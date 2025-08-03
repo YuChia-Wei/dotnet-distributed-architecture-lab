@@ -1,8 +1,11 @@
 using SaleProducts.Applications;
 using SaleProducts.Infrastructure;
 using Scalar.AspNetCore;
+using Wolverine;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseWolverine();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

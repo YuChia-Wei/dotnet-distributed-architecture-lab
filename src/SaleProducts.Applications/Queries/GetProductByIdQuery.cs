@@ -1,7 +1,5 @@
-using MediatR;
 using SaleProducts.Applications.Dtos;
 
 namespace SaleProducts.Applications.Queries;
 
-public record GetProductByIdQuery(Guid Id)
-    : IRequest<ProductDto>;
+public record GetProductByIdQuery(Guid Id);

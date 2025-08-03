@@ -1,9 +1,9 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SaleOrders.Applications.Commands;
 using SaleOrders.Applications.Queries;
 using SaleOrders.WebApi.Models.Requests;
 using SaleOrders.WebApi.Models.Responses;
+using Wolverine;
 
 namespace SaleOrders.WebApi.Controllers;
 
@@ -11,11 +11,11 @@ namespace SaleOrders.WebApi.Controllers;
 [Route("[controller]")]
 public class OrdersController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly IMessageBus _bus;
 
-    public OrdersController(IMediator mediator)
+    public OrdersController(IMessageBus bus)
     {
-        this._mediator = mediator;
+        this._bus = bus;
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
         var createOrderCommand = new CreateOrderCommand(request.OrderDate, request.TotalAmount);
-        var orderId = await this._mediator.Send(createOrderCommand);
+        var orderId = await this._bus.InvokeAsync<Guid>(createOrderCommand);
 
         return this.Ok(orderId);
     }
@@ -41,7 +41,7 @@ public class OrdersController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetOrder([FromRoute] Guid id)
     {
-        var order = await this._mediator.Send(new GetOrderByIdQuery(id));
+        var order = await this._bus.InvokeAsync<OrderResponse>(new GetOrderByIdQuery(id));
         if (order is null)
         {
             return this.NotFound();

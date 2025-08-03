@@ -1,4 +1,3 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SaleProducts.Api.Models;
 using SaleProducts.Api.Models.Requests;
@@ -6,6 +5,7 @@ using SaleProducts.Api.Models.Responses;
 using SaleProducts.Applications.Commands;
 using SaleProducts.Applications.Dtos;
 using SaleProducts.Applications.Queries;
+using Wolverine;
 
 namespace SaleProducts.Api.Controllers;
 
@@ -16,11 +16,11 @@ namespace SaleProducts.Api.Controllers;
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly IMessageBus _bus;
 
-    public ProductsController(IMediator mediator)
+    public ProductsController(IMessageBus bus)
     {
-        this._mediator = mediator;
+        this._bus = bus;
     }
 
     /// <summary>
@@ -32,7 +32,7 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
     {
         var command = new CreateProductCommand(request.Name, request.Description, request.Price, request.Stock);
-        var dto = await this._mediator.Send(command);
+        var dto = await this._bus.InvokeAsync<ProductDto>(command);
         var productResponse = new ProductResponse(dto.Id, dto.Name, dto.Description, dto.Price, dto.Stock);
         return this.Ok(productResponse);
     }
@@ -45,7 +45,7 @@ public class ProductsController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
     {
-        await this._mediator.Send(new DeleteProductCommand(id));
+        await this._bus.InvokeAsync(new DeleteProductCommand(id));
         return this.Ok();
     }
 
@@ -57,7 +57,7 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> GetAllProducts()
     {
         var getAllProductsQuery = new GetAllProductsQuery();
-        var products = await this._mediator.Send<IEnumerable<ProductDto>>(getAllProductsQuery);
+        var products = await this._bus.InvokeAsync<IEnumerable<ProductDto>>(getAllProductsQuery);
         var productResponses = products.Select(dto =>
                                                    new ProductResponse(dto.Id, dto.Name, dto.Description, dto.Price, dto.Stock));
 
@@ -72,7 +72,7 @@ public class ProductsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProductById([FromRoute] Guid id)
     {
-        var productDto = await this._mediator.Send(new GetProductByIdQuery(id));
+        var productDto = await this._bus.InvokeAsync<ProductDto>(new GetProductByIdQuery(id));
 
         return this.Ok(productDto);
     }
@@ -88,7 +88,7 @@ public class ProductsController : ControllerBase
     {
         var command = new UpdateProductCommand(id, request.Name, request.Description, request.Price, request.Stock);
 
-        await this._mediator.Send(command);
+        await this._bus.InvokeAsync(command);
         return this.Ok();
     }
 }
