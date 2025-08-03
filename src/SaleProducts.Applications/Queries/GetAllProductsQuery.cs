@@ -1,4 +1,3 @@
-namespace SaleProducts.Applications.Queries
-{
-    public record GetAllProductsQuery();
-}
+namespace SaleProducts.Applications.Queries;
+
+public record GetAllProductsQuery();

@@ -1,4 +1,3 @@
-namespace SaleProducts.Applications.Commands
-{
-    public record DeleteProductCommand(Guid Id);
-}
+namespace SaleProducts.Applications.Commands;
+
+public record DeleteProductCommand(Guid Id);

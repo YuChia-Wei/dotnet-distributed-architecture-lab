@@ -1,13 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SaleProducts.Applications
+namespace SaleProducts.Applications;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
-        {
-            services.AddScoped<ProductService>();
-            return services;
-        }
+        services.AddScoped<ProductService>();
+        return services;
     }
 }

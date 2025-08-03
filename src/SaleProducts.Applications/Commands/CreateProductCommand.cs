@@ -1,4 +1,3 @@
-namespace SaleProducts.Applications.Commands
-{
-    public record CreateProductCommand(string Name, string Description, decimal Price, int Stock);
-}
+namespace SaleProducts.Applications.Commands;
+
+public record CreateProductCommand(string Name, string Description, decimal Price, int Stock);

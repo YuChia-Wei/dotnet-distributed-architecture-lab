@@ -1,25 +1,25 @@
 <Solution>
-  <Folder Name="/Order/" />
-  <Folder Name="/Order/DomainCore/">
-    <Project Path="src\SaleOrders.Applications\SaleOrders.Applications.csproj" />
-    <Project Path="src\SaleOrders.Domains\SaleOrders.Domains.csproj" />
-    <Project Path="src\SaleOrders.Infrastructure\SaleOrders.Infrastructure.csproj" />
-  </Folder>
-  <Folder Name="/Order/Presentation/">
-    <Project Path="src\SaleOrders.Consumer\SaleOrders.Consumer.csproj" />
-    <Project Path="src\SaleOrders.WebApi\SaleOrders.WebApi.csproj" />
-  </Folder>
-  <Folder Name="/Product/" />
-  <Folder Name="/Product/DomainCore/">
-    <Project Path="src\SaleProducts.Applications\SaleProducts.Applications.csproj" />
-    <Project Path="src\SaleProducts.Domains\SaleProducts.Domains.csproj" />
-    <Project Path="src\SaleProducts.Infrastructure\SaleProducts.Infrastructure.csproj" />
-  </Folder>
-  <Folder Name="/Product/Presentation/">
-    <Project Path="src\SaleProducts.Api\SaleProducts.Api.csproj" />
-    <Project Path="src\SaleProducts.Consumer\SaleProducts.Consumer.csproj" />
-  </Folder>
-  <Folder Name="/Shared/">
-    <Project Path="src\Lab.SharedKernel\Lab.SharedKernel.csproj" />
-  </Folder>
+    <Folder Name="/Order/" />
+    <Folder Name="/Order/DomainCore/">
+        <Project Path="src\SaleOrders.Applications\SaleOrders.Applications.csproj" />
+        <Project Path="src\SaleOrders.Domains\SaleOrders.Domains.csproj" />
+        <Project Path="src\SaleOrders.Infrastructure\SaleOrders.Infrastructure.csproj" />
+    </Folder>
+    <Folder Name="/Order/Presentation/">
+        <Project Path="src\SaleOrders.Consumer\SaleOrders.Consumer.csproj" />
+        <Project Path="src\SaleOrders.WebApi\SaleOrders.WebApi.csproj" />
+    </Folder>
+    <Folder Name="/Product/" />
+    <Folder Name="/Product/DomainCore/">
+        <Project Path="src\SaleProducts.Applications\SaleProducts.Applications.csproj" />
+        <Project Path="src\SaleProducts.Domains\SaleProducts.Domains.csproj" />
+        <Project Path="src\SaleProducts.Infrastructure\SaleProducts.Infrastructure.csproj" />
+    </Folder>
+    <Folder Name="/Product/Presentation/">
+        <Project Path="src\SaleProducts.Api\SaleProducts.Api.csproj" />
+        <Project Path="src\SaleProducts.Consumer\SaleProducts.Consumer.csproj" />
+    </Folder>
+    <Folder Name="/Shared/">
+        <Project Path="src\Lab.SharedKernel\Lab.SharedKernel.csproj" />
+    </Folder>
 </Solution>

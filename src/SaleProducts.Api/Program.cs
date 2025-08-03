@@ -1,5 +1,3 @@
-using SaleProducts.Api;
-
 using SaleProducts.Applications;
 using SaleProducts.Infrastructure;
 
