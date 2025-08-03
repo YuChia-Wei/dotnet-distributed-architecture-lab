@@ -10,7 +10,11 @@
     <Project Path="src\SaleOrders.WebApi\SaleOrders.WebApi.csproj" />
   </Folder>
   <Folder Name="/Product/" />
-  <Folder Name="/Product/DomainCore/" />
+  <Folder Name="/Product/DomainCore/">
+    <Project Path="src\SaleProducts.Applications\SaleProducts.Applications.csproj" />
+    <Project Path="src\SaleProducts.Domains\SaleProducts.Domains.csproj" />
+    <Project Path="src\SaleProducts.Infrastructure\SaleProducts.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/Product/Presentation/">
     <Project Path="src\SaleProducts.Api\SaleProducts.Api.csproj" />
     <Project Path="src\SaleProducts.Consumer\SaleProducts.Consumer.csproj" />
