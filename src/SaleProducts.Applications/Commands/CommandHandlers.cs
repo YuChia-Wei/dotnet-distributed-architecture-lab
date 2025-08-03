@@ -8,40 +8,40 @@ namespace SaleProducts.Applications.Commands;
 public class CommandHandlers
     : IRequestHandler<CreateProductCommand, ProductDto>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IProductDomainRepository _productDomainRepository;
 
-    public CommandHandlers(IProductRepository productRepository)
+    public CommandHandlers(IProductDomainRepository productDomainRepository)
     {
-        this._productRepository = productRepository;
+        this._productDomainRepository = productDomainRepository;
     }
 
     public async Task<ProductDto> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
         var product = new Product(command.Name, command.Description, command.Price, command.Stock);
-        await this._productRepository.AddAsync(product);
+        await this._productDomainRepository.AddAsync(product);
         return new ProductDto(product.Id, product.Name, product.Description, product.Price, product.Stock);
     }
 
     public async Task Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        var product = await this._productRepository.GetByIdAsync(command.Id);
+        var product = await this._productDomainRepository.GetByIdAsync(command.Id);
         if (product == null)
         {
             throw new KeyNotFoundException($"Product with ID {command.Id} not found.");
         }
 
         product.Update(command.Name, command.Description, command.Price, command.Stock);
-        await this._productRepository.UpdateAsync(product);
+        await this._productDomainRepository.UpdateAsync(product);
     }
 
     public async Task Handle(DeleteProductCommand command, CancellationToken cancellationToken)
     {
-        var product = await this._productRepository.GetByIdAsync(command.Id);
+        var product = await this._productDomainRepository.GetByIdAsync(command.Id);
         if (product == null)
         {
             throw new KeyNotFoundException($"Product with ID {command.Id} not found.");
         }
 
-        await this._productRepository.DeleteAsync(command.Id);
+        await this._productDomainRepository.DeleteAsync(command.Id);
     }
 }

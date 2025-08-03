@@ -1,24 +1,23 @@
+using System.Data;
 using Dapper;
-using Npgsql;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 
-namespace SaleOrders.Infrastructure;
+namespace SaleOrders.Infrastructure.Repositories;
 
-public class OrderRepository : IOrderRepository
+public class OrderDomainRepository : IOrderDomainRepository
 {
-    private readonly string _connectionString;
+    private readonly IDbConnection _dbConnection;
 
-    public OrderRepository(string connectionString)
+    public OrderDomainRepository(IDbConnection dbConnection)
     {
-        this._connectionString = connectionString;
+        this._dbConnection = dbConnection;
     }
 
     public async Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        await using var connection = new NpgsqlConnection(this._connectionString);
         const string sql = "SELECT * FROM Orders WHERE Id = @Id";
-        return await connection.QuerySingleOrDefaultAsync<Order>(sql, new
+        return await this._dbConnection.QuerySingleOrDefaultAsync<Order>(sql, new
         {
             Id = id
         });
@@ -26,30 +25,26 @@ public class OrderRepository : IOrderRepository
 
     public async Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        await using var connection = new NpgsqlConnection(this._connectionString);
         const string sql = "SELECT * FROM Orders";
-        return await connection.QueryAsync<Order>(sql);
+        return await this._dbConnection.QueryAsync<Order>(sql);
     }
 
     public async Task AddAsync(Order order, CancellationToken cancellationToken = default)
     {
-        await using var connection = new NpgsqlConnection(this._connectionString);
         const string sql = "INSERT INTO Orders (Id, OrderDate, TotalAmount) VALUES (@Id, @OrderDate, @TotalAmount)";
-        await connection.ExecuteAsync(sql, order);
+        await this._dbConnection.ExecuteAsync(sql, order);
     }
 
     public async Task UpdateAsync(Order order, CancellationToken cancellationToken = default)
     {
-        await using var connection = new NpgsqlConnection(this._connectionString);
         const string sql = "UPDATE Orders SET OrderDate = @OrderDate, TotalAmount = @TotalAmount WHERE Id = @Id";
-        await connection.ExecuteAsync(sql, order);
+        await this._dbConnection.ExecuteAsync(sql, order);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        await using var connection = new NpgsqlConnection(this._connectionString);
         const string sql = "DELETE FROM Orders WHERE Id = @Id";
-        await connection.ExecuteAsync(sql, new
+        await this._dbConnection.ExecuteAsync(sql, new
         {
             Id = id
         });

@@ -2,7 +2,7 @@
 
 namespace SaleProducts.Applications.Repositories;
 
-public interface IProductRepository
+public interface IProductDomainRepository
 {
     Task AddAsync(Product product);
     Task DeleteAsync(Guid id);

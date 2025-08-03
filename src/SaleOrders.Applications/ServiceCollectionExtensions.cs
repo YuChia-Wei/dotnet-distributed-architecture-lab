@@ -1,13 +1,13 @@
 using Microsoft.Extensions.DependencyInjection;
-using SaleProducts.Applications.Repositories;
+using SaleOrders.Applications.Repositories;
 
-namespace SaleProducts.Applications;
+namespace SaleOrders.Applications;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IProductDomainRepository).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IOrderDomainRepository).Assembly));
         return services;
     }
 }

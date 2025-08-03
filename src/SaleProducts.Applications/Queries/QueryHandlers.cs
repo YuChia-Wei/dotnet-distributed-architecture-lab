@@ -8,22 +8,22 @@ public class QueryHandlers
     : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDto>>,
       IRequestHandler<GetProductByIdQuery, ProductDto>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IProductDomainRepository _productDomainRepository;
 
-    public QueryHandlers(IProductRepository productRepository)
+    public QueryHandlers(IProductDomainRepository productDomainRepository)
     {
-        this._productRepository = productRepository;
+        this._productDomainRepository = productDomainRepository;
     }
 
     public async Task<IEnumerable<ProductDto>> Handle(GetAllProductsQuery query, CancellationToken cancellationToken)
     {
-        var products = await this._productRepository.GetAllAsync();
+        var products = await this._productDomainRepository.GetAllAsync();
         return products.Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock));
     }
 
     public async Task<ProductDto> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
-        var product = await this._productRepository.GetByIdAsync(query.Id);
+        var product = await this._productDomainRepository.GetByIdAsync(query.Id);
 
         return new ProductDto(product.Id, product.Name, product.Description, product.Price, product.Stock);
     }

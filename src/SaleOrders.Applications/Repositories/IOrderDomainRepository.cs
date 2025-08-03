@@ -2,7 +2,7 @@
 
 namespace SaleOrders.Applications.Repositories;
 
-public interface IOrderRepository
+public interface IOrderDomainRepository
 {
     Task AddAsync(Order order, CancellationToken cancellationToken = default);
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);

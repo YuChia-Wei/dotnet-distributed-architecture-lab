@@ -1,12 +1,18 @@
-using SaleProducts.Applications;
+﻿using System.Data;
 using SaleProducts.Applications.Repositories;
 using SaleProducts.Domains;
 
-namespace SaleProducts.Infrastructure;
+namespace SaleProducts.Infrastructure.Repositories;
 
-public class ProductRepository : IProductRepository
+public class ProductDomainRepository : IProductDomainRepository
 {
+    private readonly IDbConnection _dbConnection;
     private readonly List<Product> _products = new();
+
+    public ProductDomainRepository(IDbConnection dbConnection)
+    {
+        this._dbConnection = dbConnection;
+    }
 
     public Task<Product> GetByIdAsync(Guid id)
     {

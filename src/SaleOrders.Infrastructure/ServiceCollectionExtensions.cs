@@ -2,10 +2,10 @@ using System.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
-using SaleProducts.Applications.Repositories;
-using SaleProducts.Infrastructure.Repositories;
+using SaleOrders.Applications.Repositories;
+using SaleOrders.Infrastructure.Repositories;
 
-namespace SaleProducts.Infrastructure;
+namespace SaleOrders.Infrastructure;
 
 public static class ServiceCollectionExtensions
 {
@@ -13,7 +13,7 @@ public static class ServiceCollectionExtensions
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
-        services.AddScoped<IProductDomainRepository, ProductDomainRepository>();
+        services.AddScoped<IOrderDomainRepository, OrderDomainRepository>();
         return services;
     }
 }

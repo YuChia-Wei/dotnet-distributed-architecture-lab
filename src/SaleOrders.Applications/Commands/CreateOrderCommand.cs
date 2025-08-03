@@ -8,21 +8,18 @@ public record CreateOrderCommand(DateTime OrderDate, decimal TotalAmount) : IReq
 
 public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Guid>
 {
-    private readonly IOrderRepository _orderRepository;
+    private readonly IOrderDomainRepository _orderDomainRepository;
 
-    public CreateOrderCommandHandler(IOrderRepository orderRepository)
+    public CreateOrderCommandHandler(IOrderDomainRepository orderDomainRepository)
     {
-        this._orderRepository = orderRepository;
+        this._orderDomainRepository = orderDomainRepository;
     }
 
-    public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
     {
-        var order = new Order(); // In a real app, you'd use a factory or proper constructor
-        typeof(Order).GetProperty(nameof(Order.Id))!.SetValue(order, Guid.NewGuid());
-        typeof(Order).GetProperty(nameof(Order.OrderDate))!.SetValue(order, request.OrderDate);
-        typeof(Order).GetProperty(nameof(Order.TotalAmount))!.SetValue(order, request.TotalAmount);
+        var order = new Order(command.OrderDate, command.TotalAmount);
 
-        await this._orderRepository.AddAsync(order, cancellationToken);
+        await this._orderDomainRepository.AddAsync(order, cancellationToken);
 
         return order.Id;
     }

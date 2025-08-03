@@ -1,18 +1,26 @@
-# Stage 1: Build
+﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/Product.Api/Product.Api.csproj", "Product.Api/"]
-RUN dotnet restore "Product.Api/Product.Api.csproj"
-COPY src/Product.Api/ .
-WORKDIR "/src/Product.Api"
-RUN dotnet build "Product.Api.csproj" -c Release -o /app/build
+COPY ["src/SaleProducts.Api/SaleProducts.Api.csproj", "src/SaleProducts.Api/"]
+COPY ["src/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj", "src/SaleProducts.Infrastructure/"]
+COPY ["src/SaleProducts.Domains/SaleProducts.Domains.csproj", "src/SaleProducts.Domains/"]
+COPY ["src/SaleProducts.Applications/SaleProducts.Applications.csproj", "src/SaleProducts.Applications/"]
+RUN dotnet restore "src/SaleProducts.Api/SaleProducts.Api.csproj"
+COPY . .
+WORKDIR "/src/src/SaleProducts.Api"
+RUN dotnet build "./SaleProducts.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Stage 2: Publish
 FROM build AS publish
-RUN dotnet publish "Product.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./SaleProducts.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Stage 3: Final
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Product.Api.dll"]
+ENTRYPOINT ["dotnet", "SaleProducts.Api.dll"]

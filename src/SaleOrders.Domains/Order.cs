@@ -1,18 +1,21 @@
-using Lab.SharedKernel.Abstractions;
-
 namespace SaleOrders.Domains;
 
-public class Order : IAggregateRoot
+public class Order
 {
-    public Guid Id { get; private set; }
+    /// <summary>
+    /// ctor (for ORM)
+    /// </summary>
+    private Order()
+    {
+    }
+
+    public Order(DateTime orderDate, decimal totalAmount)
+    {
+        this.OrderDate = orderDate;
+        this.TotalAmount = totalAmount;
+    }
+
     public DateTime OrderDate { get; private set; }
     public decimal TotalAmount { get; private set; }
-
-    public object[] GetKeys()
-    {
-        return new object[]
-        {
-            this.Id
-        };
-    }
+    public Guid Id { get; private set; } = Guid.CreateVersion7();
 }

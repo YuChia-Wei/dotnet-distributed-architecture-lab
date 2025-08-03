@@ -8,12 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.7" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SaleOrders.Applications\SaleOrders.Applications.csproj" />
-    <ProjectReference Include="..\Lab.SharedKernel\Lab.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>

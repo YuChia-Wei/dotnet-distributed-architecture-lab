@@ -11,7 +11,6 @@ COPY ["src/SaleOrders.WebApi/SaleOrders.WebApi.csproj", "src/SaleOrders.WebApi/"
 COPY ["src/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj", "src/SaleOrders.Infrastructure/"]
 COPY ["src/SaleOrders.Applications/SaleOrders.Applications.csproj", "src/SaleOrders.Applications/"]
 COPY ["src/SaleOrders.Domains/SaleOrders.Domains.csproj", "src/SaleOrders.Domains/"]
-COPY ["src/Lab.SharedKernel/Lab.SharedKernel.csproj", "src/Lab.SharedKernel/"]
 RUN dotnet restore "src/SaleOrders.WebApi/SaleOrders.WebApi.csproj"
 COPY . .
 WORKDIR "/src/src/SaleOrders.WebApi"
