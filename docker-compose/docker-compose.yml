@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:4.1.2-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mqarchlab_db
+
+  order-api:
+    build:
+      context: ..
+      dockerfile: src/Order.Api/Dockerfile
+    container_name: order-api
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  order-consumer:
+    build:
+      context: ..
+      dockerfile: src/Order.Consumer/Dockerfile
+    container_name: order-consumer
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  product-api:
+    build:
+      context: ..
+      dockerfile: src/Product.Api/Dockerfile
+    container_name: product-api
+    ports:
+      - "8090:8080"
+      - "8091:8081"
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  product-consumer:
+    build:
+      context: ..
+      dockerfile: src/Product.Consumer/Dockerfile
+    container_name: product-consumer
+    depends_on:
+      - rabbitmq
+      - postgres
+
+volumes:
+  rabbitmq_data:
+  postgres_data:
