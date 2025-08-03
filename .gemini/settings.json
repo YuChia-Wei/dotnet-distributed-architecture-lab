@@ -1,12 +1,3 @@
 {
-  "contextFileName": "AI_CLI_PROMPT.md",
-  "mcpServers": {
-    "jetbrains": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@jetbrains/mcp-proxy"
-      ]
-    }
-  }
+  "contextFileName": "AI_CLI_PROMPT.md"
 }
