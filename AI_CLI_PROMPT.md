@@ -18,6 +18,18 @@ The software architecture must adhere to the following core principles:
 - **Primary Language:** C#
 - **Containerization:** Docker
 
+## 3.1 Key Libraries/Frameworks
+
+- **Messaging/Command/Query Handling:** WolverineFx (replaces MediatR)
+
+## 3.2 Data Storage
+
+- **Database:** PostgreSQL
+
+## 3.3 Message Broker
+
+- **Message Queue:** RabbitMQ
+
 ## 4. Project Structure
 
 The project follows a strict, layered directory structure based on Clean Architecture. **All source code projects must be placed under the `src` directory.**

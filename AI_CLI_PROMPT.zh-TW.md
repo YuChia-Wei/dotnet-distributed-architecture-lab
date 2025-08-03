@@ -18,6 +18,18 @@
 - **主要語言 (Primary Language):** C#
 - **容器化 (Containerization):** Docker
 
+## 3.1 關鍵函式庫/框架 (Key Libraries/Frameworks)
+
+- **訊息/命令/查詢處理:** WolverineFx (取代 MediatR)
+
+## 3.2 資料儲存 (Data Storage)
+
+- **資料庫:** PostgreSQL
+
+## 3.3 訊息代理 (Message Broker)
+
+- **訊息佇列:** RabbitMQ
+
 ## 4. 專案結構 (Project Structure)
 
 專案遵循基於「乾淨架構」的嚴格分層目錄結構。**所有原始碼專案都必須放置在 `src` 資料夾下。**
