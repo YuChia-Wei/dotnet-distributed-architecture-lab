@@ -26,21 +26,36 @@
 
 - **複數命名:** `Applications`, `Repositories`, `Domains` 等分層專案的名稱，以及專案內的資料夾，在適當時應優先使用**複數形式 (plural form)**。
 
-### 服務結構範例 (例如 "Orders" 服務):
+### 服務結構範例 (例如 "SaleOrders" 服務):
+
+以下為實際的磁碟檔案結構：
 
 ```
 dotnet-mq-arch-lab/
 ├── src/
-│   └── Orders/
-│       ├── Orders.Api/
-│       │   └── Dockerfile
-│       ├── Orders.Applications/
-│       ├── Orders.Domains/
-│       └── Orders.Infrastructure/
+│   ├── SaleOrders.Applications/
+│   ├── SaleOrders.Consumer/
+│   ├── SaleOrders.Domains/
+│   ├── SaleOrders.Infrastructure/
+│   └── SaleOrders.WebApi/
+│       └── Dockerfile
 ├── docker-compose/
 │   └── docker-compose.yml
 ├── .gitignore
 └── MQArchLab.slnx
+```
+
+在 Visual Studio 方案 (`.slnx`) 中，這些專案被組織在方案資料夾中以保持清晰：
+
+```
+/Order/
+├── DomainCore/
+│   ├── SaleOrders.Applications
+│   ├── SaleOrders.Domains
+│   └── SaleOrders.Infrastructure
+└── Presentation/
+    ├── SaleOrders.Consumer
+    └── SaleOrders.WebApi
 ```
 
 ### 規則 (Rules):
@@ -63,7 +78,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["src/<ProjectName>/<ProjectName>.csproj", "<ProjectName>/"]
 RUN dotnet restore "<ProjectName>/<ProjectName>.csproj"
-COPY src/<ProjectName>/ .
+COPY src/<ProjectName>/ . 
 WORKDIR "/src/<ProjectName>"
 RUN dotnet build "<ProjectName>.csproj" -c Release -o /app/build
 
@@ -80,26 +95,34 @@ ENTRYPOINT ["dotnet", "<ProjectName>.dll"]
 
 ## 6. 開發流程 (Development Workflow)
 
-### 建立新專案 (Creating a New Project)
+### 建立新服務 (Creating a New Service)
 
-當需要建立一個新的服務或應用程式時，請遵循以下步驟：
+當需要建立一個新服務（例如 `Invoices`）時，請依序建立所需專案層級：
 
-1.  **確認專案類型與名稱:** 向使用者確認要建立的 .NET 專案範本（例如 `webapi`, `console`）和專案名稱（例如 `PublisherService`）。
-2.  **建立專案目錄:** 在 `src` 下建立一個與專案同名的資料夾。
-3.  **執行 `dotnet new`:**
+1.  **確認服務名稱與專案層級:** 向使用者確認核心服務名稱（例如 `Invoices`）以及需要建立的專案層級（例如 `Api`, `Applications`, `Domains`）。
+
+2.  **建立專案目錄與檔案:** 為每個層級建立專案。專案名稱應為 `<ServiceName>.<LayerName>`（例如 `Invoices.Api`）。
     ```shell
-    dotnet new <template> -n <ProjectName> -o src/<ProjectName>
+    # API 層範例
+    dotnet new webapi -n Invoices.Api -o src/Invoices.Api
     ```
-4.  **加入方案:** 將新專案加入到根目錄的 `.slnx` 檔案中。
+
+3.  **使用方案資料夾加入方案:** 將每個新專案加入方案時，指定正確的方案資料夾。
     ```shell
-    dotnet sln add src/<ProjectName>/<ProjectName>.csproj
+    # 將 API 專案加入到新的 "Invoices" 資料夾下的 "Presentation" 資料夾中
+    dotnet sln add src/Invoices.Api/Invoices.Api.csproj --solution-folder "Invoices/Presentation"
     ```
-5.  **建立 Dockerfile:** 在 `src/<ProjectName>/` 路徑下，根據上述範本建立 `Dockerfile`。
-6.  **更新 Docker Compose (可選):** 如果需要在本機進行整合測試，請在 `docker-compose/docker-compose.yml` 中為新服務新增一個 service entry。
+
+4.  **建立 Dockerfile:** 為任何可執行的專案（如 API 或 Consumer），在其根目錄下（例如 `src/Invoices.Api/Dockerfile`）根據上述範本建立 `Dockerfile`。
+5.  **更新 Docker Compose (可選):** 如果需要在本機進行整合測試，請在 `docker-compose/docker-compose.yml` 中為新服務新增一個 service entry。
 
 ## 7. 程式碼風格 (Coding Conventions)
 
 - 遵循 Microsoft 官方的 [C# 程式碼撰寫慣例](https://docs.microsoft.com/zh-tw/dotnet/csharp/fundamentals/coding-style/coding-conventions)。
+- 所有程式碼與文字檔案都應遵循 `.editorconfig` 檔案中定義的設定。
+- **依賴注入 (Dependency Injection):** `Infrastructure` 與 `Applications` 專案的 DI 註冊應在各自專案內部，透過專屬的擴充方法（例如 `AddInfrastructureServices`）進行封裝。
+- **API 設計 (API Design):** Web API 必須遵循 RESTful 設計原則。
+- **API 文件 (API Documentation):** 所有公開的 API Controller 都必須擁有以臺灣繁體中文撰寫的 XML 註解 (`<summary>`)。
 - **命名:** 分層專案 (`Applications`, `Repositories`) 和內部資料夾優先使用複數形式。
 - 優先使用 File-scoped namespaces。
 - 在適當的情況下（如 `Program.cs`）使用 Top-level statements。

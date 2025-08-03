@@ -26,21 +26,36 @@ The project follows a strict, layered directory structure based on Clean Archite
 
 - **Pluralization:** Project names for layers like `Applications`, `Repositories`, and `Domains`, as well as folders within projects, should be in **plural form** whenever appropriate.
 
-### Example Structure for a Service (e.g., "Orders"):
+### Example Structure for a Service (e.g., "SaleOrders"):
+
+The following shows the physical file structure on disk:
 
 ```
 dotnet-mq-arch-lab/
 ├── src/
-│   └── Orders/
-│       ├── Orders.Api/
-│       │   └── Dockerfile
-│       ├── Orders.Applications/
-│       ├── Orders.Domains/
-│       └── Orders.Infrastructure/
+│   ├── SaleOrders.Applications/
+│   ├── SaleOrders.Consumer/
+│   ├── SaleOrders.Domains/
+│   ├── SaleOrders.Infrastructure/
+│   └── SaleOrders.WebApi/
+│       └── Dockerfile
 ├── docker-compose/
 │   └── docker-compose.yml
 ├── .gitignore
 └── MQArchLab.slnx
+```
+
+In the Visual Studio Solution (`.slnx`), these projects are organized into solution folders for clarity:
+
+```
+/Order/
+├── DomainCore/
+│   ├── SaleOrders.Applications
+│   ├── SaleOrders.Domains
+│   └── SaleOrders.Infrastructure
+└── Presentation/
+    ├── SaleOrders.Consumer
+    └── SaleOrders.WebApi
 ```
 
 ### Rules:
@@ -80,26 +95,34 @@ ENTRYPOINT ["dotnet", "<ProjectName>.dll"]
 
 ## 6. Development Workflow
 
-### Creating a New Project
+### Creating a New Service
 
-When a new service or application is required, follow these steps:
+When a new service (e.g., "Invoices") is required, follow these steps, creating each project layer as needed:
 
-1.  **Confirm Project Type and Name:** Ask the user to confirm the .NET project template (e.g., `webapi`, `console`) and the project name (e.g., `PublisherService`).
-2.  **Create Project Directory:** Create a new directory with the project name under `src`.
-3.  **Run `dotnet new`:**
+1.  **Confirm Service Name and Project Layers:** Ask the user for the core service name (e.g., `Invoices`) and which project layers are needed (e.g., `Api`, `Applications`, `Domains`).
+
+2.  **Create Project Directories and Files:** For each layer, create the project. The project name should be `<ServiceName>.<LayerName>` (e.g., `Invoices.Api`).
     ```shell
-    dotnet new <template> -n <ProjectName> -o src/<ProjectName>
+    # Example for the API layer
+    dotnet new webapi -n Invoices.Api -o src/Invoices.Api
     ```
-4.  **Add to Solution:** Add the new project to the solution file (`.slnx`) in the root directory.
+
+3.  **Add to Solution with Solution Folders:** Add each new project to the solution, specifying the correct solution folder.
     ```shell
-    dotnet sln add src/<ProjectName>/<ProjectName>.csproj
+    # Example for adding the API project to the "Presentation" folder within a new "Invoices" folder
+    dotnet sln add src/Invoices.Api/Invoices.Api.csproj --solution-folder "Invoices/Presentation"
     ```
-5.  **Create Dockerfile:** Create a `Dockerfile` in the `src/<ProjectName>/` path based on the template above.
-6.  **Update Docker Compose (Optional):** If local integration testing is needed, add a new service entry for the project in `docker-compose/docker-compose.yml`.
+
+4.  **Create Dockerfile:** For any executable project (like an API or Consumer), create a `Dockerfile` in its root directory (e.g., `src/Invoices.Api/Dockerfile`) based on the template above.
+5.  **Update Docker Compose (Optional):** If local integration testing is needed, add a new service entry for the project in `docker-compose/docker-compose.yml`.
 
 ## 7. Coding Conventions
 
 - Follow the official Microsoft [C# Coding Conventions](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions).
+- Adhere to the settings defined in the `.editorconfig` file for all code and text files.
+- **Dependency Injection:** For `Infrastructure` and `Applications` projects, DI registration should be encapsulated within the project using a dedicated extension method (e.g., `AddInfrastructureServices`).
+- **API Design:** Web APIs must adhere to RESTful design principles.
+- **API Documentation:** All public API controllers must have an XML summary (`<summary>`) written in Traditional Chinese (Taiwan).
 - **Naming:** Use plural form for layer-specific projects (`Applications`, `Repositories`) and internal folders.
 - Prefer file-scoped namespaces.
 - Use top-level statements where appropriate (e.g., in `Program.cs`).
