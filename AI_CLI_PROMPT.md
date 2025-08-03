@@ -122,6 +122,7 @@ When a new service (e.g., "Invoices") is required, follow these steps, creating 
 - Adhere to the settings defined in the `.editorconfig` file for all code and text files.
 - **Dependency Injection:** For `Infrastructure` and `Applications` projects, DI registration should be encapsulated within the project using a dedicated extension method (e.g., `AddInfrastructureServices`).
 - **API Design:** Web APIs must adhere to RESTful design principles.
+- **API DTOs:** API input and output should use dedicated objects. Input objects are uniformly suffixed with "Request", and output objects are uniformly suffixed with "Response".
 - **API Documentation:** All public API controllers must have an XML summary (`<summary>`) written in Traditional Chinese (Taiwan).
 - **Naming:** Use plural form for layer-specific projects (`Applications`, `Repositories`) and internal folders.
 - Prefer file-scoped namespaces.

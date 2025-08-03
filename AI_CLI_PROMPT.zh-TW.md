@@ -122,6 +122,7 @@ ENTRYPOINT ["dotnet", "<ProjectName>.dll"]
 - 所有程式碼與文字檔案都應遵循 `.editorconfig` 檔案中定義的設定。
 - **依賴注入 (Dependency Injection):** `Infrastructure` 與 `Applications` 專案的 DI 註冊應在各自專案內部，透過專屬的擴充方法（例如 `AddInfrastructureServices`）進行封裝。
 - **API 設計 (API Design):** Web API 必須遵循 RESTful 設計原則。
+- **API 資料傳輸物件 (DTOs):** API 的輸入與輸出應使用專門的物件，輸入物件統一後綴為 `Request`，輸出物件統一後綴為 `Response`。
 - **API 文件 (API Documentation):** 所有公開的 API Controller 都必須擁有以臺灣繁體中文撰寫的 XML 註解 (`<summary>`)。
 - **命名:** 分層專案 (`Applications`, `Repositories`) 和內部資料夾優先使用複數形式。
 - 優先使用 File-scoped namespaces。
