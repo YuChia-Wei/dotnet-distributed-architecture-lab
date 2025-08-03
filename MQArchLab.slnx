@@ -1,7 +1,10 @@
 <Solution>
-  <Folder Name="/Order/">
-    <Project Path="src/Order.Api/Order.Api.csproj" />
-    <Project Path="src/Order.Consumer/Order.Consumer.csproj" />
+  <Folder Name="/Orders/">
+    <Project Path="src/Orders.Api/Orders.Api.csproj" />
+    <Project Path="src/Orders.Applications/Orders.Applications.csproj" />
+    <Project Path="src/Orders.Consumer/Orders.Consumer.csproj" />
+    <Project Path="src/Orders.Domains/Orders.Domains.csproj" />
+    <Project Path="src/Orders.Infrastructure/Orders.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/Product/">
     <Project Path="src/Product.Api/Product.Api.csproj" />
