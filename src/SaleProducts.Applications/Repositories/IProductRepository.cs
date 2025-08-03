@@ -1,6 +1,6 @@
-using SaleProducts.Domains;
+﻿using SaleProducts.Domains;
 
-namespace SaleProducts.Applications;
+namespace SaleProducts.Applications.Repositories;
 
 public interface IProductRepository
 {

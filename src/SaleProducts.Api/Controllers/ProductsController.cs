@@ -1,7 +1,10 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SaleProducts.Api.Models;
-using SaleProducts.Applications;
+using SaleProducts.Api.Models.Requests;
+using SaleProducts.Api.Models.Responses;
 using SaleProducts.Applications.Commands;
+using SaleProducts.Applications.Dtos;
 using SaleProducts.Applications.Queries;
 
 namespace SaleProducts.Api.Controllers;
@@ -13,11 +16,11 @@ namespace SaleProducts.Api.Controllers;
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
-    private readonly ProductService _productService;
+    private readonly IMediator _mediator;
 
-    public ProductsController(ProductService productService)
+    public ProductsController(IMediator mediator)
     {
-        this._productService = productService;
+        this._mediator = mediator;
     }
 
     /// <summary>
@@ -29,11 +32,9 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
     {
         var command = new CreateProductCommand(request.Name, request.Description, request.Price, request.Stock);
-        var productDto = await this._productService.Handle(command);
-        return this.CreatedAtAction(nameof(this.GetProductById), new
-        {
-            id = productDto.Id
-        }, productDto);
+        var dto = await this._mediator.Send(command);
+        var productResponse = new ProductResponse(dto.Id, dto.Name, dto.Description, dto.Price, dto.Stock);
+        return this.Ok(productResponse);
     }
 
     /// <summary>
@@ -41,18 +42,11 @@ public class ProductsController : ControllerBase
     /// </summary>
     /// <param name="id">產品 ID</param>
     /// <returns>無內容</returns>
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteProduct(Guid id)
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
     {
-        try
-        {
-            await this._productService.Handle(new DeleteProductCommand(id));
-            return this.NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return this.NotFound(ex.Message);
-        }
+        await this._mediator.Send(new DeleteProductCommand(id));
+        return this.Ok();
     }
 
     /// <summary>
@@ -62,8 +56,12 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllProducts()
     {
-        var products = await this._productService.Handle(new GetAllProductsQuery());
-        return this.Ok(products);
+        var getAllProductsQuery = new GetAllProductsQuery();
+        var products = await this._mediator.Send<IEnumerable<ProductDto>>(getAllProductsQuery);
+        var productResponses = products.Select(dto =>
+                                                   new ProductResponse(dto.Id, dto.Name, dto.Description, dto.Price, dto.Stock));
+
+        return this.Ok(productResponses);
     }
 
     /// <summary>
@@ -71,14 +69,10 @@ public class ProductsController : ControllerBase
     /// </summary>
     /// <param name="id">產品 ID</param>
     /// <returns>產品資訊</returns>
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetProductById(Guid id)
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetProductById([FromRoute] Guid id)
     {
-        var productDto = await this._productService.Handle(new GetProductByIdQuery(id));
-        if (productDto == null)
-        {
-            return this.NotFound();
-        }
+        var productDto = await this._mediator.Send(new GetProductByIdQuery(id));
 
         return this.Ok(productDto);
     }
@@ -89,19 +83,12 @@ public class ProductsController : ControllerBase
     /// <param name="id">產品 ID</param>
     /// <param name="request">更新產品的請求</param>
     /// <returns>無內容</returns>
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductRequest request)
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] UpdateProductRequest request)
     {
         var command = new UpdateProductCommand(id, request.Name, request.Description, request.Price, request.Stock);
 
-        try
-        {
-            await this._productService.Handle(command);
-            return this.NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return this.NotFound(ex.Message);
-        }
+        await this._mediator.Send(command);
+        return this.Ok();
     }
 }

@@ -1,4 +1,5 @@
 using SaleProducts.Applications;
+using SaleProducts.Applications.Repositories;
 using SaleProducts.Domains;
 
 namespace SaleProducts.Infrastructure;

@@ -1,11 +1,12 @@
 using MediatR;
-using SaleOrders.Domains;
+using SaleOrders.Applications.Dtos;
+using SaleOrders.Applications.Repositories;
 
 namespace SaleOrders.Applications.Queries;
 
-public record GetOrderByIdQuery(Guid Id) : IRequest<Order?>;
+public record GetOrderByIdQuery(Guid Id) : IRequest<OrderDto?>;
 
-public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Order?>
+public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, OrderDto?>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -14,8 +15,9 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Order
         this._orderRepository = orderRepository;
     }
 
-    public async Task<Order?> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
+    public async Task<OrderDto?> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
     {
-        return await this._orderRepository.GetByIdAsync(request.Id, cancellationToken);
+        var byIdAsync = await this._orderRepository.GetByIdAsync(request.Id, cancellationToken);
+        return byIdAsync == null ? null : new OrderDto(byIdAsync.Id, byIdAsync.OrderDate, byIdAsync.TotalAmount);
     }
 }

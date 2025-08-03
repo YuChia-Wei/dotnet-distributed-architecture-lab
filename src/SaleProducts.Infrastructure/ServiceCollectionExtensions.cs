@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SaleProducts.Applications;
+using SaleProducts.Applications.Repositories;
 
 namespace SaleProducts.Infrastructure;
 

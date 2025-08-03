@@ -1,6 +1,6 @@
-using SaleOrders.Domains;
+﻿using SaleOrders.Domains;
 
-namespace SaleOrders.Applications;
+namespace SaleOrders.Applications.Repositories;
 
 public interface IOrderRepository
 {

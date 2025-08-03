@@ -1,26 +1,28 @@
-using SaleProducts.Applications.Commands;
-using SaleProducts.Applications.Queries;
+﻿using MediatR;
+using SaleProducts.Applications.Dtos;
+using SaleProducts.Applications.Repositories;
 using SaleProducts.Domains;
 
-namespace SaleProducts.Applications;
+namespace SaleProducts.Applications.Commands;
 
-public class ProductService
+public class CommandHandlers
+    : IRequestHandler<CreateProductCommand, ProductDto>
 {
     private readonly IProductRepository _productRepository;
 
-    public ProductService(IProductRepository productRepository)
+    public CommandHandlers(IProductRepository productRepository)
     {
         this._productRepository = productRepository;
     }
 
-    public async Task<ProductDto> Handle(CreateProductCommand command)
+    public async Task<ProductDto> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
         var product = new Product(command.Name, command.Description, command.Price, command.Stock);
         await this._productRepository.AddAsync(product);
         return new ProductDto(product.Id, product.Name, product.Description, product.Price, product.Stock);
     }
 
-    public async Task Handle(UpdateProductCommand command)
+    public async Task Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
         var product = await this._productRepository.GetByIdAsync(command.Id);
         if (product == null)
@@ -32,7 +34,7 @@ public class ProductService
         await this._productRepository.UpdateAsync(product);
     }
 
-    public async Task Handle(DeleteProductCommand command)
+    public async Task Handle(DeleteProductCommand command, CancellationToken cancellationToken)
     {
         var product = await this._productRepository.GetByIdAsync(command.Id);
         if (product == null)
@@ -41,22 +43,5 @@ public class ProductService
         }
 
         await this._productRepository.DeleteAsync(command.Id);
-    }
-
-    public async Task<ProductDto> Handle(GetProductByIdQuery query)
-    {
-        var product = await this._productRepository.GetByIdAsync(query.Id);
-        if (product == null)
-        {
-            return null; // Or throw an exception, depending on desired behavior
-        }
-
-        return new ProductDto(product.Id, product.Name, product.Description, product.Price, product.Stock);
-    }
-
-    public async Task<IEnumerable<ProductDto>> Handle(GetAllProductsQuery query)
-    {
-        var products = await this._productRepository.GetAllAsync();
-        return products.Select(p => new ProductDto(p.Id, p.Name, p.Description, p.Price, p.Stock));
     }
 }

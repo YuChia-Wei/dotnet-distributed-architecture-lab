@@ -1,6 +1,6 @@
 using Dapper;
 using Npgsql;
-using SaleOrders.Applications;
+using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 
 namespace SaleOrders.Infrastructure;

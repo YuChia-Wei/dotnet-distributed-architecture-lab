@@ -1,4 +1,5 @@
 using SaleOrders.Applications;
+using SaleOrders.Applications.Repositories;
 using SaleOrders.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);

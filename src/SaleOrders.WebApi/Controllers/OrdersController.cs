@@ -2,6 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SaleOrders.Applications.Commands;
 using SaleOrders.Applications.Queries;
+using SaleOrders.WebApi.Models.Requests;
+using SaleOrders.WebApi.Models.Responses;
 
 namespace SaleOrders.WebApi.Controllers;
 
@@ -16,20 +18,36 @@ public class OrdersController : ControllerBase
         this._mediator = mediator;
     }
 
+    /// <summary>
+    /// Handles the creation of a new order.
+    /// </summary>
+    /// <param name="request">An instance of <see cref="CreateOrderCommand" /> containing order details such as date and total amount.</param>
+    /// <returns>An <see cref="IActionResult" /> containing the unique identifier of the created order.</returns>
     [HttpPost]
-    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
+    [ProducesResponseType<Guid>(200)]
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
     {
-        var orderId = await this._mediator.Send(command);
-        return this.CreatedAtAction(nameof(this.GetOrder), new
-        {
-            id = orderId
-        }, null);
+        var createOrderCommand = new CreateOrderCommand(request.OrderDate, request.TotalAmount);
+        var orderId = await this._mediator.Send(createOrderCommand);
+
+        return this.Ok(orderId);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetOrder(Guid id)
+    /// <summary>
+    /// Retrieves the details of an existing order by its unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the order to retrieve.</param>
+    /// <returns>An <see cref="IActionResult" /> containing the details of the requested order if found; otherwise, a not found response.</returns>
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetOrder([FromRoute] Guid id)
     {
         var order = await this._mediator.Send(new GetOrderByIdQuery(id));
-        return order is not null ? this.Ok(order) : this.NotFound();
+        if (order is null)
+        {
+            return this.NotFound();
+        }
+
+        var orderResponse = new OrderResponse(order.Id, order.OrderDate, order.TotalAmount);
+        return this.Ok(orderResponse);
     }
 }

@@ -1,4 +1,5 @@
 using MediatR;
+using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 
 namespace SaleOrders.Applications.Commands;
