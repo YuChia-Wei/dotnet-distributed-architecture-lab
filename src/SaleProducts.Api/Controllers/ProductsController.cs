@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SaleProducts.Api.Models;
 using SaleProducts.Applications;
 using SaleProducts.Applications.Commands;
 using SaleProducts.Applications.Queries;
@@ -22,11 +23,12 @@ public class ProductsController : ControllerBase
     /// <summary>
     /// 建立新產品
     /// </summary>
-    /// <param name="command">建立產品的命令</param>
+    /// <param name="request">建立產品的請求</param>
     /// <returns>建立的產品資訊</returns>
     [HttpPost]
-    public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
+    public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
     {
+        var command = new CreateProductCommand(request.Name, request.Description, request.Price, request.Stock);
         var productDto = await this._productService.Handle(command);
         return this.CreatedAtAction(nameof(this.GetProductById), new
         {
@@ -85,15 +87,12 @@ public class ProductsController : ControllerBase
     /// 更新產品資訊
     /// </summary>
     /// <param name="id">產品 ID</param>
-    /// <param name="command">更新產品的命令</param>
+    /// <param name="request">更新產品的請求</param>
     /// <returns>無內容</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
+    public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductRequest request)
     {
-        if (id != command.Id)
-        {
-            return this.BadRequest("ID mismatch.");
-        }
+        var command = new UpdateProductCommand(id, request.Name, request.Description, request.Price, request.Stock);
 
         try
         {
