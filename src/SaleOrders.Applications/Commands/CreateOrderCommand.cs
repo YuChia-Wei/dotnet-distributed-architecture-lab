@@ -11,7 +11,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
 
     public CreateOrderCommandHandler(IOrderRepository orderRepository)
     {
-        _orderRepository = orderRepository;
+        this._orderRepository = orderRepository;
     }
 
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -21,7 +21,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
         typeof(Order).GetProperty(nameof(Order.OrderDate))!.SetValue(order, request.OrderDate);
         typeof(Order).GetProperty(nameof(Order.TotalAmount))!.SetValue(order, request.TotalAmount);
 
-        await _orderRepository.AddAsync(order, cancellationToken);
+        await this._orderRepository.AddAsync(order, cancellationToken);
 
         return order.Id;
     }

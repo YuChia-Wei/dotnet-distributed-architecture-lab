@@ -13,20 +13,23 @@ public class OrdersController : ControllerBase
 
     public OrdersController(IMediator mediator)
     {
-        _mediator = mediator;
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetOrder(Guid id)
-    {
-        var order = await _mediator.Send(new GetOrderByIdQuery(id));
-        return order is not null ? Ok(order) : NotFound();
+        this._mediator = mediator;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
     {
-        var orderId = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetOrder), new { id = orderId }, null);
+        var orderId = await this._mediator.Send(command);
+        return this.CreatedAtAction(nameof(this.GetOrder), new
+        {
+            id = orderId
+        }, null);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetOrder(Guid id)
+    {
+        var order = await this._mediator.Send(new GetOrderByIdQuery(id));
+        return order is not null ? this.Ok(order) : this.NotFound();
     }
 }

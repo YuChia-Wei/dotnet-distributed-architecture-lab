@@ -11,11 +11,11 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Order
 
     public GetOrderByIdQueryHandler(IOrderRepository orderRepository)
     {
-        _orderRepository = orderRepository;
+        this._orderRepository = orderRepository;
     }
 
     public async Task<Order?> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _orderRepository.GetByIdAsync(request.Id, cancellationToken);
+        return await this._orderRepository.GetByIdAsync(request.Id, cancellationToken);
     }
 }

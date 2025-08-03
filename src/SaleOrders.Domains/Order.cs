@@ -8,5 +8,11 @@ public class Order : IAggregateRoot
     public DateTime OrderDate { get; private set; }
     public decimal TotalAmount { get; private set; }
 
-    public object[] GetKeys() => new object[] { Id };
+    public object[] GetKeys()
+    {
+        return new object[]
+        {
+            this.Id
+        };
+    }
 }
