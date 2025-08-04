@@ -2,10 +2,15 @@ using SaleOrders.Applications;
 using SaleOrders.Infrastructure;
 using Scalar.AspNetCore;
 using Wolverine;
+using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseWolverine();
+builder.Host.UseWolverine(opts =>
+{
+    var rabbitMqConnectionString = builder.Configuration.GetConnectionString("MessageBroker");
+    opts.UseRabbitMq(new Uri(rabbitMqConnectionString!)).AutoProvision();
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
