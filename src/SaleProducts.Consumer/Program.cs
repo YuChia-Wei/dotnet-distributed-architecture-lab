@@ -13,7 +13,7 @@ var builder = Host.CreateDefaultBuilder(args)
                           // "只聽" 連線會因為後面有啟用 UseDurableInbox 而導致啟動例外
                           // .UseListenerConnectionOnly(); // 只建立 Listener 連線（本程式不送訊息）
 
-                      // 2. 監聽指定佇列
+                      // 2. 監聽指定佇列 (監聽 order web api 發出的 queue)
                       opts.ListenToRabbitQueue("orders")
                           .UseDurableInbox() // 建議啟用 Durable Inbox 增加可靠性
                           .ListenerCount(4); // 4 條平行 Listener 提升吞吐

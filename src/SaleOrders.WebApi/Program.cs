@@ -3,7 +3,6 @@ using SaleOrders.Infrastructure;
 using Scalar.AspNetCore;
 using Wolverine;
 using Wolverine.RabbitMQ;
-using ServiceCollectionExtensions = SaleOrders.Applications.ServiceCollectionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +11,6 @@ builder.Host.UseWolverine(opts =>
     // 1. 設定訊息總管（RabbitMQ）
     var rabbitMqConnectionString = builder.Configuration.GetConnectionString("MessageBroker");
     opts.UseRabbitMq(new Uri(rabbitMqConnectionString!))
-        .UseConventionalRouting()
         .AutoProvision();
 
     // 2. 將所有訊息預設送進 named queue
@@ -21,7 +19,7 @@ builder.Host.UseWolverine(opts =>
         .UseDurableOutbox(); // 建議開啟 Outbox，確保至少一次送達
 
     // 掃描 application 的 DI 擴充，避免在掃描的時候直接倚賴到內部的實作型別
-    opts.Discovery.IncludeAssembly(typeof(ServiceCollectionExtensions).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(SaleOrders.Applications.ServiceCollectionExtensions).Assembly);
 });
 
 builder.Services.AddControllers();

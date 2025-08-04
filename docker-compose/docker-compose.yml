@@ -58,6 +58,9 @@ services:
       context: ../src
       dockerfile: ../src/SaleProducts.WebApi/Dockerfile
     container_name: product-api
+    environment:
+      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
+      - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres;Port=5432;Database=mqarchlab_db;Pooling=true;
     ports:
       - "8090:8080"
       - "8091:8081"
