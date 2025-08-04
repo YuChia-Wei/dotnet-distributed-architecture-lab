@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using SaleProducts.Api.Models;
-using SaleProducts.Api.Models.Requests;
-using SaleProducts.Api.Models.Responses;
+using SaleProducts.WebApi.Models;
 using SaleProducts.Applications.Commands;
 using SaleProducts.Applications.Dtos;
 using SaleProducts.Applications.Queries;
+using SaleProducts.WebApi.Models.Requests;
+using SaleProducts.WebApi.Models.Responses;
 using Wolverine;
 
-namespace SaleProducts.Api.Controllers;
+namespace SaleProducts.WebApi.Controllers;
 
 /// <summary>
 /// 產品管理 API
