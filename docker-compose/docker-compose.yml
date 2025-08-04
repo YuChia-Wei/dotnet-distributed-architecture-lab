@@ -23,7 +23,7 @@ services:
       # copy the sql script to create tables
       - ./sql-script/create_orders_table.sql:/docker-entrypoint-initdb.d/create_orders_table.sql
       # copy the sql script to fill tables
-      - ./sql-script/create_products_table:/docker-entrypoint-initdb.d/create_products_table.sql
+      - ./sql-script/create_products_table.sql:/docker-entrypoint-initdb.d/create_products_table.sql
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -31,11 +31,11 @@ services:
 
   orders-api:
     build:
-      context: ..
-      dockerfile: src/SaleOrders.Api/Dockerfile
+      context: ../src
+      dockerfile: ../src/SaleOrders.WebApi/Dockerfile
     container_name: orders-api
     environment:
-      - MessageBroker__ConnectionString=amqp://guest:guest@rabbitmq:5672
+      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
       - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres;Port=5432;Database=mqarchlab_db;Pooling=true;
     ports:
       - "8080:8080"
@@ -46,8 +46,8 @@ services:
 
   orders-consumer:
     build:
-      context: ..
-      dockerfile: src/SaleOrders.Consumer/Dockerfile
+      context: ../src
+      dockerfile: ../src/SaleOrders.Consumer/Dockerfile
     container_name: orders-consumer
     depends_on:
       - rabbitmq
@@ -55,8 +55,8 @@ services:
 
   product-api:
     build:
-      context: ..
-      dockerfile: src/SaleProduct.Api/Dockerfile
+      context: ../src
+      dockerfile: ../src/SaleProducts.WebApi/Dockerfile
     container_name: product-api
     ports:
       - "8090:8080"
@@ -67,8 +67,8 @@ services:
 
   product-consumer:
     build:
-      context: ..
-      dockerfile: src/SaleProduct.Consumer/Dockerfile
+      context: ../src
+      dockerfile: ../src/SaleProducts.Consumer/Dockerfile
     container_name: product-consumer
     depends_on:
       - rabbitmq
