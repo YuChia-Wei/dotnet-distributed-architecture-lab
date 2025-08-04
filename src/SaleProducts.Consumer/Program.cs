@@ -9,8 +9,9 @@ var builder = Host.CreateDefaultBuilder(args)
                   {
                       // 1. 設定訊息總管（RabbitMQ）
                       opts.UseRabbitMq(new Uri("amqp://guest:guest@rabbitmq:5672"))
-                          .AutoProvision() // 自動建立 queue / exchange
-                          .UseListenerConnectionOnly(); // 只建立 Listener 連線（本程式不送訊息）
+                          .AutoProvision(); // 自動建立 queue / exchange
+                          // "只聽" 連線會因為後面有啟用 UseDurableInbox 而導致啟動例外
+                          // .UseListenerConnectionOnly(); // 只建立 Listener 連線（本程式不送訊息）
 
                       // 2. 監聽指定佇列
                       opts.ListenToRabbitQueue("orders")
