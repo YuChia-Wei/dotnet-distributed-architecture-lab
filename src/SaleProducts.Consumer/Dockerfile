@@ -1,18 +1,21 @@
-# Stage 1: Build
+﻿FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
+USER $APP_UID
+WORKDIR /app
+
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/Product.Consumer/Product.Consumer.csproj", "Product.Consumer/"]
-RUN dotnet restore "Product.Consumer/Product.Consumer.csproj"
-COPY src/Product.Consumer/ .
-WORKDIR "/src/Product.Consumer"
-RUN dotnet build "Product.Consumer.csproj" -c Release -o /app/build
+COPY ["src/SaleProducts.Consumer/SaleProducts.Consumer.csproj", "src/SaleProducts.Consumer/"]
+RUN dotnet restore "src/SaleProducts.Consumer/SaleProducts.Consumer.csproj"
+COPY . .
+WORKDIR "/src/src/SaleProducts.Consumer"
+RUN dotnet build "./SaleProducts.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Stage 2: Publish
 FROM build AS publish
-RUN dotnet publish "Product.Consumer.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./SaleProducts.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Stage 3: Final
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Product.Consumer.dll"]
+ENTRYPOINT ["dotnet", "SaleProducts.Consumer.dll"]

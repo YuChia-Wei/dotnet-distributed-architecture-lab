@@ -8,7 +8,7 @@ var builder = Host.CreateDefaultBuilder(args)
                   .UseWolverine(opts =>
                   {
                       // 1. 設定訊息總管（RabbitMQ）
-                      opts.UseRabbitMq(new Uri("amqp://guest:guest@localhost:5672"))
+                      opts.UseRabbitMq(new Uri("amqp://guest:guest@rabbitmq:5672"))
                           .AutoProvision() // 自動建立 queue / exchange
                           .UseListenerConnectionOnly(); // 只建立 Listener 連線（本程式不送訊息）
 
