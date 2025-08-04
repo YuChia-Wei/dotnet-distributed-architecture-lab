@@ -31,7 +31,7 @@ public class OrderDomainRepository : IOrderDomainRepository
 
     public async Task AddAsync(Order order, CancellationToken cancellationToken = default)
     {
-        const string sql = "INSERT INTO Orders (Id, OrderDate, TotalAmount) VALUES (@Id, @OrderDate, @TotalAmount)";
+        const string sql = "INSERT INTO Orders (Id, OrderDate, TotalAmount, ProductName, Quantity) VALUES (@Id, @OrderDate, @TotalAmount, @ProductName, @Quantity)";
         await this._dbConnection.ExecuteAsync(sql, order);
     }
 

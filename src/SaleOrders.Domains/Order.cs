@@ -9,11 +9,16 @@ public class Order
     {
     }
 
-    public Order(DateTime orderDate, decimal totalAmount)
+    public Order(DateTime orderDate, decimal totalAmount, string productName, int quantity)
     {
         this.OrderDate = orderDate;
         this.TotalAmount = totalAmount;
+        this.ProductName = productName;
+        this.Quantity = quantity;
     }
+
+    public string ProductName { get; }
+    public int Quantity { get; }
 
     public DateTime OrderDate { get; private set; }
     public decimal TotalAmount { get; private set; }

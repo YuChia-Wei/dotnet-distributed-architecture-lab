@@ -21,13 +21,13 @@ public class OrdersController : ControllerBase
     /// <summary>
     /// Handles the creation of a new order.
     /// </summary>
-    /// <param name="request">An instance of <see cref="CreateOrderCommand" /> containing order details such as date and total amount.</param>
+    /// <param name="request">An instance of <see cref="PlaceOrderCommand" /> containing order details such as date and total amount.</param>
     /// <returns>An <see cref="IActionResult" /> containing the unique identifier of the created order.</returns>
     [HttpPost]
     [ProducesResponseType<Guid>(200)]
-    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
+    public async Task<IActionResult> CreateOrder([FromBody] PlaceOrderRequest request)
     {
-        var createOrderCommand = new CreateOrderCommand(request.OrderDate, request.TotalAmount);
+        var createOrderCommand = new PlaceOrderCommand(request.OrderDate, request.TotalAmount, request.ProductName, request.Quantity);
         var orderId = await this._bus.InvokeAsync<Guid>(createOrderCommand);
 
         return this.Ok(orderId);
