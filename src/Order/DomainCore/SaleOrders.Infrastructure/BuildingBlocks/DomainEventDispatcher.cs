@@ -1,4 +1,5 @@
 ﻿using Lab.BuildingBlocks.Domains;
+using Wolverine;
 
 namespace SaleOrders.Infrastructure.BuildingBlocks;
 
@@ -6,7 +7,7 @@ namespace SaleOrders.Infrastructure.BuildingBlocks;
 /// <remarks>
 /// 由於涉及 IO，因此由 infra 端實作
 /// </remarks>
-public class DomainEventDispatcher : IDomainEventDispatcher
+public class DomainEventDispatcher(IMessageBus messageBus) : IDomainEventDispatcher
 {
     /// <summary>
     /// 發布領域事件
@@ -14,8 +15,11 @@ public class DomainEventDispatcher : IDomainEventDispatcher
     /// <param name="events"></param>
     /// <param name="ct"></param>
     /// <returns></returns>
-    public Task DispatchAsync(IEnumerable<IDomainEvent> events, CancellationToken ct = default)
+    public async Task DispatchAsync(IEnumerable<IDomainEvent> events, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        foreach (var @event in events)
+        {
+            await messageBus.PublishAsync(@event, ct);
+        }
     }
 }

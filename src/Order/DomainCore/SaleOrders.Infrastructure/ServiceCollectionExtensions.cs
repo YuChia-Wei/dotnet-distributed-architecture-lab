@@ -1,4 +1,5 @@
 using System.Data;
+using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
         services.AddScoped<IOrderDomainRepository, OrderDomainRepository>();
         services.AddScoped<IIntegrationEventPublisher, IntegrationEventPublisher>();
+        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         return services;
     }
 }
