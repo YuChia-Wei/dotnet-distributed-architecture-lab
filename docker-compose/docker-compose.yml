@@ -32,7 +32,7 @@ services:
   orders-api:
     build:
       context: ../src
-      dockerfile: ../src/SaleOrders.WebApi/Dockerfile
+      dockerfile: ../src/Order/Presentation/SaleOrders.WebApi/Dockerfile
     container_name: orders-api
     environment:
       - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
@@ -47,7 +47,7 @@ services:
   orders-consumer:
     build:
       context: ../src
-      dockerfile: ../src/SaleOrders.Consumer/Dockerfile
+      dockerfile: ../src/Order/Presentation/SaleOrders.Consumer/Dockerfile
     container_name: orders-consumer
     depends_on:
       - rabbitmq
@@ -56,7 +56,7 @@ services:
   product-api:
     build:
       context: ../src
-      dockerfile: ../src/SaleProducts.WebApi/Dockerfile
+      dockerfile: ../src/Product/Presentation/SaleProducts.WebApi/Dockerfile
     container_name: product-api
     environment:
       - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
@@ -71,7 +71,7 @@ services:
   product-consumer:
     build:
       context: ../src
-      dockerfile: ../src/SaleProducts.Consumer/Dockerfile
+      dockerfile: ../src/Product/Presentation/SaleProducts.Consumer/Dockerfile
     container_name: product-consumer
     depends_on:
       - rabbitmq
