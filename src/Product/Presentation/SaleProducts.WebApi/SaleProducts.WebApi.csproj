@@ -14,12 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SaleProducts.Infrastructure\SaleProducts.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\DomainCore\SaleProducts.Infrastructure\SaleProducts.Infrastructure.csproj" />
     <ProjectReference Include="..\..\DomainCore\SaleProducts.Applications\SaleProducts.Applications.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\.dockerignore">
+    <Content Include="..\..\..\..\.dockerignore">
       <Link>.dockerignore</Link>
     </Content>
   </ItemGroup>

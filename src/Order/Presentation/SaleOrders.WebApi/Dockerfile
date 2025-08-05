@@ -1,20 +1,28 @@
-# Stage 1: Build
+﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj", "src/Order/Presentation/SaleOrders.WebApi/"]
+COPY ["src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj", "src/Order/DomainCore/SaleOrders.Infrastructure/"]
+COPY ["src/Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj", "src/Order/DomainCore/SaleOrders.Applications/"]
+COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "src/BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
+COPY ["src/Order/DomainCore/SaleOrders.Domains/SaleOrders.Domains.csproj", "src/Order/DomainCore/SaleOrders.Domains/"]
+COPY ["src/BC-Contracts/Lab.MessageSchemas.Orders/Lab.MessageSchemas.Orders.csproj", "src/BC-Contracts/Lab.MessageSchemas.Orders/"]
+RUN dotnet restore "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj"
+COPY . .
+WORKDIR "/src/src/Order/Presentation/SaleOrders.WebApi"
+RUN dotnet build "./SaleOrders.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Copy solution file and source code
-COPY MQArchLab.slnx .
-COPY src/ ./src/
-
-# Restore dependencies for the entire solution
-RUN dotnet restore MQArchLab.slnx
-
-# Stage 2: Publish
 FROM build AS publish
-RUN dotnet publish src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./SaleOrders.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Stage 3: Final
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SaleOrders.WebApi.dll"]

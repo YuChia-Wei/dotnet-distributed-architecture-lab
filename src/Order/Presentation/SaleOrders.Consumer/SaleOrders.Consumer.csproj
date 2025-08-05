@@ -13,13 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\.dockerignore">
-      <Link>.dockerignore</Link>
-    </Content>
+    <PackageReference Include="WolverineFx.RabbitMQ" Version="4.8.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WolverineFx.RabbitMQ" Version="4.8.0" />
+    <Content Include="..\..\..\..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
   </ItemGroup>
 
 </Project>
