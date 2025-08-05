@@ -1,4 +1,5 @@
 ﻿using Lab.BuildingBlocks.Domains;
+using Microsoft.Extensions.Logging;
 using Wolverine;
 
 namespace SaleOrders.Infrastructure.BuildingBlocks;
@@ -7,7 +8,7 @@ namespace SaleOrders.Infrastructure.BuildingBlocks;
 /// <remarks>
 /// 由於涉及 IO，因此由 infra 端實作
 /// </remarks>
-public class DomainEventDispatcher(IMessageBus messageBus) : IDomainEventDispatcher
+public class DomainEventDispatcher(IMessageBus messageBus, ILogger<DomainEventDispatcher> logger) : IDomainEventDispatcher
 {
     /// <summary>
     /// 發布領域事件
@@ -19,6 +20,7 @@ public class DomainEventDispatcher(IMessageBus messageBus) : IDomainEventDispatc
     {
         foreach (var @event in events)
         {
+            logger.LogInformation("dispatch domain event: {Event}", @event);
             await messageBus.PublishAsync(@event);
         }
     }

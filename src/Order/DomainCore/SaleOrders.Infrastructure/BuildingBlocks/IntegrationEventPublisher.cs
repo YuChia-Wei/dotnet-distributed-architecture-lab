@@ -1,10 +1,11 @@
 ﻿using Lab.BuildingBlocks.Integrations;
+using Microsoft.Extensions.Logging;
 using Wolverine;
 
 namespace SaleOrders.Infrastructure.BuildingBlocks;
 
 /// <inheritdoc />
-public class IntegrationEventPublisher(IMessageBus messageBus) : IIntegrationEventPublisher
+public class IntegrationEventPublisher(IMessageBus messageBus, ILogger<IntegrationEventPublisher> logger) : IIntegrationEventPublisher
 {
     /// <summary>
     /// 發布整合事件
@@ -14,6 +15,7 @@ public class IntegrationEventPublisher(IMessageBus messageBus) : IIntegrationEve
     /// <returns>代表非同步操作的工作物件</returns>
     public async Task PublishAsync(IIntegrationEvent integrationEvent)
     {
+        logger.LogInformation("publish integration event: {IntegrationEvent}", integrationEvent);
         await messageBus.PublishAsync(integrationEvent);
     }
 }

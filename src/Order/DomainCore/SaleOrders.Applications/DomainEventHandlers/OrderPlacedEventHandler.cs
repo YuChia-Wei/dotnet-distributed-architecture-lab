@@ -1,21 +1,13 @@
-using Lab.BuildingBlocks.Integrations;
-using Lab.MessageSchemas.Orders.IntegrationEvents;
+using Microsoft.Extensions.Logging;
 using SaleOrders.Domains.DomainEvents;
 
 namespace SaleOrders.Applications.DomainEventHandlers;
 
 public class OrderPlacedEventHandler
 {
-    private readonly IIntegrationEventPublisher _publisher;
-
-    public OrderPlacedEventHandler(IIntegrationEventPublisher publisher)
+    public async Task Handle(OrderPlacedDomainEvent domainDomainEvent, ILogger _logger, CancellationToken cancellationToken)
     {
-        this._publisher = publisher;
-    }
-
-    public async Task Handle(OrderPlacedEvent domainEvent, CancellationToken cancellationToken)
-    {
-        // 轉發為整合事件
-        await this._publisher.PublishAsync(new OrderPlaced(domainEvent.OrderId, domainEvent.ProductName, domainEvent.Quantity));
+        _logger.LogInformation("收到訂單的領域事件 {OrderId}：{Product} x{Qty}",
+                               domainDomainEvent.OrderId, domainDomainEvent.ProductName, domainDomainEvent.Quantity);
     }
 }

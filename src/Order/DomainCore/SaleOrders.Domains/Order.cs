@@ -20,7 +20,7 @@ public class Order : AggregateRoot<Guid>
         this.ProductName = productName;
         this.Quantity = quantity;
 
-        this.AddDomainEvent(new OrderPlacedEvent(this.Id, this.OrderDate, this.TotalAmount, this.ProductName, this.Quantity, DateTime.UtcNow));
+        this.AddDomainEvent(new OrderPlacedDomainEvent(this.Id, this.OrderDate, this.TotalAmount, this.ProductName, this.Quantity, DateTime.UtcNow));
     }
 
     public string ProductName { get; }
