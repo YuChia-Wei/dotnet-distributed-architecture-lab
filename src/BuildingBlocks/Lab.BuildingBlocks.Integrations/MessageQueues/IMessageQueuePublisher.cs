@@ -3,9 +3,6 @@
 /// <summary>
 /// Defines a contract for publishing messages to a message queue system.
 /// </summary>
-/// <remarks>
-/// 先不考慮共用介面，因此 sale order / sale product 兩個 BC 中都有對應的介面
-/// </remarks>
 public interface IMessageQueuePublisher
 {
     /// <summary>
