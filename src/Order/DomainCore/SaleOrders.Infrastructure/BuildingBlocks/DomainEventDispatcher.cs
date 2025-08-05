@@ -19,7 +19,7 @@ public class DomainEventDispatcher(IMessageBus messageBus) : IDomainEventDispatc
     {
         foreach (var @event in events)
         {
-            await messageBus.PublishAsync(@event, ct);
+            await messageBus.PublishAsync(@event);
         }
     }
 }
