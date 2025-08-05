@@ -1,4 +1,4 @@
-﻿namespace SaleOrders.Applications.IntegrationServices;
+﻿namespace Lab.BuildingBlocks.Integrations.MessageQueues;
 
 /// <summary>
 /// Defines a contract for publishing messages to a message queue system.

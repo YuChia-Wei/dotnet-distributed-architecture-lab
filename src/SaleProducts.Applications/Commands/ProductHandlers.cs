@@ -1,11 +1,9 @@
-
-using SaleProducts.Applications.Commands;
 using SaleProducts.Applications.Dtos;
 using SaleProducts.Applications.Queries;
 using SaleProducts.Applications.Repositories;
 using SaleProducts.Domains;
 
-namespace SaleProducts.Applications;
+namespace SaleProducts.Applications.Commands;
 
 public class ProductHandlers
 {

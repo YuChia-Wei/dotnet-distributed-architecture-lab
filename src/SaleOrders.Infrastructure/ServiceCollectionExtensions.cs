@@ -1,11 +1,11 @@
 using System.Data;
+using Lab.BuildingBlocks.Integrations.MessageQueues;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using SaleOrders.Applications.Repositories;
-using SaleOrders.Infrastructure.Repositories;
-using SaleOrders.Applications.IntegrationServices;
-using SaleOrders.Infrastructure.IntegrationServices;
+using SaleOrders.Infrastructure.Applications.Repositories;
+using SaleOrders.Infrastructure.BuildingBlocks.Integrations;
 
 namespace SaleOrders.Infrastructure;
 

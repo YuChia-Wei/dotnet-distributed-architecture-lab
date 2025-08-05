@@ -1,4 +1,4 @@
-namespace Lab.SharedKernel;
+namespace Lab.BuildingBlocks.Domains;
 
 /// <summary>
 /// 表示領域事件的介面

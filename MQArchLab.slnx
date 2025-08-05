@@ -1,4 +1,11 @@
 <Solution>
+  <Folder Name="/BC-Contracts/">
+    <Project Path="src\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/BuildingBlocks/">
+    <Project Path="src\Lab.BuildingBlocks.Domains\Lab.BuildingBlocks.Domains.csproj" Type="Classic C#" />
+    <Project Path="src\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Order/" />
   <Folder Name="/Order/DomainCore/">
     <Project Path="src\SaleOrders.Applications\SaleOrders.Applications.csproj" />

@@ -3,7 +3,7 @@ using Dapper;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 
-namespace SaleOrders.Infrastructure.Repositories;
+namespace SaleOrders.Infrastructure.Applications.Repositories;
 
 public class OrderDomainRepository : IOrderDomainRepository
 {

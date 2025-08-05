@@ -1,8 +1,7 @@
-
-using SaleOrders.Applications.IntegrationServices;
+using Lab.BuildingBlocks.Integrations.MessageQueues;
 using Wolverine;
 
-namespace SaleOrders.Infrastructure.IntegrationServices;
+namespace SaleOrders.Infrastructure.BuildingBlocks.Integrations;
 
 /// <summary>
 /// Message queue publisher for sale orders.

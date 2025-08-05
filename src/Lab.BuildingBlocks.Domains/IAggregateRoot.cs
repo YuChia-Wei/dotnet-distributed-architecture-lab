@@ -1,4 +1,4 @@
-namespace Lab.SharedKernel;
+namespace Lab.BuildingBlocks.Domains;
 
 /// <summary>
 /// 表示聚合根的介面

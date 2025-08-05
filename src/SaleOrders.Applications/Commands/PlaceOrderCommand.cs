@@ -1,4 +1,5 @@
-using SaleOrders.Applications.IntegrationServices;
+using Lab.BuildingBlocks.Integrations.MessageQueues;
+using Lab.MessageSchemas.Orders.IntegrationEvents;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 
@@ -10,14 +11,6 @@ namespace SaleOrders.Applications.Commands;
 /// <param name="OrderDate">訂單日期</param>
 /// <param name="TotalAmount">訂單總金額</param>
 public record PlaceOrderCommand(DateTime OrderDate, decimal TotalAmount, string ProductName, int Quantity);
-
-/// <summary>
-/// 下單完成的 integration event
-/// </summary>
-/// <param name="OrderId">訂單的唯一識別碼</param>
-/// <param name="ProductName">產品名稱</param>
-/// <param name="Quantity">訂購數量</param>
-public record OrderPlaced(Guid OrderId, string ProductName, int Quantity);
 
 /// <summary>
 /// 下單命令處理器

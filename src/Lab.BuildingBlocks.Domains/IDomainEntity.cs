@@ -1,4 +1,4 @@
-namespace Lab.SharedKernel;
+namespace Lab.BuildingBlocks.Domains;
 
 /// <summary>
 /// 表示領域實體的介面
