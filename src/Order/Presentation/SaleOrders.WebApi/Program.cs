@@ -16,11 +16,23 @@ builder.Host.UseWolverine(opts =>
         .AutoProvision();
 
     // 2. 將 Integration Events 送進 RabbitMQ
-    opts.PublishMessage<IIntegrationEvent>()
-        .ToRabbitQueue("orders") // 直接對 Queue
-        .UseDurableOutbox(); // 建議開啟 Outbox，確保至少一次送達
+    // 要依據介面區分發送的目標的話，傳遞給第三方服務的寫法要這樣比較安全
+    opts.Publish(rule =>
+    {
+        rule.MessagesImplementing<IIntegrationEvent>();
+        rule.ToRabbitQueue("orders")
+            .UseDurableOutbox();
+    });
+
+    // 2. 將 Integration Events 送進 RabbitMQ
+    // 這是錯誤寫法， wolverine 無法依據介面建立 rabbit 所需要的路由資源
+    // by ai: PublishMessage<T>() 僅適合「具體型別」或「共用抽象基底類別」。
+    // opts.PublishMessage<IIntegrationEvent>()
+    //     .ToRabbitQueue("orders") // 直接對 Queue
+    //     .UseDurableOutbox(); // 建議開啟 Outbox，確保至少一次送達
 
     // 3. 將 Domain Events 送進 in-memory bus
+    // in-memory bus 沒有介面解析的限制
     opts.PublishMessage<IDomainEvent>()
         .Locally();
 
