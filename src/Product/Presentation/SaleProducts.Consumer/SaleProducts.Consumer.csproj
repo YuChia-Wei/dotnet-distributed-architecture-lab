@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
+    <ProjectReference Include="..\..\..\BC-Contracts\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
   </ItemGroup>
 
 </Project>

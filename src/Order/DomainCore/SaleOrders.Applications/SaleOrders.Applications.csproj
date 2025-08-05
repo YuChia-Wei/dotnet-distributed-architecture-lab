@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
-    <ProjectReference Include="..\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
+    <ProjectReference Include="..\..\..\BC-Contracts\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
     <ProjectReference Include="..\SaleOrders.Domains\SaleOrders.Domains.csproj" />
   </ItemGroup>
 

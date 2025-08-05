@@ -1,26 +1,20 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
+# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/SaleProducts.WebApi/SaleProducts.WebApi.csproj", "src/SaleProducts.WebApi/"]
-COPY ["src/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj", "src/SaleProducts.Infrastructure/"]
-COPY ["src/SaleProducts.Domains/SaleProducts.Domains.csproj", "src/SaleProducts.Domains/"]
-COPY ["src/SaleProducts.Applications/SaleProducts.Applications.csproj", "src/SaleProducts.Applications/"]
-RUN dotnet restore "src/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
-COPY . .
-WORKDIR "/src/src/SaleProducts.WebApi"
-RUN dotnet build "./SaleProducts.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
+# Copy solution file and source code
+COPY MQArchLab.slnx .
+COPY src/ ./src/
+
+# Restore dependencies for the entire solution
+RUN dotnet restore MQArchLab.slnx
+
+# Stage 2: Publish
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./SaleProducts.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+# Stage 3: Final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SaleProducts.WebApi.dll"]
