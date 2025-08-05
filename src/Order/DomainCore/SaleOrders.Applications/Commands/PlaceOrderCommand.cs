@@ -1,4 +1,4 @@
-using Lab.BuildingBlocks.Integrations.MessageQueues;
+using Lab.BuildingBlocks.Integrations;
 using Lab.MessageSchemas.Orders.IntegrationEvents;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
@@ -24,7 +24,7 @@ public class PlaceOrderCommandHandler
     /// <param name="repository">訂單領域儲存庫</param>
     /// <param name="publisher"></param>
     /// <returns>新建訂單的識別碼</returns>
-    public static async Task<Guid> HandleAsync(PlaceOrderCommand command, IOrderDomainRepository repository, IMessageQueuePublisher publisher)
+    public static async Task<Guid> HandleAsync(PlaceOrderCommand command, IOrderDomainRepository repository, IIntegrationEventPublisher publisher)
     {
         var order = new Order(command.OrderDate, command.TotalAmount, command.ProductName, command.Quantity);
         await repository.AddAsync(order);

@@ -1,6 +1,9 @@
+using Lab.BuildingBlocks.Domains;
+using SaleProducts.Domains.DomainEvents;
+
 namespace SaleProducts.Domains;
 
-public class Product
+public class Product : AggregateRoot<Guid>
 {
     /// <summary>
     /// ctor (for ORM)
@@ -9,19 +12,19 @@ public class Product
 
     public Product(string name, string description, decimal price, int stock)
     {
-        this.Id = Guid.NewGuid();
+        this.Id = Guid.CreateVersion7();
         this.Name = name;
         this.Description = description;
         this.Price = price;
         this.Stock = stock;
+
+        this.AddDomainEvent(new ProductCreated(this.Id, this.Name, this.Price, this.Stock, DateTime.UtcNow));
     }
 
     public string Name { get; private set; }
     public string Description { get; private set; }
     public decimal Price { get; private set; }
     public int Stock { get; private set; }
-
-    public Guid Id { get; private set; }
 
     /// <summary>
     /// Reduces the product's stock by the specified quantity.
@@ -36,6 +39,11 @@ public class Product
         }
 
         this.Stock -= quantity;
+    }
+
+    public void Delete()
+    {
+        this.AddDomainEvent(new ProductDeleted(this.Id, DateTime.UtcNow));
     }
 
     /// <summary>
@@ -53,5 +61,7 @@ public class Product
         this.Description = description;
         this.Price = price;
         this.Stock = stock;
+
+        this.AddDomainEvent(new ProductUpdated(this.Id, this.Name, this.Description, this.Price, this.Stock, DateTime.UtcNow));
     }
 }

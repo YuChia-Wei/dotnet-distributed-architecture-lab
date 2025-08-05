@@ -1,6 +1,9 @@
+using Lab.BuildingBlocks.Domains;
+using SaleOrders.Domains.DomainEvents;
+
 namespace SaleOrders.Domains;
 
-public class Order
+public class Order : AggregateRoot<Guid>
 {
     /// <summary>
     /// ctor (for ORM)
@@ -11,10 +14,13 @@ public class Order
 
     public Order(DateTime orderDate, decimal totalAmount, string productName, int quantity)
     {
+        this.Id = Guid.CreateVersion7();
         this.OrderDate = orderDate;
         this.TotalAmount = totalAmount;
         this.ProductName = productName;
         this.Quantity = quantity;
+
+        this.AddDomainEvent(new OrderPlacedEvent(this.Id, this.OrderDate, this.TotalAmount, this.ProductName, this.Quantity, DateTime.UtcNow));
     }
 
     public string ProductName { get; }
@@ -22,5 +28,4 @@ public class Order
 
     public DateTime OrderDate { get; private set; }
     public decimal TotalAmount { get; private set; }
-    public Guid Id { get; private set; } = Guid.CreateVersion7();
 }
