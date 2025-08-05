@@ -10,12 +10,12 @@ public class OrderPlacedEventHandler
 
     public OrderPlacedEventHandler(IIntegrationEventPublisher publisher)
     {
-        _publisher = publisher;
+        this._publisher = publisher;
     }
 
     public async Task Handle(OrderPlacedEvent domainEvent, CancellationToken cancellationToken)
     {
         // 轉發為整合事件
-        await _publisher.PublishAsync(new OrderPlaced(domainEvent.OrderId, domainEvent.OrderDate, domainEvent.TotalAmount, domainEvent.ProductName, domainEvent.Quantity, domainEvent.OccurredOn));
+        await this._publisher.PublishAsync(new OrderPlaced(domainEvent.OrderId, domainEvent.ProductName, domainEvent.Quantity));
     }
 }
