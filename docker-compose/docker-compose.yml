@@ -77,7 +77,9 @@ services:
       dockerfile: ../src/Order/Presentation/SaleOrders.WebApi/Dockerfile
     container_name: orders-api
     environment:
+      - QUEUE_SERVICE=Kafka
       - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
+      - ConnectionStrings__KafkaBroker=kafka:9092
       - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-order;Port=5432;Database=orders_db;Pooling=true;
     ports:
       - "8080:8080"
@@ -85,15 +87,21 @@ services:
     depends_on:
       - rabbitmq
       - postgres-order
+      - kafka
 
   orders-consumer:
     build:
       context: ../src
       dockerfile: ../src/Order/Presentation/SaleOrders.Consumer/Dockerfile
     container_name: orders-consumer
+    environment:
+      - QUEUE_SERVICE=Kafka
+      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
+      - ConnectionStrings__KafkaBroker=kafka:9092
     depends_on:
       - rabbitmq
       - postgres-order
+      - kafka
 
   product-api:
     build:
@@ -101,7 +109,9 @@ services:
       dockerfile: ../src/Product/Presentation/SaleProducts.WebApi/Dockerfile
     container_name: product-api
     environment:
+      - QUEUE_SERVICE=Kafka
       - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
+      - ConnectionStrings__KafkaBroker=kafka:9092
       - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-product;Port=5432;Database=products_db;Pooling=true;
     ports:
       - "8090:8080"
@@ -109,15 +119,21 @@ services:
     depends_on:
       - rabbitmq
       - postgres-product
+      - kafka
 
   product-consumer:
     build:
       context: ../src
       dockerfile: ../src/Product/Presentation/SaleProducts.Consumer/Dockerfile
     container_name: product-consumer
+    environment:
+      - QUEUE_SERVICE=Kafka
+      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
+      - ConnectionStrings__KafkaBroker=kafka:9092
     depends_on:
       - rabbitmq
       - postgres-product
+      - kafka
 
 volumes:
   rabbitmq_data:
