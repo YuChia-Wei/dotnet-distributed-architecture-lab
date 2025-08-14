@@ -1,32 +1,34 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Wolverine;
 using Wolverine.Kafka;
 using Wolverine.RabbitMQ;
 
+var queueServiceUri = Environment.GetEnvironmentVariable("QUEUE_SERVICE") ?? string.Empty;
+ArgumentNullException.ThrowIfNull(queueServiceUri);
+var brokerConnectionString = Environment.GetEnvironmentVariable("BrokerConnectionString") ?? string.Empty;
+ArgumentNullException.ThrowIfNull(brokerConnectionString);
+
 var builder = Host.CreateDefaultBuilder(args)
-    .UseWolverine((context, opts) =>
-    {
-        var queueService = context.Configuration.GetValue<string>("QUEUE_SERVICE");
+                  .UseWolverine(opts =>
+                  {
+                      if (queueServiceUri.Equals("Kafka", StringComparison.OrdinalIgnoreCase))
+                      {
+                          opts.UseKafka(brokerConnectionString);
+                          opts.ListenToKafkaTopic("orders")
+                              .UseDurableInbox();
+                      }
+                      else if (queueServiceUri.Equals("RabbitMQ", StringComparison.OrdinalIgnoreCase))
+                      {
+                          opts.UseRabbitMq(new Uri(brokerConnectionString))
+                              .AutoProvision();
+                          opts.ListenToRabbitQueue("orders")
+                              .UseDurableInbox()
+                              .ListenerCount(4);
+                      }
 
-        if ("Kafka".Equals(queueService, StringComparison.OrdinalIgnoreCase))
-        {
-            var kafkaConnectionString = context.Configuration.GetConnectionString("KafkaBroker");
-            opts.UseKafka(kafkaConnectionString!);
-            opts.ListenToKafkaTopic("orders").UseDurableInbox();
-        }
-        else
-        {
-            var rabbitMqConnectionString = context.Configuration.GetConnectionString("MessageBroker");
-            opts.UseRabbitMq(new Uri(rabbitMqConnectionString!)).AutoProvision();
-            opts.ListenToRabbitQueue("orders")
-                .UseDurableInbox()
-                .ListenerCount(4);
-        }
-
-        opts.ApplicationAssembly = typeof(Program).Assembly;
-    });
+                      opts.Discovery.IncludeAssembly(typeof(Program).Assembly);
+                  });
 
 await builder.RunConsoleAsync(); // Ctrl+C 可優雅關閉

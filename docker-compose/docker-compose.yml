@@ -96,8 +96,8 @@ services:
     container_name: orders-consumer
     environment:
       - QUEUE_SERVICE=Kafka
-      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
-      - ConnectionStrings__KafkaBroker=kafka:9092
+#      - BrokerConnectionString=amqp://guest:guest@rabbitmq:5672
+      - BrokerConnectionString=kafka:9092
     depends_on:
       - rabbitmq
       - postgres-order
@@ -128,8 +128,8 @@ services:
     container_name: product-consumer
     environment:
       - QUEUE_SERVICE=Kafka
-      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
-      - ConnectionStrings__KafkaBroker=kafka:9092
+#      - BrokerConnectionString=amqp://guest:guest@rabbitmq:5672
+      - BrokerConnectionString=kafka:9092
     depends_on:
       - rabbitmq
       - postgres-product
