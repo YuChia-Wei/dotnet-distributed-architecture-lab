@@ -13,21 +13,33 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
 
-  postgres:
-    image: postgres:16
-    container_name: postgres
+  postgres-order:
+    image: postgres:16-alpine
+    container_name: postgres-order
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_order_data:/var/lib/postgresql/data
       # copy the sql script to create tables
       - ./sql-script/create_orders_table.sql:/docker-entrypoint-initdb.d/create_orders_table.sql
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=orders_db
+
+  postgres-product:
+    image: postgres:16-alpine
+    container_name: postgres-product
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_product_data:/var/lib/postgresql/data
       # copy the sql script to fill tables
       - ./sql-script/create_products_table.sql:/docker-entrypoint-initdb.d/create_products_table.sql
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=mqarchlab_db
+      - POSTGRES_DB=products_db
 
   orders-api:
     build:
@@ -36,13 +48,13 @@ services:
     container_name: orders-api
     environment:
       - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
-      - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres;Port=5432;Database=mqarchlab_db;Pooling=true;
+      - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-order;Port=5432;Database=orders_db;Pooling=true;
     ports:
       - "8080:8080"
       - "8081:8081"
     depends_on:
       - rabbitmq
-      - postgres
+      - postgres-order
 
   orders-consumer:
     build:
@@ -51,7 +63,7 @@ services:
     container_name: orders-consumer
     depends_on:
       - rabbitmq
-      - postgres
+      - postgres-order
 
   product-api:
     build:
@@ -60,13 +72,13 @@ services:
     container_name: product-api
     environment:
       - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
-      - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres;Port=5432;Database=mqarchlab_db;Pooling=true;
+      - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-product;Port=5432;Database=products_db;Pooling=true;
     ports:
       - "8090:8080"
       - "8091:8081"
     depends_on:
       - rabbitmq
-      - postgres
+      - postgres-product
 
   product-consumer:
     build:
@@ -75,8 +87,9 @@ services:
     container_name: product-consumer
     depends_on:
       - rabbitmq
-      - postgres
+      - postgres-product
 
 volumes:
   rabbitmq_data:
-  postgres_data:
+  postgres_order_data:
+  postgres_product_data:
