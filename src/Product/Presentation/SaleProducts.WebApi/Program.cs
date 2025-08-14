@@ -4,6 +4,7 @@ using SaleProducts.Applications;
 using SaleProducts.Infrastructure;
 using Scalar.AspNetCore;
 using Wolverine;
+using Wolverine.Kafka;
 using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
