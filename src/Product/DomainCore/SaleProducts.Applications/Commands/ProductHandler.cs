@@ -5,7 +5,7 @@ using SaleProducts.Domains;
 
 namespace SaleProducts.Applications.Commands;
 
-public class ProductHandlers
+public class ProductHandler
 {
     public static async Task<ProductDto> Handle(CreateProductCommand command, IProductDomainRepository repository)
     {
