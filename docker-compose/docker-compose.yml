@@ -13,24 +13,38 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
 
+  # 改用官方 Apache Kafka（KRaft 單節點，同時擔任 controller 與 broker）
   kafka:
-    image: bitnami/kafka:latest
+    image: apache/kafka:4.0.0
     container_name: kafka
     ports:
-      - "9092:9092"
-      - "29092:29092"
+      - "9092:9092"     # 叢集內部/容器間
+      - "29092:29092"   # 本機端工具
     volumes:
-      - kafka_data:/bitnami/kafka
+      # 官方映像的預設資料目錄建議掛載到 /var/lib/kafka/data
+      - kafka_data:/var/lib/kafka/data
     environment:
-      # KRaft settings
-      - KAFKA_CFG_NODE_ID=0
-      - KAFKA_CFG_PROCESS_ROLES=controller,broker
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,PLAINTEXT_HOST://:29092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      # A cluster ID is required for KRaft mode. This is a generated one.
+      # --- KRaft（Kafka Raft）基本設定 ---
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=controller,broker
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+
+      # --- Listeners 與對外宣告（advertised listeners）---
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,PLAINTEXT_HOST://:29092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+
+      # --- 單節點開發環境常見必要參數（避免內部主題無法建立）---
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+
+      # --- 資料目錄 ---
+      - KAFKA_LOG_DIRS=/var/lib/kafka/data
+
+      # --- KRaft 叢集 ID（cluster id）---
+      # 單節點本機可固定一個；正式環境請事先用 kafka-storage.sh 產生並格式化
       - CLUSTER_ID=Lpaefz4gR4q_4Y-d-d-d-Q
 
   kafdrop:
