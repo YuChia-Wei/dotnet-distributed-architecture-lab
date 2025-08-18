@@ -15,7 +15,8 @@ var builder = Host.CreateDefaultBuilder(args)
                   {
                       if (queueServiceUri.Equals("Kafka", StringComparison.OrdinalIgnoreCase))
                       {
-                          opts.UseKafka(brokerConnectionString);
+                          opts.UseKafka(brokerConnectionString)
+                              .AutoProvision();
                           opts.ListenToKafkaTopic("products")
                               .UseDurableInbox();
                       }

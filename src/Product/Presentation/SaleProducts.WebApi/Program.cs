@@ -18,7 +18,8 @@ builder.Host.UseWolverine(opts =>
     {
         // Configure Kafka
         var kafkaConnectionString = builder.Configuration.GetConnectionString("KafkaBroker");
-        opts.UseKafka(kafkaConnectionString!);
+        opts.UseKafka(kafkaConnectionString!)
+            .AutoProvision();
 
         opts.Publish(rule =>
         {
