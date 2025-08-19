@@ -64,3 +64,7 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
   您可以透過 [http://localhost:15672](http://localhost:15672) 來監控 RabbitMQ 的佇列和訊息。
   - **帳號:** `guest`
   - **密碼:** `guest`
+
+## 其他設計相關的分析文章
+
+- [order / product 中的 command/command handler 做法比較](./doc/command-handler-comparison-of-practices.md)
