@@ -93,6 +93,12 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
 
 - [order / product 中的 command/command handler 做法比較](./doc/command-handler-comparison-of-practices.md)
 
+## Using PRD with AI Coding Agents
+
+1. Write structured PRDs: Create Markdown PRDs under `doc/` (e.g., `doc/orders.prd.md`) using the template in `doc/PRD_TEMPLATE.md`. Keep sections concise (Overview, Goals, Functional/Non-functional, Architecture with DDD/CQRS/Clean Architecture, API Design, Constraints).
+2. Reference the PRD naturally: In your AI CLI prompt (codex cli, gemini cli), mention the file and section, e.g., “Follow `doc/orders.prd.md` — implement the API endpoints from ‘API Design’ and use Kafka as noted in ‘System Architecture’.”
+3. Let AI leverage the PRD: Keep PRD filenames predictable in `doc/`. Agents will read `AGENTS.md` and the referenced PRD to generate code and design. In follow-ups, you can simply say “adhere to the PRD” without restating details.
+
 ## 貢獻者與 AI 指南
 
 - 英文版指南：參見 `AGENTS.md`（本庫唯一的 AI 與貢獻者說明）
