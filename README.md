@@ -4,7 +4,7 @@
 
 MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（如 Clean Architecture、DDD、CQRS）建構的範例專案。此專案旨在展示如何設計和開發一個可擴展、具備韌性且易於維護的後端系統。
 
-專案包含兩個核心業務領域：**訂單 (SaleOrders)** 和 **產品 (SaleProducts)**，並透過 RabbitMQ 進行非同步通訊。
+專案包含兩個核心業務領域：**訂單 (SaleOrders)** 和 **產品 (SaleProducts)**，並透過 RabbitMQ 或 Kafka 進行非同步通訊。
 
 ## 架構原則
 
@@ -20,20 +20,39 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
 - **主要語言:** C#
 - **訊息/命令/查詢處理:** WolverineFx
 - **資料庫:** PostgreSQL
-- **訊息代理:** RabbitMQ
+- **訊息代理:** RabbitMQ / Kafka
 - **容器化:** Docker
 
 ## 如何啟動專案
 
 本專案已完全容器化，您只需要在本機安裝 Docker 和 Docker Compose 即可輕鬆啟動。
 
-1.  **Clone 專案庫**
+1.  **選擇訊息代理 (Message Broker)**
+
+    在 `docker-compose/docker-compose.yml` 檔案中，您可以透過設定 `QUEUE_SERVICE` 環境變數來選擇要使用的訊息代理。
+
+    - **使用 Kafka (預設):**
+      ```yaml
+      # 在 orders-api, orders-consumer, product-api, product-consumer 中
+      environment:
+        - QUEUE_SERVICE=Kafka
+      ```
+
+    - **使用 RabbitMQ:**
+      將 `QUEUE_SERVICE` 的值改為 `RabbitMQ`。
+      ```yaml
+      # 在 orders-api, orders-consumer, product-api, product-consumer 中
+      environment:
+        - QUEUE_SERVICE=RabbitMQ
+      ```
+
+2.  **Clone 專案庫**
     ```bash
     git clone https://github.com/YuChia/dotnet-mq-arch-lab.git
     cd dotnet-mq-arch-lab
     ```
 
-2.  **使用 Docker Compose 啟動所有服務**
+3.  **使用 Docker Compose 啟動所有服務**
     在專案根目錄下，執行以下指令：
     ```bash
     docker-compose -f ./docker-compose/docker-compose.yml up -d
@@ -43,8 +62,10 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
     - `orders-consumer`
     - `product-api`
     - `product-consumer`
-    - `rabbitmq`
     - `postgres`
+    - `rabbitmq` (如果選擇 RabbitMQ)
+    - `kafka` (如果選擇 Kafka)
+    - `kafka-ui` (如果選擇 Kafka)
 
 ## API 文件 (Scalar)
 
@@ -60,8 +81,11 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
 
 ## 服務監控
 
+- **Kafka UI:**
+  當使用 Kafka 時，您可以透過 [http://localhost:8088](http://localhost:8088) 來存取 Kafka UI。
+
 - **RabbitMQ Management UI:**
-  您可以透過 [http://localhost:15672](http://localhost:15672) 來監控 RabbitMQ 的佇列和訊息。
+  當使用 RabbitMQ 時，您可以透過 [http://localhost:15672](http://localhost:15672) 來監控 RabbitMQ 的佇列和訊息。
   - **帳號:** `guest`
   - **密碼:** `guest`
 
