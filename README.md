@@ -92,3 +92,8 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
 ## 其他設計相關的分析文章
 
 - [order / product 中的 command/command handler 做法比較](./doc/command-handler-comparison-of-practices.md)
+
+## 貢獻者與 AI 指南
+
+- 英文版指南：參見 `AGENTS.md`（本庫唯一的 AI 與貢獻者說明）
+- 正體中文版：參見 `AGENTS.zh-TW.md`
