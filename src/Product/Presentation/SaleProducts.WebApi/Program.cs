@@ -6,6 +6,10 @@ using Scalar.AspNetCore;
 using Wolverine;
 using Wolverine.Kafka;
 using Wolverine.RabbitMQ;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Logs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +63,29 @@ builder.Services.AddOpenApi();
 // domain core DI
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
+// OpenTelemetry: tracing, metrics (CPU/Memory), logging
+var serviceName = builder.Environment.ApplicationName;
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(r => r.AddService(serviceName))
+    .WithTracing(t => t
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddOtlpExporter())
+    .WithMetrics(m => m
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation()
+        .AddProcessInstrumentation()
+        .AddOtlpExporter());
+
+builder.Logging.AddOpenTelemetry(o =>
+{
+    o.IncludeScopes = true;
+    o.ParseStateValues = true;
+    o.IncludeFormattedMessage = true;
+    o.AddOtlpExporter();
+});
 
 var app = builder.Build();
 
