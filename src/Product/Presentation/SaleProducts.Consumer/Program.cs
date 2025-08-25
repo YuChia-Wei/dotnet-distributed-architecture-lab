@@ -1,13 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Wolverine;
-using Wolverine.Kafka;
-using Wolverine.RabbitMQ;
+using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Wolverine;
+using Wolverine.Kafka;
+using Wolverine.RabbitMQ;
 
 var queueServiceUri = Environment.GetEnvironmentVariable("QUEUE_SERVICE") ?? string.Empty;
 ArgumentNullException.ThrowIfNull(queueServiceUri);
@@ -19,15 +21,15 @@ var builder = Host.CreateDefaultBuilder(args)
                   {
                       var serviceName = ctx.HostingEnvironment.ApplicationName;
                       services.AddOpenTelemetry()
-                          .ConfigureResource(r => r.AddService(serviceName))
-                          .WithTracing(t => t
-                              .AddHttpClientInstrumentation()
-                              .AddOtlpExporter())
-                          .WithMetrics(m => m
-                              .AddHttpClientInstrumentation()
-                              .AddRuntimeInstrumentation()
-                              .AddProcessInstrumentation()
-                              .AddOtlpExporter());
+                              .ConfigureResource(r => r.AddService(serviceName))
+                              .WithTracing(t => t
+                                                .AddHttpClientInstrumentation()
+                                                .AddOtlpExporter())
+                              .WithMetrics(m => m
+                                                .AddHttpClientInstrumentation()
+                                                .AddRuntimeInstrumentation()
+                                                .AddProcessInstrumentation()
+                                                .AddOtlpExporter());
                   })
                   .ConfigureLogging((ctx, logging) =>
                   {

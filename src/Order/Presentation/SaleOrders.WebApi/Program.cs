@@ -1,15 +1,16 @@
 using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using SaleOrders.Applications;
 using SaleOrders.Infrastructure;
 using Scalar.AspNetCore;
 using Wolverine;
 using Wolverine.Kafka;
 using Wolverine.RabbitMQ;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Logs;
+using ServiceCollectionExtensions = SaleOrders.Applications.ServiceCollectionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,7 +52,7 @@ builder.Host.UseWolverine(opts =>
     opts.PublishMessage<IDomainEvent>().Locally();
 
     // Discover services
-    opts.Discovery.IncludeAssembly(typeof(SaleOrders.Applications.ServiceCollectionExtensions).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(ServiceCollectionExtensions).Assembly);
 });
 
 builder.Services.AddControllers();
@@ -67,17 +68,17 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 // OpenTelemetry: tracing, metrics (CPU/Memory), logging
 var serviceName = builder.Environment.ApplicationName;
 builder.Services.AddOpenTelemetry()
-    .ConfigureResource(r => r.AddService(serviceName))
-    .WithTracing(t => t
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
-        .AddOtlpExporter())
-    .WithMetrics(m => m
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
-        .AddRuntimeInstrumentation()
-        .AddProcessInstrumentation()
-        .AddOtlpExporter());
+       .ConfigureResource(r => r.AddService(serviceName))
+       .WithTracing(t => t
+                         .AddAspNetCoreInstrumentation()
+                         .AddHttpClientInstrumentation()
+                         .AddOtlpExporter())
+       .WithMetrics(m => m
+                         .AddAspNetCoreInstrumentation()
+                         .AddHttpClientInstrumentation()
+                         .AddRuntimeInstrumentation()
+                         .AddProcessInstrumentation()
+                         .AddOtlpExporter());
 
 builder.Logging.AddOpenTelemetry(o =>
 {
