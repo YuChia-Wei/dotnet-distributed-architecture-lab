@@ -12,13 +12,22 @@ exporters:
     loglevel: info
   prometheus:
     endpoint: 0.0.0.0:9464
+  otlp/tempo:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+    default_labels_enabled:
+      exporter: true
+      job: true
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging]
+      exporters: [logging, otlp/tempo]
     metrics:
       receivers: [otlp]
       processors: [batch]
@@ -26,5 +35,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging]
-
+      exporters: [logging, loki]
