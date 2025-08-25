@@ -2,10 +2,8 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Wolverine;
 using Wolverine.Kafka;
@@ -19,27 +17,34 @@ ArgumentNullException.ThrowIfNull(brokerConnectionString);
 var builder = Host.CreateDefaultBuilder(args)
                   .ConfigureServices((ctx, services) =>
                   {
-                      var serviceName = ctx.HostingEnvironment.ApplicationName;
                       services.AddOpenTelemetry()
-                              .ConfigureResource(r => r.AddService(serviceName))
-                              .WithTracing(t => t
-                                                .AddHttpClientInstrumentation()
-                                                .AddOtlpExporter())
-                              .WithMetrics(m => m
-                                                .AddHttpClientInstrumentation()
-                                                .AddRuntimeInstrumentation()
-                                                .AddProcessInstrumentation()
-                                                .AddOtlpExporter());
-                  })
-                  .ConfigureLogging((ctx, logging) =>
-                  {
-                      logging.AddOpenTelemetry(o =>
-                      {
-                          o.IncludeScopes = true;
-                          o.ParseStateValues = true;
-                          o.IncludeFormattedMessage = true;
-                          o.AddOtlpExporter();
-                      });
+                              .WithLogging(loggerProviderBuilder =>
+                              {
+                                  loggerProviderBuilder.AddOtlpExporter();
+                              })
+                              .WithTracing(tracerProviderBuilder =>
+                              {
+                                  tracerProviderBuilder
+                                      // .AddHttpClientInstrumentation()
+                                      // .AddEntityFrameworkCoreInstrumentation()
+                                      .AddOtlpExporter();
+                              })
+                              .WithMetrics(meterProviderBuilder =>
+                              {
+                                  meterProviderBuilder
+                                      .AddRuntimeInstrumentation()
+                                      // .AddHttpClientInstrumentation()
+                                      .AddProcessInstrumentation()
+                                      .AddOtlpExporter((exporterOptions, metricReaderOptions) =>
+                                      {
+                                          var endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
+                                          exporterOptions.Endpoint = !string.IsNullOrWhiteSpace(endpoint)
+                                                                         ? new Uri(endpoint)
+                                                                         : new Uri("http://localhost:4317");
+
+                                          metricReaderOptions.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = 1000;
+                                      });
+                              });
                   })
                   .UseWolverine(opts =>
                   {

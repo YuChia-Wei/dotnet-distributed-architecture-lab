@@ -65,28 +65,36 @@ builder.Services.AddOpenApi();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-// OpenTelemetry: tracing, metrics (CPU/Memory), logging
-var serviceName = builder.Environment.ApplicationName;
 builder.Services.AddOpenTelemetry()
-       .ConfigureResource(r => r.AddService(serviceName))
-       .WithTracing(t => t
-                         .AddAspNetCoreInstrumentation()
-                         .AddHttpClientInstrumentation()
-                         .AddOtlpExporter())
-       .WithMetrics(m => m
-                         .AddAspNetCoreInstrumentation()
-                         .AddHttpClientInstrumentation()
-                         .AddRuntimeInstrumentation()
-                         .AddProcessInstrumentation()
-                         .AddOtlpExporter());
+       .WithLogging(loggerProviderBuilder =>
+       {
+           loggerProviderBuilder.AddOtlpExporter();
+       })
+       .WithTracing(tracerProviderBuilder =>
+       {
+           tracerProviderBuilder
+               // .AddHttpClientInstrumentation()
+               .AddAspNetCoreInstrumentation()
+               // .AddEntityFrameworkCoreInstrumentation()
+               .AddOtlpExporter();
+       })
+       .WithMetrics(meterProviderBuilder =>
+       {
+           meterProviderBuilder
+               .AddRuntimeInstrumentation()
+               // .AddHttpClientInstrumentation()
+               .AddAspNetCoreInstrumentation()
+               .AddProcessInstrumentation()
+               .AddOtlpExporter((exporterOptions, metricReaderOptions) =>
+               {
+                   var endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
+                   exporterOptions.Endpoint = !string.IsNullOrWhiteSpace(endpoint)
+                                                  ? new Uri(endpoint)
+                                                  : new Uri("http://localhost:4317");
 
-builder.Logging.AddOpenTelemetry(o =>
-{
-    o.IncludeScopes = true;
-    o.ParseStateValues = true;
-    o.IncludeFormattedMessage = true;
-    o.AddOtlpExporter();
-});
+                   metricReaderOptions.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = 1000;
+               });
+       });
 
 var app = builder.Build();
 
