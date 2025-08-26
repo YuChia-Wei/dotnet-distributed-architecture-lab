@@ -16,6 +16,7 @@ COPY ["src/BC-Contracts/Lab.MessageSchemas.Orders/Lab.MessageSchemas.Orders.cspr
 RUN dotnet restore "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj"
 COPY . .
 WORKDIR "/src/src/Order/Presentation/SaleOrders.WebApi"
+RUN dotnet run -- codegen write
 RUN dotnet build "./SaleOrders.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

@@ -1,8 +1,9 @@
+using JasperFx;
+using JasperFx.CodeGeneration;
 using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using SaleOrders.Applications;
 using SaleOrders.Infrastructure;
@@ -18,6 +19,23 @@ builder.Host.UseWolverine(opts =>
 {
     // Get the queue service type from environment variables
     var queueService = builder.Configuration.GetValue<string>("QUEUE_SERVICE");
+
+    // opts.CodeGeneration.TypeLoadMode = TypeLoadMode.Static;
+    // opts.AutoBuildMessageStorageOnStartup = AutoCreate.None;
+
+    opts.Services.CritterStackDefaults(options =>
+        {
+            options.Production.GeneratedCodeMode = TypeLoadMode.Static;
+            options.Production.ResourceAutoCreate = AutoCreate.None;
+
+            options.Production.AssertAllPreGeneratedTypesExist = true;
+
+            options.Development.GeneratedCodeMode = TypeLoadMode.Static;
+            options.Development.ResourceAutoCreate = AutoCreate.None;
+
+            options.Development.AssertAllPreGeneratedTypesExist = true;
+        }
+    );
 
     if ("Kafka".Equals(queueService, StringComparison.OrdinalIgnoreCase))
     {
@@ -113,4 +131,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+// app.Run();
+return await app.RunJasperFxCommands(args);
