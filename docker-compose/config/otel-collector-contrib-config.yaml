@@ -13,8 +13,8 @@ exporters:
     verbosity: normal
   
   # https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/lokiexporter/README.md
-  loki:
-    endpoint: http://loki:3100/loki/api/v1/push
+  otlphttp/loki:
+    endpoint: http://loki:3100/otlp/v1/logs
     tls:
       insecure: true
   
@@ -59,7 +59,7 @@ service:
     logs:
       receivers: [otlp]
       processors: [resource]
-      exporters: [loki]
+      exporters: [otlphttp/loki]
     traces:
       receivers: [otlp]
       processors: [memory_limiter, batch]
