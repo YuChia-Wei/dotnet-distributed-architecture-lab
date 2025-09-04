@@ -76,6 +76,4 @@ var builder = Host.CreateDefaultBuilder(args)
                       opts.Discovery.IncludeAssembly(typeof(Program).Assembly);
                   });
 
-await builder.RunConsoleAsync(); // Ctrl+C 可優雅關閉    });
-
 await builder.RunConsoleAsync(); // Ctrl+C 可優雅關閉
