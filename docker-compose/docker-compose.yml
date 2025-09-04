@@ -225,6 +225,7 @@ services:
       - BrokerConnectionString=kafka:9092
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
       - OTEL_SERVICE_NAME=product-consumer
+      - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-product;Port=5432;Database=products_db;Pooling=true;
     depends_on:
       - otel-collector-contrib
 #      - rabbitmq
