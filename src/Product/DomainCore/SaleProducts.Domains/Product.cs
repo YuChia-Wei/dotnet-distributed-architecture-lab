@@ -5,6 +5,8 @@ namespace SaleProducts.Domains;
 
 public class Product : AggregateRoot<Guid>
 {
+    private readonly List<ProductSale> _sales = new();
+
     /// <summary>
     /// ctor (for ORM)
     /// </summary>
@@ -25,6 +27,15 @@ public class Product : AggregateRoot<Guid>
     public string Description { get; private set; }
     public decimal Price { get; private set; }
     public int Stock { get; private set; }
+    public IReadOnlyCollection<ProductSale> Sales => _sales.AsReadOnly();
+
+    public ProductSale AddSale(Guid orderId, int quantity)
+    {
+        this.DecreaseStock(quantity);
+        var productSale = new ProductSale(orderId, quantity);
+        this._sales.Add(productSale);
+        return productSale;
+    }
 
     /// <summary>
     /// Reduces the product's stock by the specified quantity.
