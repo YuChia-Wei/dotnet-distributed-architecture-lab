@@ -21,6 +21,9 @@ ArgumentNullException.ThrowIfNull(brokerConnectionString);
 var builder = Host.CreateDefaultBuilder(args)
                   .ConfigureServices((ctx, services) =>
                   {
+                      services.AddApplicationServices();
+                      services.AddInfrastructureServices(ctx.Configuration);
+
                       services.AddOpenTelemetry()
                               .WithLogging(loggerProviderBuilder =>
                               {
