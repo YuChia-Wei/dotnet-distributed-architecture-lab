@@ -1,5 +1,7 @@
 ﻿using Lab.MessageSchemas.Orders.IntegrationEvents;
 using Microsoft.Extensions.Logging;
+using SaleProducts.Applications.Commands;
+using Wolverine;
 
 namespace SaleProducts.Consumer.IntegrationEventHandlers;
 
@@ -9,9 +11,11 @@ namespace SaleProducts.Consumer.IntegrationEventHandlers;
 public static class InventoryDeductionOnOrderPlacedHandler
 {
     // Wolverine 會自動掃描並注入 ILogger
-    public static void HandleAsync(OrderPlaced @event, ILogger logger)
+    public static async Task HandleAsync(OrderPlaced @event, ILogger logger, IMessageBus messageBus)
     {
         logger.LogInformation("收到訂單 {OrderId}：{Product} x{Qty}",
                               @event.OrderId, @event.ProductName, @event.Quantity);
+        var productSaleCommand = new CreateProductSaleCommand(@event.OrderId, @event.ProductName, @event.Quantity);
+        await messageBus.SendAsync(productSaleCommand);
     }
 }

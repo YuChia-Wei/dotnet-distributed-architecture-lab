@@ -1,20 +1,20 @@
-using SaleProducts.Applications.Repositories;
 using SaleProducts.Applications.Dtos;
+using SaleProducts.Applications.Repositories;
 
 namespace SaleProducts.Applications.Commands;
 
 public class CreateProductSaleCommandHandler
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IProductDomainRepository _productDomainRepository;
 
-    public CreateProductSaleCommandHandler(IProductRepository productRepository)
+    public CreateProductSaleCommandHandler(IProductDomainRepository productDomainRepository)
     {
-        _productRepository = productRepository;
+        this._productDomainRepository = productDomainRepository;
     }
 
     public async Task<ProductSaleDto> Handle(CreateProductSaleCommand request)
     {
-        var product = await _productRepository.GetByNameAsync(request.ProductName);
+        var product = await this._productDomainRepository.GetByIdAsync(request.OrderId);
 
         if (product is null)
         {
@@ -23,7 +23,7 @@ public class CreateProductSaleCommandHandler
 
         var productSale = product.AddSale(request.OrderId, request.Quantity);
 
-        await _productRepository.UpdateAsync(product);
+        await this._productDomainRepository.UpdateAsync(product);
 
         return new ProductSaleDto
         {

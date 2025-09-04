@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BC-Contracts\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
+    <ProjectReference Include="..\..\DomainCore\SaleProducts.Applications\SaleProducts.Applications.csproj" />
   </ItemGroup>
 
   <ItemGroup>
