@@ -1,3 +1,4 @@
+using Confluent.Kafka.Extensions.OpenTelemetry;
 using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
 using OpenTelemetry.Logs;
@@ -76,6 +77,9 @@ builder.Services.AddOpenTelemetry()
                // .AddHttpClientInstrumentation()
                .AddAspNetCoreInstrumentation()
                // .AddEntityFrameworkCoreInstrumentation()
+               .AddSource("Wolverine")
+               .AddRabbitMQInstrumentation()
+               .AddConfluentKafkaInstrumentation()
                .AddOtlpExporter();
        })
        .WithMetrics(meterProviderBuilder =>
@@ -85,6 +89,7 @@ builder.Services.AddOpenTelemetry()
                // .AddHttpClientInstrumentation()
                .AddAspNetCoreInstrumentation()
                .AddProcessInstrumentation()
+               .AddMeter("Wolverine")
                .AddOtlpExporter((exporterOptions, metricReaderOptions) =>
                {
                    var endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");

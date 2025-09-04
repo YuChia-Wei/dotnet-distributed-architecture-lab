@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Confluent.Kafka.Extensions.OpenTelemetry" Version="0.4.0" />
+    <PackageReference Include="RabbitMQ.Client.OpenTelemetry" Version="1.0.0-rc.1" />
     <PackageReference Include="WolverineFx.Kafka" Version="4.10.0" />
     <PackageReference Include="WolverineFx.RabbitMQ" Version="4.10.0" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />

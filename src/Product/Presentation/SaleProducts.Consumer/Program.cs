@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Confluent.Kafka.Extensions.OpenTelemetry;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,9 @@ var builder = Host.CreateDefaultBuilder(args)
                                   tracerProviderBuilder
                                       // .AddHttpClientInstrumentation()
                                       // .AddEntityFrameworkCoreInstrumentation()
+                                      .AddSource("Wolverine")
+                                      .AddRabbitMQInstrumentation()
+                                      .AddConfluentKafkaInstrumentation()
                                       .AddOtlpExporter();
                               })
                               .WithMetrics(meterProviderBuilder =>
@@ -36,6 +40,7 @@ var builder = Host.CreateDefaultBuilder(args)
                                       .AddRuntimeInstrumentation()
                                       // .AddHttpClientInstrumentation()
                                       .AddProcessInstrumentation()
+                                      .AddMeter("Wolverine")
                                       .AddOtlpExporter((exporterOptions, metricReaderOptions) =>
                                       {
                                           var endpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
