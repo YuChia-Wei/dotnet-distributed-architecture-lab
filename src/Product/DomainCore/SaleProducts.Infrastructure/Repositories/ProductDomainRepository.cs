@@ -1,4 +1,5 @@
-﻿using System.Data;
+using System.Data;
+using Dapper;
 using SaleProducts.Applications.Repositories;
 using SaleProducts.Domains;
 
@@ -7,49 +8,65 @@ namespace SaleProducts.Infrastructure.Repositories;
 public class ProductDomainRepository : IProductDomainRepository
 {
     private readonly IDbConnection _dbConnection;
-    private readonly List<Product> _products = new();
 
     public ProductDomainRepository(IDbConnection dbConnection)
     {
-        this._dbConnection = dbConnection;
+        _dbConnection = dbConnection;
     }
 
-    public Task<Product> GetByIdAsync(Guid id)
+    public async Task<Product?> GetByIdAsync(Guid id)
     {
-        return Task.FromResult(this._products.FirstOrDefault(p => p.Id == id));
+        const string sql = """
+                           SELECT * FROM "Products"
+                           WHERE "Id" = @Id AND "IsDeleted" = false
+                           """;
+        return await _dbConnection.QueryFirstOrDefaultAsync<Product>(sql, new { Id = id });
     }
 
-    public Task AddAsync(Product product)
+    public async Task AddAsync(Product product)
     {
-        this._products.Add(product);
-        return Task.CompletedTask;
+        const string sql = """
+                           INSERT INTO "Products" ("Id", "Name", "Description", "Price", "Stock", "IsDeleted", "Version")
+                           VALUES (@Id, @Name, @Description, @Price, @Stock, false, 1)
+                           """;
+        await _dbConnection.ExecuteAsync(sql, product);
     }
 
-    public Task UpdateAsync(Product product)
+    public async Task UpdateAsync(Product product)
     {
-        var existingProduct = this._products.FirstOrDefault(p => p.Id == product.Id);
-        if (existingProduct != null)
+        const string sql = """
+                           UPDATE "Products"
+                           SET "Name" = @Name,
+                               "Description" = @Description,
+                               "Price" = @Price,
+                               "Stock" = @Stock,
+                               "Version" = "Version" + 1
+                           WHERE "Id" = @Id AND "Version" = @Version
+                           """;
+        var affectedRows = await _dbConnection.ExecuteAsync(sql, product);
+        if (affectedRows == 0)
         {
-            this._products.Remove(existingProduct);
-            this._products.Add(product);
+            throw new DBConcurrencyException("The record has been modified by another user.");
         }
-
-        return Task.CompletedTask;
     }
 
-    public Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        var productToRemove = this._products.FirstOrDefault(p => p.Id == id);
-        if (productToRemove != null)
-        {
-            this._products.Remove(productToRemove);
-        }
-
-        return Task.CompletedTask;
+        const string sql = """
+                           UPDATE "Products"
+                           SET "IsDeleted" = true,
+                               "Version" = "Version" + 1
+                           WHERE "Id" = @Id
+                           """;
+        await _dbConnection.ExecuteAsync(sql, new { Id = id });
     }
 
-    public Task<IEnumerable<Product>> GetAllAsync()
+    public async Task<IEnumerable<Product>> GetAllAsync()
     {
-        return Task.FromResult<IEnumerable<Product>>(this._products);
+        const string sql = """
+                           SELECT * FROM "Products"
+                           WHERE "IsDeleted" = false
+                           """;
+        return await _dbConnection.QueryAsync<Product>(sql);
     }
 }
