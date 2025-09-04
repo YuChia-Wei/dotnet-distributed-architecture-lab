@@ -172,7 +172,7 @@
             "type": "loki",
             "uid": "loki"
           },
-          "expr": "{service_name=\"$app\"} |= \"$search\" | json",
+          "expr": "{service_name=\"$app\"} |= \"$search\" | logfmt",
           "hide": false,
           "legendFormat": "",
           "refId": "A"

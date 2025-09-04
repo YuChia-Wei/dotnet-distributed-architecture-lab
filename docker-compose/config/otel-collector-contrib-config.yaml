@@ -47,18 +47,11 @@ processors:
     spike_limit_mib: 512
     check_interval: 5s
 
-  # for loki
-  resource:
-    attributes:
-      - action: insert
-        key: loki.resource.labels
-        value: service.name, service.namespace, service.version, ApplicationName
-
 service:
   pipelines:
     logs:
       receivers: [otlp]
-      processors: [resource]
+      processors: []
       exporters: [otlphttp/loki]
     traces:
       receivers: [otlp]
