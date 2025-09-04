@@ -1,10 +1,9 @@
-using MediatR;
 using SaleProducts.Applications.Repositories;
 using SaleProducts.Applications.Dtos;
 
 namespace SaleProducts.Applications.Commands;
 
-public class CreateProductSaleCommandHandler : IRequestHandler<CreateProductSaleCommand, ProductSaleDto>
+public class CreateProductSaleCommandHandler
 {
     private readonly IProductRepository _productRepository;
 
@@ -13,7 +12,7 @@ public class CreateProductSaleCommandHandler : IRequestHandler<CreateProductSale
         _productRepository = productRepository;
     }
 
-    public async Task<ProductSaleDto> Handle(CreateProductSaleCommand request, CancellationToken cancellationToken)
+    public async Task<ProductSaleDto> Handle(CreateProductSaleCommand request)
     {
         var product = await _productRepository.GetByNameAsync(request.ProductName);
 

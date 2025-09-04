@@ -1,4 +1,3 @@
-using MediatR;
 using SaleProducts.Applications.Dtos;
 
 namespace SaleProducts.Applications.Commands;
