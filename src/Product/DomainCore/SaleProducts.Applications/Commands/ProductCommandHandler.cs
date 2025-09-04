@@ -6,6 +6,27 @@ namespace SaleProducts.Applications.Commands;
 
 public class ProductCommandHandler
 {
+    public static async Task<ProductSaleDto> Handle(CreateProductSaleCommand request, IProductDomainRepository productDomainRepository)
+    {
+        var product = await productDomainRepository.GetByIdAsync(request.OrderId);
+
+        if (product is null)
+        {
+            throw new InvalidOperationException($"Product with name {request.ProductName} not found.");
+        }
+
+        var productSale = product.AddSale(request.OrderId, request.Quantity);
+
+        await productDomainRepository.UpdateAsync(product);
+
+        return new ProductSaleDto
+        {
+            OrderId = productSale.OrderId,
+            Quantity = productSale.Quantity,
+            SaleDate = productSale.SaleDate
+        };
+    }
+
     public static async Task<ProductDto> Handle(CreateProductCommand command, IProductDomainRepository repository)
     {
         var product = new Product(command.Name, command.Description, command.Price, command.Stock);

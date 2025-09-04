@@ -12,6 +12,7 @@ using SaleProducts.Infrastructure;
 using Wolverine;
 using Wolverine.Kafka;
 using Wolverine.RabbitMQ;
+using ServiceCollectionExtensions = SaleProducts.Applications.ServiceCollectionExtensions;
 
 var queueServiceUri = Environment.GetEnvironmentVariable("QUEUE_SERVICE") ?? string.Empty;
 ArgumentNullException.ThrowIfNull(queueServiceUri);
@@ -76,6 +77,7 @@ var builder = Host.CreateDefaultBuilder(args)
                               .ListenerCount(4);
                       }
 
+                      opts.Discovery.IncludeAssembly(typeof(ServiceCollectionExtensions).Assembly);
                       opts.Discovery.IncludeAssembly(typeof(Program).Assembly);
                   });
 
