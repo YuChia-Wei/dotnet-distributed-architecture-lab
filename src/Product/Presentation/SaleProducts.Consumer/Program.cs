@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using SaleProducts.Applications;
+using SaleProducts.Infrastructure;
 using Wolverine;
 using Wolverine.Kafka;
 using Wolverine.RabbitMQ;
@@ -73,5 +75,7 @@ var builder = Host.CreateDefaultBuilder(args)
 
                       opts.Discovery.IncludeAssembly(typeof(Program).Assembly);
                   });
+
+await builder.RunConsoleAsync(); // Ctrl+C 可優雅關閉    });
 
 await builder.RunConsoleAsync(); // Ctrl+C 可優雅關閉

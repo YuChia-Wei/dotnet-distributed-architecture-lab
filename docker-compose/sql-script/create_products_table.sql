@@ -7,3 +7,15 @@ CREATE TABLE IF NOT EXISTS Products (
     IsDeleted BOOLEAN NOT NULL DEFAULT FALSE,
     Version INT NOT NULL DEFAULT 1
 );
+
+CREATE TABLE IF NOT EXISTS ProductSales (
+    ProductId UUID NOT NULL,
+    OrderId UUID NOT NULL,
+    Quantity INT NOT NULL,
+    SaleDate TIMESTAMPTZ NOT NULL,
+    PRIMARY KEY (ProductId, OrderId),
+    CONSTRAINT fk_products
+        FOREIGN KEY(ProductId)
+        REFERENCES Products(Id)
+        ON DELETE CASCADE
+);
