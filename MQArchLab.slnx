@@ -30,4 +30,7 @@
     <Folder Name="/Shared/">
         <Project Path="src\Shared\Lab.SharedKernel\Lab.SharedKernel.csproj" />
     </Folder>
+    <Folder Name="/tests/">
+        <Project Path="tests/SaleProducts.Tests/SaleProducts.Tests.csproj" />
+    </Folder>
 </Solution>

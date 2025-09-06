@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Shouldly" Version="4.3.0" />
+    <PackageReference Include="WolverineFx" Version="4.10.0" />
     <PackageReference Include="xunit" Version="2.9.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <PrivateAssets>all</PrivateAssets>
@@ -17,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Product\DomainCore\SaleProducts.Domains\SaleProducts.Domains.csproj" />
+    <ProjectReference Include="..\..\src\Product\Presentation\SaleProducts.Consumer\SaleProducts.Consumer.csproj" />
   </ItemGroup>
 
 </Project>
