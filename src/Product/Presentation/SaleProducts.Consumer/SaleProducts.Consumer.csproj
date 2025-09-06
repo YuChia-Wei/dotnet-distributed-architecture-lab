@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\..\BC-Contracts\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
     <ProjectReference Include="..\..\DomainCore\SaleProducts.Applications\SaleProducts.Applications.csproj" />
     <ProjectReference Include="..\..\DomainCore\SaleProducts.Infrastructure\SaleProducts.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\BC-Contracts\Lab.MessageSchemas.Products\Lab.MessageSchemas.Products.csproj" />
   </ItemGroup>
 
   <ItemGroup>

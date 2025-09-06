@@ -1,10 +1,11 @@
 <Solution>
     <Folder Name="/BC-Contracts/">
-        <Project Path="src\BC-Contracts\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" Type="C#" />
+        <Project Path="src/BC-Contracts/Lab.MessageSchemas.Products/Lab.MessageSchemas.Products.csproj" />
+        <Project Path="src\BC-Contracts\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
     </Folder>
     <Folder Name="/BuildingBlocks/">
-        <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Domains\Lab.BuildingBlocks.Domains.csproj" Type="C#" />
-        <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" Type="C#" />
+        <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Domains\Lab.BuildingBlocks.Domains.csproj" />
+        <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
     </Folder>
     <Folder Name="/Order/" />
     <Folder Name="/Order/DomainCore/">

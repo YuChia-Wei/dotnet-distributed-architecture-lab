@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\Lab.SharedKernel\Lab.SharedKernel.csproj" />
+    <ProjectReference Include="..\..\..\BC-Contracts\Lab.MessageSchemas.Products\Lab.MessageSchemas.Products.csproj" />
   </ItemGroup>
 
   <ItemGroup>
