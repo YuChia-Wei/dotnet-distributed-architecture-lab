@@ -8,7 +8,7 @@ public class ProductCommandHandler
 {
     public static async Task<ProductSaleDto> Handle(CreateProductSaleCommand request, IProductDomainRepository productDomainRepository)
     {
-        var product = await productDomainRepository.GetByIdAsync(request.OrderId);
+        var product = await productDomainRepository.GetByIdAsync(request.ProductId);
 
         if (product is null)
         {

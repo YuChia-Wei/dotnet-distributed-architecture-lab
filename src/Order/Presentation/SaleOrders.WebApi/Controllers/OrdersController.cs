@@ -27,7 +27,7 @@ public class OrdersController : ControllerBase
     [ProducesResponseType<Guid>(200)]
     public async Task<IActionResult> CreateOrder([FromBody] PlaceOrderRequest request)
     {
-        var createOrderCommand = new PlaceOrderCommand(request.OrderDate, request.TotalAmount, request.ProductName, request.Quantity);
+        var createOrderCommand = new PlaceOrderCommand(request.OrderDate, request.TotalAmount,request.ProductId, request.ProductName, request.Quantity);
         var orderId = await this._bus.InvokeAsync<Guid>(createOrderCommand);
 
         return this.Ok(orderId);

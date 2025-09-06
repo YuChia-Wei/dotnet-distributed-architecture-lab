@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS Orders (
     Id UUID PRIMARY KEY,
     OrderDate TIMESTAMP WITH TIME ZONE NOT NULL,
     TotalAmount NUMERIC(18, 2) NOT NULL,
+    ProdcutId UUID NOT NULL,
     ProductName VARCHAR(255) NOT NULL,
     Quantity INT NOT NULL
 );
