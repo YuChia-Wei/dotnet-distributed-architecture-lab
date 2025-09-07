@@ -1,14 +1,69 @@
-# 專案貢獻指南（Repository Guidelines）
+# Repository Guidelines
 
-本指南整合 AI_CLI_PROMPT（中/英）與本庫慣例，做為 AI 與貢獻者的單一真實來源。架構：Clean Architecture + DDD + CQRS；訊息由 WolverineFx 處理；資料庫 PostgreSQL；佇列 RabbitMQ 或 Kafka。
+- 本專案採用以下設計模式並嚴格遵守
+  - Domain-Driven Design
+  - Clean Architecture
+  - CQRS
+- 外部系統選型
+  - 資料庫：PostgreSQL 16
+  - Message Queue：同時支援 RabbitMQ 與 Kafka
+- 展現層專案預設以容器發布
 
-## 專案結構與規則
-- 原始碼僅放於 `src/<Context>`。兩大群組：
-  - `DomainCore`：`<Service>.Applications`、`<Service>.Domains`、`<Service>.Infrastructure`（層名用複數）。
-  - `Presentation`：`<Service>.WebApi`、`<Service>.Consumer`（每個可執行專案都需 `Dockerfile`）。
-- 共用程式庫：`src/BuildingBlocks`、`src/BC-Contracts`（訊息結構）、`src/Shared`（Shared Kernel）。
-- 工具/資料：`docker-compose/`、`sql-script/`、設計文件在 `doc/`。方案檔 `MQArchLab.slnx` 需以方案資料夾對應目錄結構。
-- API DTO 命名：輸入 `*Request`、輸出 `*Response`。公開 API 應具備摘要（建議 zh‑TW）。
+## 資料夾結構
+
+| 資料夾位置                           | 內容                                                                                          |
+|---------------------------------|---------------------------------------------------------------------------------------------|
+| ./.gemini                       | gemini cli 的設定資料                                                                            |
+| ./.github                       | github & github copilot 的資源                                                                 |
+| ./docker-compose                | docker compose 檔案與部署設定、資料                                                                   |
+| ./docs                          | 說明文件與開發時額外想要記錄的議題資料                                                                         |
+| ./https                         | 用於快速測試的 http 檔案                                                                             |
+| ./https/<Context>               | <Context>領域的 web api 測試用 http 檔案                                                            |
+| ./memory                        | AI Agents 作業時的進度資料                                                                          |
+| ./scripts                       | spec-kit 使用的執行語法                                                                            |
+| ./specs                         | 功能規格，Spec-driven development with AI 時的必要檔案                                                 |
+| ./sql-script                    | 資料庫語法                                                                                       |
+| ./src                           | dotnet 原始碼資料夾                                                                               |
+| ./src/BC-Contracts              | 跨領域合約 (Message Queue 的傳遞物件)                                                                 |
+| ./src/BuildingBlocks            | 系統所需的基礎框架                                                                                   |
+| ./src/Shared                    | 通用領域的共用核心                                                                                   |
+| ./src/<DomainName>              | <DomainName>領域                                                                              |
+| ./src/<DomainName>/DomainCore   | <DomainName>領域的核心專案，包括但不限於領域物件層、應用層、基礎建設層等專案                                                |
+| ./src/<DomainName>/Presentation | <DomainName>領域的展現層專案，包括但不限於 WebApi、Consumer                                                 |
+| ./templates                     | Spec-driven development with AI 的範本檔案，提供 AI Agents 在 `/spec` `/plan` `/task` 等功能指令時所需要的範本檔案 |
+| ./tests                         | 測試專案資料夾，包括但不限於「使用 Xunit 開發的 dotnet 測試專案」、「使用 k6 撰寫的 E2E 測試腳本」                               |
+
+## 專案規則
+
+| 對應分層  | 專案職責                           | 命名規則                            | 放置位置                            |
+|-------|--------------------------------|---------------------------------|---------------------------------|
+| 領域層   | 領域核心物件                         | <DomainName>.Domains            | ./src/<DomainName>/DomainCore   |
+| 服務層   | 應用服務實作                         | <DomainName>.Applications       | ./src/<DomainName>/DomainCore   |
+| 基礎建設層 | 基礎建設 (技術細節)                    | <DomainName>.Infrastructure     | ./src/<DomainName>/DomainCore   |
+| 展現層   | Web Api                        | <DomainName>.WebApi             | ./src/<DomainName>/Presentation |
+| 展現層   | Queue Consumer                 | <DomainName>.Consumer           | ./src/<DomainName>/Presentation |
+|       | Cross Bounded Context Contract | Lab.MessageSchemas.<DomainName> | ./src/BC-Contracts              |
+|       | Building Blocks                | Lab.BuildingBlocks.<layer>      | ./src/BuildingBlocks            |
+|       | Tests Project                  | <Target Project>.Tests          | ./tests                         |
+
+## 軟體實作規則
+
+- 專案內資料夾應使用複數型命名
+- 方案檔 (.slnx) 中的方案資料夾除了 測試專案 (tests) 外，都應符合實際的檔案目錄
+- 偏好使用 `this.`
+- 使用 WolverineFx 處理 Command / Query / Event 的發布與處理
+- 除非特別指定，不然 CQRS 相關物件皆遵循以下規則
+  - Command 與 Command Handler 放置於同一個 cs 檔案下，檔案以 command 命名
+  - Query 與 Query Handler 放置於同一個 cs 檔案下，檔案以 Query 命名
+  - Event 與 Event Handler 依據以下規則放置
+    - Domain Event 放置於 `<DomainName>.Domains` 專案的 `DomainEvents` 資料夾
+    - Domain Event Handler 放置於 `<DomainName>.Applications` 專案的 `DomainEventHandlers` 資料夾
+    - Integration Event 放置於 `Lab.MessageSchemas.<DomainName>` 專案的 `IntegrationEvents` 資料夾
+    - Integration Event Handler 放置於要處理該跨領域事件的 `<DomainName>.Consumer` 專案的 `IntegrationEventHandlers` 資料夾
+- DTO 命名慣例
+  - 在 <DomainName>.WebApi 中的 input: `*Request`, output: `*Response`
+  - 在 <DomainName>.Application 中的 input: `*Input`, output: `*Output`
+- 公開的介面、類別、方法都需要有以`繁體中文臺灣用語`撰寫的摘要
 
 ## 開發流程（AI 與人）
 1) 確認範圍：服務名稱（如 Invoices）、Context 資料夾（如 `Invoice`）、要建立的層級。
@@ -41,12 +96,3 @@
 
 ## 安全與設定
 - 使用環境變數或使用者密鑰，避免提交機敏資訊。常用 UI：Kafka `http://localhost:19000`、RabbitMQ `http://localhost:15672`（guest/guest，僅開發）。
-
-## PRD 模式（用於大型需求）
-當需求寬泛或需節省 token，請在首次回覆提供精簡 PRD：
-- 摘要：一段說明問題與預期結果。
-- 目標：3–6 點列出將交付的內容。
-- 非目標：明確不處理的事項。
-- 侷限：技術、風格、目錄、命名、DI、Dockerfile/Compose 等約束。
-- 驗收標準：可驗證的檢核（能建置/執行、端點可用、測試通過）。
-- 計畫：4–8 個短步驟（建立/修改檔案、必要指令）。
