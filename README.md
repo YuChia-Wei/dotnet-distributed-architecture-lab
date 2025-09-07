@@ -93,31 +93,26 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
 
 - [order / product 中的 command/command handler 做法比較](./doc/command-handler-comparison-of-practices.md)
 
-## PRD 與 AI Coding Agents 使用
+## AI Agents 使用與互動
 
-- **範本位置:** 使用 `PRD/templates/modular/en`、`PRD/templates/modular/zh-TW` 的模組化段落範本；若需要單一檔案，使用 `PRD/templates/single-file`。
-- **建立新 PRD:** 將對應語系範本複製到 `PRD/<Service or Feature>/<lang>`（例：`PRD/Orders/zh-TW`），並依序填寫 `01`～`06` 段落。
-- **結構說明:** 各段落對應 Summary、Goals、Non‑Goals、Constraints、Acceptance Criteria、Plan；詳細請見 `PRD/README.md`。
-- **單檔輸出:** 如需分享單檔，可在文件流程或 CI 任務中依檔名順序合併。
+- 規範與流程：請先閱讀 `agents.md`（英文）與 `AGENTS.zh-TW.md`（繁中）。
+- 工具鏈位置：
+  - Gemini CLI 指令模板：`.gemini/commands/`
+  - GitHub Copilot 提示模板：`.github/prompts/`
 
-### 在 AI Agent 中撰寫 Prompt（範例）
+### 典型工作流程（Spec‑Driven）
+- 建立功能與規格：`scripts/create-new-feature.sh "描述"` → 產生分支與 `specs/<branch>/spec.md`
+- 產出計畫：`scripts/setup-plan.sh` → `plan.md`；依模板生成 Phase 0/1 產物（`research.md`、`data-model.md`、`contracts/`、`quickstart.md`）
+- 規劃任務：`scripts/check-task-prerequisites.sh` 後依模板產生 `tasks.md`
+- 同步代理說明：必要時執行 `scripts/update-agent-context.sh [claude|gemini|copilot]`
 
-- **通用重點:**
-  - **指向路徑:** 明確指到 `PRD/<Feature>/<lang>` 或 `PRD/templates/...`。
-  - **遵循限制:** 要求遵循 Clean Architecture、DDD、CQRS，DI 擴充方法（如 `AddApplicationServices`、`AddInfrastructureServices`），命名與路徑規範，Dockerfile 與 compose 規則。
-  - **代理設定:** Broker 以 `QUEUE_SERVICE=Kafka|RabbitMQ` 及 `ConnectionStrings__KafkaBroker` 或 `ConnectionStrings__MessageBroker` 控制。
-  - **驗收條件:** 要求能 `dotnet restore && dotnet build`、可 `dotnet run`、API/Consumer 行為符合 PRD、`dotnet test` 通過。
-
-- **gemini cli 範例 Prompt:**
-  - `請依據 PRD 位於 \`PRD/Orders/zh-TW\` 的 01～06 段落，實作訂單服務 API 與對應 Consumer。嚴格遵守 PRD 的 Constraints（Clean Architecture、DDD、CQRS、DI 規範、Dockerfile）。Broker 以環境變數切換（\`QUEUE_SERVICE\`）。完成後更新 API 的 *Request/*Response DTO 與公開摘要（zh-TW），並確保在方案根目錄可建置與執行。`
-
-- **codex cli 範例 Prompt:**
-  - `Use the modular PRD at \`PRD/Products/en\`. Implement endpoints from sections 01–06. Follow constraints: Clean Architecture + DDD + CQRS, DI extensions, folder/namespace rules, and Dockerfile for executables. Broker via \`QUEUE_SERVICE\`. After changes, run \`dotnet restore && dotnet build\` and ensure tests pass.`
-
-- **claude code cli 範例 Prompt:**
-  - `根據 \`PRD/templates/modular/zh-TW\` 的結構，替產品上下文建立新的 PRD 於 \`PRD/SaleProducts/zh-TW\`，並依此實作 API/Consumer 雛形。請撰寫必要的 DI 擴充方法與 Dockerfile，多語系註解以 zh-TW 為主，並符合驗收準則（建置/執行/測試）。`
+### 互動原則（重點）
+- 變更最小且聚焦；遵循現有結構與命名。
+- 大型寫入/結構調整前先更新計畫並標示輸出位置。
+- 具風險操作（刪檔、重構、依賴升級、網路/金鑰）需先審批或提供替代方案。
+- 測試自變更點開始執行，並補齊必要的 Contract/Integration 測試。
 
 ## 貢獻者與 AI 指南
 
-- 英文版指南：參見 `AGENTS.md`（本庫唯一的 AI 與貢獻者說明）
-- 正體中文版：參見 `AGENTS.zh-TW.md`
+- 主要指南（英文）：`agents.md`
+- 正體中文版：`AGENTS.zh-TW.md`

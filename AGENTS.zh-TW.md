@@ -101,9 +101,7 @@
 
 ## 建置、執行與 Broker
 - 建置：`dotnet restore` && `dotnet build`（repo 根目錄）。
-- 執行 API/Consumer：
-  - Orders API：`dotnet run --project src/Order/Presentation/SaleOrders.WebApi`
-  - Orders Consumer：`dotnet run --project src/Order/Presentation/SaleOrders.Consumer`（Products 類似）
+ - 執行 API/Consumer：`dotnet run --project <path-to-csproj>`
 - Broker 以環境變數選擇：`QUEUE_SERVICE=Kafka|RabbitMQ`，並對應設定 `ConnectionStrings__KafkaBroker` 或 `ConnectionStrings__MessageBroker`。
 - 本機整包：`docker-compose -f ./docker-compose/docker-compose.yml up -d`。
 
