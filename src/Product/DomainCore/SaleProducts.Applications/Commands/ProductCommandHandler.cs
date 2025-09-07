@@ -1,3 +1,5 @@
+using Lab.BuildingBlocks.Integrations;
+using Lab.MessageSchemas.Products.IntegrationEvents;
 using SaleProducts.Applications.Dtos;
 using SaleProducts.Applications.Repositories;
 using SaleProducts.Domains;
@@ -6,7 +8,10 @@ namespace SaleProducts.Applications.Commands;
 
 public class ProductCommandHandler
 {
-    public static async Task<ProductSaleDto> Handle(CreateProductSaleCommand request, IProductDomainRepository productDomainRepository)
+    public static async Task<ProductSaleDto> Handle(
+        CreateProductSaleCommand request,
+        IProductDomainRepository productDomainRepository,
+        IIntegrationEventPublisher publisher)
     {
         var product = await productDomainRepository.GetByIdAsync(request.ProductId);
 
@@ -18,6 +23,13 @@ public class ProductCommandHandler
         var productSale = product.AddSale(request.OrderId, request.Quantity);
 
         await productDomainRepository.UpdateAsync(product);
+
+        var productStockDeducted = new ProductStockDeducted(request.OrderId, new List<ProductItem>
+        {
+            new ProductItem(request.ProductId, request.Quantity)
+        });
+
+        await publisher.PublishAsync(productStockDeducted);
 
         return new ProductSaleDto
         {

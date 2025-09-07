@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
     <ProjectReference Include="..\SaleProducts.Domains\SaleProducts.Domains.csproj" />
     <ProjectReference Include="..\..\..\BC-Contracts\Lab.MessageSchemas.Products\Lab.MessageSchemas.Products.csproj" />
   </ItemGroup>

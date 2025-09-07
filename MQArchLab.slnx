@@ -32,5 +32,6 @@
     </Folder>
     <Folder Name="/tests/">
         <Project Path="tests/SaleProducts.Tests/SaleProducts.Tests.csproj" />
+        <Project Path="tests\SaleProducts.Domains.Tests\SaleProducts.Domains.Tests.csproj" Type="Classic C#" />
     </Folder>
 </Solution>
