@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -29,12 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Product\DomainCore\SaleProducts.Domains\SaleProducts.Domains.csproj" />
-    <ProjectReference Include="..\..\src\Product\Presentation\SaleProducts.Consumer\SaleProducts.Consumer.csproj" />
-    <ProjectReference Include="..\..\src\BC-Contracts\Lab.MessageSchemas.Products\Lab.MessageSchemas.Products.csproj" />
     <ProjectReference Include="..\..\src\BC-Contracts\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
-    <ProjectReference Include="..\..\src\Product\DomainCore\SaleProducts.Applications\SaleProducts.Applications.csproj" />
     <ProjectReference Include="..\..\src\Order\DomainCore\SaleOrders.Applications\SaleOrders.Applications.csproj" />
+    <ProjectReference Include="..\..\src\Order\DomainCore\SaleOrders.Infrastructure\SaleOrders.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

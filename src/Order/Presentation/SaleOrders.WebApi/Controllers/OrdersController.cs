@@ -50,4 +50,16 @@ public class OrdersController : ControllerBase
         var orderResponse = new OrderResponse(order.Id, order.OrderDate, order.TotalAmount);
         return this.Ok(orderResponse);
     }
+
+    /// <summary>
+    /// 取消指定的訂單
+    /// </summary>
+    /// <param name="orderId">訂單識別碼</param>
+    [HttpPatch("{orderId:guid}/cancel")]
+    [ProducesResponseType(204)]
+    public async Task<IActionResult> CancelOrder([FromRoute] Guid orderId)
+    {
+        await this._bus.InvokeAsync(new CancelOrder(orderId));
+        return this.NoContent();
+    }
 }

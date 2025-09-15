@@ -18,8 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Product\DomainCore\SaleProducts.Domains\SaleProducts.Domains.csproj" />
-    <ProjectReference Include="..\..\src\Product\Presentation\SaleProducts.Consumer\SaleProducts.Consumer.csproj" />
+    <ProjectReference Include="..\..\src\Order\DomainCore\SaleOrders.Domains\SaleOrders.Domains.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>
