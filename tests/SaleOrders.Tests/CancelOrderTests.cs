@@ -22,8 +22,8 @@ public class CancelOrderTests
     public async Task when_cancel_order_then_status_updated_and_event_published()
     {
         // Arrange
-        var orderId = Guid.NewGuid();
         var order = new Order(DateTime.UtcNow, 100m, Guid.NewGuid(), "P", 1);
+        var orderId = order.Id;
 
         var configuration = new ConfigurationRoot(new List<IConfigurationProvider>());
 
