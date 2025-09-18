@@ -66,6 +66,15 @@ public class Product : AggregateRoot<Guid>
         this.Stock += quantity;
     }
 
+    /// <summary>
+    /// 將商品庫存補回指定數量。
+    /// </summary>
+    /// <param name="quantity">補回的庫存數量。</param>
+    public void Restock(int quantity)
+    {
+        this.IncreaseStock(quantity);
+    }
+
     public void Update(string name, string description, decimal price, int stock)
     {
         this.Name = name;
