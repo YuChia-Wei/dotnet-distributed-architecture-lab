@@ -56,5 +56,14 @@ public class ProductTests
         product.IncreaseStock(4);
         Assert.Equal(6, product.Stock);
     }
-}
 
+    [Fact]
+    public void Restock_Increases_By_Quantity()
+    {
+        var product = new Product("A", "B", 1m, 5);
+
+        product.Restock(3);
+
+        Assert.Equal(8, product.Stock);
+    }
+}

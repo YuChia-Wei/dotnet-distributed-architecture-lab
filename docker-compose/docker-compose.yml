@@ -226,6 +226,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
       - OTEL_SERVICE_NAME=product-consumer
       - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-product;Port=5432;Database=products_db;Pooling=true;
+      - Services__Orders__BaseAddress=http://orders-api:8080/
     depends_on:
       - otel-collector-contrib
 #      - rabbitmq

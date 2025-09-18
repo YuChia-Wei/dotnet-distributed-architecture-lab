@@ -1,14 +1,15 @@
+using Lab.MessageSchemas.Orders.DataTransferObjects;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SaleOrders.Applications.Commands;
 using SaleOrders.Applications.Queries;
 using SaleOrders.WebApi.Models.Requests;
-using SaleOrders.WebApi.Models.Responses;
 using Wolverine;
 
 namespace SaleOrders.WebApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class OrdersController : ControllerBase
 {
     private readonly IMessageBus _bus;
@@ -34,21 +35,22 @@ public class OrdersController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves the details of an existing order by its unique identifier.
+    /// 取得訂單的詳細資訊。
     /// </summary>
-    /// <param name="id">The unique identifier of the order to retrieve.</param>
-    /// <returns>An <see cref="IActionResult" /> containing the details of the requested order if found; otherwise, a not found response.</returns>
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetOrder([FromRoute] Guid id)
+    /// <param name="orderId">訂單識別碼。</param>
+    /// <returns>包含訂單行項目的結果。</returns>
+    [HttpGet("{orderId:guid}")]
+    [ProducesResponseType(typeof(OrderDetailsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetOrderDetails([FromRoute] Guid orderId)
     {
-        var order = await this._bus.InvokeAsync<OrderResponse>(new GetOrderByIdQuery(id));
-        if (order is null)
+        var orderDetails = await this._bus.InvokeAsync<OrderDetailsResponse?>(new GetOrderDetailsQuery(orderId));
+        if (orderDetails is null)
         {
             return this.NotFound();
         }
 
-        var orderResponse = new OrderResponse(order.Id, order.OrderDate, order.TotalAmount);
-        return this.Ok(orderResponse);
+        return this.Ok(orderDetails);
     }
 
     /// <summary>

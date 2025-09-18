@@ -118,3 +118,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+/// <summary>
+/// 測試專用的部分 Program 類別宣告。
+/// </summary>
+public partial class Program
+{
+}
