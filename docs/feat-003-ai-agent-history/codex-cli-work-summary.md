@@ -29,4 +29,6 @@
   1. Restore the missing DiffEngine and Confluent.Kafka packages so the domain suites run cleanly.
   2. Set Services__Orders__BaseAddress appropriately in non-docker environments.
   3. Walk through specs/003-product-consumer-ordercancelled/quickstart.md once the stack is up to confirm the full cancellation workflow.
+
+Token usage: total=175,502 input=110,598 (+ 13,118,848 cached) output=64,904 (reasoning 38,784)
 ```
