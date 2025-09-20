@@ -119,10 +119,10 @@
 
 ## AI Agents Guidelines
 - Plan first:
-  - Create a feature and spec: `scripts/create-new-feature.sh "feature description"` → `specs/<branch>/spec.md`.
-  - Generate plan skeleton: `scripts/setup-plan.sh` → `plan.md`.
-  - Check prerequisites: `scripts/check-task-prerequisites.sh`.
-  - Sync agent docs when needed: `scripts/update-agent-context.sh [claude|gemini|copilot]`.
+  - Create a feature and spec: `.specify/scripts/powershell/create-new-feature.sh "feature description"` → `specs/<branch>/spec.md`.
+  - Generate plan skeleton: `.specify/scripts/powershell/setup-plan.sh` → `plan.md`.
+  - Check prerequisites: `.specify/scripts/powershell/check-task-prerequisites.sh`.
+  - Sync agent docs when needed: `.specify/scripts/powershell/update-agent-context.sh [claude|gemini|copilot]`.
 - Change policy: minimal, focused, and aligned with existing structure; avoid unrelated moves/renames.
 - Interaction policy:
   - Before large writes or structure changes, update the plan and state expected outputs/paths.

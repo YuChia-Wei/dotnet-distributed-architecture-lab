@@ -116,11 +116,12 @@
 - 事件與消息處理需具備冪等與重複投遞測試情境。
 
 ## AI Agents 作業準則
+- spec-driven development (規格驅動開發)
 - 計畫先行：
-  - 以 `scripts/create-new-feature.sh "feature description"` 建立功能分支與 `specs/<branch>/spec.md`。
-  - 以 `scripts/setup-plan.sh` 產生 `plan.md` 骨架，並依範本填寫。
-  - 以 `scripts/check-task-prerequisites.sh` 檢查 `plan.md` 與可用設計文件。
-  - 依需求執行 `scripts/update-agent-context.sh [claude|gemini|copilot]` 同步根目錄 Agent 說明檔。
+  - 以 `.specify/scripts/powershell/create-new-feature.sh "feature description"` 建立功能分支與 `specs/<branch>/spec.md`。
+  - 以 `.specify/scripts/powershell/setup-plan.sh` 產生 `plan.md` 骨架，並依範本填寫。
+  - 以 `.specify/scripts/powershell/check-task-prerequisites.sh` 檢查 `plan.md` 與可用設計文件。
+  - 依需求執行 `.specify/scripts/powershell/update-agent-context.sh [claude|gemini|copilot]` 同步根目錄 Agent 說明檔。
 - 變更原則：最小且聚焦；遵循現有結構與命名，不任意搬移/重命名無關檔案。
 - 互動原則：
   - 大量檔案寫入或結構變動前，先更新計畫並標示預期輸出位置。

@@ -67,7 +67,7 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
     - `kafka` (如果選擇 Kafka)
     - `kafka-ui` (如果選擇 Kafka)
 
-## API 文件 (Scalar)
+## OpenApi with Scalar
 
 專案的 Web API 提供了基於 Scalar 的互動式 API 文件。當專案成功啟動後，您可以透過以下連結存取：
 
@@ -93,26 +93,55 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
 
 - [order / product 中的 command/command handler 做法比較](./doc/command-handler-comparison-of-practices.md)
 
-## AI Agents 使用與互動
+## AI Agents CLI 協作
 
-- 規範與流程：請先閱讀 `agents.md`（英文）與 `AGENTS.zh-TW.md`（繁中）。
-- 工具鏈位置：
-  - Gemini CLI 指令模板：`.gemini/commands/`
-  - GitHub Copilot 提示模板：`.github/prompts/`
+- AI Agent CLI Default Context
+  - Gemini CLI: `agents.md`
+    - > 為了方便 gemini 與 codex 共用 default context，有額外於 `.gemini/settings.json` 中設定 `defaultContext`
+  - GitHub Copilot: `.github/copilot-instructions.md`
+  - Codex: `agents.md`
+- AI Agent CLI Extension Commands
+  - Gemini CLI：`.gemini/commands/`
+  - GitHub Copilot：`.github/prompts/`
+  - Codex: `not supported`
 
-### 典型工作流程（Spec‑Driven）
-- 建立功能與規格：`scripts/create-new-feature.sh "描述"` → 產生分支與 `specs/<branch>/spec.md`
-- 產出計畫：`scripts/setup-plan.sh` → `plan.md`；依模板生成 Phase 0/1 產物（`research.md`、`data-model.md`、`contracts/`、`quickstart.md`）
-- 規劃任務：`scripts/check-task-prerequisites.sh` 後依模板產生 `tasks.md`
-- 同步代理說明：必要時執行 `scripts/update-agent-context.sh [claude|gemini|copilot]`
+### Spec-Driven Development (規格驅動開發)
 
-### 互動原則（重點）
-- 變更最小且聚焦；遵循現有結構與命名。
-- 大型寫入/結構調整前先更新計畫並標示輸出位置。
-- 具風險操作（刪檔、重構、依賴升級、網路/金鑰）需先審批或提供替代方案。
-- 測試自變更點開始執行，並補齊必要的 Contract/Integration 測試。
+- [Spec-Kit](https://github.com/github/spec-kit)
 
-## 貢獻者與 AI 指南
+#### agent cli commands
 
-- 主要指南（英文）：`agents.md`
-- 正體中文版：`AGENTS.zh-TW.md`
+> agent cli 的完整擴充命令清單以及 cli 支援狀況以 spec-kit 官方文件為主
+
+1. Start using slash commands with your AI agent:
+    1. /constitution - Establish project principles
+    2. /specify - Create specifications
+    3. /plan - Create implementation plans
+    4. /tasks - Generate actionable tasks
+    5. /implement - Execute implementation
+
+#### spec-kit usage
+
+> 使用 `/specify` 命令時，會建立功能規格資料夾以及對應的分支名稱
+
+1. 建立功能分支與規格文件的 PROMPT：
+    ```shell
+    /specify "功能需求描述"
+    ```
+2. 建立技術實作的計畫：
+    ```shell
+    /plan "預期使用什麼樣的做法進行實作，限制使用哪些技術細節"
+    ```
+3. 建立實作任務清單：
+    ```shell
+    /tasks
+    ```
+4. 進行實作：
+    - use gemini cli, github copilot or other supported agents:
+        ```shell
+        /implement "功能需求描述"
+        ```
+    - use codex cli:
+        ```
+        依據 specs\<規格分支>\tasks.md 的任務規畫進行實作
+        ```
