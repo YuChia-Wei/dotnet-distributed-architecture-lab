@@ -1,19 +1,28 @@
 # Repository Guidelines
 
 ## Scope & Precedence
-- Applies to the entire repository for both AI agents and humans.
-- Deeper AGENTS files override higher-level ones.
-- Rule order: User/approval > deeper AGENTS > this file > other docs.
-- Avoid destructive changes without approval (mass moves/deletes, git resets).
+- This document serves as the collaboration guideline for AI agents and humans across the entire repository.
+- If a subdirectory has another AGENTS.* file, the deeper one takes precedence.
+- Command priority: User/Approval > Subfolder AGENTS > This file > Other general documents.
+- Avoid large-scale refactoring and destructive operations (deleting files, moving many files, git reset) unless necessary.
 
-- Architectural patterns in use:
-  - Domain-Driven Design
-  - Clean Architecture
-  - CQRS
-- External systems:
-  - Database: PostgreSQL 16
-  - Message Queue: RabbitMQ and Kafka (switchable)
-- Presentation layer projects default to containerized deployment.
+## Technical Background
+- **Language/Version**: C# 13, .NET 9
+- **Primary Dependencies**:
+  - **Message Handling**: Wolverine.NET
+  - **Persistence**: Dapper, Npgsql
+  - **Web Api Servers**: ASP.NET Core
+  - **Queues Consumer Programs**: Console App
+  - **Message Bus**: RabbitMQ and Kafka
+- **Database**: PostgreSQL 16
+- **Testing**: xUnit
+- **Target Platform**: Linux container (via Docker)
+- **Constraints**:
+  - Cross-domain data synchronization allows for "eventual consistency".
+  - The entire system is designed using the Domain-Driven Design pattern.
+  - The software architecture adopts Clean Architecture.
+  - Uses CQRS.
+  - Cross-domain services are not allowed to communicate via web APIs; they can only interact using a message queue mechanism.
 
 ## Folder Structure
 
@@ -61,21 +70,6 @@
   - In `<DomainName>.Application`: input `*Input`, output `*Output`.
 - Public APIs require XML summaries written in Traditional Chinese (Taiwan usage).
 
-## Branch Naming
-- Feature branches: `NNN-short-desc` (e.g., `001-init-service`).
-- `scripts/common.sh` enforces `^[0-9]{3}-` prefix; non-compliant branches will fail certain scripts.
-- Keep names aligned with the structure above.
-
-## Workflow (AI & Human)
-1) Define scope: service name (e.g., Invoices), context folder (e.g., `Invoice`), layers to create.
-2) Create projects at correct paths, e.g.:
-   - `dotnet new webapi -n Invoices.WebApi -o src/Invoice/Presentation/Invoices.WebApi`
-   - `dotnet new classlib -n Invoices.Applications -o src/Invoice/DomainCore/Invoices.Applications`
-3) Add to solution and solution folders:
-   - `dotnet sln add src/Invoice/Presentation/Invoices.WebApi/Invoices.WebApi.csproj --solution-folder "Invoice/Presentation"`
-4) Provide DI extensions in each project (e.g., `AddApplicationServices`, `AddInfrastructureServices`).
-5) Executables include multi-stage `Dockerfile`; add services to `docker-compose/docker-compose.yml` when needed.
-
 ## CQRS & Wolverine
 - Commands/Queries/Events should be immutable (recommend `record`) with action-first naming (e.g., `CreateOrder`).
 - Handlers remain small and focused; avoid infra details inside handlers (use injected services).
@@ -92,67 +86,3 @@
     - Domain Events → `<DomainName>.Domains/DomainEvents`.
     - Domain Event Handlers → `<DomainName>.Applications/DomainEventHandlers`.
     - Integration Event Handlers → `<DomainName>.Consumer/IntegrationEventHandlers`.
-
-## BC-Contracts & Versioning
-- Changes:
-  - Backward-compatible → extend with optional fields.
-  - Breaking changes → publish a new schema version; keep old readable for a grace period.
-- Namespace: `Lab.MessageSchemas.<DomainName>` with explicit version separation.
-- Tests: every contract change requires producer/consumer contract tests.
-- Location: Integration Events → `Lab.MessageSchemas.<DomainName>/IntegrationEvents`.
-
-## Build/Run & Broker
-- Build at repo root: `dotnet restore` && `dotnet build`.
-- Run API/Consumer: `dotnet run --project <path-to-csproj>`.
-- Broker selection via env var: `QUEUE_SERVICE=Kafka|RabbitMQ` and matching `ConnectionStrings__KafkaBroker` or `ConnectionStrings__MessageBroker`.
-- Local stack: `docker-compose -f ./docker-compose/docker-compose.yml up -d`.
-
-## Code Style
-- Follow `.editorconfig`: spaces, CRLF, 150 columns; `System` before other `using`s; namespace aligns to folders; prefer file-scoped namespaces; allow top-level statements.
-- Naming: interfaces `I*`; types/methods/properties PascalCase; instance fields `_camelCase`.
-
-## Testing
-- Default xUnit. Place test projects under `tests/*/*.Tests.csproj` (e.g., `tests/SaleProducts.Domains.Tests`); class names `<TypeName>Tests`; run with `dotnet test`.
-- Test layers (outside-in): Contract → Integration → Unit. Contract or cross-context changes must include Contract/Integration tests.
-- Tests should be self-contained; define dependencies in `docker-compose` where needed.
-- Events/consumers require idempotency and duplicate-delivery scenarios.
-
-## AI Agents Guidelines
-- Plan first:
-  - Create a feature and spec: `.specify/scripts/powershell/create-new-feature.sh "feature description"` → `specs/<branch>/spec.md`.
-  - Generate plan skeleton: `.specify/scripts/powershell/setup-plan.sh` → `plan.md`.
-  - Check prerequisites: `.specify/scripts/powershell/check-task-prerequisites.sh`.
-  - Sync agent docs when needed: `.specify/scripts/powershell/update-agent-context.sh [claude|gemini|copilot]`.
-- Change policy: minimal, focused, and aligned with existing structure; avoid unrelated moves/renames.
-- Interaction policy:
-  - Before large writes or structure changes, update the plan and state expected outputs/paths.
-  - Risky ops (deletes, large refactors, dep upgrades, network/keys) require approval or alternatives.
-- Validation policy:
-  - Run tests closest to changes first, then broaden.
-  - Add tests and docs for new functionality (`docs/` or feature folder).
-- Toolchain note: `scripts/*` primarily support Gemini CLI and GitHub Copilot; related commands/prompts live in `.gemini/commands/` and `.github/prompts/`. Other agents may ignore tool-specific commands but must follow these guidelines and output locations.
-
-## Docs & Records
-- In `specs/<branch>/`, maintain `spec.md`, `plan.md`, and when applicable `contracts/`, `data-model.md`, `quickstart.md`.
-- For cross-context contracts or major architectural decisions, add docs in `docs/` (or ADRs if used).
-- In PRs, link related specs and attach evidence (logs/screenshots/outputs).
-
-## Commits & PR
-- Commits: short imperative messages; optional scope (e.g., `orders: enable Kafka auto-provision`); annotate generators when relevant (e.g., “by gemini cli”).
-- PRs: explain motivation, linked issues, impacted services/projects; provide evidence (Scalar/Kafka/RabbitMQ screenshots or logs); use `.github/pull_request_template.md`.
-
-## Scripts & Commands Quickref
-- New feature: `scripts/create-new-feature.sh "desc"`
-- Plan skeleton: `scripts/setup-plan.sh`
-- Check plan/docs: `scripts/check-task-prerequisites.sh`
-- Update agent context: `scripts/update-agent-context.sh [claude|gemini|copilot]`
-- Build: `dotnet restore && dotnet build`
-- Run API/Consumer: `dotnet run --project <csproj>`
-- Local stack: `docker-compose -f ./docker-compose/docker-compose.yml up -d`
-
-## Security & Config
-- Use env vars or user secrets; avoid committing sensitive data.
-- UIs: Kafka `http://localhost:19000`, RabbitMQ `http://localhost:15672` (guest/guest, dev only).
-- Broker selection: `QUEUE_SERVICE=Kafka|RabbitMQ`
-- Connection strings: `ConnectionStrings__KafkaBroker` or `ConnectionStrings__MessageBroker`
-
