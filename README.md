@@ -89,9 +89,17 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
   - **帳號:** `guest`
   - **密碼:** `guest`
 
-## 其他設計相關的分析文章
+## 文件目錄
 
-- [order / product 中的 command/command handler 做法比較](./doc/command-handler-comparison-of-practices.md)
+- 設計相關
+  - [order / product 中的 command/command handler 做法比較](./docs/program-desighe/command-handler-comparison-of-practices.md)
+  - [bc contracts 專案分類](./docs/program-desighe/bc-contracts.md)
+- AI 協作紀錄 (AI Agent CLI 的對話輸出紀錄)
+  - 功能 002 : order cancel
+    - [使用 codex cli 進行實作的紀錄](./docs/SDD-ai-agent-history/feat-002/codex-chat-memo.md)
+  - 功能 003 : product consumer order cancelled
+    - [使用 gemini cli 執行 spec-kit 命令的紀錄](./docs/SDD-ai-agent-history/feat-003/spec-kit-gemini-cli-gen-history.md)
+    - [使用 codex cli 進行實作的紀錄](./docs/SDD-ai-agent-history/feat-003/codex-cli-work-summary.md)
 
 ## AI Agents CLI 協作
 
@@ -103,7 +111,10 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
 - AI Agent CLI Extension Commands
   - Gemini CLI：`.gemini/commands/`
   - GitHub Copilot：`.github/prompts/`
-  - Codex: `not supported`
+  - Codex: `.codex/prompts/`
+    - > codex 尚未支援命令參數，且需要利用 `setx CODEX_HOME '{project-floder}\.codex'` 語法來讓 codex 讀取到專案資料夾下的擴充命令
+    - > 切換後需要重新登入 codex，且開發完畢需清除環境參數以避免後續工作目錄的錯亂
+    - > 因此目前在 codex 中要使用 SDD 的擴充命令時會有諸多限制與需注意的部分
 
 ### Spec-Driven Development (規格驅動開發)
 
@@ -137,11 +148,6 @@ MQArchLab 是一個採用 .NET 9、容器化技術和現代軟體架構原則（
     /tasks
     ```
 4. 進行實作：
-    - use gemini cli, github copilot or other supported agents:
-        ```shell
-        /implement "功能需求描述"
-        ```
-    - use codex cli:
-        ```
-        依據 specs\<規格分支>\tasks.md 的任務規畫進行實作
-        ```
+    ```shell
+    /implement
+    ```
