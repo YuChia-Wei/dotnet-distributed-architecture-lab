@@ -338,3 +338,7 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# ai agent cli config
+/.codex/*
+!/.codex/prompts/
