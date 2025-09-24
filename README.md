@@ -159,12 +159,21 @@ dotnet distributed architecture lab 是一個採用 .NET 9、容器化技術和�
 
 > agent cli 的完整擴充命令清單以及 cli 支援狀況以 spec-kit 官方文件為主
 
-1. Start using slash commands with your AI agent:
-    1. /constitution - Establish project principles
-    2. /specify - Create specifications
-    3. /plan - Create implementation plans
-    4. /tasks - Generate actionable tasks
-    5. /implement - Execute implementation
+```terminaloutput
+╭───────────────────────────────────────────────────── Next Steps ─────────────────────────────────────────────────────╮
+│                                                                                                                      │
+│  1. You're already in the project directory!                                                                         │
+│  2. Start using slash commands with your AI agent:                                                                   │
+│     2.1 /constitution - Establish project principles                                                                 │
+│     2.2 /specify - Create specifications                                                                             │
+│     2.3 /clarify - Clarify and de-risk specification (run before /plan)                                              │
+│     2.4 /plan - Create implementation plans                                                                          │
+│     2.5 /tasks - Generate actionable tasks                                                                           │
+│     2.6 /analyze - Validate alignment & surface inconsistencies (read-only)                                          │
+│     2.7 /implement - Execute implementation                                                                          │
+│                                                                                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+```
 
 #### spec-kit usage
 
