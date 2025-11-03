@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj", "src/Product/Presentation/SaleProducts.Consumer/"]
-COPY ["src/BC-Contracts/Lab.MessageSchemas.Orders/Lab.MessageSchemas.Orders.csproj", "src/BC-Contracts/Lab.MessageSchemas.Orders/"]
+COPY ["src/BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj", "src/BC-Contracts/Lab.BoundedContextContracts.Orders/"]
 RUN dotnet restore "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj"
 COPY . .
 WORKDIR "/src/src/Product/Presentation/SaleProducts.Consumer"

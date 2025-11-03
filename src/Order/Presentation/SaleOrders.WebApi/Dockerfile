@@ -12,7 +12,7 @@ COPY ["src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.
 COPY ["src/Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj", "src/Order/DomainCore/SaleOrders.Applications/"]
 COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "src/BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
 COPY ["src/Order/DomainCore/SaleOrders.Domains/SaleOrders.Domains.csproj", "src/Order/DomainCore/SaleOrders.Domains/"]
-COPY ["src/BC-Contracts/Lab.MessageSchemas.Orders/Lab.MessageSchemas.Orders.csproj", "src/BC-Contracts/Lab.MessageSchemas.Orders/"]
+COPY ["src/BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj", "src/BC-Contracts/Lab.BoundedContextContracts.Orders/"]
 RUN dotnet restore "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj"
 COPY . .
 WORKDIR "/src/src/Order/Presentation/SaleOrders.WebApi"

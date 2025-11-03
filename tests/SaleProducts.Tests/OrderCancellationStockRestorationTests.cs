@@ -1,6 +1,6 @@
 using Lab.BuildingBlocks.Integrations;
-using Lab.MessageSchemas.Orders.IntegrationEvents;
-using Lab.MessageSchemas.Orders.DataTransferObjects;
+using Lab.BoundedContextContracts.Orders.IntegrationEvents;
+using Lab.BoundedContextContracts.Orders.DataTransferObjects;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

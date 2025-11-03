@@ -1,5 +1,4 @@
-using Lab.MessageSchemas.Orders.DataTransferObjects;
-using Microsoft.AspNetCore.Http;
+using Lab.BoundedContextContracts.Orders.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using SaleOrders.Applications.Commands;
 using SaleOrders.Applications.Queries;
@@ -20,6 +19,18 @@ public class OrdersController : ControllerBase
     }
 
     /// <summary>
+    /// 取消指定的訂單
+    /// </summary>
+    /// <param name="orderId">訂單識別碼</param>
+    [HttpPatch("{orderId:guid}/cancel")]
+    [ProducesResponseType(204)]
+    public async Task<IActionResult> CancelOrder([FromRoute] Guid orderId)
+    {
+        await this._bus.InvokeAsync(new CancelOrder(orderId));
+        return this.NoContent();
+    }
+
+    /// <summary>
     /// Handles the creation of a new order.
     /// </summary>
     /// <param name="request">An instance of <see cref="PlaceOrderCommand" /> containing order details such as date and total amount.</param>
@@ -28,7 +39,8 @@ public class OrdersController : ControllerBase
     [ProducesResponseType<Guid>(200)]
     public async Task<IActionResult> CreateOrder([FromBody] PlaceOrderRequest request)
     {
-        var createOrderCommand = new PlaceOrderCommand(request.OrderDate, request.TotalAmount,request.ProductId, request.ProductName, request.Quantity);
+        var createOrderCommand =
+            new PlaceOrderCommand(request.OrderDate, request.TotalAmount, request.ProductId, request.ProductName, request.Quantity);
         var orderId = await this._bus.InvokeAsync<Guid>(createOrderCommand);
 
         return this.Ok(orderId);
@@ -51,17 +63,5 @@ public class OrdersController : ControllerBase
         }
 
         return this.Ok(orderDetails);
-    }
-
-    /// <summary>
-    /// 取消指定的訂單
-    /// </summary>
-    /// <param name="orderId">訂單識別碼</param>
-    [HttpPatch("{orderId:guid}/cancel")]
-    [ProducesResponseType(204)]
-    public async Task<IActionResult> CancelOrder([FromRoute] Guid orderId)
-    {
-        await this._bus.InvokeAsync(new CancelOrder(orderId));
-        return this.NoContent();
     }
 }

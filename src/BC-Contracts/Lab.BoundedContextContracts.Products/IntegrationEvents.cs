@@ -1,6 +1,6 @@
 using Lab.BuildingBlocks.Integrations;
 
-namespace Lab.MessageSchemas.Products.IntegrationEvents;
+namespace Lab.BoundedContextContracts.Products.IntegrationEvents;
 
 public record ProductItem(Guid ProductId, int Quantity);
 

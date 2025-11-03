@@ -1,6 +1,6 @@
 ﻿using Lab.BuildingBlocks.Integrations;
 
-namespace Lab.MessageSchemas.Orders.IntegrationEvents;
+namespace Lab.BoundedContextContracts.Orders.IntegrationEvents;
 
 /// <summary>
 /// 下單完成的 integration event

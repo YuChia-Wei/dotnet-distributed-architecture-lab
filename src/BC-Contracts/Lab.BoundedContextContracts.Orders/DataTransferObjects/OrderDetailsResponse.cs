@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Lab.MessageSchemas.Orders.DataTransferObjects;
+namespace Lab.BoundedContextContracts.Orders.DataTransferObjects;
 
 /// <summary>
 /// 訂單明細回應內容。

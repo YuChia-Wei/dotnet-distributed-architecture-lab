@@ -1,6 +1,6 @@
 using Lab.BuildingBlocks.Integrations;
 
-namespace Lab.MessageSchemas.Orders.IntegrationEvents;
+namespace Lab.BoundedContextContracts.Orders.IntegrationEvents;
 
 /// <summary>
 /// 訂單已取消的 integration event

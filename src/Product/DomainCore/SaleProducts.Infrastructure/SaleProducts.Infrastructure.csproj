@@ -18,7 +18,7 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
     <ProjectReference Include="..\SaleProducts.Applications\SaleProducts.Applications.csproj" />
     <ProjectReference Include="..\SaleProducts.Domains\SaleProducts.Domains.csproj" />
-    <ProjectReference Include="..\..\..\BC-Contracts\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
+    <ProjectReference Include="..\..\..\BC-Contracts\Lab.BoundedContextContracts.Orders\Lab.BoundedContextContracts.Orders.csproj" />
   </ItemGroup>
 
 </Project>

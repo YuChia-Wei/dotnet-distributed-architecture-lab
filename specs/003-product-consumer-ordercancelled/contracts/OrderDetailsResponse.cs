@@ -1,4 +1,4 @@
-namespace Lab.MessageSchemas.Orders.DataTransferObjects;
+namespace Lab.BoundedContextContracts.Orders.DataTransferObjects;
 
 public record OrderDetailsResponse
 {

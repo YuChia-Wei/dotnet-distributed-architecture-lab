@@ -1,5 +1,5 @@
 using System.Threading;
-using Lab.MessageSchemas.Orders.DataTransferObjects;
+using Lab.BoundedContextContracts.Orders.DataTransferObjects;
 using SaleOrders.Applications.Repositories;
 
 namespace SaleOrders.Applications.Queries;

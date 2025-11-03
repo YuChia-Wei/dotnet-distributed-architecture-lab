@@ -1,7 +1,7 @@
 using JasperFx.Core.Reflection;
 using Lab.BuildingBlocks.Integrations;
-using Lab.MessageSchemas.Orders.IntegrationEvents;
-using Lab.MessageSchemas.Products.IntegrationEvents;
+using Lab.BoundedContextContracts.Orders.IntegrationEvents;
+using Lab.BoundedContextContracts.Products.IntegrationEvents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

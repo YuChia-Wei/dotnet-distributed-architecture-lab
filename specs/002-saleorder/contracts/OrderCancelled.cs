@@ -1,5 +1,5 @@
 using Lab.BuildingBlocks.Integrations;
 
-namespace Lab.MessageSchemas.Orders.IntegrationEvents;
+namespace Lab.BoundedContextContracts.Orders.IntegrationEvents;
 
 public record OrderCancelled(Guid OrderId) : IIntegrationEvent;

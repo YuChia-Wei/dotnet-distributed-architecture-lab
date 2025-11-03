@@ -1,5 +1,5 @@
 using Lab.BuildingBlocks.Integrations;
-using Lab.MessageSchemas.Products.IntegrationEvents;
+using Lab.BoundedContextContracts.Products.IntegrationEvents;
 using SaleProducts.Applications.Dtos;
 using SaleProducts.Applications.Repositories;
 using SaleProducts.Domains;

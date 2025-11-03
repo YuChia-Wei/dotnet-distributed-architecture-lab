@@ -1,4 +1,4 @@
-using Lab.MessageSchemas.Orders.IntegrationEvents;
+using Lab.BoundedContextContracts.Orders.IntegrationEvents;
 using SaleOrders.Applications.Repositories;
 
 namespace SaleOrders.Applications.Commands;

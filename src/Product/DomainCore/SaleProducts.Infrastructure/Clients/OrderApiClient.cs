@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using Lab.MessageSchemas.Orders.DataTransferObjects;
+using Lab.BoundedContextContracts.Orders.DataTransferObjects;
 
 namespace SaleProducts.Infrastructure.Clients;
 

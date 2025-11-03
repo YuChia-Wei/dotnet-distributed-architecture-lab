@@ -1,4 +1,4 @@
-﻿using Lab.MessageSchemas.Orders.IntegrationEvents;
+﻿using Lab.BoundedContextContracts.Orders.IntegrationEvents;
 using Microsoft.Extensions.Logging;
 using SaleProducts.Applications.Commands;
 using Wolverine;

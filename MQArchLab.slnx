@@ -1,39 +1,39 @@
 <Solution>
-    <Folder Name="/BC-Contracts/">
-        <Project Path="src/BC-Contracts/Lab.MessageSchemas.Products/Lab.MessageSchemas.Products.csproj" />
-        <Project Path="src\BC-Contracts\Lab.MessageSchemas.Orders\Lab.MessageSchemas.Orders.csproj" />
-    </Folder>
-    <Folder Name="/BuildingBlocks/">
-        <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Domains\Lab.BuildingBlocks.Domains.csproj" />
-        <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
-    </Folder>
-    <Folder Name="/Order/" />
-    <Folder Name="/Order/DomainCore/">
-        <Project Path="src\Order\DomainCore\SaleOrders.Applications\SaleOrders.Applications.csproj" />
-        <Project Path="src\Order\DomainCore\SaleOrders.Domains\SaleOrders.Domains.csproj" />
-        <Project Path="src\Order\DomainCore\SaleOrders.Infrastructure\SaleOrders.Infrastructure.csproj" />
-    </Folder>
-    <Folder Name="/Order/Presentation/">
-        <Project Path="src\Order\Presentation\SaleOrders.Consumer\SaleOrders.Consumer.csproj" />
-        <Project Path="src\Order\Presentation\SaleOrders.WebApi\SaleOrders.WebApi.csproj" />
-    </Folder>
-    <Folder Name="/Product/" />
-    <Folder Name="/Product/DomainCore/">
-        <Project Path="src\Product\DomainCore\SaleProducts.Applications\SaleProducts.Applications.csproj" />
-        <Project Path="src\Product\DomainCore\SaleProducts.Domains\SaleProducts.Domains.csproj" />
-        <Project Path="src\Product\DomainCore\SaleProducts.Infrastructure\SaleProducts.Infrastructure.csproj" />
-    </Folder>
-    <Folder Name="/Product/Presentation/">
-        <Project Path="src\Product\Presentation\SaleProducts.Consumer\SaleProducts.Consumer.csproj" />
-        <Project Path="src\Product\Presentation\SaleProducts.WebApi\SaleProducts.WebApi.csproj" />
-    </Folder>
-    <Folder Name="/Shared/">
-        <Project Path="src\Shared\Lab.SharedKernel\Lab.SharedKernel.csproj" />
-    </Folder>
-    <Folder Name="/tests/">
-        <Project Path="tests/SaleProducts.Tests/SaleProducts.Tests.csproj" />
-        <Project Path="tests\SaleProducts.Domains.Tests\SaleProducts.Domains.Tests.csproj" Type="Classic C#" />
-        <Project Path="tests/SaleOrders.Tests/SaleOrders.Tests.csproj" />
-        <Project Path="tests\SaleOrders.Domains.Tests\SaleOrders.Domains.Tests.csproj" Type="Classic C#" />
-    </Folder>
+  <Folder Name="/BC-Contracts/">
+    <Project Path="src\BC-Contracts\Lab.BoundedContextContracts.Orders\Lab.BoundedContextContracts.Orders.csproj" />
+    <Project Path="src\BC-Contracts\Lab.BoundedContextContracts.Products\Lab.BoundedContextContracts.Products.csproj" />
+  </Folder>
+  <Folder Name="/BuildingBlocks/">
+    <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Domains\Lab.BuildingBlocks.Domains.csproj" />
+    <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
+  </Folder>
+  <Folder Name="/Order/" />
+  <Folder Name="/Order/DomainCore/">
+    <Project Path="src\Order\DomainCore\SaleOrders.Applications\SaleOrders.Applications.csproj" />
+    <Project Path="src\Order\DomainCore\SaleOrders.Domains\SaleOrders.Domains.csproj" />
+    <Project Path="src\Order\DomainCore\SaleOrders.Infrastructure\SaleOrders.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Order/Presentation/">
+    <Project Path="src\Order\Presentation\SaleOrders.Consumer\SaleOrders.Consumer.csproj" />
+    <Project Path="src\Order\Presentation\SaleOrders.WebApi\SaleOrders.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Product/" />
+  <Folder Name="/Product/DomainCore/">
+    <Project Path="src\Product\DomainCore\SaleProducts.Applications\SaleProducts.Applications.csproj" />
+    <Project Path="src\Product\DomainCore\SaleProducts.Domains\SaleProducts.Domains.csproj" />
+    <Project Path="src\Product\DomainCore\SaleProducts.Infrastructure\SaleProducts.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Product/Presentation/">
+    <Project Path="src\Product\Presentation\SaleProducts.Consumer\SaleProducts.Consumer.csproj" />
+    <Project Path="src\Product\Presentation\SaleProducts.WebApi\SaleProducts.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="src\Shared\Lab.SharedKernel\Lab.SharedKernel.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SaleOrders.Tests/SaleOrders.Tests.csproj" />
+    <Project Path="tests/SaleProducts.Tests/SaleProducts.Tests.csproj" />
+    <Project Path="tests\SaleOrders.Domains.Tests\SaleOrders.Domains.Tests.csproj" Type="Classic C#" />
+    <Project Path="tests\SaleProducts.Domains.Tests\SaleProducts.Domains.Tests.csproj" Type="Classic C#" />
+  </Folder>
 </Solution>
