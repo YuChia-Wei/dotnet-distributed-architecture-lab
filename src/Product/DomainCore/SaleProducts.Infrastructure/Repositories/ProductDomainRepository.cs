@@ -51,7 +51,7 @@ public class ProductDomainRepository : IProductDomainRepository
                                       """;
             await this._dbConnection.ExecuteAsync(productSql, product, transaction);
 
-            if (product.Sales.Any())
+            if (product.SalesRecords.Any())
             {
                 await this.PersistSalesAsync(product, transaction);
             }
@@ -96,7 +96,7 @@ public class ProductDomainRepository : IProductDomainRepository
                 ProductId = product.Id
             }, transaction);
 
-            if (product.Sales.Any())
+            if (product.SalesRecords.Any())
             {
                 await this.PersistSalesAsync(product, transaction);
             }
@@ -135,7 +135,7 @@ public class ProductDomainRepository : IProductDomainRepository
 
         var productDictionary = new Dictionary<Guid, Product>();
 
-        var products = await this._dbConnection.QueryAsync<Product, ProductSale, Product>(
+        var products = await this._dbConnection.QueryAsync<Product, ProductSaleRecord, Product>(
                            sql,
                            (product, sale) =>
                            {
@@ -147,7 +147,7 @@ public class ProductDomainRepository : IProductDomainRepository
 
                                if (sale != null)
                                {
-                                   var salesList = (List<ProductSale>)currentProduct.GetType()
+                                   var salesList = (List<ProductSaleRecord>)currentProduct.GetType()
                                                                                     .GetField(
                                                                                         "_sales", BindingFlags.NonPublic | BindingFlags.Instance)
                                                                                     ?.GetValue(currentProduct);
@@ -172,7 +172,7 @@ public class ProductDomainRepository : IProductDomainRepository
                                 SELECT * FROM "productsales"
                                 WHERE "productid" = @ProductId
                                 """;
-        var sales = await this._dbConnection.QueryAsync<ProductSale>(salesSql, new
+        var sales = await this._dbConnection.QueryAsync<ProductSaleRecord>(salesSql, new
         {
             ProductId = product.Id
         });
@@ -190,7 +190,7 @@ public class ProductDomainRepository : IProductDomainRepository
                                 INSERT INTO "productsales" ("productid", "orderid", "quantity", "saledate")
                                 VALUES (@ProductId, @OrderId, @Quantity, @SaleDate)
                                 """;
-        var salesWithProductId = product.Sales.Select(s => new
+        var salesWithProductId = product.SalesRecords.Select(s => new
         {
             ProductId = product.Id,
             s.OrderId,

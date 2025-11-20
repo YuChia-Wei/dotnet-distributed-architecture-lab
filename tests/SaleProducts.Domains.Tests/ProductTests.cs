@@ -25,7 +25,7 @@ public class ProductTests
     {
         var product = new Product("A", "B", 1m, 1);
 
-        product.Update("A2", "B2", 2m, 3);
+        product.Update("A2", "B2", 2m);
 
         Assert.Equal("A2", product.Name);
         Assert.Equal("B2", product.Description);

@@ -86,7 +86,7 @@ public class ProductsController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] UpdateProductRequest request)
     {
-        var command = new UpdateProductCommand(id, request.Name, request.Description, request.Price, request.Stock);
+        var command = new UpdateProductCommand(id, request.Name, request.Description, request.Price);
 
         await this._bus.InvokeAsync(command);
         return this.Ok();

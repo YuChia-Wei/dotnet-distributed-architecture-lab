@@ -4,10 +4,10 @@ namespace SaleProducts.Applications.Repositories;
 
 public interface IProductRepository
 {
-    Task<Product?> GetByNameAsync(string name);
-    Task UpdateAsync(Product product);
     Task AddAsync(Product product);
-    Task<Product?> GetByIdAsync(Guid id);
     Task DeleteAsync(Guid id);
+    Task<Product?> GetByIdAsync(Guid id);
+    Task<Product?> GetByNameAsync(string name);
     Task<IEnumerable<Product>> ListAllAsync();
+    Task UpdateAsync(Product product);
 }

@@ -15,11 +15,11 @@ public record RestockProductCommand(Guid ProductId, int Quantity);
 /// </summary>
 public class RestockProductCommandHandler
 {
-    private readonly IProductDomainRepository _repository;
     private readonly ILogger<RestockProductCommandHandler> _logger;
+    private readonly IProductDomainRepository _repository;
 
     /// <summary>
-    /// 建立 <see cref="RestockProductCommandHandler"/>。
+    /// 建立 <see cref="RestockProductCommandHandler" />。
     /// </summary>
     /// <param name="repository">商品領域儲存庫。</param>
     /// <param name="logger">紀錄器。</param>

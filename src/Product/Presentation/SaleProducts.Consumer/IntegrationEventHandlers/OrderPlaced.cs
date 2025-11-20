@@ -15,7 +15,7 @@ public static class InventoryDeductionOnOrderPlacedHandler
     {
         logger.LogInformation("收到訂單 {OrderId}：{ProductId}.{ProductName} x{Qty}",
                               @event.OrderId, @event.ProductId, @event.ProductName, @event.Quantity);
-        var productSaleCommand = new CreateProductSaleCommand(@event.OrderId, @event.ProductId, @event.ProductName, @event.Quantity);
+        var productSaleCommand = new SellProductCommand(@event.OrderId, @event.ProductId, @event.ProductName, @event.Quantity);
         await messageBus.SendAsync(productSaleCommand);
     }
 }

@@ -11,7 +11,7 @@
     <PackageReference Include="Confluent.Kafka.Extensions.OpenTelemetry" Version="0.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
     <PackageReference Include="RabbitMQ.Client.OpenTelemetry" Version="1.0.0-rc.1" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.10.3" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.11.0" />
     <PackageReference Include="WolverineFx.Kafka" Version="5.2.0" />
     <PackageReference Include="WolverineFx.RabbitMQ" Version="5.2.0" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />

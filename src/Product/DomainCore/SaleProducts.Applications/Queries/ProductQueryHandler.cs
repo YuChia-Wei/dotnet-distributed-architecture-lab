@@ -18,6 +18,7 @@ public class ProductQueryHandler
         {
             throw new KeyNotFoundException($"Product with ID {query.Id} not found.");
         }
+
         return new ProductDto(product.Id, product.Name, product.Description, product.Price, product.Stock);
     }
 }

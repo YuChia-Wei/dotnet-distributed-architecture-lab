@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using SaleProducts.Applications.Commands;
 
 namespace SaleProducts.Applications;
 

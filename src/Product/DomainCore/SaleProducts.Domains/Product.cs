@@ -3,9 +3,12 @@ using SaleProducts.Domains.DomainEvents;
 
 namespace SaleProducts.Domains;
 
+/// <summary>
+/// 產品的 Aggregate Root
+/// </summary>
 public class Product : AggregateRoot<Guid>
 {
-    private readonly List<ProductSale> _sales = new();
+    private readonly List<ProductSaleRecord> _sales = new();
 
     /// <summary>
     /// ctor (for ORM)
@@ -27,14 +30,13 @@ public class Product : AggregateRoot<Guid>
     public string Description { get; private set; }
     public decimal Price { get; private set; }
     public int Stock { get; private set; }
-    public IReadOnlyCollection<ProductSale> Sales => _sales.AsReadOnly();
+    public IReadOnlyCollection<ProductSaleRecord> SalesRecords => this._sales.AsReadOnly();
 
-    public ProductSale AddSale(Guid orderId, int quantity)
+    public void AddSaleRecord(Guid orderId, int quantity)
     {
         this.DecreaseStock(quantity);
-        var productSale = new ProductSale(orderId, quantity);
+        var productSale = new ProductSaleRecord(orderId, quantity, DateTime.UtcNow);
         this._sales.Add(productSale);
-        return productSale;
     }
 
     /// <summary>
@@ -75,13 +77,12 @@ public class Product : AggregateRoot<Guid>
         this.IncreaseStock(quantity);
     }
 
-    public void Update(string name, string description, decimal price, int stock)
+    public void Update(string name, string description, decimal price)
     {
         this.Name = name;
         this.Description = description;
         this.Price = price;
-        this.Stock = stock;
 
-        this.AddDomainEvent(new ProductUpdated(this.Id, this.Name, this.Description, this.Price, this.Stock, DateTime.UtcNow));
+        this.AddDomainEvent(new ProductUpdated(this.Id, this.Name, this.Description, this.Price, DateTime.UtcNow));
     }
 }
