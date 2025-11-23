@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BC-Contracts\Lab.BoundedContextContracts.Inventory\Lab.BoundedContextContracts.Inventory.csproj" />
+    <ProjectReference Include="..\..\..\BC-Contracts\Lab.BoundedContextContracts.Orders\Lab.BoundedContextContracts.Orders.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
+    <ProjectReference Include="..\InventoryControl.Domains\InventoryControl.Domains.csproj" />
+  </ItemGroup>
+
+</Project>

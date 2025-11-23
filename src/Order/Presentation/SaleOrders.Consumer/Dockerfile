@@ -5,11 +5,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj", "src/Order/Presentation/SaleOrders.Consumer/"]
-COPY ["src/Shared/Lab.SharedKernel/Lab.SharedKernel.csproj", "src/Shared/Lab.SharedKernel/"]
-RUN dotnet restore "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj"
+COPY ["src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj", "Order/Presentation/SaleOrders.Consumer/"]
+RUN dotnet restore "Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj"
 COPY . .
-WORKDIR "/src/src/Order/Presentation/SaleOrders.Consumer"
+WORKDIR "Order/Presentation/SaleOrders.Consumer"
 RUN dotnet build "./SaleOrders.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

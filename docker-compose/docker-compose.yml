@@ -1,9 +1,6 @@
-version: '3.8'
-
 services:
   otel-collector-contrib:
     image: otel/opentelemetry-collector-contrib:0.113.0
-    restart: always
     container_name: otel-collector-contrib
     command: [ "--config=/etc/otel-collector.yaml" ]
     volumes:
@@ -155,6 +152,20 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=products_db
 
+  postgres-inventory:
+    image: postgres:16-alpine
+    container_name: postgres-inventory
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_inventory_data:/var/lib/postgresql/data
+      # copy the sql script to fill tables
+      - ./sql-script/create_inventoryitems_table.sql:/docker-entrypoint-initdb.d/create_inventoryitems_table.sql
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=inventory_db
+
   orders-api:
     build:
       context: ../src
@@ -233,8 +244,48 @@ services:
       - postgres-product
       - kafka
 
+  inventory-api:
+    build:
+      context: ../src
+      dockerfile: ../src/Inventory/Presentation/InventoryControl.WebApi/Dockerfile
+    container_name: inventory-api
+    environment:
+      - QUEUE_SERVICE=Kafka
+#      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
+      - ConnectionStrings__KafkaBroker=kafka:9092
+      - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-inventory;Port=5432;Database=inventory_db;Pooling=true;
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
+      - OTEL_SERVICE_NAME=inventory-api
+    ports:
+      - "8100:8080"
+      - "8101:8081"
+    depends_on:
+      - otel-collector-contrib
+#      - rabbitmq
+      - postgres-inventory
+      - kafka
+
+  inventory-consumer:
+    build:
+      context: ../src
+      dockerfile: ../src/Inventory/Presentation/InventoryControl.Consumer/Dockerfile
+    container_name: inventory-consumer
+    environment:
+      - QUEUE_SERVICE=Kafka
+#      - BrokerConnectionString=amqp://guest:guest@rabbitmq:5672
+      - BrokerConnectionString=kafka:9092
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
+      - OTEL_SERVICE_NAME=inventory-consumer
+      - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-inventory;Port=5432;Database=inventory_db;Pooling=true;
+    depends_on:
+      - otel-collector-contrib
+#      - rabbitmq
+      - postgres-inventory
+      - kafka
+
 volumes:
 #  rabbitmq_data:
   postgres_order_data:
   postgres_product_data:
+  postgres_inventory_data:
   kafka_data:
