@@ -29,8 +29,29 @@ builder.Host.UseWolverine(opts =>
         // Configure Kafka
         var kafkaConnectionString = builder.Configuration.GetConnectionString("KafkaBroker");
         opts.UseKafka(kafkaConnectionString!)
+            .ConfigureConsumers(consumerConfig =>
+            {
+                consumerConfig.AllowAutoCreateTopics = true;
+                consumerConfig.EnableAutoCommit = false;
+                // consumerConfig.AutoOffsetReset = Confluent.Kafka.AutoOffsetReset.Earliest;
+            })
             .AutoProvision();
 
+        // 設定整合命令的接收通道
+        opts.ListenToKafkaTopic("inventory.requests")
+            .ProcessInline()
+            .ListenerCount(3)
+            .UseDurableInbox();
+
+        // 如果想把整合命令的回應也視為一種整合事件，可以這樣設定，wolverine 會在 request contract handler 完成處理並回應時，額外回應物件到這邊
+        // opts.Publish(rule =>
+        // {
+        //     rule.MessagesImplementing<IInventoryResponseContract>();
+        //     rule.ToKafkaTopic("inventory.responses")
+        //         .UseDurableOutbox();
+        // });
+
+        // 設定整合事件的發布通道
         opts.Publish(rule =>
         {
             rule.MessagesImplementing<IIntegrationEvent>();

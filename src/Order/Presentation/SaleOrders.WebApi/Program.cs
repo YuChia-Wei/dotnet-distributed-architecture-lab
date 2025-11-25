@@ -1,4 +1,5 @@
 using Confluent.Kafka.Extensions.OpenTelemetry;
+using Lab.BoundedContextContracts.Inventory.Interactions;
 using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
 using OpenTelemetry.Logs;
@@ -32,6 +33,19 @@ builder.Host.UseWolverine(opts =>
             rule.ToKafkaTopic("orders")
                 .UseDurableOutbox();
         });
+
+        opts.Publish(rule =>
+        {
+            rule.MessagesImplementing<IInventoryRequestContract>();
+            rule.ToKafkaTopic("inventory.requests")
+                .UseDurableOutbox();
+        });
+
+        // 設定整合命令的接收通道
+        opts.ListenToKafkaTopic("inventory.requests")
+            .ProcessInline()
+            .ListenerCount(3)
+            .UseDurableInbox();
     }
     else // Default to RabbitMQ
     {

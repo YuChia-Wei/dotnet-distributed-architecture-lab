@@ -2,7 +2,7 @@
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
+EXPOSE 8443
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -12,7 +12,7 @@ COPY ["src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl
 COPY ["src/Inventory/DomainCore/InventoryControl.Applications/InventoryControl.Applications.csproj", "Inventory/DomainCore/InventoryControl.Applications/"]
 COPY ["src/Inventory/DomainCore/InventoryControl.Domains/InventoryControl.Domains.csproj", "Inventory/DomainCore/InventoryControl.Domains/"]
 COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
-COPY ["src/BC-Contracts/Lab.BoundedContextContracts.Inventorys/Lab.BoundedContextContracts.Inventorys.csproj", "BC-Contracts/Lab.BoundedContextContracts.Inventorys/"]
+COPY ["src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj", "BC-Contracts/Lab.BoundedContextContracts.Inventory/"]
 RUN dotnet restore "Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj"
 COPY . .
 WORKDIR "Inventory/Presentation/InventoryControl.WebApi"
