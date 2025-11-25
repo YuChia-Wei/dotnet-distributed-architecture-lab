@@ -8,8 +8,7 @@ public record DeleteProductCommand(Guid Id);
 /// <param name="Name"></param>
 /// <param name="Description"></param>
 /// <param name="Price"></param>
-/// <param name="DefaultStock"></param>
-public record CreateProductCommand(string Name, string Description, decimal Price, int DefaultStock);
+public record CreateProductCommand(string Name, string Description, decimal Price);
 
 /// <summary>
 /// 更新產品資訊
@@ -19,8 +18,3 @@ public record CreateProductCommand(string Name, string Description, decimal Pric
 /// <param name="Description"></param>
 /// <param name="Price"></param>
 public record UpdateProductCommand(Guid Id, string Name, string Description, decimal Price);
-
-/// <summary>
-/// 產品售出命令
-/// </summary>
-public record SellProductCommand(Guid OrderId, Guid ProductId, string ProductName, int Quantity);

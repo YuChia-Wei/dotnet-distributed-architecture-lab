@@ -31,9 +31,9 @@ public class ProductsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
     {
-        var command = new CreateProductCommand(request.Name, request.Description, request.Price, request.Stock);
+        var command = new CreateProductCommand(request.Name, request.Description, request.Price);
         var dto = await this._bus.InvokeAsync<ProductDto>(command);
-        var productResponse = new ProductResponse(dto.Id, dto.Name, dto.Description, dto.Price, dto.Stock);
+        var productResponse = new ProductResponse(dto.Id, dto.Name, dto.Description, dto.Price);
         return this.Ok(productResponse);
     }
 
@@ -59,7 +59,7 @@ public class ProductsController : ControllerBase
         var getAllProductsQuery = new GetAllProductsQuery();
         var products = await this._bus.InvokeAsync<IEnumerable<ProductDto>>(getAllProductsQuery);
         var productResponses = products.Select(dto =>
-                                                   new ProductResponse(dto.Id, dto.Name, dto.Description, dto.Price, dto.Stock));
+                                                   new ProductResponse(dto.Id, dto.Name, dto.Description, dto.Price));
 
         return this.Ok(productResponses);
     }

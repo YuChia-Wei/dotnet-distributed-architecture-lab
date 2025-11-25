@@ -1,5 +1,4 @@
 using System.Data;
-using System.Reflection;
 using Dapper;
 using SaleProducts.Applications.Repositories;
 using SaleProducts.Domains;
@@ -26,11 +25,6 @@ public class ProductDomainRepository : IProductDomainRepository
             Id = id
         });
 
-        if (product is not null)
-        {
-            await this.LoadSalesAsync(product);
-        }
-
         return product;
     }
 
@@ -50,11 +44,6 @@ public class ProductDomainRepository : IProductDomainRepository
                                       VALUES (@Id, @Name, @Description, @Price, @Stock, false, 1)
                                       """;
             await this._dbConnection.ExecuteAsync(productSql, product, transaction);
-
-            if (product.SalesRecords.Any())
-            {
-                await this.PersistSalesAsync(product, transaction);
-            }
 
             transaction.Commit();
         }
@@ -96,11 +85,6 @@ public class ProductDomainRepository : IProductDomainRepository
                 ProductId = product.Id
             }, transaction);
 
-            if (product.SalesRecords.Any())
-            {
-                await this.PersistSalesAsync(product, transaction);
-            }
-
             transaction.Commit();
         }
         catch
@@ -127,76 +111,11 @@ public class ProductDomainRepository : IProductDomainRepository
     public async Task<IEnumerable<Product>> GetAllAsync()
     {
         const string sql = """
-                           SELECT p.*, ps.*
+                           SELECT p.*
                            FROM "products" AS p
-                           LEFT JOIN "productsales" AS ps ON p."id" = ps."productid"
                            WHERE p."isdeleted" = false
                            """;
 
-        var productDictionary = new Dictionary<Guid, Product>();
-
-        var products = await this._dbConnection.QueryAsync<Product, ProductSaleRecord, Product>(
-                           sql,
-                           (product, sale) =>
-                           {
-                               if (!productDictionary.TryGetValue(product.Id, out var currentProduct))
-                               {
-                                   currentProduct = product;
-                                   productDictionary.Add(currentProduct.Id, currentProduct);
-                               }
-
-                               if (sale != null)
-                               {
-                                   var salesList = (List<ProductSaleRecord>)currentProduct.GetType()
-                                                                                    .GetField(
-                                                                                        "_sales", BindingFlags.NonPublic | BindingFlags.Instance)
-                                                                                    ?.GetValue(currentProduct);
-
-                                   if (salesList != null && salesList.All(s => s.OrderId != sale.OrderId))
-                                   {
-                                       salesList.Add(sale);
-                                   }
-                               }
-
-                               return currentProduct;
-                           },
-                           splitOn: "ProductId"
-                       );
-
-        return productDictionary.Values;
-    }
-
-    private async Task LoadSalesAsync(Product product)
-    {
-        const string salesSql = """
-                                SELECT * FROM "productsales"
-                                WHERE "productid" = @ProductId
-                                """;
-        var sales = await this._dbConnection.QueryAsync<ProductSaleRecord>(salesSql, new
-        {
-            ProductId = product.Id
-        });
-
-        var salesList = typeof(Product).GetField("_sales", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (salesList is not null)
-        {
-            salesList.SetValue(product, sales.ToList());
-        }
-    }
-
-    private async Task PersistSalesAsync(Product product, IDbTransaction transaction)
-    {
-        const string salesSql = """
-                                INSERT INTO "productsales" ("productid", "orderid", "quantity", "saledate")
-                                VALUES (@ProductId, @OrderId, @Quantity, @SaleDate)
-                                """;
-        var salesWithProductId = product.SalesRecords.Select(s => new
-        {
-            ProductId = product.Id,
-            s.OrderId,
-            s.Quantity,
-            s.SaleDate
-        });
-        await this._dbConnection.ExecuteAsync(salesSql, salesWithProductId, transaction);
+        return await this._dbConnection.QueryAsync<Product>(sql);
     }
 }
