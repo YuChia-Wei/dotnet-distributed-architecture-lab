@@ -98,7 +98,7 @@ public class PlaceOrderResult
 
     public static PlaceOrderResult Fail(string errorMessage)
     {
-        return new PlaceOrderResult(true, Guid.Empty, errorMessage);
+        return new PlaceOrderResult(false, Guid.Empty, errorMessage);
     }
 
     public static PlaceOrderResult Success(Guid orderId)
