@@ -40,8 +40,8 @@ public class ProductDomainRepository : IProductDomainRepository
         try
         {
             const string productSql = """
-                                      INSERT INTO "products" ("id", "name", "description", "price", "stock", "isdeleted", "version")
-                                      VALUES (@Id, @Name, @Description, @Price, @Stock, false, 1)
+                                      INSERT INTO "products" ("id", "name", "description", "price", "isdeleted", "version")
+                                      VALUES (@Id, @Name, @Description, @Price, false, 1)
                                       """;
             await this._dbConnection.ExecuteAsync(productSql, product, transaction);
 
@@ -69,7 +69,6 @@ public class ProductDomainRepository : IProductDomainRepository
                                       SET "name" = @Name,
                                           "description" = @Description,
                                           "price" = @Price,
-                                          "stock" = @Stock,
                                           "version" = "version" + 1
                                       WHERE "id" = @Id AND "version" = @Version
                                       """;
