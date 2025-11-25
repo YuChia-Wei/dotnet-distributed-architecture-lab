@@ -41,9 +41,9 @@ public class OrdersController : ControllerBase
     {
         var createOrderCommand =
             new PlaceOrderCommand(request.OrderDate, request.TotalAmount, request.ProductId, request.ProductName, request.Quantity);
-        var orderId = await this._bus.InvokeAsync<Guid>(createOrderCommand);
+        var placeOrderResult = await this._bus.InvokeAsync<PlaceOrderResult>(createOrderCommand);
 
-        return this.Ok(orderId);
+        return this.Ok(placeOrderResult);
     }
 
     /// <summary>

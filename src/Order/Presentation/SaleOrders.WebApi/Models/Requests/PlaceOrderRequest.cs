@@ -12,8 +12,13 @@ public record PlaceOrderRequest
     }
 
     public Guid ProductId { get; }
+
+    // [DefaultValue("2025-11-25T12:00:00")]
     public DateTime OrderDate { get; }
+
     public decimal TotalAmount { get; }
+
     public string ProductName { get; }
+
     public int Quantity { get; }
 }

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BC-Contracts\Lab.BoundedContextContracts.Inventory\Lab.BoundedContextContracts.Inventory.csproj" />
     <ProjectReference Include="..\..\..\BC-Contracts\Lab.BoundedContextContracts.Orders\Lab.BoundedContextContracts.Orders.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
     <ProjectReference Include="..\SaleOrders.Domains\SaleOrders.Domains.csproj" />

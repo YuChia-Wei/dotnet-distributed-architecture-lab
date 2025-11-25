@@ -1,11 +1,22 @@
 <Solution>
   <Folder Name="/BC-Contracts/">
+    <Project Path="src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj" />
     <Project Path="src\BC-Contracts\Lab.BoundedContextContracts.Orders\Lab.BoundedContextContracts.Orders.csproj" />
     <Project Path="src\BC-Contracts\Lab.BoundedContextContracts.Products\Lab.BoundedContextContracts.Products.csproj" />
   </Folder>
   <Folder Name="/BuildingBlocks/">
     <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Domains\Lab.BuildingBlocks.Domains.csproj" />
     <Project Path="src\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
+  </Folder>
+  <Folder Name="/Inventory/" />
+  <Folder Name="/Inventory/DomainCore/">
+    <Project Path="src/Inventory/DomainCore/InventoryControl.Applications/InventoryControl.Applications.csproj" />
+    <Project Path="src/Inventory/DomainCore/InventoryControl.Domains/InventoryControl.Domains.csproj" />
+    <Project Path="src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Inventory/Presentation/">
+    <Project Path="src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj" />
+    <Project Path="src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj" />
   </Folder>
   <Folder Name="/Order/" />
   <Folder Name="/Order/DomainCore/">
@@ -33,7 +44,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/SaleOrders.Tests/SaleOrders.Tests.csproj" />
     <Project Path="tests/SaleProducts.Tests/SaleProducts.Tests.csproj" />
-    <Project Path="tests\SaleOrders.Domains.Tests\SaleOrders.Domains.Tests.csproj" Type="Classic C#" />
-    <Project Path="tests\SaleProducts.Domains.Tests\SaleProducts.Domains.Tests.csproj" Type="Classic C#" />
+    <Project Path="tests\SaleOrders.Domains.Tests\SaleOrders.Domains.Tests.csproj" Type="C#" />
+    <Project Path="tests\SaleProducts.Domains.Tests\SaleProducts.Domains.Tests.csproj" Type="C#" />
   </Folder>
 </Solution>

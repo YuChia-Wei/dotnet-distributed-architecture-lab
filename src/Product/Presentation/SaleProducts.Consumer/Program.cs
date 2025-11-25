@@ -3,7 +3,6 @@
 using Confluent.Kafka.Extensions.OpenTelemetry;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -72,6 +71,7 @@ var builder = Host.CreateDefaultBuilder(args)
                       {
                           opts.UseRabbitMq(new Uri(brokerConnectionString))
                               .AutoProvision();
+
                           opts.ListenToRabbitQueue("orders")
                               .UseDurableInbox()
                               .ListenerCount(4);

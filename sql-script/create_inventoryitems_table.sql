@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS InventoryItems (
+    Id UUID PRIMARY KEY,
+    ProductId UUID NOT NULL,
+    Stock INT NOT NULL
+);
