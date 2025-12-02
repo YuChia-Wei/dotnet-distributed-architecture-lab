@@ -5,6 +5,8 @@ namespace SaleOrders.Domains;
 
 public class Order : AggregateRoot<Guid>
 {
+    public int Version { get; private set; }
+
     /// <summary>
     /// ctor (for ORM)
     /// </summary>
@@ -13,6 +15,12 @@ public class Order : AggregateRoot<Guid>
         this.ProductId = productId;
         this.Status = OrderStatus.Placed;
     }
+
+    /// <summary>
+    /// ctor (for Event Sourcing)
+    /// </summary>
+    public Order() { }
+
 
     /// <summary>
     /// 建立訂單的建構式
@@ -24,31 +32,25 @@ public class Order : AggregateRoot<Guid>
     /// <param name="quantity">數量</param>
     public Order(DateTime orderDate, decimal totalAmount, Guid productId, string productName, int quantity)
     {
-        this.Id = Guid.CreateVersion7();
-        this.OrderDate = orderDate;
-        this.TotalAmount = totalAmount;
-        this.ProductId = productId;
-        this.ProductName = productName;
-        this.Quantity = quantity;
-        this.Status = OrderStatus.Placed;
-
-        this.AddDomainEvent(new OrderPlacedDomainEvent(this.Id, this.OrderDate, this.TotalAmount, this.ProductName, this.Quantity, DateTime.UtcNow));
+        var @event = new OrderPlacedDomainEvent(Guid.CreateVersion7(), orderDate, totalAmount, productId, productName, quantity, DateTime.UtcNow);
+        this.AddDomainEvent(@event);
+        this.Mutate(@event);
     }
 
     /// <summary>
     /// 產品識別碼
     /// </summary>
-    public Guid ProductId { get; }
+    public Guid ProductId { get; private set; }
 
     /// <summary>
     /// 產品名稱
     /// </summary>
-    public string ProductName { get; }
+    public string ProductName { get; private set; }
 
     /// <summary>
     /// 訂購數量
     /// </summary>
-    public int Quantity { get; }
+    public int Quantity { get; private set; }
 
     /// <summary>
     /// 訂單日期
@@ -61,8 +63,7 @@ public class Order : AggregateRoot<Guid>
     public decimal TotalAmount { get; private set; }
 
     /// <summary>
-    /// 訂單狀態
-    /// </summary>
+    _summary>
     public OrderStatus Status { get; private set; } = OrderStatus.Placed;
 
     /// <summary>
@@ -70,7 +71,42 @@ public class Order : AggregateRoot<Guid>
     /// </summary>
     public void Cancel()
     {
+        if (this.Status == OrderStatus.Cancelled)
+        {
+            return;
+        }
+        var @event = new OrderCancelledDomainEvent(this.Id, DateTime.UtcNow);
+        this.AddDomainEvent(@event);
+        this.Mutate(@event);
+    }
+
+    public void LoadFromHistory(IEnumerable<IDomainEvent> history)
+    {
+        foreach (var e in history)
+        {
+            this.Mutate(e);
+            this.Version++;
+        }
+    }
+
+    private void Mutate(IDomainEvent @event)
+    {
+        ((dynamic)this).When((dynamic)@event);
+    }
+
+    private void When(OrderPlacedDomainEvent @event)
+    {
+        this.Id = @event.OrderId;
+        this.OrderDate = @event.OrderDate;
+        this.TotalAmount = @event.TotalAmount;
+        this.ProductId = @event.ProductId;
+        this.ProductName = @event.ProductName;
+        this.Quantity = @event.Quantity;
+        this.Status = OrderStatus.Placed;
+    }
+
+    private void When(OrderCancelledDomainEvent @event)
+    {
         this.Status = OrderStatus.Cancelled;
-        this.AddDomainEvent(new OrderCancelledDomainEvent(this.Id, DateTime.UtcNow));
     }
 }
