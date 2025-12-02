@@ -96,6 +96,21 @@ public class Order : AggregateRoot<Guid>
         this.Mutate(@event);
     }
 
+    /// <summary>
+    /// 設定訂單為已完成交付
+    /// </summary>
+    public void Deliver()
+    {
+        if (this.Status == OrderStatus.Delivered)
+        {
+            return;
+        }
+
+        var @event = new OrderDeliveredDomainEvent(this.Id, DateTime.UtcNow);
+        this.AddDomainEvent(@event);
+        this.Mutate(@event);
+    }
+
     public void LoadFromHistory(IEnumerable<IDomainEvent> history)
     {
         foreach (var e in history)
@@ -129,5 +144,10 @@ public class Order : AggregateRoot<Guid>
     private void When(OrderShippedDomainEvent @event)
     {
         this.Status = OrderStatus.Shipped;
+    }
+
+    private void When(OrderDeliveredDomainEvent @event)
+    {
+        this.Status = OrderStatus.Delivered;
     }
 }

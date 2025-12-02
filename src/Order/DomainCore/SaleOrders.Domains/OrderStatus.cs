@@ -16,6 +16,11 @@ public enum OrderStatus
     Shipped,
 
     /// <summary>
+    /// 已完成交付
+    /// </summary>
+    Delivered,
+
+    /// <summary>
     /// 已取消
     /// </summary>
     Cancelled
