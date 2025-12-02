@@ -5,8 +5,18 @@ namespace SaleOrders.Domains;
 /// </summary>
 public enum OrderStatus
 {
+    /// <summary>
+    /// 已下單
+    /// </summary>
     Placed,
+
+    /// <summary>
+    /// 已出貨
+    /// </summary>
     Shipped,
+
+    /// <summary>
+    /// 已取消
+    /// </summary>
     Cancelled
 }
-
