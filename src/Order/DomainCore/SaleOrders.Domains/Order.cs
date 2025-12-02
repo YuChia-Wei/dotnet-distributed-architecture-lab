@@ -5,8 +5,6 @@ namespace SaleOrders.Domains;
 
 public class Order : AggregateRoot<Guid>
 {
-    public int Version { get; private set; }
-
     /// <summary>
     /// ctor (for ORM)
     /// </summary>
@@ -20,7 +18,6 @@ public class Order : AggregateRoot<Guid>
     /// ctor (for Event Sourcing)
     /// </summary>
     public Order() { }
-
 
     /// <summary>
     /// 建立訂單的建構式
@@ -36,6 +33,8 @@ public class Order : AggregateRoot<Guid>
         this.AddDomainEvent(@event);
         this.Mutate(@event);
     }
+
+    public int Version { get; private set; }
 
     /// <summary>
     /// 產品識別碼
@@ -63,7 +62,8 @@ public class Order : AggregateRoot<Guid>
     public decimal TotalAmount { get; private set; }
 
     /// <summary>
-    _summary>
+    /// 訂單狀態
+    /// </summary>
     public OrderStatus Status { get; private set; } = OrderStatus.Placed;
 
     /// <summary>
@@ -75,6 +75,7 @@ public class Order : AggregateRoot<Guid>
         {
             return;
         }
+
         var @event = new OrderCancelledDomainEvent(this.Id, DateTime.UtcNow);
         this.AddDomainEvent(@event);
         this.Mutate(@event);

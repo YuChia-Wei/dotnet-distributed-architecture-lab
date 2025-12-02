@@ -18,7 +18,8 @@ public static class ServiceCollectionExtensions
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
-        services.AddScoped<IOrderDomainRepository, OrderDomainRepository>();
+        // services.AddScoped<IOrderDomainRepository, OrderDomainRepository>();
+        services.AddScoped<IOrderDomainRepository, OrderEventSourcingRepository>();
         services.AddScoped<IIntegrationEventPublisher, IntegrationEventPublisher>();
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         services.AddScoped<IInventoryGateway, InventoryGateway>();
