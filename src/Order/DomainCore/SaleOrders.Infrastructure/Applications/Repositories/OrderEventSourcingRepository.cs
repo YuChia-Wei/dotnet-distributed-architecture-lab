@@ -23,6 +23,10 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
         {
             nameof(OrderCancelledDomainEvent), typeof(OrderCancelledDomainEvent)
         }
+        ,
+        {
+            nameof(OrderShippedDomainEvent), typeof(OrderShippedDomainEvent)
+        }
     };
 
     private readonly IDbConnection _dbConnection;

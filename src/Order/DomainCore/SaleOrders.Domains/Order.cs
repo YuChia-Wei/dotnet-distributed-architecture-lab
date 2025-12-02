@@ -81,6 +81,21 @@ public class Order : AggregateRoot<Guid>
         this.Mutate(@event);
     }
 
+    /// <summary>
+    /// 設定訂單為已出貨
+    /// </summary>
+    public void Ship()
+    {
+        if (this.Status == OrderStatus.Shipped)
+        {
+            return;
+        }
+
+        var @event = new OrderShippedDomainEvent(this.Id, DateTime.UtcNow);
+        this.AddDomainEvent(@event);
+        this.Mutate(@event);
+    }
+
     public void LoadFromHistory(IEnumerable<IDomainEvent> history)
     {
         foreach (var e in history)
@@ -109,5 +124,10 @@ public class Order : AggregateRoot<Guid>
     private void When(OrderCancelledDomainEvent @event)
     {
         this.Status = OrderStatus.Cancelled;
+    }
+
+    private void When(OrderShippedDomainEvent @event)
+    {
+        this.Status = OrderStatus.Shipped;
     }
 }
