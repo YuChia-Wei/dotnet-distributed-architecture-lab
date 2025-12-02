@@ -1,4 +1,5 @@
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
+using Lab.BuildingBlocks.Integrations;
 using SaleOrders.Applications.Repositories;
 
 namespace SaleOrders.Applications.Commands;
@@ -19,7 +20,7 @@ public class CancelOrderHandler
     /// <param name="command">取消訂單命令</param>
     /// <param name="repository">訂單儲存庫</param>
     /// <param name="publisher">整合事件發布器</param>
-    public static async Task HandleAsync(CancelOrder command, IOrderDomainRepository repository, Lab.BuildingBlocks.Integrations.IIntegrationEventPublisher publisher)
+    public static async Task HandleAsync(CancelOrder command, IOrderDomainRepository repository, IIntegrationEventPublisher publisher)
     {
         var order = await repository.GetByIdAsync(command.OrderId) ?? throw new KeyNotFoundException($"Order {command.OrderId} not found");
 
@@ -30,4 +31,3 @@ public class CancelOrderHandler
         await publisher.PublishAsync(new OrderCancelled(order.Id));
     }
 }
-

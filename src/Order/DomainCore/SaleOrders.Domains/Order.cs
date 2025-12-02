@@ -82,21 +82,6 @@ public class Order : AggregateRoot<Guid>
     }
 
     /// <summary>
-    /// 設定訂單為已出貨
-    /// </summary>
-    public void Ship()
-    {
-        if (this.Status == OrderStatus.Shipped)
-        {
-            return;
-        }
-
-        var @event = new OrderShippedDomainEvent(this.Id, DateTime.UtcNow);
-        this.AddDomainEvent(@event);
-        this.Mutate(@event);
-    }
-
-    /// <summary>
     /// 設定訂單為已完成交付
     /// </summary>
     public void Deliver()
@@ -118,6 +103,21 @@ public class Order : AggregateRoot<Guid>
             this.Mutate(e);
             this.Version++;
         }
+    }
+
+    /// <summary>
+    /// 設定訂單為已出貨
+    /// </summary>
+    public void Ship()
+    {
+        if (this.Status == OrderStatus.Shipped)
+        {
+            return;
+        }
+
+        var @event = new OrderShippedDomainEvent(this.Id, DateTime.UtcNow);
+        this.AddDomainEvent(@event);
+        this.Mutate(@event);
     }
 
     private void Mutate(IDomainEvent @event)

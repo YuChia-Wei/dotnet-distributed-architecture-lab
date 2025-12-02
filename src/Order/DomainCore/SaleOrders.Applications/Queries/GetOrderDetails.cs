@@ -1,4 +1,3 @@
-using System.Threading;
 using Lab.BoundedContextContracts.Orders.DataTransferObjects;
 using SaleOrders.Applications.Repositories;
 
@@ -11,14 +10,14 @@ namespace SaleOrders.Applications.Queries;
 public record GetOrderDetailsQuery(Guid OrderId);
 
 /// <summary>
-/// 負責處理 <see cref="GetOrderDetailsQuery"/> 的查詢處理常式。
+/// 負責處理 <see cref="GetOrderDetailsQuery" /> 的查詢處理常式。
 /// </summary>
 public class GetOrderDetailsQueryHandler
 {
     private readonly IOrderDomainRepository _repository;
 
     /// <summary>
-    /// 建立 <see cref="GetOrderDetailsQueryHandler"/>。
+    /// 建立 <see cref="GetOrderDetailsQueryHandler" />。
     /// </summary>
     /// <param name="repository">訂單領域儲存庫。</param>
     public GetOrderDetailsQueryHandler(IOrderDomainRepository repository)
@@ -48,9 +47,9 @@ public class GetOrderDetailsQueryHandler
                 new LineItemDto
                 {
                     ProductId = order.ProductId,
-                    Quantity = order.Quantity,
-                },
-            ],
+                    Quantity = order.Quantity
+                }
+            ]
         };
 
         return response;

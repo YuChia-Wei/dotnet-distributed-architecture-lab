@@ -22,12 +22,10 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
         },
         {
             nameof(OrderCancelledDomainEvent), typeof(OrderCancelledDomainEvent)
-        }
-        ,
+        },
         {
             nameof(OrderShippedDomainEvent), typeof(OrderShippedDomainEvent)
-        }
-        ,
+        },
         {
             nameof(OrderDeliveredDomainEvent), typeof(OrderDeliveredDomainEvent)
         }
