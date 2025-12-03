@@ -57,14 +57,18 @@ var builder = Host.CreateDefaultBuilder(args)
                       {
                           opts.UseKafka(brokerConnectionString)
                               .AutoProvision();
-                          opts.ListenToKafkaTopic("products")
+
+                          // 接收 產品服務 的整合事件
+                          opts.ListenToKafkaTopic("products.integration.events")
                               .UseDurableInbox();
                       }
                       else if (queueServiceUri.Equals("RabbitMQ", StringComparison.OrdinalIgnoreCase))
                       {
                           opts.UseRabbitMq(new Uri(brokerConnectionString))
                               .AutoProvision();
-                          opts.ListenToRabbitQueue("products")
+
+                          // 接收 產品服務 的整合事件
+                          opts.ListenToRabbitQueue("products.integration.events")
                               .UseDurableInbox()
                               .ListenerCount(4);
                       }

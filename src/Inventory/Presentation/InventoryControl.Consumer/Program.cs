@@ -1,6 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System;
 using Confluent.Kafka.Extensions.OpenTelemetry;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -58,14 +57,16 @@ var builder = Host.CreateDefaultBuilder(args)
                       {
                           opts.UseKafka(brokerConnectionString)
                               .AutoProvision();
-                          opts.ListenToKafkaTopic("orders")
+
+                          opts.ListenToKafkaTopic("orders.integration.events")
                               .UseDurableInbox();
                       }
                       else if (queueServiceUri.Equals("RabbitMQ", StringComparison.OrdinalIgnoreCase))
                       {
                           opts.UseRabbitMq(new Uri(brokerConnectionString))
                               .AutoProvision();
-                          opts.ListenToRabbitQueue("orders")
+
+                          opts.ListenToRabbitQueue("orders.integration.events")
                               .UseDurableInbox()
                               .ListenerCount(4);
                       }

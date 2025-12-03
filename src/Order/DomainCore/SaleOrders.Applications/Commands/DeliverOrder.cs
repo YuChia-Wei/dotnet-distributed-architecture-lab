@@ -1,33 +1,33 @@
-using Lab.BoundedContextContracts.Orders.IntegrationEvents;
+﻿using Lab.BoundedContextContracts.Orders.IntegrationEvents;
 using Lab.BuildingBlocks.Integrations;
 using SaleOrders.Applications.Repositories;
 
 namespace SaleOrders.Applications.Commands;
 
 /// <summary>
-/// 取消訂單命令
+/// 訂單已完成交付命令
 /// </summary>
-public record CancelOrder(Guid OrderId);
+public record DeliverOrder(Guid OrderId);
 
 /// <summary>
-/// 取消訂單命令處理器
+/// 訂單已完成交付命令處理器
 /// </summary>
-public class CancelOrderHandler
+public class DeliverOrderHandler
 {
     /// <summary>
-    /// 處理取消訂單
+    /// 處理訂單已完成交付
     /// </summary>
-    /// <param name="command">取消訂單命令</param>
+    /// <param name="command">已完成交付命令</param>
     /// <param name="repository">訂單儲存庫</param>
     /// <param name="publisher">整合事件發布器</param>
-    public static async Task HandleAsync(CancelOrder command, IOrderDomainRepository repository, IIntegrationEventPublisher publisher)
+    public static async Task HandleAsync(DeliverOrder command, IOrderDomainRepository repository, IIntegrationEventPublisher publisher)
     {
         var order = await repository.GetByIdAsync(command.OrderId) ?? throw new KeyNotFoundException($"Order {command.OrderId} not found");
 
-        order.Cancel();
+        order.Deliver();
 
         await repository.UpdateAsync(order);
 
-        await publisher.PublishAsync(new OrderCancelled(order.Id));
+        await publisher.PublishAsync(new OrderDelivered(order.Id));
     }
 }

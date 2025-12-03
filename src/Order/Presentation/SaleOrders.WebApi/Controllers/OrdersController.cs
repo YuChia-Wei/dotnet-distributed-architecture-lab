@@ -31,6 +31,30 @@ public class OrdersController : ControllerBase
     }
 
     /// <summary>
+    /// 設定指定訂單為已出貨
+    /// </summary>
+    /// <param name="orderId">訂單識別碼</param>
+    [HttpPatch("{orderId:guid}/ship")]
+    [ProducesResponseType(204)]
+    public async Task<IActionResult> ShipOrder([FromRoute] Guid orderId)
+    {
+        await this._bus.InvokeAsync(new ShipOrder(orderId));
+        return this.NoContent();
+    }
+
+    /// <summary>
+    /// 設定指定訂單為已完成交付
+    /// </summary>
+    /// <param name="orderId">訂單識別碼</param>
+    [HttpPatch("{orderId:guid}/deliver")]
+    [ProducesResponseType(204)]
+    public async Task<IActionResult> DeliverOrder([FromRoute] Guid orderId)
+    {
+        await this._bus.InvokeAsync(new DeliverOrder(orderId));
+        return this.NoContent();
+    }
+
+    /// <summary>
     /// Handles the creation of a new order.
     /// </summary>
     /// <param name="request">An instance of <see cref="PlaceOrderCommand" /> containing order details such as date and total amount.</param>

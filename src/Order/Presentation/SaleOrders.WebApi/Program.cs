@@ -30,7 +30,7 @@ builder.Host.UseWolverine(opts =>
         opts.Publish(rule =>
         {
             rule.MessagesImplementing<IIntegrationEvent>();
-            rule.ToKafkaTopic("orders")
+            rule.ToKafkaTopic("orders.integration.events")
                 .UseDurableOutbox();
         });
 
@@ -41,8 +41,10 @@ builder.Host.UseWolverine(opts =>
                 .UseDurableOutbox();
         });
 
-        // 設定整合命令的接收通道
-        opts.ListenToKafkaTopic("inventory.requests")
+        // The following listener is incorrect for the Order service.
+        // It should only publish requests, not listen to them.
+        opts.ListenToKafkaTopic("orders.outbound.replies")
+            .UseForReplies()
             .ProcessInline()
             .ListenerCount(3)
             .UseDurableInbox();
@@ -57,9 +59,24 @@ builder.Host.UseWolverine(opts =>
         opts.Publish(rule =>
         {
             rule.MessagesImplementing<IIntegrationEvent>();
-            rule.ToRabbitQueue("orders")
+            rule.ToRabbitQueue("orders.integration.events")
                 .UseDurableOutbox();
         });
+
+        opts.Publish(rule =>
+        {
+            rule.MessagesImplementing<IInventoryRequestContract>();
+            rule.ToRabbitQueue("inventory.requests")
+                .UseDurableOutbox();
+        });
+
+        // The following listener is incorrect for the Order service.
+        // It should only publish requests, not listen to them.
+        opts.ListenToRabbitQueue("orders.outbound.replies")
+            .UseForReplies()
+            .ProcessInline()
+            .ListenerCount(3)
+            .UseDurableInbox();
     }
 
     // Publish domain events locally
