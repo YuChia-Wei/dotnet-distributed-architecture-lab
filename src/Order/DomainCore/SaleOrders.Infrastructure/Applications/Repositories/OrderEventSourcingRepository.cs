@@ -8,6 +8,8 @@ using SaleOrders.Domains.DomainEvents;
 
 namespace SaleOrders.Infrastructure.Applications.Repositories;
 
+// dapper connection control: ./docs/problem-note/dapper-dbconnection.md
+
 public class OrderEventSourcingRepository : IOrderDomainRepository
 {
     private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
