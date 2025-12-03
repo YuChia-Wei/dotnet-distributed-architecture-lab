@@ -1,13 +1,8 @@
-using System;
 using Confluent.Kafka.Extensions.OpenTelemetry;
 using InventoryControl.Applications;
 using InventoryControl.Infrastructure;
 using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -29,15 +24,9 @@ builder.Host.UseWolverine(opts =>
         // Configure Kafka
         var kafkaConnectionString = builder.Configuration.GetConnectionString("KafkaBroker");
         opts.UseKafka(kafkaConnectionString!)
-            .ConfigureConsumers(consumerConfig =>
-            {
-                consumerConfig.AllowAutoCreateTopics = true;
-                consumerConfig.EnableAutoCommit = false;
-                // consumerConfig.AutoOffsetReset = Confluent.Kafka.AutoOffsetReset.Earliest;
-            })
             .AutoProvision();
 
-        // 設定整合命令的接收通道
+        // 監聽跨服務間的要求資料
         opts.ListenToKafkaTopic("inventory.requests")
             .ProcessInline()
             .ListenerCount(3)
@@ -55,7 +44,7 @@ builder.Host.UseWolverine(opts =>
         opts.Publish(rule =>
         {
             rule.MessagesImplementing<IIntegrationEvent>();
-            rule.ToKafkaTopic("inventory")
+            rule.ToKafkaTopic("inventory.integration.events")
                 .UseDurableOutbox();
         });
     }
@@ -69,7 +58,7 @@ builder.Host.UseWolverine(opts =>
         opts.Publish(rule =>
         {
             rule.MessagesImplementing<IIntegrationEvent>();
-            rule.ToRabbitQueue("inventory")
+            rule.ToRabbitQueue("inventory.integration.events")
                 .UseDurableOutbox();
         });
     }
@@ -79,6 +68,7 @@ builder.Host.UseWolverine(opts =>
 
     // Discover services
     opts.Discovery.IncludeAssembly(typeof(ServiceCollectionExtensions).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(Program).Assembly);
 });
 
 builder.Services.AddControllers();

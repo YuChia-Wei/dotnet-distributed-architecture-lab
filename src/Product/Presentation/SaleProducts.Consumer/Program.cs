@@ -64,7 +64,7 @@ var builder = Host.CreateDefaultBuilder(args)
                           opts.UseKafka(brokerConnectionString)
                               .AutoProvision();
 
-                          opts.ListenToKafkaTopic("orders")
+                          opts.ListenToKafkaTopic("orders.integration.events")
                               .UseDurableInbox();
                       }
                       else if (queueServiceUri.Equals("RabbitMQ", StringComparison.OrdinalIgnoreCase))
@@ -72,7 +72,7 @@ var builder = Host.CreateDefaultBuilder(args)
                           opts.UseRabbitMq(new Uri(brokerConnectionString))
                               .AutoProvision();
 
-                          opts.ListenToRabbitQueue("orders")
+                          opts.ListenToRabbitQueue("orders.integration.events")
                               .UseDurableInbox()
                               .ListenerCount(4);
                       }

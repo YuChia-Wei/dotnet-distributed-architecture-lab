@@ -30,7 +30,7 @@ builder.Host.UseWolverine(opts =>
         opts.Publish(rule =>
         {
             rule.MessagesImplementing<IIntegrationEvent>();
-            rule.ToKafkaTopic("products")
+            rule.ToKafkaTopic("products.integration.events")
                 .UseDurableOutbox();
         });
     }
@@ -44,7 +44,7 @@ builder.Host.UseWolverine(opts =>
         opts.Publish(rule =>
         {
             rule.MessagesImplementing<IIntegrationEvent>();
-            rule.ToRabbitQueue("products")
+            rule.ToRabbitQueue("products.integration.events")
                 .UseDurableOutbox();
         });
     }
