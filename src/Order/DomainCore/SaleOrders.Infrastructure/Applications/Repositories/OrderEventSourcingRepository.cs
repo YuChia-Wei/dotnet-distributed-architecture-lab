@@ -116,6 +116,14 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
             return;
         }
 
+        // Ensure the connection is open before starting a transaction.
+        // Dapper will auto-open/close around its own commands when the connection is closed,
+        // but ADO.NET requires an explicitly open connection for BeginTransaction().
+        if (this._dbConnection.State != ConnectionState.Open)
+        {
+            this._dbConnection.Open();
+        }
+
         const string versionSql = "SELECT MAX(Version) FROM OrderEvents WHERE StreamId = @StreamId";
         var dbVersion = await this._dbConnection.ExecuteScalarAsync<int?>(versionSql, new
         {
@@ -132,27 +140,35 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
         using var transaction = this._dbConnection.BeginTransaction();
 
         var nextVersion = order.Version;
-        foreach (var @event in events)
+        try
         {
-            nextVersion++;
-            var eventType = @event.GetType().Name;
-            var data = JsonSerializer.Serialize(@event, @event.GetType(), _jsonSerializerOptions);
+            foreach (var @event in events)
+            {
+                nextVersion++;
+                var eventType = @event.GetType().Name;
+                var data = JsonSerializer.Serialize(@event, @event.GetType(), _jsonSerializerOptions);
 
-            const string insertSql = @"
+                const string insertSql = @"
                 INSERT INTO OrderEvents (StreamId, Version, EventType, Data, Timestamp)
                 VALUES (@StreamId, @Version, @EventType, @Data::jsonb, @Timestamp)";
 
-            await this._dbConnection.ExecuteAsync(insertSql, new
-            {
-                StreamId = order.Id,
-                Version = nextVersion,
-                EventType = eventType,
-                Data = data,
-                Timestamp = DateTime.UtcNow
-            }, transaction);
-        }
+                await this._dbConnection.ExecuteAsync(insertSql, new
+                {
+                    StreamId = order.Id,
+                    Version = nextVersion,
+                    EventType = eventType,
+                    Data = data,
+                    Timestamp = DateTime.UtcNow
+                }, transaction);
+            }
 
-        transaction.Commit();
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
 
         await this._dispatcher.DispatchAsync(events, cancellationToken);
     }
