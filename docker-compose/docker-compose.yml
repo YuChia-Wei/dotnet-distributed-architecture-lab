@@ -170,6 +170,7 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Order/Presentation/SaleOrders.WebApi/Dockerfile
+    pull_policy: build
     container_name: orders-api
     environment:
       - QUEUE_SERVICE=Kafka
@@ -191,6 +192,7 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Order/Presentation/SaleOrders.Consumer/Dockerfile
+    pull_policy: build
     container_name: orders-consumer
     environment:
       - QUEUE_SERVICE=Kafka
@@ -208,6 +210,7 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Product/Presentation/SaleProducts.WebApi/Dockerfile
+    pull_policy: build
     container_name: product-api
     environment:
       - QUEUE_SERVICE=Kafka
@@ -229,6 +232,7 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Product/Presentation/SaleProducts.Consumer/Dockerfile
+    pull_policy: build
     container_name: product-consumer
     environment:
       - QUEUE_SERVICE=Kafka
@@ -248,6 +252,7 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Inventory/Presentation/InventoryControl.WebApi/Dockerfile
+    pull_policy: build
     container_name: inventory-api
     environment:
       - QUEUE_SERVICE=Kafka
@@ -269,6 +274,7 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Inventory/Presentation/InventoryControl.Consumer/Dockerfile
+    pull_policy: build
     container_name: inventory-consumer
     environment:
       - QUEUE_SERVICE=Kafka
