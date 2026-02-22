@@ -14,6 +14,8 @@ public class StockDecreased : IDomainEvent
         this.OccurredOn = DateTime.UtcNow;
     }
 
+    public Guid EventId { get; init; } = Guid.NewGuid();
+
     public Guid ProductId { get; set; }
 
     public Guid InventoryItemId { get; }

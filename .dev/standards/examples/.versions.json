@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "lastCheck": "2026-02-01T00:00:00+00:00",
+  "templates": {
+    "aggregate/Plan.cs": {
+      "version": "1.0.0",
+      "source": "src/Domain/Plan/Plan.cs",
+      "lastSync": "2025-08-05",
+      "status": "synced",
+      "category": "core",
+      "changes": []
+    }
+  }
+}

@@ -28,7 +28,7 @@ public class InitProductStockRequestCommandHandler
 
         var item = new InventoryItem(command.ProductId, command.Stock);
 
-        await repository.AddAsync(item);
+        await repository.SaveAsync(item);
 
         return new InitProductStockResultDto
         {

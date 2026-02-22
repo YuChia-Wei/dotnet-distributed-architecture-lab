@@ -1,11 +1,12 @@
 using System.Data;
 using Dapper;
-using SaleProducts.Applications.Repositories;
+using Lab.BuildingBlocks.Application;
 using SaleProducts.Domains;
+using SaleProducts.Domains.DomainEvents;
 
 namespace SaleProducts.Infrastructure.Repositories;
 
-public class ProductDomainRepository : IProductDomainRepository
+public class ProductDomainRepository : IDomainRepository<Product, Guid>
 {
     private readonly IDbConnection _dbConnection;
 
@@ -14,7 +15,7 @@ public class ProductDomainRepository : IProductDomainRepository
         this._dbConnection = dbConnection;
     }
 
-    public async Task<Product?> GetByIdAsync(Guid id)
+    public async Task<Product?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         const string productSql = """
                                   SELECT * FROM "products"
@@ -28,33 +29,26 @@ public class ProductDomainRepository : IProductDomainRepository
         return product;
     }
 
-    public async Task AddAsync(Product product)
+    public async Task<IEnumerable<Product>> FindByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
     {
-        if (this._dbConnection.State != ConnectionState.Open)
+        var idArray = ids.ToArray();
+        if (idArray.Length == 0)
         {
-            this._dbConnection.Open();
+            return Array.Empty<Product>();
         }
 
-        using var transaction = this._dbConnection.BeginTransaction();
-
-        try
+        const string productSql = """
+                                  SELECT * FROM "products"
+                                  WHERE "id" = ANY(@Ids) AND "isdeleted" = false
+                                  """;
+        var products = await this._dbConnection.QueryAsync<Product>(productSql, new
         {
-            const string productSql = """
-                                      INSERT INTO "products" ("id", "name", "description", "price", "isdeleted", "version")
-                                      VALUES (@Id, @Name, @Description, @Price, false, 1)
-                                      """;
-            await this._dbConnection.ExecuteAsync(productSql, product, transaction);
-
-            transaction.Commit();
-        }
-        catch
-        {
-            transaction.Rollback();
-            throw;
-        }
+            Ids = idArray
+        });
+        return products;
     }
 
-    public async Task UpdateAsync(Product product)
+    public async Task SaveAsync(Product product, CancellationToken cancellationToken = default)
     {
         if (this._dbConnection.State != ConnectionState.Open)
         {
@@ -64,26 +58,52 @@ public class ProductDomainRepository : IProductDomainRepository
         using var transaction = this._dbConnection.BeginTransaction();
         try
         {
-            const string productSql = """
-                                      UPDATE "products"
-                                      SET "name" = @Name,
-                                          "description" = @Description,
-                                          "price" = @Price,
-                                          "version" = "version" + 1
-                                      WHERE "id" = @Id AND "version" = @Version
-                                      """;
-            var affectedRows = await this._dbConnection.ExecuteAsync(productSql, product, transaction);
-            if (affectedRows == 0)
+            var isDelete = product.DomainEvents.Any(e => e is ProductDeleted);
+            if (product.Version <= 0)
             {
-                throw new DBConcurrencyException("The record has been modified by another user.");
+                const string insertSql = """
+                                         INSERT INTO "products" ("id", "name", "description", "price", "isdeleted", "version")
+                                         VALUES (@Id, @Name, @Description, @Price, false, 1)
+                                         """;
+                await this._dbConnection.ExecuteAsync(insertSql, product, transaction);
+            }
+            else if (isDelete)
+            {
+                const string deleteSql = """
+                                         UPDATE "products"
+                                         SET "isdeleted" = true,
+                                             "version" = "version" + 1
+                                         WHERE "id" = @Id AND "version" = @Version AND "isdeleted" = false
+                                         """;
+                var affectedRows = await this._dbConnection.ExecuteAsync(deleteSql, product, transaction);
+                if (affectedRows == 0)
+                {
+                    throw new DBConcurrencyException("The record has been modified by another user.");
+                }
+            }
+            else
+            {
+                const string updateSql = """
+                                         UPDATE "products"
+                                         SET "name" = @Name,
+                                             "description" = @Description,
+                                             "price" = @Price,
+                                             "version" = "version" + 1
+                                         WHERE "id" = @Id AND "version" = @Version AND "isdeleted" = false
+                                         """;
+                var affectedRows = await this._dbConnection.ExecuteAsync(updateSql, product, transaction);
+                if (affectedRows == 0)
+                {
+                    throw new DBConcurrencyException("The record has been modified by another user.");
+                }
+
+                const string deleteSalesSql = """DELETE FROM "productsales" WHERE "productid" = @ProductId""";
+                await this._dbConnection.ExecuteAsync(deleteSalesSql, new
+                {
+                    ProductId = product.Id
+                }, transaction);
             }
 
-            const string deleteSalesSql = """DELETE FROM "productsales" WHERE "productid" = @ProductId""";
-            await this._dbConnection.ExecuteAsync(deleteSalesSql, new
-            {
-                ProductId = product.Id
-            }, transaction);
-
             transaction.Commit();
         }
         catch
@@ -93,28 +113,30 @@ public class ProductDomainRepository : IProductDomainRepository
         }
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task SaveAllAsync(IEnumerable<Product> entities, CancellationToken cancellationToken = default)
+    {
+        foreach (var entity in entities)
+        {
+            await this.SaveAsync(entity, cancellationToken);
+        }
+    }
+
+    public async Task DeleteAsync(Product entity, CancellationToken cancellationToken = default)
     {
         const string sql = """
                            UPDATE "products"
                            SET "isdeleted" = true,
                                "version" = "version" + 1
-                           WHERE "id" = @Id
+                           WHERE "id" = @Id AND "version" = @Version
                            """;
-        await this._dbConnection.ExecuteAsync(sql, new
+        var affectedRows = await this._dbConnection.ExecuteAsync(sql, new
         {
-            Id = id
+            entity.Id,
+            entity.Version
         });
-    }
-
-    public async Task<IEnumerable<Product>> GetAllAsync()
-    {
-        const string sql = """
-                           SELECT p.*
-                           FROM "products" AS p
-                           WHERE p."isdeleted" = false
-                           """;
-
-        return await this._dbConnection.QueryAsync<Product>(sql);
+        if (affectedRows == 0)
+        {
+            throw new DBConcurrencyException("The record has been modified by another user.");
+        }
     }
 }

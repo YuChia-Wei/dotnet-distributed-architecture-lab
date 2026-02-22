@@ -1,3 +1,4 @@
+using Lab.BuildingBlocks.Application;
 using Lab.BuildingBlocks.Domains;
 using Wolverine;
 

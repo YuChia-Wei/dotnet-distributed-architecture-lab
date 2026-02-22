@@ -1,4 +1,5 @@
 using System.Data;
+using Lab.BuildingBlocks.Application;
 using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
 using Microsoft.Extensions.Configuration;

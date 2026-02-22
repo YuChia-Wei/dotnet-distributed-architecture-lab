@@ -11,8 +11,11 @@ COPY ["src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebAp
 COPY ["src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj", "Inventory/DomainCore/InventoryControl.Infrastructure/"]
 COPY ["src/Inventory/DomainCore/InventoryControl.Applications/InventoryControl.Applications.csproj", "Inventory/DomainCore/InventoryControl.Applications/"]
 COPY ["src/Inventory/DomainCore/InventoryControl.Domains/InventoryControl.Domains.csproj", "Inventory/DomainCore/InventoryControl.Domains/"]
+COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Application/Lab.BuildingBlocks.Application.csproj", "BuildingBlocks/Lab.BuildingBlocks.Application/"]
+COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Domains/Lab.BuildingBlocks.Domains.csproj", "BuildingBlocks/Lab.BuildingBlocks.Domains/"]
 COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
 COPY ["src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj", "BC-Contracts/Lab.BoundedContextContracts.Inventory/"]
+COPY ["src/BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj", "BC-Contracts/Lab.BoundedContextContracts.Orders/"]
 RUN dotnet restore "Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj"
 COPY . .
 WORKDIR "Inventory/Presentation/InventoryControl.WebApi"

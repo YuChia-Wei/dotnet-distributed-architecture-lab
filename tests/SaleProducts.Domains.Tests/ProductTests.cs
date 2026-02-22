@@ -1,4 +1,5 @@
 using Xunit;
+using SaleProducts.Domains.DomainEvents;
 
 namespace SaleProducts.Domains.Tests;
 
@@ -27,5 +28,36 @@ public class ProductTests
         Assert.Equal("B2", product.Description);
         Assert.Equal(2m, product.Price);
         Assert.Contains(product.DomainEvents, e => e.GetType().Name == "ProductUpdated");
+    }
+
+    [Fact]
+    public void Delete_Raises_ProductDeleted()
+    {
+        var product = new Product("A", "B", 1m);
+        product.ClearDomainEvents();
+
+        product.Delete();
+
+        Assert.Contains(product.DomainEvents, e => e is ProductDeleted);
+    }
+
+    [Theory]
+    [InlineData("", "Desc", 1)]
+    [InlineData("Name", "", 1)]
+    [InlineData("Name", "Desc", -1)]
+    public void Ctor_InvalidInput_Throws(string name, string description, decimal price)
+    {
+        Assert.ThrowsAny<ArgumentException>(() => new Product(name, description, price));
+    }
+
+    [Theory]
+    [InlineData("", "Desc", 1)]
+    [InlineData("Name", "", 1)]
+    [InlineData("Name", "Desc", -1)]
+    public void Update_InvalidInput_Throws(string name, string description, decimal price)
+    {
+        var product = new Product("A", "B", 1m);
+
+        Assert.ThrowsAny<ArgumentException>(() => product.Update(name, description, price));
     }
 }

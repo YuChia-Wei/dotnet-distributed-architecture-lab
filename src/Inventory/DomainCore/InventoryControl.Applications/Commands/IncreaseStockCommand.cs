@@ -67,7 +67,7 @@ public class IncreaseStockCommandHandler
         }
 
         // 正常流程：持久化 + 發整合事件(Integration Event)
-        await repository.UpdateAsync(inventoryItem);
+        await repository.SaveAsync(inventoryItem);
 
         await publisher.PublishAsync(
             new ProductStockIncreasedIntegrationEvent(

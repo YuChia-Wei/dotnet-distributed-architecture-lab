@@ -6,6 +6,8 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj", "Inventory/Presentation/InventoryControl.Consumer/"]
+COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
+COPY ["src/BC-Contracts/Lab.BoundedContextContracts.Products/Lab.BoundedContextContracts.Products.csproj", "BC-Contracts/Lab.BoundedContextContracts.Products/"]
 RUN dotnet restore "Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj"
 COPY . .
 WORKDIR "Inventory/Presentation/InventoryControl.Consumer"
