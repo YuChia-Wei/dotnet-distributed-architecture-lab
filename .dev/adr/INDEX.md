@@ -47,3 +47,4 @@ Legend:
 | ADR-046-query-side-layering-strategy | Translate | Query Repository + Query Service layering |
 | ADR-047-shared-project-classification | Translate | Shared projects classification and dependency rules |
 | ADR-048-slnx-logical-solution-folder-structure | Translate | Adopt logical Solution Folder grouping with fixed slash style |
+| ADR-049-dockerfile-explicit-csproj-copy-for-restore-cache | Translate | Keep explicit csproj COPY before restore for Docker layer cache, with script-based sync check |
