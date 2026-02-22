@@ -14,6 +14,8 @@ public class StockReturned : IDomainEvent
         throw new NotImplementedException();
     }
 
+    public Guid EventId { get; init; } = Guid.NewGuid();
+
     public Guid InventoryItemId { get; set; }
 
     public Guid ProductId { get; }

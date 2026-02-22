@@ -1,4 +1,5 @@
-﻿using Lab.BuildingBlocks.Domains;
+﻿using Lab.BuildingBlocks.Application;
+using Lab.BuildingBlocks.Domains;
 using Microsoft.Extensions.Logging;
 using Wolverine;
 

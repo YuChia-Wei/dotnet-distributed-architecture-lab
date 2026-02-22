@@ -11,10 +11,5 @@ public abstract class AggregateRoot<TId>
     {
     }
 
-    public int Version { get; private set; }
-
-    public void IncrementVersion()
-    {
-        this.Version++;
-    }
+    public int Version { get; protected set; }
 }

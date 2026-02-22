@@ -2,4 +2,7 @@ using Lab.BuildingBlocks.Domains;
 
 namespace SaleProducts.Domains.DomainEvents;
 
-public record ProductDeleted(Guid ProductId, DateTime OccurredOn) : IDomainEvent;
+public sealed record ProductDeleted(Guid ProductId, DateTime OccurredOn) : IDomainEvent
+{
+    public Guid EventId { get; init; } = Guid.NewGuid();
+}

@@ -3,38 +3,34 @@ using SaleOrders.Domains.DomainEvents;
 
 namespace SaleOrders.Domains;
 
-public class Order : AggregateRoot<Guid>
+public class Order : EsAggregateRoot<Guid>
 {
     /// <summary>
-    /// ctor (for ORM)
+    /// 事件重播用建構子
     /// </summary>
-    private Order(Guid productId)
+    public Order(IEnumerable<IDomainEvent> events) : base(events)
     {
-        this.ProductId = productId;
-        this.Status = OrderStatus.Placed;
     }
 
     /// <summary>
-    /// ctor (for Event Sourcing)
+    /// ORM / 框架用無參數建構子
     /// </summary>
-    public Order() { }
+    public Order()
+    {
+    }
 
     /// <summary>
     /// 建立訂單的建構式
     /// </summary>
     /// <param name="orderDate">訂單日期</param>
     /// <param name="totalAmount">訂單總金額</param>
-    /// <param name="productId"></param>
+    /// <param name="productId">產品識別碼</param>
     /// <param name="productName">產品名稱</param>
     /// <param name="quantity">數量</param>
     public Order(DateTime orderDate, decimal totalAmount, Guid productId, string productName, int quantity)
     {
-        var @event = new OrderPlacedDomainEvent(Guid.CreateVersion7(), orderDate, totalAmount, productId, productName, quantity, DateTime.UtcNow);
-        this.AddDomainEvent(@event);
-        this.Mutate(@event);
+        Apply(new OrderPlacedDomainEvent(Guid.CreateVersion7(), orderDate, totalAmount, productId, productName, quantity, DateTime.UtcNow));
     }
-
-    public int Version { get; private set; }
 
     /// <summary>
     /// 產品識別碼
@@ -76,9 +72,7 @@ public class Order : AggregateRoot<Guid>
             return;
         }
 
-        var @event = new OrderCancelledDomainEvent(this.Id, DateTime.UtcNow);
-        this.AddDomainEvent(@event);
-        this.Mutate(@event);
+        Apply(new OrderCancelledDomainEvent(this.Id, DateTime.UtcNow));
     }
 
     /// <summary>
@@ -91,18 +85,7 @@ public class Order : AggregateRoot<Guid>
             return;
         }
 
-        var @event = new OrderDeliveredDomainEvent(this.Id, DateTime.UtcNow);
-        this.AddDomainEvent(@event);
-        this.Mutate(@event);
-    }
-
-    public void LoadFromHistory(IEnumerable<IDomainEvent> history)
-    {
-        foreach (var e in history)
-        {
-            this.Mutate(e);
-            this.Version++;
-        }
+        Apply(new OrderDeliveredDomainEvent(this.Id, DateTime.UtcNow));
     }
 
     /// <summary>
@@ -115,39 +98,37 @@ public class Order : AggregateRoot<Guid>
             return;
         }
 
-        var @event = new OrderShippedDomainEvent(this.Id, DateTime.UtcNow);
-        this.AddDomainEvent(@event);
-        this.Mutate(@event);
+        Apply(new OrderShippedDomainEvent(this.Id, DateTime.UtcNow));
     }
 
-    private void Mutate(IDomainEvent @event)
+    /// <summary>
+    /// 根據領域事件變更聚合根內部狀態
+    /// </summary>
+    protected override void When(IDomainEvent @event)
     {
-        ((dynamic)this).When((dynamic)@event);
-    }
+        switch (@event)
+        {
+            case OrderPlacedDomainEvent e:
+                this.Id = e.OrderId;
+                this.OrderDate = e.OrderDate;
+                this.TotalAmount = e.TotalAmount;
+                this.ProductId = e.ProductId;
+                this.ProductName = e.ProductName;
+                this.Quantity = e.Quantity;
+                this.Status = OrderStatus.Placed;
+                break;
 
-    private void When(OrderPlacedDomainEvent @event)
-    {
-        this.Id = @event.OrderId;
-        this.OrderDate = @event.OrderDate;
-        this.TotalAmount = @event.TotalAmount;
-        this.ProductId = @event.ProductId;
-        this.ProductName = @event.ProductName;
-        this.Quantity = @event.Quantity;
-        this.Status = OrderStatus.Placed;
-    }
+            case OrderCancelledDomainEvent:
+                this.Status = OrderStatus.Cancelled;
+                break;
 
-    private void When(OrderCancelledDomainEvent @event)
-    {
-        this.Status = OrderStatus.Cancelled;
-    }
+            case OrderShippedDomainEvent:
+                this.Status = OrderStatus.Shipped;
+                break;
 
-    private void When(OrderShippedDomainEvent @event)
-    {
-        this.Status = OrderStatus.Shipped;
-    }
-
-    private void When(OrderDeliveredDomainEvent @event)
-    {
-        this.Status = OrderStatus.Delivered;
+            case OrderDeliveredDomainEvent:
+                this.Status = OrderStatus.Delivered;
+                break;
+        }
     }
 }

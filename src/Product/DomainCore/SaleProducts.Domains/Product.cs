@@ -15,6 +15,7 @@ public class Product : AggregateRoot<Guid>
 
     public Product(string name, string description, decimal price)
     {
+        ValidateProductData(name, description, price);
         this.Id = Guid.CreateVersion7();
         this.Name = name;
         this.Description = description;
@@ -34,10 +35,21 @@ public class Product : AggregateRoot<Guid>
 
     public void Update(string name, string description, decimal price)
     {
+        ValidateProductData(name, description, price);
         this.Name = name;
         this.Description = description;
         this.Price = price;
 
         this.AddDomainEvent(new ProductUpdated(this.Id, this.Name, this.Description, this.Price, DateTime.UtcNow));
+    }
+
+    private static void ValidateProductData(string name, string description, decimal price)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentException.ThrowIfNullOrWhiteSpace(description);
+        if (price < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(price), "Price cannot be negative.");
+        }
     }
 }

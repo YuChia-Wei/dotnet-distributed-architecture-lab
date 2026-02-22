@@ -7,6 +7,11 @@ namespace Lab.BuildingBlocks.Domains;
 public interface IDomainEvent
 {
     /// <summary>
+    /// 事件的唯一識別碼，用於冪等性處理
+    /// </summary>
+    Guid EventId { get; }
+
+    /// <summary>
     /// 事件發生的時間
     /// </summary>
     DateTime OccurredOn { get; }

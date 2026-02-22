@@ -8,14 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0" />
-    <PackageReference Include="Npgsql" Version="10.0.0" />
-    <PackageReference Include="WolverineFx" Version="5.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.3" />
+    <PackageReference Include="Npgsql" Version="10.0.1" />
+    <PackageReference Include="WolverineFx" Version="5.16.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
     <ProjectReference Include="..\InventoryControl.Applications\InventoryControl.Applications.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Application\Lab.BuildingBlocks.Application.csproj" />
   </ItemGroup>
 
 </Project>

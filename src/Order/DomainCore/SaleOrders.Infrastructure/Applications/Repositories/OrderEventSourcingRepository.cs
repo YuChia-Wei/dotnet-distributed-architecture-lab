@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Text.Json;
 using Dapper;
+using Lab.BuildingBlocks.Application;
 using Lab.BuildingBlocks.Domains;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
@@ -63,8 +64,7 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
             return domainEvent;
         }).ToList();
 
-        var order = new Order();
-        order.LoadFromHistory(domainEvents);
+        var order = new Order(domainEvents);
 
         return order;
     }

@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Lab.BuildingBlocks.Domains;
 
 public abstract class DomainEntity<TId>
@@ -16,7 +14,6 @@ public abstract class DomainEntity<TId>
     {
     }
 
-    [Column(Order = 0)]
     public TId Id { get; protected set; }
 
     public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();

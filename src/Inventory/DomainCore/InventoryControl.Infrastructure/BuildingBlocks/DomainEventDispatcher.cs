@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Lab.BuildingBlocks.Application;
 using Lab.BuildingBlocks.Domains;
 using Microsoft.Extensions.Logging;
 using Wolverine;

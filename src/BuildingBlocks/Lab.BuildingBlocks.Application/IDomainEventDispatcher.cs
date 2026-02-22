@@ -1,4 +1,6 @@
-﻿namespace Lab.BuildingBlocks.Domains;
+﻿using Lab.BuildingBlocks.Domains;
+
+namespace Lab.BuildingBlocks.Application;
 
 /// <summary>
 /// 領域事件發布者

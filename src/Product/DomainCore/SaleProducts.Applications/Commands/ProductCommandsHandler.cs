@@ -1,5 +1,5 @@
 using SaleProducts.Applications.Dtos;
-using SaleProducts.Applications.Repositories;
+using Lab.BuildingBlocks.Application;
 using SaleProducts.Domains;
 
 namespace SaleProducts.Applications.Commands;
@@ -9,33 +9,34 @@ namespace SaleProducts.Applications.Commands;
 /// </summary>
 public class ProductCommandsHandler
 {
-    public static async Task<ProductDto> HandleAsync(CreateProductCommand command, IProductDomainRepository repository)
+    public static async Task<ProductDto> HandleAsync(CreateProductCommand command, IDomainRepository<Product, Guid> repository)
     {
         var product = new Product(command.Name, command.Description, command.Price);
-        await repository.AddAsync(product);
+        await repository.SaveAsync(product);
         return new ProductDto(product.Id, product.Name, product.Description, product.Price);
     }
 
-    public static async Task HandleAsync(UpdateProductCommand command, IProductDomainRepository repository)
+    public static async Task HandleAsync(UpdateProductCommand command, IDomainRepository<Product, Guid> repository)
     {
-        var product = await repository.GetByIdAsync(command.Id);
+        var product = await repository.FindByIdAsync(command.Id);
         if (product == null)
         {
             throw new KeyNotFoundException($"Product with ID {command.Id} not found.");
         }
 
         product.Update(command.Name, command.Description, command.Price);
-        await repository.UpdateAsync(product);
+        await repository.SaveAsync(product);
     }
 
-    public static async Task HandleAsync(DeleteProductCommand command, IProductDomainRepository repository)
+    public static async Task HandleAsync(DeleteProductCommand command, IDomainRepository<Product, Guid> repository)
     {
-        var product = await repository.GetByIdAsync(command.Id);
+        var product = await repository.FindByIdAsync(command.Id);
         if (product == null)
         {
             throw new KeyNotFoundException($"Product with ID {command.Id} not found.");
         }
 
-        await repository.DeleteAsync(command.Id);
+        product.Delete();
+        await repository.SaveAsync(product);
     }
 }

@@ -2,7 +2,7 @@ using Lab.BuildingBlocks.Domains;
 
 namespace SaleOrders.Domains.DomainEvents;
 
-public record OrderPlacedDomainEvent(
+public sealed record OrderPlacedDomainEvent(
     Guid OrderId,
     DateTime OrderDate,
     decimal TotalAmount,
@@ -10,4 +10,7 @@ public record OrderPlacedDomainEvent(
     string ProductName,
     int Quantity,
     DateTime OccurredOn)
-    : IDomainEvent;
+    : IDomainEvent
+{
+    public Guid EventId { get; init; } = Guid.NewGuid();
+}

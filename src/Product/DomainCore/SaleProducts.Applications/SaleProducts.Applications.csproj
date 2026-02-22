@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WolverineFx" Version="5.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+    <PackageReference Include="WolverineFx" Version="5.16.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Application\Lab.BuildingBlocks.Application.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
     <ProjectReference Include="..\SaleProducts.Domains\SaleProducts.Domains.csproj" />
     <ProjectReference Include="..\..\..\BC-Contracts\Lab.BoundedContextContracts.Products\Lab.BoundedContextContracts.Products.csproj" />

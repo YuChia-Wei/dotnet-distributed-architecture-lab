@@ -1,6 +1,7 @@
 using System.Data;
 using InventoryControl.Infrastructure.Applications.Repositories;
 using InventoryControl.Infrastructure.BuildingBlocks;
+using Lab.BuildingBlocks.Application;
 using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
 using Microsoft.Extensions.Configuration;
