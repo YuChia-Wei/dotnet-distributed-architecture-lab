@@ -11,6 +11,11 @@ COPY ["src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj",
 COPY ["src/Product/DomainCore/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj", "Product/DomainCore/SaleProducts.Infrastructure/"]
 COPY ["src/Product/DomainCore/SaleProducts.Applications/SaleProducts.Applications.csproj", "Product/DomainCore/SaleProducts.Applications/"]
 COPY ["src/Product/DomainCore/SaleProducts.Domains/SaleProducts.Domains.csproj", "Product/DomainCore/SaleProducts.Domains/"]
+COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Application/Lab.BuildingBlocks.Application.csproj", "BuildingBlocks/Lab.BuildingBlocks.Application/"]
+COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Domains/Lab.BuildingBlocks.Domains.csproj", "BuildingBlocks/Lab.BuildingBlocks.Domains/"]
+COPY ["src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
+COPY ["src/BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj", "BC-Contracts/Lab.BoundedContextContracts.Orders/"]
+COPY ["src/BC-Contracts/Lab.BoundedContextContracts.Products/Lab.BoundedContextContracts.Products.csproj", "BC-Contracts/Lab.BoundedContextContracts.Products/"]
 RUN dotnet restore "Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
 COPY . .
 WORKDIR "Product/Presentation/SaleProducts.WebApi"
