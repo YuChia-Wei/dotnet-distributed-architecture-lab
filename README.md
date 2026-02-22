@@ -18,12 +18,21 @@ dotnet distributed architecture lab 是一個採用 .NET 10、容器化技術和
 
 ## 核心技術
 
-- **主要框架:** .NET 9
-- **主要語言:** C#
+- **主要框架:** .NET 10
+- **主要語言:** C# 14
 - **訊息/命令/查詢處理:** WolverineFx
 - **資料庫:** PostgreSQL
 - **訊息代理:** RabbitMQ / Kafka
 - **容器化:** Docker
+
+### NuGet 版本快照（以目前 `*.csproj` 為準）
+
+- `WolverineFx`: `5.16.2`（含 `WolverineFx.Kafka` / `WolverineFx.RabbitMQ`）
+- `Dapper`: `2.1.66`
+- `Npgsql`: `10.0.1`
+- `xunit`: `2.9.3`
+- `xunit.runner.visualstudio`: `3.1.5`
+- `Microsoft.NET.Test.Sdk`: `18.0.1`
 
 ## 如何啟動專案
 
@@ -112,9 +121,9 @@ dotnet distributed architecture lab 是一個採用 .NET 10、容器化技術和
 | ./specs                         | 功能規格，Spec-driven development with AI 時產生的規格文件                                               |
 | ./sql-script                    | 資料庫語法                                                                                       |
 | ./src                           | dotnet 原始碼資料夾                                                                               |
-| ./src/BC-Contracts              | 跨領域合約 (Message Queue 的傳遞物件)                                                                 |
-| ./src/BuildingBlocks            | 系統所需的基礎框架                                                                                   |
-| ./src/Shared                    | 通用領域的共用核心                                                                                   |
+| ./src/BC-Contracts              | 跨領域通訊合約 — BC 間的 Integration Events、Request/Reply Contracts、跨 BC DTO                         |
+| ./src/BuildingBlocks            | 架構基礎設施 — 無業務語義的抽象基底與介面（AggregateRoot、ValueObject 等）                                     |
+| ./src/Shared                    | 通用領域核心（Shared Kernel）— 跨 BC 共享的 Value Objects、Enums 等領域概念                                 |
 | ./src/<DomainName>              | <DomainName>領域                                                                              |
 | ./src/<DomainName>/DomainCore   | <DomainName>領域的核心專案，包括但不限於領域物件層、應用層、基礎建設層等專案                                                |
 | ./src/<DomainName>/Presentation | <DomainName>領域的展現層專案，包括但不限於 WebApi、Consumer                                                 |

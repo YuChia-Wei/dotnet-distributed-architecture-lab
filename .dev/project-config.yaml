@@ -1,0 +1,102 @@
+projectName: AiScrum
+rootNamespace: AiScrum
+version: 0.1.0
+description: 使用 AI 開發的 Scrum 專案（.NET 版本）
+techStack: dotnet-ca-wolverine-efcore
+dotnetVersion: "10.0"
+wolverineFxVersion: "5.16.2"
+efCoreVersion: "10.x"
+dependencies:
+  xunit: "2.9.3"
+  bddfy: "TBD"
+  nsubstitute: "5.3.0"
+  strykerNet: "TBD"
+  kafka: "WolverineFx.Kafka 5.16.2"
+database:
+  environments:
+    test:
+      type: PostgreSQL
+      host: localhost
+      port: 6000
+      username: postgres
+      password: root
+      url: jdbc:postgresql://localhost:6000/board?currentSchema=message_store
+      schema: message_store
+      jpa:
+        ddlAuto: update
+        showSql: true
+      containerName: postgres_ezscrum_test2
+    production:
+      type: PostgreSQL
+      host: localhost
+      port: 5500
+      username: postgres
+      password: root
+      url: jdbc:postgresql://localhost:5500/board?currentSchema=message_store
+      schema: message_store
+      jpa:
+        ddlAuto: update
+        showSql: false
+      containerName: postgres_ezscrum_prod
+    ai:
+      type: PostgreSQL
+      host: localhost
+      port: 6600
+      username: postgres
+      password: root
+      url: jdbc:postgresql://localhost:6600/board?currentSchema=message_store
+      schema: message_store
+      jpa:
+        ddlAuto: update
+        showSql: true
+      containerName: postgres_ezscrum_ai
+  driver: Npgsql
+  dialect: PostgreSQL
+features:
+  eventSourcing: true
+  cqrs: true
+  restApi: true
+  swagger: false
+frontend:
+  framework: React
+  language: TypeScript
+  port: 3000
+  buildTool: Vite
+  dependencies:
+    react: 18.3.1
+    typescript: 5.5.3
+    vite: 5.4.1
+backend:
+  port: 9090
+  contextPath: "/"
+  apiPrefix: "/v1/api"
+architecture:
+  defaultPattern: outbox
+  profiles:
+    inmemory: ["inmemory", "test-inmemory"]
+    outbox: ["outbox", "test-outbox"]
+    eventsourcing: ["eventsourcing", "test-eventsourcing"]
+  aggregates:
+    Product:
+      pattern: outbox
+      eventStore: false
+    Sprint:
+      pattern: outbox
+      eventStore: false
+    ProductBacklogItem:
+      pattern: outbox
+      eventStore: false
+    ScrumTeam:
+      pattern: outbox
+      eventStore: false
+  commandDefaults:
+    repository: outbox
+    generateOutboxPattern: true
+    dualProfileSupport: true
+  conventions:
+    configNamespace: Infrastructure.DependencyInjection
+    namingPatterns:
+      repositoryConfig: "{Profile}RepositoryConfig"
+      projectionConfig: "{Profile}ProjectionConfig"
+      infrastructureConfig: "{Profile}InfrastructureConfig"
+      archiveConfig: "{Profile}ArchiveConfig"

@@ -1,6 +1,10 @@
 user
 分析我的專案架構，在 DDD 的模式下， BC-Contracts 內的專案應該放置在 domain folder 之下，還是維持目前的放置位置
 
+> [!NOTE]
+> 此文件為早期設計筆記（AI 對話輸出），正式規範請參照 [ADR-047: 共用專案分類與依賴規則](../../.dev/adr/ADR-047-shared-project-classification.md)。
+> 專案命名已從 `Lab.MessageSchemas.*` 更新為 `Lab.BoundedContextContracts.*`。
+
 thinking
 Considering contract organization
 
@@ -13,8 +17,8 @@ maintain stability and avoid cyclical dependencies.
 Clarifying BC-Contracts purpose
 
 It seems BC-Contracts resembles a Published Language in Domain-Driven Design rather than a Shared Kernel, so I should keep them
-separate. Packaging needs consideration, with individual assemblies for each bounded context like Lab.MessageSchemas.Orders and
-Lab.MessageSchemas.Products. I noticed Lab.MessageSchemas.Orders is already in place, which is good for separation.
+separate. Packaging needs consideration, with individual assemblies for each bounded context like Lab.BoundedContextContracts.Orders and
+Lab.BoundedContextContracts.Products.
 
 Although there are alternatives like AsyncAPI or Protobuf, sticking with current structuring in src/BC-Contracts is better since
 they’re using C# contracts. I need to propose action items, ensuring no domain dependencies and maintaining a clear versioning
@@ -51,12 +55,12 @@ Short Answer
 - 版本與治理：契約需要獨立版本管理與相容性策略（向後相容演進）。獨立於 src/BC-Contracts 讓它可被多個 BC 使用、單獨發版或替換。
 - 防止循環依賴：若契約放進某個 BC 的 Domain，其他 BC 需要引用時容易出現不當依賴或循環。
 - 團隊邊界清晰：BC-Contracts 扮演 DDD 的 Published Language（不是 Shared Kernel）。獨立資料夾讓「對外語言」邊界更清楚。
-- 部署/打包：未來可抽成 NuGet（單或多個封裝，如 Lab.MessageSchemas.Orders、Lab.MessageSchemas.Products），獨立於業務服務的生命
+- 部署/打包：未來可抽成 NuGet（單或多個封裝，如 Lab.BoundedContextContracts.Orders、Lab.BoundedContextContracts.Products），獨立於業務服務的生命
   週期。
 
 How To Use
 
-- 定位：持續放在 src/BC-Contracts/<Context>.MessageSchemas（例如：Lab.MessageSchemas.Orders）。
+- 定位：持續放在 src/BC-Contracts/Lab.BoundedContextContracts.<Context>（例如：Lab.BoundedContextContracts.Orders）。
 - 內容：只放「純資料合約」的 POCO/record（Integration Events、跨 BC 指令/回應），不可引用任何 Domain/Application/Infra 型別。
 - 參考關係：
     - 不可：Domain → BC-Contracts
@@ -70,7 +74,7 @@ How To Use
 
 Repo 現況建議
 
-- 目前 Consumer/API 已引用 Lab.MessageSchemas.Orders（良好）。維持 BC-Contracts 獨立資料夾位置即可。
+- 目前 Consumer/API 已引用 Lab.BoundedContextContracts.Orders（良好）。維持 BC-Contracts 獨立資料夾位置即可。
 - 可再檢查：
     - BC-Contracts 專案沒有引用 SaleOrders.* 或 SaleProducts.*（保持純淨）。
     - Application 層若直接建立整合事件可接受，但若想更乾淨，可在 Infrastructure 放置「Domain → Integration Event」轉譯器（非必要
