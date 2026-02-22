@@ -342,3 +342,5 @@ healthchecksdb
 # ai agent cli config
 /.codex/*
 !/.codex/prompts/
+/.dotnet_cli_home/
+.dotnet
