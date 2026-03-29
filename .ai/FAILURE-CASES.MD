@@ -140,7 +140,8 @@ public void Rule_Create_product_successfully()
 
 ## Prevention Strategies
 
-1. Use `.ai/prompts/` prompts
+1. Use `.ai/assets/` prompts
 2. Follow `.ai/DOTNET-CODE-TEMPLATES.md`
 3. Read `.dev/standards/coding-standards.md`
 4. Run `.ai/scripts/check-all.sh`
+

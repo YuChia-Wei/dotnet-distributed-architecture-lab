@@ -1,0 +1,63 @@
+{
+  "task_id": "stage-b-codex-skill-pilot",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-portable-ai-asset-architecture",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Create the first Codex runtime skill wrapper pilot",
+    "files": [
+      ".codex/skills/ddd-ca-hex-architect/SKILL.md",
+      ".codex/skills/ddd-ca-hex-architect/references/source-map.md",
+      ".codex/skills/ddd-ca-hex-architect/references/architecture-playbook.md",
+      ".codex/skills/ddd-ca-hex-architect/references/design-deliverables.md",
+      ".ai/assets/skills/ddd-ca-hex-architect/skill.yaml",
+      ".dev/refactor-workflows/2026-03-portable-ai-asset-architecture/stage-b-codex-skill-pilot.md"
+    ],
+    "dependency_radius": ".codex/skills, canonical skill source, human-facing guide, existing Claude wrapper",
+    "constraints": [
+      "Keep the Codex runtime wrapper thin",
+      "Do not duplicate the full canonical references"
+    ],
+    "non_goals": [
+      "No migration of every skill",
+      "No CODEX_HOME sync/export mechanics yet"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Validate that a portable canonical skill can map into a Codex runtime skill wrapper",
+    "review_findings": [],
+    "user_constraints": [
+      "Proceed with a runtime-skill pilot rather than only prompt wrappers",
+      "Keep the solution repo-portable"
+    ]
+  },
+  "execution": {
+    "operation_type": "runtime-skill-pilot",
+    "steps": [
+      "Created a Codex runtime SKILL.md wrapper for ddd-ca-hex-architect",
+      "Created thin-pointer reference files under the runtime wrapper",
+      "Updated the canonical skill metadata to record Codex runtime wrapper mapping"
+    ],
+    "validation": [
+      "The Codex runtime wrapper points back to the canonical skill source",
+      "The runtime wrapper stays separate from the existing prompt wrapper",
+      "The runtime wrapper does not duplicate the full canonical references"
+    ],
+    "deferred_items": [
+      "Document repo-local to CODEX_HOME usage",
+      "Decide whether to export or sync runtime wrappers automatically"
+    ]
+  },
+  "results": {
+    "summary": "Created the first Codex runtime skill wrapper pilot for ddd-ca-hex-architect.",
+    "files_changed": [
+      ".codex/skills/ddd-ca-hex-architect",
+      ".ai/assets/skills/ddd-ca-hex-architect/skill.yaml",
+      ".dev/refactor-workflows/2026-03-portable-ai-asset-architecture/stage-b-codex-skill-pilot.md",
+      ".dev/refactor-workflows/2026-03-portable-ai-asset-architecture/tasks/stage-b-codex-skill-pilot.json"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}

@@ -1,0 +1,37 @@
+asset_id: "aggregate-code-review-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Aggregate Code Review Sub-Agent"
+purpose: "Define the delegated reviewer role for DDD tactical patterns, event sourcing correctness, and aggregate-specific invariant review."
+role_kind: "review-sub-agent"
+triggers:
+  - "aggregate code review sub-agent"
+  - "review aggregate"
+  - "aggregate reviewer"
+inputs:
+  - "aggregate implementation scope"
+  - "aggregate tests when available"
+  - "invariant and event-sourcing expectations"
+outputs:
+  - "aggregate-focused review findings"
+  - "invariant and event-structure issues"
+  - "aggregate test strategy notes"
+constraints:
+  - "Always check event-sourcing state transitions"
+  - "Always verify aggregate contract and invariant handling"
+  - "Do not drift into architecture redesign unless escalation is needed"
+workflow:
+  - step: 1
+    description: "Load aggregate-specific checklist, contract, and event rules"
+  - step: 2
+    description: "Review aggregate state transitions, invariants, and test quality"
+  - step: 3
+    description: "Report bounded aggregate review findings with concrete remediation notes"
+references:
+  - ".ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/references/review-playbook.md"
+  - ".ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/references/review-prompt.md"
+  - ".ai/assets/shared/code-review-checklist.md"
+  - ".ai/assets/shared/common-rules.md"
+  - ".ai/assets/shared/testing-strategy.md"
+  - ".ai/assets/skills/code-reviewer/skill.yaml"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+

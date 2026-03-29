@@ -1,50 +1,58 @@
-# .NET AI 文檔索引
+# .ai Index
 
-> 這是 .ai 目錄的索引，提供 BDDfy + WolverineFx + EF Core 的主要參考。
+本文件是 `.ai/` 的 agent-facing 索引。
 
-## 📚 核心配置文檔
+## Core
 
-### 專案記憶與協作
-- [README.MD](README.MD) - .NET AI 協作總覽
-- [SUB-AGENT-SYSTEM.MD](SUB-AGENT-SYSTEM.MD) - Sub-agent 工作流程系統
-- [CODE-REVIEW-INDEX.MD](CODE-REVIEW-INDEX.MD) - Code Review 快速索引
-- [DIRECTORY-RULES.MD](DIRECTORY-RULES.MD) - .ai/.dev 目錄規則
+- `README.MD`
+  - `.ai/` 目錄用途與分工
+- `DIRECTORY-RULES.MD`
+  - `.ai/` 與 `.dev/` 的放置規則
+- `SUB-AGENT-SYSTEM.MD`
+  - sub-agent 系統、routing、artifact 讀寫規則
+- `CODE-REVIEW-INDEX.MD`
+  - code review workflow 入口
 
-## 🔍 品質管理文檔
+## Prompt Assets
 
-- [FAILURE-CASES.MD](FAILURE-CASES.MD) - 常見錯誤案例
-- [COMMON-PITFALLS.MD](COMMON-PITFALLS.MD) - 常見陷阱與解法
-- [CODE-TEMPLATES.MD](CODE-TEMPLATES.MD) - .NET 程式碼模板
+- `assets/`
+  - canonical source root for portable AI assets
+- `prompts/`
+  - prompt 資產根目錄
+- `prompts/PROMPT-PORTABILITY-RULES.md`
+  - prompt 可移植性規則
+- `prompts/shared/`
+  - shared prompt fragments / reusable rules
+- `prompts/examples/`
+  - prompt examples
 
-## 🏗️ .NET 技術棧文檔 (位於 .dev/standards/)
+## Script Assets
 
-- [../../.dev/standards/README.md](../../.dev/standards/README.md)
-- [../../.dev/standards/quick-setup.md](../../.dev/standards/quick-setup.md)
-- [../../.dev/standards/coding-guide.md](../../.dev/standards/coding-guide.md)
-- [../../.dev/standards/coding-standards/](../../.dev/standards/coding-standards/)
-- [../../.dev/standards/CODE-REVIEW-CHECKLIST.md](../../.dev/standards/CODE-REVIEW-CHECKLIST.md)
-- [../../.dev/standards/examples/INDEX.md](../../.dev/standards/examples/INDEX.md)
+- `scripts/`
+  - validation / review / generation scripts
+- `scripts/generated/`
+  - generated check scripts
+- `scripts/README.md`
+  - scripts 使用入口
 
-## 📖 .NET 指南文檔 (位於 .dev/guides/)
+## Supporting References
 
-- [../../.dev/guides/](../../.dev/guides/)
+- `BUILDING-BLOCKS-CLASS-INDEX.MD`
+  - BuildingBlocks 類型索引
+- `FAILURE-CASES.MD`
+  - 常見錯誤案例
+- `COMMON-PITFALLS.MD`
+  - 常見陷阱與解法
+- `CODE-TEMPLATES.MD`
+  - .NET 程式碼模板
 
-## 🧠 Prompts
+## Related Human-Facing Docs
 
-- [prompts/](prompts/)
-- [prompts/PROMPT-PORTABILITY-RULES.md](prompts/PROMPT-PORTABILITY-RULES.md)
-- [prompts/shared/](prompts/shared/)
-- [prompts/examples/](prompts/examples/)
-
-## 🔧 自動化腳本
-
-- [scripts/](scripts/)
-- [scripts/generated/](scripts/generated/)
-
-## 🔗 參考文件
-
-- [../../.dev/standards/examples/reference/](../../.dev/standards/examples/reference/)
-- [BUILDING-BLOCKS-CLASS-INDEX.MD](BUILDING-BLOCKS-CLASS-INDEX.MD)
-
----
-提示：使用 Ctrl+F 快速搜尋所需文檔。
+- `../.dev/guides/README.MD`
+  - human-facing guides 入口
+- `../.dev/guides/ai-collaboration-guides/README.MD`
+  - AI collaboration guides 入口
+- `../.dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md`
+  - 多 agent 情境下的 skill / prompt / guide 收納策略
+- `../.claude/skills/README.md`
+  - repo-local skill definition 入口

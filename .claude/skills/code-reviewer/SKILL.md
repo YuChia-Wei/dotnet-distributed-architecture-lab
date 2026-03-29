@@ -1,9 +1,10 @@
 ---
-name: dotnet/code-reviewer
+name: code-reviewer
 description: |
   Review .NET code for DDD, Clean Architecture, CQRS, and Event Sourcing compliance.
   Use when: user asks to "code review", "review code", "check this file",
-  mentions reviewing a specific C# file, or asks about code quality.
+  mentions reviewing a specific C# file, or asks about code quality. This skill only reviews,
+  scores, and marks issues; it does not plan refactors or define target architecture.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -12,12 +13,19 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Overview
 This skill performs systematic code reviews for .NET DDD + Clean Architecture + CQRS projects,
 following the project's .NET checklist and review index.
+It is a reviewer only: identify issues, classify severity, score the implementation, and point to the next appropriate skill when needed.
 
 ## Trigger Conditions
 Activate when user mentions:
 - "code review" / "review code"
 - "check this file" / "review [filename]"
 - Specific file patterns like "review Sprint.cs"
+
+Do not activate this skill as a substitute for:
+- architecture diagnosis
+- target architecture definition
+- staged refactoring planning
+- refactoring execution
 
 ## Mandatory Execution Flow
 **Do not skip any step. Violations invalidate the review.**
@@ -66,18 +74,43 @@ If tests fail, the review **cannot proceed**.
 | State assigned only in When()? | FAIL | line 42-55 | Direct assignment in constructor |
 ```
 
-### Step 7: Categorize Issues
+### Step 7: Separate Architecture-Level vs Code-Level Findings
+Every finding must be tagged as one of:
+- `ARCHITECTURE-LEVEL`: boundary leakage, dependency direction problems, command/query mixing, wrong layer placement, invalid repository role
+- `CODE-LEVEL`: local implementation defects, missing guards, mapper bugs, test gaps, naming/organization issues
+
+Do not turn architecture-level findings into a refactoring plan.
+Only describe the problem and, if needed, point the user to `ddd-ca-hex-architect` for design work.
+
+### Step 8: Categorize Issues
 - **CRITICAL**: Event Sourcing violations, missing Apply/When pattern, broken domain events
 - **MUST FIX**: Wrong DI usage, missing pre/post conditions, broken mapping
 - **SHOULD FIX**: Naming, minor organization, missing null guards
 
-### Step 8: Generate Review Report
+### Step 9: Score the Reviewed Scope
+Include a simple score for the reviewed scope:
+
+```markdown
+### Review Score
+- Architecture Compliance: X/10
+- Code Quality: Y/10
+- Test Adequacy: Z/10
+```
+
+Scores summarize the current state; they are not implementation plans.
+
+### Step 10: Generate Review Report
 ```markdown
 ## Code Review Report: [FileName]
 
 ### Test Status: [PASSING/FAILING]
 
 ### Compliance Check: [COMPLIANT/NON-COMPLIANT]
+
+### Review Score
+- Architecture Compliance: X/10
+- Code Quality: Y/10
+- Test Adequacy: Z/10
 
 ### Issues Found
 #### CRITICAL Issues
@@ -89,11 +122,27 @@ If tests fail, the review **cannot proceed**.
 #### SHOULD FIX Issues
 1. ...
 
+### Issue Type Summary
+- Architecture-Level Findings: X
+- Code-Level Findings: Y
+
 ### Summary
 - Critical Issues: X
 - Must Fix Issues: Y
 - Should Fix Issues: Z
 ```
+
+### Step 11: Stop at Review Boundaries
+The final output may:
+- describe issues
+- explain why they matter
+- suggest which skill should handle the next step
+
+The final output must not:
+- define a staged refactoring roadmap
+- choose the target architecture
+- describe implementation sequencing beyond a brief next-skill recommendation
+- rewrite the task into an execution plan
 
 ---
 
@@ -136,6 +185,26 @@ src/Domain/<Aggregate>/
 - Write side must align with `IDomainRepository<TEntity, TId>`
 - Domain-specific wrapper interface is optional, but must not add extra methods
 - Queries must go through Query Service / Query Repository (not Domain Repository)
+
+---
+
+## Boundary Rules
+
+### What This Skill Owns
+- Review
+- Scoring
+- Severity classification
+- Architecture-level vs code-level issue tagging
+- Pointing to the next skill
+
+### What This Skill Does Not Own
+- Architecture redesign
+- Refactoring stage design
+- Execution planning
+- Code modification strategy
+
+If the main problem is "what should the target architecture become?", send it to `ddd-ca-hex-architect`.
+If the main problem is "how do we safely implement this one stage?", send it to `staged-refactor-implementer`.
 
 ---
 

@@ -1,0 +1,35 @@
+asset_id: "mutation-testing-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Mutation Testing Sub-Agent"
+purpose: "Define the delegated worker-role prompt for improving mutation coverage with Stryker.NET and contract-oriented testing."
+role_kind: "testing-enhancement-sub-agent"
+triggers:
+  - "mutation testing sub-agent"
+  - "mutation coverage"
+  - "stryker"
+inputs:
+  - "target entity or module"
+  - "current tests and mutation baseline"
+  - "contract and assertion-free test expectations"
+outputs:
+  - "mutation-improvement guidance"
+  - "contract strengthening plan"
+  - "verification steps"
+constraints:
+  - "Never change business logic just to kill mutants"
+  - "Always run existing tests before changes"
+  - "Always verify mutation score improves after changes"
+workflow:
+  - step: 1
+    description: "Run or inspect baseline mutation and test results"
+  - step: 2
+    description: "Strengthen contracts and tests incrementally"
+  - step: 3
+    description: "Re-verify mutation score and record outcome"
+references:
+  - ".ai/assets/sub-agent-role-prompts/mutation-testing-sub-agent/references/implementation-playbook.md"
+  - ".ai/assets/shared/common-rules.md"
+  - ".ai/assets/shared/testing-strategy.md"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+
+

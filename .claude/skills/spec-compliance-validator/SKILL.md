@@ -14,9 +14,9 @@ This skill verifies that generated .NET code and tests fully comply with problem
 It produces a compliance report and blocks completion if any category is below 100%.
 
 Required references:
-- `.ai/prompts/spec-compliance-rules.md`
-- `.ai/prompts/test-validation-steps.md`
-- `.ai/prompts/validation-command-templates.md`
+- `.ai/assets/skills/spec-compliance-validator/references/spec-compliance-rules.md`
+- `.ai/assets/skills/spec-compliance-validator/references/test-validation-steps.md`
+- `.ai/assets/skills/spec-compliance-validator/references/validation-command-templates.md`
 
 ## Supported Frame Types
 
@@ -200,7 +200,7 @@ Contract tests:
 ---
 
 ### Step 5: Produce Compliance Report
-Use the output format from `.ai/prompts/validation-command-templates.md`.
+Use the output format from `.ai/assets/skills/spec-compliance-validator/references/validation-command-templates.md`.
 Include:
 - Coverage per category
 - Missing items with spec references
@@ -260,3 +260,5 @@ validate spec compliance dotnet for .dev/problem-frames/ezkanban/workflow/cbf/co
 Expected output:
 - Compliance report with 100% gate status
 - Remediation list if any deficits exist
+
+

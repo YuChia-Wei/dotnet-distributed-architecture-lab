@@ -28,13 +28,13 @@ subagent_type = "output-style-setup"  # 輸出樣式設定
 # ❌ 不支援的功能
 Task(
     subagent_type="general-purpose",
-    prompt_file=".ai/prompts/code-generation-prompt.md"  # 無法載入
+    prompt_file=".ai/assets/code-generation-prompt.md"  # 無法載入
 )
 
 # ❌ 也無法這樣做
 Task(
     subagent_type="custom",
-    instructions=read(".ai/prompts/...")  # 無法註冊新類型
+    instructions=read(".ai/assets/...")  # 無法註冊新類型
 )
 ```
 
@@ -50,7 +50,7 @@ Task(
 ```python
 # 為什麼這個不會運作
 Task(
-    prompt="根據 .ai/prompts/code-generation-prompt.md 產生程式碼",
+    prompt="根據 .ai/assets/code-generation-prompt.md 產生程式碼",
     subagent_type="general-purpose"
 )
 ```
@@ -64,7 +64,7 @@ Task(
 ```
 主 Claude (有完整 context) → Task() → Sub-agent (空白 context)
                                          ↓
-                                    不知道 .ai/prompts/ 是什麼
+                                    不知道 .ai/assets/ 是什麼
                                     不知道專案結構
                                     必須重新探索
 ```
@@ -97,7 +97,7 @@ Task(
 - 可能產生完全錯誤的結構
 
 # Prompt-based (完全可控)
-根據 .ai/prompts/code-generation-prompt.md 產生程式碼
+根據 .ai/assets/code-generation-prompt.md 產生程式碼
 結果保證：
 - 遵循 ezddd 框架規範
 - Input 正確實作為 inner class
@@ -235,9 +235,9 @@ Prompt-based 架構:
 
 | 原 CLAUDE.md 內容 | 遷移位置 | 目的 |
 |------------------|----------|------|
-| 詳細編碼規範 | `.ai/prompts/code-generation-prompt.md` | 專門處理程式碼生成 |
-| 測試撰寫指引 | `.ai/prompts/test-generation-prompt.md` | 專門處理測試生成 |
-| Code Review 規則 | `.ai/prompts/code-review-prompt.md` | 專門處理審查 |
+| 詳細編碼規範 | `.ai/assets/code-generation-prompt.md` | 專門處理程式碼生成 |
+| 測試撰寫指引 | `.ai/assets/test-generation-prompt.md` | 專門處理測試生成 |
+| Code Review 規則 | `.ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-prompt.md` | 專門處理審查 |
 | Domain Event 細節 | `coding-standards/aggregate-standards.md` | 模組化規範 |
 | Use Case 實作細節 | `coding-standards/usecase-standards.md` | 模組化規範 |
 | Repository 規範 | `coding-standards/repository-standards.md` | 模組化規範 |
@@ -287,3 +287,4 @@ AI 助手與使用者共同評估決定
 - 2025-08-15：加入 Claude Code 限制的詳細技術解釋
 - 2025-08-15：加入 Sub-agent 獨立實例架構的技術細節
 - 2025-08-15：加入 CLAUDE.md 內容重組分析和資訊傳遞機制說明
+

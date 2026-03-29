@@ -1,0 +1,30 @@
+id: example-skill-id
+asset_type: skill
+title: Example Skill
+purpose: >
+  Describe what this skill is for in portable, agent-neutral terms.
+portability: repo-portable
+audience:
+  - agent-facing
+wrapper_targets:
+  - claude
+  - codex
+  - gemini
+  - copilot
+source_of_truth: canonical
+inputs:
+  - requirements
+  - specs
+outputs:
+  - design notes
+  - execution guidance
+triggers:
+  - example trigger
+constraints:
+  - Keep this skill wrapper-neutral
+handoff_rules:
+  - Escalate if the task exceeds scope
+references: []
+examples: []
+human_guide: ""
+status: draft

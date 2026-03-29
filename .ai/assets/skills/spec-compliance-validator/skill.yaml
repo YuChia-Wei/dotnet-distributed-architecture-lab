@@ -1,0 +1,42 @@
+asset_id: "spec-compliance-validator"
+asset_type: "skill-spec"
+title: "Spec Compliance Validator"
+purpose: "Validate .NET code and tests against problem frame specs with a 100% gate. Supports CommandedBehaviorFrame and SimpleWorkpieceFrame workflows."
+triggers:
+  - "validate spec"
+  - "spec compliance"
+  - "problem frame validation"
+inputs:
+  - "problem frame path"
+  - "generated code and tests"
+outputs:
+  - "compliance report"
+  - "coverage gaps"
+  - "gate decision"
+constraints:
+  - "Completion is blocked if any required compliance category is below 100%"
+  - "Do not relax the spec gate"
+workflow:
+  - step: 1
+    description: "Detect frame type and read all required specs"
+  - step: 2
+    description: "Build the compliance checklist"
+  - step: 3
+    description: "Validate production code and tests against the checklist"
+references:
+  - ".ai/assets/skills/spec-compliance-validator/references/spec-compliance-rules.md"
+  - ".ai/assets/skills/spec-compliance-validator/references/test-validation-steps.md"
+  - ".ai/assets/skills/spec-compliance-validator/references/validation-command-templates.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/spec-compliance-validator/"
+  codex:
+    runtime_wrapper_path: ".codex/skills/spec-compliance-validator/"
+
+

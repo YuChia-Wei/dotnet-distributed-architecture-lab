@@ -1,0 +1,40 @@
+asset_id: "tactical-refactor-implementer"
+asset_type: "skill-spec"
+title: "Tactical Refactor Implementer"
+purpose: "Execute local, object-centered refactoring in this repository. Use it for one target class, object, or symbol through bounded structural changes such as extract method or safe local rename, without redesigning architecture or introducing new types."
+triggers:
+  - "tactical refactor"
+  - "extract method"
+  - "rename symbol"
+inputs:
+  - "single target class, object, or symbol"
+  - "one bounded local refactor operation"
+outputs:
+  - "local refactoring result"
+  - "dependency radius touched"
+  - "behavior compatibility notes"
+constraints:
+  - "Do not introduce a new class or interface"
+  - "Do not expand into architecture redesign or stage planning"
+workflow:
+  - step: 1
+    description: "Confirm the main target and local operation"
+  - step: 2
+    description: "Set the dependency radius"
+  - step: 3
+    description: "Apply one coherent local refactor"
+references:
+  - ".ai/assets/skills/tactical-refactor-implementer/references/skill-boundaries.md"
+  - ".ai/assets/skills/tactical-refactor-implementer/references/allowed-operations.md"
+  - ".ai/assets/skills/tactical-refactor-implementer/references/execution-rules.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/TACTICAL-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/TACTICAL-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/tactical-refactor-implementer/"
+  codex:
+    runtime_wrapper_path: ".codex/skills/tactical-refactor-implementer/"

@@ -1,0 +1,29 @@
+asset_id: "<command-id>"
+asset_type: "command-spec"
+title: "<Human Readable Command Title>"
+purpose: "<What this command does>"
+kind: "slash-command | workflow-command | sub-agent-command"
+triggers:
+  - "<trigger phrase>"
+inputs:
+  - "<expected input>"
+outputs:
+  - "<expected output>"
+constraints:
+  - "<key constraint>"
+prompt_packages:
+  - "<relative prompt package path>"
+references:
+  - "<relative reference path>"
+examples:
+  - "<relative example path>"
+wrapper_targets:
+  - "claude"
+  - "codex"
+  - "gemini"
+  - "copilot"
+wrapper_metadata:
+  claude: {}
+  codex: {}
+  gemini: {}
+  copilot: {}

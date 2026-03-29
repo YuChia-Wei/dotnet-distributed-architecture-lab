@@ -7,7 +7,7 @@
 ### 1. Essential Reading Order
 1. `coding-standards.md` - 編碼規範（優先閱讀）
 2. This file - Overview and quick reference
-3. `TEMPLATE-USAGE-GUIDE.md` - 範本選擇與使用決策指南
+3. `../guides/implementation-guides/TEMPLATE-USAGE-GUIDE.md` - 範本選擇與使用決策指南
 4. `CLAUDE.md` - Project-specific rules and conventions
 5. `project-structure.md` - .NET 專案結構
 6. Relevant aggregate spec in `.dev/specs/[aggregate]/`

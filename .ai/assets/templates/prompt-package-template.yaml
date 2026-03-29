@@ -1,0 +1,24 @@
+id: example-prompt-package-id
+asset_type: prompt-package
+title: Example Prompt Package
+purpose: >
+  Describe the reusable prompt package.
+portability: portable
+audience:
+  - agent-facing
+wrapper_targets:
+  - claude
+  - codex
+  - gemini
+  - copilot
+source_of_truth: canonical
+inputs:
+  - source context
+outputs:
+  - prompt text
+base_prompt: ""
+shared_fragments: []
+validation_rules: []
+references: []
+examples: []
+status: draft

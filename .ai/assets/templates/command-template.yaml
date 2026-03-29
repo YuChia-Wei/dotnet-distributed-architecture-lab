@@ -1,0 +1,27 @@
+id: example-command-id
+asset_type: command
+title: Example Command
+purpose: >
+  Describe the command family intent in portable terms.
+portability: repo-portable
+audience:
+  - agent-facing
+wrapper_targets:
+  - codex
+  - gemini
+  - copilot
+source_of_truth: canonical
+inputs:
+  - context
+  - requirements
+outputs:
+  - generated artifacts
+invocation_style:
+  - slash-command
+prompt_packages: []
+constraints:
+  - Keep wrapper-specific syntax outside canonical content
+references: []
+examples: []
+human_guide: ""
+status: draft

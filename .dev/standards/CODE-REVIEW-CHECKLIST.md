@@ -189,5 +189,5 @@ public Product(ProductId id, string name)
 
 ## 🔗 相關資源
 - `coding-standards.md`
-- `COMMON-MISTAKES-GUIDE.md`
-- `TEMPLATE-USAGE-GUIDE.md`
+- `../guides/implementation-guides/COMMON-MISTAKES-GUIDE.md`
+- `../guides/implementation-guides/TEMPLATE-USAGE-GUIDE.md`

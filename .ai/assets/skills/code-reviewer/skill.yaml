@@ -1,0 +1,41 @@
+asset_id: "code-reviewer"
+asset_type: "skill-spec"
+title: "Code Reviewer"
+purpose: "Review .NET code in this repository for DDD, Clean Architecture, CQRS, and Event Sourcing compliance. This skill reviews, scores, and marks issues; it does not plan refactors or define target architecture."
+triggers:
+  - "code review"
+  - "review code"
+  - "check this file"
+inputs:
+  - "target file or reviewed scope"
+  - "repo standards and checklist rules"
+outputs:
+  - "review report"
+  - "architecture-level findings"
+  - "code-level findings"
+  - "review scores"
+constraints:
+  - "Do not define target architecture"
+  - "Do not output a staged refactoring plan"
+workflow:
+  - step: 1
+    description: "Read the review index and checklist"
+  - step: 2
+    description: "Classify the reviewed scope and build a checklist comparison"
+  - step: 3
+    description: "Separate architecture-level and code-level findings"
+references:
+  - ".ai/CODE-REVIEW-INDEX.MD"
+  - ".claude/skills/code-reviewer/CHECKLIST-REFERENCE.MD"
+  - ".dev/standards/CODE-REVIEW-CHECKLIST.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/code-reviewer/"
+  codex:
+    runtime_wrapper_path: ".codex/skills/code-reviewer/"

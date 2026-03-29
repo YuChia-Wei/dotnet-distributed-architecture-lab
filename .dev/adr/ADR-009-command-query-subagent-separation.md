@@ -121,12 +121,13 @@ Reactor 作為事件驅動架構的核心元件，有其獨特的：
 - User
 
 ## 參考資料
-- `.ai/prompts/command-sub-agent-prompt.md`
-- `.ai/prompts/query-sub-agent-prompt.md`
-- `.ai/prompts/reactor-sub-agent-prompt.md`（新增）
-- `.ai/prompts/reactor-test-generation-prompt.md`（新增）
-- `.ai/prompts/reactor-code-review-prompt.md`（新增）
+- `.ai/assets/command-sub-agent-prompt.md`
+- `.ai/assets/query-sub-agent-prompt.md`
+- `.ai/assets/reactor-sub-agent-prompt.md`（新增）
+- `.ai/assets/sub-agent-role-prompts/reactor-test-sub-agent/references/test-generation-guidance.md`（新增）
+- `.ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/references/review-prompt.md`（新增）
 - `.ai/SUB-AGENT-SYSTEM.md`
 - CQRS Pattern
 - Clean Architecture principles
 - Event-Driven Architecture patterns
+

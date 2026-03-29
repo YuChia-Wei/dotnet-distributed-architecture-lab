@@ -1,14 +1,18 @@
 # 📁 Directory Rules - 目錄使用規則（.NET）
 
-## 🚨 重要原則：.ai vs .dev 的區別
+## 🚨 重要原則：`.ai/` vs `.dev/` vs `.claude/skills/`
 
 ### `.ai/` 目錄 - 通用 AI Coding 框架
 **只能包含**：
 - ✅ 可重用於任何專案的內容
 - ✅ 通用的編碼標準和最佳實踐
 - ✅ 技術棧範本（使用 Example/BuildingBlocks 等通用命名）
-- ✅ 通用的工作流程和 prompts
+- ✅ 通用的工作流程、canonical assets、shared supporting materials
 - ✅ 可複製到其他專案的檔案
+
+補充：
+- `.ai/assets/` 應作為 canonical source root
+- `.ai/assets/shared/` 應作為 shared rules / examples / supporting materials 的可重用資產
 
 **絕對不能包含**：
 - ❌ 專案名稱（如 AiScrum, CompanyX）
@@ -16,6 +20,17 @@
 - ❌ 專案特定的業務邏輯或領域模型
 - ❌ 專案的 ADR、規格、任務
 - ❌ 專案特定的測試資料或設定
+
+### `.claude/skills/` 目錄 - Agent-Specific Skill Definitions
+**應該包含**：
+- ✅ skill 定義本體 (`SKILL.md`)
+- ✅ skill-local references
+- ✅ skill 相關 metadata / agent 設定
+
+**不應作為**：
+- ❌ human-facing guide 入口
+- ❌ workflow artifact 存放位置
+- ❌ 跨 agent 的 canonical prompt/source 位置
 
 ### `.dev/` 目錄 - 專案特定內容
 **應該包含**：
@@ -39,8 +54,10 @@
 | 內容類型 | 放置位置 | 範例 |
 |---------|---------|------|
 | 編碼標準 | `.dev/standards/coding-standards/` | Repository 限制規則 |
+| agent-facing canonical skill / sub-agent / prompt materials | `.ai/` | `assets/skills/ddd-ca-hex-architect/skill.yaml`, `assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`, `prompts/shared/common-rules.md` |
+| agent-specific skill 定義 | `.claude/skills/` | `ddd-ca-hex-architect/SKILL.md` |
+| human-facing AI guide | `.dev/guides/ai-collaboration-guides/` | `DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md` |
 | 專案 ADR | `.dev/adr/` | ADR-031-reactor-interface |
-| 通用 prompt | `.ai/prompts/` | command-sub-agent-prompt.md |
 | 專案規格 | `.dev/specs/` | product-spec.json |
 | 技術範例 | `.dev/standards/examples/` | 使用 Example.* namespace |
 | 專案程式碼 | `src/` | 使用實際 root namespace |
@@ -79,3 +96,4 @@ rg -n "AiScrum|CompanyX|MyProject" .ai/ --glob "!**/.git/**"
 
 ---
 最後更新：2026-02-01
+

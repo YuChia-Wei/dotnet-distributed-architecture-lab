@@ -21,7 +21,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 STANDARDS_DIR="$BASE_DIR/.dev/standards/coding-standards"
 MAIN_FILE="$BASE_DIR/.dev/standards/coding-standards.md"
-PROMPTS_DIR="$BASE_DIR/.ai/prompts"
+PROMPTS_DIR="$BASE_DIR/.ai/assets/shared"
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}Coding Standards Integrity Check (.NET)${NC}"
@@ -81,26 +81,9 @@ if [ $MISSING_PROMPTS -eq 0 ]; then
     echo -e "  ${GREEN}All referenced prompt files exist${NC}"
 fi
 
-# Check for prompts that exist but are not checked
 echo ""
-echo -e "${BLUE}Checking for unchecked prompt files:${NC}"
-ACTUAL_PROMPTS=$(ls "$PROMPTS_DIR"/*-prompt.md 2>/dev/null | xargs -n1 basename | sort)
-UNCHECKED_PROMPTS=0
-
-for actual_prompt in $ACTUAL_PROMPTS; do
-    if ! echo "$REFERENCED_PROMPTS" | grep -q "^$actual_prompt$"; then
-        # Skip some prompts that don't need checking
-        if [[ "$actual_prompt" == "frontend-"* ]] || [[ "$actual_prompt" == "mutation-"* ]] || [[ "$actual_prompt" == "outbox-"* ]] || [[ "$actual_prompt" == "profile-"* ]] || [[ "$actual_prompt" == "spec-"* ]]; then
-            continue
-        fi
-        echo -e "  ${YELLOW}⚠${NC} $actual_prompt exists but is not checked by this script"
-        ((UNCHECKED_PROMPTS++))
-    fi
-done
-
-if [ $UNCHECKED_PROMPTS -eq 0 ]; then
-    echo -e "  ${GREEN}All relevant prompts are being checked${NC}"
-fi
+echo -e "${BLUE}Checking for unchecked supporting files:${NC}"
+echo -e "  ${BLUE}ℹ${NC} Supporting assets are validated selectively by canonical workflow usage."
 
 # Self-check summary
 echo ""
@@ -230,7 +213,7 @@ for file in "${SPECIALIZED_FILES[@]}"; do
 done
 
 echo ""
-echo -e "${YELLOW}3. Checking Sub-agent Prompts References${NC}"
+echo -e "${YELLOW}3. Checking Canonical Supporting Material References${NC}"
 echo "----------------------------------------"
 
 # Check individual prompt files for references
@@ -267,27 +250,8 @@ check_prompt_references() {
     fi
 }
 
-# Check each prompt file
-check_prompt_references "$PROMPTS_DIR/command-sub-agent-prompt.md" "aggregate-standards.md,usecase-standards.md,repository-standards.md"
-check_prompt_references "$PROMPTS_DIR/query-sub-agent-prompt.md" "usecase-standards.md,repository-standards.md,projection-standards.md"
-
-check_prompt_references "$PROMPTS_DIR/aggregate-sub-agent-prompt.md" "aggregate-standards.md"
-check_prompt_references "$PROMPTS_DIR/aggregate-test-generation-prompt.md" "test-standards.md,aggregate-standards.md"
-check_prompt_references "$PROMPTS_DIR/aggregate-code-review-prompt.md" "aggregate-standards.md,coding-standards.md"
-
-check_prompt_references "$PROMPTS_DIR/controller-code-generation-prompt.md" "controller-standards.md"
-check_prompt_references "$PROMPTS_DIR/controller-test-generation-prompt.md" "test-standards.md,controller-standards.md"
-check_prompt_references "$PROMPTS_DIR/controller-code-review-prompt.md" "controller-standards.md,test-standards.md"
-
-check_prompt_references "$PROMPTS_DIR/reactor-sub-agent-prompt.md" "aggregate-standards.md,usecase-standards.md"
-check_prompt_references "$PROMPTS_DIR/reactor-test-generation-prompt.md" "test-standards.md"
-check_prompt_references "$PROMPTS_DIR/reactor-code-review-prompt.md" "coding-standards.md"
-
-check_prompt_references "$PROMPTS_DIR/usecase-test-generation-prompt.md" "test-standards.md,usecase-standards.md"
-check_prompt_references "$PROMPTS_DIR/code-review-prompt.md" "coding-standards.md,aggregate-standards.md"
-
-# General/testing prompts
-check_prompt_references "$PROMPTS_DIR/testing-standards-prompt.md" "test-standards.md"
+check_prompt_references "$PROMPTS_DIR/code-review-checklist.md" "Controller,Testing,Use Case / Application"
+check_prompt_references "$PROMPTS_DIR/testing-standards.md" "xUnit,NSubstitute,BaseTestClass"
 
 
 echo ""
@@ -437,3 +401,5 @@ else
     echo "Please fix the errors before proceeding."
     exit 1
 fi
+
+

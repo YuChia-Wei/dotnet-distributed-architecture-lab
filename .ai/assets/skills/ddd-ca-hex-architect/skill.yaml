@@ -1,0 +1,54 @@
+asset_id: "ddd-ca-hex-architect"
+asset_type: "skill-spec"
+title: "DDD CA HEX Architect"
+purpose: "Design and refactor architecture in this repository using DDD, Clean Architecture, CQRS, MQ-first integration, and a Hexagonal Architecture view of ports and adapters."
+triggers:
+  - "architect"
+  - "DDD"
+  - "CA"
+  - "Hexagonal"
+  - "HEX"
+inputs:
+  - "bounded context or module problem statement"
+  - "aggregate or use case scope"
+  - "repo rules, ADRs, or integration constraints"
+outputs:
+  - "architecture decisions"
+  - "layer and adapter placement"
+  - "contract and persistence impact"
+  - "files, prompts, and ADRs to update"
+constraints:
+  - "Cross-BC communication must stay MQ-only"
+  - "Do not redefine repo architecture rules mid-flight"
+workflow:
+  - step: 1
+    description: "Frame the design problem and classify the scope"
+  - step: 2
+    description: "Apply DDD, CA, and HEX lenses together"
+  - step: 3
+    description: "Bind the design to repo constraints and ADRs"
+  - step: 4
+    description: "Load only the smallest relevant prompt/reference subset"
+  - step: 5
+    description: "Return architect-grade decisions, placement, impact, and risks"
+references:
+  - ".ai/assets/skills/ddd-ca-hex-architect/references/source-map.md"
+  - ".ai/assets/skills/ddd-ca-hex-architect/references/architecture-playbook.md"
+  - ".ai/assets/skills/ddd-ca-hex-architect/references/design-deliverables.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+  - "gemini"
+  - "copilot"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/ddd-ca-hex-architect/"
+  codex:
+    runtime_wrapper_path: ".codex/skills/ddd-ca-hex-architect/"
+  gemini:
+    wrapper_path: ".gemini/commands/ddd-ca-hex-architect.md"
+  copilot:
+    wrapper_path: ".github/prompts/ddd-ca-hex-architect.md"

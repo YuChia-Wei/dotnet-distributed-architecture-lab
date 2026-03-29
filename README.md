@@ -109,6 +109,7 @@ dotnet distributed architecture lab 是一個採用 .NET 10、容器化技術和
 | ./.codex                        | codex cli 的資源                                                                               |
 | ./.gemini                       | gemini cli 的資源                                                                              |
 | ./.github                       | github & github copilot 的資源                                                                 |
+| ./.ai/assets                    | portable canonical AI assets（skills / commands / shared packages）                           |
 | ./.specify                      | spec-kit 的語法腳本及 prompt 範本                                                                   |
 | ./.specify/kit-command-prompts  | spec-kit 在各種 ai agents cli 中所使用的自訂 prompt 的備份文件，包含中譯檔案，用於研究 spec-kit 的運作邏輯                  |
 | ./.specify/memory               | spec-kit 的規範文件 (constitution)                                                               |
@@ -155,10 +156,13 @@ dotnet distributed architecture lab 是一個採用 .NET 10、容器化技術和
 - AI Agent CLI Extension Commands
   - Gemini CLI：`.gemini/commands/`
   - GitHub Copilot：`.github/prompts/`
-  - Codex: `.codex/prompts/`
+- Codex: `.codex/skills/`
     - > codex 需要利用 `setx CODEX_HOME '{project-floder}\.codex'` 語法來讓 codex 讀取到專案資料夾下的擴充命令
     - > 切換後需要重新登入 codex，且開發完畢需清除環境參數以避免後續工作目錄的錯亂
     - > 因此目前在 codex 中要使用 SDD 的擴充命令時會有諸多限制與需注意的部分
+- Portable AI Asset Canonical Source
+  - `.ai/assets/`
+- > wrapper 目錄（`.claude/skills/`、`.codex/skills/`、`.gemini/commands/`、`.github/prompts/`）應視為薄包裝入口，真正的單一真相以 `.ai/assets/` 為準
 
 ### Spec-Driven Development (規格驅動開發)
 

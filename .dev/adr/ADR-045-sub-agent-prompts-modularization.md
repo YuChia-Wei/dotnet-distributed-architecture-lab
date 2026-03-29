@@ -18,7 +18,7 @@ Sub-agent prompts 中存在大量重複內容，造成以下問題：
 
 ### 架構設計
 ```
-.ai/prompts/
+.ai/assets/
 ├── shared/                      # 共用模組目錄
 │   ├── common-rules.md         # 所有 sub-agent 共用規則
 │   ├── fresh-project-init.md   # 專案初始化步驟
@@ -31,7 +31,7 @@ Sub-agent prompts 中存在大量重複內容，造成以下問題：
 ### 引用機制
 Sub-agent prompts 使用 Markdown 連結引用共用內容：
 ```markdown
-**See [Common Rules](./shared/common-rules.md) for all sub-agent shared rules.**
+**See [Common Rules](.ai/assets/shared/common-rules.md) for all sub-agent shared rules.**
 ```
 
 ## 實施結果
@@ -94,5 +94,6 @@ Sub-agent prompts 使用 Markdown 連結引用共用內容：
 
 ## 參考資料
 - [Sub-agent System Documentation](.ai/SUB-AGENT-SYSTEM.md)
-- [Common Rules](../../.ai/prompts/shared/common-rules.md)
-- [Dual Profile Testing](../../.ai/prompts/shared/dual-profile-testing.md)
+- [Common Rules](../../.ai/assets/shared/common-rules.md)
+- [Dual Profile Testing](../../.ai/assets/shared/dual-profile-testing.md)
+
