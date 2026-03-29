@@ -1,0 +1,44 @@
+asset_id: "reactor-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Reactor Sub-Agent"
+purpose: "Define the delegated worker-role prompt for implementing a reactor for cross-aggregate consistency in this repository's .NET stack."
+role_kind: "use-case-sub-agent"
+triggers:
+  - "reactor sub-agent"
+  - "implement reactor"
+  - "reactor"
+inputs:
+  - "event trigger"
+  - "consistency coordination goal"
+  - "integration or projection expectations"
+outputs:
+  - "reactor implementation guidance"
+  - "event-processing rules and output structure"
+  - "follow-up validation notes"
+constraints:
+  - "Reactors handle event data, not domain entities"
+  - "Use WolverineFx message handlers for event processing"
+  - "No direct cross-aggregate repository query"
+workflow:
+  - step: 1
+    description: "Confirm the triggering event and consistency goal"
+  - step: 2
+    description: "Apply reactor-side event-processing and query-service rules"
+  - step: 3
+    description: "Produce delegated implementation guidance or code changes with validation notes"
+references:
+  - ".ai/assets/sub-agent-role-prompts/reactor-sub-agent/references/implementation-playbook.md"
+  - ".ai/assets/shared/common-rules.md"
+  - ".ai/assets/shared/architecture-config.md"
+  - ".ai/assets/shared/testing-strategy.md"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+wrapper_targets:
+  - "gemini"
+  - "copilot"
+wrapper_metadata:
+  gemini:
+    wrapper_path: ".gemini/commands/reactor-sub-agent.md"
+  copilot:
+    wrapper_path: ".github/prompts/reactor-sub-agent.md"
+
+

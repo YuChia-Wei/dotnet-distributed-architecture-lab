@@ -1,0 +1,36 @@
+asset_id: "usecase-test-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Use Case Test Sub-Agent"
+purpose: "Define the delegated worker role for implementing use case tests from scenario design, repository rules, and testing strategy."
+role_kind: "test-generation-sub-agent"
+triggers:
+  - "usecase test sub-agent"
+  - "generate use case tests"
+  - "implement test scenarios"
+inputs:
+  - "use case behavior or acceptance criteria"
+  - "scenario plan from bdd-gwt-test-designer when available"
+  - "target use case implementation scope"
+outputs:
+  - "use case test implementation guidance or code"
+  - "assertion mapping notes"
+  - "test coverage gaps or TODO items"
+constraints:
+  - "Do not invent behavior beyond the source of truth"
+  - "No BaseTestClass"
+  - "Follow xUnit + BDDfy guidance unless the repository standard changes"
+workflow:
+  - step: 1
+    description: "Load scenario design output or derive Given-When-Then coverage from the source of truth"
+  - step: 2
+    description: "Map scenarios and assertions to concrete use case tests"
+  - step: 3
+    description: "Produce bounded test implementation with explicit coverage notes"
+references:
+  - ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-playbook.md"
+  - ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-generation-guidance.md"
+  - ".ai/assets/shared/testing-strategy.md"
+  - ".ai/assets/shared/common-rules.md"
+  - ".ai/assets/skills/bdd-gwt-test-designer/skill.yaml"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+

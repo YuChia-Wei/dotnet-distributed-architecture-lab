@@ -1,0 +1,43 @@
+asset_id: "query-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Query Sub-Agent"
+purpose: "Define the delegated worker-role prompt for implementing a query use case in this repository's .NET stack."
+role_kind: "use-case-sub-agent"
+triggers:
+  - "query sub-agent"
+  - "implement query use case"
+  - "query use case"
+inputs:
+  - "query behavior goal"
+  - "projection or DTO expectations"
+  - "client-facing state or filter requirements"
+outputs:
+  - "query implementation guidance"
+  - "read-side storage and DTO rules"
+  - "follow-up validation notes"
+constraints:
+  - "Queries must not modify domain state"
+  - "Use read models or projections for query paths"
+  - "Return DTOs, never domain entities"
+workflow:
+  - step: 1
+    description: "Confirm the query goal, read-side data shape, and DTO expectations"
+  - step: 2
+    description: "Apply query-side storage, DTO, and handler rules"
+  - step: 3
+    description: "Produce delegated implementation guidance or code changes with validation notes"
+references:
+  - ".ai/assets/sub-agent-role-prompts/query-sub-agent/references/implementation-playbook.md"
+  - ".ai/assets/shared/common-rules.md"
+  - ".ai/assets/shared/domain-rules.md"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+wrapper_targets:
+  - "gemini"
+  - "copilot"
+wrapper_metadata:
+  gemini:
+    wrapper_path: ".gemini/commands/query-sub-agent.md"
+  copilot:
+    wrapper_path: ".github/prompts/query-sub-agent.md"
+
+

@@ -1,0 +1,41 @@
+asset_id: "staged-refactor-implementer"
+asset_type: "skill-spec"
+title: "Staged Refactor Implementer"
+purpose: "Execute incremental refactoring stages in this repository using existing architecture decisions and review findings. Use it to turn one bounded, pre-decided refactoring slice into concrete code changes, tests, and validation steps."
+triggers:
+  - "implement refactor stage"
+  - "execute stage"
+  - "incremental refactor"
+inputs:
+  - "architecture target or review findings"
+  - "bounded stage goal"
+  - "validation requirements"
+outputs:
+  - "implemented refactoring slice"
+  - "behavior compatibility notes"
+  - "tests or validation run"
+constraints:
+  - "Do not redefine architecture direction mid-flight"
+  - "Keep the stage bounded and incremental"
+workflow:
+  - step: 1
+    description: "Confirm the stage boundary and normalize inputs"
+  - step: 2
+    description: "Choose the smallest safe slice"
+  - step: 3
+    description: "Implement incrementally and validate"
+references:
+  - ".ai/assets/skills/staged-refactor-implementer/references/skill-boundaries.md"
+  - ".ai/assets/skills/staged-refactor-implementer/references/execution-playbook.md"
+  - ".ai/assets/skills/staged-refactor-implementer/references/input-contract.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/STAGED-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/STAGED-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/staged-refactor-implementer/"
+  codex:
+    runtime_wrapper_path: ".codex/skills/staged-refactor-implementer/"

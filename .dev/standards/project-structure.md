@@ -30,8 +30,8 @@ project-root/
 ├── https/                               # HTTP 測試檔案
 │   └── <Context>/                       # 特定 BC 的 HTTP 測試
 ├── sql-script/                          # 資料庫腳本
-├── .ai/                                 # AI prompts, scripts
-├── .dev/                                # specs, ADRs, requirements
+├── .ai/                                 # 給 agent 重用的 prompts, shared rules, scripts
+├── .dev/                                # 給人看的 specs, ADRs, requirements, guides
 ├── .gemini/                             # Gemini CLI 設定
 ├── .github/                             # GitHub & Copilot 資源
 └── *.slnx                               # .NET Solution
@@ -50,6 +50,15 @@ project-root/
 | BuildingBlocks | 架構基礎設施 | `Lab.BuildingBlocks.<Layer>` | `./src/BuildingBlocks` |
 | SharedKernel | 通用領域核心 | `Lab.SharedKernel` | `./src/Shared` |
 | Tests | 測試專案 | `<TargetProject>.Tests` | `./tests` |
+
+## 文件與 AI 資產分工
+
+| 路徑 | 主要讀者 | 用途 |
+|------|---------|------|
+| `./.dev/guides/ai-collaboration-guides` | Human | AI collaboration guides、workflow、prompt 範本 |
+| `./.dev/guides` | Human | 一般開發與設計指南（ai collaboration / design / implementation / learning） |
+| `./ai` | Agent | prompt 元件、shared rules、scripts |
+| `./.claude/skills` | Agent | skill 定義本體與 skill-local references |
 
 ## 方案檔 (.slnx) 規則
 

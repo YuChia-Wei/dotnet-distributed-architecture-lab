@@ -1,0 +1,30 @@
+asset_id: "<skill-id>"
+asset_type: "skill-spec"
+title: "<Human Readable Skill Title>"
+purpose: "<What this skill is for>"
+triggers:
+  - "<trigger phrase>"
+inputs:
+  - "<expected input>"
+outputs:
+  - "<expected output>"
+constraints:
+  - "<key constraint>"
+workflow:
+  - step: 1
+    description: "<workflow step>"
+references:
+  - "<relative reference path>"
+examples:
+  - "<relative example path>"
+human_guide: "<relative path to .dev human-facing guide>"
+wrapper_targets:
+  - "claude"
+  - "codex"
+  - "gemini"
+  - "copilot"
+wrapper_metadata:
+  claude: {}
+  codex: {}
+  gemini: {}
+  copilot: {}

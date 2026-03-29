@@ -52,4 +52,4 @@ Accepted (2026-02-18)
 ## 相關
 
 - [project-structure.md](../standards/project-structure.md)
-- [quick-setup.md](../standards/quick-setup.md)
+- [quick-setup.md](../guides/implementation-guides/quick-setup.md)

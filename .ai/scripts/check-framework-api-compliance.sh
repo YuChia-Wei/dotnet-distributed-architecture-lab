@@ -186,7 +186,7 @@ elif [ "$ERRORS" -eq 0 ]; then
   echo -e "${YELLOW}⚠️  Found $WARNINGS warning(s)${NC}"
 else
   echo -e "${RED}❌ Found $ERRORS error(s) and $WARNINGS warning(s)${NC}"
-  echo "See: .dev/guides/FRAMEWORK-API-INTEGRATION-GUIDE.md for details"
+  echo "See: .dev/guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md for details"
 fi
 
 exit $ERRORS

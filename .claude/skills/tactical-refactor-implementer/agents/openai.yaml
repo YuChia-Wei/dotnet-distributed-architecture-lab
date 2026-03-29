@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tactical Refactor Implementer"
+  short_description: "Object-level and local structural refactoring"
+  default_prompt: "Use $tactical-refactor-implementer to refactor one target class or object and its direct dependencies through safe local structural changes."

@@ -1,0 +1,41 @@
+asset_id: "bdd-gwt-test-designer"
+asset_type: "skill-spec"
+title: "BDD GWT Test Designer"
+purpose: "Design Given-When-Then tests for this repository by turning requirements, specs, acceptance criteria, or observed behavior into BDD/Gherkin-style scenarios and assertion plans without directly implementing test code."
+triggers:
+  - "BDD"
+  - "GWT"
+  - "Given When Then"
+  - "Gherkin"
+inputs:
+  - "requirements, specs, acceptance criteria, or existing behavior"
+  - "target use case or domain behavior"
+outputs:
+  - "scenario list in Given-When-Then form"
+  - "recommended test level for each scenario"
+  - "assertion points and setup notes"
+constraints:
+  - "Do not implement final test code unless explicitly requested"
+  - "Do not change production code"
+workflow:
+  - step: 1
+    description: "Identify the highest-priority source of truth"
+  - step: 2
+    description: "Extract behaviors, rules, and edge cases"
+  - step: 3
+    description: "Draft Given-When-Then scenarios and map them to test intent"
+references:
+  - ".ai/assets/skills/bdd-gwt-test-designer/references/scope-rules.md"
+  - ".ai/assets/skills/bdd-gwt-test-designer/references/scenario-design-playbook.md"
+  - ".ai/assets/skills/bdd-gwt-test-designer/references/output-contract.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/bdd-gwt-test-designer/"
+  codex:
+    runtime_wrapper_path: ".codex/skills/bdd-gwt-test-designer/"

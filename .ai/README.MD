@@ -1,83 +1,56 @@
-# .NET AI 協作開發框架
+# .ai
 
-這是 .NET 版 AI 協作開發框架，幫助團隊以 DDD + Clean Architecture + CQRS 交付高品質程式碼。
+本目錄放置 agent-facing 的可重用 AI 資產，不是 human-facing guide 入口，也不是 skill runtime 安裝位置。
 
-## 🎯 框架特色
+## 目錄角色
 
-- **DDD + Clean Architecture**：完整實作領域驅動設計與清潔架構
-- **Sub-agent Workflow System**：專門的 AI sub-agents 處理不同類型任務
-- **Event Sourcing + Outbox**：WolverineFx + EF Core
-- **Profile-Based Testing**：支援 `test-inmemory` / `test-outbox`
-- **BDD 測試**：xUnit + BDDfy（Gherkin 風格命名）
+- reusable prompts
+- shared rules
+- automation / validation scripts
+- sub-agent workflow reference
 
-## 📚 核心文檔
+## 與其他目錄的分工
 
-### 必讀文檔
-- **[INDEX.MD](INDEX.MD)** - .NET 文檔索引
-- **[SUB-AGENT-SYSTEM.MD](SUB-AGENT-SYSTEM.MD)** - Sub-agent 工作流程
-- **[CODE-REVIEW-INDEX.MD](CODE-REVIEW-INDEX.MD)** - Code Review 索引
+- `.ai/`
+  - 給 agent 重用的 prompts、rules、scripts
+- `.dev/guides/ai-collaboration-guides/`
+  - 給人看的 AI collaboration guides、skill guide、prompt guide、workflow guide
+- `.claude/skills/`
+  - repo-local skill definitions 與 skill-local references
+- `.dev/refactor-workflows/`
+  - 多 skill / subagent handoff artifacts
 
-### 學習路徑 (位於 .dev/guides/)
-- [../../.dev/guides/](../../.dev/guides/)
+## 核心文件
 
-## 📁 目錄結構
+- `INDEX.MD`
+  - `.ai/` 索引入口
+- `SUB-AGENT-SYSTEM.MD`
+  - sub-agent 系統與 routing 規則
+- `CODE-REVIEW-INDEX.MD`
+  - code review 入口
+- `DIRECTORY-RULES.MD`
+  - `.ai/` 與 `.dev/` 的放置規則
 
-```
-.ai/                    ← 純 AI 指令
-├── INDEX.MD
-├── README.MD
-├── SUB-AGENT-SYSTEM.MD
-├── CODE-REVIEW-INDEX.MD
-├── prompts/
-└── scripts/
+## 子目錄
 
-.dev/                   ← 專案知識 (人機共用)
-├── adr/
-├── lessons/
-├── guides/                    ← 學習指南
-├── requirement/
-├── specs/
-└── standards/                 ← Code Review Checklist
-```
+- `assets/`
+  - portable canonical source for skills、commands、shared packages
+- `prompts/`
+  - reusable prompt building blocks、sub-agent prompts、shared prompt rules
+- `scripts/`
+  - validation / review / generation scripts
 
-## 🚀 快速開始
+## 多 Agent 情境下的 skill 收納
 
-### 使用 Sub-agent Workflow
-```
-請使用 command-sub-agent workflow 實作 [create-product]
-請使用 query-sub-agent workflow 實作 [get-product]
-請使用 reactor-sub-agent workflow 實作 [notify-sprint-to-select-backlog-item]
-請使用 aggregate-sub-agent workflow 實作 [ProductBacklogItem 狀態機]
-請使用 outbox-sub-agent workflow 為 [Product] 實作 Outbox Pattern
-請使用 mutation-testing-sub-agent workflow 為 [Product] 提升 mutation coverage
-```
+若同時使用 Codex、Gemini、GitHub Copilot：
 
-### 執行測試
-```bash
-dotnet test
-ASPNETCORE_ENVIRONMENT=test-inmemory dotnet test
-ASPNETCORE_ENVIRONMENT=test-outbox dotnet test
-```
+- `.ai/` 應作為跨 agent 可重用資產
+- `.dev/guides/ai-collaboration-guides/` 應作為 human-facing canonical guide
+- `.claude/skills/` 應作為 repo-local agent-specific skill definition
 
-### 自動化檢查
-```bash
-.ai/scripts/check-all.sh
-.ai/scripts/check-spec-compliance.sh <spec-file> <task-name>
-.ai/scripts/check-mutation-coverage.sh
-```
+若要讓某 skill 成為 Codex 本機可直接使用的 runtime skill，應視為本機安裝/同步問題，而不是將 `.ai/` 或 `.dev/` 改成 runtime 路徑。
 
-## ⚠️ 重要原則
+更完整的收納策略見：
 
-1. **版本管理**：所有版本號以 `.dev/project-config.yaml` 為準
-2. **Profile 測試**：支援 `test-inmemory` / `test-outbox` 雙 profile
-3. **測試規範**：Use Case 測試必須使用 BDDfy（Gherkin 風格命名）
-4. **Repository 規範**：絕對不要創建自定義 Repository 介面
-5. **Outbox 規範**：OutboxMapper 必須是內部類別
-
-## 📖 技術棧版本
-
-請以 `.dev/project-config.yaml` 的版本為準（.NET 10 / C# 14 / WolverineFx / EF Core / xUnit / BDDfy / NSubstitute）。
-
----
-**注意**：本框架為通用 .NET AI 協作範本，請勿放入專案特定內容。
+- `../.dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md`
 

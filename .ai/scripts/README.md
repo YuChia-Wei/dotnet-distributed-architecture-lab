@@ -36,7 +36,7 @@ CHECK_STACK=dotnet SPEC_FILE=.dev/specs/foo.json TASK_NAME=foo ./.ai/scripts/che
 
 ### Prompt 可攜性檢查
 ```bash
-# 檢查 .ai/prompts 是否含有不可攜內容（ADR 編號、專案專有詞）
+# 檢查 .ai/assets/shared 是否含有不可攜內容（ADR 編號、專案專有詞）
 ./.ai/scripts/check-prompt-portability.sh
 
 # 自訂額外不可攜關鍵字（逗號分隔）

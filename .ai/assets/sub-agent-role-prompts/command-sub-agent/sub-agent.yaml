@@ -1,0 +1,44 @@
+asset_id: "command-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Command Sub-Agent"
+purpose: "Define the delegated worker-role prompt for implementing a command use case in this repository's .NET stack."
+role_kind: "use-case-sub-agent"
+triggers:
+  - "command sub-agent"
+  - "implement command use case"
+  - "command use case"
+inputs:
+  - "aggregate or bounded context target"
+  - "command behavior goal"
+  - "validation and test expectations"
+outputs:
+  - "command implementation guidance"
+  - "expected output structure and required rules"
+  - "follow-up validation notes"
+constraints:
+  - "Use WolverineFx handlers for commands"
+  - "Use the repository DI model; do not introduce custom repository interfaces"
+  - "Tests follow xUnit + BDDfy naming guidance and no BaseTestClass"
+workflow:
+  - step: 1
+    description: "Confirm the command behavior, aggregate boundary, and output location"
+  - step: 2
+    description: "Apply command-side rules, architecture constraints, and testing strategy"
+  - step: 3
+    description: "Produce delegated implementation guidance or code changes with validation notes"
+references:
+  - ".ai/assets/sub-agent-role-prompts/command-sub-agent/references/implementation-playbook.md"
+  - ".ai/assets/shared/common-rules.md"
+  - ".ai/assets/shared/architecture-config.md"
+  - ".ai/assets/shared/testing-strategy.md"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+wrapper_targets:
+  - "gemini"
+  - "copilot"
+wrapper_metadata:
+  gemini:
+    wrapper_path: ".gemini/commands/command-sub-agent.md"
+  copilot:
+    wrapper_path: ".github/prompts/command-sub-agent.md"
+
+

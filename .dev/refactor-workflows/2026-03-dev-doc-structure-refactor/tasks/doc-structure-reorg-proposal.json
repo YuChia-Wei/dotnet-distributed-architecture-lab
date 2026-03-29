@@ -1,0 +1,58 @@
+{
+  "task_id": "doc-structure-reorg-proposal",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-dev-doc-structure-refactor",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": ".dev documentation structure proposal",
+    "files": [
+      ".dev/guides",
+      ".dev/standards",
+      ".dev/guides/ai-collaboration-guides"
+    ],
+    "dependency_radius": "README, INDEX, future migration planning only",
+    "constraints": [
+      "Do not move files yet",
+      "Document target structure before execution"
+    ],
+    "non_goals": [
+      "No bulk file moves",
+      "No content rewrite of existing technical docs"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Clarify .dev information architecture and reduce overlap between guides, standards, and AI collaboration docs",
+    "review_findings": [],
+    "user_constraints": [
+      "Keep work records under .dev/refactor-workflows when appropriate"
+    ]
+  },
+  "execution": {
+    "operation_type": "documentation-structure-planning",
+    "steps": [
+      "Inventory current guides and standards categories",
+      "Identify overlap and mixed-purpose directories",
+      "Draft target structure and migration mapping",
+      "Record the proposal in a dedicated workflow artifact"
+    ],
+    "validation": [
+      "Proposal distinguishes standards vs guides roles",
+      "Proposal includes migration mapping"
+    ],
+    "deferred_items": [
+      "Actual file relocation",
+      "Index and link migration after approval"
+    ]
+  },
+  "results": {
+    "summary": "Created a documentation structure refactor plan and proposal before any file moves, with the current direction clarified as renaming `.dev/ai-skill-guides/` and placing it under `.dev/guides/ai-collaboration-guides/`.",
+    "files_changed": [
+      ".dev/refactor-workflows/2026-03-dev-doc-structure-refactor/refactor-plan.md",
+      ".dev/refactor-workflows/2026-03-dev-doc-structure-refactor/tasks/doc-structure-reorg-proposal.json",
+      ".dev/refactor-workflows/2026-03-dev-doc-structure-refactor/structure-reorganization-proposal.md"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}

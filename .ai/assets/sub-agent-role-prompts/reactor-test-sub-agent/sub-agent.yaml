@@ -1,0 +1,36 @@
+asset_id: "reactor-test-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Reactor Test Sub-Agent"
+purpose: "Define the delegated worker role for implementing reactor tests that verify event handling, side effects, and asynchronous integration behavior."
+role_kind: "test-generation-sub-agent"
+triggers:
+  - "reactor test sub-agent"
+  - "generate reactor tests"
+  - "reactor test implementation"
+inputs:
+  - "reactor behavior or integration requirements"
+  - "scenario plan when available"
+  - "target reactor implementation scope"
+outputs:
+  - "reactor test implementation guidance or code"
+  - "side-effect verification notes"
+  - "async verification notes"
+constraints:
+  - "Always verify event handling and side effects explicitly"
+  - "No BaseTestClass"
+  - "Async verification must be explicit and reliable"
+workflow:
+  - step: 1
+    description: "Confirm reactor trigger events, side effects, and external boundaries"
+  - step: 2
+    description: "Map reactor behavior to explicit scenarios and assertions"
+  - step: 3
+    description: "Produce bounded reactor test implementation with async verification notes"
+references:
+  - ".ai/assets/sub-agent-role-prompts/reactor-test-sub-agent/references/test-playbook.md"
+  - ".ai/assets/sub-agent-role-prompts/reactor-test-sub-agent/references/test-generation-guidance.md"
+  - ".ai/assets/shared/testing-strategy.md"
+  - ".ai/assets/shared/common-rules.md"
+  - ".ai/assets/skills/bdd-gwt-test-designer/skill.yaml"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+

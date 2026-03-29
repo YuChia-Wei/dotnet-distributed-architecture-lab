@@ -10,10 +10,10 @@ NC='\033[0m'
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
-PROMPTS_DIR="$BASE_DIR/.ai/prompts"
+PROMPTS_DIR="$BASE_DIR/.ai/assets/shared"
 
 if [ ! -d "$PROMPTS_DIR" ]; then
-  echo -e "${RED}✗ prompts directory not found: $PROMPTS_DIR${NC}"
+  echo -e "${RED}✗ shared asset directory not found: $PROMPTS_DIR${NC}"
   exit 1
 fi
 
@@ -42,7 +42,7 @@ if [ -n "$EXTRA_TERMS_RAW" ]; then
 fi
 
 echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}Prompt Portability Check${NC}"
+echo -e "${BLUE}Shared Asset Portability Check${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo "Target: $PROMPTS_DIR"
 echo ""
@@ -98,6 +98,7 @@ if [ "$ERRORS" -eq 0 ]; then
 fi
 
 echo -e "${RED}✗ Prompt portability check failed (${ERRORS} group(s) failed)${NC}"
-echo -e "${YELLOW}Tip:${NC} Update prompts or expand placeholders in .ai/prompts/PROMPT-PORTABILITY-RULES.md"
+echo -e "${YELLOW}Tip:${NC} Update prompts or expand placeholders in .ai/assets/shared/PROMPT-PORTABILITY-RULES.md"
 exit 1
+
 

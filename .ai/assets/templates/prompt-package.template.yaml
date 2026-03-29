@@ -1,0 +1,14 @@
+asset_id: "<prompt-package-id>"
+asset_type: "prompt-package"
+title: "<Prompt Package Title>"
+purpose: "<What this package supports>"
+files:
+  - "<relative prompt file>"
+shared_rules:
+  - "<relative shared rule path>"
+examples:
+  - "<relative example path>"
+consumers:
+  - "<skill or command asset id>"
+portability_notes:
+  - "<portability note>"

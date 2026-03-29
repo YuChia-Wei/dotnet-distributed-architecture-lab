@@ -1,0 +1,37 @@
+asset_id: "code-review-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Code Review Sub-Agent"
+purpose: "Define the delegated reviewer role for general .NET code review against DDD, Clean Architecture, CQRS, Event Sourcing, and repository testing rules."
+role_kind: "review-sub-agent"
+triggers:
+  - "code review sub-agent"
+  - "review generated code"
+  - "delegated code review"
+inputs:
+  - "reviewed files or bounded scope"
+  - "repo standards and checklist rules"
+  - "optional test results or validation output"
+outputs:
+  - "review findings with file and line references"
+  - "must-fix and should-fix categories"
+  - "positive findings and follow-up notes"
+constraints:
+  - "Do not redefine target architecture"
+  - "Do not silently approve code without checklist comparison"
+  - "Always separate findings from summary"
+workflow:
+  - step: 1
+    description: "Classify the reviewed scope and load the matching review checklist sections"
+  - step: 2
+    description: "Check structural, behavioral, and testing compliance against repository rules"
+  - step: 3
+    description: "Produce delegated review findings with severity and file references"
+references:
+  - ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-playbook.md"
+  - ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-prompt.md"
+  - ".ai/assets/shared/code-review-checklist.md"
+  - ".ai/assets/shared/common-rules.md"
+  - ".ai/assets/shared/testing-strategy.md"
+  - ".ai/assets/skills/code-reviewer/skill.yaml"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+

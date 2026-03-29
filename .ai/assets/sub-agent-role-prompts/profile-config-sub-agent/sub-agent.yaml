@@ -1,0 +1,30 @@
+asset_id: "profile-config-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Profile Config Sub-Agent"
+purpose: "Define the delegated worker-role prompt for configuring environment profiles and appsettings-based setup."
+role_kind: "infrastructure-sub-agent"
+triggers:
+  - "profile config sub-agent"
+  - "configure environment profiles"
+  - "appsettings profile configuration"
+inputs:
+  - "environment and profile requirements"
+  - "DI registration expectations"
+outputs:
+  - "profile configuration guidance"
+  - "environment-specific DI notes"
+constraints:
+  - "No hardcoded profile in tests"
+  - "Use environment variables and appsettings.{Environment}.json"
+  - "DI registration depends on environment"
+workflow:
+  - step: 1
+    description: "Confirm environment targets and profile rules"
+  - step: 2
+    description: "Apply environment-specific config and DI registration rules"
+  - step: 3
+    description: "Produce delegated configuration guidance or code changes with validation notes"
+references:
+  - ".ai/assets/sub-agent-role-prompts/profile-config-sub-agent/references/implementation-playbook.md"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+

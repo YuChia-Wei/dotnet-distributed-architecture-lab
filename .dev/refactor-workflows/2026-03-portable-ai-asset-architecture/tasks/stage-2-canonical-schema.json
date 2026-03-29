@@ -1,0 +1,65 @@
+{
+  "task_id": "stage-2-canonical-schema",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-portable-ai-asset-architecture",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Define canonical source schema and directory structure",
+    "files": [
+      ".ai/assets/README.MD",
+      ".ai/assets/skills/README.MD",
+      ".ai/assets/commands/README.MD",
+      ".ai/assets/shared/README.MD",
+      ".ai/assets/templates/skill-spec.template.yaml",
+      ".ai/assets/templates/command-spec.template.yaml",
+      ".ai/assets/templates/prompt-package.template.yaml",
+      ".dev/refactor-workflows/2026-03-portable-ai-asset-architecture/stage-2-canonical-schema.md"
+    ],
+    "dependency_radius": ".ai canonical assets, workflow docs, future wrapper mappings",
+    "constraints": [
+      "Do not migrate existing assets yet",
+      "Canonical schemas must stay agent-neutral"
+    ],
+    "non_goals": [
+      "No wrapper generation",
+      "No pilot migration yet"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Create an agent-neutral canonical schema for portable AI assets",
+    "review_findings": [],
+    "user_constraints": [
+      "Keep the approach highly portable and repo-centric",
+      "Avoid duplicating full content into every agent-specific folder"
+    ]
+  },
+  "execution": {
+    "operation_type": "canonical-schema-definition",
+    "steps": [
+      "Created .ai/assets as the canonical source root",
+      "Defined separate canonical areas for skills, commands, shared assets, and templates",
+      "Created skill-spec, command-spec, and prompt-package templates",
+      "Recorded schema decisions and directory structure in a Stage 2 workflow document"
+    ],
+    "validation": [
+      "Canonical templates are agent-neutral",
+      "Canonical directories are separated from wrapper directories"
+    ],
+    "deferred_items": [
+      "Map existing assets into canonical form",
+      "Define wrappers and migration strategy"
+    ]
+  },
+  "results": {
+    "summary": "Completed Stage 2 canonical schema and directory structure definition.",
+    "files_changed": [
+      ".ai/assets",
+      ".dev/refactor-workflows/2026-03-portable-ai-asset-architecture/stage-2-canonical-schema.md",
+      ".dev/refactor-workflows/2026-03-portable-ai-asset-architecture/tasks/stage-2-canonical-schema.json"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  },
+  "historical_note": "This task records the Stage 2 schema at the time it was defined. Later stages retired the command-spec layer from active use and introduced canonical sub-agent-role prompts as a separate asset family."
+}

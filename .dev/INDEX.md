@@ -25,9 +25,35 @@
 - `lessons/`
 - `lessons/dotnet/`
 - `legacy/ask/`
+- `refactor-workflows/README.MD`
+- `guides/README.MD`
 
 ## AI Agent & Skills
 - `AGENTS.md`
-- `.claude/README.md`（skills/commands 索引）
+- `guides/ai-collaboration-guides/README.MD`
+- `guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md`
+- `guides/ai-collaboration-guides/LOCAL-RUNTIME-WRAPPER-GUIDE.md`
+- `guides/ai-collaboration-guides/AI-SKILL-GUIDE-STANDARDS.md`
+- `guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`
+- `guides/ai-collaboration-guides/AI-REFACTORING-SKILL-CONTRACTS.md`
+- `guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md`
+- `guides/ai-collaboration-guides/OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
+- `guides/ai-collaboration-guides/DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md`
+- `guides/ai-collaboration-guides/BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md`
+- `guides/ai-collaboration-guides/BDD-GWT-TEST-DESIGNER-PAIR-GUIDE.md`
+- `guides/ai-collaboration-guides/REQUIREMENT-AND-SPEC-DESIGNER-STRATEGY.md`
+- `guides/ai-collaboration-guides/REQUIREMENT-DESIGNER-PROMPT-GUIDE.md`
+- `guides/ai-collaboration-guides/SPEC-DESIGNER-PROMPT-GUIDE.md`
+- `guides/ai-collaboration-guides/STAGED-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md`
+- `guides/ai-collaboration-guides/TACTICAL-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md`
+- `.claude/skills/README.md`
+- `.codex/skills/README.md`
+- `.gemini/commands/README.md`
+- `.github/prompts/README.md`
+- `.github/copilot-instructions.md`
 - `.claude/skills/spec-compliance-validator/`
 - `.claude/skills/code-reviewer/`
+- `.claude/skills/ddd-ca-hex-architect/`
+- `.claude/skills/bdd-gwt-test-designer/`
+- `.claude/skills/staged-refactor-implementer/`
+- `.claude/skills/tactical-refactor-implementer/`
