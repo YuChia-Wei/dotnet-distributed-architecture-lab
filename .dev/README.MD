@@ -21,6 +21,7 @@
 2. **技術選型**: [`requirement/TECH-STACK-REQUIREMENTS.MD`](requirement/TECH-STACK-REQUIREMENTS.MD)
 3. **Code Review**: [`standards/CODE-REVIEW-CHECKLIST.md`](standards/CODE-REVIEW-CHECKLIST.md)
 4. **ADR 索引**: [`adr/INDEX.md`](adr/INDEX.md)
+5. **Application 詞彙邊界**: [`standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
 
 ## 🔗 相關資源
 
