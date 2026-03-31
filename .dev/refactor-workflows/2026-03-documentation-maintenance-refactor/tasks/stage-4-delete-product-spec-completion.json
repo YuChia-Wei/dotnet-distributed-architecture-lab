@@ -1,0 +1,21 @@
+{
+  "taskId": "stage-4-delete-product-spec-completion",
+  "stage": 4,
+  "title": "Complete Product domain DeleteProduct specification slice",
+  "status": "completed",
+  "summary": "Added the missing DeleteProduct production spec and aligned Product use-case, aggregate, and integration test specs so the Product domain no longer has an obvious Stage 4 use-case gap.",
+  "scope": [
+    ".dev/specs/domains/product/usecase/delete-product.json",
+    ".dev/specs/tests/product/use-cases/delete-product.test-spec.md",
+    ".dev/specs/tests/product/aggregate/product.test-spec.md",
+    ".dev/specs/tests/product/integration/product-repository-persistence.test-spec.md",
+    ".dev/refactor-workflows/2026-03-documentation-maintenance-refactor/stage-4-spec-coverage-checklist.md"
+  ],
+  "results": [
+    "Added DeleteProduct production spec.",
+    "Added DeleteProduct use-case test spec.",
+    "Extended Product aggregate test spec with deletion behavior.",
+    "Extended Product integration test spec with delete persistence semantics.",
+    "Updated Stage 4 coverage to mark DeleteProduct as covered."
+  ]
+}

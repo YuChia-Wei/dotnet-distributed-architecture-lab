@@ -2,6 +2,12 @@
 
 本文件定義四個重構 skill 在 direct mode 與 optional workflow mode 下的最小 input / output contract。
 
+補充：
+
+- 本文件中的「重構」同時包含程式碼重構與文件重構。
+- 當目標是補齊 requirement、spec、runbook、context map、AI asset routing 等文件系統時，workflow artifact 仍然適用。
+- 只有在 execution step 明確涉及 production code / tests 時，才應使用 code-centric 的切片與驗證語言。
+
 ## 目的
 
 - 讓 skill 可以直接使用，不被流程文件綁死
@@ -29,13 +35,19 @@
 - 預設存放於 `.dev/refactor-workflows/<workflow-id>/`
 - artifact 欄位應至少滿足本文件的最小 contract
 
+常見 workflow mode 類型：
+
+- code refactor workflow
+- document refactor workflow
+- mixed workflow（先補文件真相，再進入 code stage）
+
 ## Artifact 與 Skill 對應
 
 | Artifact | Owner Skill | 主要用途 |
 | :--- | :--- | :--- |
-| `refactor-plan.md` | `ddd-ca-hex-architect` | 保存診斷、目標方向、stages、非目標、風險 |
-| `review-report.md` | `code-reviewer` | 保存評分、architecture/code findings、建議下一步 |
-| `refactor-task.json` | `staged-refactor-implementer` / `tactical-refactor-implementer` | 保存執行 scope、限制、驗證、結果 |
+| `refactor-plan.md` | `ddd-ca-hex-architect` | 保存診斷、目標方向、stages、非目標、風險，可用於 code 或 document workflow |
+| `review-report.md` | `code-reviewer` | 保存評分、architecture/code/doc findings、建議下一步 |
+| `refactor-task.json` | `staged-refactor-implementer` / `tactical-refactor-implementer` | 保存執行 scope、限制、驗證、結果，可承載 code、document、或 mixed stage |
 
 ## Artifact 存放位置
 
@@ -50,6 +62,25 @@ Workflow artifact 的正式存放根目錄為：
 - `.dev/refactor-workflows/<workflow-id>/tasks/<task-id>.json`
 
 若 task 不只一個，應放在同一個 `tasks/` 子目錄下，而不是散落在其他路徑。
+
+## 文件重構補充規則
+
+當 workflow 目標是文件系統時：
+
+- stage 應以 source-of-truth 邊界切分，而不是以程式碼模組切分
+- validation 應優先檢查完整性、一致性、權責清楚度、與維護情境覆蓋
+- non-goals 應明確防止「順手把 code 也一起改掉」
+- 若文件缺口會影響後續 code refactor，應先完成文件 stage，再啟動 code stage
+
+常見 document stage 類型：
+
+- workflow definition / governance
+- inventory and gap mapping
+- terminology normalization
+- requirement completion
+- spec completion
+- runtime operations documentation
+- AI asset alignment
 
 ## `ddd-ca-hex-architect`
 
@@ -85,6 +116,12 @@ Workflow artifact 的正式存放根目錄為：
 - 至少一個 `Stage`
 - `Recommended implementer`
 
+若是 document workflow，建議另外明確寫出：
+
+- 文件邊界或知識域
+- source of truth 放置位置
+- 文件完成定義（definition of done）
+
 ## `code-reviewer`
 
 ### 最低必要輸入
@@ -102,7 +139,7 @@ Workflow artifact 的正式存放根目錄為：
 
 - review score
 - architecture-level findings
-- code-level findings
+- code-level findings 或 doc-level findings
 - recommended next skill
 
 ### 若進入 Workflow Mode，至少應寫入 `review-report.md`
@@ -112,9 +149,9 @@ Workflow artifact 的正式存放根目錄為：
 - `Reviewed target`
 - `Review reason`
 - `Architecture Compliance`
-- `Code Quality`
+- `Code Quality` 或 `Documentation Quality`
 - `Test Adequacy`
-- 至少一筆 architecture-level 或 code-level finding
+- 至少一筆 architecture-level、code-level、或 doc-level finding
 - `Recommended Next Skill`
 
 ## `staged-refactor-implementer`
@@ -151,6 +188,12 @@ Workflow artifact 的正式存放根目錄為：
 - `execution.operation_type`
 - `execution.steps`
 - `execution.validation`
+
+若是 document workflow，建議：
+
+- `scope.target` 以文件系統、知識域、或 source-of-truth slice 表示
+- `execution.operation_type` 使用如 `workflow-definition`、`documentation-analysis`、`terminology-normalization`、`document-completion`
+- `execution.validation` 明確描述 completeness / consistency / maintainability checks
 
 ## `tactical-refactor-implementer`
 
@@ -200,7 +243,7 @@ Workflow artifact 的正式存放根目錄為：
 
 - implementer 至少要知道：
   - 哪些問題是 architecture-level
-  - 哪些問題是 code-level
+  - 哪些問題是 code-level 或 doc-level
   - 這一輪應優先處理哪些 finding
   - reviewer 建議下一步交給哪個 skill
 

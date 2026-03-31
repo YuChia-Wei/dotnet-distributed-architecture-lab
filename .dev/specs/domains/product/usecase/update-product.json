@@ -1,0 +1,30 @@
+{
+  "useCase": "UpdateProduct",
+  "behavior": "Update an existing product's name, description, and price.",
+  "input": [
+    { "name": "id", "type": "Guid" },
+    { "name": "name", "type": "string" },
+    { "name": "description", "type": "string" },
+    { "name": "price", "type": "decimal" }
+  ],
+  "aggregate": "Product",
+  "aggregateId": "Guid",
+  "method": "Product.Update",
+  "domainEvent": "SaleProducts.Domains.DomainEvents.ProductUpdated",
+  "repository": "IDomainRepository<Product, Guid>",
+  "output": "void",
+  "domainModelNotes": [
+    "The application layer must load the existing aggregate by id before calling update.",
+    "If the target product does not exist, the current implementation throws KeyNotFoundException."
+  ],
+  "constructorPreconditions": [
+    "id must refer to an existing product",
+    "name must not be blank",
+    "description must not be blank",
+    "price must be greater than or equal to 0"
+  ],
+  "constructorPostconditions": [
+    "The target product has updated name, description, and price.",
+    "A ProductUpdated domain event is recorded."
+  ]
+}

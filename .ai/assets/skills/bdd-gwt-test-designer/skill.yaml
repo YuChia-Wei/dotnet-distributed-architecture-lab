@@ -14,6 +14,7 @@ outputs:
   - "scenario list in Given-When-Then form"
   - "recommended test level for each scenario"
   - "assertion points and setup notes"
+  - "recommended test spec storage path under .dev/specs/tests/"
 constraints:
   - "Do not implement final test code unless explicitly requested"
   - "Do not change production code"
@@ -24,6 +25,8 @@ workflow:
     description: "Extract behaviors, rules, and edge cases"
   - step: 3
     description: "Draft Given-When-Then scenarios and map them to test intent"
+  - step: 4
+    description: "Recommend the correct test spec category and output path"
 references:
   - ".ai/assets/skills/bdd-gwt-test-designer/references/scope-rules.md"
   - ".ai/assets/skills/bdd-gwt-test-designer/references/scenario-design-playbook.md"

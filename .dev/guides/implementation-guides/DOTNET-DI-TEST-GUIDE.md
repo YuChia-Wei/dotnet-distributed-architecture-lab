@@ -1,4 +1,7 @@
-# Dependency Injection Testing Guide (Dotnet)
+# Dependency Injection Testing Guide (.NET)
+
+> Active .NET practice in this repository is xUnit fixture-based testing plus `IServiceCollection` registration.
+> Historical Spring naming is no longer the primary entry point for this guide.
 
 ## ezapp 2.0.0 Intent (Preserve)
 
@@ -147,8 +150,10 @@ ASPNETCORE_ENVIRONMENT=test-outbox dotnet test
 - [ ] No hardcoded repository implementations in tests
 - [ ] test-inmemory and test-outbox both supported
 
-## Automated Check (TODO)
-Create a .NET equivalent of `.ai/scripts/check-test-spring-di.sh`.
+## Automated Check
+Preferred active entry point:
+
+- `.ai/scripts/check-test-di-compliance.sh`
 
 ## Common Mistakes
 

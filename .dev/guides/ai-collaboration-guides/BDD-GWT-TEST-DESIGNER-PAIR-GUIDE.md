@@ -23,6 +23,8 @@
 - 從 requirement / spec / AC 拆出 scenarios
 - 判定 test level
 - 規劃 Then assertions 與資料準備
+- 若要保存測試意圖，將結果整理到 `.dev/specs/tests/`
+- 路徑依測試目標選擇 `aggregate/`、`use-cases/`、`integration/`、`cross-domain/`、`e2e/`
 
 ### 2. 再生成測試程式碼
 
@@ -61,9 +63,10 @@ architect 覆核後，再回到 `bdd-gwt-test-designer` 繼續拆 scenario。
 ```text
 1. requirement / spec
 2. bdd-gwt-test-designer
-3. test generation sub-agent
-4. code-reviewer
-5. 必要時回到 bdd-gwt-test-designer 補 scenario gaps
+3. `.dev/specs/tests/` test spec
+4. test generation sub-agent
+5. code-reviewer
+6. 必要時回到 bdd-gwt-test-designer 補 scenario gaps
 ```
 
 ## 不建議的用法

@@ -1,0 +1,25 @@
+{
+  "useCase": "ShipOrder",
+  "behavior": "Mark an existing order as shipped and publish an order-shipped integration event.",
+  "input": [
+    { "name": "orderId", "type": "Guid" }
+  ],
+  "aggregate": "Order",
+  "aggregateId": "Guid",
+  "method": "Order.Ship",
+  "domainEvent": "SaleOrders.Domains.DomainEvents.OrderShippedDomainEvent",
+  "repository": "IOrderDomainRepository",
+  "output": "void",
+  "domainModelNotes": [
+    "The application layer loads the target order by id.",
+    "If the order does not exist, the current implementation throws KeyNotFoundException."
+  ],
+  "domainEvents": [
+    "SaleOrders.Domains.DomainEvents.OrderShippedDomainEvent",
+    "Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderShipped"
+  ],
+  "constructorPostconditions": [
+    "The order status becomes Shipped.",
+    "An OrderShipped integration event is published after persistence."
+  ]
+}

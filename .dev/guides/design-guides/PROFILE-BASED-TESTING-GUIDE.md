@@ -252,7 +252,7 @@ Fix:
 ## Related Documents
 - `.ai/assets/shared/testing-standards.md`
 - `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml`
-- `.dev/adr/ADR-021-profile-based-testing-architecture.md`
+- `.dev/adr/ADR-051-profile-based-testing-architecture.md`
 
 ## Future Extensions
 1. ESDB profile implementation

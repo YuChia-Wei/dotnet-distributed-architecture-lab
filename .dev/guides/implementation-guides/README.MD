@@ -2,6 +2,10 @@
 
 本目錄放置偏實作、設定、排錯、操作流程的 human-facing guides。
 
+> Note:
+> 本目錄已將高流量入口文件優先改為 .NET 命名。
+> 若仍看到 Java/Spring/JPA 字樣，預設應視為 historical context 或遷移紀錄，而非現行主動推薦做法。
+
 ## 適合放這裡的文件
 
 - setup / initialization / configuration guide
@@ -40,14 +44,14 @@
   - 常見問題入口
 - `NEW-PROJECT-TEST-SETUP-GUIDE.md`
   - 新專案測試設定流程
-- `PREVENT-REPOSITORY-BEAN-MISSING.md`
-  - repository/bean 缺失問題排查
+- `PREVENT-SERVICE-REGISTRATION-MISSING.md`
+  - DI registration / dependency resolution 問題排查指南
 - `PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md`
   - profile 複雜度處理方案
 - `quick-setup.md`
   - 快速初始化流程
-- `SPRING-DI-TEST-GUIDE.md`
-  - Spring DI 測試設定方式
+- `DOTNET-DI-TEST-GUIDE.md`
+  - .NET DI 測試指南，現行請對照 xUnit fixture 與 `IServiceCollection`
 - `TEMPLATE-SYNC-GUIDE.md`
   - template sync 操作方式
 - `TEMPLATE-USAGE-GUIDE.md`

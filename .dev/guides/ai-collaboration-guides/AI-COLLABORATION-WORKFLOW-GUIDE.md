@@ -16,6 +16,11 @@
 - 多 skill handoff 才進 workflow mode
 - skill 負責專業角色，subagent 負責在既定邊界內協作
 
+補充：
+
+- `workflow mode` 不只適用於程式碼重構，也適用於文件補全、文件重構、與 source-of-truth 校準
+- 若程式碼問題本質上來自文件缺口，應先進 document workflow，再決定是否展開 code workflow
+
 ## 主要文件入口
 
 ### 需求與規格
@@ -127,12 +132,13 @@
 - architecture correction
 - staged refactoring
 - test-first 補強後再重構
+- 文件系統補全或 source-of-truth 重整
 
 建議流程：
 
 ```text
 1. architecture diagnosis
-2. code review findings
+2. review findings
 3. staged or tactical execution
 4. review again
 5. iterate if needed
@@ -159,7 +165,7 @@
 產出：
 
 - architecture-level findings
-- code-level findings
+- code-level findings 或 doc-level findings
 - score
 - next-skill recommendation
 
@@ -169,6 +175,12 @@
 
 - `staged-refactor-implementer`
 - `tactical-refactor-implementer`
+
+若是 document workflow，execution 應優先使用下列切法：
+
+- 以文件邊界切 stage，例如 requirement、spec、runbook、AI asset alignment
+- 以 source-of-truth 問題切 stage，例如 terminology normalization、ownership clarification、gap map
+- 避免把「文件補全 + code cleanup + prompt cleanup」混成同一輪
 
 ### Step 4: review again
 
@@ -201,6 +213,7 @@
 - 多 skill handoff
 - 多輪 stage
 - 需要保存 architecture / review / task 狀態
+- 需要保存文件真相與補全決策
 
 artifact 位置：
 
@@ -211,6 +224,13 @@ artifact 種類：
 - `refactor-plan.md`
 - `review-report.md`
 - `tasks/<task-id>.json`
+
+對 document workflow 來說，artifact 應至少回答：
+
+- 哪一類文件是 source of truth
+- 這一輪補的是哪個知識缺口
+- 完成後可以支撐哪一種維護情境
+- 哪些內容刻意延到下一 stage
 
 ## Subagent 介入原則
 

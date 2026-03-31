@@ -1,0 +1,25 @@
+{
+  "useCase": "CancelOrder",
+  "behavior": "Cancel an existing order and publish an order-cancelled integration event.",
+  "input": [
+    { "name": "orderId", "type": "Guid" }
+  ],
+  "aggregate": "Order",
+  "aggregateId": "Guid",
+  "method": "Order.Cancel",
+  "domainEvent": "SaleOrders.Domains.DomainEvents.OrderCancelledDomainEvent",
+  "repository": "IOrderDomainRepository",
+  "output": "void",
+  "domainModelNotes": [
+    "The application layer loads the target order by id.",
+    "If the order does not exist, the current implementation throws KeyNotFoundException."
+  ],
+  "domainEvents": [
+    "SaleOrders.Domains.DomainEvents.OrderCancelledDomainEvent",
+    "Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderCancelled"
+  ],
+  "constructorPostconditions": [
+    "The order status becomes Cancelled.",
+    "An OrderCancelled integration event is published after persistence."
+  ]
+}

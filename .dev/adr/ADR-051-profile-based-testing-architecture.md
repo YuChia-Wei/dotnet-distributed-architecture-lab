@@ -1,4 +1,4 @@
-# ADR-021: Profile-Based Testing Architecture (.NET)
+# ADR-051: Profile-Based Testing Architecture (.NET)
 
 ## Status
 Accepted
@@ -11,7 +11,7 @@ Accepted
 過去曾在 **Base Test Class** 內硬編碼環境，導致無法動態切換。該做法在 .NET 也不可接受。
 
 ## Decision
-**絕對不要在任何 Base Test Class 中硬編碼環境設定**。  
+**絕對不要在任何 Base Test Class 中硬編碼環境設定**。
 環境選擇應由 **環境變數 + appsettings** 決定。
 
 ## Implementation
@@ -62,4 +62,3 @@ DOTNET_ENVIRONMENT=TestOutbox dotnet test
 🔴 **重要教訓**：不要在測試程式碼中硬寫環境選擇。
 - Profile 必須可配置
 - 動態 > 靜態
-

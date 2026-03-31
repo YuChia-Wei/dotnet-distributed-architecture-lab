@@ -1,0 +1,33 @@
+{
+  "useCase": "PlaceOrder",
+  "behavior": "Place a new order after confirming inventory reservation succeeds.",
+  "input": [
+    { "name": "orderDate", "type": "DateTime" },
+    { "name": "totalAmount", "type": "decimal" },
+    { "name": "productId", "type": "Guid" },
+    { "name": "productName", "type": "string" },
+    { "name": "quantity", "type": "int" }
+  ],
+  "aggregate": "Order",
+  "aggregateId": "Guid",
+  "method": "Order constructor",
+  "domainEvent": "SaleOrders.Domains.DomainEvents.OrderPlacedDomainEvent",
+  "repository": "IOrderDomainRepository",
+  "output": "PlaceOrderResult",
+  "domainModelNotes": [
+    "The order aggregate is created first in the application flow.",
+    "Inventory must confirm reservation before the order is saved and the integration event is published."
+  ],
+  "domainEvents": [
+    "SaleOrders.Domains.DomainEvents.OrderPlacedDomainEvent",
+    "Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderPlaced"
+  ],
+  "outputContracts": [
+    "Lab.BoundedContextContracts.Inventory.Interactions.ReserveInventoryRequestContract",
+    "Lab.BoundedContextContracts.Inventory.Interactions.ReserveInventoryResponseContract"
+  ],
+  "constructorPostconditions": [
+    "A new Order aggregate exists with status Placed if inventory reservation succeeds.",
+    "An OrderPlaced integration event is published after persistence."
+  ]
+}

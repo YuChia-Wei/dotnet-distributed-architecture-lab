@@ -1,0 +1,28 @@
+{
+  "useCase": "CreateProduct",
+  "behavior": "Create a new product in the Products bounded context.",
+  "input": [
+    { "name": "name", "type": "string" },
+    { "name": "description", "type": "string" },
+    { "name": "price", "type": "decimal" }
+  ],
+  "aggregate": "Product",
+  "aggregateId": "Guid",
+  "method": "Product constructor",
+  "domainEvent": "SaleProducts.Domains.DomainEvents.ProductCreated",
+  "repository": "IDomainRepository<Product, Guid>",
+  "output": "ProductDto",
+  "domainModelNotes": [
+    "Name and description are required.",
+    "Price cannot be negative."
+  ],
+  "constructorPreconditions": [
+    "name must not be blank",
+    "description must not be blank",
+    "price must be greater than or equal to 0"
+  ],
+  "constructorPostconditions": [
+    "A new Product aggregate exists with a generated Guid identifier.",
+    "A ProductCreated domain event is recorded."
+  ]
+}

@@ -12,6 +12,7 @@
 1. Read `.dev/ARCHITECTURE.MD` and `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`.
 2. Use `.dev/adr/README.md` and `.dev/adr/INDEX.md` as the single source of ADR truth.
 3. For reusable AI-specific prompts, use `.ai/` folder.
+4. When preparing this framework for reuse in another repo, follow `.dev/PORTABLE-PACKAGING-GUIDE.MD`.
 
 ---
 
@@ -44,6 +45,13 @@ Workflow artifact location:
 - Use `.dev/refactor-workflows/<workflow-id>/review-report.md`
 - Use `.dev/refactor-workflows/<workflow-id>/tasks/<task-id>.json`
 - Do not scatter workflow artifacts under `.ai/`, `.claude/skills/`, or arbitrary feature folders unless the user explicitly requests it.
+
+### Portable Packaging (When framework files are copied to another repo)
+
+1. Keep framework-level guides, standards, scripts, and collaboration rules.
+2. Remove or rewrite project-specific requirement, spec, operations, workflow, and ADR truth.
+3. Rebuild `.dev/requirement/`, `.dev/specs/`, `.dev/operations/`, and `ADR-*.md` from the target project's facts.
+4. Treat `.dev/PORTABLE-PACKAGING-GUIDE.MD` as the authoritative migration boundary.
 
 ---
 

@@ -31,6 +31,17 @@
 - `ddd-ca-hex-architect`:
   - 若規格本身有邊界或語意不清，先覆核架構方向
 
+若 repo 已採用 test spec workflow：
+
+- scenario 設計結果應優先沉澱到 `.dev/specs/tests/`
+- production behavior truth 仍應留在 `.dev/specs/domains/`
+- test spec 路徑應依測試目標選擇：
+  - aggregate -> `aggregate/`
+  - use case -> `use-cases/`
+  - repository/MQ/gateway -> `integration/`
+  - cross-BC flow -> `cross-domain/`
+  - full journey -> `e2e/`
+
 ## 典型適用情境
 
 - 你有 spec，但還不想直接生成測試碼
@@ -53,7 +64,7 @@
 Use $bdd-gwt-test-designer to design Given-When-Then test scenarios from this spec.
 
 Context:
-- Source: [.dev/specs/...]
+- Source: [.dev/specs/domains/...]
 - Target level: use case test
 - Do not implement test code yet
 
@@ -67,8 +78,15 @@ Return:
 2. scenario set in Given-When-Then form
 3. recommended test level
 4. assertion notes
-5. ambiguities or missing rules
+5. recommended test spec path under `.dev/specs/tests/`
+6. ambiguities or missing rules
 ```
+
+建議路徑範例：
+
+- `.dev/specs/tests/order/use-cases/place-order.test-spec.md`
+- `.dev/specs/tests/inventory-item/integration/decrease-stock-repository.test-spec.md`
+- `.dev/specs/tests/cross-domain/place-order-and-reserve-stock.test-spec.md`
 
 ## 範本 2：從既有程式行為逆向整理 scenarios
 

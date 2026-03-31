@@ -1,0 +1,68 @@
+{
+  "task_id": "refactor-task-2026-03-test-spec-structure-normalization",
+  "owner_skill": "ddd-ca-hex-architect",
+  "related_plan_id": "refactor-plan-2026-03-documentation-maintenance-refactor",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Normalize test-spec storage to remove redundant duplicate domain/aggregate folder names",
+    "files": [
+      ".dev/specs/tests/README.MD",
+      ".dev/specs/tests/TEST-SPEC-GUIDE.MD",
+      ".dev/specs/SPEC-GUIDE.MD",
+      ".dev/specs/SPEC-ORGANIZATION-GUIDE.MD",
+      ".dev/specs/tests/order/place-order.test-spec.md",
+      ".dev/specs/tests/inventory-item/decrease-stock.test-spec.md"
+    ],
+    "dependency_radius": "Documentation tree only",
+    "constraints": [
+      "Default structure should stay easy to scan for current one-domain-one-aggregate cases",
+      "Retain an escape hatch for deeper aggregate subfolders when a domain eventually has multiple aggregates",
+      "Explain the storage rule explicitly in guide files"
+    ],
+    "non_goals": [
+      "Do not redesign production spec layout",
+      "Do not populate all missing test specs in this normalization task"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Test-spec structure should be semantically clear without introducing redundant folder depth.",
+    "review_findings": [
+      "Current test-spec tree contains repeated folder names such as order/order and inventory-item/inventory-item.",
+      "The extra aggregate layer does not add information when a domain currently maps to a single primary aggregate."
+    ],
+    "user_constraints": [
+      "Settle the structure first before expanding more Stage 4 content."
+    ]
+  },
+  "execution": {
+    "operation_type": "document-restructure",
+    "steps": [
+      "Flatten current test-spec examples to .dev/specs/tests/<domain>/ by default.",
+      "Update guides to explain when an aggregate subfolder is optional rather than mandatory.",
+      "Preserve the option to reintroduce aggregate subfolders only when a domain owns multiple aggregates."
+    ],
+    "validation": [
+      "Current test-spec examples no longer use duplicated folder names.",
+      "Guides explain the default and optional deeper layout clearly.",
+      "The structure remains extensible without being noisy."
+    ],
+    "deferred_items": [
+      "Additional test-spec examples for the rest of the active use cases.",
+      "Stage 5 standards and runtime docs."
+    ]
+  },
+  "results": {
+    "summary": "Flattened the current test-spec examples and clarified that aggregate subfolders are optional and only needed when a bounded context has multiple aggregates.",
+    "files_changed": [
+      ".dev/specs/tests/README.MD",
+      ".dev/specs/tests/TEST-SPEC-GUIDE.MD",
+      ".dev/specs/SPEC-GUIDE.MD",
+      ".dev/specs/SPEC-ORGANIZATION-GUIDE.MD",
+      ".dev/specs/tests/order/place-order.test-spec.md",
+      ".dev/specs/tests/inventory-item/decrease-stock.test-spec.md"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}

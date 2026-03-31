@@ -1,0 +1,15 @@
+{
+  "id": "stage-6-portable-packaging-boundaries",
+  "title": "Define portable packaging boundaries for reusable .dev/.ai assets",
+  "status": "completed",
+  "results": [
+    "Added a root portable packaging guide that distinguishes framework-level assets from project-specific truth.",
+    "Updated .dev/README.MD, .ai/README.MD, and AGENTS.md to treat portability as an explicit collaboration rule."
+  ],
+  "changedFiles": [
+    ".dev/PORTABLE-PACKAGING-GUIDE.MD",
+    ".dev/README.MD",
+    ".ai/README.MD",
+    "AGENTS.md"
+  ]
+}

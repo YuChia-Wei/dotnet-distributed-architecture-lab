@@ -195,7 +195,7 @@ if [ "$MODE" != "critical" ]; then
         "false" "true"
     
     # JPA configuration (pending .NET translation)
-    run_check_pending "check-jpa-projection-config.sh" \
+    run_check_pending "check-projection-config.sh" \
         "JPA Projection Configuration" \
         "false" "true"
     
@@ -222,7 +222,7 @@ if [ "$MODE" == "full" ]; then
         "false" "false"
     
     # Spring DI Test compliance (pending .NET translation)
-    run_check_pending "check-test-spring-di.sh" \
+    run_check_pending "check-test-di-compliance.sh" \
         "Spring DI Test Compliance" \
         "true" "false"
     

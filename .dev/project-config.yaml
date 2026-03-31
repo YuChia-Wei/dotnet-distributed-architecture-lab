@@ -1,57 +1,64 @@
-projectName: AiScrum
-rootNamespace: AiScrum
+projectName: dotnet-mq-arch-lab
+solutionName: dotnet-mq-arch-lab
+rootNamespace: Lab
 version: 0.1.0
-description: 使用 AI 開發的 Scrum 專案（.NET 版本）
+description: Distributed commerce sample system using DDD + Clean Architecture + Hexagonal Architecture with MQ-first bounded-context integration.
 techStack: dotnet-ca-wolverine-efcore
+targetFramework: net10.0
 dotnetVersion: "10.0"
 wolverineFxVersion: "5.16.2"
 efCoreVersion: "10.x"
 dependencies:
+  dapper: "2.1.66"
+  npgsql: "10.0.1"
   xunit: "2.9.3"
-  bddfy: "TBD"
   nsubstitute: "5.3.0"
-  strykerNet: "TBD"
   kafka: "WolverineFx.Kafka 5.16.2"
+  rabbitmq: "WolverineFx.RabbitMQ 5.16.2"
 database:
+  provider: PostgreSQL
+  driver: Npgsql
+  writeModel:
+    orm: Dapper
+    client: Npgsql
+  readModel:
+    orm: EFCoreOrDapper
   environments:
     test:
-      type: PostgreSQL
       host: localhost
       port: 6000
+      database: board
       username: postgres
       password: root
-      url: jdbc:postgresql://localhost:6000/board?currentSchema=message_store
       schema: message_store
-      jpa:
-        ddlAuto: update
-        showSql: true
+      connectionString: Host=localhost;Port=6000;Database=board;Username=postgres;Password=root;Search Path=message_store
+      showSql: true
       containerName: postgres_ezscrum_test2
     production:
-      type: PostgreSQL
       host: localhost
       port: 5500
+      database: board
       username: postgres
       password: root
-      url: jdbc:postgresql://localhost:5500/board?currentSchema=message_store
       schema: message_store
-      jpa:
-        ddlAuto: update
-        showSql: false
+      connectionString: Host=localhost;Port=5500;Database=board;Username=postgres;Password=root;Search Path=message_store
+      showSql: false
       containerName: postgres_ezscrum_prod
     ai:
-      type: PostgreSQL
       host: localhost
       port: 6600
+      database: board
       username: postgres
       password: root
-      url: jdbc:postgresql://localhost:6600/board?currentSchema=message_store
       schema: message_store
-      jpa:
-        ddlAuto: update
-        showSql: true
+      connectionString: Host=localhost;Port=6600;Database=board;Username=postgres;Password=root;Search Path=message_store
+      showSql: true
       containerName: postgres_ezscrum_ai
-  driver: Npgsql
-  dialect: PostgreSQL
+messaging:
+  integrationStyle: mq-only
+  brokers:
+    rabbitmq: true
+    kafka: true
 features:
   eventSourcing: true
   cqrs: true
@@ -76,17 +83,36 @@ architecture:
     inmemory: ["inmemory", "test-inmemory"]
     outbox: ["outbox", "test-outbox"]
     eventsourcing: ["eventsourcing", "test-eventsourcing"]
+  boundedContexts:
+    Products:
+      path: src/Product
+      domainNamespace: SaleProducts.Domains
+      applicationNamespace: SaleProducts.Applications
+      contractNamespace: Lab.BoundedContextContracts.Products
+      primaryAggregate: Product
+    Orders:
+      path: src/Order
+      domainNamespace: SaleOrders.Domains
+      applicationNamespace: SaleOrders.Applications
+      contractNamespace: Lab.BoundedContextContracts.Orders
+      primaryAggregate: Order
+    Inventory:
+      path: src/Inventory
+      domainNamespace: InventoryControl.Domains
+      applicationNamespace: InventoryControl.Applications
+      contractNamespace: Lab.BoundedContextContracts.Inventory
+      primaryAggregate: InventoryItem
   aggregates:
     Product:
+      boundedContext: Products
       pattern: outbox
       eventStore: false
-    Sprint:
-      pattern: outbox
-      eventStore: false
-    ProductBacklogItem:
-      pattern: outbox
-      eventStore: false
-    ScrumTeam:
+    Order:
+      boundedContext: Orders
+      pattern: eventsourcing
+      eventStore: true
+    InventoryItem:
+      boundedContext: Inventory
       pattern: outbox
       eventStore: false
   commandDefaults:

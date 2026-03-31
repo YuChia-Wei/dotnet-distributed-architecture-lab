@@ -36,6 +36,16 @@
 - integration test:
   environment/config/messaging/database interaction
 
+## Recommended Output Placement
+
+- aggregate-focused scenarios -> `.dev/specs/tests/<domain>/aggregate/`
+- use case or handler scenarios -> `.dev/specs/tests/<domain>/use-cases/`
+- repository, database, MQ, gateway scenarios -> `.dev/specs/tests/<domain>/integration/`
+- cross bounded context scenarios -> `.dev/specs/tests/cross-domain/`
+- end-to-end user journeys -> `.dev/specs/tests/e2e/`
+
+`app-services/` and `domain-services/` are optional categories. Use them only when the test target is explicitly that service type.
+
 ## Ambiguity Handling
 
 If a rule is ambiguous:
