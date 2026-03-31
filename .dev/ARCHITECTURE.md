@@ -17,6 +17,10 @@
 
 完整專案結構與命名規則：[project-structure.md](./standards/project-structure.md)
 
+詞彙與責任邊界：
+
+- `Use Case`、`Command`、`Query`、`Handler`、`Application Service` 的關係見 [USECASE-COMMAND-HANDLER-RELATIONSHIP.MD](./standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
+
 ### Architecture Config Driven
 本專案的 command-sub-agent 會依照 [`project-config.yaml`](./project-config.yaml) 的 `architecture` 區塊自動產生對應結構：
 - 依 aggregate 設定選擇 Outbox / InMemory / Event Sourcing
