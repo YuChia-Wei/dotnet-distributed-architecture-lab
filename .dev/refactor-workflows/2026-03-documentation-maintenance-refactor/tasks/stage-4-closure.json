@@ -1,0 +1,16 @@
+{
+  "taskId": "stage-4-closure",
+  "stage": 4,
+  "title": "Close Stage 4 requirement and specification baseline",
+  "status": "completed",
+  "summary": "Recorded the completion state of Stage 4 so Stage 5 can begin from a stable requirement/spec baseline.",
+  "scope": [
+    ".dev/refactor-workflows/2026-03-documentation-maintenance-refactor/stage-4-closure.md",
+    ".dev/refactor-workflows/2026-03-documentation-maintenance-refactor/stage-4-spec-coverage-checklist.md"
+  ],
+  "results": [
+    "Stage 4 completion criteria were summarized.",
+    "Intentional remaining gaps were recorded.",
+    "Stage 5 was unblocked from a stable spec baseline."
+  ]
+}

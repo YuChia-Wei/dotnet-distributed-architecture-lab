@@ -1,0 +1,24 @@
+{
+  "useCase": "DeleteProduct",
+  "behavior": "Delete an existing product from the Products bounded context.",
+  "input": [
+    { "name": "id", "type": "Guid" }
+  ],
+  "aggregate": "Product",
+  "aggregateId": "Guid",
+  "method": "Product.Delete",
+  "domainEvent": "SaleProducts.Domains.DomainEvents.ProductDeleted",
+  "repository": "IDomainRepository<Product, Guid>",
+  "output": "void",
+  "domainModelNotes": [
+    "The application layer must load the existing aggregate by id before calling delete.",
+    "If the target product does not exist, the current implementation is expected to surface not-found semantics from the repository or application layer."
+  ],
+  "constructorPreconditions": [
+    "id must refer to an existing product"
+  ],
+  "constructorPostconditions": [
+    "The target product is marked as deleted or removed according to repository behavior.",
+    "A ProductDeleted domain event is recorded."
+  ]
+}

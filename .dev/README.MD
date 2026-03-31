@@ -9,6 +9,7 @@
 | `adr/` | .NET 架構決策紀錄 (ADR) |
 | `guides/` | 一般 human-facing guides（ai collaboration / design / implementation / learning） |
 | `lessons/` | 經驗教訓與錯誤案例 |
+| `operations/` | 分散式系統 runtime / 維運文件（context map、event catalog、MQ topology、runbook） |
 | `requirement/` | 技術需求與規格 |
 | `refactor-workflows/` | 跨 skill / subagent workflow artifacts（plan / review-report / task） |
 | `specs/` | 詳細規格指南 |
@@ -26,6 +27,7 @@
 - Human-facing AI Collaboration Guides: `guides/ai-collaboration-guides/`
 - AI Prompts: `.ai/`
 - Portable Canonical AI Assets: `.ai/assets/`
+- Portable Packaging Guide: `PORTABLE-PACKAGING-GUIDE.MD`
 - Claude Skills: `.claude/skills/`
 - Claude Skills Index: `.claude/skills/README.md`
 - 專案入口: `AGENTS.md`
@@ -40,6 +42,13 @@
 
 - `.dev/requirement/`: functional / non-functional requirement docs
 - `.dev/specs/`: function specs 與行為規格
+- `.dev/operations/`: distributed runtime truth 與維運文件
 - `.dev/refactor-workflows/`: 多 skill / subagent handoff 所需的 `plan`、`review-report`、`task`
 
-當工作涉及多 skill 接力、subagent 分工或 staged refactoring 時，優先從這三類文件建立共同上下文。
+當工作涉及多 skill 接力、subagent 分工或 staged refactoring 時，優先從這四類文件建立共同上下文。
+
+## Portable 使用原則
+
+- `.dev/` 可作為新專案的知識治理骨架直接複製
+- 但 `.dev/requirement/`、`.dev/specs/`、`.dev/operations/` 與具體 `ADR-*.md` 通常屬於專案真相，不應原封不動沿用
+- 移植規則與保留/重寫邊界見 `PORTABLE-PACKAGING-GUIDE.MD`

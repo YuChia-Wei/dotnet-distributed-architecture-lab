@@ -1,0 +1,20 @@
+{
+  "taskId": "stage-4-spec-coverage-and-usecase-test-expansion",
+  "stage": 4,
+  "title": "Expand use-case test spec coverage for active contexts",
+  "status": "completed",
+  "summary": "Added a Stage 4 coverage checklist and filled missing use-case test specs for Product, Order, and InventoryItem production specs.",
+  "scope": [
+    ".dev/refactor-workflows/2026-03-documentation-maintenance-refactor/stage-4-spec-coverage-checklist.md",
+    ".dev/specs/tests/product/use-cases/",
+    ".dev/specs/tests/order/use-cases/",
+    ".dev/specs/tests/inventory-item/use-cases/"
+  ],
+  "results": [
+    "Documented production-spec to test-spec coverage across active use cases.",
+    "Added CreateProduct and UpdateProduct test specs.",
+    "Added ShipOrder, DeliverOrder, and CancelOrder test specs.",
+    "Added IncreaseStock and Restock test specs.",
+    "Recorded remaining Stage 4 gaps that should stay pending until later slices."
+  ]
+}

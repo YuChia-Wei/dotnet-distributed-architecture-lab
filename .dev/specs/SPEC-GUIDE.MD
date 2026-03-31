@@ -2,10 +2,30 @@
 
 本文件定義 `.dev/specs/` 內規格文件的格式與撰寫方式，並整合 `SPEC-ORGANIZATION-GUIDE.md` 的組織規範。
 
+`.dev/specs/` 目前分成兩類：
+
+- `domains/`
+  - production-facing behavior specs
+- `tests/`
+  - BDD/TDD-oriented test specs and scenario design artifacts
+
 ## 1) Directory & Naming Rules
 請先遵守：
-- `SPEC-ORGANIZATION-GUIDE.md`
+- `SPEC-ORGANIZATION-GUIDE.MD`
 - Aggregate 為最小邊界
+
+production spec 應放在：
+
+- `.dev/specs/domains/<domain>/<entity|usecase|adapter>/...`
+
+test spec 應放在：
+
+- `.dev/specs/tests/<domain>/aggregate/<aggregate-name>.test-spec.md`
+- `.dev/specs/tests/<domain>/use-cases/<use-case>.test-spec.md`
+- `.dev/specs/tests/<domain>/integration/<target-name>.test-spec.md`
+- 視需要再加：`.dev/specs/tests/<domain>/app-services/`、`.dev/specs/tests/<domain>/domain-services/`
+- 跨 domain 流程：`.dev/specs/tests/cross-domain/<flow-name>.test-spec.md`
+- 端對端旅程：`.dev/specs/tests/e2e/<journey-name>.test-spec.md`
 
 ### Use Case Spec
 - 檔名格式：`[action]-[aggregate].json`
@@ -114,3 +134,10 @@
 - Use Case / Adapter / Entity 結構是否符合 JSON 格式
 - 是否包含必要欄位
 - 是否能對應到實際程式碼命名
+
+## 7) Boundary with Test Specs
+
+- `.dev/specs/domains/` 回答「系統應該做什麼」
+- `.dev/specs/tests/` 回答「我要如何驗證它真的做到」
+- test spec 不應取代 production spec
+- test spec 應優先按測試目標分類，而不是把所有 scenario 平鋪在 `<domain>/`

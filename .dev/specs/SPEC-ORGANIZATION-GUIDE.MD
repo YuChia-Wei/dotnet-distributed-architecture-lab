@@ -4,47 +4,57 @@
 
 ## 📁 目錄結構原則
 
+目前 `.dev/specs/` 建議分成：
+
+- `domains/`
+  - 依 bounded context / aggregate 放 production-facing specs
+- `tests/`
+  - 依 bounded context / 測試目標類型 放 test specs
+
 ### ✅ 正確結構
-```
+```text
 .dev/specs/
-├── product/              # Product Aggregate
-│   ├── entity/          # Product 領域模型規格
-│   │   └── product-spec.md
-│   └── usecase/         # Product 相關 Use Cases
-│       ├── create-product.json
-│       ├── set-product-goal.json
-│       └── add-product-goal-metric.json
-│
-├── pbi/                  # ProductBacklogItem Aggregate
-│   ├── entity/          # PBI 領域模型規格
-│   │   └── pbi-spec.md
-│   └── usecase/         # PBI 相關 Use Cases
-│       ├── create-pbi.json
-│       ├── estimate-pbi.json
-│       └── move-pbi-to-sprint.json
-│
-├── sprint/               # Sprint Aggregate
-│   ├── entity/
-│   │   └── sprint-spec.md
-│   └── usecase/
-│       ├── create-sprint.json
-│       └── start-sprint.json
-│
-├── team/                 # Team Aggregate
-│   ├── entity/
-│   └── usecase/
-│
-└── tag/                  # Tag Aggregate
-    ├── entity/
-    └── usecase/
-        └── tag-crud.md
+├── domains/
+│   ├── product/
+│   │   ├── entity/
+│   │   │   └── product-spec.md
+│   │   └── usecase/
+│   │       ├── create-product.json
+│   │       └── update-product.json
+│   ├── order/
+│   │   ├── entity/
+│   │   │   └── order-spec.md
+│   │   └── usecase/
+│   │       ├── place-order.json
+│   │       ├── ship-order.json
+│   │       ├── deliver-order.json
+│   │       └── cancel-order.json
+│   └── inventory-item/
+│       ├── entity/
+│       │   └── inventory-item-spec.md
+│       └── usecase/
+│           ├── decrease-stock.json
+│           ├── increase-stock.json
+│           └── restock.json
+└── tests/
+    ├── order/
+    │   ├── aggregate/
+    │   ├── integration/
+    │   └── use-cases/
+    │       └── place-order.test-spec.md
+    ├── inventory-item/
+    │   └── use-cases/
+    │       └── decrease-stock.test-spec.md
+    ├── cross-domain/
+    └── e2e/
 ```
 
 ### ❌ 錯誤結構
-```
+```text
 .dev/specs/
-└── product/
-    └── usecase/
+└── domains/
+    └── product/
+        └── usecase/
         ├── create-product.json
         ├── create-pbi.json        ❌ PBI 不應在 product 下
         └── create-sprint.json     ❌ Sprint 不應在 product 下
@@ -56,9 +66,9 @@
 問自己：「這個 Use Case 主要操作哪個 Aggregate？」
 
 ### 步驟 2：檢查 Aggregate 名稱
-- `CreateProduct` → Product Aggregate → `product/usecase/`
-- `CreateProductBacklogItem` → PBI Aggregate → `pbi/usecase/`
-- `CreateSprint` → Sprint Aggregate → `sprint/usecase/`
+- `CreateProduct` → Product Aggregate → `domains/product/usecase/`
+- `CreateProductBacklogItem` → PBI Aggregate → `domains/pbi/usecase/`
+- `CreateSprint` → Sprint Aggregate → `domains/sprint/usecase/`
 
 ### 步驟 3：驗證決定
 使用 [AGGREGATE-IDENTIFICATION-CHECKLIST.md](../../.ai/AGGREGATE-IDENTIFICATION-CHECKLIST.md)
@@ -79,32 +89,51 @@
   - `pbi-spec.md`
   - `sprint-spec.md`
 
+### Test Spec 檔案
+- 格式：`[target].test-spec.md`
+- 範例：
+  - `place-order.test-spec.md`
+  - `decrease-stock.test-spec.md`
+  - `order-fulfillment-flow.test-spec.md`
+
+### Test Spec 目錄規則
+- aggregate 驗證：`tests/<domain>/aggregate/<aggregate-name>.test-spec.md`
+- use case 驗證：`tests/<domain>/use-cases/<use-case>.test-spec.md`
+- integration 驗證：`tests/<domain>/integration/<target-name>.test-spec.md`
+- 視需要再加：
+  - `tests/<domain>/app-services/<service-name>.test-spec.md`
+  - `tests/<domain>/domain-services/<service-name>.test-spec.md`
+- 跨 domain 流程：
+  - `tests/cross-domain/<flow-name>.test-spec.md`
+- E2E 旅程：
+  - `tests/e2e/<journey-name>.test-spec.md`
+
 ## ⚠️ 常見錯誤
 
 ### 錯誤 1：根據關聯關係組織
-```
-❌ product/usecase/create-pbi.json
+```text
+❌ domains/product/usecase/create-pbi.json
    理由：雖然 PBI 有 ProductId，但 PBI 是獨立 Aggregate
-   
-✅ pbi/usecase/create-pbi.json
+
+✅ domains/pbi/usecase/create-pbi.json
 ```
 
 ### 錯誤 2：根據名稱前綴組織
-```
-❌ product/usecase/create-product-backlog-item.json
+```text
+❌ domains/product/usecase/create-product-backlog-item.json
    理由：名稱誤導，PBI 不是 Product 的一部分
-   
-✅ pbi/usecase/create-pbi.json
+
+✅ domains/pbi/usecase/create-pbi.json
 ```
 
 ### 錯誤 3：集中式組織
-```
+```text
 ❌ specs/usecases/create-product.json
 ❌ specs/usecases/create-pbi.json
    理由：失去 Aggregate 邊界的可見性
-   
-✅ specs/product/usecase/create-product.json
-✅ specs/pbi/usecase/create-pbi.json
+
+✅ specs/domains/product/usecase/create-product.json
+✅ specs/domains/pbi/usecase/create-pbi.json
 ```
 
 ## 🔄 遷移指南
@@ -113,13 +142,13 @@
 
 1. **創建正確的目錄結構**
    ```bash
-   mkdir -p .dev/specs/[aggregate]/usecase
+   mkdir -p .dev/specs/domains/[aggregate]/usecase
    ```
 
 2. **移動檔案**
    ```bash
-   mv .dev/specs/product/usecase/create-sprint.json \
-      .dev/specs/pbi/usecase/
+   mv .dev/specs/domains/product/usecase/create-sprint.json \
+      .dev/specs/domains/pbi/usecase/
    ```
 
 3. **更新相關引用**
@@ -130,18 +159,16 @@
 4. **驗證**
    ```bash
    # 確認沒有遺漏的引用
-   grep -r "product/usecase/create-pbi" .
+   grep -r "domains/product/usecase/create-pbi" .
    ```
 
 ## 📊 Aggregate 對照表
 
 | Aggregate | Spec 目錄 | 主要 Use Cases |
 |-----------|----------|----------------|
-| Product | `product/` | CreateProduct, SetProductGoal |
-| ProductBacklogItem | `pbi/` | CreatePBI, EstimatePBI, AssignPBI |
-| Sprint | `sprint/` | CreateSprint, StartSprint, CloseSprint |
-| Team | `team/` | CreateTeam, AddMember, RemoveMember |
-| Tag | `tag/` | CreateTag, DeleteTag, AssignTag |
+| Product | `domains/product/` | CreateProduct, UpdateProduct |
+| Order | `domains/order/` | PlaceOrder, ShipOrder, DeliverOrder, CancelOrder |
+| InventoryItem | `domains/inventory-item/` | DecreaseStock, IncreaseStock, Restock |
 
 ## 🚀 最佳實踐
 
@@ -157,7 +184,16 @@
    - Code Review 時檢查 spec 位置
    - 發現錯誤立即修正
 
+## 🧪 Test Spec 補充規則
+
+- test spec 與 production spec 應使用同一組 domain / aggregate 視角
+- test spec 優先對應既有 production spec，而不是自成孤島
+- 若採 BDD / TDD，請把 scenario 設計放在 `.dev/specs/tests/`
+- test spec 應優先按測試目標分類，例如 `use-cases/`、`integration/`
+- `cross-domain/` 與 `e2e/` 不應隨意掛在單一 domain 底下
+
 ## 📅 更新記錄
 
 - **2025-08-12**: 初始版本，建立 spec 組織原則
 - **2025-08-12**: 將 create-pbi.json 從 product/ 移至 pbi/
+- **2026-03-31**: 新增 typed test spec taxonomy 與 cross-domain / e2e 規則

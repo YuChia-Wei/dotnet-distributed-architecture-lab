@@ -2,6 +2,10 @@
 
 本目錄放置 human-facing guides，依用途拆成子分類，避免將規範、操作指南、AI 協作文件混在同一層。
 
+> Note:
+> 本目錄已將高流量入口文件優先收斂為 .NET 命名。
+> 若仍看到 Java/Spring/JPA 字樣，預設應先視為 historical context、ADR translation context、或 inventory/reference 紀錄，而非現行主動推薦做法。
+
 ## 子目錄
 
 - `ai-collaboration-guides/`
@@ -88,14 +92,14 @@
   - 常見問題入口
 - `NEW-PROJECT-TEST-SETUP-GUIDE.md`
   - 新專案測試設定流程
-- `PREVENT-REPOSITORY-BEAN-MISSING.md`
-  - repository/bean 缺失問題排查
+- `PREVENT-SERVICE-REGISTRATION-MISSING.md`
+  - service registration / dependency resolution 問題排查指南
 - `PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md`
   - profile 複雜度處理方案
 - `quick-setup.md`
   - 快速初始化流程
-- `SPRING-DI-TEST-GUIDE.md`
-  - Spring DI 測試設定方式
+- `DOTNET-DI-TEST-GUIDE.md`
+  - .NET DI 測試指南；現行使用 xUnit + `IServiceCollection` / fixture-based test setup
 - `TEMPLATE-SYNC-GUIDE.md`
   - template sync 操作方式
 - `TEMPLATE-USAGE-GUIDE.md`

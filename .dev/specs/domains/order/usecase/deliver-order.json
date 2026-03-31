@@ -1,0 +1,25 @@
+{
+  "useCase": "DeliverOrder",
+  "behavior": "Mark an existing order as delivered and publish an order-delivered integration event.",
+  "input": [
+    { "name": "orderId", "type": "Guid" }
+  ],
+  "aggregate": "Order",
+  "aggregateId": "Guid",
+  "method": "Order.Deliver",
+  "domainEvent": "SaleOrders.Domains.DomainEvents.OrderDeliveredDomainEvent",
+  "repository": "IOrderDomainRepository",
+  "output": "void",
+  "domainModelNotes": [
+    "The application layer loads the target order by id.",
+    "If the order does not exist, the current implementation throws KeyNotFoundException."
+  ],
+  "domainEvents": [
+    "SaleOrders.Domains.DomainEvents.OrderDeliveredDomainEvent",
+    "Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderDelivered"
+  ],
+  "constructorPostconditions": [
+    "The order status becomes Delivered.",
+    "An OrderDelivered integration event is published after persistence."
+  ]
+}

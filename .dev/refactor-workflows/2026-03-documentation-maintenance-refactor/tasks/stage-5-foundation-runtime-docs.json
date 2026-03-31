@@ -1,0 +1,22 @@
+{
+  "taskId": "stage-5-foundation-runtime-docs",
+  "stage": 5,
+  "title": "Create foundational runtime operations documents",
+  "status": "completed",
+  "summary": "Added the first code-backed Stage 5 runtime documents for context mapping, event cataloging, MQ topology, and inventory reservation incident handling.",
+  "scope": [
+    ".dev/operations/context-map.md",
+    ".dev/operations/event-catalog.md",
+    ".dev/operations/mq-topology.md",
+    ".dev/operations/runbooks/inventory-reservation-failure.md",
+    ".dev/operations/README.MD",
+    ".dev/refactor-workflows/2026-03-documentation-maintenance-refactor/stage-5-document-standards.md"
+  ],
+  "results": [
+    "Documented current bounded-context relationships.",
+    "Cataloged active integration events and request/reply contracts.",
+    "Mapped the known Kafka and RabbitMQ logical channels visible in Wolverine configuration.",
+    "Created the first runbook for reservation-path failures.",
+    "Recorded the rule to keep runtime docs under .dev/operations until an explicit .ops migration threshold is met."
+  ]
+}

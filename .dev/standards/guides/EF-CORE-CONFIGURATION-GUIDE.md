@@ -59,7 +59,7 @@ Unable to resolve service for type 'EfPlanProjection'
 
 ```bash
 # TODO: Rename legacy script name to check-ef-projection-config.sh.
-.ai/scripts/check-jpa-projection-config.sh
+.ai/scripts/check-projection-config.sh
 ```
 
 > Note: Script name is legacy; keep it until the rename is completed.

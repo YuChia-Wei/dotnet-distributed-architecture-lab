@@ -1,0 +1,26 @@
+{
+  "useCase": "IncreaseStock",
+  "behavior": "Increase available stock for a product and publish an inventory integration event when successful.",
+  "input": [
+    { "name": "productId", "type": "Guid" },
+    { "name": "quantity", "type": "int" }
+  ],
+  "aggregate": "InventoryItem",
+  "aggregateId": "Guid",
+  "method": "InventoryItem.IncreaseStock",
+  "domainEvent": "InventoryControl.Domains.DomainEvents.StockIncreased",
+  "repository": "IInventoryItemDomainRepository",
+  "output": "IncreaseStockResultDto",
+  "domainModelNotes": [
+    "InventoryItem is looked up by ProductId in the application layer.",
+    "If no inventory item exists, the current implementation returns InventoryItemNotFound."
+  ],
+  "domainEvents": [
+    "InventoryControl.Domains.DomainEvents.StockIncreased",
+    "Lab.BoundedContextContracts.Inventory.IntegrationEvents.ProductStockIncreasedIntegrationEvent"
+  ],
+  "constructorPostconditions": [
+    "Current stock is increased by the requested quantity.",
+    "A ProductStockIncreasedIntegrationEvent is published after persistence."
+  ]
+}

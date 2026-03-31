@@ -1,0 +1,74 @@
+{
+  "task_id": "refactor-task-2026-03-usecase-expansion-and-test-spec-zone",
+  "owner_skill": "ddd-ca-hex-architect",
+  "related_plan_id": "refactor-plan-2026-03-documentation-maintenance-refactor",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Expand Stage 4 with more real use-case specs and establish a dedicated test-spec area for BDD/TDD workflows",
+    "files": [
+      ".dev/specs/product/usecase/update-product.json",
+      ".dev/specs/order/usecase/ship-order.json",
+      ".dev/specs/order/usecase/deliver-order.json",
+      ".dev/specs/order/usecase/cancel-order.json",
+      ".dev/specs/inventory-item/usecase/increase-stock.json",
+      ".dev/specs/inventory-item/usecase/restock.json",
+      ".dev/test-specs/README.MD",
+      ".dev/test-specs/TEST-SPEC-GUIDE.MD"
+    ],
+    "dependency_radius": "Documentation only",
+    "constraints": [
+      "Keep implementation-facing specs under .dev/specs/",
+      "Use .dev/test-specs/ for test intent, scenario design, and red-green-refactor planning rather than duplicating production behavior specs",
+      "Only describe use cases and test-spec structure that are verifiable from the current codebase and workflow goals"
+    ],
+    "non_goals": [
+      "Do not generate concrete test code in this task",
+      "Do not fully populate every bounded context with test scenarios yet"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Stage 4 should cover more of the current active use cases and create a stable documentation home for BDD/TDD-oriented test specifications.",
+    "review_findings": [
+      "Stage 4 first batch covered only the minimum set of active contexts.",
+      "BDD/TDD workflows need a place to store scenario-level test intent without overloading production specs."
+    ],
+    "user_constraints": [
+      "Continue Stage 4 completion.",
+      "Evaluate whether a dedicated test spec area should exist for BDD/TDD development."
+    ]
+  },
+  "execution": {
+    "operation_type": "document-completion",
+    "steps": [
+      "Add more implementation-facing use-case specs for currently implemented commands.",
+      "Create a dedicated .dev/test-specs area with rules for BDD/TDD-oriented test specifications.",
+      "Clarify the boundary between production specs and test specs."
+    ],
+    "validation": [
+      "Additional active commands now have matching use-case specs.",
+      "The repository now contains a dedicated test-spec area for BDD/TDD workflows.",
+      "The test-spec guide clearly separates scenario-level test intent from implementation-facing production specs."
+    ],
+    "deferred_items": [
+      "Concrete scenario files per use case in .dev/test-specs/.",
+      "Linking each production spec to a corresponding test spec.",
+      "Stage 5 runtime documents."
+    ]
+  },
+  "results": {
+    "summary": "Expanded Stage 4 with additional use-case specs and created a dedicated .dev/test-specs area for BDD/TDD-oriented test specifications.",
+    "files_changed": [
+      ".dev/specs/product/usecase/update-product.json",
+      ".dev/specs/order/usecase/ship-order.json",
+      ".dev/specs/order/usecase/deliver-order.json",
+      ".dev/specs/order/usecase/cancel-order.json",
+      ".dev/specs/inventory-item/usecase/increase-stock.json",
+      ".dev/specs/inventory-item/usecase/restock.json",
+      ".dev/test-specs/README.MD",
+      ".dev/test-specs/TEST-SPEC-GUIDE.MD"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}

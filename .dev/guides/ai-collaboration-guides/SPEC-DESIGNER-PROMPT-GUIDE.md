@@ -4,6 +4,11 @@
 
 目前它不是正式 skill，而是 human-facing prompt guide，目標是讓你能快速把 requirement 轉成符合 `.dev/specs/` 規範的 markdown / json spec。
 
+目前 `.dev/specs/` 已分成：
+
+- `.dev/specs/domains/`
+- `.dev/specs/tests/`
+
 ## 適合用在什麼情況
 
 - 已有 requirement，需要展開成 use case / adapter / entity spec
@@ -16,10 +21,17 @@
 - aggregate 邊界還沒確認
 - 你其實要的是測試 scenario，而不是 implementation spec
 
+若你要的是測試 scenario、Given-When-Then 或 BDD/TDD test intent：
+
+- production spec 放 `.dev/specs/domains/`
+- test spec 放 `.dev/specs/tests/`
+- test spec 依測試目標放到 `aggregate/`、`use-cases/`、`integration/`、`cross-domain/` 或 `e2e/`
+- scenario 設計優先交給 `bdd-gwt-test-designer`
+
 ## 參考規範
 
-- `.dev/specs/SPEC-GUIDE.md`
-- `.dev/specs/SPEC-ORGANIZATION-GUIDE.md`
+- `.dev/specs/SPEC-GUIDE.MD`
+- `.dev/specs/SPEC-ORGANIZATION-GUIDE.MD`
 
 ## 輸出目標
 

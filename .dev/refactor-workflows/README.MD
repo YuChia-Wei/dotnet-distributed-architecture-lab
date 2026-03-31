@@ -8,6 +8,11 @@
 - 讓人類與 agent 都能在固定位置找到同一批 workflow 資料
 - 避免 workflow artifact 散落在 feature 目錄、skill 目錄或臨時文件中
 
+補充：
+
+- 本目錄不只用於程式碼重構，也可用於文件重構、文件補全、與 source-of-truth 校準 workflow
+- 當工作先補文件、後做程式碼時，可在同一 workflow 下分成 document stages 與 code stages
+
 ## 建議結構
 
 ```text
@@ -31,3 +36,9 @@
 - 小任務或單一 skill 任務，不強制建立本目錄內容
 - 只有進入 optional workflow mode 時，才建立對應 workflow 資料夾
 - 若同一 workflow 有多輪 review，可在 `review-report.md` 中追加輪次，或由使用者明確決定是否拆新 workflow
+
+## 文件工作使用原則
+
+- 若問題核心是 requirement、spec、runbook、context map、event catalog、AI routing 文件不足，應優先建立 document workflow
+- document workflow 的 stage 應以知識邊界切分，而不是以程式碼檔案切分
+- 若後續需要 code refactor，應在 document stage 補齊最小必要真相後再展開

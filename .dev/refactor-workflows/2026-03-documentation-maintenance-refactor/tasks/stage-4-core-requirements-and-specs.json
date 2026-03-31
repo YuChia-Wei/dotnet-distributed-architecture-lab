@@ -1,0 +1,71 @@
+{
+  "task_id": "refactor-task-2026-03-core-requirements-and-specs",
+  "owner_skill": "ddd-ca-hex-architect",
+  "related_plan_id": "refactor-plan-2026-03-documentation-maintenance-refactor",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Minimum viable requirement and spec set for the current Product, Order, and Inventory bounded contexts",
+    "files": [
+      ".dev/requirement/distributed-commerce-bounded-context-overview.md",
+      ".dev/specs/product/entity/product-spec.md",
+      ".dev/specs/product/usecase/create-product.json",
+      ".dev/specs/order/entity/order-spec.md",
+      ".dev/specs/order/usecase/place-order.json",
+      ".dev/specs/inventory-item/entity/inventory-item-spec.md",
+      ".dev/specs/inventory-item/usecase/decrease-stock.json"
+    ],
+    "dependency_radius": "Requirement and spec documents only",
+    "constraints": [
+      "Align docs with the current source tree, not the legacy Scrum/PBI model",
+      "Use only repository-verifiable behavior for this first batch of Stage 4 docs",
+      "Keep the scope to one overview requirement plus three aggregate/use-case slices"
+    ],
+    "non_goals": [
+      "Do not attempt full bounded-context coverage in a single stage",
+      "Do not generate implementation code from these docs in this task"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Stage 4 should replace empty guidance-only areas with real project-specific requirement/spec truth tied to the current Product, Order, and Inventory contexts.",
+    "review_findings": [
+      "The repository had no real requirement documents beyond guides.",
+      "The repository had no real aggregate/use-case specs under .dev/specs/."
+    ],
+    "user_constraints": [
+      "Continue the documentation refactor workflow after project-config cleanup."
+    ]
+  },
+  "execution": {
+    "operation_type": "document-completion",
+    "steps": [
+      "Create one overview requirement document describing the bounded contexts and MQ-first collaboration.",
+      "Create entity specs for Product, Order, and InventoryItem.",
+      "Create use-case specs for CreateProduct, PlaceOrder, and DecreaseStock."
+    ],
+    "validation": [
+      "Requirement document reflects the current source tree and BC contracts.",
+      "Each spec points to a real aggregate and real use case in the codebase.",
+      "Stage 4 now contains real project truth instead of guide-only placeholders."
+    ],
+    "deferred_items": [
+      "Additional use-case specs such as update product, ship order, and restock inventory.",
+      "Controller/consumer specs.",
+      "Detailed runtime operations docs reserved for Stage 5."
+    ]
+  },
+  "results": {
+    "summary": "Added the first real requirement and spec documents aligned with the current Product, Order, and Inventory bounded contexts.",
+    "files_changed": [
+      ".dev/requirement/distributed-commerce-bounded-context-overview.md",
+      ".dev/specs/product/entity/product-spec.md",
+      ".dev/specs/product/usecase/create-product.json",
+      ".dev/specs/order/entity/order-spec.md",
+      ".dev/specs/order/usecase/place-order.json",
+      ".dev/specs/inventory-item/entity/inventory-item-spec.md",
+      ".dev/specs/inventory-item/usecase/decrease-stock.json"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}

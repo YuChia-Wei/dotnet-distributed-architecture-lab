@@ -293,7 +293,7 @@ fi
 
 # Projection Check
 if [ "$CHECK_JPA_PROJECTION" = true ]; then
-    run_check_pending "check-jpa-projection-config.sh" "Projection Configuration"
+    run_check_pending "check-projection-config.sh" "Projection Configuration"
 fi
 
 # Coding Standards Check
@@ -303,7 +303,7 @@ fi
 
 # Test DI Check
 if [ "$CHECK_TEST_DI" = true ]; then
-    run_check_pending "check-test-spring-di.sh" "Test DI Compliance"
+    run_check_pending "check-test-di-compliance.sh" "Test DI Compliance"
 fi
 
 # Domain Events Check

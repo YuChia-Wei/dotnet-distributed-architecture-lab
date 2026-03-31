@@ -1,0 +1,22 @@
+{
+  "taskId": "stage-4-typed-test-spec-taxonomy-and-bdd-skill-alignment",
+  "stage": 4,
+  "title": "Normalize test spec taxonomy and align BDD skill outputs",
+  "status": "completed",
+  "summary": "Reorganized test specs by target type and updated BDD test design guidance so the skill recommends category-aware output paths under .dev/specs/tests.",
+  "scope": [
+    ".dev/specs/tests/",
+    ".dev/specs/SPEC-GUIDE.MD",
+    ".dev/specs/SPEC-ORGANIZATION-GUIDE.MD",
+    ".dev/guides/ai-collaboration-guides/BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md",
+    ".dev/guides/ai-collaboration-guides/BDD-GWT-TEST-DESIGNER-PAIR-GUIDE.md",
+    ".dev/guides/ai-collaboration-guides/SPEC-DESIGNER-PROMPT-GUIDE.md",
+    ".ai/assets/skills/bdd-gwt-test-designer/"
+  ],
+  "results": [
+    "Moved existing use-case test specs under typed use-cases directories.",
+    "Defined aggregate/use-cases/integration plus optional app-services/domain-services categories.",
+    "Reserved cross-domain and e2e roots for multi-BC and journey-level specs.",
+    "Extended bdd-gwt-test-designer canonical references to recommend output paths."
+  ]
+}

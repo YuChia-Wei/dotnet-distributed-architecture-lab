@@ -1,0 +1,17 @@
+{
+  "id": "stage-6-portable-packaging-notes",
+  "title": "Add per-directory portability notes and transfer checklist",
+  "status": "completed",
+  "results": [
+    "Added a portable transfer checklist for moving the collaboration framework to another repository.",
+    "Added portability notes for ADR, requirement, specs, operations, and refactor workflow directories."
+  ],
+  "changedFiles": [
+    ".dev/PORTABLE-TRANSFER-CHECKLIST.MD",
+    ".dev/adr/PORTABILITY-NOTES.MD",
+    ".dev/requirement/PORTABILITY-NOTES.MD",
+    ".dev/specs/PORTABILITY-NOTES.MD",
+    ".dev/operations/PORTABILITY-NOTES.MD",
+    ".dev/refactor-workflows/PORTABILITY-NOTES.MD"
+  ]
+}

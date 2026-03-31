@@ -9,6 +9,7 @@ Use `bdd-gwt-test-designer` when the main task is to design or review test scena
 - identify positive, negative, and edge scenarios
 - plan Then assertions and setup needs
 - suggest the right test level
+- suggest the right `.dev/specs/tests/` storage category and output path
 
 ## Out of Scope
 

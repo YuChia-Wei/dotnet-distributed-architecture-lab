@@ -1,0 +1,26 @@
+{
+  "useCase": "Restock",
+  "behavior": "Return stock to inventory and publish an inventory integration event when successful.",
+  "input": [
+    { "name": "productId", "type": "Guid" },
+    { "name": "quantity", "type": "int" }
+  ],
+  "aggregate": "InventoryItem",
+  "aggregateId": "Guid",
+  "method": "InventoryItem.Restock",
+  "domainEvent": "InventoryControl.Domains.DomainEvents.StockReturned",
+  "repository": "IInventoryItemDomainRepository",
+  "output": "RestockResultDto",
+  "domainModelNotes": [
+    "InventoryItem is looked up by ProductId in the application layer.",
+    "The current application handler name contains a typo but the business behavior is restock/return stock."
+  ],
+  "domainEvents": [
+    "InventoryControl.Domains.DomainEvents.StockReturned",
+    "Lab.BoundedContextContracts.Inventory.IntegrationEvents.ProductStockReturnedIntegrationEvent"
+  ],
+  "constructorPostconditions": [
+    "Current stock is increased by the returned quantity.",
+    "A ProductStockReturnedIntegrationEvent is published after persistence."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "useCase": "DecreaseStock",
+  "behavior": "Decrease available stock for a product and publish an inventory integration event when successful.",
+  "input": [
+    { "name": "productId", "type": "Guid" },
+    { "name": "quantity", "type": "int" }
+  ],
+  "aggregate": "InventoryItem",
+  "aggregateId": "Guid",
+  "method": "InventoryItem.DecreaseStock",
+  "domainEvent": "InventoryControl.Domains.DomainEvents.StockDecreased",
+  "repository": "IInventoryItemDomainRepository",
+  "output": "DecreaseStockResultDto",
+  "domainModelNotes": [
+    "InventoryItem is looked up by ProductId in the application layer.",
+    "Insufficient stock is treated as an expected business result, not a transport failure."
+  ],
+  "domainEvents": [
+    "InventoryControl.Domains.DomainEvents.StockDecreased",
+    "Lab.BoundedContextContracts.Inventory.IntegrationEvents.ProductStockDecreasedIntegrationEvent"
+  ],
+  "constructorPostconditions": [
+    "Current stock is reduced when enough stock is available.",
+    "A ProductStockDecreasedIntegrationEvent is published after persistence."
+  ]
+}

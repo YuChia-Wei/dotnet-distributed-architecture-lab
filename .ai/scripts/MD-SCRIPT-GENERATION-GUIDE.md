@@ -15,7 +15,7 @@
 ## 🏗️ 系統架構
 
 ```
-.dev/standards/java-ca-ezddd-spring/
+.dev/standards/
 └── coding-standards/              # Markdown 規範文件（唯一來源）
     ├── repository-standards.md
     ├── mapper-standards.md
@@ -37,16 +37,16 @@
 
 #### 1. 錯誤模式（應該避免的）
 ```markdown
-// ❌ 錯誤：不要創建自定義的 Repository interface
-public interface ProductRepository extends Repository<Product, ProductId> {
+// ❌ 錯誤：不要建立自定義 Repository 介面
+public interface IProductRepository : IRepository<Product, Guid> {
     // 這會被檢查為違規
 }
 ```
 
 #### 2. 正確模式（應該遵循的）
 ```markdown
-// ✅ 正確：直接使用 generic Repository
-private final Repository<Product, ProductId> repository;
+// ✅ 正確：直接使用 generic repository abstraction
+private readonly IRepository<Product, Guid> _repository;
 ```
 
 #### 3. 關鍵詞觸發
@@ -60,18 +60,19 @@ private final Repository<Product, ProductId> repository;
 
 ### 1. Repository Interface 設計
 
-**規則**：禁止創建自定義 Repository 介面
+**規則**：禁止建立自定義 Repository 介面
 
-```java
-// ❌ 錯誤：不要創建自定義的 Repository interface
-public interface ProductRepository extends Repository<Product, ProductId> {
-    List<Product> findByState(State state);  // 違規
+```csharp
+// ❌ 錯誤：不要建立自定義 Repository 介面
+public interface IProductRepository : IRepository<Product, Guid>
+{
+    Task<IReadOnlyList<Product>> FindByStateAsync(ProductState state);  // 違規
 }
 
-// ✅ 正確：直接使用 generic Repository
-@Service
-public class CreateProductService {
-    private final Repository<Product, ProductId> repository;
+// ✅ 正確：直接使用 generic repository abstraction
+public sealed class CreateProductHandler
+{
+    private readonly IRepository<Product, Guid> _repository;
 }
 ```
 
@@ -140,8 +141,8 @@ if '✅' in marker:
 ### 3. 生成 Shell 檢查
 ```bash
 # 檢查違規模式
-VIOLATIONS=$(find "$SRC_DIR" -name "*.java" \
-    -exec grep -l "interface.*Repository.*extends" {} \;)
+VIOLATIONS=$(find "$SRC_DIR" -name "*.cs" \
+    -exec grep -l "interface.*Repository.*:" {} \;)
 
 if [ -n "$VIOLATIONS" ]; then
     echo "✗ Found violations"
@@ -162,32 +163,33 @@ fi
 
 ### 方法 1：增加機器可讀註解
 ```markdown
-<!-- CHECK: forbidden-pattern: interface.*Repository.*extends -->
-// ❌ 錯誤：不要創建自定義的 Repository interface
+<!-- CHECK: forbidden-pattern: interface.*Repository.*: -->
+// ❌ 錯誤：不要建立自定義 Repository 介面
 ```
 
 ### 方法 2：結構化規則區塊
 ```markdown
 ### 規則：禁止自定義 Repository 介面
 - **類型**: forbidden
-- **模式**: `interface.*Repository.*extends.*Repository`
-- **檔案**: `*.java`
+- **模式**: `interface.*Repository.*:.*IRepository`
+- **檔案**: `*.cs`
 - **嚴重性**: ERROR
 ```
 
 ### 方法 3：明確的範例標記
 ```markdown
 #### ❌ 違規範例
-```java
+```csharp
 // 這個程式碼應該被檢查為違規
-interface ProductRepository extends Repository<Product, ProductId> {
+public interface IProductRepository : IRepository<Product, Guid>
+{
 }
 ```
 
 #### ✅ 正確範例
-```java
+```csharp
 // 這個程式碼是正確的做法
-private final Repository<Product, ProductId> repository;
+private readonly IRepository<Product, Guid> _repository;
 ```
 ```
 
@@ -195,7 +197,7 @@ private final Repository<Product, ProductId> repository;
 
 1. **保持 Markdown 格式一致**
    - 統一使用 `// ❌ 錯誤` 和 `// ✅ 正確`
-   - 程式碼區塊使用 ` ```java ` , ` ```csharp ` , ` ```typescript ` , ` ```sql ` 等包含該語言的標記
+  - 程式碼區塊使用 ` ```csharp ` , ` ```bash ` , ` ```typescript ` , ` ```sql ` 等包含該語言的標記
 
 2. **清晰的規則描述**
    - 每個規則有明確的標題
