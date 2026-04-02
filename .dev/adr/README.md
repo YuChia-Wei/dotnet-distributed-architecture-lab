@@ -29,6 +29,7 @@ This folder is the authoritative ADR set for this documentation system and its a
 - Prefer concise, current-state ADRs over translation notes.
 - When an ADR's reusable value has been extracted into `.dev/standards/` or `.dev/standards/rationale/`, the ADR may be retired and removed.
 - When a `Historical / Project-Specific` ADR no longer carries reusable rationale and is only old feature history, it should be retired and removed instead of staying in the portable ADR set.
+- When a `Historical / Superseded` ADR only reflects retired tooling, wrapper, or workflow history and its active guidance already lives elsewhere, it should also be retired and removed.
 
 ## How to Add a New ADR
 

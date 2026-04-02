@@ -1,6 +1,6 @@
 # Portable AI Asset Inventory
 
-> Historical snapshot: 本文件記錄的是重構初期的資產盤點，部分內容已被後續的 canonical skill / sub-agent-role 模型取代。使用目前狀態時，應以 `refactor-plan.md`、`prompt-retention-checklist.md`、ADR-050 與最新 task / handoff 記錄為準。
+> Historical snapshot: 本文件記錄的是重構初期的資產盤點，部分內容已被後續的 canonical skill / sub-agent-role 模型取代。使用目前狀態時，應以 `refactor-plan.md`、`prompt-retention-checklist.md`、`SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md` 與最新 task / handoff 記錄為準。
 
 ## Purpose
 

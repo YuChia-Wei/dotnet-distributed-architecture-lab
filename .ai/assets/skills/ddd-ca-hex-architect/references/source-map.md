@@ -77,7 +77,7 @@ Use for:
 
 Read the ADR itself when the task touches one of these recurring areas:
 
-- Sub-agent and prompt structure: `ADR-004`, `ADR-009`, `ADR-045`, `ADR-050`
+- Sub-agent and prompt structure: `.ai/SUB-AGENT-SYSTEM.MD`, `SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md`, `ADR-009`, `ADR-045`
 - DI and configuration: `ADR-010`, `ADR-040`, `ADR-044`
 - Outbox and transaction flow: `ADR-019`, `ADR-023`, `ADR-035`
 - Query-side layering: `ADR-046`

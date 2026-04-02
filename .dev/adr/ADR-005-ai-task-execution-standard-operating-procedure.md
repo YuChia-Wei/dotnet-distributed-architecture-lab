@@ -86,7 +86,7 @@ AI 助手重複發生遺漏 task 檔案要求的錯誤，特別是：
 - **Reason for rejection**: 技術限制無法實現
 
 ## Related Decisions
-- [ADR-004](./ADR-004-sub-agent-architecture-decision.md) - Sub-agent 架構決策
+- [`.ai/SUB-AGENT-SYSTEM.MD`](C:/Github/YuChia/dotnet-mq-arch-lab/.ai/SUB-AGENT-SYSTEM.MD) - Canonical sub-agent system guidance
 - [AI-TASK-EXECUTION-CHECKLIST.md](../../.ai/AI-TASK-EXECUTION-CHECKLIST.md)
 - [SUB-AGENT-SYSTEM.md](../../.ai/SUB-AGENT-SYSTEM.md)
 
