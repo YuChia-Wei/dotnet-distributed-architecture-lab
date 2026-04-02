@@ -11,6 +11,8 @@
 5. 將多份已過時或已被取代的 ADR 內部狀態改為 historical / superseded
 6. 建立 portable `standards/rationale/`，抽出可攜式模式選擇理由
 7. 退役並移除已被標準與 rationale 完整承接的 ADR
+8. 將 `ADR-050` 抽成可攜式 AI taxonomy guide
+9. 將剩餘 active ADR 補成正式落點或降為 project-specific history
 
 ## New Canonical Standards Added
 
@@ -28,16 +30,19 @@
 - `.dev/standards/rationale/profile-based-testing-rationale.MD`
 - `.dev/standards/rationale/skill-sub-agent-boundary-rationale.MD`
 
+## New Portable Guides Added
+
+- `.dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md`
+- `.dev/guides/implementation-guides/PERSISTENCE-CONFIGURATION-GUIDE.md`
+- `.dev/guides/implementation-guides/DOCKER-RESTORE-CACHE-GUIDE.md`
+
 ## Active ADRs Intentionally Kept
 
-以下 ADR 目前仍保留為 `Active ADR`，因為尚未被其他 canonical 文件完整吸收：
+本輪結束後，`INDEX.md` 已無剩餘 `Active ADR`。
+原先仍 active 的 ADR 已分別：
 
-- `ADR-002-orm-config-location`
-- `ADR-005-ai-task-execution-standard-operating-procedure`
-- `ADR-012-task-moved-event-design`
-- `ADR-018-pbi-state-transition-invariant-handling`
-- `ADR-024-test-isolation-and-domain-event-mapper`
-- `ADR-049-dockerfile-explicit-csproj-copy-for-restore-cache`
+- 補成正式 canonical source
+- 或降為 historical / project-specific history
 
 ## Historical / Superseded ADRs Normalized
 
@@ -61,18 +66,28 @@
 - `ADR-046`
 - `ADR-051`
 
+## Additional ADRs Reclassified After Backfill
+
+- `ADR-002` -> `Landed in Standards`
+- `ADR-005` -> `Landed in Standards`
+- `ADR-024` -> `Landed in Standards`
+- `ADR-049` -> `Landed in Standards`
+- `ADR-050` -> `Historical / Superseded`
+- `ADR-012` -> `Historical / Project-Specific`
+- `ADR-018` -> `Historical / Project-Specific`
+
 ## Practical Effect
 
-- 使用者現在可以直接從 `INDEX.md` 看出哪些 ADR 還是 active source of truth
+- 使用者現在可以直接從 `INDEX.md` 看出哪些 ADR 只是歷史、哪些已被正式文件承接
 - 已落地的規則不需要再把 ADR 當成主要入口
 - historical ADR 不再與 active guidance 混淆
 - 可攜式決策理由已不再綁死在 project-specific ADR 中
+- AI taxonomy、persistence configuration、docker restore cache 等知識已可跟著 portable knowledge base 一起帶走
 
 ## Suggested Next Slice
 
 若要再進一步收斂 `.dev/adr/`，建議下一條 workflow 處理：
 
-1. `ADR-002` 是否應落地到正式 ORM / persistence standard
-2. `ADR-024` 是否應落地到 testing standard 或 framework integration guide
-3. `ADR-049` 是否應落地到 deployment / docker guide
-4. `ADR-012`、`ADR-018` 是否應移出 ADR，改為 domain-specific spec / historical note
+1. 是否要進一步刪除 `Historical / Project-Specific` 的 Scrum / PBI ADR
+2. 是否要把 `Historical / Superseded` 的舊 AI / workflow ADR 再精簡一輪
+3. 是否要替 `ADR-003`、`ADR-019`、`ADR-020` 這些 landed ADR 補更多 portable rationale
