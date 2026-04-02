@@ -9,6 +9,8 @@
 3. 為 ADR index 建立狀態模型與 canonical source 欄位
 4. 將 `ADR-031`、`ADR-041` 對應規則補成正式標準文件
 5. 將多份已過時或已被取代的 ADR 內部狀態改為 historical / superseded
+6. 建立 portable `standards/rationale/`，抽出可攜式模式選擇理由
+7. 退役並移除已被標準與 rationale 完整承接的 ADR
 
 ## New Canonical Standards Added
 
@@ -17,6 +19,14 @@
 ## Canonical Standards Expanded
 
 - `.dev/standards/coding-standards/mapper-standards.md`
+
+## Portable Rationale Added
+
+- `.dev/standards/rationale/rest-api-resource-path-rationale.MD`
+- `.dev/standards/rationale/generic-repository-only-rationale.MD`
+- `.dev/standards/rationale/query-side-layering-rationale.MD`
+- `.dev/standards/rationale/profile-based-testing-rationale.MD`
+- `.dev/standards/rationale/skill-sub-agent-boundary-rationale.MD`
 
 ## Active ADRs Intentionally Kept
 
@@ -42,11 +52,21 @@
 - `ADR-036`
 - `ADR-042`
 
+## ADRs Retired After Rationale Extraction
+
+以下 ADR 已被刪除，因為其規則與可攜式決策理由都已由 standards / rationale 承接：
+
+- `ADR-006`
+- `ADR-029`
+- `ADR-046`
+- `ADR-051`
+
 ## Practical Effect
 
 - 使用者現在可以直接從 `INDEX.md` 看出哪些 ADR 還是 active source of truth
 - 已落地的規則不需要再把 ADR 當成主要入口
 - historical ADR 不再與 active guidance 混淆
+- 可攜式決策理由已不再綁死在 project-specific ADR 中
 
 ## Suggested Next Slice
 
