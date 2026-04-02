@@ -145,6 +145,12 @@ public static class ProductMapper
 }
 ```
 
+補充要求：
+
+- 優先沿用單一 `JsonSerializerOptions`
+- 複雜物件序列化失敗時應優雅降級，不應讓 mapper 中斷整個流程
+- 若 data 內含 domain events，`ToDomain()` 應優先走 event-based rebuild
+
 ---
 
 ### 3. IsDeleted 欄位必須映射
@@ -190,6 +196,47 @@ public static ProductData ToData(Product aggregate)
         Name = aggregate.Name
         // 缺少 IsDeleted！
     };
+}
+```
+
+---
+
+### 4. Domain Events 與 Metadata 必須映射
+
+若 mapper 參與 write model / outbox round-trip，必須處理：
+
+- domain events
+- event metadata
+- stream identity（若該 aggregate 採 event/outbox 模式）
+
+```csharp
+public static ProductData ToData(Product aggregate)
+{
+    return new ProductData
+    {
+        Id = aggregate.Id.Value,
+        DomainEventDatas = aggregate.DomainEvents
+            .Select(DomainEventMapper.ToData)
+            .ToList(),
+        StreamName = aggregate.StreamName
+    };
+}
+```
+
+```csharp
+public static Product ToDomain(ProductData data)
+{
+    if (data.DomainEventDatas is { Count: > 0 })
+    {
+        var events = data.DomainEventDatas
+            .Select(DomainEventMapper.ToDomain)
+            .Cast<IDomainEvent>()
+            .ToList();
+
+        return new Product(events);
+    }
+
+    // fallback rebuild by current state
 }
 ```
 
@@ -269,6 +316,14 @@ public static Product ToDomain(ProductData data)
 
 ---
 
+### JSON 失敗處理原則
+
+- 可以記錄 warning
+- 不應因單一複雜欄位序列化/反序列化失敗就讓整個 mapping 流程失敗
+- 但不得默默遺漏關鍵 business identity
+
+---
+
 ## ⚠️ 常見錯誤
 
 ### Aggregate 新增狀態但 Data/Mapper 未同步更新
@@ -335,6 +390,7 @@ if (!string.IsNullOrEmpty(data.CommittedSprintsJson))
 - [ ] 序列化複雜物件為 JSON
 - [ ] 包含 `IsDeleted` 欄位
 - [ ] 處理序列化錯誤
+- [ ] 如屬 write-model mapper，包含 domain events / metadata / stream identity
 
 ### ToDomain 方法
 - [ ] 優先從 events 重建（Event Sourcing）
@@ -342,6 +398,7 @@ if (!string.IsNullOrEmpty(data.CommittedSprintsJson))
 - [ ] 反序列化所有複雜物件
 - [ ] 恢復 `IsDeleted` 狀態
 - [ ] 呼叫 `ClearDomainEvents()`
+- [ ] 反序列化失敗時採優雅降級，不讓整體流程中斷
 
 ### ToDto 方法
 - [ ] 有 Domain → DTO 方法
@@ -366,3 +423,4 @@ if (!string.IsNullOrEmpty(data.CommittedSprintsJson))
 - [aggregate-standards.md](aggregate-standards.md)
 - [repository-standards.md](repository-standards.md)
 - [projection-standards.md](projection-standards.md)
+- [../../adr/ADR-041-mapper-serialization-requirements.md](../../adr/ADR-041-mapper-serialization-requirements.md)

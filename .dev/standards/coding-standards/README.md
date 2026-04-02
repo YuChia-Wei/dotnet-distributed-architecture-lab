@@ -26,6 +26,11 @@
   - Result Pattern 錯誤處理
   - 📋 包含 Command/Query 完整模板
 
+- **[reactor-standards.md](./reactor-standards.md)** - Reactor / 事件處理規範
+  - `IReactor<DomainEventData>` 介面規則
+  - event-to-action flow 邊界
+  - replay / duplicate delivery 注意事項
+
 ### 資料存取規範
 - **[projection-standards.md](./projection-standards.md)** - Projection/Query Service 模式規範
   - Read Model 設計原則

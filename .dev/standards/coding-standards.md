@@ -46,6 +46,11 @@
 - Archive Pattern 與軟刪除
 - 歷史資料追蹤
 
+### 9. [Reactor Standards](./coding-standards/reactor-standards.md)
+- Reactor 介面型別與事件處理邊界
+- `DomainEventData` 規則
+- replay / duplicate delivery 注意事項
+
 ## 核心設計原則
 
 ### 1. Domain-Driven Design (DDD)
