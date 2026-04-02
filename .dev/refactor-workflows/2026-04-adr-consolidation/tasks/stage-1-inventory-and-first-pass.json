@@ -1,0 +1,12 @@
+{
+  "id": "stage-1-inventory-and-first-pass",
+  "title": "Inventory ADRs and classify first-pass consolidation status",
+  "status": "completed",
+  "results": [
+    "Created a first-pass ADR consolidation report that classifies ADRs into landed, partially landed, and historical/project-specific groups.",
+    "Identified high-priority follow-up ADRs that still need canonical standard backfill or cleanup decisions."
+  ],
+  "changedFiles": [
+    ".dev/adr/ADR-CONSOLIDATION-FIRST-PASS.MD"
+  ]
+}

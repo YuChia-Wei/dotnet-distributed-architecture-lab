@@ -37,6 +37,26 @@
 - 只有進入 optional workflow mode 時，才建立對應 workflow 資料夾
 - 若同一 workflow 有多輪 review，可在 `review-report.md` 中追加輪次，或由使用者明確決定是否拆新 workflow
 
+## Workflow 觸發條件
+
+符合下列任一條件時，應建立 workflow 目錄：
+
+- 需要兩個以上 stage
+- 需要跨 skill handoff
+- 需要保存 plan / review / task status
+- 需要保存 document refactor 的 decision trail
+- 需要整理 source-of-truth，而不是只做單次修改
+- 需要在多輪作業中追蹤哪些內容已完成、哪些刻意延後
+
+反之，若只是：
+
+- 單輪分析
+- 單次小修
+- 單一 skill 任務
+- 不需要保留長期上下文
+
+可維持 direct mode，不強制建立 workflow artifact
+
 ## 文件工作使用原則
 
 - 若問題核心是 requirement、spec、runbook、context map、event catalog、AI routing 文件不足，應優先建立 document workflow
