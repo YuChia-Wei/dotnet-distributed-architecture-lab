@@ -23,17 +23,13 @@ This index tracks the authoritative ADR set in `.dev/adr/`.
 | ADR-007-task-file-format-standardization | Task file format | Historical / Superseded | `.dev/refactor-workflows/README.MD` |
 | ADR-009-command-query-subagent-separation | Command/query sub-agent separation | Landed in Standards | `.ai/SUB-AGENT-SYSTEM.MD` |
 | ADR-010-no-component-annotation-for-services | Explicit service registration | Landed in Standards | `.dev/guides/implementation-guides/DOTNET-DI-TEST-GUIDE.md` |
-| ADR-012-task-moved-event-design | Task moved event design | Historical / Project-Specific | project-specific domain history |
 | ADR-013-task-results-tracking | Task results tracking | Historical / Superseded | `.dev/refactor-workflows/README.MD` |
-| ADR-018-pbi-state-transition-invariant-handling | State transition invariant handling | Historical / Project-Specific | project-specific domain history |
 | ADR-019-outbox-pattern-implementation | Outbox pattern implementation | Landed in Standards | `.dev/standards/coding-standards.md` |
 | ADR-020-archive-pattern-implementation | Archive/query model implementation | Landed in Standards | `.dev/standards/coding-standards/archive-standards.md` |
 | ADR-021-aggregate-field-initialization-pattern | Aggregate field initialization pattern | Landed in Standards | `.dev/standards/coding-standards/aggregate-standards.md` |
 | ADR-023-outbox-mapper-complete-entity-mapping-requirement | Outbox mapper completeness requirement | Landed in Standards | `.dev/guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md` |
 | ADR-024-test-isolation-and-domain-event-mapper | Test isolation and domain event mapper | Landed in Standards | `.dev/standards/coding-standards/test-standards.md` |
 | ADR-025-mutation-testing-ucontract-exclusion | Mutation testing exclusion policy | Landed in Standards | `.dev/standards/coding-standards.md` |
-| ADR-027-sprint-meeting-fields-addition | Sprint meeting field addition | Historical / Project-Specific | project-specific feature history |
-| ADR-028-unassigned-pbi-query-design | Unassigned PBI query design | Historical / Project-Specific | project-specific feature history |
 | ADR-031-reactor-interface-definition | Reactor interface definition | Landed in Standards | `.dev/standards/coding-standards/reactor-standards.md` |
 | ADR-034-task-completion-notification | Task completion notification | Historical / Superseded | workflow/tooling history |
 | ADR-035-transaction-outbox-pattern | Transaction outbox pattern | Landed in Standards | `.dev/standards/coding-standards.md` |

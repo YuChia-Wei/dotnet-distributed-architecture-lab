@@ -13,6 +13,7 @@
 7. 退役並移除已被標準與 rationale 完整承接的 ADR
 8. 將 `ADR-050` 抽成可攜式 AI taxonomy guide
 9. 將剩餘 active ADR 補成正式落點或降為 project-specific history
+10. 退役已無 portable 價值的 Scrum / PBI project-specific ADR
 
 ## New Canonical Standards Added
 
@@ -51,8 +52,6 @@
 - `ADR-004`
 - `ADR-007`
 - `ADR-013`
-- `ADR-027`
-- `ADR-028`
 - `ADR-034`
 - `ADR-036`
 - `ADR-042`
@@ -66,6 +65,15 @@
 - `ADR-046`
 - `ADR-051`
 
+## Historical / Project-Specific ADRs Retired
+
+以下 ADR 已被刪除，因為它們只剩舊 Scrum / PBI feature history，沒有 portable rationale，也不再作為知識庫入口：
+
+- `ADR-012`
+- `ADR-018`
+- `ADR-027`
+- `ADR-028`
+
 ## Additional ADRs Reclassified After Backfill
 
 - `ADR-002` -> `Landed in Standards`
@@ -73,8 +81,6 @@
 - `ADR-024` -> `Landed in Standards`
 - `ADR-049` -> `Landed in Standards`
 - `ADR-050` -> `Historical / Superseded`
-- `ADR-012` -> `Historical / Project-Specific`
-- `ADR-018` -> `Historical / Project-Specific`
 
 ## Practical Effect
 
@@ -82,12 +88,12 @@
 - 已落地的規則不需要再把 ADR 當成主要入口
 - historical ADR 不再與 active guidance 混淆
 - 可攜式決策理由已不再綁死在 project-specific ADR 中
+- 舊 Scrum / PBI feature history 已退出 portable ADR set，不會跟著知識庫複製到新專案
 - AI taxonomy、persistence configuration、docker restore cache 等知識已可跟著 portable knowledge base 一起帶走
 
 ## Suggested Next Slice
 
 若要再進一步收斂 `.dev/adr/`，建議下一條 workflow 處理：
 
-1. 是否要進一步刪除 `Historical / Project-Specific` 的 Scrum / PBI ADR
-2. 是否要把 `Historical / Superseded` 的舊 AI / workflow ADR 再精簡一輪
-3. 是否要替 `ADR-003`、`ADR-019`、`ADR-020` 這些 landed ADR 補更多 portable rationale
+1. 是否要把 `Historical / Superseded` 的舊 AI / workflow ADR 再精簡一輪
+2. 是否要替 `ADR-003`、`ADR-019`、`ADR-020` 這些 landed ADR 補更多 portable rationale
