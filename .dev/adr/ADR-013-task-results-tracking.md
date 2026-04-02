@@ -1,7 +1,16 @@
 # ADR-013: Task Results Tracking Enforcement
 
 ## Status
-Accepted
+Historical / Superseded
+
+## Current Canonical Source
+
+- `.dev/refactor-workflows/README.MD`
+- `.dev/guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md`
+
+## Note
+
+本 ADR 反映的是舊 task JSON 與 TodoWrite 追蹤時代的執行紀律。現行 workflow 已改由 `plan / review-report / tasks/*.json` artifact 追蹤 stage 結果。
 
 ## Context
 AI 助手在執行 task 時經常忘記將執行結果寫回 task JSON 檔案的 results 陣列，導致：

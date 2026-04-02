@@ -4,7 +4,11 @@
 2025-08-16
 
 ## 狀態
-已接受 (Accepted)
+Historical / Project-Specific
+
+## Note
+
+本 ADR 描述單一 Sprint aggregate 欄位擴充，屬於 feature-level decision，不是跨專案的長期 architecture standard。
 
 ## 背景 (Context)
 Sprint aggregate 原本缺少 Scrum 框架中重要的三個會議資訊：

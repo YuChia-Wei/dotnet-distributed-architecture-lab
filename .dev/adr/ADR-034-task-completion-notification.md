@@ -1,7 +1,15 @@
 # ADR-019: Task Completion Notification Mechanism
 
 ## Status
-Accepted
+Historical / Superseded
+
+## Current Canonical Source
+
+- Codex desktop notification / app-level capabilities
+
+## Note
+
+本 ADR 依賴特定本機工具通知機制，已不適合作為 repo-level active standard。
 
 ## Context
 當 AI 助手（Claude）執行耗時較長的任務時，使用者可能不會一直在電腦前等待。需要一個機制在任務完成時通知使用者，讓使用者可以去做其他事情。

@@ -1,7 +1,16 @@
 # ADR-007: Task 檔案格式標準化
 
 ## 狀態
-已採納 (Accepted)
+Historical / Superseded
+
+## Current Canonical Source
+
+- `.dev/refactor-workflows/README.MD`
+- `.dev/guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md`
+
+## Note
+
+本 ADR 描述的是舊 `.dev/tasks/*` task model。現行 active workflow artifact contract 已改為 `.dev/refactor-workflows/<workflow-id>/`。
 
 ## 日期
 2025-08-15

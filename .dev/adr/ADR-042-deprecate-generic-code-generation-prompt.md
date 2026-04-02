@@ -1,7 +1,16 @@
 # ADR-042: 棄用通用 Code Generation Prompt
 
 ## 狀態
-已採納 (Accepted)
+Historical / Superseded
+
+## Current Canonical Source
+
+- `.ai/SUB-AGENT-SYSTEM.MD`
+- `.dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md`
+
+## Note
+
+本 ADR 描述從 generic prompt 過渡到 specialized sub-agent assets 的歷史決策。現行 active source of truth 已不是舊 prompt 資產。
 
 ## 背景
 專案早期使用 `code-generation-prompt.md` 作為通用的程式碼生成 prompt。隨著專案演化，我們根據 ADR-009 的決定，開發了多個專門化的 sub-agent prompts（command、query、aggregate、reactor、controller 等）。

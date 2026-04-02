@@ -1,7 +1,16 @@
 # ADR-004: Sub-agent 架構決策 - Prompt-based vs Claude Code Task
 
 ## 狀態
-**已決定** - 2025-08-15
+Historical / Superseded
+
+## Current Canonical Source
+
+- `.ai/SUB-AGENT-SYSTEM.MD`
+- `.dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md`
+
+## Note
+
+本 ADR 保留 prompt-first 時代的決策脈絡；目前 active sub-agent / skill 邊界已改由上述 canonical 文件承接。
 
 ## 背景
 專案建立了 Sub-agent Workflow 系統來提高程式碼生成品質，需要決定使用哪種實作方式：

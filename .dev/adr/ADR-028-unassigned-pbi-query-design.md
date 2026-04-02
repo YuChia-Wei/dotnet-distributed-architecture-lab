@@ -1,7 +1,11 @@
 # ADR-010: Unassigned PBI Query Design
 
 ## Status
-Accepted
+Historical / Project-Specific
+
+## Note
+
+本 ADR 描述單一查詢設計，屬於 feature-level decision，不是跨專案的長期 architecture standard。
 
 ## Date
 2025-08-20

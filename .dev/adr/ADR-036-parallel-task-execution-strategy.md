@@ -1,7 +1,17 @@
 # ADR-020: 平行任務執行策略
 
 ## 狀態
-已接受
+Historical / Superseded
+
+## Current Canonical Source
+
+- `.ai/SUB-AGENT-SYSTEM.MD`
+- `AGENTS.md`
+- runtime agent delegation rules
+
+## Note
+
+本 ADR 描述舊 sub-agent workflow prompt 時代的平行執行策略；現行平行 delegation 規則由 runtime agent coordination 與 sub-agent system 文件承接。
 
 ## 背景
 目前使用 sub-agent workflow prompts 來執行任務，但這些都是循序執行的。當有多個獨立的功能需要開發時（例如 RenameSprint、ChangeSprintGoal、SetSprintTimebox），循序執行會花費大量時間（3個功能約90分鐘）。
