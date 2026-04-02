@@ -114,10 +114,24 @@ public Product(ProductId id, string name)
 ## 🧩 UseCase 層檢查
 
 ### UseCase/Handler
-- [ ] Handler 足夠薄（只負責協調）
-- [ ] 不包含 Domain 邏輯
+- [ ] Handler 與對應 use case 名稱一致，能清楚表達這次 business operation
+- [ ] Handler 可被視為 use case implementation，或明確委派給有實際價值的 Application Service
+- [ ] 不為了名詞完整性硬多包一層只有單行轉呼叫的 `*UseCaseService`
+- [ ] Handler 足夠薄，但仍完整承擔 application orchestration
+- [ ] 不包含應放入 Aggregate 的 Domain 邏輯
 - [ ] 使用 constructor injection
 - [ ] 例外包裝為 UseCaseFailureException（若規範要求）
+
+### Command / Query Boundary
+- [ ] Command / Query 是 request model，不承載業務執行邏輯
+- [ ] Command handler 處理狀態變更；Query handler 不改變 domain state
+- [ ] Query handler 優先使用 query repository / query service，不把讀取流程拉回 aggregate
+- [ ] 若抽出 Application Service，必須有明確 orchestration / reuse 價值
+
+### Repository / Domain Service Usage
+- [ ] Command side 透過 repository 載入與保存 aggregate
+- [ ] Domain service 只承載真正無法歸屬於單一 aggregate 的 domain rule
+- [ ] 沒有把 application orchestration 誤塞進 domain service
 
 ### Input/Output 設計
 - [ ] Input/Output 為獨立 record/class
@@ -134,6 +148,9 @@ public Product(ProductId id, string name)
 ### Controller
 - [ ] Controller 不包含業務邏輯
 - [ ] 不直接操作 Repository
+- [ ] 不直接操作 Aggregate
+- [ ] 只負責把 protocol input 轉成 command / query，並把 result 轉回 response
+- [ ] 同 BC 內若使用 bus / dispatcher 屬於 dispatch choice，不被誤當成 use case 本身
 - [ ] 使用 ProblemDetails 統一錯誤格式
 
 ### Mapper
@@ -189,5 +206,6 @@ public Product(ProductId id, string name)
 
 ## 🔗 相關資源
 - `coding-standards.md`
+- `USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`
 - `../guides/implementation-guides/COMMON-MISTAKES-GUIDE.md`
 - `../guides/implementation-guides/TEMPLATE-USAGE-GUIDE.md`
