@@ -20,6 +20,8 @@ Use WolverineFx for CQRS/MQ/Event Sourcing, EF Core for ORM, xUnit + BDDfy (Gher
   - coding style 與 implementation-level rules
 - `project-structure.md`
   - 專案目錄與資料夾用途的單一真相
+- `rationale/`
+  - 可攜式模式選擇理由
 - `README.md`
   - standards 入口說明
 

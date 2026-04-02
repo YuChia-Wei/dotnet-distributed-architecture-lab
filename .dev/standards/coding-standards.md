@@ -146,7 +146,7 @@ public interface IDomainRepository<TAggregateRoot, TId>
 
 Query Side 採用 **Query Repository + Query Service** 雙層設計，分離資料存取與業務邏輯。
 
-> 📖 設計決策詳見 [ADR-046](../adr/ADR-046-query-side-layering-strategy.md)
+> 📖 模式理由詳見 [query-side-layering-rationale.MD](./rationale/query-side-layering-rationale.MD)
 
 #### 介面與實作放置位置
 

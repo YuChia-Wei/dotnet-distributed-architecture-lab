@@ -27,6 +27,7 @@ This folder is the authoritative ADR set for this documentation system and its a
 - Do not keep migration-only duplicate ADRs as active records.
 - Do not keep structurally invalid duplicates with the same ADR number.
 - Prefer concise, current-state ADRs over translation notes.
+- When an ADR's reusable value has been extracted into `.dev/standards/` or `.dev/standards/rationale/`, the ADR may be retired and removed.
 
 ## How to Add a New ADR
 
