@@ -46,5 +46,5 @@ This index tracks the authoritative ADR set in `.dev/adr/`.
 | ADR-047-shared-project-classification | Shared project classification | Landed in Standards | `.dev/standards/project-structure.md` |
 | ADR-048-slnx-logical-solution-folder-structure | Solution folder structure | Landed in Standards | `.dev/standards/project-structure.md` |
 | ADR-049-dockerfile-explicit-csproj-copy-for-restore-cache | Docker restore-cache csproj copy rule | Active ADR | ADR itself |
-| ADR-050-skill-and-sub-agent-boundary | Skill and sub-agent boundary | Landed in Standards | `.ai/SUB-AGENT-SYSTEM.MD` |
+| ADR-050-skill-and-sub-agent-boundary | Skill and sub-agent boundary | Historical / Superseded | `.dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md` |
 | ADR-052-script-generation-from-markdown-documentation | Script generation from markdown documentation | Landed in Standards | `.ai/scripts/MD-SCRIPT-GENERATION-GUIDE.md` |

@@ -1,7 +1,17 @@
 # ADR-050: Skill 與 Sub-Agent 邊界定義
 
 ## 狀態
-接受 (Accepted)
+Historical / Superseded
+
+## Current Canonical Source
+
+- `.dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md`
+- `.ai/SUB-AGENT-SYSTEM.MD`
+- `.dev/standards/rationale/skill-sub-agent-boundary-rationale.MD`
+
+## Note
+
+本 ADR 的核心價值已轉成可攜式 AI 協作知識。它保留為歷史決策脈絡，不再作為主要入口。
 
 ## 日期
 2026-03-29
