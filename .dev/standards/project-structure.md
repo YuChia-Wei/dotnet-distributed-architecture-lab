@@ -86,6 +86,35 @@ project-root/
 └── Dtos/                        # Application 層 DTO (Input/Output)
 ```
 
+### Application 詞彙與責任
+
+- `Use Case`
+  - application boundary 與一次 business operation 的名稱，例如 `CreateProduct`
+- `Command` / `Query`
+  - 進入 use case 的 request model
+- `Handler`
+  - command / query 的 application-layer executor
+- `Application Service`
+  - 只有在 orchestration 明顯變複雜或需要重用時才抽出
+
+預設規則：
+
+- handler 可直接作為 use case implementation
+- 不要求每個 use case 一定再多包一層 `*UseCaseService`
+- 若 handler 只是單行轉呼叫同名 service，通常代表多包了一層無效抽象
+
+推薦關係鏈：
+
+```text
+Controller
+  -> Command / Query
+  -> Handler
+  -> Aggregate / Domain Service / Repository / Query Service
+  -> Result DTO
+```
+
+補充規則見 [`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](./USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
+
 ## Infrastructure 層資料夾結構
 
 ```
@@ -110,6 +139,13 @@ project-root/
 - Application 依賴 Domain
 - Infrastructure 依賴 Application/Domain
 - Presentation 依賴 Application（不直接依賴 Infrastructure，透過 DI）
+
+### Adapter 與 Bus 的關係
+
+- Controller 應依賴 application boundary，而不是直接依賴 repository 或 aggregate
+- 同 BC / 同 process 內，可使用 in-process dispatcher、mediator、Wolverine handler invocation 或直接呼叫 application port
+- 跨 BC communication 才強制使用 MQ / message bus
+- 不要把 message bus 視為 use case 本身
 
 ## 跨 BC 通訊規則
 

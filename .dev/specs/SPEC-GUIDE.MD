@@ -9,6 +9,32 @@
 - `tests/`
   - BDD/TDD-oriented test specs and scenario design artifacts
 
+## 0) Terminology Boundary
+
+- `use case`
+  - production behavior 的主名稱，例如 `CreateProduct`
+- `command` / `query`
+  - 該 use case 的 request model
+- `handler`
+  - 程式碼中的 application executor
+
+spec 應優先描述：
+
+- 系統要完成的 use case
+- 對應的 aggregate / domain event / repository / output
+
+而不是先描述：
+
+- `CreateProductCommandHandler`
+- `CreateProductUseCaseService`
+
+換句話說：
+
+- `use case` 是 spec 的主語
+- `command` / `query` 與 `handler` 是實作映射，不必成為 spec 主檔名
+
+完整詞彙規則見 [`../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
+
 ## 1) Directory & Naming Rules
 請先遵守：
 - `SPEC-ORGANIZATION-GUIDE.MD`
@@ -48,6 +74,19 @@ test spec 應放在：
 - `domainEvent`
 - `repository`
 - `output`
+
+### Interpretation Rules
+
+- `useCase`
+  - business operation 名稱，不是 class 名稱
+- `input`
+  - 對應 command / query request model 的資料形狀
+- `method`
+  - aggregate constructor、aggregate method、或其他主要 domain entry point
+- `repository`
+  - command side aggregate persistence 或 query-side 主要資料存取協作者
+- `output`
+  - handler / use case 完成後回傳的 result DTO 或 output model
 
 ### Optional / Recommended Keys
 - `domainModelNotes`
