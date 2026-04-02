@@ -2,7 +2,11 @@
 
 ## 狀態
 
-Accepted (2026-02-22)
+Landed in Standards
+
+## Current Canonical Source
+
+- `.dev/guides/implementation-guides/DOCKER-RESTORE-CACHE-GUIDE.md`
 
 ## 背景
 

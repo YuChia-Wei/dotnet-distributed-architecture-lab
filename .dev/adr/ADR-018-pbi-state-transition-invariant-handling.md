@@ -4,7 +4,11 @@
 2025-08-18
 
 ## Status
-Accepted
+Historical / Project-Specific
+
+## Note
+
+本 ADR 描述舊 PBI / Scrum domain 的特定 invariant handling，屬於 domain-specific history，不是目前 portable knowledge base 的通用 architecture rule。
 
 ## Context
 在 Event Sourcing 架構下，PBI (Product Backlog Item) 的 Task 狀態變更會觸發 PBI 狀態轉換，例如：

@@ -4,7 +4,12 @@
 2025-08-01
 
 ## Status
-Accepted
+Landed in Standards
+
+## Current Canonical Source
+
+- `.dev/guides/implementation-guides/PERSISTENCE-CONFIGURATION-GUIDE.md`
+- `.dev/standards/project-structure.md`
 
 ## Context
 EF Core 設定（DbContext、連線字串、Migration 設定）曾被放在 Web/Api 層附近，造成層級混淆：

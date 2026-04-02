@@ -182,6 +182,16 @@
 - 以 source-of-truth 問題切 stage，例如 terminology normalization、ownership clarification、gap map
 - 避免把「文件補全 + code cleanup + prompt cleanup」混成同一輪
 
+### Task Artifact 執行原則
+
+若工作明確提供 `task-*.json`、workflow task artifact 或 stage task JSON：
+
+- 必須先讀 task
+- 先確認 required steps / postChecks / expected outputs
+- 完成後更新對應 status 與 results
+
+不要因看到關鍵字就直接執行而跳過 artifact 內容。
+
 ### Step 4: review again
 
 再回到：

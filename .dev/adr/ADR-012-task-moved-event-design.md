@@ -1,7 +1,11 @@
 # ADR-012: Task Moved Event Design - Single Event with State Enum
 
 ## Status
-Accepted
+Historical / Project-Specific
+
+## Note
+
+本 ADR 描述 Scrum task board domain 中的單一事件建模選擇，屬於特定產品 / bounded context 的歷史設計，不是目前 portable knowledge base 的跨專案 architecture standard。
 
 ## Context
 在實作 Scrum Board 的 Task 狀態變更功能時，需要設計 Domain Event 來記錄 Task 在看板上的移動。我們面臨兩種設計選擇：

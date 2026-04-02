@@ -1,0 +1,15 @@
+{
+  "id": "stage-9-domain-history-normalization",
+  "title": "Normalize old Scrum domain ADRs as project-specific history",
+  "status": "completed",
+  "results": [
+    "Backfilled test-isolation rules into test standards.",
+    "Reclassified old Scrum/PBI-specific ADRs as project-specific history instead of active ADRs."
+  ],
+  "changedFiles": [
+    ".dev/standards/coding-standards/test-standards.md",
+    ".dev/adr/ADR-012-task-moved-event-design.md",
+    ".dev/adr/ADR-018-pbi-state-transition-invariant-handling.md",
+    ".dev/adr/INDEX.md"
+  ]
+}
