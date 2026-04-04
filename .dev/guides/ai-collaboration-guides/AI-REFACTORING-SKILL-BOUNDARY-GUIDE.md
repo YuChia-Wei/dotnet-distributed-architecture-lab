@@ -143,9 +143,9 @@
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
-- `templates/workflow-plan-template.md`
-- `templates/review-report-template.md`
-- `templates/workflow-task-template.json`
+- `../../workflows/templates/workflow-plan-template.md`
+- `../../workflows/templates/review-report-template.md`
+- `../../workflows/templates/workflow-task-template.json`
 
 ## Sub-agent Collaboration
 

@@ -283,8 +283,8 @@ Workflow artifact 的正式存放根目錄為：
 - `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
 - `../workflows/README.MD`
-- `templates/workflow-plan-template.md`
-- `templates/review-report-template.md`
-- `templates/workflow-task-template.json`
+- `../../workflows/templates/workflow-plan-template.md`
+- `../../workflows/templates/review-report-template.md`
+- `../../workflows/templates/workflow-task-template.json`
 
 

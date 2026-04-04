@@ -38,9 +38,9 @@
 ## Workflow Templates
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
-- `templates/workflow-plan-template.md`
-- `templates/review-report-template.md`
-- `templates/workflow-task-template.json`
+- `../../workflows/templates/workflow-plan-template.md`
+- `../../workflows/templates/review-report-template.md`
+- `../../workflows/templates/workflow-task-template.json`
 
 ## 維護規則
 

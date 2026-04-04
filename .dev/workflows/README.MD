@@ -37,6 +37,12 @@
 - `review-report.md`: 單一 workflow 的正式 review artifact，可承載 architecture、implementation、document、或 workflow review
 - `tasks/<task-id>.json`: 單一 stage 或單一 tactical work item
 
+## Templates
+
+- `templates/workflow-plan-template.md`
+- `templates/review-report-template.md`
+- `templates/workflow-task-template.json`
+
 ## 使用原則
 
 - 小任務或單一 skill 任務，不強制建立本目錄內容
