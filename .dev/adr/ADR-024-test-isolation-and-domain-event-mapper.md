@@ -1,7 +1,12 @@
 # ADR-024: Test Isolation and DomainEventMapper Management (.NET)
 
 ## Status
-Accepted
+Landed in Standards
+
+## Current Canonical Source
+
+- `.dev/standards/coding-standards/test-standards.md`
+- `.dev/guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md`
 
 ## Context
 Outbox 整合測試曾出現間歇性失敗：

@@ -182,6 +182,16 @@
 - 以 source-of-truth 問題切 stage，例如 terminology normalization、ownership clarification、gap map
 - 避免把「文件補全 + code cleanup + prompt cleanup」混成同一輪
 
+### Task Artifact 執行原則
+
+若工作明確提供 `task-*.json`、workflow task artifact 或 stage task JSON：
+
+- 必須先讀 task
+- 先確認 required steps / postChecks / expected outputs
+- 完成後更新對應 status 與 results
+
+不要因看到關鍵字就直接執行而跳過 artifact 內容。
+
 ### Step 4: review again
 
 再回到：
@@ -215,6 +225,19 @@
 - 需要保存 architecture / review / task 狀態
 - 需要保存文件真相與補全決策
 
+明確觸發條件：
+
+- 工作預期會分成兩個以上 stage
+- 工作同時涉及 architect / reviewer / implementer 類型 handoff
+- 需要在多輪作業間保留 decision trail
+- 需要追蹤 `plan`、`review`、`task status` 或 stage results
+- 問題本質是文件系統重整、source-of-truth 校準、ADR 整理、spec 補全、operations 補全
+- 預期會更新多個知識邊界，而不是單一小檔案
+
+若符合上述任一條件中的強訊號，應優先建立：
+
+- `.dev/refactor-workflows/<workflow-id>/`
+
 artifact 位置：
 
 - `.dev/refactor-workflows/<workflow-id>/`
@@ -231,6 +254,14 @@ artifact 種類：
 - 這一輪補的是哪個知識缺口
 - 完成後可以支撐哪一種維護情境
 - 哪些內容刻意延到下一 stage
+
+### Practical Trigger Rule
+
+可用以下判斷快速決定是否進 workflow mode：
+
+- 如果這件事只是一次分析或一次小修，留在 direct mode
+- 如果這件事需要「盤點 -> 分類 -> 補標準 -> 清理遺留」，就應進 workflow mode
+- 如果你已經開始問「這件事要不要分 stage」，通常答案就是要進 workflow mode
 
 ## Subagent 介入原則
 

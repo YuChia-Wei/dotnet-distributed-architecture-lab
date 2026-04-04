@@ -4,7 +4,16 @@
 2025-08-15
 
 ## Status
-Accepted
+Landed in Standards
+
+## Current Canonical Source
+
+- `.dev/guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md`
+- `AGENTS.md`
+
+## Note
+
+本 ADR 的核心已被現行 task artifact execution rules 吸收；其中舊 `TodoWrite` 與 `.dev/tasks/*` 脈絡只保留為歷史背景。
 
 ## Context
 AI 助手重複發生遺漏 task 檔案要求的錯誤，特別是：
@@ -77,7 +86,7 @@ AI 助手重複發生遺漏 task 檔案要求的錯誤，特別是：
 - **Reason for rejection**: 技術限制無法實現
 
 ## Related Decisions
-- [ADR-004](./ADR-004-sub-agent-architecture-decision.md) - Sub-agent 架構決策
+- [`.ai/SUB-AGENT-SYSTEM.MD`](C:/Github/YuChia/dotnet-mq-arch-lab/.ai/SUB-AGENT-SYSTEM.MD) - Canonical sub-agent system guidance
 - [AI-TASK-EXECUTION-CHECKLIST.md](../../.ai/AI-TASK-EXECUTION-CHECKLIST.md)
 - [SUB-AGENT-SYSTEM.md](../../.ai/SUB-AGENT-SYSTEM.md)
 

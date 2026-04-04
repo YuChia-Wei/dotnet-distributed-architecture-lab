@@ -257,6 +257,48 @@ repository.Verify(x => x.SaveAsync(...), Times.Once);
 
 ---
 
+### 7. 事件映射與測試初始化必須隔離
+
+若測試依賴全域事件映射、bootstrap 或 domain event mapper 註冊：
+
+- 必須使用統一 bootstrap 初始化
+- 測試本身應採防禦性初始化
+- 不可讓測試互相覆蓋全域 mapping 狀態
+
+```csharp
+public static class TestBootstrap
+{
+    [ModuleInitializer]
+    public static void Init()
+    {
+        BootstrapConfig.Initialize();
+    }
+}
+```
+
+```csharp
+public class OutboxIntegrationTests
+{
+    public OutboxIntegrationTests()
+    {
+        BootstrapConfig.Initialize();
+    }
+}
+```
+
+若事件名稱採 mapping prefix：
+
+- prefix 必須一致
+- 不可在不同測試中用不同命名策略覆蓋同一 mapper
+
+這條規則主要是為了避免：
+
+- 全域狀態污染
+- 測試順序依賴
+- 並行測試互相干擾
+
+---
+
 ## 🎯 測試分層策略
 
 ### 測試金字塔
@@ -393,6 +435,11 @@ var product = ProductBuilder.AProduct()
 - [ ] 驗證 HTTP Status Code
 - [ ] 驗證 Response Body
 
+### Integration / Mapping 測試
+- [ ] 全域事件映射透過統一 bootstrap 初始化
+- [ ] 測試本身有防禦性初始化
+- [ ] 不依賴前一個測試留下的 mapper 狀態
+
 ---
 
 ## 📂 程式碼範例
@@ -413,3 +460,4 @@ var product = ProductBuilder.AProduct()
 - [aggregate-standards.md](aggregate-standards.md)
 - [usecase-standards.md](usecase-standards.md)
 - [controller-standards.md](controller-standards.md)
+- [../../guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md](../../guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md)

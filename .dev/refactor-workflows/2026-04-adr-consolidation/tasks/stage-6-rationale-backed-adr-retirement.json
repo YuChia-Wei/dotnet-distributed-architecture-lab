@@ -1,0 +1,18 @@
+{
+  "id": "stage-6-rationale-backed-adr-retirement",
+  "title": "Retire ADRs whose rationale has been extracted into portable standards",
+  "status": "completed",
+  "results": [
+    "Retired and removed ADRs whose rules and reusable decision reasons now live in standards and standards/rationale.",
+    "Updated references so active documents point to canonical standards or rationale files instead of removed ADRs."
+  ],
+  "changedFiles": [
+    ".dev/adr/README.md",
+    ".dev/adr/INDEX.md",
+    ".dev/requirement/TECH-STACK-REQUIREMENTS.MD",
+    ".dev/guides/design-guides/PROFILE-BASED-TESTING-GUIDE.md",
+    ".dev/standards/coding-standards.md",
+    ".dev/standards/coding-standards/repository-standards.md",
+    ".dev/standards/README.md"
+  ]
+}

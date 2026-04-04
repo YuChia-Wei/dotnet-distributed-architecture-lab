@@ -9,8 +9,8 @@
 | ORM (Read/Projection) | EF Core | 10.x | [ADR-002](../adr/ADR-002-orm-config-location.md) |
 | Messaging | WolverineFx + RabbitMQ + Kafka | WolverineFx 5.16.2 | [ADR-019](../adr/ADR-019-outbox-pattern-implementation.md) |
 | Database | PostgreSQL | 16 | [ADR-019](../adr/ADR-019-outbox-pattern-implementation.md) |
-| Testing Framework | xUnit | 2.9.3 | [ADR-051](../adr/ADR-051-profile-based-testing-architecture.md) |
-| BDD (Planned) | BDDfy (Gherkin-style naming) | (TBD) | [ADR-051](../adr/ADR-051-profile-based-testing-architecture.md) |
+| Testing Framework | xUnit | 2.9.3 | [PROFILE-BASED-TESTING-GUIDE.md](../guides/design-guides/PROFILE-BASED-TESTING-GUIDE.md) |
+| BDD (Planned) | BDDfy (Gherkin-style naming) | (TBD) | [profile-based-testing-rationale.MD](../standards/rationale/profile-based-testing-rationale.MD) |
 | Mocking | NSubstitute | 5.3.0 | N/A |
 | Mutation Testing | Stryker.NET | (TBD) | [ADR-025](../adr/ADR-025-mutation-testing-ucontract-exclusion.md) |
 | Web API Host | ASP.NET Core | (同 .NET 版本) | N/A |

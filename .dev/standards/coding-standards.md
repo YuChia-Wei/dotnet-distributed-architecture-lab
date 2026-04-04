@@ -46,6 +46,11 @@
 - Archive Pattern 與軟刪除
 - 歷史資料追蹤
 
+### 9. [Reactor Standards](./coding-standards/reactor-standards.md)
+- Reactor 介面型別與事件處理邊界
+- `DomainEventData` 規則
+- replay / duplicate delivery 注意事項
+
 ## 核心設計原則
 
 ### 1. Domain-Driven Design (DDD)
@@ -141,7 +146,7 @@ public interface IDomainRepository<TAggregateRoot, TId>
 
 Query Side 採用 **Query Repository + Query Service** 雙層設計，分離資料存取與業務邏輯。
 
-> 📖 設計決策詳見 [ADR-046](../adr/ADR-046-query-side-layering-strategy.md)
+> 📖 模式理由詳見 [query-side-layering-rationale.MD](./rationale/query-side-layering-rationale.MD)
 
 #### 介面與實作放置位置
 
