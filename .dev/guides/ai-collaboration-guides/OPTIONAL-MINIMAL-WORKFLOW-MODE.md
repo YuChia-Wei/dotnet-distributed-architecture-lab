@@ -42,9 +42,9 @@
 
 只使用三個 artifact：
 
-1. `refactor-plan.md`
+1. `workflow-plan.md`
 2. `review-report.md`
-3. `refactor-task.json`
+3. `tasks/<task-id>.json`
 
 這是最小集合，不額外新增更多流程文件。
 
@@ -54,11 +54,11 @@
 
 預設存放位置：
 
-- `.dev/refactor-workflows/<workflow-id>/`
+- `.dev/workflows/<workflow-id>/`
 
 ## Artifact 角色
 
-### `refactor-plan.md`
+### `workflow-plan.md`
 
 由 `ddd-ca-hex-architect` 建立或更新。
 
@@ -75,12 +75,13 @@
 
 用途：
 
-- 記錄分數
-- 記錄 architecture-level / code-level findings
+- 記錄正式 review 結果
+- 記錄 architecture-level / implementation-level / document-level / workflow-level findings
 - 記錄嚴重度
+- 記錄 review decision
 - 建議下一個 skill
 
-### `refactor-task.json`
+### `tasks/<task-id>.json`
 
 由 `staged-refactor-implementer` 或 `tactical-refactor-implementer` 建立或更新。
 
@@ -94,13 +95,13 @@
 
 ```text
 1. ddd-ca-hex-architect
-   需要時建立 refactor-plan.md
+   需要時建立 workflow-plan.md
 
 2. code-reviewer
    需要時建立 review-report.md
 
 3. staged-refactor-implementer / tactical-refactor-implementer
-   需要時建立 refactor-task.json
+   需要時建立對應的 `tasks/<task-id>.json`
 
 4. code-reviewer
    對本輪結果再次 review
@@ -121,7 +122,7 @@
 
 - 建立最小 artifact
 - 由 skill 之間透過 artifact handoff
-- artifact 預設放在 `.dev/refactor-workflows/<workflow-id>/`
+- artifact 預設放在 `.dev/workflows/<workflow-id>/`
 
 ## 不要做的事
 
@@ -133,7 +134,9 @@
 ## 相關模板
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
-- `../refactor-workflows/README.MD`
-- `templates/refactor-plan-template.md`
-- `templates/review-report-template.md`
-- `templates/refactor-task-template.json`
+- `../workflows/README.MD`
+- `../../workflows/templates/workflow-plan-template.md`
+- `../../workflows/templates/review-report-template.md`
+- `../../workflows/templates/workflow-task-template.json`
+
+

@@ -159,11 +159,11 @@
 
 ### Refactor Workflow Artifacts
 
-- 若任務進入 multi-skill 或 multi-agent handoff，workflow artifact 應放在 `.dev/refactor-workflows/`
+- 若任務進入 multi-skill 或 multi-agent handoff，workflow artifact 應放在 `.dev/workflows/`
 - 標準位置：
-  - `.dev/refactor-workflows/<workflow-id>/refactor-plan.md`
-  - `.dev/refactor-workflows/<workflow-id>/review-report.md`
-  - `.dev/refactor-workflows/<workflow-id>/tasks/<task-id>.json`
+  - `.dev/workflows/<workflow-id>/workflow-plan.md`
+  - `.dev/workflows/<workflow-id>/review-report.md`
+  - `.dev/workflows/<workflow-id>/tasks/<task-id>.json`
 
 ### 讀寫原則
 
@@ -243,7 +243,7 @@ sub-agent 不應自行取代 refactor skills。
 ## ✍ Artifact 更新權限
 
 - `ddd-ca-hex-architect`:
-  - 可建立或更新 `refactor-plan.md`
+  - 可建立或更新 `workflow-plan.md`
 - `code-reviewer`:
   - 可建立或更新 `review-report.md`
 - `staged-refactor-implementer` / `tactical-refactor-implementer`:
@@ -251,7 +251,7 @@ sub-agent 不應自行取代 refactor skills。
 - 一般 sub-agent:
   - 預設只讀
   - 只有在任務明確要求更新 task 狀態或結果時，才可更新既有 `tasks/<task-id>.json`
-  - 不應自行建立新的 `refactor-plan.md` 或 `review-report.md`
+  - 不應自行建立新的 `workflow-plan.md` 或 `review-report.md`
 
 ## 💻 實際執行範例（簡版）
 
@@ -328,7 +328,7 @@ Code Review 有 MUST FIX 時必須先修正再進行後續步驟。
 - `.ai/assets/`
 - `.dev/requirement/`
 - `.dev/specs/`
-- `.dev/refactor-workflows/README.MD`
+- `.dev/workflows/README.MD`
 - `.dev/standards/`
 - `.dev/guides/`
 
@@ -344,6 +344,7 @@ Sub-Agent Asset: .ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-ag
 Task: Review [use-case-name] implementation
 Sub-Agent Asset: .ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml
 ```
+
 
 
 

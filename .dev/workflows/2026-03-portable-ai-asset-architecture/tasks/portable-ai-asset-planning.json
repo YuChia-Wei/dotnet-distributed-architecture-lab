@@ -1,0 +1,66 @@
+{
+  "task_id": "portable-ai-asset-planning",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-portable-ai-asset-architecture",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Portable AI asset architecture planning",
+    "files": [
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/workflow-plan.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/portable-ai-asset-architecture-proposal.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/migration-checklist.md"
+    ],
+    "dependency_radius": ".ai, .claude/skills, .dev/guides/ai-collaboration-guides, future agent wrapper directories",
+    "constraints": [
+      "Do not migrate existing skills yet",
+      "Do not introduce multi-agent wrapper duplication yet",
+      "Keep planning artifacts under .dev/workflows"
+    ],
+    "non_goals": [
+      "No canonical schema implementation yet",
+      "No generated wrappers yet",
+      "No Codex runtime installation workflow yet"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Define a portable AI asset strategy that supports multiple agents without hand-maintaining duplicated skill content",
+    "review_findings": [],
+    "user_constraints": [
+      "Create planning and checklist resources under .dev/workflows",
+      "Plan before moving existing skill or prompt assets"
+    ]
+  },
+  "execution": {
+    "operation_type": "documentation-planning",
+    "steps": [
+      "Created a workflow-specific refactor plan",
+      "Created a proposal for canonical source, human guide, wrapper, and generation layers",
+      "Created a staged migration checklist for future execution",
+      "Recorded the currently expected repo-level wrapper paths for Claude, Codex, Gemini, and GitHub Copilot"
+    ],
+    "validation": [
+      "The plan, proposal, and checklist are colocated in one workflow directory",
+      "The proposal does not yet force any structural migration",
+      "The plan keeps .claude/skills as the current wrapper layer until a canonical schema is defined",
+      "The proposal distinguishes repo portability from local runtime installation"
+    ],
+    "deferred_items": [
+      "Inventory current skills and prompts",
+      "Design canonical schema",
+      "Choose and execute pilot migration"
+    ]
+  },
+  "results": {
+    "summary": "Created the initial planning artifacts for a portable AI asset architecture refactor.",
+    "files_changed": [
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/workflow-plan.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/portable-ai-asset-architecture-proposal.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/migration-checklist.md"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}
+
+

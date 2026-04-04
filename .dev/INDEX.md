@@ -25,7 +25,7 @@
 - `lessons/`
 - `lessons/dotnet/`
 - `legacy/ask/`
-- `refactor-workflows/README.MD`
+- `workflows/README.MD`
 - `guides/README.MD`
 
 ## AI Agent & Skills
@@ -57,3 +57,4 @@
 - `.claude/skills/bdd-gwt-test-designer/`
 - `.claude/skills/staged-refactor-implementer/`
 - `.claude/skills/tactical-refactor-implementer/`
+

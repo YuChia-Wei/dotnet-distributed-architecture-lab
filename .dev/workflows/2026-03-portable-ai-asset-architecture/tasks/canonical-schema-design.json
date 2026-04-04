@@ -1,0 +1,68 @@
+{
+  "task_id": "canonical-schema-design",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-portable-ai-asset-architecture",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Define canonical source schema and create canonical root structure",
+    "files": [
+      ".ai/assets/README.MD",
+      ".ai/assets/CANONICAL-SCHEMA.MD",
+      ".ai/assets/skills/README.MD",
+      ".ai/assets/commands/README.MD",
+      ".ai/assets/shared/README.MD",
+      ".ai/assets/templates/README.MD",
+      ".ai/assets/templates/skill-template.yaml",
+      ".ai/assets/templates/command-template.yaml",
+      ".ai/assets/templates/prompt-package-template.yaml",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/canonical-schema-design.md"
+    ],
+    "dependency_radius": ".ai, .claude/skills, future wrapper targets",
+    "constraints": [
+      "Do not migrate all existing assets yet",
+      "Establish canonical structure before wrapper changes"
+    ],
+    "non_goals": [
+      "No full pilot migration yet",
+      "No generated wrappers yet"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Create a neutral canonical source layout and schema that can feed multiple agent wrappers",
+    "review_findings": [],
+    "user_constraints": [
+      "Proceed stage by stage with commits",
+      "Keep the repo portable"
+    ]
+  },
+  "execution": {
+    "operation_type": "canonical-schema-design",
+    "steps": [
+      "Defined a canonical .ai/assets root",
+      "Created canonical schema documentation",
+      "Created canonical asset templates for skills, commands, and prompt packages",
+      "Documented the schema decision in the workflow"
+    ],
+    "validation": [
+      "Canonical root exists and is distinct from wrapper directories",
+      "Templates cover the taxonomy fields from Stage 1",
+      "No existing wrapper directories were broken by the schema setup"
+    ],
+    "deferred_items": [
+      "Define wrapper mapping for each supported agent",
+      "Migrate pilot assets into canonical structure"
+    ]
+  },
+  "results": {
+    "summary": "Completed Stage 2 canonical schema design and created the initial .ai/assets structure.",
+    "files_changed": [
+      ".ai/assets/",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/canonical-schema-design.md"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  },
+  "historical_note": "This task preserves the original schema-design stage context. Subsequent stages refined the taxonomy by keeping top-level skills separate from delegated sub-agent-role prompts and by removing the active legacy command layer."
+}
+

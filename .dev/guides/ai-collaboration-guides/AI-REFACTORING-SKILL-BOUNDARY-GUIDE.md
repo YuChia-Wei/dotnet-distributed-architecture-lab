@@ -134,18 +134,18 @@
 
 但如果任務會跨 skill 接力，建議啟用「可選的最小 workflow 模式」：
 
-- `refactor-plan.md`
+- `workflow-plan.md`
 - `review-report.md`
-- `refactor-task.json`
+- `tasks/<task-id>.json`
 
 用途不是增加流程，而是讓 skill 間 handoff 更穩定。
 詳細規則與模板見：
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
-- `templates/refactor-plan-template.md`
-- `templates/review-report-template.md`
-- `templates/refactor-task-template.json`
+- `../../workflows/templates/workflow-plan-template.md`
+- `../../workflows/templates/review-report-template.md`
+- `../../workflows/templates/workflow-task-template.json`
 
 ## Sub-agent Collaboration
 
@@ -269,3 +269,5 @@
 - `STAGED-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md`
 - `TACTICAL-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md`
 - `AI-SKILL-GUIDE-STANDARDS.md`
+
+

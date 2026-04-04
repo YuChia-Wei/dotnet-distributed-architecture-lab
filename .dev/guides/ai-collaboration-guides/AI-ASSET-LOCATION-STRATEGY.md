@@ -20,7 +20,7 @@
 |------|---------|------|
 | `.ai/assets/` | Agent | canonical source for portable skills、sub-agent-role-prompts、shared packages |
 | `.dev/guides/ai-collaboration-guides/` | Human | human-facing guides、workflow、prompt 使用說明 |
-| `.dev/refactor-workflows/` | Human + Agent | plan / review-report / task artifact |
+| `.dev/workflows/` | Human + Agent | plan / review-report / task artifact |
 | `.ai/` | Agent | reusable prompts、shared rules、scripts |
 | `.claude/skills/` | Agent | Claude runtime skill wrappers |
 | `.codex/skills/` | Agent | Codex runtime skill wrappers |
@@ -107,3 +107,4 @@
 - 不把完整 references 複製到 Codex runtime wrappers
 - 目前不導入 sync/export tooling
 - 若未來擴大遷移更多 skills，應先決定是手動 thin wrapper 還是 generated wrapper
+

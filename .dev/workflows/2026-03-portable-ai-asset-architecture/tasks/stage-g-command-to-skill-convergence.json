@@ -1,0 +1,117 @@
+{
+  "task_id": "stage-g-command-to-skill-convergence",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-portable-ai-asset-architecture",
+  "related_review_report_id": "",
+  "status": "in_progress",
+  "scope": {
+    "target": "Converge command-style AI prompts into a top-level-skill plus sub-agent-role-prompt model and neutralize canonical skill references",
+    "files": [
+      ".ai/assets/sub-agent-role-prompts/",
+      ".ai/assets/",
+      ".ai/assets/skills/",
+      ".codex/skills/",
+      ".claude/skills/",
+      ".dev/guides/ai-collaboration-guides/",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/"
+    ],
+    "dependency_radius": ".ai canonical assets, repo-local runtime wrappers, human-facing AI collaboration guides, workflow artifacts",
+    "constraints": [
+      "Do not reintroduce .codex/prompts or .codex/commands",
+      "Keep Codex runtime entry skill-first",
+      "Retain explanatory and shared prompt materials that still provide reusable guidance",
+      "Avoid creating a second canonical truth during reference migration",
+      "Use shell-based edits for .codex* paths because apply_patch fails on that path prefix in the current runtime"
+    ],
+    "non_goals": [
+      "Do not add sync/export tooling",
+      "Do not force all retained prompt materials to become skills immediately",
+      "Do not remove shared prompt materials without explicit classification"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Make top-level skills the primary executable AI asset model while modeling delegated worker-role prompts as canonical sub-agent-role-prompts",
+    "review_findings": [],
+    "user_constraints": [
+      "Command-form prompts should be removed from the primary model and reclassified into the correct asset taxonomy",
+      "Explanatory prompts that help AI collaboration should remain unless explicitly judged otherwise",
+      "This work should be tracked as a refactor workflow with checklist artifacts",
+      "Codex repo-local skills work without sync/export tooling",
+      "Sub-agent style use cases should have an explicit canonical definition source plus a dedicated delegated-wrapper strategy when needed"
+    ]
+  },
+  "execution": {
+    "operation_type": "ai-collaboration-asset-refactor-planning",
+    "steps": [
+      "Validate that .codex/commands removal leaves no active references",
+      "Inventory command-spec assets and prompt inventory",
+      "Classify prompts into migrate-to-skill, keep-as-shared, or user-judgment-needed",
+      "Plan canonical skill reference migration from .claude paths to .ai/assets/skills/.../references",
+      "Update strategy and index docs as migration decisions are executed",
+      "Partial phase 1 complete: copied three reference sets into .ai/assets/skills/.../references and updated three canonical skill specs",
+      "Boundary confirmed: apply_patch fails on .codex* paths in this runtime, so .codex wrapper edits must use shell-based replacement",
+      "Phase 1 completed: repointed three Codex skill wrappers to canonical reference paths and validated the remaining active references",
+      "Phase 2 started: created skill-first replacements for command/query/reactor and added matching Codex runtime wrappers",
+      "Marked the legacy command-spec layer as deprecated and linked command/query/reactor specs to their new skill replacements",
+      "Updated active architecture docs to describe use-case sub-agents as skill-first assets with explicit canonical-source and wrapper roles",
+      "Finalized the Claude/Codex wrapper strategy by treating .ai/assets/skills as the canonical source and adding Claude thin wrappers for command/query/reactor",
+      "Re-labeled remaining active legacy command-spec and prompt-package references so they explicitly point to skill-first primary entries",
+      "Design correction applied: command/query/reactor are now recognized as sub-agent role prompts, not top-level skills",
+      "Created canonical sub-agent-role-prompt assets and repointed active docs and compatibility wrappers to the corrected canonical source",
+      "Rolled back the mistaken command/query/reactor top-level skills and removed their Codex/Claude skill wrappers",
+      "Completed the remaining aggregate/frontend/mutation-testing/outbox/profile-config sub-agent conversions into canonical sub-agent-role-prompt assets",
+      "Updated active frontend prompts and human guides to point to canonical sub-agent-role-prompt assets instead of the old prompt files",
+      "Accepted the skill-versus-sub-agent boundary in ADR-050 and converted delegated review/test-generation prompts into canonical sub-agent-role-prompt assets",
+      "Converted controller-test-generation into a canonical sub-agent-role-prompt asset and classified contract-test-generation as retained supporting material",
+      "Converted controller-code-review and reactor-code-review into canonical delegated review sub-agent assets",
+      "Locked the retention strategy for shared and explanatory prompt materials and updated wrapper/index documentation to match the new taxonomy"
+    ],
+    "validation": [
+      "No active repository path depends on .codex/commands",
+      "Each sub-agent-style prompt family has a canonical asset or an explicit retirement decision",
+      "Each retained explanatory prompt has a justified long-term role",
+      "Canonical skill specs no longer point to .claude/skills/.../references after migration"
+    ],
+    "deferred_items": [
+      "Design new specialized top-level skills only after the remaining shared/supporting prompt inventory is classified",
+      "Decide the final fate of judgment-required prompt materials with user input where needed",
+      "Clean remaining historical docs, ADRs, and scripts that still mention the old command/query/reactor prompt-first model",
+      "Decide when the legacy command-spec and legacy prompt-package compatibility layer can be fully removed",
+      "Define whether delegated sub-agent wrappers need their own dedicated runtime directories beyond canonical sub-agent role prompt assets",
+      "Clean historical references that still mention the removed legacy command-spec and prompt-package layer",
+      "Revisit whether contract-test-generation-prompt should become a future DBC-focused sub-agent asset after Design by Contract standards mature"
+    ]
+  },
+  "results": {
+    "summary": "Planning is committed, Stage G Phase 1 is complete, and the taxonomy correction now covers all current sub-agent-style prompt families: active docs point to canonical sub-agent-role-prompt assets, and the mistaken top-level skill wrappers have been rolled back.",
+    "files_changed": [
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/stage-g-command-to-skill-convergence.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/command-to-skill-inventory.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/prompt-retention-checklist.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/tasks/stage-g-command-to-skill-convergence.json",
+      ".ai/assets/skills/bdd-gwt-test-designer/references/",
+      ".ai/assets/skills/staged-refactor-implementer/references/",
+      ".ai/assets/skills/tactical-refactor-implementer/references/",
+      ".ai/assets/skills/bdd-gwt-test-designer/skill.yaml",
+      ".ai/assets/skills/staged-refactor-implementer/skill.yaml",
+      ".ai/assets/skills/tactical-refactor-implementer/skill.yaml",
+      ".codex/skills/bdd-gwt-test-designer/SKILL.md",
+      ".codex/skills/staged-refactor-implementer/SKILL.md",
+      ".codex/skills/tactical-refactor-implementer/SKILL.md",
+      ".ai/assets/skills/command-use-case-implementer/",
+      ".ai/assets/skills/query-use-case-implementer/",
+      ".ai/assets/skills/reactor-implementer/",
+      ".codex/skills/command-use-case-implementer/",
+      ".codex/skills/query-use-case-implementer/",
+      ".codex/skills/reactor-implementer/",
+      ".codex/skills/README.md"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}
+
+
+
+
+

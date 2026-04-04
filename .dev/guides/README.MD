@@ -120,7 +120,7 @@
   - how-to、setup、workflow、reference、onboarding 文件
 - `.dev/standards/`
   - rules、checklists、single source of truth
-- `.dev/refactor-workflows/`
+- `.dev/workflows/`
   - 一次性重構工作紀錄、plan、task、review artifacts
 
 ## 新文件放置規則
@@ -132,4 +132,5 @@
 - 新增 AI skill、prompt、workflow 的人類使用說明：
   - 放 `ai-collaboration-guides/`
 - 新增單次重構提案、執行記錄、task artifact：
-  - 放 `.dev/refactor-workflows/<workflow-id>/`
+  - 放 `.dev/workflows/<workflow-id>/`
+

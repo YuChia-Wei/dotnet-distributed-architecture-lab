@@ -45,8 +45,8 @@
 | --- | --- | --- | --- |
 | ADR-002 | EF Core configuration location | 有技術棧與結構描述，但缺一份專門的 ORM / EF Core config standard | 考慮補到 `standards/` 或 `guides/design-guides/` |
 | ADR-004 | Sub-agent architecture decision | 大方向已被 `.ai/SUB-AGENT-SYSTEM.MD` 吸收，但內文仍含大量歷史 prompt-first 脈絡 | 之後可轉成 superseded / historical ADR |
-| ADR-005 | AI task execution SOP | 現在有 `AI-COLLABORATION-WORKFLOW-GUIDE.md` 與 `refactor-workflows/README.MD`，但沒有完整吸收 SOP 細則 | 需決定是否補成 workflow standard，或將 ADR 標成 historical |
-| ADR-007 | Task file format standardization | 舊 `.dev/tasks/*` 模型與現在的 `.dev/refactor-workflows/` artifact contract 已不一致 | 高優先檢查是否應廢止或重寫 |
+| ADR-005 | AI task execution SOP | 現在有 `AI-COLLABORATION-WORKFLOW-GUIDE.md` 與 `workflows/README.MD`，但沒有完整吸收 SOP 細則 | 需決定是否補成 workflow standard，或將 ADR 標成 historical |
+| ADR-007 | Task file format standardization | 舊 `.dev/tasks/*` 模型與現在的 `.dev/workflows/` artifact contract 已不一致 | 高優先檢查是否應廢止或重寫 |
 | ADR-024 | Test isolation and domain event mapper | 測試與 outbox 規則已分散在 testing / framework guides，但未集中承接 | 可考慮補到 `test-standards.md` 或 `FRAMEWORK-API-INTEGRATION-GUIDE.md` |
 | ADR-031 | Reactor interface uses `DomainEventData` | 仍主要停留在 ADR；目前缺一份 reactor-specific standard 明寫這條規則 | 若 repo 仍使用此模式，應補正式標準文件 |
 | ADR-041 | Mapper serialization requirements | 有 Framework API integration 與 data class 規則，但缺 mapper serialization 的 canonical standard | 可補到 `mapper-standards.md` |
@@ -83,7 +83,7 @@
 ### 目前最值得優先處理的 ADR
 
 1. `ADR-007-task-file-format-standardization`
-   - 舊 task model 與現行 `refactor-workflows` contract 明顯不一致
+   - 舊 task model 與現行 `workflows` contract 明顯不一致
 2. `ADR-031-reactor-interface-definition`
    - 若仍是 active rule，應移到正式 standard
 3. `ADR-041-mapper-serialization-requirements`
@@ -101,3 +101,5 @@
    - `Historical / superseded`
 2. 為 `ADR-031`、`ADR-041`、`ADR-049` 補正式承接文件
 3. 對 `ADR-007`、`ADR-013`、`ADR-034`、`ADR-036`、`ADR-042` 做清理決策
+
+

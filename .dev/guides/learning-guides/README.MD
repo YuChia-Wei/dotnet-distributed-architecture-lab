@@ -23,7 +23,7 @@
 - `.dev/guides/design-guides/`
 - `.dev/standards/`
 - `.dev/guides/ai-collaboration-guides/`
-- `.dev/refactor-workflows/`
+- `.dev/workflows/`
 
 ## 文件索引
 
@@ -31,3 +31,4 @@
   - 專案學習路徑
 - `NEW-PROJECT-GUIDE.md`
   - 新專案入門與 onboarding 指南
+

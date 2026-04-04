@@ -17,7 +17,7 @@
   - 給人看的 AI collaboration guides、skill guide、prompt guide、workflow guide
 - `.claude/skills/`
   - repo-local skill definitions 與 skill-local references
-- `.dev/refactor-workflows/`
+- `.dev/workflows/`
   - 多 skill / subagent handoff artifacts
 
 ## Portable 使用原則
@@ -60,4 +60,5 @@
 更完整的收納策略見：
 
 - `../.dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md`
+
 
