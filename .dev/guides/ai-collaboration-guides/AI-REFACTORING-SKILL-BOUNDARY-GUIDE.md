@@ -143,9 +143,9 @@
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
-- `templates/refactor-plan-template.md`
+- `templates/workflow-plan-template.md`
 - `templates/review-report-template.md`
-- `templates/refactor-task-template.json`
+- `templates/workflow-task-template.json`
 
 ## Sub-agent Collaboration
 
@@ -269,4 +269,5 @@
 - `STAGED-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md`
 - `TACTICAL-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md`
 - `AI-SKILL-GUIDE-STANDARDS.md`
+
 

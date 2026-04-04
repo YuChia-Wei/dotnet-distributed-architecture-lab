@@ -38,9 +38,9 @@
 ## Workflow Templates
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
-- `templates/refactor-plan-template.md`
+- `templates/workflow-plan-template.md`
 - `templates/review-report-template.md`
-- `templates/refactor-task-template.json`
+- `templates/workflow-task-template.json`
 
 ## 維護規則
 
@@ -49,4 +49,5 @@
 - 本目錄的文件是給人讀的，不應複製大量 `.ai/` prompt 內部細節。
 - skill 實作細節仍以 `.claude/skills/<skill>/` 為準；本目錄只做人類入口與操作指南。
 - 若 guide 內容與 skill 本體衝突，應同步修正並避免形成雙重真相。
+
 

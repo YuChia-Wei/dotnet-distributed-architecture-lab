@@ -135,7 +135,8 @@
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
 - `../workflows/README.MD`
-- `templates/refactor-plan-template.md`
+- `templates/workflow-plan-template.md`
 - `templates/review-report-template.md`
-- `templates/refactor-task-template.json`
+- `templates/workflow-task-template.json`
+
 

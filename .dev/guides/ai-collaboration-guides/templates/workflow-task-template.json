@@ -1,5 +1,5 @@
 {
-  "task_id": "refactor-task-<date>-<topic>",
+  "task_id": "workflow-task-<date>-<topic>",
   "owner_skill": "staged-refactor-implementer",
   "related_plan_id": "",
   "related_review_report_id": "",

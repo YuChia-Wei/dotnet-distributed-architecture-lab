@@ -1,8 +1,8 @@
-# Refactor Plan Template
+# Workflow Plan Template
 
 ## Metadata
 
-- `plan_id`: `refactor-plan-<date>-<topic>`
+- `plan_id`: `workflow-plan-<date>-<topic>`
 - `owner_skill`: `ddd-ca-hex-architect`
 - `status`: `draft | active | superseded | completed`
 
@@ -10,7 +10,7 @@
 
 - Problem statement:
 - Current scope:
-- Why refactor now:
+- Why this workflow now:
 
 ## Target Direction
 
