@@ -44,7 +44,7 @@
 
 1. `workflow-plan.md`
 2. `review-report.md`
-3. `refactor-task.json`
+3. `tasks/<task-id>.json`
 
 這是最小集合，不額外新增更多流程文件。
 
@@ -81,7 +81,7 @@
 - 記錄 review decision
 - 建議下一個 skill
 
-### `refactor-task.json`
+### `tasks/<task-id>.json`
 
 由 `staged-refactor-implementer` 或 `tactical-refactor-implementer` 建立或更新。
 
@@ -101,7 +101,7 @@
    需要時建立 review-report.md
 
 3. staged-refactor-implementer / tactical-refactor-implementer
-   需要時建立 refactor-task.json
+   需要時建立對應的 `tasks/<task-id>.json`
 
 4. code-reviewer
    對本輪結果再次 review

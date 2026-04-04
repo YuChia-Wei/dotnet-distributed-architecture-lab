@@ -136,7 +136,7 @@
 
 - `workflow-plan.md`
 - `review-report.md`
-- `refactor-task.json`
+- `tasks/<task-id>.json`
 
 用途不是增加流程，而是讓 skill 間 handoff 更穩定。
 詳細規則與模板見：

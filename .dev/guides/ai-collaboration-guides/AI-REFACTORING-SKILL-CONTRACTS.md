@@ -31,7 +31,7 @@
 
 - 使用 `workflow-plan.md`
 - 使用 `review-report.md`
-- 使用 `refactor-task.json`
+- 使用 `tasks/<task-id>.json`
 - 預設存放於 `.dev/workflows/<workflow-id>/`
 - artifact 欄位應至少滿足本文件的最小 contract
 
@@ -47,7 +47,7 @@
 | :--- | :--- | :--- |
 | `workflow-plan.md` | `ddd-ca-hex-architect` | 保存診斷、目標方向、stages、非目標、風險，可用於 code 或 document workflow |
 | `review-report.md` | `code-reviewer` | 保存正式 review 結果，可承載 architecture、implementation、documentation、workflow findings 與建議下一步 |
-| `refactor-task.json` | `staged-refactor-implementer` / `tactical-refactor-implementer` | 保存執行 scope、限制、驗證、結果，可承載 code、document、或 mixed stage |
+| `tasks/<task-id>.json` | `staged-refactor-implementer` / `tactical-refactor-implementer` | 保存單一 workflow task 的執行 scope、限制、驗證、結果，可承載 code、document、或 mixed stage |
 
 ## Artifact 存放位置
 
@@ -184,7 +184,7 @@ Workflow artifact 的正式存放根目錄為：
 - 驗證方式
 - deferred items
 
-### 若進入 Workflow Mode，至少應寫入 `refactor-task.json`
+### 若進入 Workflow Mode，至少應寫入對應的 `tasks/<task-id>.json`
 
 - `task_id`
 - `owner_skill`
@@ -224,7 +224,7 @@ Workflow artifact 的正式存放根目錄為：
 - 驗證方式
 - 超出範圍而被延後的項目
 
-### 若進入 Workflow Mode，至少應寫入 `refactor-task.json`
+### 若進入 Workflow Mode，至少應寫入對應的 `tasks/<task-id>.json`
 
 - `task_id`
 - `owner_skill`
