@@ -29,10 +29,10 @@
 
 當任務跨 skill、跨 stage、或需要保存決策時：
 
-- 使用 `refactor-plan.md`
+- 使用 `workflow-plan.md`
 - 使用 `review-report.md`
 - 使用 `refactor-task.json`
-- 預設存放於 `.dev/refactor-workflows/<workflow-id>/`
+- 預設存放於 `.dev/workflows/<workflow-id>/`
 - artifact 欄位應至少滿足本文件的最小 contract
 
 常見 workflow mode 類型：
@@ -45,7 +45,7 @@
 
 | Artifact | Owner Skill | 主要用途 |
 | :--- | :--- | :--- |
-| `refactor-plan.md` | `ddd-ca-hex-architect` | 保存診斷、目標方向、stages、非目標、風險，可用於 code 或 document workflow |
+| `workflow-plan.md` | `ddd-ca-hex-architect` | 保存診斷、目標方向、stages、非目標、風險，可用於 code 或 document workflow |
 | `review-report.md` | `code-reviewer` | 保存評分、architecture/code/doc findings、建議下一步 |
 | `refactor-task.json` | `staged-refactor-implementer` / `tactical-refactor-implementer` | 保存執行 scope、限制、驗證、結果，可承載 code、document、或 mixed stage |
 
@@ -53,13 +53,13 @@
 
 Workflow artifact 的正式存放根目錄為：
 
-- `.dev/refactor-workflows/`
+- `.dev/workflows/`
 
 每個 workflow 應使用獨立資料夾：
 
-- `.dev/refactor-workflows/<workflow-id>/refactor-plan.md`
-- `.dev/refactor-workflows/<workflow-id>/review-report.md`
-- `.dev/refactor-workflows/<workflow-id>/tasks/<task-id>.json`
+- `.dev/workflows/<workflow-id>/workflow-plan.md`
+- `.dev/workflows/<workflow-id>/review-report.md`
+- `.dev/workflows/<workflow-id>/tasks/<task-id>.json`
 
 若 task 不只一個，應放在同一個 `tasks/` 子目錄下，而不是散落在其他路徑。
 
@@ -103,7 +103,7 @@ Workflow artifact 的正式存放根目錄為：
 - 目標方向
 - 建議下一步使用哪個 skill
 
-### 若進入 Workflow Mode，至少應寫入 `refactor-plan.md`
+### 若進入 Workflow Mode，至少應寫入 `workflow-plan.md`
 
 - `plan_id`
 - `owner_skill`
@@ -164,7 +164,7 @@ Workflow artifact 的正式存放根目錄為：
 
 ### 建議補充輸入
 
-- `refactor-plan.md`
+- `workflow-plan.md`
 - `review-report.md`
 - 驗證要求
 - 明確 non-goals
@@ -274,7 +274,8 @@ Workflow artifact 的正式存放根目錄為：
 
 - `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
-- `../refactor-workflows/README.MD`
+- `../workflows/README.MD`
 - `templates/refactor-plan-template.md`
 - `templates/review-report-template.md`
 - `templates/refactor-task-template.json`
+

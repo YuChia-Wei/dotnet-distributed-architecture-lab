@@ -12,7 +12,7 @@
 ## 與其他目錄的分工
 
 - `.dev/guides/ai-collaboration-guides/`: 給人看的 AI collaboration guides、workflow、prompt 與操作指南
-- `.dev/refactor-workflows/`: 跨 skill workflow artifacts 的正式存放位置
+- `.dev/workflows/`: 跨 skill workflow artifacts 的正式存放位置
 - `.dev/guides/`: 一般軟體開發、架構、框架、專案使用指南
 - `.ai/`: 給 agent 重用的 prompt 元件、shared rules、scripts
 - `.claude/skills/`: skill 實作本體與 agent 觸發後讀取的內容
@@ -49,3 +49,4 @@
 - 本目錄的文件是給人讀的，不應複製大量 `.ai/` prompt 內部細節。
 - skill 實作細節仍以 `.claude/skills/<skill>/` 為準；本目錄只做人類入口與操作指南。
 - 若 guide 內容與 skill 本體衝突，應同步修正並避免形成雙重真相。
+

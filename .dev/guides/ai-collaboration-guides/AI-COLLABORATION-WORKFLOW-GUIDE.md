@@ -37,8 +37,8 @@
 
 ### 重構交接
 
-- `.dev/refactor-workflows/`
-  - `refactor-plan.md`
+- `.dev/workflows/`
+  - `workflow-plan.md`
   - `review-report.md`
   - `tasks/<task-id>.json`
 
@@ -236,15 +236,15 @@
 
 若符合上述任一條件中的強訊號，應優先建立：
 
-- `.dev/refactor-workflows/<workflow-id>/`
+- `.dev/workflows/<workflow-id>/`
 
 artifact 位置：
 
-- `.dev/refactor-workflows/<workflow-id>/`
+- `.dev/workflows/<workflow-id>/`
 
 artifact 種類：
 
-- `refactor-plan.md`
+- `workflow-plan.md`
 - `review-report.md`
 - `tasks/<task-id>.json`
 
@@ -320,4 +320,5 @@ subagent 不應：
 - `BDD-GWT-TEST-DESIGNER-PAIR-GUIDE.md`
 - `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
-- `../refactor-workflows/README.MD`
+- `../workflows/README.MD`
+

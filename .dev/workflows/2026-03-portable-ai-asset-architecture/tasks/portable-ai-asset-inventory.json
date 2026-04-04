@@ -1,0 +1,60 @@
+{
+  "task_id": "portable-ai-asset-inventory",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-portable-ai-asset-architecture",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Inventory current AI assets and define taxonomy",
+    "files": [
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/asset-inventory.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/taxonomy.md"
+    ],
+    "dependency_radius": ".ai, .claude/skills, .dev/guides/ai-collaboration-guides, README agent path references",
+    "constraints": [
+      "Do not move assets yet",
+      "Capture current structure before schema design"
+    ],
+    "non_goals": [
+      "No canonical schema implementation yet",
+      "No wrapper generation yet"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Document the current AI asset landscape so canonical schema design can be based on explicit taxonomy instead of assumptions",
+    "review_findings": [],
+    "user_constraints": [
+      "Proceed stage by stage with commits",
+      "Keep planning artifacts under .dev/workflows"
+    ]
+  },
+  "execution": {
+    "operation_type": "inventory-and-taxonomy",
+    "steps": [
+      "Inventoried repo-local skills under .claude/skills",
+      "Grouped .ai prompts into command families, review/validation prompt packages, shared fragments, examples, and rules",
+      "Grouped .ai scripts into review, pattern-specific, environment, and generation buckets",
+      "Defined the initial portable AI asset taxonomy"
+    ],
+    "validation": [
+      "Every existing repo-local skill is represented in the inventory",
+      "Prompt inventory distinguishes portable fragments from wrapper-tied assets",
+      "Taxonomy fields are explicit enough to feed Stage 2 schema work"
+    ],
+    "deferred_items": [
+      "Translate the taxonomy into canonical schema and directory structure",
+      "Map each asset type to wrapper targets"
+    ]
+  },
+  "results": {
+    "summary": "Completed Stage 1 inventory and taxonomy definition for portable AI assets.",
+    "files_changed": [
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/asset-inventory.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/taxonomy.md"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}
+
+

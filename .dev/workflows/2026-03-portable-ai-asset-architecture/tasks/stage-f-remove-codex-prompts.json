@@ -1,0 +1,76 @@
+{
+  "task_id": "stage-f-remove-codex-prompts",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-portable-ai-asset-architecture",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Remove the obsolete Codex prompt wrapper layer",
+    "files": [
+      ".codex/prompts/",
+      ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml",
+      ".ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml",
+      ".ai/assets/sub-agent-role-prompts/reactor-sub-agent/sub-agent.yaml",
+      ".ai/assets/skills/ddd-ca-hex-architect/skill.yaml",
+      "README.md",
+      "agents.md",
+      ".dev/INDEX.md",
+      ".dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md",
+      ".dev/guides/ai-collaboration-guides/LOCAL-RUNTIME-WRAPPER-GUIDE.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/stage-f-remove-codex-prompts.md"
+    ],
+    "dependency_radius": ".codex, .ai/assets, repo indexes, AI asset strategy guides",
+    "constraints": [
+      "Keep .ai canonical sources intact",
+      "Preserve Codex runtime skills"
+    ],
+    "non_goals": [
+      "Do not remove .codex/skills",
+      "Do not remove Gemini or Copilot wrapper layers"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Simplify the Codex adapter model by removing prompt wrappers and keeping runtime skills only",
+    "review_findings": [],
+    "user_constraints": [
+      "The related prompts already exist under .ai and the extra Codex prompt layer is no longer needed"
+    ]
+  },
+  "execution": {
+    "operation_type": "wrapper-layer-removal",
+    "steps": [
+      "Deleted the .codex/prompts wrapper files",
+      "Removed Codex prompt wrapper mappings from canonical assets and kept the canonical paths on the sub-agent model",
+      "Updated repository documentation to point Codex users to .codex/skills instead"
+    ],
+    "validation": [
+      "No tracked Codex prompt wrapper files remain",
+      "Codex runtime skills remain intact",
+      "Repository docs no longer present .codex/prompts as an active Codex entry point"
+    ],
+    "deferred_items": [
+      "Clean up any historical references inside archived workflow notes only if desired",
+      "Clean historical workflow notes that still mention the removed command-spec layer if desired"
+    ]
+  },
+  "results": {
+    "summary": "Removed the obsolete Codex prompt wrapper layer and aligned docs with the runtime-skill-first approach.",
+    "files_changed": [
+      ".codex/prompts/",
+      ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml",
+      ".ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml",
+      ".ai/assets/sub-agent-role-prompts/reactor-sub-agent/sub-agent.yaml",
+      ".ai/assets/skills/ddd-ca-hex-architect/skill.yaml",
+      "README.md",
+      "agents.md",
+      ".dev/INDEX.md",
+      ".dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md",
+      ".dev/guides/ai-collaboration-guides/LOCAL-RUNTIME-WRAPPER-GUIDE.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/stage-f-remove-codex-prompts.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/tasks/stage-f-remove-codex-prompts.json"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}
+

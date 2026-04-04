@@ -1,0 +1,60 @@
+{
+  "task_id": "stage-5-rollout-and-guides",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-portable-ai-asset-architecture",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Finalize rollout, local runtime guidance, and wrapper-facing documentation",
+    "files": [
+      ".dev/guides/ai-collaboration-guides/LOCAL-RUNTIME-WRAPPER-GUIDE.md",
+      ".claude/skills/ddd-ca-hex-architect/references/architecture-playbook.md",
+      ".claude/skills/ddd-ca-hex-architect/references/design-deliverables.md",
+      ".claude/skills/ddd-ca-hex-architect/references/source-map.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/stage-5-rollout-and-guides.md"
+    ],
+    "dependency_radius": ".ai/assets, wrapper roots, human-facing guides, repo indexes",
+    "constraints": [
+      "Keep wrapper pointers thin",
+      "Preserve current wrapper roots"
+    ],
+    "non_goals": [
+      "No full generated wrapper pipeline yet"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Complete the first rollout of the portable AI asset architecture",
+    "review_findings": [],
+    "user_constraints": [
+      "The work should finish the planned rollout rather than stop at proposal"
+    ]
+  },
+  "execution": {
+    "operation_type": "rollout-finalization",
+    "steps": [
+      "Converted Claude pilot references into thin pointers to canonical source",
+      "Added a local runtime wrapper guide",
+      "Recorded rollout outcome in workflow docs"
+    ],
+    "validation": [
+      "Pilot wrapper roots now coexist with canonical source and human-facing guides",
+      "Local runtime usage is documented separately from canonical source strategy"
+    ],
+    "deferred_items": [
+      "Migrate more skills and command families",
+      "Add generated wrapper/export scripts if needed"
+    ]
+  },
+  "results": {
+    "summary": "Completed the first rollout of the portable AI asset architecture.",
+    "files_changed": [
+      ".claude/skills/ddd-ca-hex-architect/references/architecture-playbook.md",
+      ".claude/skills/ddd-ca-hex-architect/references/design-deliverables.md",
+      ".claude/skills/ddd-ca-hex-architect/references/source-map.md",
+      ".dev/guides/ai-collaboration-guides/LOCAL-RUNTIME-WRAPPER-GUIDE.md"
+    ],
+    "tests_run": [],
+    "follow_up_needed": false
+  }
+}
+

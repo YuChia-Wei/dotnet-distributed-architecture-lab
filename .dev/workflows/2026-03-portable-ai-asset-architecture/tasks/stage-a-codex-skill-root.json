@@ -1,0 +1,58 @@
+{
+  "task_id": "stage-a-codex-skill-root",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "2026-03-portable-ai-asset-architecture",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Create the Codex runtime skill wrapper root and root-level conventions",
+    "files": [
+      ".codex/skills/README.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/stage-a-codex-skill-root.md"
+    ],
+    "dependency_radius": ".codex, canonical source definitions, AI asset location guides",
+    "constraints": [
+      "Keep prompt wrappers and runtime skill wrappers separate",
+      "Do not migrate every skill in this stage"
+    ],
+    "non_goals": [
+      "No pilot skill wrapper yet",
+      "No CODEX_HOME sync/export implementation yet"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Establish a dedicated Codex runtime skill wrapper root",
+    "review_findings": [],
+    "user_constraints": [
+      "Proceed with the Codex runtime skill wrapper implementation",
+      "Keep the solution portable and repo-centric"
+    ]
+  },
+  "execution": {
+    "operation_type": "runtime-skill-root-setup",
+    "steps": [
+      "Created .codex/skills as a dedicated runtime skill wrapper root",
+      "Documented root-level wrapper rules and expected structure",
+      "Separated .codex/prompts from .codex/skills at the repository structure level"
+    ],
+    "validation": [
+      "The repository now has a distinct Codex runtime skill wrapper root",
+      "The root README distinguishes prompt wrappers from runtime skill wrappers"
+    ],
+    "deferred_items": [
+      "Create a pilot Codex runtime skill wrapper",
+      "Define repo-local install or sync mechanics"
+    ]
+  },
+  "results": {
+    "summary": "Created the root structure for Codex runtime skill wrappers.",
+    "files_changed": [
+      ".codex/skills/README.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/stage-a-codex-skill-root.md",
+      ".dev/workflows/2026-03-portable-ai-asset-architecture/tasks/stage-a-codex-skill-root.json"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}
+

@@ -41,9 +41,9 @@ When using problem-frame workflows:
 4. Update `status` + `results` in task JSON.
 
 Workflow artifact location:
-- Use `.dev/refactor-workflows/<workflow-id>/refactor-plan.md`
-- Use `.dev/refactor-workflows/<workflow-id>/review-report.md`
-- Use `.dev/refactor-workflows/<workflow-id>/tasks/<task-id>.json`
+- Use `.dev/workflows/<workflow-id>/workflow-plan.md`
+- Use `.dev/workflows/<workflow-id>/review-report.md`
+- Use `.dev/workflows/<workflow-id>/tasks/<task-id>.json`
 - Do not scatter workflow artifacts under `.ai/`, `.claude/skills/`, or arbitrary feature folders unless the user explicitly requests it.
 
 ### Portable Packaging (When framework files are copied to another repo)
@@ -117,7 +117,7 @@ Workflow artifact location:
 | `.dev/guides/` | 學習指南 |
 | `.dev/lessons/` | 經驗教訓 |
 | `.dev/requirement/` | 技術需求 |
-| `.dev/refactor-workflows/` | 跨 skill / subagent workflow artifacts（plan / review-report / task） |
+| `.dev/workflows/` | 跨 skill / subagent workflow artifacts（plan / review-report / task） |
 | `.dev/specs/` | 功能規格與行為規格 |
 | `.dev/standards/` | Code Review Checklist, Project Structure |
 
@@ -147,4 +147,5 @@ Workflow artifact location:
 | `.gemini/commands/README.md` | Gemini wrapper command 入口 |
 | `.github/prompts/README.md` | GitHub Copilot wrapper prompt 入口 |
 | `.github/copilot-instructions.md` | GitHub Copilot repo-level instructions |
+
 

@@ -28,7 +28,7 @@
 - `.dev/guides/learning-guides/`
 - `.dev/standards/`
 - `.dev/guides/ai-collaboration-guides/`
-- `.dev/refactor-workflows/`
+- `.dev/workflows/`
 
 ## 文件索引
 
@@ -58,3 +58,4 @@
   - template 使用方式
 - `VERSION-PLACEHOLDER-GUIDE.md`
   - version placeholder 相關作法
+

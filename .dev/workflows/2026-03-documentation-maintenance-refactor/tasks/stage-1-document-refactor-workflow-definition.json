@@ -1,0 +1,65 @@
+{
+  "task_id": "refactor-task-2026-03-document-workflow-definition",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "refactor-plan-2026-03-documentation-maintenance-refactor",
+  "related_review_report_id": "",
+  "status": "completed",
+  "scope": {
+    "target": "Documentation-first refactor workflow definition for .dev and .ai maintenance",
+    "files": [
+      ".dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-CONTRACTS.md",
+      ".dev/guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md",
+      ".dev/workflows/2026-03-documentation-maintenance-refactor/workflow-plan.md"
+    ],
+    "dependency_radius": "Workflow artifacts and human-facing workflow guides only",
+    "constraints": [
+      "Must preserve current workflow mode artifact locations under .dev/workflows/",
+      "Must adapt execution semantics for document work without breaking code-refactor workflows",
+      "Must define document validation in terms of completeness, ownership, and source-of-truth clarity"
+    ],
+    "non_goals": [
+      "Do not perform broad content cleanup across .dev and .ai in this task",
+      "Do not redesign all skills or sub-agent boundaries"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Refactor workflow must explicitly support document completion/refactoring as a first-class staged workflow before any broad documentation maintenance work begins.",
+    "review_findings": [
+      "Current staged-refactor guidance is code-centric and can mislead document-maintenance execution."
+    ],
+    "user_constraints": [
+      "This work must go through refactor workflow.",
+      "If the workflow only supports code refactoring, prioritize planning a document refactor workflow first."
+    ]
+  },
+  "execution": {
+    "operation_type": "workflow-definition",
+    "steps": [
+      "Define how document refactor stages differ from code refactor stages.",
+      "Specify artifact expectations and validation criteria for documentation tasks.",
+      "Identify which existing workflow docs require amendment or extension.",
+      "Record deferred items that belong to later content stages rather than workflow-definition stage."
+    ],
+    "validation": [
+      "Workflow docs no longer imply code is the only valid refactor target.",
+      "At least one explicit document-first staging pattern exists.",
+      "Task can be consumed by a later implementer without architectural guessing."
+    ],
+    "deferred_items": [
+      "Inventory of actual document gaps.",
+      "Terminology cleanup and source-of-truth normalization.",
+      "Requirement/spec/runbook content creation."
+    ]
+  },
+  "results": {
+    "summary": "Extended the refactor workflow guidance so workflow mode explicitly supports document refactor/document completion work before broader documentation maintenance stages begin.",
+    "files_changed": [
+      ".dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-CONTRACTS.md",
+      ".dev/guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md",
+      ".dev/workflows/README.MD"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}
+

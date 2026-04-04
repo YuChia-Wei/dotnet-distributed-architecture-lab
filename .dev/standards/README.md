@@ -50,9 +50,10 @@ Operational guides、setup walkthroughs、FAQ、troubleshooting 文件已移到 
 - `.dev/guides/design-guides/`
 - `.dev/guides/learning-guides/`
 - `.dev/guides/ai-collaboration-guides/`
-- `.dev/refactor-workflows/`
+- `.dev/workflows/`
 
 ## Notes
 - ezDDD/ezSpec concepts must be preserved even without direct .NET packages.
 - If no .NET equivalent exists, keep the rule and mark TODO rather than deleting it.
 - `standards/` should not accumulate setup guides, troubleshooting guides, or FAQ-style documents.
+

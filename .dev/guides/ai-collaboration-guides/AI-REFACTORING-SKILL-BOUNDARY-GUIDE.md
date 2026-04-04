@@ -134,7 +134,7 @@
 
 但如果任務會跨 skill 接力，建議啟用「可選的最小 workflow 模式」：
 
-- `refactor-plan.md`
+- `workflow-plan.md`
 - `review-report.md`
 - `refactor-task.json`
 
@@ -269,3 +269,4 @@
 - `STAGED-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md`
 - `TACTICAL-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md`
 - `AI-SKILL-GUIDE-STANDARDS.md`
+

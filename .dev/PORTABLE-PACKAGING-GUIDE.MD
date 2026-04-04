@@ -18,7 +18,7 @@
   - 結構規範、review checklist、組織原則
 - `.dev/adr/README.md`
   - ADR 使用規則
-- `.dev/refactor-workflows/README.MD`
+- `.dev/workflows/README.MD`
   - workflow artifact contract
 - `AGENTS.md`
   - repo-level collaboration baseline
@@ -28,7 +28,7 @@
 - `.dev/requirement/` 中的專案需求與 bounded context truth
 - `.dev/specs/` 中的 domain/use-case/test specs
 - `.dev/operations/` 中的 context map、event catalog、mq topology、runbooks
-- `.dev/refactor-workflows/<workflow-id>/`
+- `.dev/workflows/<workflow-id>/`
   - 已完成 workflow 的 plan、task、review artifacts
 - `.dev/adr/ADR-*.md`
   - 若內容描述的是當前專案的既有決策，而非新專案的決策
@@ -57,3 +57,4 @@
 
 - 目前 portable baseline 仍使用 `.dev/operations/`
 - 只有當新專案的 ops 治理已經明顯獨立，才考慮升級成根層 `.ops/`
+

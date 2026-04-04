@@ -42,7 +42,7 @@
 
 只使用三個 artifact：
 
-1. `refactor-plan.md`
+1. `workflow-plan.md`
 2. `review-report.md`
 3. `refactor-task.json`
 
@@ -54,11 +54,11 @@
 
 預設存放位置：
 
-- `.dev/refactor-workflows/<workflow-id>/`
+- `.dev/workflows/<workflow-id>/`
 
 ## Artifact 角色
 
-### `refactor-plan.md`
+### `workflow-plan.md`
 
 由 `ddd-ca-hex-architect` 建立或更新。
 
@@ -94,7 +94,7 @@
 
 ```text
 1. ddd-ca-hex-architect
-   需要時建立 refactor-plan.md
+   需要時建立 workflow-plan.md
 
 2. code-reviewer
    需要時建立 review-report.md
@@ -121,7 +121,7 @@
 
 - 建立最小 artifact
 - 由 skill 之間透過 artifact handoff
-- artifact 預設放在 `.dev/refactor-workflows/<workflow-id>/`
+- artifact 預設放在 `.dev/workflows/<workflow-id>/`
 
 ## 不要做的事
 
@@ -133,7 +133,8 @@
 ## 相關模板
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
-- `../refactor-workflows/README.MD`
+- `../workflows/README.MD`
 - `templates/refactor-plan-template.md`
 - `templates/review-report-template.md`
 - `templates/refactor-task-template.json`
+

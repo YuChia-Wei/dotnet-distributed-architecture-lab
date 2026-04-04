@@ -39,7 +39,7 @@
   - optional compatibility layers; they may be absent in some environments and do not affect the canonical source model
 - `.dev/guides/ai-collaboration-guides/`
   - human-facing usage guides
-- `.dev/refactor-workflows/`
+- `.dev/workflows/`
   - migration / refactor artifacts
 
 ## Current Direction
@@ -48,4 +48,5 @@
 - `sub-agent-role-prompts/` 是 delegated worker-role 的 canonical source
 - `shared/` 與 `sub-agent-role-prompts/*/references/` 承接 reusable supporting materials
 - `.gemini/commands/`、`.github/prompts/`、`.claude/skills/` 若存在，應視為 wrapper / compatibility layer，而不是 canonical source
+
 
