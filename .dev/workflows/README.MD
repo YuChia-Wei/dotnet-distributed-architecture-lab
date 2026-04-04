@@ -34,7 +34,7 @@
 
 - `<workflow-id>`: 使用可追蹤的主題名稱，例如 `2026-03-ordering-boundary-cleanup`
 - `workflow-plan.md`: 單一 workflow 的 architect plan
-- `review-report.md`: 單一 workflow 的 reviewer report
+- `review-report.md`: 單一 workflow 的正式 review artifact，可承載 architecture、implementation、document、或 workflow review
 - `tasks/<task-id>.json`: 單一 stage 或單一 tactical work item
 
 ## 使用原則

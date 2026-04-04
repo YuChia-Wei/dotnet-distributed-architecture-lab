@@ -75,9 +75,10 @@
 
 用途：
 
-- 記錄分數
-- 記錄 architecture-level / code-level findings
+- 記錄正式 review 結果
+- 記錄 architecture-level / implementation-level / document-level / workflow-level findings
 - 記錄嚴重度
+- 記錄 review decision
 - 建議下一個 skill
 
 ### `refactor-task.json`

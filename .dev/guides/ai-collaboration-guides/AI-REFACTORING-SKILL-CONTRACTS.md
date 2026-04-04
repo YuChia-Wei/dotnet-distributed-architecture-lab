@@ -46,7 +46,7 @@
 | Artifact | Owner Skill | 主要用途 |
 | :--- | :--- | :--- |
 | `workflow-plan.md` | `ddd-ca-hex-architect` | 保存診斷、目標方向、stages、非目標、風險，可用於 code 或 document workflow |
-| `review-report.md` | `code-reviewer` | 保存評分、architecture/code/doc findings、建議下一步 |
+| `review-report.md` | `code-reviewer` | 保存正式 review 結果，可承載 architecture、implementation、documentation、workflow findings 與建議下一步 |
 | `refactor-task.json` | `staged-refactor-implementer` / `tactical-refactor-implementer` | 保存執行 scope、限制、驗證、結果，可承載 code、document、或 mixed stage |
 
 ## Artifact 存放位置
@@ -146,13 +146,21 @@ Workflow artifact 的正式存放根目錄為：
 
 - `report_id`
 - `owner_skill`
+- `review_kind`
 - `Reviewed target`
 - `Review reason`
+- `Review boundaries`
 - `Architecture Compliance`
-- `Code Quality` 或 `Documentation Quality`
+- `Implementation Quality`、`Documentation Quality`、`Workflow Integrity` 至少擇一適用欄位
 - `Test Adequacy`
-- 至少一筆 architecture-level、code-level、或 doc-level finding
+- 至少一筆 architecture-level、implementation-level、doc-level、或 workflow-level finding
+- `Decision`
 - `Recommended Next Skill`
+
+補充：
+
+- `review-report.md` 是 workflow review artifact，不限於純 code review
+- 若本輪是文件或治理工作，應優先填寫 document / workflow findings，而不是硬塞 code-level 欄位
 
 ## `staged-refactor-implementer`
 
