@@ -1,0 +1,69 @@
+{
+  "task_id": "workflow-task-2026-04-usecase-migration",
+  "owner_skill": "staged-refactor-implementer",
+  "related_plan_id": "workflow-plan-2026-04-usecase-implementation-migration",
+  "related_review_report_id": "review-report-2026-04-usecase-implementation-migration",
+  "status": "active",
+  "scope": {
+    "target": "Migrate current command/query-driven HTTP boundaries to explicit UseCase/Input with Output/Result/PageResult boundaries and update call sites.",
+    "files": [
+      "src/Product",
+      "src/Order",
+      "src/Inventory",
+      "tests/SaleProducts.Tests",
+      "tests/SaleOrders.Tests"
+    ],
+    "dependency_radius": "Application symbols, controllers, DI registration, Wolverine-discovered handlers, and tests.",
+    "constraints": [
+      "Use Rider rename refactoring for programmatic symbol renames where possible.",
+      "Preserve business behavior.",
+      "Align implementation with the approved guideline set."
+    ],
+    "non_goals": [
+      "Cross-BC redesign",
+      "Non-essential cleanup"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Explicit UseCase ports for HTTP entry, message-oriented handlers for bus/consumer/workflow entry, and Result/PageResult for result-pattern outputs.",
+    "review_findings": [
+      "HTTP controllers still use IMessageBus as the default application boundary.",
+      "Current command/query symbols are acting as effective use case input/execution units."
+    ],
+    "user_constraints": [
+      "Open a workflow record for this implementation migration.",
+      "Rename current objects directly and fix call sites.",
+      "Use Rider IDE refactoring where possible."
+    ]
+  },
+  "execution": {
+    "operation_type": "implementation-migration",
+    "steps": [
+      "Inventory current symbols and classify HTTP-boundary vs message-oriented usage.",
+      "Rename and reshape application symbols by bounded context.",
+      "Replace legacy *ResultDto naming used for result-pattern outputs with Result / PageResult aligned models.",
+      "Rewrite controllers to use explicit use case injection.",
+      "Update DI and tests.",
+      "Build and run targeted tests."
+    ],
+    "validation": [
+      "Controllers no longer use IMessageBus as the default application boundary.",
+      "Use case naming follows the approved guideline, including Result / PageResult rules.",
+      "Changed projects build successfully.",
+      "Affected tests pass or failures are reported explicitly."
+    ],
+    "deferred_items": [
+      "Broader code cleanup after migration"
+    ]
+  },
+  "results": {
+    "summary": "Implementation workflow opened. Inventory and refactor execution pending.",
+    "files_changed": [
+      ".dev/workflows/2026-04-usecase-implementation-migration/workflow-plan.md",
+      ".dev/workflows/2026-04-usecase-implementation-migration/review-report.md",
+      ".dev/workflows/2026-04-usecase-implementation-migration/tasks/workflow-task-2026-04-usecase-migration.json"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}

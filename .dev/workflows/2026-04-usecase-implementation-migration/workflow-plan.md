@@ -35,6 +35,7 @@
 - Target architecture summary:
   - HTTP controllers should use explicit `Use Case` ports via `[FromServices]`.
   - Existing `Command` / `Query` / `Handler` symbols that currently behave as the main HTTP boundary should be migrated to `UseCase` / `Input` / `Output`.
+  - Result Pattern use cases should use `Result` / `PageResult` instead of `*ResultDto`.
   - Message-oriented flows should remain explicit and separate.
 - Key constraints:
   - Use Rider rename refactoring for symbol renames where possible.

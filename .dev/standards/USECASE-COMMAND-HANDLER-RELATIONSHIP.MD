@@ -12,7 +12,7 @@
 
 - `Use Case` 是 application inbound port，也是一次明確 business operation 的主名稱。
 - `Use Case` 在本 repo 中應顯式反映在程式碼中，預設以 `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase` 命名。
-- `Input` / `Output` 是 use case boundary model，不使用 `InputDto` / `OutputDto` 作為預設命名。
+- `Input` / `Output` / `Result` / `PageResult` 是 use case boundary model，不使用 `InputDto` / `OutputDto` / `ResultDto` 作為預設命名。
 - `Command` / `Query` 不是 use case 的同義詞，而是 message-oriented request model。
 - HTTP controller 的主要入口應直接依賴 `Use Case`，不以 `message bus -> command handler` 作為預設入口。
 - `Command Handler` / `Query Handler` 是 message-oriented application executor，主要服務於 bus、consumer、reactor、workflow 等入口。
@@ -48,9 +48,9 @@
 
 `Use Case` 不是 transport 技術詞彙，而是 application boundary。本 repo 要求它在程式碼中顯式存在，而不是只留在文件概念層。
 
-### Input / Output
+### Input / Output / Result / PageResult
 
-`Input` / `Output` 是 use case boundary model。
+`Input` / `Output` / `Result` / `PageResult` 是 use case boundary model。
 
 - `Input`
   - use case 的 application-level input model
@@ -58,18 +58,35 @@
 - `Output`
   - use case 的 application-level output model
   - 不直接等同於 HTTP response，也不直接等同於 query-side DTO
+- `Result`
+  - result pattern 的 application-level output wrapper
+  - 用於表達 success / failure / error / optional value
+- `PageResult`
+  - 分頁查詢的 application-level output wrapper
+  - 用於表達 items、total count、page index、page size 等分頁資訊
 
 命名規則：
 
 - `PlaceOrderInput`
 - `PlaceOrderOutput`
+- `Result<Guid>`
+- `Result<OrderDetailsOutput>`
+- `PageResult<ProductDto>`
 
 避免使用：
 
 - `PlaceOrderInputDto`
 - `PlaceOrderOutputDto`
+- `DecreaseStockResultDto`
 
 `Dto` 應保留給 projection、跨 BC 傳輸、或 adapter / read model 導向的資料承載模型。
+
+補充規則：
+
+- 若 use case 回傳的是單純成功資料，優先使用具語意的 `*Output`
+- 若 use case 明確採用 result pattern，回傳 `Result` / `Result<T>`
+- 若 use case 明確回傳分頁資料，回傳 `PageResult<T>`
+- `Result` / `PageResult` 屬於 use case boundary model 的特例，不視為 DTO
 
 ### Command
 
@@ -198,7 +215,7 @@ HTTP Request
   -> Use Case
   -> Application Service (optional)
   -> Aggregate / Domain Service / Repository / Gateway
-  -> Use Case Output
+  -> Use Case Output / Result / PageResult
   -> HTTP Response
 ```
 
@@ -210,7 +227,7 @@ HTTP Request
   -> Use Case Input or Query
   -> Use Case
   -> Query Repository / Query Service
-  -> Use Case Output or Response Model
+  -> Use Case Output / Result / PageResult / Response Model
   -> HTTP Response
 ```
 
@@ -277,7 +294,7 @@ HTTP controller 預設直接依賴顯式 `Use Case` port，不透過 `IMessageBu
 
 ### Rule 2
 
-`Use Case` 預設以 `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase` 命名，搭配 `<Verb><Noun>Input` / `<Verb><Noun>Output`。
+`Use Case` 預設以 `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase` 命名，搭配 `<Verb><Noun>Input` 與 `*Output` / `Result` / `PageResult`。
 
 ### Rule 3
 
@@ -313,6 +330,8 @@ Query side 應優先使用 query repository / query service，不要把 query fl
   - `PlaceOrderUseCase`
   - `PlaceOrderInput`
   - `PlaceOrderOutput`
+  - `Result<Guid>`
+  - `PageResult<ProductDto>`
 - message-oriented models:
   - `ReserveInventoryCommand`
   - `ReserveInventoryCommandHandler`
@@ -327,7 +346,7 @@ Query side 應優先使用 query repository / query service，不要把 query fl
 在 `.dev/specs/` 中：
 
 - `use case` 是 production behavior 的主名稱
-- `input` / `output` 是該 use case 的 boundary model
+- `input` / `output` / `result` / `page result` 是該 use case 的 boundary model
 - `command` / `query` / `handler` 是程式碼中的 message-oriented implementation vocabulary，不必額外成為 spec 主詞
 
 因此 spec 應先寫：
@@ -337,6 +356,7 @@ Query side 應優先使用 query repository / query service，不要把 query fl
 再由程式碼決定以：
 
 - `ICreateProductUseCase + CreateProductUseCase + CreateProductInput + CreateProductOutput`
+- 或在 result pattern 下使用 `IIncreaseStockUseCase + IncreaseStockInput + Result<IncreaseStockOutput>`
 - 並在需要 message-oriented dispatch 時補上 `CreateProductCommand + CreateProductCommandHandler`
 
 ## References

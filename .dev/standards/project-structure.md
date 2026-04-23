@@ -97,7 +97,7 @@ project-root/
 
 - `Use Case`
   - application inbound port 與一次 business operation 的名稱，例如 `PlaceOrder`
-- `Input` / `Output`
+- `Input` / `Output` / `Result` / `PageResult`
   - use case boundary model
 - `Command` / `Query`
   - message-oriented request model
@@ -110,7 +110,7 @@ project-root/
 
 - HTTP controller 預設直接依賴 `Use Case`
 - `Use Case` 使用 `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase` 命名
-- `Use Case` 使用 `<Verb><Noun>Input` / `<Verb><Noun>Output` 命名
+- `Use Case` 使用 `<Verb><Noun>Input` 命名，輸出則依語意使用 `<Verb><Noun>Output`、`Result<T>`、或 `PageResult<T>`
 - `Request` / `Response` 保留給 HTTP adapter model
 - `Dto` 保留給 projection、跨 BC transfer、或 read model 導向模型
 - `Command` / `Query` / `Handler` 保留給 message-oriented 入口
@@ -125,7 +125,7 @@ Controller
   -> Use Case
   -> Application Service (optional)
   -> Aggregate / Domain Service / Repository / Query Service
-  -> Use Case Output
+  -> Use Case Output / Result / PageResult
   -> Response
 ```
 

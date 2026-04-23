@@ -92,7 +92,7 @@
 | 層級 | Input 命名 | Output 命名 |
 |------|-----------|------------|
 | `<DomainName>.WebApi` | `*Request` | `*Response` |
-| `<DomainName>.Applications` | `*Input` | `*Output` |
+| `<DomainName>.Applications` | `*Input` | `*Output` / `Result<T>` / `PageResult<T>` |
 
 ### ⚠ CQRS & Wolverine 規則
 
