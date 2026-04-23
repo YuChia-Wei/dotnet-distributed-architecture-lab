@@ -123,6 +123,7 @@
 - 建立最小 artifact
 - 由 skill 之間透過 artifact handoff
 - artifact 預設放在 `.dev/workflows/<workflow-id>/`
+- 實作進行中要維持 commit discipline；每個已完成且有最小驗證的 bounded slice 都應先 commit，再進下一個 slice
 
 ## 不要做的事
 
@@ -130,6 +131,7 @@
 - 不要把 workflow mode 變成每次都要跑的重流程
 - 不要讓 artifact 取代 skill 的判斷
 - 不要讓 artifact 數量繼續膨脹
+- 不要把整個 workflow 的程式碼與文件修改累積到最後一個超大 commit
 
 ## 相關模板
 
