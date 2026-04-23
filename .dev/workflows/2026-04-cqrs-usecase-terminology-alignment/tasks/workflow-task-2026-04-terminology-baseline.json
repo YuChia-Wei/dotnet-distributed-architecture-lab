@@ -3,7 +3,7 @@
   "owner_skill": "ddd-ca-hex-architect",
   "related_plan_id": "workflow-plan-2026-04-cqrs-usecase-terminology-alignment",
   "related_review_report_id": "review-report-2026-04-cqrs-usecase-terminology-alignment",
-  "status": "active",
+  "status": "completed",
   "scope": {
     "target": "Establish externally grounded definitions for command, command handler, use case, and candidate use case input naming in this repository.",
     "files": [
@@ -54,8 +54,11 @@
     ]
   },
   "results": {
-    "summary": "Workflow task opened. Terminology baseline discussion pending external-reference comparison and repo guideline synthesis.",
+    "summary": "Terminology baseline established. The repo now defines Use Case as the explicit application inbound port, reserves Input/Output for use case boundary models, restricts HTTP controllers to direct Use Case access through [FromServices], and narrows Command/Query/Handler vocabulary to message-oriented flows.",
     "files_changed": [
+      ".dev/ARCHITECTURE.MD",
+      ".dev/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD",
+      ".dev/standards/project-structure.md",
       ".dev/workflows/2026-04-cqrs-usecase-terminology-alignment/workflow-plan.md",
       ".dev/workflows/2026-04-cqrs-usecase-terminology-alignment/review-report.md",
       ".dev/workflows/2026-04-cqrs-usecase-terminology-alignment/tasks/workflow-task-2026-04-terminology-baseline.json"
