@@ -37,6 +37,19 @@ command side 預設只使用 generic repository：
 
 ## Practical Rule
 
-- command side: generic repository
+- command side / use case write side: generic repository
 - query side: query repository / query service
 - 不要把 DTO 查詢方法加進 domain repository
+
+## Relationship to Use Case Rule
+
+- `Use Case` 是 HTTP 與 application inbound port 的主入口
+- `IDomainRepository<TAggregate, TId>` 是 use case / application service / message handler 在 write side 的預設 persistence port
+- repository 規則不改變 `Use Case`、`Command`、`Handler` 的責任邊界，只限制 write-side persistence vocabulary
+
+## References
+
+- Microsoft, CQRS pattern:
+  - [https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs)
+- Martin Fowler, CQRS:
+  - [https://martinfowler.com/bliki/CQRS.html](https://martinfowler.com/bliki/CQRS.html)

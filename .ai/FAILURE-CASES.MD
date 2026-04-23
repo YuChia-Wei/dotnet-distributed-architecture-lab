@@ -16,8 +16,47 @@ public interface CreateProductUseCase
 
 **✅ CORRECT**: Input/Output in separate files
 ```
-src/Application/Product/UseCases/Commands/CreateProductInput.cs
-src/Application/Product/UseCases/Commands/CreateProductOutput.cs
+src/Product/DomainCore/SaleProducts.Applications/UseCases/CreateProduct/CreateProductInput.cs
+src/Product/DomainCore/SaleProducts.Applications/UseCases/CreateProduct/CreateProductOutput.cs
+```
+
+### 1.1 Wrong Boundary Naming
+**❌ WRONG**: use case boundary models named as DTOs
+```csharp
+public sealed record CreateProductInputDto(...);
+public sealed record CreateProductOutputDto(...);
+```
+
+**✅ CORRECT**: use case boundary models use Input/Output naming
+```csharp
+public sealed record CreateProductInput(...);
+public sealed record CreateProductOutput(...);
+```
+
+### 1.2 HTTP Controller Dispatching Through Bus
+**❌ WRONG**: controller uses `IMessageBus` as the HTTP application boundary
+```csharp
+public async Task<IActionResult> Create(
+    [FromBody] CreateProductRequest request)
+{
+    var result = await _bus.InvokeAsync<CreateProductOutput>(
+        new CreateProductCommand(request.Name));
+    return Ok(result);
+}
+```
+
+**✅ CORRECT**: controller resolves explicit use case via `[FromServices]`
+```csharp
+public async Task<IActionResult> Create(
+    [FromBody] CreateProductRequest request,
+    [FromServices] ICreateProductUseCase useCase,
+    CancellationToken ct)
+{
+    var output = await useCase.ExecuteAsync(
+        new CreateProductInput(request.Name),
+        ct);
+    return Ok(new CreateProductResponse(output.Id));
+}
 ```
 
 ### 2. Missing Mappers
@@ -120,6 +159,11 @@ public void Rule_Create_product_successfully()
         .BDDfy();
 }
 ```
+
+### 11. Command Handler as HTTP Boundary by Default
+**❌ WRONG**: treating command handler as the default HTTP use case boundary
+
+**✅ CORRECT**: keep command handlers for message-oriented flows, and use explicit use cases as HTTP inbound ports
 
 ### 11. Hardcoding profile in tests
 **❌ WRONG**: `ASPNETCORE_ENVIRONMENT` set inside test class
