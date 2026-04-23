@@ -17,14 +17,14 @@
 
 - `assets/`
   - canonical source root for portable AI assets
-- `prompts/`
-  - prompt 資產根目錄
-- `prompts/PROMPT-PORTABILITY-RULES.md`
-  - prompt 可移植性規則
-- `prompts/shared/`
-  - shared prompt fragments / reusable rules
-- `prompts/examples/`
-  - prompt examples
+- `assets/shared/`
+  - shared rules / prompt fragments / reusable supporting materials
+- `assets/sub-agent-role-prompts/`
+  - delegated sub-agent role prompt canonical assets
+- `assets/skills/`
+  - canonical skill registry and skill specs
+- `assets/templates/`
+  - canonical templates for skills / prompts / commands
 
 ## Script Assets
 
@@ -52,6 +52,8 @@
   - human-facing guides 入口
 - `../.dev/guides/ai-collaboration-guides/README.MD`
   - AI collaboration guides 入口
+- `../.dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md`
+  - template 移植到新 repo 後的架構同步指南
 - `../.dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md`
   - 多 agent 情境下的 skill / prompt / guide 收納策略
 - `../.claude/skills/README.md`

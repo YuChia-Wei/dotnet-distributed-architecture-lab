@@ -105,21 +105,23 @@ requirement-designer
 
 ## 我對目前 repo 的建議
 
-現階段建議：
+目前 repo 已經補上：
 
-1. 先做 `requirement-designer` prompt / guide
-2. 再做 `spec-designer` prompt / guide
-3. 等實際使用幾輪後，再決定是否升級成 skill
+1. `requirement-author` skill
+2. `spec-author` skill
+3. 對應的 human-facing prompt guides
 
-理由：
+這代表現況不再只是 prompt/template 試行，而是進入正式 skill 化基線。
 
-- `.dev/requirement/requirement-guide.md` 已有明確 markdown 結構
-- `.dev/specs/SPEC-GUIDE.md` 與 `.dev/specs/SPEC-ORGANIZATION-GUIDE.md` 已有明確格式與目錄規範
-- 你目前缺的更像是「如何把模糊想法快速整理成合格文件」，這通常先用 prompt/template 就能解決
+採用方式建議仍維持輕量：
+
+- requirement 還模糊時先用 `requirement-author`
+- requirement 穩定後再用 `spec-author`
+- 若 aggregate / bounded context 邊界不清，先交給 `ddd-ca-hex-architect`
 
 ## 升級判斷點
 
-當你觀察到以下情況時，就值得升級成 skill：
+這些原本的升級判斷點，已成為本次 skill 化的理由：
 
 - requirement 常漏 acceptance criteria 或 non-functional constraints
 - spec 常漏必要 JSON keys 或 aggregate 歸屬
@@ -128,8 +130,10 @@ requirement-designer
 
 ## 下一步建議
 
-最小可行方案：
+目前建議的實際鏈路：
 
-1. 先建立一份 human-facing guide，說明 requirement / spec 各自怎麼下 prompt
-2. 補兩份 prompt templates
-3. 實際用幾輪後，再決定是否建立正式 skill
+1. `requirement-author`
+2. `spec-author`
+3. `problem-frame-author`
+4. `bdd-gwt-test-designer`
+5. implementer / review / validator

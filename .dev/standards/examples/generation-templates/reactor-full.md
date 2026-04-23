@@ -9,7 +9,7 @@ Generate reactors for eventual consistency using:
 - Wolverine for message handling
 - ezDDD concepts (to be implemented in .NET)
 
-## Reactor Interface Definition (ADR-018 Equivalent)
+## Reactor Interface Definition
 
 The reactor interface must handle `DomainEventData`:
 ```csharp

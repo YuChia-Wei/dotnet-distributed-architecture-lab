@@ -175,7 +175,6 @@ Ensure `ASPNETCORE_ENVIRONMENT` matches `test-inmemory` or `test-outbox` and tha
 ## Next Steps
 1. Read `.dev/guides/LEARNING-PATH.md`.
 2. Use `.ai/CODE-TEMPLATES.md` for scaffolding.
-3. Keep `.dev/adr/` updated with key decisions.
-
+3. Keep `.dev/standards/`, `.dev/guides/`, and `.dev/ARCHITECTURE.MD` updated as the primary rule set.
 
 

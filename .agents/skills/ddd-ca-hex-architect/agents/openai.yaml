@@ -1,0 +1,4 @@
+interface:
+  display_name: "DDD CA HEX Architect"
+  short_description: "Architect workflow for DDD, CA, HEX, and MQ-first design"
+  default_prompt: "Use $ddd-ca-hex-architect to design or refactor a bounded context, aggregate, or MQ-first integration in this repository."

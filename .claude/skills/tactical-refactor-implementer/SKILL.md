@@ -5,79 +5,20 @@ description: Execute local, object-centered refactoring in this repository. Use 
 
 # Tactical Refactor Implementer
 
-## Overview
+This is a thin Claude-compatible wrapper.
 
-Use this skill for tactical refactoring around one main target.
-It is for local structure improvement, not architecture design and not stage-level refactoring.
+## Canonical Source
 
-## Quick Start
+- Registry: `.ai/assets/skills/README.MD`
+- Spec: `.ai/assets/skills/tactical-refactor-implementer/skill.yaml`
+- Human Guide: `.dev/guides/ai-collaboration-guides/TACTICAL-REFACTOR-IMPLEMENTER-SKILL-GUIDE.md`
+- References:
+  - `.ai/assets/skills/tactical-refactor-implementer/references/skill-boundaries.md`
+  - `.ai/assets/skills/tactical-refactor-implementer/references/allowed-operations.md`
+  - `.ai/assets/skills/tactical-refactor-implementer/references/execution-rules.md`
 
-1. Read `.dev/ARCHITECTURE.MD` and `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`.
-2. Read [references/skill-boundaries.md](references/skill-boundaries.md) to confirm this is a local refactor task.
-3. Read [references/allowed-operations.md](references/allowed-operations.md) to confirm the requested operation is in scope.
-4. Read [references/execution-rules.md](references/execution-rules.md) before editing.
+## Wrapper Rules
 
-## Workflow
-
-### 1. Confirm the main target
-Identify exactly one primary target:
-- class
-- object
-- symbol to rename
-
-### 2. Confirm the local operation
-Allowed default operations:
-- extract method
-- rename symbol
-
-Do not introduce a new class or a new interface in this skill.
-If the refactor requires a new type, redirect to `ddd-ca-hex-architect` for review and then to `staged-refactor-implementer` for execution.
-
-### 3. Set the dependency radius
-The default dependency radius is:
-- target class/object
-- direct dependencies
-- direct call sites
-- immediate tests if needed
-
-Do not silently expand past this radius.
-
-### 4. Apply one coherent local refactor
-Prefer a single coherent local move over several loosely related edits.
-If the task starts requiring module boundaries or architecture changes, stop and redirect.
-
-## Scope Rules
-
-### What This Skill Owns
-- local structural refactoring
-- object-centered cleanup
-- direct dependency updates
-- safe bounded renames
-
-### What This Skill Does Not Own
-- architecture redesign
-- stage-level refactoring strategy
-- aggregate or bounded context re-cutting
-- new class extraction
-- new interface extraction
-- broad multi-module cleanup campaigns
-
-### Maximum Default Size
-- one primary target
-- one main refactoring operation
-- only direct dependencies and direct call sites
-
-## Output Expectations
-
-Return:
-1. target and chosen operation
-2. files changed or planned
-3. dependency radius touched
-4. behavior compatibility notes
-5. deferred items if broader work is needed
-
-## References
-
-- [references/skill-boundaries.md](references/skill-boundaries.md)
-- [references/allowed-operations.md](references/allowed-operations.md)
-- [references/execution-rules.md](references/execution-rules.md)
+Use this wrapper only as a compatibility entry.
+Keep runtime-specific metadata in this wrapper directory only when the runtime requires it, such as `agents/openai.yaml`.
+If wrapper text and canonical spec differ, follow `.ai/assets/skills/tactical-refactor-implementer/skill.yaml`.

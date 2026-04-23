@@ -1,0 +1,51 @@
+name: "AuthorizePayment"
+execution:
+  method: "command"
+
+input:
+  - name: "payment_id"
+    type: "PaymentId"
+    required: true
+  - name: "order_id"
+    type: "OrderId"
+    required: true
+  - name: "amount"
+    type: "Money"
+    required: true
+  - name: "currency"
+    type: "string"
+    required: true
+  - name: "payment_method_token"
+    type: "string"
+    required: true
+  - name: "idempotency_key"
+    type: "string"
+    required: true
+  - name: "correlation_id"
+    type: "string"
+    required: true
+
+preconditions:
+  - id: PRE1
+    description: "The payment aggregate exists and is awaiting authorization."
+  - id: PRE2
+    description: "The amount and currency match the payment intent recorded for the order."
+  - id: PRE3
+    description: "The idempotency key has not already produced a terminal authorization result for this payment."
+
+postconditions:
+  - id: POST1
+    description: "The aggregate records the latest gateway interaction reference and outcome classification."
+  - id: POST2
+    description: "A domain event reflects whether the payment was authorized, declined, or left pending."
+  - id: POST3
+    description: "The returned application outcome matches the gateway response mapping rules."
+
+output:
+  success: "AuthorizePaymentResult"
+  failures:
+    - "ValidationFailure"
+    - "PaymentAlreadyFinalized"
+    - "GatewayDeclined"
+    - "GatewayTimeoutPendingReconciliation"
+    - "GatewayTemporaryFailure"

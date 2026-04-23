@@ -1,0 +1,4 @@
+interface:
+  display_name: "Staged Refactor Implementer"
+  short_description: "Incremental refactor execution from plans and findings"
+  default_prompt: "Use $staged-refactor-implementer to execute one safe stage of a refactoring plan using architecture decisions and review findings."

@@ -1,0 +1,53 @@
+asset_id: "repo-structure-sync"
+asset_type: "skill-spec"
+title: "Repo Structure Sync"
+purpose: "Scan a freshly copied target git repository and refresh repo-specific architecture sections in `.dev/`, `.ai/`, and `agents.md` while keeping framework-level collaboration rules stable."
+portability: "portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+triggers:
+  - "repo sync"
+  - "structure sync"
+  - "portable install"
+  - "template copy"
+inputs:
+  - "target repository file tree"
+  - "solution files and csproj files"
+  - "copied template docs that may be stale"
+outputs:
+  - "repo inventory"
+  - "complexity verdict"
+  - "safe direct update targets"
+  - "source packet for escalation"
+  - "updated architecture-facing docs"
+constraints:
+  - "Keep framework-level collaboration rules unless the new repo clearly invalidates them"
+  - "Do not bulk rewrite specs or operations docs unless explicitly requested"
+  - "Prefer low-cost inventory first and escalate only when the checklist requires it"
+workflow:
+  - step: 1
+    description: "Run a low-cost inventory pass and extract only file-backed facts"
+  - step: 2
+    description: "Evaluate P0 and P1 triggers to decide whether escalation is needed"
+  - step: 3
+    description: "Update only the architecture-facing docs that can be safely synced from confirmed facts"
+  - step: 4
+    description: "If needed, pass a compact source packet to a stronger model or sub-agent"
+references:
+  - ".ai/assets/skills/repo-structure-sync/references/scan-playbook.md"
+  - ".ai/assets/skills/repo-structure-sync/references/escalation-checklist.md"
+  - ".ai/assets/skills/repo-structure-sync/references/delegation-rules.md"
+  - ".ai/assets/skills/repo-structure-sync/references/document-targets.md"
+  - ".ai/assets/skills/repo-structure-sync/references/output-contract.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/repo-structure-sync/"
+  codex:
+    wrapper_path: ".agents/skills/repo-structure-sync/"
+status: "active"

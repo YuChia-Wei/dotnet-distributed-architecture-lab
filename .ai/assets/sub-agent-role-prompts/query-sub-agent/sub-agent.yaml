@@ -31,13 +31,4 @@ references:
   - ".ai/assets/shared/common-rules.md"
   - ".ai/assets/shared/domain-rules.md"
 human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
-wrapper_targets:
-  - "gemini"
-  - "copilot"
-wrapper_metadata:
-  gemini:
-    wrapper_path: ".gemini/commands/query-sub-agent.md"
-  copilot:
-    wrapper_path: ".github/prompts/query-sub-agent.md"
-
 

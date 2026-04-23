@@ -41,4 +41,4 @@ wrapper_metadata:
   claude:
     wrapper_path: ".claude/skills/bdd-gwt-test-designer/"
   codex:
-    runtime_wrapper_path: ".codex/skills/bdd-gwt-test-designer/"
+    runtime_wrapper_path: ".agents/skills/bdd-gwt-test-designer/"

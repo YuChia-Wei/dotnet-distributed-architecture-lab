@@ -3,10 +3,7 @@
 這個目錄包含自動化檢查與驗證腳本，用於支援目前的 .NET 10 + WolverineFx + Dapper/Npgsql + EF Core 工作流。
 
 > Note:
-> 部分 legacy script names 仍保留為相容層，但對外預設入口已改為 .NET 命名。
-> 原則是：
-> - 優先使用新的 .NET 友善腳本名稱
-> - 舊名稱只作為 backward compatibility wrapper
+> 對外預設入口已統一為 .NET 命名，legacy script names 已完成退場。
 
 ## Quick Start
 
@@ -39,14 +36,6 @@
 - `check-dotnet-config.sh`
 - `check-test-di-compliance.sh`
 
-### Legacy compatibility wrappers
-
-- `check-jpa-projection-config.sh`
-- `check-spring-config.sh`
-- `check-test-spring-di.sh`
-
-這些 legacy names 不代表 active stack 仍然是 Java / Spring / JPA。
-
 ## Script Inventory
 
 ```text
@@ -61,7 +50,6 @@
 ├── check-domain-events-compliance.sh
 ├── check-dotnet-config.sh
 ├── check-framework-api-compliance.sh
-├── check-jpa-projection-config.sh
 ├── check-mapper-compliance.sh
 ├── check-mutation-coverage.sh
 ├── check-projection-compliance.sh
@@ -69,10 +57,8 @@
 ├── check-prompt-portability.sh
 ├── check-repository-compliance.sh
 ├── check-spec-compliance.sh
-├── check-spring-config.sh
 ├── check-test-compliance.sh
 ├── check-test-di-compliance.sh
-├── check-test-spring-di.sh
 ├── check-usecase-compliance.sh
 ├── generate-check-scripts-from-md.sh
 ├── MD-SCRIPT-GENERATION-GUIDE.md
@@ -82,8 +68,7 @@
 ## Stage 6 Alignment Notes
 
 - `.NET` naming is now the default recommendation in docs and orchestrator scripts.
-- Legacy names remain available so older prompts, notes, and local habits do not break immediately.
-- Further cleanup can remove legacy wrappers only after all references have been migrated.
+- Legacy wrapper retirement is complete for the projection/config/test-DI script trio.
 
 ## Script Notes
 
@@ -100,17 +85,17 @@
 ### `check-projection-config.sh`
 
 - preferred entry point for projection/read-model configuration checks
-- currently delegates to the legacy `check-jpa-projection-config.sh`
+- canonical implementation owner
 
 ### `check-dotnet-config.sh`
 
 - preferred entry point for DI/config/environment checks
-- currently delegates to the legacy `check-spring-config.sh`
+- canonical implementation owner
 
 ### `check-test-di-compliance.sh`
 
 - preferred entry point for test DI compliance checks
-- currently delegates to the legacy `check-test-spring-di.sh`
+- canonical implementation owner
 
 ## Related Files
 

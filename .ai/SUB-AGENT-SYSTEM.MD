@@ -4,9 +4,9 @@
 
 ## Current Direction
 
-- `command-sub-agent`、`query-sub-agent`、`reactor-sub-agent` 這三類 use case / consistency sub-agents 已改收斂為 sub-agent role prompts
-- 其 canonical source 應以 `.ai/assets/sub-agent-role-prompts/` 下的 `sub-agent.yaml` 與 references 為準，而不再以單一 prompt 檔作為唯一真相
-- 它們不應被視為 top-level skills
+- `command-sub-agent`、`query-sub-agent`、`reactor-sub-agent` 這三類 use case / consistency sub-agents 已改收斂為 delegated sub-agent role prompts
+- 其 delegated canonical source 應以 `.ai/assets/sub-agent-role-prompts/` 下的 `sub-agent.yaml` 與 references 為準，而不再以單一 prompt 檔作為唯一真相
+- 對應的 top-level implementation entry 現在分別由 `command-use-case-implementer`、`query-use-case-implementer`、`reactor-implementer` 承擔
 - `bdd-gwt-test-designer` 與 `code-reviewer` 保持 top-level skills；test generation 與 delegated review 應優先建模為 sub-agent role prompts
 - 若未來需要 delegated runtime wrapper，應在專門的 sub-agent wrapper strategy 中處理
 - 舊 prompt-first sub-agent assets 與 `.ai/assets/commands/*` 已自活躍層移除，不應再作為主入口或相容層依賴
@@ -113,7 +113,7 @@
 - **職責**：從 Problem Frame 規格產生完整功能
 - **來源**：`.dev/problem-frames/*.yaml`（若未存在，請標記 TODO）
 - **要求**：Spec compliance 100% gate
-- **Canonical Asset**：`.ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/`（若尚未建立，請標記 TODO）
+- **Canonical Asset**：`.ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/sub-agent.yaml`
 
 ### Infrastructure Sub-agents
 
@@ -256,11 +256,13 @@ sub-agent 不應自行取代 refactor skills。
 ## 💻 實際執行範例（簡版）
 
 ### Command Use Case
+- Top-Level Skill: `.ai/assets/skills/command-use-case-implementer/skill.yaml`
 - Canonical Sub-Agent Asset: `.ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`
 - 輸入：spec + `project-config.yaml`
 - 輸出：Handler + Domain Events + Repository Save
 
 ### Query Use Case
+- Top-Level Skill: `.ai/assets/skills/query-use-case-implementer/skill.yaml`
 - Canonical Sub-Agent Asset: `.ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml`
 - 輸出：Projection + DTO + Mapper
 
@@ -268,6 +270,7 @@ sub-agent 不應自行取代 refactor skills。
 - Canonical Sub-Agent Asset: `.ai/assets/sub-agent-role-prompts/controller-sub-agent/sub-agent.yaml`
 
 ### Reactor
+- Top-Level Skill: `.ai/assets/skills/reactor-implementer/skill.yaml`
 - Canonical Sub-Agent Asset: `.ai/assets/sub-agent-role-prompts/reactor-sub-agent/sub-agent.yaml`
 
 ### Reconciler
@@ -279,9 +282,9 @@ sub-agent 不應自行取代 refactor skills。
 ## 🔧 使用指南（對使用者）
 
 ```
-"請使用 command-sub-agent role prompt 實作 create-product use case"
-"請使用 query-sub-agent role prompt 實作 get-product use case"
-"請使用 reactor-sub-agent role prompt 實作 notify-sprint-to-select-backlog-item"
+"請使用 command-use-case-implementer 實作 create-product use case"
+"請使用 query-use-case-implementer 實作 get-product use case"
+"請使用 reactor-implementer 實作 notify-sprint-to-select-backlog-item"
 "請使用 reconciler-sub-agent workflow 實作定期校正"
 "請使用 outbox-sub-agent workflow 為 Product 實作 Outbox Pattern"
 ```
@@ -335,7 +338,8 @@ Code Review 有 MUST FIX 時必須先修正再進行後續步驟。
 ## 📌 快速參考
 
 ```
-Task: Generate [command-name] use case
+Task: Implement [command-name] use case
+Top-Level Skill: .ai/assets/skills/command-use-case-implementer/skill.yaml
 Sub-Agent Asset: .ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml
 
 Task: Generate tests for [use-case-name]

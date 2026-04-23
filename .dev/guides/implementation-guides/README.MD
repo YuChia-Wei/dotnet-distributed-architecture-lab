@@ -3,8 +3,8 @@
 本目錄放置偏實作、設定、排錯、操作流程的 human-facing guides。
 
 > Note:
-> 本目錄已將高流量入口文件優先改為 .NET 命名。
-> 若仍看到 Java/Spring/JPA 字樣，預設應視為 historical context 或遷移紀錄，而非現行主動推薦做法。
+> 本目錄已將高流量入口文件優先改為 .NET 命名與 .NET-first 語意。
+> 若仍看到少量 legacy 名稱，應優先以對應的 .NET canonical docs 為準。
 
 ## 適合放這裡的文件
 
@@ -58,4 +58,3 @@
   - template 使用方式
 - `VERSION-PLACEHOLDER-GUIDE.md`
   - version placeholder 相關作法
-

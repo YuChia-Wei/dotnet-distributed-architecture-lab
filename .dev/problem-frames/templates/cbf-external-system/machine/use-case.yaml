@@ -1,0 +1,30 @@
+name: "<use-case>"
+execution:
+  method: "command"
+
+input:
+  - name: "<id>"
+    type: "string"
+    required: true
+  - name: "idempotency_key"
+    type: "string"
+    required: true
+
+preconditions:
+  - id: PRE1
+    description: "The target aggregate exists and is in a state that allows this command."
+  - id: PRE2
+    description: "The idempotency key has not already produced a terminal side effect."
+
+postconditions:
+  - id: POST1
+    description: "A domain event records the attempted interaction with the external system."
+  - id: POST2
+    description: "The aggregate stores the external reference needed for later reconciliation."
+
+output:
+  success: "<success response DTO or acknowledgement>"
+  failures:
+    - "<business failure for invalid request>"
+    - "<business failure for external rejection>"
+    - "<business failure for timeout or pending confirmation>"

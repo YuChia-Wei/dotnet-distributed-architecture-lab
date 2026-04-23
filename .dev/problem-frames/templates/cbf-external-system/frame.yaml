@@ -1,0 +1,40 @@
+frame_type: CommandedBehaviorFrame
+domain: "<domain>"
+use_case: "<use-case>"
+summary: "<one-line summary>"
+
+controlled_domain:
+  aggregate_spec: controlled-domain/aggregate.yaml
+
+frame_concerns:
+  - id: FC1
+    title: External authority boundary
+    description: Which facts are decided by the external system rather than the local machine?
+  - id: FC2
+    title: Idempotent command handling
+    description: How does the system avoid duplicate side effects for retries or repeated callbacks?
+  - id: FC3
+    title: Timeout and retry policy
+    description: What happens when the external system is slow or temporarily unavailable?
+  - id: FC4
+    title: Error outcome mapping
+    description: How are external errors translated into business-level outcomes?
+  - id: FC5
+    title: Asynchronous confirmation
+    description: Which state changes happen only after a callback or message from the external system?
+  - id: FC6
+    title: Auditability
+    description: Which identifiers and decisions must be retained for support and traceability?
+
+problem_world_facts:
+  - id: PWF1
+    fact: "<external system> is the source of truth for the authorization result."
+  - id: PWF2
+    fact: "Callbacks or confirmation messages may be delayed or duplicated."
+  - id: PWF3
+    fact: "Client retries may resend the same business intent."
+
+commanded_behavior:
+  actor: "<primary actor>"
+  command: "<command name>"
+  desired_outcome: "<business outcome>"

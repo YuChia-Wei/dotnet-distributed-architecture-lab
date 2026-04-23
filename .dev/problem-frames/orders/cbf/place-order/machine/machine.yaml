@@ -1,0 +1,18 @@
+command_processing:
+  steps:
+    - "Validate PlaceOrder command fields"
+    - "Create the Order aggregate candidate for the requested product, quantity, date, and amount"
+    - "Send ReserveInventoryRequestContract through the inventory collaboration gateway"
+    - "If reservation succeeds, persist the order"
+    - "After persistence, publish the outbound OrderPlaced integration event"
+    - "Return PlaceOrderResult with success semantics and order id"
+
+error_handling:
+  reservation_failed: "Return a failure result and do not persist the order"
+  repository_failure: "Treat persistence failure as a failed place-order outcome and do not publish the outbound event"
+  collaboration_failure: "Preserve failure semantics unless and until later runtime docs define retry or pending behavior"
+
+constraint_enforcement:
+  - "Inventory reservation success is required before order persistence"
+  - "No outbound OrderPlaced integration event is published when reservation fails"
+  - "Orders must collaborate through MQ-first contracts rather than direct web API calls"

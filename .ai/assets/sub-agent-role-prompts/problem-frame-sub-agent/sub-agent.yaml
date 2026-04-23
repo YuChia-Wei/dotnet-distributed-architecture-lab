@@ -1,0 +1,33 @@
+asset_id: "problem-frame-sub-agent"
+asset_type: "sub-agent-role-prompt"
+title: "Problem Frame Sub-Agent"
+purpose: "Define the delegated worker-role prompt for drafting a first problem frame from repository requirements, specs, code, and tests, and for preparing validator-ready inputs."
+role_kind: "specification-sub-agent"
+triggers:
+  - "problem-frame-sub-agent"
+  - "draft problem frame from requirements"
+  - "reverse engineer problem frame from code"
+inputs:
+  - "target use case"
+  - "source requirement/spec files"
+  - "optional code and test files"
+outputs:
+  - "problem-frame draft"
+  - "inference markers and open questions"
+  - "handoff notes for BDD or validator"
+constraints:
+  - "Prefer CBF for first-pass external-system use cases"
+  - "Keep one use case per draft"
+  - "Explicitly separate source-backed facts from inferred facts"
+workflow:
+  - step: 1
+    description: "Read the source files and define the use case boundary"
+  - step: 2
+    description: "Extract contracts, outcomes, external constraints, and acceptance scenarios"
+  - step: 3
+    description: "Draft the validator-ready problem-frame files and note gaps"
+references:
+  - ".ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/references/authoring-playbook.md"
+  - ".ai/assets/skills/problem-frame-author/references/output-contract.md"
+  - ".dev/problem-frames/README.MD"
+human_guide: ".ai/SUB-AGENT-SYSTEM.MD"

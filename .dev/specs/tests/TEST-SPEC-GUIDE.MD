@@ -2,6 +2,8 @@
 
 本指南定義如何在本 repo 內撰寫測試規格，特別適用於 BDD、TDD、Given-When-Then 與 scenario-first 開發。
 
+`.feature` 正式存放規範見 [GHERKIN-FEATURE-STORAGE-GUIDE.MD](./GHERKIN-FEATURE-STORAGE-GUIDE.MD)。
+
 ## 1. 什麼情況要建立 test spec
 
 建議在下列情況建立：
@@ -50,6 +52,12 @@ domain-local test spec 應依測試目標分類：
 
 - `.dev/specs/tests/cross-domain/<flow-name>.test-spec.md`
 - `.dev/specs/tests/e2e/<journey-name>.test-spec.md`
+
+對應的正式 Gherkin `.feature` 建議放在：
+
+- `tests/Features/<domain>/<use-case>.feature`
+- `tests/Features/cross-domain/<flow-name>.feature`
+- `tests/Features/e2e/<journey-name>.feature`
 
 ## 4. 建議章節
 
@@ -122,7 +130,8 @@ Then 可包含：
 - `.dev/specs/tests/` 是測試意圖的正式文件區
 - `bdd-gwt-test-designer` 可把 requirement/spec 轉成此區的 scenarios
 - `bdd-gwt-test-designer` 應同時回傳建議存放類別，例如 `use-cases/`、`integration/`、`cross-domain/`
-- 後續 test generation 或實作時，再根據這裡的場景寫測試程式碼
+- 後續 test generation 或實作時，正式 `.feature` 應建立在 `tests/Features/`，而不是 `.dev/specs/tests/`
+- `.dev/specs/tests/` 應保留 assertion notes、coverage gaps、追溯資訊與非 Gherkin 補充說明
 
 ## 9. 最小完成定義
 

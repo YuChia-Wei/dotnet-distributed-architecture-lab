@@ -1,0 +1,69 @@
+scenarios:
+  - id: SC1
+    title: "Gateway approves the payment synchronously"
+    given:
+      - "A payment aggregate exists in AwaitingAuthorization state"
+      - "The command contains a new idempotency key"
+    when:
+      - "AuthorizePayment is submitted"
+      - "The gateway returns an approval with a gateway reference"
+    then:
+      - "The payment aggregate becomes Authorized"
+      - "The gateway reference is stored"
+      - "A PaymentAuthorized event is emitted"
+    traces_to:
+      requirements: ["REQ-PAY-1", "REQ-PAY-4"]
+      frame_concerns: ["FC1", "FC2", "FC6"]
+    tests_anchor:
+      use_case_test: "AuthorizePaymentHandlerTests.authorizes_payment_when_gateway_approves"
+      aggregate_test: "PaymentContractTests.authorize_sets_authorized_state_when_gateway_approves"
+  - id: SC2
+    title: "Gateway declines the payment"
+    given:
+      - "A payment aggregate exists in AwaitingAuthorization state"
+    when:
+      - "AuthorizePayment is submitted"
+      - "The gateway returns a decline response with a decline code"
+    then:
+      - "The payment aggregate does not become Authorized"
+      - "The decline reason is recorded"
+      - "A PaymentAuthorizationDeclined event is emitted"
+    traces_to:
+      requirements: ["REQ-PAY-2"]
+      frame_concerns: ["FC1", "FC4", "FC6"]
+    tests_anchor:
+      use_case_test: "AuthorizePaymentHandlerTests.records_decline_when_gateway_rejects"
+      aggregate_test: "PaymentContractTests.authorize_records_decline_when_gateway_rejects"
+  - id: SC3
+    title: "Gateway times out and reconciliation is required"
+    given:
+      - "A payment aggregate exists in AwaitingAuthorization state"
+    when:
+      - "AuthorizePayment is submitted"
+      - "The gateway does not answer before the timeout policy expires"
+    then:
+      - "The payment aggregate does not become Authorized"
+      - "A pending authorization outcome is recorded"
+      - "A reconciliation-oriented event is emitted"
+    traces_to:
+      requirements: ["REQ-PAY-3"]
+      frame_concerns: ["FC3", "FC5", "FC6"]
+    tests_anchor:
+      use_case_test: "AuthorizePaymentHandlerTests.records_pending_outcome_when_gateway_times_out"
+      aggregate_test: "PaymentContractTests.authorize_records_pending_outcome_on_timeout"
+  - id: SC4
+    title: "Duplicate callback does not duplicate authorization"
+    given:
+      - "A gateway approval callback for the payment was already processed"
+    when:
+      - "The same callback is received again"
+    then:
+      - "The payment aggregate remains in the same terminal state"
+      - "No second PaymentAuthorized event is emitted"
+      - "The duplicate is handled idempotently"
+    traces_to:
+      requirements: ["REQ-PAY-5"]
+      frame_concerns: ["FC2", "FC5"]
+    tests_anchor:
+      use_case_test: "RecordGatewayAuthorizationCallbackHandlerTests.ignores_duplicate_callback"
+      aggregate_test: "PaymentContractTests.process_callback_is_idempotent_for_duplicate_approval"

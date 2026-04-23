@@ -1,0 +1,45 @@
+asset_id: "command-use-case-implementer"
+asset_type: "skill-spec"
+title: "Command Use Case Implementer"
+purpose: "Implement a bounded command-side use case in this repository from requirement, spec, architecture decisions, or review findings without redefining the overall architecture direction."
+triggers:
+  - "command use case"
+  - "implement command"
+  - "add command handler"
+  - "command-use-case-implementer"
+inputs:
+  - "requirement, spec, or review findings for the command behavior"
+  - "aggregate or bounded-context target"
+  - "project configuration or current storage profile when relevant"
+outputs:
+  - "bounded command-side implementation"
+  - "touched files and validation notes"
+  - "explicit handoff if architecture or testing work remains"
+constraints:
+  - "Use WolverineFx handlers for commands"
+  - "Use the repository DI model; do not introduce custom repository interfaces"
+  - "Stop and hand off when bounded-context or aggregate boundaries are unclear"
+  - "Do not redefine the architecture direction when the task is really a refactor-planning problem"
+workflow:
+  - step: 1
+    description: "Confirm the command goal, aggregate boundary, and required inputs from requirement or spec truth"
+  - step: 2
+    description: "Apply command-side implementation rules, storage profile constraints, and validation expectations"
+  - step: 3
+    description: "Implement the bounded change and return validation notes plus any required next-skill handoff"
+references:
+  - ".ai/assets/skills/command-use-case-implementer/references/implementation-playbook.md"
+  - ".ai/assets/skills/command-use-case-implementer/references/handoff-rules.md"
+  - ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+  - ".dev/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD"
+examples:
+  - ".dev/guides/ai-collaboration-guides/USE-CASE-IMPLEMENTER-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/USE-CASE-IMPLEMENTER-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/command-use-case-implementer/"
+  codex:
+    runtime_wrapper_path: ".agents/skills/command-use-case-implementer/"

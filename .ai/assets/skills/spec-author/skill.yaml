@@ -1,0 +1,43 @@
+asset_id: "spec-author"
+asset_type: "skill-spec"
+title: "Spec Author"
+purpose: "Draft or normalize repository production specs and test specs from requirements, existing specs, or codebase facts so they align with .dev/specs structure and schema rules."
+triggers:
+  - "spec"
+  - "draft spec"
+  - "normalize spec"
+  - "convert requirement to spec"
+inputs:
+  - "requirement files or summaries"
+  - "existing spec drafts or code references"
+  - "target aggregate or use case"
+outputs:
+  - "use-case, entity, adapter, or test spec draft"
+  - "recommended file path under .dev/specs/"
+  - "assumptions and missing fields"
+constraints:
+  - "Follow .dev/specs/SPEC-GUIDE.MD and .dev/specs/SPEC-ORGANIZATION-GUIDE.MD"
+  - "Do not invent aggregate ownership when architecture boundaries are unclear"
+  - "Separate production specs from test specs"
+workflow:
+  - step: 1
+    description: "Choose the spec type and identify the target aggregate or use case"
+  - step: 2
+    description: "Draft the spec in the required JSON or markdown shape"
+  - step: 3
+    description: "Recommend the correct output path and next handoff"
+references:
+  - ".ai/assets/skills/spec-author/references/authoring-playbook.md"
+  - ".ai/assets/skills/spec-author/references/output-contract.md"
+  - ".ai/assets/skills/spec-author/references/type-selection.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/SPEC-DESIGNER-PROMPT-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/SPEC-DESIGNER-PROMPT-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/spec-author/"
+  codex:
+    runtime_wrapper_path: ".agents/skills/spec-author/"

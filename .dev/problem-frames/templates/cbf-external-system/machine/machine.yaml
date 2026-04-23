@@ -1,0 +1,19 @@
+command_processing:
+  steps:
+    - "Validate command shape and required fields"
+    - "Resolve aggregate and verify local preconditions"
+    - "Call external system through an application port"
+    - "Map the external response into local business outcomes"
+    - "Apply aggregate behavior and emit domain events"
+    - "Persist state and publish integration messages if required"
+
+error_handling:
+  duplicate_request: "<business outcome for duplicate command or repeated callback>"
+  external_timeout: "<business outcome for timeout>"
+  external_rejection: "<business outcome for explicit rejection>"
+  external_system_error: "<business outcome for transient failure>"
+
+constraint_enforcement:
+  - "The same idempotency key must not create duplicate side effects"
+  - "External identifiers must be stored for later reconciliation"
+  - "State transitions that depend on external authority must not be finalized early"

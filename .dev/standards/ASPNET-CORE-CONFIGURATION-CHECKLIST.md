@@ -43,6 +43,11 @@ dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 ### ✅ 正確做法
 - `ASPNETCORE_ENVIRONMENT=InMemory` / `Outbox`
 - 使用 `IConfiguration` 讀取 Profile
+- 不要再建立另一套自製 profile 機制
+- 環境命名維持一致，例如 `TestInMemory` / `TestOutbox`
+
+### ✅ 規範來源
+- 詳細硬規則以 `coding-standards/profile-configuration-standards.md` 為準
 
 ## 4. WolverineFx 配置
 

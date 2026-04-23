@@ -72,4 +72,4 @@ For any architecture proposal, state:
 - layer placement
 - port and adapter boundaries
 - data ownership and integration event ownership
-- ADR or repo rule references that justify the design
+- canonical rule/doc references that justify the design

@@ -1,0 +1,43 @@
+asset_id: "requirement-author"
+asset_type: "skill-spec"
+title: "Requirement Author"
+purpose: "Draft or normalize repository requirement documents from rough notes, existing requirement files, codebase facts, ADRs, or stakeholder inputs so they match the .dev/requirement structure."
+triggers:
+  - "requirement"
+  - "draft requirement"
+  - "normalize requirement"
+  - "convert notes to requirement"
+inputs:
+  - "rough notes, requirement drafts, or codebase context"
+  - "topic or bounded-context scope"
+  - "optional ADR or architecture references"
+outputs:
+  - "requirement markdown draft"
+  - "explicit assumptions and missing information"
+  - "recommended output path under .dev/requirement/"
+constraints:
+  - "Follow .dev/requirement/REQUIREMENT-GUIDE.MD"
+  - "Do not silently invent stakeholder-confirmed facts"
+  - "Stop at requirement quality; do not jump straight into use-case JSON specs"
+workflow:
+  - step: 1
+    description: "Identify the topic, scope, and source inputs"
+  - step: 2
+    description: "Structure the requirement into the required sections"
+  - step: 3
+    description: "Mark assumptions, gaps, and recommended next handoff"
+references:
+  - ".ai/assets/skills/requirement-author/references/authoring-playbook.md"
+  - ".ai/assets/skills/requirement-author/references/output-contract.md"
+  - ".ai/assets/skills/requirement-author/references/source-truth-rules.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/REQUIREMENT-DESIGNER-PROMPT-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/REQUIREMENT-DESIGNER-PROMPT-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/requirement-author/"
+  codex:
+    runtime_wrapper_path: ".agents/skills/requirement-author/"

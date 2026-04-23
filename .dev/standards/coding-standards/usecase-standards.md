@@ -92,6 +92,7 @@ public sealed class GetProductHandler
 ### 2. 依賴注入必須透過 Constructor
 
 禁止使用 `IServiceProvider` 或 Service Locator 模式。
+Use case / handler / service / mapper / projection 本身也不得依賴 DI attribute 或 assembly scanning 來完成註冊，必須在 composition root 以 `IServiceCollection` 顯式註冊。
 
 ```csharp
 // ✅ 正確：Constructor Injection
@@ -120,6 +121,21 @@ public sealed class CreateProductHandler
         var repo = provider.GetService<IRepository<Product, ProductId>>();  // FORBIDDEN!
     }
 }
+```
+
+```csharp
+// ❌ 錯誤：依賴 attribute-based DI 註冊
+[SomeDiAttribute]
+public sealed class CreateProductService : ICreateProductUseCase
+{
+}
+
+// ✅ 正確：保持純 POCO，於 composition root 顯式註冊
+public sealed class CreateProductService : ICreateProductUseCase
+{
+}
+
+services.AddScoped<ICreateProductUseCase, CreateProductService>();
 ```
 
 ---
@@ -178,6 +194,7 @@ public async Task<Result<ProductId>> Handle(
 ### Handler
 - [ ] 使用 Constructor Injection
 - [ ] 沒有使用 `IServiceProvider`
+- [ ] 沒有使用 DI attribute / auto-registration
 - [ ] Command Handler 返回 `Result<T>`
 
 ### CQRS 分離

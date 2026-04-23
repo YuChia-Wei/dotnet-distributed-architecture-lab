@@ -1,0 +1,47 @@
+scenarios:
+  - id: SC1
+    title: "Authorized by external system"
+    given:
+      - "The aggregate is eligible for the command"
+    when:
+      - "The command is submitted with a new idempotency key"
+      - "The external system accepts the request"
+    then:
+      - "The aggregate records the external reference"
+      - "A success-oriented domain event is emitted"
+    traces_to:
+      requirements: ["REQ-EXT-1"]
+      frame_concerns: ["FC1", "FC2", "FC6"]
+    tests_anchor:
+      use_case_test: "<UseCaseTests>.<authorized_scenario>"
+      aggregate_test: "<AggregateContractTests>.<authorized_contract>"
+  - id: SC2
+    title: "External rejection is mapped to a business failure"
+    given:
+      - "The aggregate is eligible for the command"
+    when:
+      - "The external system rejects the request"
+    then:
+      - "The aggregate does not enter the success state"
+      - "The rejection reason is recorded"
+    traces_to:
+      requirements: ["REQ-EXT-2"]
+      frame_concerns: ["FC1", "FC4", "FC6"]
+    tests_anchor:
+      use_case_test: "<UseCaseTests>.<rejected_scenario>"
+      aggregate_test: "<AggregateContractTests>.<rejected_contract>"
+  - id: SC3
+    title: "Duplicate callback does not duplicate side effects"
+    given:
+      - "A callback for the same external reference was already processed"
+    when:
+      - "The same callback is received again"
+    then:
+      - "No duplicate terminal transition occurs"
+      - "No duplicate domain event is emitted"
+    traces_to:
+      requirements: ["REQ-EXT-3"]
+      frame_concerns: ["FC2", "FC5"]
+    tests_anchor:
+      use_case_test: "<UseCaseTests>.<duplicate_callback_scenario>"
+      aggregate_test: "<AggregateContractTests>.<duplicate_callback_contract>"

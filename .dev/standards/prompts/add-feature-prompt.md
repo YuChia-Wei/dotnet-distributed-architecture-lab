@@ -1,5 +1,9 @@
 # Prompt Template: Add New Feature (Dotnet)
 
+> Migration note:
+> This file is a legacy human-facing prompt example.
+> Canonical reusable prompt assets should live under `.ai/` and `.ai/assets/`.
+
 ## Input Format
 ```yaml
 feature_name: Task Priority

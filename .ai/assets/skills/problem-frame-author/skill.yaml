@@ -1,0 +1,45 @@
+asset_id: "problem-frame-author"
+asset_type: "skill-spec"
+title: "Problem Frame Author"
+purpose: "Draft a first problem frame from existing requirements, specs, ADRs, code, or tests for this repository, with emphasis on CBF use cases and validator-ready output."
+triggers:
+  - "problem frame"
+  - "draft problem frame"
+  - "author problem frame"
+  - "reverse engineer problem frame"
+inputs:
+  - "requirement files and spec files"
+  - "target use case"
+  - "optional code and tests"
+outputs:
+  - "authoring extraction sheet"
+  - "validator-ready problem-frame draft"
+  - "open questions and inferred items"
+constraints:
+  - "Prefer CBF for the first draft unless SWF is clearly a better fit"
+  - "Mark inferred items explicitly when the source documents do not state them"
+  - "Do not claim 100% validator compliance from drafting alone"
+workflow:
+  - step: 1
+    description: "Identify the highest-priority source of truth and the target use case"
+  - step: 2
+    description: "Extract inputs, preconditions, outcomes, external constraints, and scenarios"
+  - step: 3
+    description: "Draft frame.yaml, machine/machine.yaml, machine/use-case.yaml, aggregate.yaml, and acceptance.yaml"
+  - step: 4
+    description: "List open questions, inferred items, and next skill handoff"
+references:
+  - ".ai/assets/skills/problem-frame-author/references/authoring-playbook.md"
+  - ".ai/assets/skills/problem-frame-author/references/source-mapping.md"
+  - ".ai/assets/skills/problem-frame-author/references/output-contract.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/PROBLEM-FRAME-AUTHORING-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/PROBLEM-FRAME-AUTHORING-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/problem-frame-author/"
+  codex:
+    runtime_wrapper_path: ".agents/skills/problem-frame-author/"

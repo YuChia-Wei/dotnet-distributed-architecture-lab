@@ -1,16 +1,23 @@
-# ADR Portability Notes
+# ADR Governance Portability Notes
 
-`.dev/adr/` 可攜移植時要分開看待：
+`.dev/adr/` 應保留作為 portable governance layer，但不應再攜帶舊專案的決策內容。
+
+## Keep
 
 - `README.md`
-  - 可保留，因為它定義 ADR 的使用規則
 - `INDEX.md`
-  - 可保留結構，但內容應依新專案的有效 ADR 重建
-- `ADR-*.md`
-  - 預設視為 project-specific truth，不應直接複製到新專案
+- `ADR-TEMPLATE.md`
+- `WHEN-TO-CREATE-ADR.MD`
 
-## 移植原則
+## Remove or Rewrite
 
-- 若 ADR 是新專案仍然成立的決策，應重新建立新的 ADR，而不是直接沿用舊編號與舊上下文
-- 若 ADR 只是本專案歷史脈絡，移植時應直接刪除
-- 不保留無效、重複、已被取代的 ADR
+- 任何 `ADR-*.md`
+  - 若描述的是舊專案的既有決策，應刪除或重建
+
+## Portable Rule
+
+移植到新專案後：
+
+1. 保留本目錄的治理文件
+2. 刪除舊專案的 `ADR-*.md`
+3. 只有在新專案真的出現重大結構性決策時，才重新建立新的 ADR

@@ -1,0 +1,48 @@
+scenarios:
+  - id: SC1
+    title: "Persist and publish after successful inventory reservation"
+    given:
+      - "The inventory reservation request for the target product will succeed"
+      - "The order repository accepts persistence"
+    when:
+      - "PlaceOrderCommand is handled with valid order date, amount, product id, product name, and quantity"
+    then:
+      - "A new order is persisted"
+      - "The result is successful and returns an order id"
+      - "An OrderPlaced integration event is published"
+    traces_to:
+      requirements: ["REQ-ORD-PLACE-1", "REQ-ORD-PLACE-2"]
+      frame_concerns: ["FC1", "FC2", "FC3", "FC6"]
+    tests_anchor:
+      use_case_test: "PlaceOrderTests.successful_order_placement"
+      integration_test: "OrderPlacementAndLifecycleMessagingTests.place_order_after_successful_inventory_reservation"
+  - id: SC2
+    title: "Block order placement when inventory reservation fails"
+    given:
+      - "The inventory gateway returns Result = false"
+    when:
+      - "PlaceOrderCommand is handled"
+    then:
+      - "The result is a failure"
+      - "No order is persisted"
+      - "No OrderPlaced integration event is published"
+    traces_to:
+      requirements: ["REQ-ORD-PLACE-3"]
+      frame_concerns: ["FC1", "FC3", "FC4"]
+    tests_anchor:
+      use_case_test: "PlaceOrderTests.inventory_not_enough"
+      integration_test: "OrderPlacementAndLifecycleMessagingTests.block_order_placement_when_inventory_reservation_fails"
+  - id: SC3
+    title: "Recognize deferred runtime concerns for retries and duplicates"
+    given:
+      - "The repository documents eventual consistency and MQ-first cross-context collaboration"
+    when:
+      - "Maintainers review the place-order messaging flow"
+    then:
+      - "Retry, duplicate publication, and timing concerns are recognized as deferred runtime documentation items"
+      - "The first-pass problem frame does not falsely claim those behaviors are fully specified"
+    traces_to:
+      requirements: ["REQ-ORD-PLACE-4"]
+      frame_concerns: ["FC5", "FC6"]
+    tests_anchor:
+      documentation_review: "ProblemFrameAuthoringReview.place_order_deferred_runtime_concerns"

@@ -16,7 +16,7 @@
 ## Location Rule
 
 - `workflows/` 目前保留在 `.dev/` 之下，因為它屬於專案知識治理的一部分，不是 build / runtime / deployment artifact
-- 它與 `.dev/adr/`、`.dev/specs/`、`.dev/operations/`、`.dev/standards/` 共享同一條 knowledge-system 邊界
+- 它與 `.dev/specs/`、`.dev/operations/`、`.dev/standards/` 共享同一條 knowledge-system 邊界
 - 只有當 repo 未來出現獨立的 repo-wide operational workflow system，才再評估是否升格到根目錄
 
 ## 建議結構
@@ -74,5 +74,4 @@
 - 若問題核心是 requirement、spec、runbook、context map、event catalog、AI routing 文件不足，應優先建立 document workflow
 - document workflow 的 stage 應以知識邊界切分，而不是以程式碼檔案切分
 - 若後續需要 code refactor，應在 document stage 補齊最小必要真相後再展開
-
 

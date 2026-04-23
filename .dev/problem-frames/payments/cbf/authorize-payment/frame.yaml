@@ -1,0 +1,42 @@
+frame_type: CommandedBehaviorFrame
+domain: "payments"
+use_case: "authorize-payment"
+summary: "Authorize an order payment through an external payment gateway and record the outcome safely."
+
+controlled_domain:
+  aggregate_spec: controlled-domain/aggregate.yaml
+
+frame_concerns:
+  - id: FC1
+    title: Gateway authority
+    description: The payment gateway decides whether the payment is authorized, declined, or pending review.
+  - id: FC2
+    title: Command and callback idempotency
+    description: Repeated client submissions or duplicated gateway callbacks must not double-authorize the same payment.
+  - id: FC3
+    title: Timeout handling
+    description: A gateway timeout must not be treated as a successful authorization.
+  - id: FC4
+    title: Error mapping
+    description: Gateway responses must be translated into business-level payment outcomes.
+  - id: FC5
+    title: Async settlement boundary
+    description: Authorization may be known before final capture or settlement; the aggregate must not overstate finality.
+  - id: FC6
+    title: Auditability and support
+    description: Support staff must be able to trace each authorization attempt by payment id, order id, gateway reference, and idempotency key.
+
+problem_world_facts:
+  - id: PWF1
+    fact: "The payment gateway is the source of truth for authorization status."
+  - id: PWF2
+    fact: "The gateway may return success synchronously or may confirm asynchronously through a callback or message."
+  - id: PWF3
+    fact: "Gateway callbacks may be delayed, duplicated, or arrive after a client retry."
+  - id: PWF4
+    fact: "An authorization timeout does not prove that the payment failed or succeeded."
+
+commanded_behavior:
+  actor: "Checkout application"
+  command: "AuthorizePayment"
+  desired_outcome: "Record a trustworthy authorization outcome for a specific order payment attempt."

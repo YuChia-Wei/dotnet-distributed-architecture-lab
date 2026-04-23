@@ -15,7 +15,8 @@
 - `.dev/workflows/`: 跨 skill workflow artifacts 的正式存放位置
 - `.dev/guides/`: 一般軟體開發、架構、框架、專案使用指南
 - `.ai/`: 給 agent 重用的 prompt 元件、shared rules、scripts
-- `.claude/skills/`: skill 實作本體與 agent 觸發後讀取的內容
+- `.ai/assets/skills/`: canonical skill specs 與完整 skill registry
+- `.agents/skills/` / `.claude/skills/`: thin runtime wrappers
 
 ## 目前文件
 
@@ -27,7 +28,10 @@
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`: 可選的最小 workflow 模式與 artifact 說明
 - `DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md`: `ddd-ca-hex-architect` 的使用說明與 prompt 範本
 - `BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md`: `bdd-gwt-test-designer` 的使用說明與 Given-When-Then prompt 範本
+- `REPO-STRUCTURE-SYNC-SKILL-GUIDE.md`: template 複製到新 repo 後，掃描結構並同步架構入口文件的指南
+- `PROBLEM-FRAME-AUTHORING-GUIDE.md`: 從 requirement/spec/code 快速萃取第一版 problem frame 的指南
 - `BDD-GWT-TEST-DESIGNER-PAIR-GUIDE.md`: `bdd-gwt-test-designer` 與 test generation / review workflow 的搭配方式
+- `USE-CASE-IMPLEMENTER-SKILL-GUIDE.md`: `command-use-case-implementer`、`query-use-case-implementer`、`reactor-implementer` 的人類入口與 prompt 範本
 - `REQUIREMENT-AND-SPEC-DESIGNER-STRATEGY.md`: requirement / spec 是否應該做成 prompt 或 skill 的邊界與採用策略
 - `REQUIREMENT-DESIGNER-PROMPT-GUIDE.md`: requirement markdown 草稿與補齊工作的 prompt 範本
 - `SPEC-DESIGNER-PROMPT-GUIDE.md`: use case / adapter / entity spec 整理工作的 prompt 範本
@@ -47,7 +51,7 @@
 - 新增 human-facing 的 AI skill 使用說明時，優先放在本目錄。
 - 每個 skill 至少應有一份對應 guide，說明用途、適用情境、prompt 範本與輸出期待。
 - 本目錄的文件是給人讀的，不應複製大量 `.ai/` prompt 內部細節。
-- skill 實作細節仍以 `.claude/skills/<skill>/` 為準；本目錄只做人類入口與操作指南。
-- 若 guide 內容與 skill 本體衝突，應同步修正並避免形成雙重真相。
+- canonical skill 規則仍以 `.ai/assets/skills/<skill>/skill.yaml` 與其 references 為準；wrapper 只保留薄入口。
+- 若 guide 內容與 canonical skill spec 衝突，應同步修正並避免形成雙重真相。
 
 

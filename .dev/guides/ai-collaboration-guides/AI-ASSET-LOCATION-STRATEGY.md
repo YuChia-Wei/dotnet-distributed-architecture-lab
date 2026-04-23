@@ -22,33 +22,33 @@
 | `.dev/guides/ai-collaboration-guides/` | Human | human-facing guides、workflow、prompt 使用說明 |
 | `.dev/workflows/` | Human + Agent | plan / review-report / task artifact |
 | `.ai/` | Agent | reusable prompts、shared rules、scripts |
+| `.agents/skills/` | Agent | current runtime skill wrappers |
 | `.claude/skills/` | Agent | Claude runtime skill wrappers |
-| `.codex/skills/` | Agent | Codex runtime skill wrappers |
 
-## Skill 應不應該搬到 `.codex/skills/`
+## Skill 應不應該搬到 `.agents/skills/`
 
 ### 結論
 
-- 如果目的是「作為 repo 內可版本控管的 skill 定義與參考」，目前放在 `.claude/skills/` 是可以接受的。
-- 如果目的是「讓 Codex 在本機環境直接把它當成內建可用 skill」，則 repo 內的 `.claude/skills/` 不等於 Codex runtime skill 安裝位置。
+- repo 內可版本控管且跨 agent 可共用的 skill 真相，應放在 `.ai/assets/skills/`
+- `.agents/skills/` 與 `.claude/skills/` 都只是 runtime wrapper，不應再承擔 canonical skill 定義
 
 ### 目前建議
 
-- repo 內保留 `.claude/skills/` 作為 agent-specific skill definition 資產
+- repo 內保留 `.agents/skills/` 與 `.claude/skills/` 作為 runtime wrapper 資產
 - `.ai/` 保留跨 agent 可重用的 prompts / rules / scripts
 - `.dev/guides/ai-collaboration-guides/` 保留人類入口
-- `.codex/skills/` 保留 Codex runtime skill wrappers
+- `.codex/` 若存在，僅保留 Codex runtime config 或狀態
 
 ### Codex 的實務做法
 
-- `.codex/skills/` 作為 Codex runtime skill wrappers
-- 若要讓 Codex 直接把某 skill 當成可用 skill，可透過 `.codex/skills/` 搭配 `$CODEX_HOME`
-- repo 內 skill wrapper 可視為「可同步來源」或「版本控管來源」，而不是自動生效的 runtime 安裝位置
+- `.agents/skills/` 作為目前 repo 內的 Codex / agent runtime skill wrappers
+- 若要讓 Codex 直接把某 skill 當成可用 skill，應優先維護 `.agents/skills/`
+- `.codex/` 若存在，處理的是本機 runtime 設定，不是 canonical skill registry
 
-## 為什麼不建議現在把 repo skill 全搬到 `.codex/skills/`
+## 為什麼不建議把 repo skill 真相放到 runtime wrapper
 
 - 你目前同時使用 Codex、Gemini、GitHub Copilot
-- `.codex/skills/` 會讓路徑語意偏向單一 agent
+- `.agents/skills/` 或 `.claude/skills/` 都屬於 wrapper layer
 - 未來若還要補 `.gemini/` 或 Copilot 對應配置，會更難建立一致的 cross-agent 分工
 
 ## 更穩定的收納方式
@@ -71,10 +71,10 @@
 
 ### Agent Runtime Wrapper
 
+- `.agents/skills/`
+  - current runtime skill wrappers
 - `.claude/skills/`
   - Claude runtime skill wrappers
-- `.codex/skills/`
-  - Codex runtime skill wrappers
 - `.gemini/commands/`
   - Gemini compatibility wrappers
 - `.github/prompts/`
@@ -92,19 +92,19 @@
 
 ## 目前 repo 的建議決策
 
-1. 保留 `.claude/skills/` 作為 Claude runtime skill wrapper 位置
-2. 將 `.ai/assets/` 作為 canonical source 位置
-3. `.codex/skills/` 作為 Codex runtime skill wrapper layer
+1. 將 `.ai/assets/skills/` 作為 canonical skill registry 與 spec 位置
+2. 保留 `.claude/skills/` 作為 Claude runtime skill wrapper 位置
+3. `.agents/skills/` 作為目前主要 runtime skill wrapper layer
 4. delegated worker roles 收斂於 `.ai/assets/sub-agent-role-prompts/`
 5. 將「Codex 直接可用」視為 wrapper + 本機設定問題，不是 canonical source 位置問題
 6. 將 `.ai/` 與 `.dev/guides/ai-collaboration-guides/` 視為跨 agent 長期可重用資產
 
-## 目前對 `.codex/skills/` 的限制
+## 目前對 runtime wrapper 的限制
 
-雖然 repo 已引入 `.codex/skills/`，仍應遵守下列限制：
+無論是 `.agents/skills/` 或 `.claude/skills/`，仍應遵守下列限制：
 
-- 不將 canonical source 改放到 `.codex/skills/`
-- 不把完整 references 複製到 Codex runtime wrappers
+- 不將 canonical source 改放到 runtime wrapper
+- 不把完整 references 複製到 runtime wrappers
 - 目前不導入 sync/export tooling
 - 若未來擴大遷移更多 skills，應先決定是手動 thin wrapper 還是 generated wrapper
 

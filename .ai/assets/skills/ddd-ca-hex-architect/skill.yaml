@@ -35,20 +35,15 @@ references:
   - ".ai/assets/skills/ddd-ca-hex-architect/references/source-map.md"
   - ".ai/assets/skills/ddd-ca-hex-architect/references/architecture-playbook.md"
   - ".ai/assets/skills/ddd-ca-hex-architect/references/design-deliverables.md"
+  - ".ai/assets/skills/ddd-ca-hex-architect/references/prompt-templates.md"
 examples:
   - ".dev/guides/ai-collaboration-guides/DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md"
 human_guide: ".dev/guides/ai-collaboration-guides/DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md"
 wrapper_targets:
   - "claude"
   - "codex"
-  - "gemini"
-  - "copilot"
 wrapper_metadata:
   claude:
     wrapper_path: ".claude/skills/ddd-ca-hex-architect/"
   codex:
-    runtime_wrapper_path: ".codex/skills/ddd-ca-hex-architect/"
-  gemini:
-    wrapper_path: ".gemini/commands/ddd-ca-hex-architect.md"
-  copilot:
-    wrapper_path: ".github/prompts/ddd-ca-hex-architect.md"
+    runtime_wrapper_path: ".agents/skills/ddd-ca-hex-architect/"

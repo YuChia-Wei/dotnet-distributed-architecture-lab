@@ -1,39 +1,38 @@
-# ADRs
+# ADR Governance
 
-This folder is the authoritative ADR set for this documentation system and its associated .NET development workflow.
+本目錄保留作為架構決策治理層，不是日常規則主入口。
 
-## Usage Rules
+## 目錄角色
 
-- When a decision is active, document it here.
-- When a decision becomes invalid, remove or replace it rather than keeping duplicate or conflicting ADRs active.
-- Keep ADR numbering unique.
-- Keep `INDEX.md` aligned with the files that actually exist in this folder.
+- 提供 ADR template
+- 提供 ADR index
+- 說明什麼情況需要新增 ADR
+- 保留少量仍有必要的歷史決策脈絡
 
-## Status Model
+## Canonical Source Boundary
 
-`INDEX.md` 應將 ADR 至少區分為：
+目前專案的正式規則入口仍是：
 
-- `Active ADR`
-  - 仍然是主要決策入口，尚未完全被其他 canonical 文件吸收
-- `Landed in Standards`
-  - 規則已被 `.dev/standards/`、`.dev/specs/`、`.dev/operations/`、`.dev/guides/` 或 `.ai/` 的正式文件承接
-- `Historical / Superseded`
-  - 主要用於保留決策脈絡，已不是 active source of truth
+- `.dev/ARCHITECTURE.MD`
+- `.dev/standards/`
+- `.dev/guides/`
+- `AGENTS.md`
 
-若規則已被正式標準文件完整承接，優先讓標準文件成為主要入口，而不是讓 ADR 繼續承擔日常使用入口。
+ADR 的角色是記錄「為什麼做出某個結構性決策」，不是承載日常 implementation 規則。
 
-## Maintenance Rules
+## 本目錄內容
 
-- Do not keep migration-only duplicate ADRs as active records.
-- Do not keep structurally invalid duplicates with the same ADR number.
-- Prefer concise, current-state ADRs over translation notes.
-- When an ADR's reusable value has been extracted into `.dev/standards/` or `.dev/standards/rationale/`, the ADR may be retired and removed.
-- When a `Historical / Project-Specific` ADR no longer carries reusable rationale and is only old feature history, it should be retired and removed instead of staying in the portable ADR set.
-- When a `Historical / Superseded` ADR only reflects retired tooling, wrapper, or workflow history and its active guidance already lives elsewhere, it should also be retired and removed.
+- `INDEX.md`
+  - ADR index 與目前保留狀態
+- `ADR-TEMPLATE.md`
+  - 新 ADR 樣板
+- `WHEN-TO-CREATE-ADR.MD`
+  - 何時需要建立 ADR 的判斷規則
+- `PORTABILITY-NOTES.MD`
+  - 移植到新專案時如何保留本目錄
 
-## How to Add a New ADR
+## Governance Rules
 
-1. Choose the next available ADR number.
-2. Write the ADR in this folder.
-3. Add it to `INDEX.md`.
-4. Update any high-traffic references if the new ADR changes active guidance.
+- 新 ADR 只用於重大且跨檔案/跨模組的結構性決策
+- 已完整落到 canonical docs 的決策，可只保留簡短索引或直接刪除舊 ADR 內容
+- 不要把操作教學、checklist、prompt 本體、或 implementation 細節寫成 ADR

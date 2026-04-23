@@ -59,7 +59,7 @@ Return:
 2. architecture decisions
 3. context/module structure
 4. events/contracts to add
-5. ADRs or docs to update
+5. Docs to update
 6. risks and tradeoffs
 ```
 
@@ -205,12 +205,13 @@ Use $ddd-ca-hex-architect to reorganize canonical AI assets under `.ai/assets/` 
 如果你是第一次使用這個 skill，建議順序如下：
 
 1. 先看本文件，了解它能做什麼
-2. 再看 [`.claude/skills/ddd-ca-hex-architect/SKILL.md`](C:/Github/YuChia/dotnet-mq-arch-lab/.claude/skills/ddd-ca-hex-architect/SKILL.md)，理解 skill 本體規則
-3. 若要深挖設計依據，再看 skill 內的 `references/`
+2. 再看 `.ai/assets/skills/ddd-ca-hex-architect/skill.yaml`，理解 canonical skill 規則
+3. 需要 runtime wrapper 時，再看 `.agents/skills/ddd-ca-hex-architect/SKILL.md` 或 `.claude/skills/ddd-ca-hex-architect/SKILL.md`
+4. 若要深挖設計依據，再看 `.ai/assets/skills/ddd-ca-hex-architect/references/`
 
 ## 與其他目錄的關係
 
 - 這份文件是給人看的，所以放在 `.dev/guides/ai-collaboration-guides/`
-- skill 本體仍然在 `.claude/skills/ddd-ca-hex-architect/`
+- canonical skill 規則在 `.ai/assets/skills/ddd-ca-hex-architect/`
+- runtime wrappers 在 `.agents/skills/ddd-ca-hex-architect/` 與 `.claude/skills/ddd-ca-hex-architect/`
 - 給 agent 重用的 prompt building blocks 仍然放在 `.ai/`
-

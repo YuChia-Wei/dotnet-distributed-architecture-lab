@@ -3,8 +3,8 @@
 本目錄放置 human-facing guides，依用途拆成子分類，避免將規範、操作指南、AI 協作文件混在同一層。
 
 > Note:
-> 本目錄已將高流量入口文件優先收斂為 .NET 命名。
-> 若仍看到 Java/Spring/JPA 字樣，預設應先視為 historical context、ADR translation context、或 inventory/reference 紀錄，而非現行主動推薦做法。
+> 本目錄已將高流量入口文件優先收斂為 .NET 命名與 .NET-first 語意。
+> 若仍看到少量 legacy 名稱，應優先以對應的 .NET canonical docs 為準。
 
 ## 子目錄
 
@@ -50,6 +50,8 @@
   - BDD/GWT 測試設計與其他流程的配對方式
 - `BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md`
   - BDD/GWT 測試設計 skill 使用說明
+- `PROBLEM-FRAME-AUTHORING-GUIDE.md`
+  - Problem Frame 第一版規格萃取與 authoring 指南
 - `DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md`
   - DDD + CA + HEX architect skill 使用說明
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
@@ -133,4 +135,3 @@
   - 放 `ai-collaboration-guides/`
 - 新增單次重構提案、執行記錄、task artifact：
   - 放 `.dev/workflows/<workflow-id>/`
-

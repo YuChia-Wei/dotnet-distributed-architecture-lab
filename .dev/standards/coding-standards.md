@@ -51,6 +51,11 @@
 - `DomainEventData` 規則
 - replay / duplicate delivery 注意事項
 
+### 10. [Profile / Environment Configuration Standards](./coding-standards/profile-configuration-standards.md)
+- `DOTNET_ENVIRONMENT` / `ASPNETCORE_ENVIRONMENT` 規則
+- `appsettings.{Environment}.json` 命名與覆蓋邏輯
+- InMemory / Outbox profile-specific DI 約束
+
 ## 核心設計原則
 
 ### 1. Domain-Driven Design (DDD)
@@ -259,6 +264,7 @@ public async Task HandleAsync(UpdatePendingOrdersCommand cmd)
 - **禁止使用 BaseTestClass / BaseUseCaseTest 作為測試父類**
 - 所有測試必須支援 `test-inmemory` 與 `test-outbox` profiles
 - 使用 `appsettings.*.json` 控制 profile
+- profile 命名、載入、DI 分支與 profile-specific infra 規則以 [Profile / Environment Configuration Standards](./coding-standards/profile-configuration-standards.md) 為準
 
 ### ⚠ Outbox / Inbox Pattern
 - 使用 WolverineFx 的 Outbox 機制確保事件發佈的可靠性
@@ -284,4 +290,3 @@ public async Task HandleAsync(UpdatePendingOrdersCommand cmd)
 - [反模式](./anti-patterns.md)
 - [編碼指南](./coding-guide.md)
 - [程式碼審查清單](./CODE-REVIEW-CHECKLIST.md)
-

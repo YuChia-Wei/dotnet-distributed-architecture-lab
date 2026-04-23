@@ -1,15 +1,14 @@
 # Dependency Injection Testing Guide (.NET)
 
 > Active .NET practice in this repository is xUnit fixture-based testing plus `IServiceCollection` registration.
-> Historical Spring naming is no longer the primary entry point for this guide.
 
-## ezapp 2.0.0 Intent (Preserve)
+## Framework Intent To Preserve
 
-### Deprecated patterns from ezapp 1.x
+### Deprecated legacy patterns
 - Do not use manual in-memory repositories or blocking message buses.
 - Replace manual wiring with DI + profile-based registrations.
 
-### Recommended approach (ezapp 2.0.0 intent)
+### Recommended approach
 ```csharp
 // Use DI to resolve dependencies
 public sealed class CreateProductFeature : IClassFixture<TestProfileFixture>
@@ -26,7 +25,7 @@ public sealed class CreateProductFeature : IClassFixture<TestProfileFixture>
 ```
 
 ### Framework-provided InMemory classes (concepts to preserve)
-These classes exist in Java ezapp 2.0.0. .NET equivalents must preserve the same intent:
+The original framework lineage included the following concepts. .NET equivalents should preserve the same intent:
 - InMemoryOrmDb
 - InMemoryOrmClient
 - InMemoryMessageDb
@@ -42,7 +41,7 @@ Many tests still create objects with `new` instead of using DI. This causes:
 1. Tests cannot switch between profiles (test-inmemory vs test-outbox)
 2. Tests diverge from runtime behavior
 3. Loss of framework-level test features (transactional behavior, DI validation, mock registration)
-4. Legacy ezapp 1.x manual wiring leaks into modern tests
+4. Legacy manual wiring leaks into modern tests
 
 ## Correct Test Architecture
 
@@ -189,4 +188,3 @@ Correct:
 ```csharp
 var projection = _services.GetRequiredService<IProductsProjection>();
 ```
-

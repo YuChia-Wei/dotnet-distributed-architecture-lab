@@ -1,0 +1,58 @@
+aggregate: "Order"
+
+contracts:
+  preconditions:
+    - id: PRE1
+      rule: "The order constructor receives orderDate, totalAmount, productId, productName, and quantity."
+    - id: PRE2
+      rule: "The application flow only finalizes order placement after successful inventory reservation."
+  postconditions:
+    - id: POST1
+      rule: "A new Order aggregate exists with status Placed if inventory reservation succeeds."
+    - id: POST2
+      rule: "OrderPlacedDomainEvent represents the successful placement within the Orders bounded context."
+    - id: POST3
+      rule: "The outbound OrderPlaced integration event is published after persistence."
+  invariants:
+    - id: INV1
+      rule: "A failed inventory reservation must not be represented as a placed order."
+
+invariants:
+  shared:
+    - id: INV2
+      rule: "The Order aggregate lifecycle remains within Placed, Shipped, Delivered, and Cancelled states."
+    - id: INV3
+      rule: "Cross-context communication is modeled through contracts and integration events, not direct internal model sharing."
+  local:
+    - id: INV4
+      rule: "Order placement persistence and outbound event publication occur only after reservation success."
+
+behavior:
+  signature: "Order(orderDate, totalAmount, productId, productName, quantity)"
+
+domain_events:
+  - name: "SaleOrders.Domains.DomainEvents.OrderPlacedDomainEvent"
+    attributes:
+      - "Id"
+      - "ProductId"
+      - "ProductName"
+      - "Quantity"
+      - "OrderDate"
+      - "TotalAmount"
+      - "Status"
+  - name: "Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderPlaced"
+    attributes:
+      - "orderId"
+      - "productId"
+      - "productName"
+      - "quantity"
+      - "orderDate"
+      - "totalAmount"
+
+semantic_tags:
+  - field: "Id"
+    semantics:
+      - identity
+  - field: "Status"
+    semantics:
+      - external_authority

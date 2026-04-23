@@ -140,4 +140,4 @@ Reactor 是 event handler，不是 transport adapter。
 - [usecase-standards.md](usecase-standards.md)
 - [archive-standards.md](archive-standards.md)
 - [../../operations/runbooks/README.MD](../../operations/runbooks/README.MD)
-- [../../adr/ADR-031-reactor-interface-definition.md](../../adr/ADR-031-reactor-interface-definition.md)
+- [../../ARCHITECTURE.MD](../../ARCHITECTURE.MD)

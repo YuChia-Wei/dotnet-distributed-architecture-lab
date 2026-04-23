@@ -64,7 +64,7 @@ services.AddWolverine(opts =>
 3. Infrastructure needs framework-provided interceptors
 4. Mapping and serialization need consistent configuration
 
-## Problem 2: Outbox Pattern Implementation Rules (ADR-019)
+## Problem 2: Outbox Pattern Implementation Rules
 
 ### 1. OutboxMapper must be a nested class
 
@@ -93,10 +93,10 @@ public static class ProductMapper
 }
 ```
 
-### 2. Use EF Core mapping (no JPA)
+### 2. Use EF Core mapping only
 
-#### Wrong: Java/JPA annotations in .NET
-Do not copy Java ORM annotations or imports into .NET code. Use EF Core attributes or fluent mapping instead.
+#### Wrong: non-.NET ORM annotations in .NET
+Do not copy non-.NET ORM annotations or imports into .NET code. Use EF Core attributes or fluent mapping instead.
 
 #### Correct: EF Core mapping
 ```csharp
@@ -270,7 +270,8 @@ Fix: ensure outbox registrations only in outbox environments
 | Configuration | Environment | outbox/test-outbox only
 
 ## Related Resources
-- ADR-019: Outbox Pattern Implementation (.dev/adr/ADR-019-outbox-pattern-implementation.md)
+- `.dev/standards/coding-standards.md`
+- `.dev/standards/coding-standards/mapper-standards.md`
 - Outbox Sub-agent Canonical Asset (.ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml)
 - Wolverine outbox examples (`.dev/standards/examples/outbox/README.md`, `.dev/standards/examples/aspnet-core/Program.cs`)
 
@@ -289,7 +290,5 @@ rg "DomainEventDatas" src/ | rg -v "NotMapped" && echo "Missing NotMapped"
 # 4. Ensure outbox config only in outbox environments
 rg "UseDurableOutbox" src/ | rg -v "outbox" && echo "Check environment gating"
 ```
-
-
 
 

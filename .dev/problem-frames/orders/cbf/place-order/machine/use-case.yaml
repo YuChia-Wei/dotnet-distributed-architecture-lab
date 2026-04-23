@@ -1,0 +1,41 @@
+name: "PlaceOrder"
+execution:
+  method: "command"
+
+input:
+  - name: "orderDate"
+    type: "DateTime"
+    required: true
+  - name: "totalAmount"
+    type: "decimal"
+    required: true
+  - name: "productId"
+    type: "Guid"
+    required: true
+  - name: "productName"
+    type: "string"
+    required: true
+  - name: "quantity"
+    type: "int"
+    required: true
+
+preconditions:
+  - id: PRE1
+    description: "The command contains valid order date, total amount, product id, product name, and quantity."
+  - id: PRE2
+    description: "The inventory collaboration contract returns a successful reservation outcome."
+
+postconditions:
+  - id: POST1
+    description: "A new Order aggregate exists with status Placed when reservation succeeds."
+  - id: POST2
+    description: "The order repository persists the new order only on successful reservation."
+  - id: POST3
+    description: "An outbound OrderPlaced integration event is published after persistence."
+
+output:
+  success: "PlaceOrderResult"
+  failures:
+    - "ReservationFailed"
+    - "PersistenceFailed"
+    - "CollaborationFailed"

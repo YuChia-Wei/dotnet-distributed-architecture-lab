@@ -14,6 +14,10 @@
   - 描述 production behavior、aggregate、use case、adapter contract
 - `.dev/specs/tests/`
   - 描述測試場景、驗證重點、前置條件、邊界條件、red-green-refactor 切分
+- `tests/Features/`
+  - 放正式維護與 IDE / BDD 工具整合的 Gherkin `.feature` 檔
+- `tests/**/*.Steps.cs`
+  - 放 `.feature` 對應的 step definitions 與測試支援程式
 
 簡單判斷：
 
@@ -25,6 +29,7 @@
 ```text
 .dev/specs/tests/
   README.MD
+  GHERKIN-FEATURE-STORAGE-GUIDE.MD
   TEST-SPEC-GUIDE.MD
   <domain>/
     aggregate/
@@ -41,6 +46,15 @@
     <flow-name>.test-spec.md
   e2e/
     <journey-name>.test-spec.md
+
+tests/
+  Features/
+    <domain>/
+      <use-case>.feature
+    cross-domain/
+      <flow-name>.feature
+    e2e/
+      <journey-name>.feature
 ```
 
 ## 目錄分類原則
@@ -79,6 +93,7 @@
 - red/green/refactor test slices
 - edge cases and failure scenarios
 - test-level recommendation（unit / integration / contract / end-to-end）
+- `.feature` 的追溯資訊、對應關係、未落入 Gherkin 的補充說明
 
 ## 不適合放這裡的內容
 
@@ -86,3 +101,4 @@
 - repository 具體實作細節
 - 僅供 agent 臨時使用的 scratch notes
 - 取代 `.dev/specs/` 的 production behavior 規格
+- 把所有正式 `.feature` 檔直接堆在這裡；正式 Gherkin 應放 `tests/Features/`

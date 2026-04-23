@@ -1,0 +1,48 @@
+aggregate: "<aggregate-name>"
+
+contracts:
+  preconditions:
+    - id: PRE1
+      rule: "<aggregate precondition>"
+    - id: PRE2
+      rule: "The same idempotency key must not finalize the command twice."
+  postconditions:
+    - id: POST1
+      rule: "The aggregate records the latest external interaction intent or outcome."
+  invariants:
+    - id: INV1
+      rule: "Terminal externally-authoritative states are only entered after a matching external outcome."
+
+invariants:
+  shared:
+    - id: INV2
+      rule: "The aggregate retains traceable external references once they exist."
+  local:
+    - id: INV3
+      rule: "A rejected or failed external outcome must not be represented as success."
+
+behavior:
+  signature: "<method-name>(<args>)"
+
+domain_events:
+  - name: "<AttemptedEvent>"
+    attributes:
+      - "<aggregate-id>"
+      - "idempotency_key"
+      - "external_reference"
+  - name: "<ResultRecordedEvent>"
+    attributes:
+      - "<aggregate-id>"
+      - "external_status"
+      - "occurred_at"
+
+semantic_tags:
+  - field: "<aggregate-id>"
+    semantics:
+      - identity
+  - field: "idempotency_key"
+    semantics:
+      - idempotency_key
+  - field: "external_status"
+    semantics:
+      - external_authority

@@ -26,7 +26,7 @@ workflow:
     description: "Separate architecture-level and code-level findings"
 references:
   - ".ai/CODE-REVIEW-INDEX.MD"
-  - ".claude/skills/code-reviewer/CHECKLIST-REFERENCE.MD"
+  - ".ai/assets/skills/code-reviewer/references/checklist-reference.md"
   - ".dev/standards/CODE-REVIEW-CHECKLIST.md"
 examples:
   - ".dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md"
@@ -38,4 +38,4 @@ wrapper_metadata:
   claude:
     wrapper_path: ".claude/skills/code-reviewer/"
   codex:
-    runtime_wrapper_path: ".codex/skills/code-reviewer/"
+    runtime_wrapper_path: ".agents/skills/code-reviewer/"

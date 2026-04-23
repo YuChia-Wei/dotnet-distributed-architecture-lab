@@ -1,0 +1,72 @@
+aggregate: "Payment"
+
+contracts:
+  preconditions:
+    - id: PRE1
+      rule: "Payment must be in AwaitingAuthorization state before authorize(...) is invoked."
+    - id: PRE2
+      rule: "Requested amount and currency must match the payment intent."
+    - id: PRE3
+      rule: "A terminal authorization outcome must not be finalized twice for the same idempotency key."
+  postconditions:
+    - id: POST1
+      rule: "After authorize(...), the aggregate stores the gateway reference or pending correlation needed for later reconciliation."
+    - id: POST2
+      rule: "The aggregate emits a domain event that represents the mapped authorization outcome."
+  invariants:
+    - id: INV1
+      rule: "Authorized state is only reachable from a gateway-authoritative approval."
+
+invariants:
+  shared:
+    - id: INV2
+      rule: "Declined and timeout outcomes must never be represented as authorized."
+    - id: INV3
+      rule: "Gateway identifiers remain traceable after the first interaction."
+  local:
+    - id: INV4
+      rule: "A duplicate callback for the same terminal gateway result does not create a second terminal transition."
+
+behavior:
+  signature: "authorize(orderId, amount, currency, paymentMethodToken, idempotencyKey, correlationId, gatewayResult)"
+
+domain_events:
+  - name: "PaymentAuthorizationRequested"
+    attributes:
+      - "payment_id"
+      - "order_id"
+      - "idempotency_key"
+      - "correlation_id"
+  - name: "PaymentAuthorized"
+    attributes:
+      - "payment_id"
+      - "order_id"
+      - "gateway_reference"
+      - "authorized_amount"
+      - "currency"
+  - name: "PaymentAuthorizationDeclined"
+    attributes:
+      - "payment_id"
+      - "order_id"
+      - "gateway_reference"
+      - "decline_code"
+  - name: "PaymentAuthorizationPending"
+    attributes:
+      - "payment_id"
+      - "order_id"
+      - "correlation_id"
+      - "pending_reason"
+
+semantic_tags:
+  - field: "payment_id"
+    semantics:
+      - identity
+  - field: "gateway_reference"
+    semantics:
+      - external_authority
+  - field: "idempotency_key"
+    semantics:
+      - idempotency_key
+  - field: "version"
+    semantics:
+      - optimistic_concurrency_version

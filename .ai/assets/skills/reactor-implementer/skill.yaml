@@ -1,0 +1,45 @@
+asset_id: "reactor-implementer"
+asset_type: "skill-spec"
+title: "Reactor Implementer"
+purpose: "Implement a bounded reactor in this repository for event-driven consistency, projection updates, or integration reactions without redefining the architecture direction."
+triggers:
+  - "reactor"
+  - "implement reactor"
+  - "add reactor"
+  - "reactor-implementer"
+inputs:
+  - "triggering event and desired reaction"
+  - "consistency, projection, or integration goal"
+  - "bounded-context scope and validation expectations"
+outputs:
+  - "bounded reactor implementation"
+  - "touched files and validation notes"
+  - "explicit handoff if event design, testing, or review work remains"
+constraints:
+  - "Reactors handle event data rather than domain entities"
+  - "Use WolverineFx message handlers for event processing"
+  - "Do not query another aggregate repository directly"
+  - "Stop and hand off when the task really requires architecture redesign or stage planning"
+workflow:
+  - step: 1
+    description: "Confirm the triggering event, consistency goal, and ownership boundary"
+  - step: 2
+    description: "Apply reactor-side event-processing, MQ, and read-model rules"
+  - step: 3
+    description: "Implement the bounded reactor change and return validation notes plus any required next-skill handoff"
+references:
+  - ".ai/assets/skills/reactor-implementer/references/implementation-playbook.md"
+  - ".ai/assets/skills/reactor-implementer/references/handoff-rules.md"
+  - ".ai/assets/sub-agent-role-prompts/reactor-sub-agent/sub-agent.yaml"
+  - ".dev/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD"
+examples:
+  - ".dev/guides/ai-collaboration-guides/USE-CASE-IMPLEMENTER-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/USE-CASE-IMPLEMENTER-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/reactor-implementer/"
+  codex:
+    runtime_wrapper_path: ".agents/skills/reactor-implementer/"

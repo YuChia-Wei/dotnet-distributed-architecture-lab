@@ -440,6 +440,12 @@ var product = ProductBuilder.AProduct()
 - [ ] 測試本身有防禦性初始化
 - [ ] 不依賴前一個測試留下的 mapper 狀態
 
+### Profile / Environment 測試
+- [ ] 測試 profile 由 host / fixture / test command 決定
+- [ ] 不在測試類別內修改全域 environment variable
+- [ ] `TestInMemory` 不註冊 EF Core / Npgsql
+- [ ] `TestOutbox` 具備完整 persistence chain
+
 ---
 
 ## 📂 程式碼範例
@@ -460,4 +466,5 @@ var product = ProductBuilder.AProduct()
 - [aggregate-standards.md](aggregate-standards.md)
 - [usecase-standards.md](usecase-standards.md)
 - [controller-standards.md](controller-standards.md)
+- [profile-configuration-standards.md](profile-configuration-standards.md)
 - [../../guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md](../../guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md)

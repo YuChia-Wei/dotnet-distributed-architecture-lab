@@ -62,6 +62,11 @@
   - WebApplicationFactory 整合測試
   - 📋 包含各種測試模板
 
+- **[profile-configuration-standards.md](./profile-configuration-standards.md)** - Profile / Environment 規範
+  - `DOTNET_ENVIRONMENT` / `ASPNETCORE_ENVIRONMENT` 載入規則
+  - `appsettings.{Environment}.json` 命名與分工
+  - InMemory / Outbox profile-specific DI 約束
+
 ---
 
 ## 🔴 關鍵原則摘要
@@ -82,6 +87,7 @@
 - ✅ Command 和 Query 必須分離
 - ✅ 使用 `sealed record` 定義 Command/Query
 - ✅ 使用 Constructor Injection，禁止使用 `[FromServices]`
+- ✅ Use case / service / mapper / projection 一律由 `IServiceCollection` 顯式註冊，禁止 attribute-based auto registration
 - ✅ 返回 `Result<T>` 處理錯誤
 
 #### 4. 測試要求
@@ -89,6 +95,7 @@
 - ✅ 使用 NSubstitute（禁止 Moq）
 - ✅ 禁止繼承 BaseTestClass
 - ✅ 聚合根 ID 使用 `Guid.NewGuid().ToString()`
+- ✅ profile 與 environment 規則見 [profile-configuration-standards.md](./profile-configuration-standards.md)
 
 ---
 
@@ -99,6 +106,7 @@
 - **實作 Handler/Use Case** → 查看 [usecase-standards.md](./usecase-standards.md)
 - **設計 REST API** → 查看 [controller-standards.md](./controller-standards.md)
 - **撰寫測試** → 查看 [test-standards.md](./test-standards.md)
+- **處理 profile / environment / DI 分支** → 查看 [profile-configuration-standards.md](./profile-configuration-standards.md)
 - **處理查詢** → 查看 [projection-standards.md](./projection-standards.md)
 - **管理 Read Model** → 查看 [archive-standards.md](./archive-standards.md)
 

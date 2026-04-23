@@ -159,7 +159,7 @@ Controller
 
 ## 共用專案分類（Shared Projects Classification）
 
-> 詳細設計決策與 DDD 概念說明請參照 [ADR-047](../adr/ADR-047-shared-project-classification.md)。
+> 詳細設計理由與 DDD 概念說明，應以本文件與相對應的 rationale / guide 文件為準。
 
 本專案有三個跨領域共用區域，各自對應不同的 DDD 概念：
 

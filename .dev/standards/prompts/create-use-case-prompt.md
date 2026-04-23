@@ -1,5 +1,9 @@
 # Prompt Template: Create Use Case (Dotnet)
 
+> Migration note:
+> This file is a legacy human-facing prompt example.
+> Canonical reusable prompt assets should live under `.ai/` and `.ai/assets/`.
+
 ## Input Format
 ```yaml
 use_case_name: CreateTag

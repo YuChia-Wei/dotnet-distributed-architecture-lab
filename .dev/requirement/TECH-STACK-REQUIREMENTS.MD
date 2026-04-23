@@ -1,20 +1,20 @@
 # .NET Tech Stack Requirements
 
-本文件定義 .NET 專案的技術選型，並提供對應 ADR 連結（如適用）。
+本文件定義 .NET 專案的技術選型與對應 canonical docs。
 
-| Area | Choice | Version | ADR |
+| Area | Choice | Version | Canonical Source |
 | --- | --- | --- | --- |
-| Language/Runtime | C# 14 / .NET | 10.0 | N/A |
-| ORM (Write) | Dapper + Npgsql | Dapper 2.1.66 / Npgsql 10.0.1 | N/A |
-| ORM (Read/Projection) | EF Core | 10.x | [ADR-002](../adr/ADR-002-orm-config-location.md) |
-| Messaging | WolverineFx + RabbitMQ + Kafka | WolverineFx 5.16.2 | [ADR-019](../adr/ADR-019-outbox-pattern-implementation.md) |
-| Database | PostgreSQL | 16 | [ADR-019](../adr/ADR-019-outbox-pattern-implementation.md) |
+| Language/Runtime | C# 14 / .NET | 10.0 | `.dev/ARCHITECTURE.MD` |
+| ORM (Write) | Dapper + Npgsql | Dapper 2.1.66 / Npgsql 10.0.1 | `.dev/ARCHITECTURE.MD` |
+| ORM (Read/Projection) | EF Core | 10.x | `.dev/guides/implementation-guides/PERSISTENCE-CONFIGURATION-GUIDE.md` |
+| Messaging | WolverineFx + RabbitMQ + Kafka | WolverineFx 5.16.2 | `.dev/ARCHITECTURE.MD` |
+| Database | PostgreSQL | 16 | `.dev/ARCHITECTURE.MD` |
 | Testing Framework | xUnit | 2.9.3 | [PROFILE-BASED-TESTING-GUIDE.md](../guides/design-guides/PROFILE-BASED-TESTING-GUIDE.md) |
 | BDD (Planned) | BDDfy (Gherkin-style naming) | (TBD) | [profile-based-testing-rationale.MD](../standards/rationale/profile-based-testing-rationale.MD) |
-| Mocking | NSubstitute | 5.3.0 | N/A |
-| Mutation Testing | Stryker.NET | (TBD) | [ADR-025](../adr/ADR-025-mutation-testing-ucontract-exclusion.md) |
-| Web API Host | ASP.NET Core | (同 .NET 版本) | N/A |
-| Queue Consumer Host | Console App (.NET Generic Host) | (同 .NET 版本) | N/A |
+| Mocking | NSubstitute | 5.3.0 | `.dev/ARCHITECTURE.MD` |
+| Mutation Testing | Stryker.NET | (TBD) | `.dev/standards/coding-standards.md` |
+| Web API Host | ASP.NET Core | (同 .NET 版本) | `.dev/ARCHITECTURE.MD` |
+| Queue Consumer Host | Console App (.NET Generic Host) | (同 .NET 版本) | `.dev/ARCHITECTURE.MD` |
 
 ## ORM 使用策略
 
@@ -26,7 +26,7 @@
 | Query (Read/Projection) | EF Core | 快速開發、Projection 支援 |
 | Complex Query | Dapper | 複雜 SQL、效能關鍵查詢 |
 
-> Note: 未有 ADR 的選型，後續如需固定版本或理由，請新增對應 ADR。
+> Note: 若後續需要補充選型理由，請直接更新對應 standards / guides / architecture docs，不再新增 ADR 檔。
 
 ## 部署平台
 

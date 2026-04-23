@@ -1,45 +1,26 @@
-# Claude Skills
+# Claude Skill Wrappers
 
-本目錄放置 repo-local Claude skill 定義本體，以及 skill-local references、agents metadata。
+本目錄放置 Claude-compatible skill wrapper。
 
-## 目錄用途
-
-- `SKILL.md`
-  - skill 的核心定義與使用規則
-- `references/`
-  - skill 執行時會讀取的補充參考
-- `agents/`
-  - skill 相關的 agent metadata 或預設 prompt
-
-## Skill Index
-
-- `bdd-gwt-test-designer/`
-  - Given-When-Then / BDD / Gherkin 測試設計 skill
-- `code-reviewer/`
-  - .NET code review、評分與 findings skill
-- `ddd-ca-hex-architect/`
-  - DDD + Clean Architecture + Hexagonal 架構設計 skill
-- `spec-compliance-validator/`
-  - spec compliance gate skill
-- `staged-refactor-implementer/`
-  - stage 級安全重構執行 skill
-- `tactical-refactor-implementer/`
-  - 局部、物件中心重構 skill
-
-## 與其他目錄的分工
+## 角色
 
 - `.claude/skills/`
-  - agent-facing skill definitions
-- `.ai/assets/`
-  - portable canonical source for skills、sub-agent-role prompts、shared materials
+  - Claude-compatible wrapper root
+- `.ai/assets/skills/`
+  - canonical skill registry 與單一真相
 - `.dev/guides/ai-collaboration-guides/`
-  - human-facing skill guides、prompt templates、workflow guides
-- `.ai/`
-  - AI-facing indexes、system overviews、scripts
+  - human-facing guides
 
-## Wrapper Direction
+## 使用方式
 
-- `.claude/skills/` 只放 top-level skills
-- use-case sub-agents 的 canonical source 應放在 `.ai/assets/sub-agent-role-prompts/`
-- shared/supporting materials 應優先放在 `.ai/assets/shared/` 或 canonical `references/`
+1. 先到 `.ai/assets/skills/README.MD` 找完整 skill registry。
+2. 再看對應 `skill.yaml` 確認 canonical purpose、inputs、outputs、constraints、wrapper targets、human guide。
+3. 需要 Claude-compatible wrapper 時，再使用 `.claude/skills/<skill>/SKILL.md`。
+
+## Wrapper 原則
+
+- wrapper 不應成為 skill 規則的單一真相
+- 新增 skill 時，應先補 canonical spec，再補 wrapper
+- 若 canonical spec 與 wrapper 衝突，以 `.ai/assets/skills/` 為準
+- 每個 wrapper `SKILL.md` 應只保留 canonical spec、human guide、references、runtime-specific metadata 的薄入口
 

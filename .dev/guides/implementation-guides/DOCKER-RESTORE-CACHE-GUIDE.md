@@ -47,4 +47,5 @@ RUN dotnet publish "src/App/App.csproj" -c Release -o /app/publish
 
 ## Related
 
-- `../../adr/ADR-049-dockerfile-explicit-csproj-copy-for-restore-cache.md`
+- `../../.ai/scripts/check-dockerfile-csproj-copy-sync.ps1`
+- `./TEMPLATE-USAGE-GUIDE.md`

@@ -11,7 +11,7 @@ Return:
 4. Outbound ports and required adapters
 5. BC contracts and MQ events
 6. Project/folder placement
-7. ADRs to add or update
+7. Docs to add or update
 
 ## New Aggregate or Major Refactor
 
@@ -54,5 +54,5 @@ Return:
 
 - Check the design against `.dev/ARCHITECTURE.MD`.
 - Check the design against `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`.
-- Read matching ADRs from `.dev/adr/`.
+- Read the matching standards, guides, and architecture docs that now hold the canonical rules.
 - If the design affects code generation or review workflows, map the result back to `.ai/assets/` rather than inventing an isolated parallel standard.

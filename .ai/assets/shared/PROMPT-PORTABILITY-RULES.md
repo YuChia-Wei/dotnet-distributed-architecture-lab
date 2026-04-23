@@ -3,7 +3,7 @@
 Use these rules when creating or updating canonical shared materials and delegated guidance files so they remain reusable across repositories.
 
 ## Mandatory Rules
-- Do not reference repository-specific ADR numbers (for example: `ADR-0xx`).
+- Do not reference repository-specific legacy decision numbers or decision-record IDs.
 - Do not reference repository-specific domain terms, route names, aggregate names, or folder names.
 - Do not hardcode project names, solution names, or bounded-context names.
 - Use neutral placeholders (`Entity`, `WorkItem`, `Container`, `DomainObject`) in examples.
@@ -21,11 +21,10 @@ Use these rules when creating or updating canonical shared materials and delegat
 - Never hardcode a numeric ADR id in prompt text.
 
 ## Example Conversion
-- Before: `RTK Query Cache Rules (ADR-XXX)`
+- Before: `RTK Query Cache Rules (Legacy Decision XXX)`
 - After: `RTK Query Cache Rules (Project Decision Slot: Cache Invalidation Policy)`
 
 ## Pre-Commit Checklist
-- `rg -n "ADR-[0-9]{3}" .ai/assets/shared` returns no results.
+- Searches for repository-specific decision IDs inside portable prompt assets should return no results.
 - `rg -n "ProjectNameA|ProjectNameB|DomainTermA|DomainTermB" .ai/assets/shared` returns no results.
 - Example code uses neutral names and can be copied without domain rewrite.
-

@@ -9,9 +9,9 @@ Use Cases are the application layer. Each Use Case:
 - Orchestrates Domain + Infrastructure
 - Is framework-agnostic in its core logic
 
-## ezapp 2.x Concepts (Preserved)
+## Framework Concepts (Preserved)
 
-Legacy (ezapp 1.x) patterns to avoid:
+Legacy patterns to avoid:
 - `GenericInMemoryRepository` (replaced by Outbox + InMemory ORM)
 - `BlockingMessageBus` (replaced by InMemory message broker)
 

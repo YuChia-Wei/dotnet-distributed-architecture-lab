@@ -1,0 +1,21 @@
+command_processing:
+  steps:
+    - "Validate the payment authorization command fields"
+    - "Load the Payment aggregate by payment id"
+    - "Verify the aggregate is awaiting authorization and the idempotency key is acceptable"
+    - "Call the external payment gateway through a gateway port"
+    - "Map the gateway response into authorized, declined, pending, or timeout outcomes"
+    - "Apply aggregate behavior and emit domain events"
+    - "Persist the aggregate and publish follow-up integration messages if required"
+
+error_handling:
+  duplicate_request: "Return the already known payment authorization outcome without producing duplicate events"
+  external_timeout: "Record a pending or unknown authorization outcome and require later reconciliation"
+  external_rejection: "Record a declined authorization outcome with gateway reason code"
+  external_system_error: "Return a retryable failure while preserving the payment aggregate in a non-authorized state"
+
+constraint_enforcement:
+  - "A payment that is already authorized or declined must not be authorized again through the same command path"
+  - "The same idempotency key must not create duplicate authorization side effects"
+  - "Gateway reference and correlation identifiers must be stored when available"
+  - "Success state must only be entered after a gateway-authoritative success response or callback"

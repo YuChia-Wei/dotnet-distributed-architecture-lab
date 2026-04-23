@@ -1,6 +1,6 @@
 # 📁 Directory Rules - 目錄使用規則（.NET）
 
-## 🚨 重要原則：`.ai/` vs `.dev/` vs `.claude/skills/`
+## 🚨 重要原則：`.ai/` vs `.dev/` vs runtime wrappers
 
 ### `.ai/` 目錄 - 通用 AI Coding 框架
 **只能包含**：
@@ -21,11 +21,11 @@
 - ❌ 專案的 ADR、規格、任務
 - ❌ 專案特定的測試資料或設定
 
-### `.claude/skills/` 目錄 - Agent-Specific Skill Definitions
+### `.agents/skills/` / `.claude/skills/` 目錄 - Runtime Skill Wrappers
 **應該包含**：
-- ✅ skill 定義本體 (`SKILL.md`)
-- ✅ skill-local references
+- ✅ thin wrapper `SKILL.md`
 - ✅ skill 相關 metadata / agent 設定
+- ✅ 指向 canonical spec 與 human guide 的薄入口
 
 **不應作為**：
 - ❌ human-facing guide 入口
@@ -54,10 +54,10 @@
 | 內容類型 | 放置位置 | 範例 |
 |---------|---------|------|
 | 編碼標準 | `.dev/standards/coding-standards/` | Repository 限制規則 |
-| agent-facing canonical skill / sub-agent / prompt materials | `.ai/` | `assets/skills/ddd-ca-hex-architect/skill.yaml`, `assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`, `prompts/shared/common-rules.md` |
-| agent-specific skill 定義 | `.claude/skills/` | `ddd-ca-hex-architect/SKILL.md` |
+| agent-facing canonical skill / sub-agent / prompt materials | `.ai/` | `assets/skills/ddd-ca-hex-architect/skill.yaml`, `assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`, `assets/shared/common-rules.md` |
+| runtime skill wrapper | `.agents/skills/` / `.claude/skills/` | `ddd-ca-hex-architect/SKILL.md` |
 | human-facing AI guide | `.dev/guides/ai-collaboration-guides/` | `DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md` |
-| 專案 ADR | `.dev/adr/` | ADR-031-reactor-interface |
+| 專案架構決策記錄 | `.dev/adr/` | 歷史決策紀錄（如仍保留） |
 | 專案規格 | `.dev/specs/` | product-spec.json |
 | 技術範例 | `.dev/standards/examples/` | 使用 Example.* namespace |
 | 專案程式碼 | `src/` | 使用實際 root namespace |
@@ -96,4 +96,3 @@ rg -n "AiScrum|CompanyX|MyProject" .ai/ --glob "!**/.git/**"
 
 ---
 最後更新：2026-02-01
-

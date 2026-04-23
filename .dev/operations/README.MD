@@ -48,7 +48,7 @@
 原因：
 
 - 這一階段的 operations 文件仍然是專案知識系統的一部分
-- 它和 `.dev/requirement/`、`.dev/specs/`、`.dev/adr/` 的關聯比和獨立 ops 平台更強
+- 它和 `.dev/requirement/`、`.dev/specs/`、`.dev/standards/` 的關聯比和獨立 ops 平台更強
 - 現在拆成 `.ops/` 只會增加資訊架構成本，還不會帶來明顯治理收益
 
 只有當下列條件成立時，才考慮升級成 repo 根層的 `.ops/`：

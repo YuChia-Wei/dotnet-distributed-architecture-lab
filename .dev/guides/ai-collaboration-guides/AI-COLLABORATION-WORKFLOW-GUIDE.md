@@ -110,7 +110,12 @@
 
 ### Step 5: test generation / implementation
 
-依情境交給既有 test generation prompt / subagent 或 implementation workflow。
+依情境交給：
+
+- `command-use-case-implementer`
+- `query-use-case-implementer`
+- `reactor-implementer`
+- 或既有 test generation prompt / subagent
 
 ### Step 6: code review
 
