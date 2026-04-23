@@ -1,20 +1,22 @@
 # Use Case, Command, Query, and Handler Relationship
 
-本文件定義本 repo 在 DDD + Clean Architecture + Hexagonal Architecture 下，`use case`、`command`、`query`、`handler`、`application service`、`repository`、`controller` 等詞彙的關係與責任邊界。
+本文件定義本 repo 在 DDD + Clean Architecture + Hexagonal Architecture 下，`use case`、`command`、`query`、`handler`、`application service`、`repository`、`controller`、`message bus` 等詞彙的關係與責任邊界。
 
 ## 目的
 
 - 統一詞彙
 - 避免把 `use case`、`command`、`handler` 混成同義詞
-- 定義 controller、message bus、handler、application service 的依賴方向
+- 定義 controller、message bus、use case、handler、application service 的依賴方向
 
 ## 核心結論
 
-- `Use Case` 是 application boundary，不是特定 class 名稱。
-- `Command` / `Query` 是進入 use case 的 request model。
-- `Handler` 是 command / query 的 application-layer executor。
-- 多數情況下，handler 本身就可以是 use case implementation。
-- 只有當 orchestration 明顯變複雜、需要重用、或需要把 handler 保持極薄時，才另外抽 `Application Service`。
+- `Use Case` 是 application inbound port，也是一次明確 business operation 的主名稱。
+- `Use Case` 在本 repo 中應顯式反映在程式碼中，預設以 `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase` 命名。
+- `Input` / `Output` / `Result` / `PageResult` 是 use case boundary model，不使用 `InputDto` / `OutputDto` / `ResultDto` 作為預設命名。
+- `Command` / `Query` 不是 use case 的同義詞，而是 message-oriented request model。
+- HTTP controller 的主要入口應直接依賴 `Use Case`，不以 `message bus -> command handler` 作為預設入口。
+- `Command Handler` / `Query Handler` 是 message-oriented application executor，主要服務於 bus、consumer、reactor、workflow 等入口。
+- `Application Service` 是 use case 內部可選的 application-layer collaborator，不是每個 use case 都必備，也不是 inbound port。
 - `Controller` 是 adapter，只負責轉譯 protocol input/output，不直接碰 repository 或 domain model。
 - `message bus` 是 delivery / dispatch mechanism，不應被誤當成 use case 本身。
 
@@ -22,7 +24,7 @@
 
 ### Use Case
 
-一次明確的 application-level business operation。
+一次明確的 application-level business operation，且在本 repo 中是顯式的 inbound port。
 
 例：
 
@@ -30,18 +32,65 @@
 - `PlaceOrder`
 - `DecreaseStock`
 
+對應程式碼命名例：
+
+- `IPlaceOrderUseCase`
+- `PlaceOrderUseCase`
+- `PlaceOrderInput`
+- `PlaceOrderOutput`
+
 `Use Case` 回答的是：
 
 - 系統這次要完成什麼業務操作
-- 需要哪些 input
+- 需要哪些 application input
 - 改變哪個 aggregate 或 read model
 - 成功後輸出什麼結果
 
-`Use Case` 是責任與邊界，不要求一定有一個名為 `*UseCase` 的獨立 class。
+`Use Case` 不是 transport 技術詞彙，而是 application boundary。本 repo 要求它在程式碼中顯式存在，而不是只留在文件概念層。
+
+### Input / Output / Result / PageResult
+
+`Input` / `Output` / `Result` / `PageResult` 是 use case boundary model。
+
+- `Input`
+  - use case 的 application-level input model
+  - 不直接等同於 HTTP request，也不直接等同於 message bus command
+- `Output`
+  - use case 的 application-level output model
+  - 不直接等同於 HTTP response，也不直接等同於 query-side DTO
+- `Result`
+  - result pattern 的 application-level output wrapper
+  - 用於表達 success / failure / error / optional value
+- `PageResult`
+  - 分頁查詢的 application-level output wrapper
+  - 用於表達 items、total count、page index、page size 等分頁資訊
+
+命名規則：
+
+- `PlaceOrderInput`
+- `PlaceOrderOutput`
+- `Result<Guid>`
+- `Result<OrderDetailsOutput>`
+- `PageResult<ProductDto>`
+
+避免使用：
+
+- `PlaceOrderInputDto`
+- `PlaceOrderOutputDto`
+- `DecreaseStockResultDto`
+
+`Dto` 應保留給 projection、跨 BC 傳輸、或 adapter / read model 導向的資料承載模型。
+
+補充規則：
+
+- 若 use case 回傳的是單純成功資料，優先使用具語意的 `*Output`
+- 若 use case 明確採用 result pattern，回傳 `Result` / `Result<T>`
+- 若 use case 明確回傳分頁資料，回傳 `PageResult<T>`
+- `Result` / `PageResult` 屬於 use case boundary model 的特例，不視為 DTO
 
 ### Command
 
-表達「要做一件會改變系統狀態的事」的 request model。
+表達「要做一件會改變系統狀態的事」的 message-oriented request model。
 
 `Command` 本身不負責執行業務，只承載：
 
@@ -54,15 +103,34 @@
 - `CreateProductCommand`
 - `ShipOrderCommand`
 
+在本 repo 中，`Command` 的主要適用情境是：
+
+- message bus dispatch
+- MQ consumer
+- reactor / workflow 內部訊息
+- 非 HTTP 的 message-oriented 入口
+
+因此：
+
+- `Command` 不是 HTTP use case port 的預設輸入模型
+- `Command` 不是 `Use Case` 的同義詞
+
 ### Query
 
 表達「要讀取資料或組裝 view/read model」的 request model。
 
 `Query` 不應改變 domain state。
 
+`Query` 可視情況作為：
+
+- 顯式 use case port 的 input model
+- query handler 的 message model
+
+但無論哪種形式，都應維持 read-only 語意。
+
 ### Handler
 
-接收 `Command` 或 `Query` 並執行對應 use case 的 application-layer object。
+接收 `Command` 或 `Query` 並執行對應 application flow 的 message-oriented application-layer object。
 
 `Handler` 的責任通常包括：
 
@@ -70,14 +138,35 @@
 - 載入 aggregate 或 read-side data
 - 呼叫 aggregate behavior / domain service
 - 呼叫 repository 或 query service
-- 組裝 output DTO / result
+- 組裝 result
 - 必要時發布 integration message
+
+在本 repo 中：
+
+- `Handler` 不是 `Use Case` 的同義詞
+- `Handler` 可以在內部轉呼叫 `Use Case`
+- `Handler` 也可以在某些純訊息流場景中直接承擔 application execution
+- 但 HTTP controller 不以 `Handler` 作為預設依賴目標
 
 ### Application Service
 
-當 handler 的 orchestration 過長、跨多個 collaborator、需要重用，或你想把 handler 保持為極薄 dispatch shell 時，才抽出的 application-layer service。
+`Application Service` 是 use case 內部可選的 application-layer collaborator，用來承接不適合直接留在單一 use case 類別中的 orchestration / policy coordination。
 
-它不是每個 use case 都必備的物件。
+它不是每個 use case 都必備的物件，也不是 inbound port。
+
+建議抽出的情況：
+
+- 同一段 orchestration 需要被多個 use case / handler / reactor 重用
+- 流程協調跨多個 repository / gateway / publisher / policy collaborator
+- 流程中有明確的 permission / compensation / retry / sequencing policy
+- use case 類別中的流程控制已壓過 use case 主語意
+
+不建議抽出的情況：
+
+- 只是把 use case 的內容平移到同名 service
+- 沒有重用需求，也沒有獨立 policy/orchestration 語意
+- 只是 repository pass-through
+- 單純為了讓 class 變薄而多包一層
 
 ### Domain Service
 
@@ -97,40 +186,60 @@
 HTTP adapter。只負責：
 
 - 接收 HTTP request
-- 轉成 command / query
+- 轉成 use case input
+- 透過 `[FromServices]` 取得 use case port
 - 呼叫 application boundary
 - 將 result 轉成 HTTP response
 
 Controller 不應：
 
+- 透過 `IMessageBus` 作為 HTTP use case 的預設入口
 - 直接依賴 repository
 - 直接操作 aggregate
 - 承擔 domain orchestration
 
+Controller DI 規則：
+
+- `Use Case` 介面只能透過 action parameter 的 `[FromServices]` 注入
+- 其他輔助介面如 `ILogger`、`IMapper`、`IMessageBus` 可使用 constructor injection
+- 不直接注入 repository 或 aggregate
+
 ## 推薦關係鏈
 
-### Command Flow
+### HTTP Command-Side Flow
 
 ```text
 HTTP Request
   -> Controller
-  -> Command
-  -> Command Handler
-  -> Aggregate / Domain Service / Repository
-  -> Result DTO
+  -> Use Case Input
+  -> Use Case
+  -> Application Service (optional)
+  -> Aggregate / Domain Service / Repository / Gateway
+  -> Use Case Output / Result / PageResult
   -> HTTP Response
 ```
 
-### Query Flow
+### HTTP Query-Side Flow
 
 ```text
 HTTP Request
   -> Controller
-  -> Query
-  -> Query Handler
+  -> Use Case Input or Query
+  -> Use Case
   -> Query Repository / Query Service
-  -> Result DTO
+  -> Use Case Output / Result / PageResult / Response Model
   -> HTTP Response
+```
+
+### Message-Oriented Flow
+
+```text
+Consumer / Reactor / Workflow
+  -> Command / Query
+  -> Handler
+  -> Use Case (optional but recommended when the same business operation also exists as a named inbound port)
+  -> Application Service (optional)
+  -> Aggregate / Query Repository / Gateway
 ```
 
 ### Cross-BC Flow
@@ -140,12 +249,12 @@ BC A Application
   -> Integration Event / Request Message
   -> MQ / Message Bus
   -> BC B Consumer / Handler
-  -> BC B Use Case
+  -> BC B Use Case / Reactor
 ```
 
 ## Controller 是否一定要透過 Message Bus
 
-不一定。
+否。
 
 應區分兩件事：
 
@@ -154,7 +263,8 @@ BC A Application
 
 在同一個 BC / process 內：
 
-- controller 可以透過 in-process dispatcher、mediator、Wolverine handler invocation、或直接依賴 application port 進入 use case
+- HTTP controller 應直接依賴 `Use Case` 進入 application boundary
+- `message bus` 可保留給 internal workflow 或 message-oriented dispatch
 
 在跨 BC / 跨 process 情境：
 
@@ -162,79 +272,82 @@ BC A Application
 
 因此：
 
-- `controller -> command/query dispatch` 是合理的
-- 但不要把 `bus` 視為唯一合法入口
+- `controller -> use case` 是本 repo 的預設規則
+- `bus -> command/query handler` 是 message-oriented 補充機制
+- 不要把 `bus` 視為 use case 本身
 
-## Handler 是否必須再呼叫 Use Case Class
+## Handler 是否必須再呼叫 Use Case
 
-不必。
+不一定，但要看入口類型。
 
 正確原則是：
 
-- 一定要有 `use case boundary`
-- 不一定要多包一層 `UseCaseService`
-
-以下情況，handler 本身就可以是 use case implementation：
-
-- 單一 aggregate 為主
-- orchestration 短而清楚
-- 沒有可重用的 application workflow 需求
-- handler 內容仍可讀、可測、可維護
-
-以下情況，建議抽 `Application Service`：
-
-- handler 需要協調多個 repository / service
-- 流程長且有多段 policy / permission / compensation logic
-- 同一 orchestration 需要被多個 adapter 或 consumer 重用
-- 你需要讓 handler 保持為 very thin transport shell
+- HTTP 入口一定要有顯式 `use case boundary`
+- message-oriented 入口可以由 handler 直接執行，或轉呼叫 use case
+- 若同一 business operation 同時存在 HTTP 與 message-oriented 入口，應優先讓共用邏輯收斂到 use case / application service，而不是各自複製
 
 ## 推薦實作規則
 
 ### Rule 1
 
-預設把 handler 視為 use case implementation。
+HTTP controller 預設直接依賴顯式 `Use Case` port，不透過 `IMessageBus` dispatch command 進入 application boundary。
 
 ### Rule 2
 
-只有在複雜度真的上升時，才抽 `Application Service`，不要為了名詞完整性硬多包一層。
+`Use Case` 預設以 `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase` 命名，搭配 `<Verb><Noun>Input` 與 `*Output` / `Result` / `PageResult`。
 
 ### Rule 3
 
-Command handler 應聚焦在狀態變更與 domain collaboration，不應退化成只轉呼叫另一個同名 service。
+`Command` / `Query` 保留給 message-oriented request model，不作為 HTTP use case port 的預設命名。
 
 ### Rule 4
 
-Query handler 應優先使用 query repository / query service，不要把 query flow 拉回 aggregate。
+只有在複雜度真的上升時，才抽 `Application Service`，不要為了名詞完整性硬多包一層。
 
 ### Rule 5
 
-Controller 只碰 adapter concern，不直接碰 repository 或 aggregate。
+`Application Service` 不是 inbound port，不直接被 controller 作為主依賴目標。
 
 ### Rule 6
 
-跨 BC communication 只能用 MQ；同 BC 內是否使用 bus，屬於 dispatch choice，不是 architecture law。
+`Command Handler` / `Query Handler` 應聚焦在 message-oriented execution，不應退化成與同名 use case 的無意義轉呼叫。
+
+### Rule 7
+
+Query side 應優先使用 query repository / query service，不要把 query flow 拉回 aggregate。
+
+### Rule 8
+
+跨 BC communication 只能用 MQ；同 BC 內 `bus` 是 dispatch choice，不是 HTTP application boundary。
 
 ## 命名建議
 
-- request model:
-  - `CreateProductCommand`
+- HTTP models:
+  - `PlaceOrderRequest`
+  - `PlaceOrderResponse`
+- use case:
+  - `IPlaceOrderUseCase`
+  - `PlaceOrderUseCase`
+  - `PlaceOrderInput`
+  - `PlaceOrderOutput`
+  - `Result<Guid>`
+  - `PageResult<ProductDto>`
+- message-oriented models:
+  - `ReserveInventoryCommand`
+  - `ReserveInventoryCommandHandler`
   - `GetOrderDetailsQuery`
-- handler:
-  - `CreateProductHandler`
-  - `GetOrderDetailsHandler`
+  - `GetOrderDetailsQueryHandler`
 - optional application service:
   - `OrderPlacementApplicationService`
   - `InventoryReservationApplicationService`
-
-若已使用 handler-based dispatch，避免再建立完全同名且只有單行轉呼叫的 `CreateProductUseCaseService`。
 
 ## 與 Spec 的關係
 
 在 `.dev/specs/` 中：
 
 - `use case` 是 production behavior 的主名稱
-- `command` / `query` 是進入該 use case 的 request model
-- `handler` 是程式碼實作形態，不必額外成為 spec 主詞
+- `input` / `output` / `result` / `page result` 是該 use case 的 boundary model
+- `command` / `query` / `handler` 是程式碼中的 message-oriented implementation vocabulary，不必額外成為 spec 主詞
 
 因此 spec 應先寫：
 
@@ -242,7 +355,17 @@ Controller 只碰 adapter concern，不直接碰 repository 或 aggregate。
 
 再由程式碼決定以：
 
-- `CreateProductCommand + CreateProductHandler`
-- 或其他等價 application dispatch 形式
+- `ICreateProductUseCase + CreateProductUseCase + CreateProductInput + CreateProductOutput`
+- 或在 result pattern 下使用 `IIncreaseStockUseCase + IncreaseStockInput + Result<IncreaseStockOutput>`
+- 並在需要 message-oriented dispatch 時補上 `CreateProductCommand + CreateProductCommandHandler`
 
-來實作這個 use case。
+## References
+
+- Microsoft, CQRS pattern:
+  - [https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs)
+- Martin Fowler, CQRS:
+  - [https://martinfowler.com/bliki/CQRS.html](https://martinfowler.com/bliki/CQRS.html)
+- Alistair Cockburn, Hexagonal Architecture:
+  - [https://alistair.cockburn.us/hexagonal-architecture](https://alistair.cockburn.us/hexagonal-architecture)
+- Microsoft, DDD-oriented microservice:
+  - [https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice)

@@ -1,44 +1,44 @@
 using System;
 using System.Threading.Tasks;
-using InventoryControl.Applications.Commands;
-using InventoryControl.Applications.Dtos;
-using InventoryControl.Applications.Queries;
+using InventoryControl.Applications.UseCases;
 using InventoryControl.WebApi.Models.Requests;
 using InventoryControl.WebApi.Models.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Wolverine;
 
 namespace InventoryControl.WebApi.Controllers;
 
+/// <summary>
+/// 提供庫存管理相關 HTTP 端點。
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class InventoryController : ControllerBase
 {
-    private readonly IMessageBus _bus;
-
-    public InventoryController(IMessageBus bus)
-    {
-        this._bus = bus;
-    }
 
     /// <summary>
-    /// 扣庫
+    /// 扣除指定商品庫存。
     /// </summary>
-    /// <param name="productId">訂單識別碼。</param>
-    /// <param name="request"></param>
-    /// <returns>包含訂單行項目的結果。</returns>
+    /// <param name="productId">商品識別碼。</param>
+    /// <param name="request">扣庫請求資料。</param>
+    /// <param name="useCase">扣除庫存 use case。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    /// <returns>包含可用庫存數量的結果。</returns>
     [HttpPost("product/{productId:guid}/decrease")]
-    public async Task<IActionResult> DecreaseStock([FromRoute] Guid productId, [FromBody] DecreaseStockRequest request)
+    public async Task<IActionResult> DecreaseStock(
+        [FromRoute] Guid productId,
+        [FromBody] DecreaseStockRequest request,
+        [FromServices] IDecreaseStockUseCase useCase,
+        CancellationToken cancellationToken)
     {
-        var resultDto = await this._bus.InvokeAsync<DecreaseStockResultDto>(new DecreaseStockCommand(productId, request.Stock));
+        var resultDto = await useCase.ExecuteAsync(new DecreaseStockInput(productId, request.Stock), cancellationToken);
 
-        if (resultDto.IsSuccess)
+        if (resultDto.IsSuccess && resultDto.Value is not null)
         {
             var availableQuantityResponse = new AvailableQuantityResponse
             {
                 ProductId = productId,
-                AvailableQuantity = resultDto.CurrentStock
+                AvailableQuantity = resultDto.Value.CurrentStock
             };
 
             return this.Ok(availableQuantityResponse);
@@ -48,81 +48,119 @@ public class InventoryController : ControllerBase
     }
 
     /// <summary>
-    /// 取得指定貨品的庫存數量
+    /// 取得指定商品的庫存數量。
     /// </summary>
-    /// <param name="productId">訂單識別碼。</param>
-    /// <returns>包含訂單行項目的結果。</returns>
+    /// <param name="productId">商品識別碼。</param>
+    /// <param name="useCase">取得可用庫存數量 use case。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    /// <returns>包含可用庫存數量的結果。</returns>
     [HttpGet("product/{productId:guid}")]
     [ProducesResponseType(typeof(AvailableQuantityResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetOrderDetails([FromRoute] Guid productId)
+    public async Task<IActionResult> GetAvailableQuantity(
+        [FromRoute] Guid productId,
+        [FromServices] IGetInventoryItemAvailableQuantityUseCase useCase,
+        CancellationToken cancellationToken)
     {
-        var resultDto = await this._bus.InvokeAsync<GetAvailableQuantityResultDto>(new GetInventoryItemAvailableQuantityQuery(productId));
+        var output = await useCase.ExecuteAsync(new GetInventoryItemAvailableQuantityInput(productId), cancellationToken);
 
         var availableQuantityResponse = new AvailableQuantityResponse
         {
-            ProductId = resultDto.ProductId,
-            AvailableQuantity = resultDto.AvailableStock
+            ProductId = output.ProductId,
+            AvailableQuantity = output.AvailableStock
         };
 
         return this.Ok(availableQuantityResponse);
     }
 
     /// <summary>
-    /// 進貨
+    /// 增加指定商品庫存。
     /// </summary>
-    /// <param name="productId">訂單識別碼。</param>
-    /// <param name="request"></param>
-    /// <returns>包含訂單行項目的結果。</returns>
+    /// <param name="productId">商品識別碼。</param>
+    /// <param name="request">進貨請求資料。</param>
+    /// <param name="useCase">增加庫存 use case。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    /// <returns>包含可用庫存數量的結果。</returns>
     [HttpPost("product/{productId:guid}/increase")]
-    public async Task<IActionResult> IncreaseStock([FromRoute] Guid productId, [FromBody] IncreaseStockRequest request)
+    public async Task<IActionResult> IncreaseStock(
+        [FromRoute] Guid productId,
+        [FromBody] IncreaseStockRequest request,
+        [FromServices] IIncreaseStockUseCase useCase,
+        CancellationToken cancellationToken)
     {
-        var resultDto = await this._bus.InvokeAsync<IncreaseStockResultDto>(new IncreaseStockCommand(productId, request.Stock));
+        var resultDto = await useCase.ExecuteAsync(new IncreaseStockInput(productId, request.Stock), cancellationToken);
+
+        if (!resultDto.IsSuccess || resultDto.Value is null)
+        {
+            return this.BadRequest(resultDto.ErrorMessage);
+        }
 
         var availableQuantityResponse = new AvailableQuantityResponse
         {
             ProductId = productId,
-            AvailableQuantity = resultDto.CurrentStock
+            AvailableQuantity = resultDto.Value.CurrentStock
         };
 
         return this.Ok(availableQuantityResponse);
     }
 
     /// <summary>
-    /// 初始化商品庫存
+    /// 初始化商品庫存。
     /// </summary>
-    /// <param name="productId">訂單識別碼。</param>
-    /// <param name="request"></param>
-    /// <returns>包含訂單行項目的結果。</returns>
+    /// <param name="productId">商品識別碼。</param>
+    /// <param name="request">初始化庫存請求資料。</param>
+    /// <param name="useCase">初始化商品庫存 use case。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    /// <returns>包含可用庫存數量的結果。</returns>
     [HttpPost("product/{productId:guid}")]
-    public async Task<IActionResult> InitProductStock([FromRoute] Guid productId, [FromBody] InitProductStockRequest request)
+    public async Task<IActionResult> InitProductStock(
+        [FromRoute] Guid productId,
+        [FromBody] InitProductStockRequest request,
+        [FromServices] IInitProductStockUseCase useCase,
+        CancellationToken cancellationToken)
     {
-        var resultDto = await this._bus.InvokeAsync<InitProductStockResultDto>(new InitProductStockRequestCommand(productId, request.Stock));
+        var resultDto = await useCase.ExecuteAsync(new InitProductStockInput(productId, request.Stock), cancellationToken);
+
+        if (!resultDto.IsSuccess || resultDto.Value is null)
+        {
+            return this.BadRequest(resultDto.ErrorMessage);
+        }
 
         var availableQuantityResponse = new AvailableQuantityResponse
         {
             ProductId = productId,
-            AvailableQuantity = resultDto.CurrentStock
+            AvailableQuantity = resultDto.Value.CurrentStock
         };
 
         return this.Ok(availableQuantityResponse);
     }
 
     /// <summary>
-    /// 退貨回補庫存
+    /// 退貨回補庫存。
     /// </summary>
-    /// <param name="productId">訂單識別碼。</param>
-    /// <param name="request"></param>
-    /// <returns>包含訂單行項目的結果。</returns>
+    /// <param name="productId">商品識別碼。</param>
+    /// <param name="request">退貨回補請求資料。</param>
+    /// <param name="useCase">退貨回補 use case。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    /// <returns>包含可用庫存數量的結果。</returns>
     [HttpPost("product/{productId:guid}/restock")]
-    public async Task<IActionResult> Restock([FromRoute] Guid productId, [FromBody] ProductRestockRequest request)
+    public async Task<IActionResult> Restock(
+        [FromRoute] Guid productId,
+        [FromBody] ProductRestockRequest request,
+        [FromServices] IRestockUseCase useCase,
+        CancellationToken cancellationToken)
     {
-        var resultDto = await this._bus.InvokeAsync<RestockResultDto>(new RestockCommand(productId, request.Stock));
+        var resultDto = await useCase.ExecuteAsync(new RestockInput(productId, request.Stock), cancellationToken);
+
+        if (!resultDto.IsSuccess || resultDto.Value is null)
+        {
+            return this.BadRequest(resultDto.ErrorMessage);
+        }
 
         var availableQuantityResponse = new AvailableQuantityResponse
         {
             ProductId = productId,
-            AvailableQuantity = resultDto.CurrentStock
+            AvailableQuantity = resultDto.Value.CurrentStock
         };
 
         return this.Ok(availableQuantityResponse);

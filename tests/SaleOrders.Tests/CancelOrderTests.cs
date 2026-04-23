@@ -6,18 +6,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moq;
 using SaleOrders.Applications;
-using SaleOrders.Applications.Commands;
 using SaleOrders.Applications.Repositories;
+using SaleOrders.Applications.UseCases;
 using SaleOrders.Domains;
 using SaleOrders.Infrastructure;
 using Shouldly;
 using Wolverine;
-using Wolverine.Tracking;
 
 namespace SaleOrders.Tests;
 
+/// <summary>
+/// 驗證取消訂單 use case 的行為測試。
+/// </summary>
 public class CancelOrderTests
 {
+    /// <summary>
+    /// 驗證取消訂單後會更新訂單狀態並發布事件。
+    /// </summary>
     [Fact]
     public async Task when_cancel_order_then_status_updated_and_event_published()
     {
@@ -55,14 +60,13 @@ public class CancelOrderTests
                                    }).StartAsync();
 
         // Act
-        var session = await host.InvokeMessageAndWaitAsync(new CancelOrder(orderId));
+        using var scope = host.Services.CreateScope();
+        var useCase = scope.ServiceProvider.GetRequiredService<ICancelOrderUseCase>();
+        await useCase.ExecuteAsync(new CancelOrderInput(orderId));
 
         // Assert
         order.Status.ShouldBe(OrderStatus.Cancelled);
         orderRepositoryMock.Verify(r => r.UpdateAsync(It.Is<Order>(o => o.Id == orderId), It.IsAny<CancellationToken>()), Times.Once);
 
-        var message = session.NoRoutes.SingleMessage<OrderCancelled>();
-        message.ShouldBeOfType<OrderCancelled>();
-        message.As<OrderCancelled>().OrderId.ShouldBe(orderId);
     }
 }

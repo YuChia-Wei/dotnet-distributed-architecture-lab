@@ -2,31 +2,58 @@
 using Lab.BuildingBlocks.Integrations;
 using SaleOrders.Applications.Repositories;
 
-namespace SaleOrders.Applications.Commands;
+namespace SaleOrders.Applications.UseCases;
 
 /// <summary>
-/// 訂單商品已發貨命令
+/// 發貨訂單 use case 的輸入資料。
 /// </summary>
-public record ShipOrder(Guid OrderId);
-
-/// <summary>
-/// 訂單商品已發貨命令處理器
-/// </summary>
-public class ShipOrderHandler
+public sealed class ShipOrderInput
 {
     /// <summary>
-    /// 處理訂單商品已發貨
+    /// 初始化發貨訂單 use case 的輸入資料。
     /// </summary>
-    /// <param name="command">已發貨命令</param>
-    /// <param name="repository">訂單儲存庫</param>
-    /// <param name="publisher">整合事件發布器</param>
-    public static async Task HandleAsync(ShipOrder command, IOrderDomainRepository repository, IIntegrationEventPublisher publisher)
+    /// <param name="orderId">訂單識別碼。</param>
+    public ShipOrderInput(Guid orderId)
     {
-        var order = await repository.GetByIdAsync(command.OrderId) ?? throw new KeyNotFoundException($"Order {command.OrderId} not found");
+        this.OrderId = orderId;
+    }
+
+    /// <summary>
+    /// 訂單識別碼。
+    /// </summary>
+    public Guid OrderId { get; }
+}
+
+/// <summary>
+/// 定義發貨訂單 use case 的入口。
+/// </summary>
+public interface IShipOrderUseCase
+{
+    /// <summary>
+    /// 將指定訂單標記為已發貨。
+    /// </summary>
+    /// <param name="input">發貨訂單所需的輸入資料。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    Task ExecuteAsync(ShipOrderInput input, CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// 發貨訂單 use case 的預設實作。
+/// </summary>
+public class ShipOrderUseCase(IOrderDomainRepository repository, IIntegrationEventPublisher publisher) : IShipOrderUseCase
+{
+    /// <summary>
+    /// 執行發貨訂單流程。
+    /// </summary>
+    /// <param name="input">發貨訂單所需的輸入資料。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    public async Task ExecuteAsync(ShipOrderInput input, CancellationToken cancellationToken = default)
+    {
+        var order = await repository.GetByIdAsync(input.OrderId, cancellationToken) ?? throw new KeyNotFoundException($"Order {input.OrderId} not found");
 
         order.Ship();
 
-        await repository.UpdateAsync(order);
+        await repository.UpdateAsync(order, cancellationToken);
 
         await publisher.PublishAsync(new OrderShipped(order.Id));
     }

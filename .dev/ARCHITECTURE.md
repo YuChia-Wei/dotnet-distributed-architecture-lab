@@ -7,19 +7,26 @@
 ### Core Architecture
 - **Style**: Clean Architecture + DDD + CQRS
 - **Patterns**: Outbox / InMemory / Event Sourcing（依 aggregate 設定）
-- **Use Case 分類**：Command / Query / Reactor
+- **Use Case 分類**：HTTP Use Case / Query Use Case / Reactor
 
 ### Code Organization (概念層級)
 - **Domain**: Aggregates, Entities, Value Objects, Domain Events
-- **Application**: Use Cases（Command/Query/Reactor ports）
+- **Application**: Use Cases（顯式 inbound ports）、Application Services、Message-oriented Handlers
 - **Infrastructure**: Repository / ORM / Messaging / Integration
-- **Adapter**: REST API Controllers, DTOs
+- **Adapter**: REST API Controllers, Request/Response Models, MQ Consumers
 
 完整專案結構與命名規則：[project-structure.md](./standards/project-structure.md)
 
 詞彙與責任邊界：
 
 - `Use Case`、`Command`、`Query`、`Handler`、`Application Service` 的關係見 [USECASE-COMMAND-HANDLER-RELATIONSHIP.MD](./standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
+
+### Default Boundary Rule
+
+- HTTP controller 預設直接依賴顯式 `Use Case` port，不透過 `IMessageBus` 作為 application boundary
+- `Command` / `Query` / `Handler` 保留給 message-oriented 入口（consumer / reactor / workflow / bus dispatch）
+- `Use Case` 以 `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase` 命名，搭配 `<Verb><Noun>Input` 與 `*Output` / `Result` / `PageResult`
+- HTTP adapter model 使用 `Request` / `Response`
 
 ### Architecture Config Driven
 本專案的 command-sub-agent 會依照 [`project-config.yaml`](./project-config.yaml) 的 `architecture` 區塊自動產生對應結構：

@@ -26,8 +26,9 @@
 | 檔案模式 | 檢查清單位置 | 檢查重點 | 優先級 |
 |---------|------------|---------|--------|
 | `src/Domain/**/Aggregates/*.cs` | [CODE-REVIEW-CHECKLIST.md](../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Aggregate（先做 type-first 判定）** | 1. 先判定 `EsAggregateRoot` 或 `AggregateRoot`<br>2. ES 才檢查 Apply/When<br>3. non-ES 檢查 invariant 與事件一致性 | **CRITICAL** |
-| `src/Application/**/UseCases/Commands/*.cs` | [CODE-REVIEW-CHECKLIST.md](../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **UseCase/Handler** | 1. CQRS 分離<br>2. Command 是否只操作 write model<br>3. Result/CqrsOutput 處理是否明確 | HIGH |
-| `src/Application/**/UseCases/Queries/*.cs` | [CODE-REVIEW-CHECKLIST.md](../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **UseCase/Handler / Projection** | 1. Query 是否無副作用<br>2. Projection 使用正確 | HIGH |
+| `src/**/Applications/UseCases/**/*.cs` | [CODE-REVIEW-CHECKLIST.md](../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Use Case** | 1. 是否為顯式 inbound port<br>2. `Input/Output` 命名是否正確<br>3. HTTP use case 是否避免直接依賴 bus | HIGH |
+| `src/**/Applications/Commands/*.cs` | [CODE-REVIEW-CHECKLIST.md](../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Message Handler** | 1. 是否為 message-oriented flow<br>2. Command 是否只操作 write model<br>3. 是否與同名 use case 無意義重複 | HIGH |
+| `src/**/Applications/Queries/*.cs` | [CODE-REVIEW-CHECKLIST.md](../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Query / Projection** | 1. Query 是否無副作用<br>2. Query side 是否使用 query repository / service<br>3. Projection 使用正確 | HIGH |
 | `src/**/Repositories/*.cs` | [CODE-REVIEW-CHECKLIST.md](../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Repository** | 1. write side 是否符合 `IDomainRepository<TEntity, TId>`<br>2. domain wrapper 是否僅薄封裝<br>3. query 方法是否從 domain repository 移除 | HIGH |
 | `src/Api/Controllers/*.cs` | [CODE-REVIEW-CHECKLIST.md](../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Controller** | 1. Controller 是否足夠薄<br>2. DTO 是否獨立檔案<br>3. HTTP status 正確 | MEDIUM |
 | `src/Application/**/Ports/**/*Mapper.cs`<br>`src/Infrastructure/**/Mappers/*.cs` | [CODE-REVIEW-CHECKLIST.md](../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Mapper** | 1. Mapper 是否為 static/sealed？<br>2. 一個 DTO 對一個 Mapper<br>3. Outbox toDomain 是否處理有/無 events 兩種情況 | **HIGH** |
@@ -155,3 +156,13 @@ Repository checks in review:
 - Domain-specific repository interface is allowed only as a thin wrapper inheriting `IDomainRepository<TEntity, TId>` with no extra methods.
 - Query capabilities must be placed in `I<Domain>QueryService` and `I<Domain>QueryRepository`.
 - If query methods are found in a domain repository, classify as MUST FIX.
+
+## Use Case Rules
+
+Use case checks in review:
+
+- HTTP application boundary should be an explicit `Use Case`, not `IMessageBus`.
+- Use case naming should follow `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase`.
+- Use case boundary models should use `<Verb><Noun>Input` / `<Verb><Noun>Output`.
+- `Request` / `Response` remain adapter models, not use case boundary models.
+- `Command` / `Query` / `Handler` should be treated as message-oriented vocabulary, not as synonyms of use case.

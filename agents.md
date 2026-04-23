@@ -38,13 +38,15 @@ When using problem-frame workflows:
 1. Read task JSON.
 2. Implement.
 3. Run tests (if required).
-4. Update `status` + `results` in task JSON.
+4. For workflow-based implementation, commit each validated slice or stage checkpoint before continuing.
+5. Update `status` + `results` in task JSON.
 
 Workflow artifact location:
 - Use `.dev/workflows/<workflow-id>/workflow-plan.md`
 - Use `.dev/workflows/<workflow-id>/review-report.md`
 - Use `.dev/workflows/<workflow-id>/tasks/<task-id>.json`
 - Do not scatter workflow artifacts under `.ai/`, `.claude/skills/`, or arbitrary feature folders unless the user explicitly requests it.
+- Do not accumulate a large uncommitted workflow result. Once a bounded slice is implemented and minimally validated, commit it before moving to the next slice.
 
 ### Portable Packaging (When framework files are copied to another repo)
 

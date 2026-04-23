@@ -48,6 +48,9 @@
 - 小任務或單一 skill 任務，不強制建立本目錄內容
 - 只有進入 optional workflow mode 時，才建立對應 workflow 資料夾
 - 若同一 workflow 有多輪 review，可在 `review-report.md` 中追加輪次，或由使用者明確決定是否拆新 workflow
+- workflow 進入實作階段後，不應把全部結果累積到最後一次 commit；每個可驗證、可回顧、可回滾的切片都應形成獨立 commit
+- 「可提交切片」至少應滿足：範圍有邊界、主要調整已完成、最小驗證已執行，或已明確記錄無法驗證的原因
+- 若 workflow 明顯分 stage，至少每個 stage 結束時都應有對應 commit；若單一 stage 仍很大，應再往下切成較小的 commit checkpoint
 
 ## Workflow 觸發條件
 
@@ -74,4 +77,11 @@
 - 若問題核心是 requirement、spec、runbook、context map、event catalog、AI routing 文件不足，應優先建立 document workflow
 - document workflow 的 stage 應以知識邊界切分，而不是以程式碼檔案切分
 - 若後續需要 code refactor，應在 document stage 補齊最小必要真相後再展開
+
+## Commit Discipline
+
+- workflow commit 的目的，是保留每個中間可用狀態，而不是只在全部做完後一次傾倒
+- commit 訊息應反映該切片的邊界，例如 `refactor: migrate product controllers to use case ports`
+- 若當前切片尚未完成且無法安全提交，應先縮小切片，而不是延後到整個 workflow 結束再一次提交
+- 若驗證受環境限制阻擋，仍應在 workflow artifact 中記錄阻擋原因，並在可獨立審查的範圍內先提交已完成部分
 
