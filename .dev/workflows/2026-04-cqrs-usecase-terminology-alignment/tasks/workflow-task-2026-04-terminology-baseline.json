@@ -1,0 +1,66 @@
+{
+  "task_id": "workflow-task-2026-04-terminology-baseline",
+  "owner_skill": "ddd-ca-hex-architect",
+  "related_plan_id": "workflow-plan-2026-04-cqrs-usecase-terminology-alignment",
+  "related_review_report_id": "review-report-2026-04-cqrs-usecase-terminology-alignment",
+  "status": "active",
+  "scope": {
+    "target": "Establish externally grounded definitions for command, command handler, use case, and candidate use case input naming in this repository.",
+    "files": [
+      ".dev/ARCHITECTURE.MD",
+      ".dev/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD",
+      ".dev/standards/project-structure.md",
+      "src/Product/DomainCore/SaleProducts.Applications",
+      "src/Order/DomainCore/SaleOrders.Applications",
+      "src/Inventory/DomainCore/InventoryControl.Applications"
+    ],
+    "dependency_radius": "Architecture docs, rationale docs, and representative command/query implementations across three bounded contexts.",
+    "constraints": [
+      "Keep definitions aligned with CQRS + DDD + CA + Hexagonal terminology.",
+      "Avoid inventing unnecessary abstraction layers.",
+      "Avoid making message bus terminology equal to use case terminology."
+    ],
+    "non_goals": [
+      "Mass refactor of existing code",
+      "Changing runtime messaging strategy"
+    ]
+  },
+  "inputs": {
+    "architecture_target": "Stable and sustainable repository-wide command-side terminology and application-layer boundary rules.",
+    "review_findings": [
+      "Current docs and implementations blur conceptual use case and concrete handler terminology.",
+      "Current repo guidance is directionally correct but not strict enough for team onboarding consistency."
+    ],
+    "user_constraints": [
+      "The system should sustainably follow CQRS + DDD + CA + Hexagonal.",
+      "Definitions should be supported by literature, not only team preference."
+    ]
+  },
+  "execution": {
+    "operation_type": "architecture-terminology-baseline",
+    "steps": [
+      "Collect repo-local architecture and terminology rules.",
+      "Collect primary external references relevant to CQRS, DDD, and application-layer boundaries.",
+      "Compare repo usage against those references.",
+      "Propose distinct definitions and naming guidance."
+    ],
+    "validation": [
+      "Each term has a distinct role and does not collapse into a synonym of another term.",
+      "The terminology remains compatible with current Wolverine-based dispatch usage.",
+      "The resulting guidance can be translated into repo documents without forcing meaningless wrappers."
+    ],
+    "deferred_items": [
+      "Repository-wide implementation migration after terminology approval"
+    ]
+  },
+  "results": {
+    "summary": "Workflow task opened. Terminology baseline discussion pending external-reference comparison and repo guideline synthesis.",
+    "files_changed": [
+      ".dev/workflows/2026-04-cqrs-usecase-terminology-alignment/workflow-plan.md",
+      ".dev/workflows/2026-04-cqrs-usecase-terminology-alignment/review-report.md",
+      ".dev/workflows/2026-04-cqrs-usecase-terminology-alignment/tasks/workflow-task-2026-04-terminology-baseline.json"
+    ],
+    "tests_run": [],
+    "follow_up_needed": true
+  }
+}
