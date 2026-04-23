@@ -1,68 +1,100 @@
 using Lab.BoundedContextContracts.Inventory.Interactions;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
+using Lab.BuildingBlocks.Application;
 using Lab.BuildingBlocks.Integrations;
 using SaleOrders.Applications.Gateways;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 
-namespace SaleOrders.Applications.Commands;
+namespace SaleOrders.Applications.UseCases;
 
 /// <summary>
-/// 下單命令
+/// 下單 use case 的輸入資料。
 /// </summary>
-public record PlaceOrderCommand
+public sealed class PlaceOrderInput
 {
     /// <summary>
-    /// 下單命令
+    /// 初始化下單 use case 的輸入資料。
     /// </summary>
-    /// <param name="OrderDate">訂單日期</param>
-    /// <param name="TotalAmount">訂單總金額</param>
-    /// <param name="productId"></param>
-    /// <param name="ProductName"></param>
-    /// <param name="Quantity"></param>
-    public PlaceOrderCommand(DateTime OrderDate, decimal TotalAmount, Guid productId, string ProductName, int Quantity)
+    /// <param name="orderDate">訂單日期。</param>
+    /// <param name="totalAmount">訂單總金額。</param>
+    /// <param name="productId">商品識別碼。</param>
+    /// <param name="productName">商品名稱。</param>
+    /// <param name="quantity">購買數量。</param>
+    public PlaceOrderInput(DateTime orderDate, decimal totalAmount, Guid productId, string productName, int quantity)
     {
-        this.OrderDate = OrderDate;
-        this.TotalAmount = TotalAmount;
-        this.ProductName = ProductName;
-        this.Quantity = Quantity;
+        this.OrderDate = orderDate;
+        this.TotalAmount = totalAmount;
+        this.ProductName = productName;
+        this.Quantity = quantity;
         this.ProductId = productId;
     }
 
-    public Guid ProductId { get; set; }
+    /// <summary>
+    /// 商品識別碼。
+    /// </summary>
+    public Guid ProductId { get; }
 
-    /// <summary>訂單日期</summary>
-    public DateTime OrderDate { get; init; }
+    /// <summary>
+    /// 訂單日期。
+    /// </summary>
+    public DateTime OrderDate { get; }
 
-    /// <summary>訂單總金額</summary>
-    public decimal TotalAmount { get; init; }
+    /// <summary>
+    /// 訂單總金額。
+    /// </summary>
+    public decimal TotalAmount { get; }
 
-    public string ProductName { get; init; }
-    public int Quantity { get; init; }
+    /// <summary>
+    /// 商品名稱。
+    /// </summary>
+    public string ProductName { get; }
+
+    /// <summary>
+    /// 購買數量。
+    /// </summary>
+    public int Quantity { get; }
 }
 
 /// <summary>
-/// 下單命令處理器
+/// 定義下單 use case 的入口。
 /// </summary>
-public class PlaceOrderCommandHandler
+public interface IPlaceOrderUseCase
 {
     /// <summary>
-    /// 處理命令
+    /// 執行下單流程。
     /// </summary>
-    /// <param name="command">下單命令</param>
-    /// <param name="repository">訂單領域儲存庫</param>
-    /// <param name="publisher"></param>
-    /// <param name="inventoryGateway"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>新建訂單的識別碼</returns>
-    public static async Task<PlaceOrderResult> HandleAsync(
-        PlaceOrderCommand command,
+    /// <param name="input">下單所需的輸入資料。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    /// <returns>下單結果。</returns>
+    Task<Result<PlaceOrderOutput>> ExecuteAsync(PlaceOrderInput input, CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// 下單 use case 的預設實作。
+/// </summary>
+public class PlaceOrderUseCase(
+    IOrderDomainRepository repository,
+    IIntegrationEventPublisher publisher,
+    IInventoryGateway inventoryGateway) : IPlaceOrderUseCase
+{
+    /// <summary>
+    /// 執行下單流程並建立訂單。
+    /// </summary>
+    /// <param name="input">下單所需的輸入資料。</param>
+    /// <param name="repository">訂單領域儲存庫。</param>
+    /// <param name="publisher">整合事件發布器。</param>
+    /// <param name="inventoryGateway">庫存閘道。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    /// <returns>下單結果。</returns>
+    public static async Task<Result<PlaceOrderOutput>> HandleAsync(
+        PlaceOrderInput input,
         IOrderDomainRepository repository,
         IIntegrationEventPublisher publisher,
         IInventoryGateway inventoryGateway,
         CancellationToken cancellationToken)
     {
-        var order = new Order(command.OrderDate, command.TotalAmount, command.ProductId, command.ProductName, command.Quantity);
+        var order = new Order(input.OrderDate, input.TotalAmount, input.ProductId, input.ProductName, input.Quantity);
 
         var reserveInventoryResponseContract = await inventoryGateway.ReserveAsync(new ReserveInventoryRequestContract
         {
@@ -72,37 +104,44 @@ public class PlaceOrderCommandHandler
 
         if (!reserveInventoryResponseContract.Result)
         {
-            return PlaceOrderResult.Fail("Inventory is not enough.");
+            return Result<PlaceOrderOutput>.Failure("Inventory is not enough.");
         }
 
         await repository.AddAsync(order);
 
         await publisher.PublishAsync(new OrderPlaced(order.Id, order.ProductId, order.ProductName, order.Quantity));
 
-        return PlaceOrderResult.Success(order.Id);
+        return Result<PlaceOrderOutput>.Success(new PlaceOrderOutput(order.Id));
+    }
+
+    /// <summary>
+    /// 執行下單 use case。
+    /// </summary>
+    /// <param name="input">下單所需的輸入資料。</param>
+    /// <param name="cancellationToken">取消權杖。</param>
+    /// <returns>下單結果。</returns>
+    public Task<Result<PlaceOrderOutput>> ExecuteAsync(PlaceOrderInput input, CancellationToken cancellationToken = default)
+    {
+        return HandleAsync(input, repository, publisher, inventoryGateway, cancellationToken);
     }
 }
 
-public class PlaceOrderResult
+/// <summary>
+/// 下單 use case 的輸出資料。
+/// </summary>
+public sealed class PlaceOrderOutput
 {
-    private PlaceOrderResult(bool isSuccess, Guid orderId, string? errorMessage = null)
+    /// <summary>
+    /// 初始化下單輸出資料。
+    /// </summary>
+    /// <param name="orderId">訂單識別碼。</param>
+    public PlaceOrderOutput(Guid orderId)
     {
-        this.IsSuccess = isSuccess;
         this.OrderId = orderId;
-        this.ErrorMessage = errorMessage;
     }
 
-    public bool IsSuccess { get; }
+    /// <summary>
+    /// 取得建立完成的訂單識別碼。
+    /// </summary>
     public Guid OrderId { get; }
-    public string? ErrorMessage { get; }
-
-    public static PlaceOrderResult Fail(string errorMessage)
-    {
-        return new PlaceOrderResult(false, Guid.Empty, errorMessage);
-    }
-
-    public static PlaceOrderResult Success(Guid orderId)
-    {
-        return new PlaceOrderResult(true, orderId);
-    }
 }

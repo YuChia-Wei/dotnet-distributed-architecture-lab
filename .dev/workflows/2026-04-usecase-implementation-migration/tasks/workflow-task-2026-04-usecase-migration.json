@@ -57,13 +57,23 @@
     ]
   },
   "results": {
-    "summary": "Implementation workflow opened. Inventory and refactor execution pending.",
+    "summary": "Production implementation was migrated toward explicit UseCase/Input with Output/Result boundaries. Product, Order, and Inventory WebApi projects build successfully. Test project adjustments are intentionally deferred to the next slice.",
     "files_changed": [
       ".dev/workflows/2026-04-usecase-implementation-migration/workflow-plan.md",
       ".dev/workflows/2026-04-usecase-implementation-migration/review-report.md",
-      ".dev/workflows/2026-04-usecase-implementation-migration/tasks/workflow-task-2026-04-usecase-migration.json"
+      ".dev/workflows/2026-04-usecase-implementation-migration/tasks/workflow-task-2026-04-usecase-migration.json",
+      "src/BuildingBlocks/Lab.BuildingBlocks.Application/Result.cs",
+      "src/BuildingBlocks/Lab.BuildingBlocks.Application/PageResult.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases",
+      "src/Order/DomainCore/SaleOrders.Applications/Commands/PlaceOrderCommand.cs",
+      "src/Inventory/DomainCore/InventoryControl.Applications/Commands",
+      "src/Inventory/DomainCore/InventoryControl.Applications/Queries/GetOrderByIdQuery.cs"
     ],
-    "tests_run": [],
+    "tests_run": [
+      "dotnet build src\\Product\\Presentation\\SaleProducts.WebApi\\SaleProducts.WebApi.csproj --no-restore -m:1 -p:UseSharedCompilation=false",
+      "dotnet build src\\Order\\Presentation\\SaleOrders.WebApi\\SaleOrders.WebApi.csproj --no-restore -m:1 -p:UseSharedCompilation=false",
+      "dotnet build src\\Inventory\\Presentation\\InventoryControl.WebApi\\InventoryControl.WebApi.csproj --no-restore -m:1 -p:UseSharedCompilation=false"
+    ],
     "follow_up_needed": true
   }
 }

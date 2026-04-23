@@ -25,7 +25,7 @@
 
 - HTTP controller 預設直接依賴顯式 `Use Case` port，不透過 `IMessageBus` 作為 application boundary
 - `Command` / `Query` / `Handler` 保留給 message-oriented 入口（consumer / reactor / workflow / bus dispatch）
-- `Use Case` 以 `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase` 命名，搭配 `<Verb><Noun>Input` / `<Verb><Noun>Output`
+- `Use Case` 以 `I<Verb><Noun>UseCase` / `<Verb><Noun>UseCase` 命名，搭配 `<Verb><Noun>Input` 與 `*Output` / `Result` / `PageResult`
 - HTTP adapter model 使用 `Request` / `Response`
 
 ### Architecture Config Driven
