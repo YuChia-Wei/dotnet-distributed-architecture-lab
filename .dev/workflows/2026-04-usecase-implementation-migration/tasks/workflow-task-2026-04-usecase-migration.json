@@ -3,7 +3,7 @@
   "owner_skill": "staged-refactor-implementer",
   "related_plan_id": "workflow-plan-2026-04-usecase-implementation-migration",
   "related_review_report_id": "review-report-2026-04-usecase-implementation-migration",
-  "status": "active",
+  "status": "completed",
   "scope": {
     "target": "Migrate current command/query-driven HTTP boundaries to explicit UseCase/Input with Output/Result/PageResult boundaries and update call sites.",
     "files": [
@@ -57,7 +57,7 @@
     ]
   },
   "results": {
-    "summary": "Production implementation was migrated toward explicit UseCase/Input with Output/Result boundaries. Product, Order, and Inventory WebApi projects build successfully. Test project adjustments are intentionally deferred to the next slice.",
+    "summary": "Implementation migration completed for Product, Order, and Inventory HTTP boundaries. Production projects build successfully. Test code was updated to match the new boundary model, but test execution was skipped because the required integration-test services are not running and the user explicitly chose to stop running tests.",
     "files_changed": [
       ".dev/workflows/2026-04-usecase-implementation-migration/workflow-plan.md",
       ".dev/workflows/2026-04-usecase-implementation-migration/review-report.md",
@@ -74,6 +74,6 @@
       "dotnet build src\\Order\\Presentation\\SaleOrders.WebApi\\SaleOrders.WebApi.csproj --no-restore -m:1 -p:UseSharedCompilation=false",
       "dotnet build src\\Inventory\\Presentation\\InventoryControl.WebApi\\InventoryControl.WebApi.csproj --no-restore -m:1 -p:UseSharedCompilation=false"
     ],
-    "follow_up_needed": true
+    "follow_up_needed": false
   }
 }

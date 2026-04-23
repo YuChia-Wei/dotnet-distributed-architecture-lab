@@ -9,21 +9,30 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
-using SaleOrders.Applications.Queries;
+using SaleOrders.Applications.UseCases;
 using Shouldly;
-using Wolverine;
 
 namespace SaleOrders.Tests;
 
+/// <summary>
+/// 驗證取得訂單明細端點的整合測試。
+/// </summary>
 public class GetOrderDetailsEndpointTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
 
+    /// <summary>
+    /// 初始化取得訂單明細端點測試。
+    /// </summary>
+    /// <param name="factory">Web 應用程式測試工廠。</param>
     public GetOrderDetailsEndpointTests(WebApplicationFactory<Program> factory)
     {
         this._factory = factory;
     }
 
+    /// <summary>
+    /// 驗證取得訂單明細端點會回傳預期內容。
+    /// </summary>
     [Fact]
     public async Task when_getting_order_details_then_returns_expected_payload()
     {
@@ -42,9 +51,9 @@ public class GetOrderDetailsEndpointTests : IClassFixture<WebApplicationFactory<
             ],
         };
 
-        var messageBusMock = new Mock<IMessageBus>();
-        messageBusMock.Setup(bus => bus.InvokeAsync<OrderDetailsResponse>(It.Is<GetOrderDetailsQuery>(query => query.OrderId == orderId), It.IsAny<CancellationToken>(), It.IsAny<TimeSpan?>()))
-                      .ReturnsAsync(expected);
+        var useCaseMock = new Mock<IGetOrderDetailsUseCase>();
+        useCaseMock.Setup(useCase => useCase.ExecuteAsync(It.Is<GetOrderDetailsInput>(input => input.OrderId == orderId), It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(expected);
 
         var client = this._factory.WithWebHostBuilder(builder =>
         {
@@ -60,8 +69,8 @@ public class GetOrderDetailsEndpointTests : IClassFixture<WebApplicationFactory<
             });
             builder.ConfigureTestServices(services =>
             {
-                services.RemoveAll<IMessageBus>();
-                services.AddSingleton(messageBusMock.Object);
+                services.RemoveAll<IGetOrderDetailsUseCase>();
+                services.AddSingleton(useCaseMock.Object);
             });
         }).CreateClient();
 
@@ -75,6 +84,6 @@ public class GetOrderDetailsEndpointTests : IClassFixture<WebApplicationFactory<
         payload!.OrderId.ShouldBe(expected.OrderId);
         payload.LineItems.Count.ShouldBe(expected.LineItems.Count);
         payload.LineItems[0].ShouldBe(expected.LineItems[0]);
-        messageBusMock.Verify(bus => bus.InvokeAsync<OrderDetailsResponse>(It.IsAny<GetOrderDetailsQuery>(), It.IsAny<CancellationToken>(), It.IsAny<TimeSpan?>()), Times.Once);
+        useCaseMock.Verify(useCase => useCase.ExecuteAsync(It.IsAny<GetOrderDetailsInput>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

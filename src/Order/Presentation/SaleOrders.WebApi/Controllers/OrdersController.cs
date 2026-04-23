@@ -79,9 +79,9 @@ public class OrdersController : ControllerBase
         [FromServices] IPlaceOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
-        Result<PlaceOrderOutput> placeOrderResult = await useCase.ExecuteAsync(
-            new PlaceOrderInput(request.OrderDate, request.TotalAmount, request.ProductId, request.ProductName, request.Quantity),
-            cancellationToken);
+        var placeOrderResult = await useCase.ExecuteAsync(
+                                   new PlaceOrderInput(request.OrderDate, request.TotalAmount, request.ProductId, request.ProductName, request.Quantity),
+                                   cancellationToken);
 
         if (!placeOrderResult.IsSuccess)
         {
