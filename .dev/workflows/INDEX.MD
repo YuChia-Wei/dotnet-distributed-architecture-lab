@@ -6,6 +6,7 @@ This index is the discovery view for workflow artifacts retained by `dotnet-mq-a
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |
 | --- | --- | --- | --- | --- | --- |
+| [`2026-07-13-critical-remediation-and-analyzer-integration`](2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml) | Remediate critical architecture findings and integrate repository analyzers | `dev-workflow` | `active` | `2026-07-13T22:37:26+08:00` | [plan](2026-07-13-critical-remediation-and-analyzer-integration/workflow-plan.md) |
 | [`2026-07-13-repo-structure-sync`](2026-07-13-repo-structure-sync/workflow.yaml) | Restore repository truth after AI context refresh | `repo-structure-sync` | `completed` | `2026-07-13T21:12:28+08:00` | [plan](2026-07-13-repo-structure-sync/workflow-plan.md) |
 
 ## Legacy Target-Repository Workflows

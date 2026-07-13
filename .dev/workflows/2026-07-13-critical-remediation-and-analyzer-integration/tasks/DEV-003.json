@@ -1,0 +1,9 @@
+{
+  "template_id": "dev-workflow/development-workflow-task", "template_version": "1.0.0", "template_created_at": "2026-07-10T18:25:11+08:00", "template_updated_at": "2026-07-10T18:25:11+08:00",
+  "workflow_id": "2026-07-13-critical-remediation-and-analyzer-integration", "task_id": "DEV-003", "owner_skill": "ddd-ca-hex-architect", "related_plan_id": "development-plan-2026-07-13-critical-remediation-and-analyzer-integration", "status": "pending",
+  "created_at": "2026-07-13T22:37:26+08:00", "updated_at": "2026-07-13T22:37:26+08:00", "template_source": ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json", "workflow_locator": ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml",
+  "scope": {"goal": "Record bounded architecture decisions for all critical remediation slices.", "target": "ES lifecycle, Order state transitions, CQRS repositories, durable messaging", "files": [".dev/adr/", ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/"], "constraints": ["Preserve bounded-context isolation", "Decide before implementing"], "non_goals": ["Product implementation"]},
+  "inputs": {"requirements": [".dev/requirement/distributed-commerce-bounded-context-overview.md"], "specifications": [".dev/problem-frames/orders/cbf/place-order/"], "architecture_decisions": [".dev/ARCHITECTURE.md"], "user_constraints": ["Prioritize CRITICAL and MUST FIX findings"]},
+  "execution": {"capability_slot": "architecture", "steps": ["Evaluate alternatives", "Record decisions and non-goals", "Refine downstream slices"], "validation": ["Trace decisions to backlog findings", "Review dependency direction"], "commit_checkpoint": "Commit approved architecture direction", "deferred_items": []},
+  "results": {"summary": "", "files_changed": [], "validation_evidence": [], "commits": [], "follow_up_needed": true}
+}

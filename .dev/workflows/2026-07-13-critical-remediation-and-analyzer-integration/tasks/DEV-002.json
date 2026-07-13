@@ -1,0 +1,36 @@
+{
+  "template_id": "dev-workflow/development-workflow-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-07-10T18:25:11+08:00",
+  "workflow_id": "2026-07-13-critical-remediation-and-analyzer-integration",
+  "task_id": "DEV-002",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-07-13-critical-remediation-and-analyzer-integration",
+  "status": "pending",
+  "created_at": "2026-07-13T22:37:26+08:00",
+  "updated_at": "2026-07-13T22:37:26+08:00",
+  "template_source": ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json",
+  "workflow_locator": ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml",
+  "scope": {
+    "goal": "Integrate source-included Roslyn analyzers into normal production builds without a runtime dependency.",
+    "target": "Shared src build configuration and analyzer validation",
+    "files": ["src/Directory.Build.props", "tools/DotnetBackendAnalyzers/", "README.md"],
+    "constraints": ["Use OutputItemType=Analyzer", "Use ReferenceOutputAssembly=false", "Inventory existing diagnostics instead of hiding them"],
+    "non_goals": ["Fix all analyzer findings", "Package the analyzer as NuGet"]
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [],
+    "architecture_decisions": ["tools/DotnetBackendAnalyzers/README.md"],
+    "user_constraints": ["Evaluate and integrate analyzers brought from the upstream AI context repository"]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "steps": ["Confirm integration design", "Wire analyzer into production projects", "Build and record diagnostics", "Document validation"],
+    "validation": ["dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj --no-restore", "dotnet build MQArchLab.slnx --no-restore"],
+    "commit_checkpoint": "Commit the validated tooling slice independently",
+    "deferred_items": []
+  },
+  "results": {"summary": "", "files_changed": [], "validation_evidence": [], "commits": [], "follow_up_needed": true}
+}
