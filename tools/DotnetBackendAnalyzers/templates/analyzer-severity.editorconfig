@@ -1,0 +1,36 @@
+# Merge this section into the target repository's .editorconfig.
+# Supported severities: none, silent, suggestion, warning, error.
+# A warning fails the build only when the target build treats warnings as errors.
+
+[*.cs]
+
+# Portable aggregate/query repository boundary is mandatory.
+dotnet_diagnostic.DBA1001.severity = error
+
+# Core application and domain architecture boundaries.
+dotnet_diagnostic.DBA1002.severity = error
+dotnet_diagnostic.DBA1003.severity = warning
+
+# Controller profile rules. Set to none when the target repository does not use API controllers.
+dotnet_diagnostic.DBA1004.severity = warning
+dotnet_diagnostic.DBA1005.severity = error
+dotnet_diagnostic.DBA1006.severity = error
+
+# Static-only pure Mapper policy.
+dotnet_diagnostic.DBA1007.severity = warning
+dotnet_diagnostic.DBA1008.severity = warning
+
+# Event Sourcing and UseCase profile rules.
+dotnet_diagnostic.DBA1009.severity = warning
+dotnet_diagnostic.DBA1010.severity = error
+dotnet_diagnostic.DBA1011.severity = error
+dotnet_diagnostic.DBA1012.severity = error
+
+# Projection read-side rule.
+dotnet_diagnostic.DBA1013.severity = warning
+
+# Use Case inbound-port and Handler adapter boundaries.
+dotnet_diagnostic.DBA1014.severity = error
+dotnet_diagnostic.DBA1015.severity = error
+dotnet_diagnostic.DBA1016.severity = error
+dotnet_diagnostic.DBA1017.severity = error

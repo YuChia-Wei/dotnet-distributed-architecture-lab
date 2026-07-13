@@ -1,17 +1,17 @@
-# Profile 隔離配置模板集 (.NET)
+# Profile-Isolated Configuration Template Set (.NET)
 
-## 目的
-提供完整的 .NET DI/配置範本，實現 InMemory 與 Outbox Profile 完全隔離，避免配置衝突。
+## Purpose
+Provides complete .NET DI and configuration templates that fully isolate the InMemory and Outbox profiles to prevent configuration conflicts.
 
-## 🚨 重要概念 (ezapp 2.0.0 對應)
-ezDDD/ezapp 的 InMemory/Outbox 兩套 Repository 概念在 .NET 需保留，
-目前 .NET 需以自建介面與組態實作對應功能（請以 TODO 保留概念）。
+## 🚨 Important Concept (ezapp 2.0.0 Correspondence)
+The two ezDDD/ezapp InMemory and Outbox repository concepts must be preserved in .NET.
+For now, implement the corresponding behavior in .NET through custom interfaces and configuration, preserving the concept with TODO markers.
 
-## 📁 建議的配置結構
+## 📁 Recommended Configuration Structure
 
 ```
 src/Infrastructure/Configuration/
-├── CommonConfiguration.cs        # 所有 Profile 共用
+├── CommonConfiguration.cs        # Shared by all profiles
 ├── InMemory/
 │   ├── InMemoryConfiguration.cs
 │   └── InMemoryProjectionConfig.cs
@@ -21,7 +21,7 @@ src/Infrastructure/Configuration/
     └── OutboxProjectionConfig.cs
 ```
 
-## 1️⃣ CommonConfiguration（所有 Profile 共用）
+## 1️⃣ CommonConfiguration (Shared by All Profiles)
 
 ```csharp
 public static class CommonConfiguration
@@ -36,7 +36,7 @@ public static class CommonConfiguration
 }
 ```
 
-## 2️⃣ InMemory Profile 配置
+## 2️⃣ InMemory Profile Configuration
 
 ```csharp
 public static class InMemoryConfiguration
@@ -51,7 +51,7 @@ public static class InMemoryConfiguration
 }
 ```
 
-## 3️⃣ Outbox Profile 配置
+## 3️⃣ Outbox Profile Configuration
 
 ```csharp
 public static class OutboxConfiguration
@@ -67,7 +67,7 @@ public static class OutboxConfiguration
 }
 ```
 
-## 4️⃣ 使用方式
+## 4️⃣ Usage
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -84,7 +84,7 @@ else if (mode == "Outbox")
 }
 ```
 
-## ⚠️ 重要提醒
-- InMemory / Outbox 必須隔離組態與 DI 註冊
-- Repository 介面一致（findById / save / delete）
-- WolverineFx / Outbox 需保留語意與事件流程
+## ⚠️ Important Reminders
+- InMemory and Outbox configurations and DI registrations must remain isolated.
+- Repository interfaces must remain consistent (`findById` / `save` / `delete`).
+- WolverineFx and Outbox semantics and event flows must be preserved.

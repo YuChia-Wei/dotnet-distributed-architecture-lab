@@ -5,7 +5,7 @@ When initializing a new project, two fatal errors appear frequently:
 
 ### Error 1: DI registration missing
 ```
-No service for type 'IRepository<Product, ProductId>' has been registered.
+No service for type 'IAggregateRepository<Product, ProductId>' has been registered.
 ```
 
 ### Error 2: DbContext configuration missing
@@ -26,7 +26,7 @@ Unable to resolve service for type 'AppDbContext' while attempting to activate .
 ### 3. Dependency chain (Outbox)
 ```
 CreateProductUseCase
-  -> IRepository<Product, ProductId>
+  -> IAggregateRepository<Product, ProductId>
      -> OutboxRepository
         -> OutboxStore / OutboxClient
            -> DbContext + Wolverine Outbox
@@ -40,7 +40,7 @@ CreateProductUseCase
 3. Multi-layer outbox dependency registration
 
 ### Solution reference
-- `.dev/guides/PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md`
+- `.dev/guides/implementation-guides/PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md`
 
 ## Protection Mechanisms
 
@@ -97,7 +97,7 @@ Note: set the environment via `ASPNETCORE_ENVIRONMENT` or launchSettings; do not
 ```json
 {
   "ConnectionStrings": {
-    "Outbox": "Host=localhost;Port=5432;Database=aiscrum;Username=postgres;Password=root"
+    "Outbox": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   }
 }
 ```
@@ -142,8 +142,6 @@ DON'T
 5. Add Outbox profile (optional)
 
 ## References
-- `.dev/guides/PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md`
-- `.dev/guides/FRAMEWORK-API-INTEGRATION-GUIDE.md`
-- `.ai/COMMON-PITFALLS.md`
-
-
+- `.dev/guides/implementation-guides/PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md`
+- `.dev/guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md`
+- `.ai/assets/tech-stacks/dotnet-backend/references/COMMON-PITFALLS.MD`

@@ -46,7 +46,7 @@ For each required use case:
 
 ### Step 5: Update Frontend (if required)
 1. Update API client (RTK Query).
-2. Add/modify React components.
+2. If the target repo has a separately governed UI profile, hand off UI changes to that profile instead of assuming a frontend stack.
 3. Update state/cache/optimistic rules if needed.
 
 ## Example Code Structure

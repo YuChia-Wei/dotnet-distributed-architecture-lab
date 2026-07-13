@@ -2,6 +2,8 @@
 
 Use this structure unless the user asks for another format.
 
+The default artifact is scenario notes. If the user provides or explicitly requests a `.feature` file, or the target profile selects a feature runner, render the same scenario set as valid Gherkin feature/scenario design and record the selected runner only when project evidence names it.
+
 ## 1. Inputs Used
 
 - requirement/spec/doc paths
@@ -45,6 +47,6 @@ For each scenario provide:
 
 Examples:
 
-- `.dev/specs/tests/order/use-cases/place-order.test-spec.md`
-- `.dev/specs/tests/inventory-item/integration/decrease-stock-repository.test-spec.md`
-- `.dev/specs/tests/cross-domain/place-order-and-reserve-stock.test-spec.md`
+- `.dev/specs/tests/<context>/use-cases/<use-case>.test-spec.md`
+- `.dev/specs/tests/<context>/integration/<integration-target>.test-spec.md`
+- `.dev/specs/tests/cross-domain/<scenario>.test-spec.md`

@@ -52,7 +52,7 @@ public static class InMemoryRepositoryConfig
         // services.AddSingleton<InMemoryMessageBroker>();
 
         // Example: register repository for Product
-        // services.AddSingleton<IRepository<Product, ProductId>, InMemoryProductRepository>();
+        // services.AddSingleton<IAggregateRepository<Product, ProductId>, InMemoryProductRepository>();
 
         return services;
     }

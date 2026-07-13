@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using TestStack.BDDfy;
 using Xunit;
 
-namespace AiScrum.Tests.Rules;
+namespace ExampleApp.Tests.Rules;
 
 public sealed class CompleteUseCaseRuleTests
 {

@@ -7,9 +7,9 @@ Use case contracts validate input and ensure expected outcomes.
 ```csharp
 public sealed class CreateTaskService : ICreateTaskUseCase
 {
-    private readonly IRepository<Plan, PlanId> _repository;
+    private readonly IAggregateRepository<Plan, PlanId> _repository;
 
-    public CreateTaskService(IRepository<Plan, PlanId> repository)
+    public CreateTaskService(IAggregateRepository<Plan, PlanId> repository)
     {
         Contract.RequireNotNull(nameof(repository), repository);
         _repository = repository;

@@ -1,7 +1,7 @@
 # Test Validation Steps (Dotnet)
 
 ## Purpose
-Provide a repeatable checklist to verify tests comply with xUnit + BDDfy rules (Gherkin-style naming only), spec-compliance requirements, and repository conventions.
+Provide a repeatable checklist to verify tests comply with mandatory Given-When-Then rules, the default xUnit + BDDfy profile or an explicit project opt-out, spec-compliance requirements, and repository conventions.
 
 ## Scope
 - Use case tests
@@ -10,7 +10,9 @@ Provide a repeatable checklist to verify tests comply with xUnit + BDDfy rules (
 - Reactor/Outbox tests (if applicable)
 
 ## Pre-Check (Mandatory)
-- Tests use **xUnit + BDDfy with Gherkin-style naming (no `.feature` files)**.
+- Tests use **Given-When-Then structure and naming**. BDDfy is the default profile, but an explicit project decision may opt out of the package.
+- Unit, use-case, and integration tests do not substitute Arrange-Act-Assert (3A) for GWT.
+- `.feature` assets are optional unless supplied/requested or required by an explicitly selected target feature-runner profile; never infer a runner/package.
 - **No BaseTestClass** or shared test base types.
 - **NSubstitute** is the only mocking library.
 - No debug logging (Console.WriteLine / ad-hoc logs).

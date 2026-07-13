@@ -1,7 +1,12 @@
 asset_id: "aggregate-test-sub-agent"
+schema_version: "1.0"
 asset_type: "sub-agent-role-prompt"
 title: "Aggregate Test Sub-Agent"
 purpose: "Define the delegated worker role for implementing aggregate-focused tests around invariants, event sourcing behavior, and serialization-sensitive domain events."
+portability: "repo-portable"
+audience: "agent-facing"
+wrapper_targets: []
+source_of_truth: "canonical"
 role_kind: "test-generation-sub-agent"
 triggers:
   - "aggregate test sub-agent"
@@ -29,8 +34,12 @@ workflow:
 references:
   - ".ai/assets/sub-agent-role-prompts/aggregate-test-sub-agent/references/test-playbook.md"
   - ".ai/assets/sub-agent-role-prompts/aggregate-test-sub-agent/references/test-generation-guidance.md"
-  - ".ai/assets/shared/testing-strategy.md"
-  - ".ai/assets/shared/common-rules.md"
+  - ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"
+  - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
   - ".ai/assets/skills/bdd-gwt-test-designer/skill.yaml"
-human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+examples:
+  - ".ai/assets/sub-agent-role-prompts/aggregate-test-sub-agent/references/test-playbook.md"
+  - ".ai/assets/sub-agent-role-prompts/aggregate-test-sub-agent/references/test-generation-guidance.md"
+human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
+status: "active"
 

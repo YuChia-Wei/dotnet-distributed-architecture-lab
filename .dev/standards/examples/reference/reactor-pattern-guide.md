@@ -33,11 +33,11 @@ public interface When[Event][Reaction]Reactor : IReactor<DomainEventData>
 public sealed class [Reaction]When[Event]Service : When[Event][Reaction]Reactor
 {
     private readonly IFind[Entity]By[Criteria]Inquiry _inquiry;
-    private readonly IRepository<[Aggregate], [Aggregate]Id> _repository;
+    private readonly IAggregateRepository<[Aggregate], [Aggregate]Id> _repository;
 
     public [Reaction]When[Event]Service(
         IFind[Entity]By[Criteria]Inquiry inquiry,
-        IRepository<[Aggregate], [Aggregate]Id> repository)
+        IAggregateRepository<[Aggregate], [Aggregate]Id> repository)
     {
         Contract.RequireNotNull(nameof(inquiry), inquiry);
         Contract.RequireNotNull(nameof(repository), repository);

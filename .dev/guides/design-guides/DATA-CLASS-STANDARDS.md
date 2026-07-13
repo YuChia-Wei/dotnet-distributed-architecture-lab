@@ -150,13 +150,9 @@ Before committing a data class:
 
 ## Validation Script
 
-TODO: create a .NET equivalent of `.ai/scripts/check-data-class-annotations.sh`.
+TODO: replace `.ai/scripts/check-data-class-annotations.sh` with a Roslyn analyzer rule for data class attribute requirements.
 
 ## Related Documents
 - `FRAMEWORK-API-INTEGRATION-GUIDE.md`
-- `.ai/assets/shared/dto-conventions.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/dto-conventions.md`
 - `.dev/standards/examples/dto/README.md`
-
-
-
-

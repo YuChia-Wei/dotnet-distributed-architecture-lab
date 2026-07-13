@@ -12,7 +12,7 @@ Example (connection string):
 ```json
 {
   "ConnectionStrings": {
-    "OutboxDb": "Host=localhost;Port=5800;Database=board;Username=postgres;Password=root"
+    "OutboxDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   }
 }
 ```
@@ -52,7 +52,7 @@ Every OutboxRepository must include these scenarios:
 Use EF Core or raw SQL for direct checks:
 ```csharp
 var isDeleted = await db.Database
-    .SqlQueryRaw<bool>("SELECT is_deleted FROM message_store.product WHERE id = {0}", id)
+    .SqlQueryRaw<bool>("SELECT is_deleted FROM message_store.aggregate WHERE id = {0}", id)
     .SingleAsync();
 ```
 

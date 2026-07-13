@@ -1,6 +1,6 @@
 # Controller Test Generation Prompt (Dotnet)
 
-Generate controller tests using WebApplicationFactory + xUnit + BDDfy (Gherkin-style naming).
+Generate controller tests using WebApplicationFactory + xUnit with mandatory Given-When-Then structure and naming. BDDfy is the default profile; an explicit team opt-out permits plain xUnit GWT, not 3A. Support optional `.feature` design only when supplied/requested or selected by the target profile, without inferring a runner/package.
 
 ## Mandatory References
 - `../assets/sub-agent-role-prompts/controller-test-sub-agent/sub-agent.yaml`

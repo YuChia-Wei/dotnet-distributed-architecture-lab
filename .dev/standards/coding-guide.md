@@ -1,19 +1,27 @@
-# AI Coding Guide for .NET CA + WolverineFx
+# Legacy AI Coding Guide for .NET CA + WolverineFx
 
-> This guide is for AI assistants working on the .NET version of this codebase.
+> **Status: legacy profile example — not active repository or target-project truth.**
+>
+> This document preserves an earlier Todo/.NET backend profile for historical
+> reference. Do not infer that a target repository uses WolverineFx, EF Core,
+> Event Sourcing, PostgreSQL, BDDfy, or the topology below. Establish target
+> facts with `repo-structure-sync`, then follow the generated repository context
+> and the applicable `.ai/assets/tech-stacks/dotnet-backend/` references.
+> Architecture and package choices require target-repository evidence or an
+> explicit decision.
 
 ## Quick Start
 
 ### 1. Essential Reading Order
-1. `coding-standards.md` - 編碼規範（優先閱讀）
+1. `coding-standards.md` - Coding standards (read first)
 2. This file - Overview and quick reference
-3. `../guides/implementation-guides/TEMPLATE-USAGE-GUIDE.md` - 範本選擇與使用決策指南
-4. `CLAUDE.md` - Project-specific rules and conventions
-5. `project-structure.md` - .NET 專案結構
+3. `../guides/implementation-guides/TEMPLATE-USAGE-GUIDE.md` - Template selection and usage decision guide
+4. Root `AGENTS.md` and `README.md` - repository rules and identity
+5. `project-structure.md` - conditional .NET backend target structure profile; physical names and paths require target adoption
 6. Relevant aggregate spec in `.dev/specs/[aggregate]/`
 
-### 2. Project Overview
-- **Purpose**: Todo List application with DDD architecture
+### 2. Preserved Example Profile
+- **Purpose**: Historical Todo List example; not this repository's product identity
 - **Tech Stack**: .NET, ASP.NET Core, WolverineFx, EF Core, CQRS, Event Sourcing
 - **Tests**: xUnit + BDDfy (Gherkin-style naming), NSubstitute (no BaseTestClass)
 
@@ -35,7 +43,10 @@
 └─────────────────────────────────────────────────────────┘
 ```
 
-## Non-Negotiables
+## Preserved Profile Constraints (Conditional)
+
+The following constraints apply only when the target repository has explicitly
+adopted this legacy profile. They are not universal framework requirements.
 
 - DDD / CA / CQRS must be preserved.
 - Event sourcing state changes must go through Apply/When.

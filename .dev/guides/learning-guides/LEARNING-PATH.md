@@ -1,5 +1,13 @@
 # DDD + CA + CQRS Learning Path (Dotnet)
 
+> **Status: profile-specific learning reference, not target-project truth.**
+>
+> This learning path describes the repository's reusable `dotnet-backend`
+> examples. WolverineFx, EF Core, Event Sourcing, BDDfy, package choices, and
+> sample source layouts apply only when the target repository adopts them.
+> Begin target-repository onboarding with root `AGENTS.md`, `README.md`, and
+> `repo-structure-sync`; prefer generated target context over this example.
+
 ## Core Concept Levels
 
 ### Level 1: Fundamentals
@@ -50,10 +58,10 @@
 ## Required Reading Order
 
 ### Phase 1: Understand the architecture
-1. `CLAUDE.md` - project memory (TODO: replace with .NET memory doc when available)
-2. `.ai/assets/shared/architecture-config.md` - architecture rules
-3. `.ai/assets/shared/common-rules.md` - non-negotiable rules
-4. `.ai/assets/shared/testing-strategy.md` - test rules
+1. Root `AGENTS.md` and `README.md` - repository rules and identity
+2. `.ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md` - architecture rules
+3. `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md` - non-negotiable rules
+4. `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md` - test rules
 5. `.ai/assets/skills/spec-compliance-validator/references/spec-compliance-rules.md` - spec compliance rules
 
 ### Phase 2: Learn by examples
@@ -63,8 +71,8 @@
 4. `.dev/standards/examples/dto/README.md` - DTO layout
 
 ### Phase 3: Avoid common mistakes
-1. `.ai/COMMON-PITFALLS.md` - cross-cutting pitfalls
-2. `.ai/FAILURE-CASES.md` - failure patterns
+1. `.ai/assets/tech-stacks/dotnet-backend/references/COMMON-PITFALLS.MD` - cross-cutting pitfalls
+2. `.ai/assets/tech-stacks/dotnet-backend/references/FAILURE-CASES.MD` - failure patterns
 
 ## Key Principles Quick Reference
 
@@ -146,11 +154,16 @@ When you need to implement a new feature:
 1. Find the closest example in `.dev/standards/examples/`
 2. Follow naming rules:
    - Use case: `<Operation><Aggregate>UseCase`
-   - Handler: `<Operation><Aggregate>Handler` or Wolverine handler class
-   - Input/Output: `<Operation><Aggregate>Request`, `<Aggregate>Response`
+   - Use Case: `I<Operation><Aggregate>UseCase` and
+     `<Operation><Aggregate>UseCase`
+   - Handler: only for an actual dispatch/message entry
+   - HTTP Input/Output: `<Operation><Aggregate>Request`,
+     `<Aggregate>Response`
+   - Use Case Input/Output: `<Operation><Aggregate>Input`,
+     `<Operation><Aggregate>Output`
 3. Apply correct patterns:
-   - Command: handler returns `CqrsOutput`
-   - Query: handler returns custom output DTOs
+   - Command: Use Case changes state and returns only the produced output
+   - Query: Use Case returns custom output DTOs without changing state
    - Test: xUnit + BDDfy (Gherkin-style naming), no BaseTestClass
 
 ## Common Pitfalls
@@ -164,12 +177,12 @@ When you need to implement a new feature:
 
 Initial conversation template:
 ```markdown
-I am using DDD + Clean Architecture + CQRS + Event Sourcing in .NET.
+My target repository has explicitly adopted DDD + Clean Architecture + CQRS + Event Sourcing in .NET.
 Please follow these references to learn the coding style:
 
-1. Project memory: CLAUDE.md (TODO: replace with .NET memory doc)
-2. Learning path: .dev/guides/LEARNING-PATH.md
-3. Code templates: .ai/CODE-TEMPLATES.md
+1. Repository context: root AGENTS.md and README.md
+2. Learning path: .dev/guides/learning-guides/LEARNING-PATH.md
+3. Code templates: .ai/assets/tech-stacks/dotnet-backend/references/CODE-TEMPLATES.MD
 4. Prompts: .ai/assets/
 
 Important rules:
@@ -244,8 +257,3 @@ When the output violates rules:
 2. Provide a correct reference example
 3. Explain the principle behind the rule
 4. Ask for a regenerated solution
-
-
-
-
-

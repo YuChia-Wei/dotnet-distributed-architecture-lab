@@ -2,39 +2,39 @@
 
 ## Decision Pattern
 
-區分兩種 AI 資產：
+Distinguish between two kinds of AI assets:
 
 - top-level skill
 - delegated sub-agent role
 
 ## Why
 
-### 1. 入口層級不同
+### 1. Different Entry Levels
 
-skill 是人或 main agent 可以直接啟動的高階能力。  
-sub-agent role 是 workflow 內部委派給 worker 的角色。
+A skill is a high-level capability that a human or main agent can invoke directly.
+A sub-agent role is delegated to a worker inside a workflow.
 
-### 2. 避免 taxonomy 混亂
+### 2. Avoid Taxonomy Confusion
 
-若把所有可執行 prompt 都升格成 skill，會混淆：
+Promoting every executable prompt to a skill would blur the distinction between:
 
 - top-level capability
 - worker role
 - shared prompt material
 
-### 3. 有助於可攜式知識庫整理
+### 3. Support Portable Knowledge-Base Organization
 
-當 skill 與 sub-agent 明確分層後，`.ai/` 才能保持穩定的可移植結構，而不會隨 runtime wrapper 改動反覆重組。
+When skills and sub-agents are clearly separated, `.ai/` can retain a stable, portable structure instead of being reorganized whenever runtime wrappers change.
 
 ## Why Not
 
-### 每個可執行 prompt 都做成 skill
+### Make Every Executable Prompt a Skill
 
-缺點：
+Drawbacks:
 
-- runtime entry 過多
-- 與 delegated worker 邊界模糊
-- wrapper strategy 難以維護
+- Too many runtime entries.
+- An unclear boundary with delegated workers.
+- A wrapper strategy that is difficult to maintain.
 
 ## Practical Rule
 

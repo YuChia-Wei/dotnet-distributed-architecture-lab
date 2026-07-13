@@ -22,7 +22,7 @@ business_rules:
 ## Expected Output
 
 ### 1) Use Case Input Model
-Path: `src/Application/<Aggregate>/UseCases/Commands/<UseCase>Input.cs`
+Path: `src/Application/UseCases/<UseCase>/<UseCase>Input.cs`
 
 ```csharp
 public sealed record CreateTagInput(
@@ -31,20 +31,32 @@ public sealed record CreateTagInput(
     string Color);
 ```
 
-### 2) Use Case Handler
-Path: `src/Application/<Aggregate>/UseCases/Commands/<UseCase>Handler.cs`
+### 2) Use Case Interface and Implementation
+Paths:
+
+- `src/Application/UseCases/<UseCase>/I<UseCase>UseCase.cs`
+- `src/Application/UseCases/<UseCase>/<UseCase>UseCase.cs`
 
 ```csharp
-public sealed class CreateTagHandler
+public interface ICreateTagUseCase
 {
-    private readonly IRepository<Tag, TagId> _repository;
+    Task<CqrsOutput> ExecuteAsync(
+        CreateTagInput input,
+        CancellationToken cancellationToken);
+}
 
-    public CreateTagHandler(IRepository<Tag, TagId> repository)
+public sealed class CreateTagUseCase : ICreateTagUseCase
+{
+    private readonly IAggregateRepository<Tag, TagId> _repository;
+
+    public CreateTagUseCase(IAggregateRepository<Tag, TagId> repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<CqrsOutput> Execute(CreateTagInput input)
+    public async Task<CqrsOutput> ExecuteAsync(
+        CreateTagInput input,
+        CancellationToken cancellationToken)
     {
         // 1. Validate input
         // 2. Load aggregate or related entities
@@ -66,6 +78,7 @@ Path: `src/tests/Application/<Aggregate>/UseCases/<UseCase>Tests.cs`
 ## Validation Checklist
 - [ ] All required fields have validation
 - [ ] Business rules are enforced
-- [ ] Domain events are published
+- [ ] Domain events and outbound event publisher lifecycle are verified
+- [ ] No direct Wolverine `IMessageBus` or other Use Case dependency exists
 - [ ] Error cases are handled
 - [ ] Tests cover success and failure paths

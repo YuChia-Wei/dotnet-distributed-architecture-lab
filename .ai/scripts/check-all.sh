@@ -22,15 +22,12 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-# Parse arguments
+# Parse arguments strictly so a typo cannot silently select the full gate.
 MODE="full"
-if [ "$1" == "--quick" ]; then
-    MODE="quick"
-elif [ "$1" == "--critical" ]; then
-    MODE="critical"
-elif [ "$1" == "--full" ]; then
-    MODE="full"
-elif [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
+if [ "$#" -gt 1 ]; then
+    echo "Usage: $0 [--quick | --full | --critical]" >&2
+    exit 2
+elif [ "$#" -eq 1 ] && { [ "$1" == "--help" ] || [ "$1" == "-h" ]; }; then
     echo "Usage: $0 [--quick | --full | --critical]"
     echo ""
     echo "Modes:"
@@ -39,6 +36,17 @@ elif [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
     echo "  --full     : Run all available checks (default)"
     echo ""
     exit 0
+elif [ "$#" -eq 1 ]; then
+    case "$1" in
+        --quick) MODE="quick" ;;
+        --critical) MODE="critical" ;;
+        --full) MODE="full" ;;
+        *)
+            echo "Unknown argument: $1" >&2
+            echo "Usage: $0 [--quick | --full | --critical]" >&2
+            exit 2
+            ;;
+    esac
 fi
 
 # Track results
@@ -47,30 +55,68 @@ PASSED_CHECKS=0
 FAILED_CHECKS=0
 SKIPPED_CHECKS=0
 WARNINGS=0
+REQUIRED_SELECTED=0
+REQUIRED_RUN=0
+REQUIRED_FAILED=0
+ADVISORY_SELECTED=0
+DEFERRED_CHECKS=0
+NOT_APPLICABLE=0
+
+select_check() {
+    local description=$1
+    local is_critical=$2
+    local is_quick=$3
+    if [ "$MODE" == "critical" ] && [ "$is_critical" != "true" ]; then
+        echo -e "${YELLOW}⊖${NC} Skipping by mode: $description (non-critical)"
+        SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+        return 1
+    fi
+    if [ "$MODE" == "quick" ] && [ "$is_quick" != "true" ]; then
+        echo -e "${YELLOW}⊖${NC} Skipping by mode: $description (not quick)"
+        SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+        return 1
+    fi
+    return 0
+}
+
+record_selected() {
+    local enforcement=$1
+    if [ "$enforcement" != "required" ] && [ "$enforcement" != "advisory" ]; then
+        echo "Internal error: unsupported enforcement class '$enforcement'" >&2
+        exit 2
+    fi
+    TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+    if [ "$enforcement" == "required" ]; then
+        REQUIRED_SELECTED=$((REQUIRED_SELECTED + 1))
+    else
+        ADVISORY_SELECTED=$((ADVISORY_SELECTED + 1))
+    fi
+}
+
+record_unavailable_or_failed() {
+    local enforcement=$1
+    local description=$2
+    if [ "$enforcement" == "required" ]; then
+        echo -e "${RED}✗ FAILED${NC}: $description"
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+    else
+        echo -e "${YELLOW}⚠ ADVISORY${NC}: $description"
+        WARNINGS=$((WARNINGS + 1))
+    fi
+}
 
 # Function to run a check script
 run_check() {
     local script_name=$1
     local description=$2
-    local is_critical=$3
-    local is_quick=$4
-    shift 4
+    local enforcement=$3
+    local is_critical=$4
+    local is_quick=$5
+    shift 5
     local args=("$@")
-    
-    # Skip logic based on mode
-    if [ "$MODE" == "critical" ] && [ "$is_critical" != "true" ]; then
-        echo -e "${YELLOW}⊖${NC} Skipping: $description (non-critical)"
-        ((SKIPPED_CHECKS++))
-        return
-    fi
-    
-    if [ "$MODE" == "quick" ] && [ "$is_quick" != "true" ]; then
-        echo -e "${YELLOW}⊖${NC} Skipping: $description (not quick)"
-        ((SKIPPED_CHECKS++))
-        return
-    fi
-    
-    ((TOTAL_CHECKS++))
+    select_check "$description" "$is_critical" "$is_quick" || return
+    record_selected "$enforcement"
     
     echo ""
     echo -e "${CYAN}▶ Running:${NC} $description"
@@ -79,65 +125,82 @@ run_check() {
     
     if [ -f "$SCRIPT_DIR/$script_name" ]; then
         if [ -x "$SCRIPT_DIR/$script_name" ]; then
-            # Run the script and capture exit code
+            [ "$enforcement" == "required" ] && REQUIRED_RUN=$((REQUIRED_RUN + 1))
             if "$SCRIPT_DIR/$script_name" "${args[@]}" 2>&1; then
                 echo -e "${GREEN}✓ PASSED${NC}: $description"
-                ((PASSED_CHECKS++))
+                PASSED_CHECKS=$((PASSED_CHECKS + 1))
             else
-                echo -e "${RED}✗ FAILED${NC}: $description"
-                ((FAILED_CHECKS++))
+                record_unavailable_or_failed "$enforcement" "$description returned non-zero"
             fi
         else
-            echo -e "${YELLOW}⚠ WARNING${NC}: $script_name is not executable"
-            echo "  Run: chmod +x $SCRIPT_DIR/$script_name"
-            ((WARNINGS++))
+            record_unavailable_or_failed "$enforcement" "$script_name is not executable"
         fi
     else
-        echo -e "${RED}✗ ERROR${NC}: $script_name not found"
-        ((FAILED_CHECKS++))
+        record_unavailable_or_failed "$enforcement" "$script_name not found"
     fi
     
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 }
 
-# Function to mark a check as pending .NET translation
-run_check_pending() {
+run_command_check() {
+    local command_text=$1
+    local description=$2
+    local enforcement=$3
+    local is_critical=$4
+    local is_quick=$5
+    select_check "$description" "$is_critical" "$is_quick" || return
+    record_selected "$enforcement"
+    [ "$enforcement" == "required" ] && REQUIRED_RUN=$((REQUIRED_RUN + 1))
+
+    echo ""
+    echo -e "${CYAN}▶ Running:${NC} $description"
+    echo "  Command: $command_text"
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+
+    if (cd "$PROJECT_ROOT" && eval "$command_text"); then
+        echo -e "${GREEN}✓ PASSED${NC}: $description"
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    else
+        record_unavailable_or_failed "$enforcement" "$description returned non-zero"
+    fi
+
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+}
+
+# Function to mark a check as pending dotnet-native replacement
+run_deferred_check() {
     local script_name=$1
     local description=$2
     local is_critical=$3
     local is_quick=$4
-    local reason=${5:-".NET translation pending"}
+    local reason=${5:-"dotnet-native replacement pending"}
 
-    # Skip logic based on mode
-    if [ "$MODE" == "critical" ] && [ "$is_critical" != "true" ]; then
-        echo -e "${YELLOW}⊖${NC} Skipping: $description (non-critical)"
-        ((SKIPPED_CHECKS++))
-        return
-    fi
-
-    if [ "$MODE" == "quick" ] && [ "$is_quick" != "true" ]; then
-        echo -e "${YELLOW}⊖${NC} Skipping: $description (not quick)"
-        ((SKIPPED_CHECKS++))
-        return
-    fi
-
-    echo -e "${YELLOW}⊖${NC} TODO: $description ($reason)"
-    ((SKIPPED_CHECKS++))
+    select_check "$description" "$is_critical" "$is_quick" || return
+    echo -e "${YELLOW}⊖${NC} DEFERRED: $description ($reason)"
+    DEFERRED_CHECKS=$((DEFERRED_CHECKS + 1))
 }
 
 run_spec_compliance_check() {
     local spec_file="${SPEC_FILE:-}"
     local task_name="${TASK_NAME:-}"
 
+    if [ -z "$spec_file" ] && [ -z "$task_name" ]; then
+        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Spec Implementation Compliance (SPEC_FILE/TASK_NAME not set)"
+        NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+        return
+    fi
     if [ -z "$spec_file" ] || [ -z "$task_name" ]; then
-        echo -e "${YELLOW}⊖${NC} Skipping: Spec Implementation Compliance (SPEC_FILE/TASK_NAME not set)"
-        ((SKIPPED_CHECKS++))
+        echo -e "${RED}✗ FAILED${NC}: Spec Implementation Compliance requires both SPEC_FILE and TASK_NAME"
+        TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        REQUIRED_SELECTED=$((REQUIRED_SELECTED + 1))
+        REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
         return
     fi
 
     run_check "check-spec-compliance.sh" \
         "Spec Implementation Compliance (.NET)" \
-        "false" "true" "$spec_file" "$task_name"
+        "required" "false" "true" "$spec_file" "$task_name"
 }
 
 # Header
@@ -156,20 +219,33 @@ echo -e "${BLUE}Starting checks at $(date '+%Y-%m-%d %H:%M:%S')${NC}"
 echo ""
 echo -e "${MAGENTA}════ Critical Checks ════${NC}"
 
-# Coding standards are fundamental
+run_command_check "python .ai/scripts/validate-workflow-artifacts.py" \
+    "Workflow Artifact Metadata" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/validate-ai-context.py" \
+    "AI Context Navigation and Runtime Contracts" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/validate-shell-assets.py" \
+    "Shell Asset Classification And Git Modes" \
+    "required" "true" "true"
+
+# Coding standards are fundamental for AI context and standards docs
 run_check "check-coding-standards.sh" \
     "Coding Standards Compliance" \
-    "true" "true"
+    "required" "true" "true"
 
-# Repository pattern compliance is critical
-run_check "check-repository-compliance.sh" \
-    "Repository Pattern Compliance" \
-    "true" "true"
+run_command_check "dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj" \
+    "Dotnet Backend Analyzer Template Tests" \
+    "required" "true" "true"
 
-# Mapper compliance is critical
-run_check "check-mapper-compliance.sh" \
-    "Mapper Design Compliance" \
-    "true" "true"
+run_command_check "dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj" \
+    "Dotnet Backend Configuration Validation Tests" \
+    "required" "true" "true"
+
+# Repository source validation is covered by DBA1001 in analyzer tests.
+# Mapper source validation is covered by DBA1007-DBA1008 in analyzer tests.
 
 # ====================================================================
 # Important Checks (run in full and quick modes)
@@ -179,33 +255,19 @@ if [ "$MODE" != "critical" ]; then
     echo ""
     echo -e "${MAGENTA}════ Important Checks ════${NC}"
     
-    # Aggregate compliance
-    run_check "check-aggregate-compliance.sh" \
-        "Aggregate Pattern Compliance" \
-        "false" "true"
+    # Aggregate and UseCase source validation is covered by DBA1002-DBA1003 and DBA1009-DBA1012.
     
-    # UseCase compliance
-    run_check "check-usecase-compliance.sh" \
-        "UseCase Pattern Compliance" \
-        "false" "true"
-    
-    # Controller compliance
-    run_check "check-controller-compliance.sh" \
-        "Controller Pattern Compliance" \
-        "false" "true"
-    
-    # JPA configuration (pending .NET translation)
-    run_check_pending "check-projection-config.sh" \
-        "JPA Projection Configuration" \
-        "false" "true"
+    # Controller compliance is covered by DBA1004-DBA1006 in analyzer tests.
+
+    # Projection source and EF model registration are covered by DBA1013 and configuration validation tests.
     
     # Spec compliance is important
     run_spec_compliance_check
     
-    # Dependencies check (script not yet ported)
-    run_check_pending "check-dependencies.sh" \
+    # Dependencies check (dotnet-native replacement not yet available)
+    run_deferred_check "check-dependencies.sh" \
         "Dependencies and Versions" \
-        "false" "true" "script not yet available in .NET"
+        "false" "true" "dotnet-native replacement not yet available"
 fi
 
 # ====================================================================
@@ -219,32 +281,22 @@ if [ "$MODE" == "full" ]; then
     # Test compliance
     run_check "check-test-compliance.sh" \
         "Test Standards Compliance" \
-        "false" "false"
+        "advisory" "false" "false"
     
-    # Spring DI Test compliance (pending .NET translation)
-    run_check_pending "check-test-di-compliance.sh" \
-        "Spring DI Test Compliance" \
-        "true" "false"
+    # Test DI compliance helper remains transitional
+    run_deferred_check "check-test-di-compliance.sh" \
+        "Test DI Compliance" \
+        "true" "false" "replace with analyzer or test architecture rules"
     
-    # Projection compliance
-    run_check "check-projection-compliance.sh" \
-        "Projection Pattern Compliance" \
-        "false" "false"
-    
-    # Archive compliance
-    run_check "check-archive-compliance.sh" \
-        "Archive Pattern Compliance" \
-        "false" "false"
-    
-    # Template sync check (script not yet ported)
-    run_check_pending "check-template-sync.sh" \
+    # Template sync check (dotnet-native replacement not yet available)
+    run_deferred_check "check-template-sync.sh" \
         "Template Synchronization" \
-        "false" "false" "script not yet available in .NET"
+        "false" "false" "dotnet-native replacement not yet available"
     
-    # ADR index update (script not yet ported)
-    run_check_pending "update-adr-index.sh" \
+    # ADR index update (dotnet-native replacement not yet available)
+    run_deferred_check "update-adr-index.sh" \
         "ADR Index Update" \
-        "false" "false" "script not yet available in .NET"
+        "false" "false" "dotnet-native replacement not yet available"
     
     # Add ADR script (if needed)
     if [ -f "$SCRIPT_DIR/add-adr.sh" ]; then
@@ -273,8 +325,14 @@ fi
 echo -e "Total Checks Run: ${CYAN}$TOTAL_CHECKS${NC}"
 echo -e "Passed: ${GREEN}$PASSED_CHECKS${NC}"
 echo -e "Failed: ${RED}$FAILED_CHECKS${NC}"
-echo -e "Skipped: ${YELLOW}$SKIPPED_CHECKS${NC}"
-echo -e "Warnings: ${YELLOW}$WARNINGS${NC}"
+echo -e "Skipped By Mode: ${YELLOW}$SKIPPED_CHECKS${NC}"
+echo -e "Advisory Warnings: ${YELLOW}$WARNINGS${NC}"
+echo -e "Deferred: ${YELLOW}$DEFERRED_CHECKS${NC}"
+echo -e "Not Applicable: ${CYAN}$NOT_APPLICABLE${NC}"
+echo -e "Required Selected: ${CYAN}$REQUIRED_SELECTED${NC}"
+echo -e "Required Executed: ${CYAN}$REQUIRED_RUN${NC}"
+echo -e "Required Failed: ${RED}$REQUIRED_FAILED${NC}"
+echo -e "Advisory Selected: ${CYAN}$ADVISORY_SELECTED${NC}"
 echo -e "Pass Rate: ${CYAN}${PASS_RATE}%${NC}"
 
 echo ""
@@ -289,7 +347,7 @@ if [ $FAILED_CHECKS -eq 0 ] && [ $WARNINGS -eq 0 ]; then
     exit 0
 elif [ $FAILED_CHECKS -eq 0 ]; then
     echo -e "${YELLOW}╔════════════════════════════════════════╗${NC}"
-    echo -e "${YELLOW}║  ⚠ Passed with $WARNINGS Warning(s)          ║${NC}"
+    echo -e "${YELLOW}║  ⚠ Passed with $WARNINGS Advisory Warning(s) ║${NC}"
     echo -e "${YELLOW}╚════════════════════════════════════════╝${NC}"
     exit 0
 else

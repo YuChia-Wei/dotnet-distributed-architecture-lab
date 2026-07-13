@@ -1,6 +1,6 @@
 ---
 name: repo-structure-sync
-description: Scan a freshly copied target git repository and refresh repo-specific architecture sections in `.dev/`, `.ai/`, and `agents.md`. Use when Codex needs to adapt this template to a new .NET repo by inventorying solution structure, projects, stack facts, and documentation truth without rewriting framework-level collaboration rules.
+description: Initialize a target repository after this AI context framework is copied in by scanning repo facts and refreshing repo-specific README, `.dev/`, `.ai/`, and `AGENTS.md` sections without rewriting framework-level collaboration rules.
 ---
 
 # Repo Structure Sync
@@ -14,10 +14,12 @@ This is a thin current-runtime wrapper.
 - Human Guide: `.dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md`
 - References:
   - `.ai/assets/skills/repo-structure-sync/references/scan-playbook.md`
+  - `.ai/assets/skills/repo-structure-sync/references/migration-boundaries.md`
   - `.ai/assets/skills/repo-structure-sync/references/escalation-checklist.md`
   - `.ai/assets/skills/repo-structure-sync/references/delegation-rules.md`
   - `.ai/assets/skills/repo-structure-sync/references/document-targets.md`
   - `.ai/assets/skills/repo-structure-sync/references/output-contract.md`
+  - `.ai/assets/skills/repo-structure-sync/templates/project-config.template.yaml`
 
 ## Wrapper Rules
 

@@ -47,5 +47,5 @@ RUN dotnet publish "src/App/App.csproj" -c Release -o /app/publish
 
 ## Related
 
-- `../../.ai/scripts/check-dockerfile-csproj-copy-sync.ps1`
+- `../../.ai/scripts/check-dockerfile-csproj-copy-sync.ps1` as a transitional PowerShell helper. This may later move to a dotnet repo validation tool or CI validation task.
 - `./TEMPLATE-USAGE-GUIDE.md`

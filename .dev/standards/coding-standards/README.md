@@ -1,135 +1,132 @@
-# .NET 編碼規範
+# .NET Coding Standards
 
-本目錄包含所有 .NET 編碼規範文件，每個文件專注於特定領域的標準和最佳實踐。
+This directory contains all .NET coding-standard documents. Each document focuses on standards and best practices for a specific area.
 
 ---
 
-## 📚 規範文件索引
+## 📚 Standards Document Index
 
-### 核心領域規範
-- **[aggregate-standards.md](./aggregate-standards.md)** - Aggregate、Entity、Value Object 和 Domain Event 規範
-  - Aggregate Root 設計原則
-  - Domain Event 結構與處理
-  - Value Object 不可變性設計
-  - 軟刪除 (Soft Delete) 實作要求
-  - 📋 包含完整程式碼模板
+### Core Domain Standards
+- **[aggregate-standards.md](./aggregate-standards.md)** - Aggregate, Entity, Value Object, and Domain Event rules
+  - Aggregate Root design principles
+  - Domain Event structure and handling
+  - Value Object immutability design
+  - Soft Delete implementation requirements
+  - 📋 Includes complete code templates
 
-- **[repository-standards.md](./repository-standards.md)** - Repository 模式規範
-  - Generic Repository 使用原則
-  - EF Core 實作
-  - IUnitOfWork 設計
-  - 軟刪除過濾機制
+- **[repository-standards.md](./repository-standards.md)** - Repository pattern rules
+  - Aggregate Repository and compatibility contract
+  - Query Repository marker
+  - Physical purge and optional batch capability
+  - Transaction / Domain Event lifecycle
+  - Conditional adapter guidance
 
-- **[usecase-standards.md](./usecase-standards.md)** - Handler/Use Case 層規範
-  - Command vs Query 分離原則 (CQRS)
-  - WolverineFx Handler 設計
-  - Result Pattern 錯誤處理
-  - 📋 包含 Command/Query 完整模板
+- **[usecase-standards.md](./usecase-standards.md)** - Handler/Use Case layer rules
+  - Command vs Query separation principle (CQRS)
+  - WolverineFx Handler design
+  - Result Pattern error handling
+  - 📋 Includes complete Command/Query templates
 
-- **[reactor-standards.md](./reactor-standards.md)** - Reactor / 事件處理規範
-  - `IReactor<DomainEventData>` 介面規則
-  - event-to-action flow 邊界
-  - replay / duplicate delivery 注意事項
+- **[reactor-standards.md](./reactor-standards.md)** - Reactor/event-handling rules
+  - `IReactor<DomainEventData>` interface rules
+  - event-to-action flow boundaries
+  - replay and duplicate-delivery considerations
 
-### 資料存取規範
-- **[projection-standards.md](./projection-standards.md)** - Projection/Query Service 模式規範
-  - Read Model 設計原則
-  - EF Core Query 實作
-  - 分頁和複雜查詢處理
+### Data Access Standards
+- **[projection-standards.md](./projection-standards.md)** - Projection/Query Service pattern rules
+  - Read Model design principles
+  - EF Core Query implementation
+  - Pagination and complex-query handling
 
-- **[archive-standards.md](./archive-standards.md)** - Archive 模式規範
-  - Query Model CRUD 操作
-  - 跨 Bounded Context 參考資料
-  - 事件驅動寫入
+- **[archive-standards.md](./archive-standards.md)** - Archive pattern rules
+  - Query Model CRUD operations
+  - Cross-Bounded-Context reference data
+  - Event-driven writes
 
-- **[mapper-standards.md](./mapper-standards.md)** - Mapper 設計規範
-  - Domain 與 Data 物件轉換
-  - System.Text.Json 序列化
-  - 靜態方法設計原則
+- **[mapper-standards.md](./mapper-standards.md)** - Mapper design rules
+  - Domain and Data object conversion
+  - System.Text.Json serialization
+  - Static-method design principles
 
-### API 與控制層規範
-- **[controller-standards.md](./controller-standards.md)** - ASP.NET Core Controller 規範
-  - HTTP 狀態碼使用
-  - ProblemDetails 錯誤回應
-  - 請求驗證
+### API and Controller-Layer Standards
+- **[controller-standards.md](./controller-standards.md)** - ASP.NET Core Controller rules
+  - HTTP status-code usage
+  - ProblemDetails error responses
+  - Request validation
   - Minimal API vs Controller
 
-### 測試規範
-- **[test-standards.md](./test-standards.md)** - 測試編碼規範
-  - xUnit + BDDfy 測試框架
-  - NSubstitute Mocking（禁止 Moq）
-  - Contract Tests (DBC Precondition 驗證)
-  - WebApplicationFactory 整合測試
-  - 📋 包含各種測試模板
+### Testing Standards
+- **[test-standards.md](./test-standards.md)** - Test coding rules
+  - xUnit + BDDfy is the default testing framework; GWT is the minimum requirement and must not be replaced by 3A
+  - NSubstitute Mocking (Moq is prohibited)
+  - Contract Tests (DBC Precondition validation)
+  - WebApplicationFactory integration tests
+  - 📋 Includes test templates
 
-- **[profile-configuration-standards.md](./profile-configuration-standards.md)** - Profile / Environment 規範
-  - `DOTNET_ENVIRONMENT` / `ASPNETCORE_ENVIRONMENT` 載入規則
-  - `appsettings.{Environment}.json` 命名與分工
-  - InMemory / Outbox profile-specific DI 約束
-
----
-
-## 🔴 關鍵原則摘要
-
-### 必須遵守的核心規則
-
-#### 1. Repository 規範
-- ❌ 絕對不要創建自定義 Repository 介面
-- ✅ 直接使用 `IRepository<Aggregate, AggregateId>`
-- ✅ Repository 只能有三個方法: `FindByIdAsync()`, `SaveAsync()`, `DeleteAsync()`
-
-#### 2. Aggregate 設計
-- ✅ 每個 Aggregate 必須支援軟刪除 (`IsDeleted`)
-- ✅ 使用公開建構子，不用 static factory method
-- ✅ Command method 必須有 `Contract.Ensure` 後置條件檢查
-
-#### 3. Handler 設計 (CQRS)
-- ✅ Command 和 Query 必須分離
-- ✅ 使用 `sealed record` 定義 Command/Query
-- ✅ 使用 Constructor Injection，禁止使用 `[FromServices]`
-- ✅ Use case / service / mapper / projection 一律由 `IServiceCollection` 顯式註冊，禁止 attribute-based auto registration
-- ✅ 返回 `Result<T>` 處理錯誤
-
-#### 4. 測試要求
-- ✅ 使用 xUnit + BDDfy 框架
-- ✅ 使用 NSubstitute（禁止 Moq）
-- ✅ 禁止繼承 BaseTestClass
-- ✅ 聚合根 ID 使用 `Guid.NewGuid().ToString()`
-- ✅ profile 與 environment 規則見 [profile-configuration-standards.md](./profile-configuration-standards.md)
+- **[profile-configuration-standards.md](./profile-configuration-standards.md)** - Profile/Environment rules
+  - `DOTNET_ENVIRONMENT` / `ASPNETCORE_ENVIRONMENT` loading rules
+  - `appsettings.{Environment}.json` naming and responsibilities
+  - InMemory/Outbox profile-specific DI constraints
 
 ---
 
-## 📋 快速導航
+## 🔴 Key Principle Summary
 
-### 當你要...
-- **創建新的 Aggregate** → 查看 [aggregate-standards.md](./aggregate-standards.md)
-- **實作 Handler/Use Case** → 查看 [usecase-standards.md](./usecase-standards.md)
-- **設計 REST API** → 查看 [controller-standards.md](./controller-standards.md)
-- **撰寫測試** → 查看 [test-standards.md](./test-standards.md)
-- **處理 profile / environment / DI 分支** → 查看 [profile-configuration-standards.md](./profile-configuration-standards.md)
-- **處理查詢** → 查看 [projection-standards.md](./projection-standards.md)
-- **管理 Read Model** → 查看 [archive-standards.md](./archive-standards.md)
+### Mandatory Core Rules
+
+#### 1. Repository Rules
+- ✅ New code uses `IAggregateRepository<Aggregate, AggregateId>`
+- ✅ Existing `IDomainRepository<Aggregate, AggregateId>` remains a compatibility contract
+- ✅ The shared Aggregate Repository exposes only `FindByIdAsync()` and `SaveAsync()`
+- ❌ Child Entity repositories and public generic CRUD repositories are prohibited
+- ✅ Query ports implement `IQueryRepository` and remain read-only
+- ✅ Physical purge and target-specific batch persistence use separate capabilities
+
+#### 2. Aggregate Design
+- ✅ Every Aggregate must support soft deletion (`IsDeleted`)
+- ✅ Use public constructors rather than static factory methods
+- ✅ Command methods must include `Contract.Ensure` postcondition checks
+
+#### 3. Handler Design (CQRS)
+- ✅ Commands and Queries must be separated
+- ✅ Define Commands/Queries with `sealed record`
+- ✅ Use Constructor Injection; `[FromServices]` is prohibited
+- ✅ Use cases, services, mappers, and projections must be registered explicitly through `IServiceCollection`; attribute-based auto registration is prohibited
+- ✅ Return `Result<T>` for error handling
+
+#### 4. Testing Requirements
+- ✅ Use xUnit + BDDfy by default; when the target team disables BDDfy, C# tests must still use GWT style
+- ✅ Use NSubstitute (Moq is prohibited)
+- ✅ Do not inherit from BaseTestClass
+- ✅ Use `Guid.NewGuid().ToString()` for Aggregate Root IDs
+- ✅ See [profile-configuration-standards.md](./profile-configuration-standards.md) for profile and environment rules
 
 ---
 
-## 🛠️ 技術棧
+## 📋 Quick Navigation
 
-| 類別 | 技術 | 版本 |
-|------|------|------|
-| 語言/Runtime | C# / .NET | 8.0 |
-| ORM | EF Core | 8.x |
-| Message Bus | WolverineFx | Latest |
-| 測試框架 | xUnit + BDDfy | Latest |
-| Mocking | NSubstitute | Latest |
-| Assertion | FluentAssertions | Latest |
-| 資料庫 | PostgreSQL | 16.x |
-| 訊息佇列 | Kafka | 3.x |
+### When you need to...
+- **Create a new Aggregate** → See [aggregate-standards.md](./aggregate-standards.md)
+- **Implement a Handler/Use Case** → See [usecase-standards.md](./usecase-standards.md)
+- **Design a REST API** → See [controller-standards.md](./controller-standards.md)
+- **Write tests** → See [test-standards.md](./test-standards.md)
+- **Handle profile/environment/DI branches** → See [profile-configuration-standards.md](./profile-configuration-standards.md)
+- **Handle queries** → See [projection-standards.md](./projection-standards.md)
+- **Manage a Read Model** → See [archive-standards.md](./archive-standards.md)
 
 ---
 
-## 📚 相關文件
+## 🛠️ Technology Choices
 
-- [架構文件](../../ARCHITECTURE.MD) - 整體架構設計
-- [技術棧需求](../../requirement/TECH-STACK-REQUIREMENTS.MD) - 技術棧詳細需求
-- [ADR 索引](../../adr/INDEX.md) - 架構決策記錄
-- [Code Review 清單](../CODE-REVIEW-CHECKLIST.md) - 程式碼審查清單
+Database, ORM, event store, message broker, and package versions are determined by target-repository evidence.
+
+This framework may retain conditional/reference guidance for EF Core, Dapper, Npgsql, WolverineFx, RabbitMQ, Kafka, xUnit, NSubstitute, and similar technologies, but a reference selection must not be treated as mandatory truth for every target repository.
+
+---
+
+## 📚 Related Documents
+
+- [Architecture Document](../../ARCHITECTURE.MD) - Overall architecture design
+- [Technology Stack Requirements](../../requirement/TECH-STACK-REQUIREMENTS.MD) - Detailed technology-stack requirements
+- [ADR Index](../../adr/INDEX.md) - Architecture decision records
+- [Code Review Checklist](../CODE-REVIEW-CHECKLIST.md) - Code review checklist

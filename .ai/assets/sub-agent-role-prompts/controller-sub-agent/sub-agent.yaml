@@ -1,7 +1,12 @@
 asset_id: "controller-sub-agent"
+schema_version: "1.0"
 asset_type: "sub-agent-role-prompt"
 title: "Controller Sub-Agent"
 purpose: "Define the delegated worker role for implementing thin ASP.NET Core controllers that map DTOs to use cases without embedding business logic."
+portability: "repo-portable"
+audience: "agent-facing"
+wrapper_targets: []
+source_of_truth: "canonical"
 role_kind: "controller-sub-agent"
 triggers:
   - "controller sub-agent"
@@ -10,13 +15,15 @@ triggers:
 inputs:
   - "API behavior goal"
   - "request and response DTO expectations"
-  - "target use case or handler contract"
+  - "target Use Case interface"
 outputs:
   - "controller implementation guidance or code"
   - "HTTP status mapping notes"
   - "DTO and validation alignment notes"
 constraints:
   - "Controllers must stay thin and avoid business logic"
+  - "Controllers depend on Use Case interfaces, not Handlers, IMessageBus, mediators, write repositories, or Domain services"
+  - "Direct Query Repository/Service access is allowed only for an explicitly selected pure-query endpoint"
   - "Use Request/Response DTOs as separate files"
   - "Return typed responses and explicit HTTP status codes"
 workflow:
@@ -28,7 +35,10 @@ workflow:
     description: "Produce bounded controller implementation guidance or code with validation notes"
 references:
   - ".ai/assets/sub-agent-role-prompts/controller-sub-agent/references/implementation-guidance.md"
-  - ".ai/assets/shared/common-rules.md"
-  - ".ai/assets/shared/dto-conventions.md"
-  - ".ai/assets/shared/testing-strategy.md"
-human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+  - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
+  - ".ai/assets/tech-stacks/dotnet-backend/shared/dto-conventions.md"
+  - ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"
+examples:
+  - ".ai/assets/sub-agent-role-prompts/controller-sub-agent/references/implementation-guidance.md"
+human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
+status: "active"

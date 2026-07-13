@@ -15,8 +15,8 @@ Use this file to map a user request to the smallest useful subset of the repo's 
 - `.ai/assets/sub-agent-role-prompts/aggregate-sub-agent/sub-agent.yaml`
 - `.ai/assets/sub-agent-role-prompts/aggregate-test-sub-agent/sub-agent.yaml`
 - `.ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/sub-agent.yaml`
-- `.ai/assets/shared/domain-rules.md`
-- `.ai/assets/shared/dto-conventions.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/domain-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/dto-conventions.md`
 
 Use for:
 - aggregate boundary design
@@ -28,8 +28,8 @@ Use for:
 - `.ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`
 - `.ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml`
 - `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml`
-- `.ai/assets/shared/common-rules.md`
-- `.ai/assets/shared/architecture-config.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md`
 
 Use for:
 - command handler flow
@@ -48,22 +48,19 @@ Use for:
 - outbox mapping
 - environment/profile isolation
 
-### API and Frontend Boundary
+### API Boundary
 - `.ai/assets/sub-agent-role-prompts/controller-sub-agent/references/implementation-guidance.md`
 - `.ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/sub-agent.yaml`
 - `.ai/assets/sub-agent-role-prompts/controller-test-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/frontend-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/frontend-sub-agent/references/api-integration-guidance.md`
 
 Use for:
 - API contract shape
 - controller boundary rules
-- frontend/backend contract alignment
 
 ### Quality Gates
 - `.ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml`
 - `.ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml`
-- `.ai/assets/shared/code-review-checklist.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md`
 - `.ai/assets/skills/spec-compliance-validator/references/spec-compliance-rules.md`
 - `.ai/assets/skills/spec-compliance-validator/references/test-validation-steps.md`
 - `.ai/assets/skills/spec-compliance-validator/references/validation-command-templates.md`
@@ -81,7 +78,7 @@ Read the canonical rules/docs for these recurring areas:
 - DI and configuration: `.dev/standards/coding-standards/usecase-standards.md`, `.dev/standards/coding-standards/profile-configuration-standards.md`, `.dev/standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md`
 - Outbox and transaction flow: `.dev/standards/coding-standards.md`, `.dev/guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md`
 - Query-side layering: `.dev/standards/coding-standards.md`, `.dev/standards/rationale/query-side-layering-rationale.MD`
-- Shared project boundaries: `.dev/standards/project-structure.md`
+- Conditional physical project layout and shared-project profile: `.dev/standards/project-structure.md`; confirm target adoption and use canonical architecture standards for invariants
 - Docker/container packaging: `.dev/guides/implementation-guides/DOCKER-RESTORE-CACHE-GUIDE.md`
 
 ## Selection Rules

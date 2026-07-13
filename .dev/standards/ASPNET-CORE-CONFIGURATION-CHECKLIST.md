@@ -1,62 +1,62 @@
-# ASP.NET Core 配置檢查清單 🔥
+# ASP.NET Core Configuration Checklist 🔥
 
-## ⚠️ 必須避免的常見錯誤
+## ⚠️ Common Errors That Must Be Avoided
 
-本清單記錄在 .NET 版本中常見的設定錯誤，避免重複踩雷。
+This checklist records configuration mistakes commonly encountered in .NET projects so they are not repeated.
 
-## 1. 資料庫連線配置
+## 1. Database Connection Configuration
 
-### ❌ 錯誤：使用錯誤的 port
+### ❌ Error: Using the Wrong Port
 ```json
-// 錯誤
-"MainDb": "Host=localhost;Port=5500;Database=app;Username=app;Password=app"
+// Incorrect
+"MainDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
 
-// 正確
-"MainDb": "Host=localhost;Port=5432;Database=app;Username=app;Password=app"
+// Correct
+"MainDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
 ```
 
-### ❌ 錯誤：schema 配置方式錯誤
+### ❌ Error: Incorrect Schema Configuration
 ```json
-// 錯誤：未指定 schema 或使用錯誤鍵
-"MainDb": "Host=localhost;Port=5432;Database=app;Username=app;Password=app"
+// Incorrect: schema is omitted or an incorrect key is used
+"MainDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
 
-// 正確：在連線字串指定 schema
-"MainDb": "Host=localhost;Port=5432;Database=app;Username=app;Password=app;Search Path=message_store"
+// Correct: specify the schema in the connection string
+"MainDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD};Search Path=${DB_SCHEMA}"
 ```
 
-## 2. 套件依賴配置
+## 2. Package Dependency Configuration
 
-### ❌ 錯誤：漏裝 provider
-- 缺少 `Microsoft.EntityFrameworkCore.Npgsql` 或 `Microsoft.EntityFrameworkCore.SqlServer`
+### ❌ Error: Missing Provider Package
+- `Microsoft.EntityFrameworkCore.Npgsql` or `Microsoft.EntityFrameworkCore.SqlServer` is missing.
 
-### ✅ 正確做法
+### ✅ Correct Approach
 ```bash
 dotnet add package Microsoft.EntityFrameworkCore
 dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 ```
 
-## 3. Profile / Environment 配置
+## 3. Profile / Environment Configuration
 
-### ❌ 錯誤：未建立 appsettings.{Environment}.json
-必須建立 `appsettings.InMemory.json` / `appsettings.Outbox.json`（或對應名稱）。
+### ❌ Error: Missing appsettings.{Environment}.json
+Create `appsettings.InMemory.json` / `appsettings.Outbox.json` or the corresponding environment-specific files.
 
-### ✅ 正確做法
-- `ASPNETCORE_ENVIRONMENT=InMemory` / `Outbox`
-- 使用 `IConfiguration` 讀取 Profile
-- 不要再建立另一套自製 profile 機制
-- 環境命名維持一致，例如 `TestInMemory` / `TestOutbox`
+### ✅ Correct Approach
+- Set `ASPNETCORE_ENVIRONMENT=InMemory` / `Outbox`.
+- Use `IConfiguration` to read the profile.
+- Do not create a second custom profile mechanism.
+- Keep environment names consistent, for example `TestInMemory` / `TestOutbox`.
 
-### ✅ 規範來源
-- 詳細硬規則以 `coding-standards/profile-configuration-standards.md` 為準
+### ✅ Authoritative Standard
+- Follow `coding-standards/profile-configuration-standards.md` for detailed mandatory rules.
 
-## 4. WolverineFx 配置
+## 4. WolverineFx Configuration
 
-### ❌ 錯誤：未註冊 handlers / messaging
-**解法**：檢查 WolverineFx 服務註冊與 assembly 掃描。
+### ❌ Error: Handlers / Messaging Are Not Registered
+**Resolution**: Verify WolverineFx service registration and assembly scanning.
 
 ## 5. EF Core Migration
 
-### ❌ 錯誤：Migration 未更新或未套用
+### ❌ Error: Migrations Are Outdated or Not Applied
 ```bash
 dotnet ef migrations add Init
 dotnet ef database update

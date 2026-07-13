@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using AiScrum.Tests.Infrastructure;
+using ExampleApp.Tests.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using TestStack.BDDfy;
 using Xunit;
 
-namespace AiScrum.Tests.UseCases;
+namespace ExampleApp.Tests.UseCases;
 
 public sealed class CreateTaskUseCaseTests : IClassFixture<TestHostFixture>, IDisposable
 {

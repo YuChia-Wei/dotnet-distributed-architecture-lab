@@ -19,7 +19,7 @@ Use these examples to keep BDD tests readable and reusable in .NET.
   - Step-by-step migration guide from ezSpec to Gherkin Rule blocks.
 - `OUTBOX-TEST-CONFIGURATION.md`
   - Outbox test configuration for .NET.
-- `product-outbox-repository.feature` + `ProductOutboxRepositorySteps.cs`
+- `aggregate-outbox-repository.feature` + `AggregateOutboxRepositorySteps.cs`
   - Standard Outbox repository integration scenarios.
 
 ## Rule Design Principles

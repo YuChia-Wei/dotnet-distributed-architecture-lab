@@ -4,8 +4,8 @@ Use this delegated worker role when the main agent needs tests for event-driven 
 
 ## Mandatory References
 
-- `.ai/assets/shared/testing-strategy.md`
-- `.ai/assets/shared/common-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
 - `.ai/assets/skills/bdd-gwt-test-designer/skill.yaml`
 
 ## Focus Areas

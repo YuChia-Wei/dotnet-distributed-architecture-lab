@@ -18,7 +18,7 @@ This is a thin Claude-compatible wrapper.
 - Spec: `.ai/assets/skills/code-reviewer/skill.yaml`
 - Human Guide: `.dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`
 - References:
-  - `.ai/CODE-REVIEW-INDEX.MD`
+  - `.ai/assets/tech-stacks/dotnet-backend/references/CODE-REVIEW-INDEX.MD`
   - `.ai/assets/skills/code-reviewer/references/checklist-reference.md`
   - `.dev/standards/CODE-REVIEW-CHECKLIST.md`
 
@@ -27,3 +27,9 @@ This is a thin Claude-compatible wrapper.
 Use this wrapper only as a compatibility entry.
 Keep runtime-specific metadata in this wrapper directory only when the runtime requires it.
 If wrapper text and canonical spec differ, follow `.ai/assets/skills/code-reviewer/skill.yaml`.
+
+## Validation Boundary
+
+Use software engineering reasoning and checklist comparison as the core review method.
+Analyzer, architecture test, and dotnet test output may support the review when available.
+Do not treat transitional `.ai/scripts` grep-based C# checks as final semantic validation.

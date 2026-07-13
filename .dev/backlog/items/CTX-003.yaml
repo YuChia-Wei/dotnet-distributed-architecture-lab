@@ -1,0 +1,27 @@
+schema_version: "1.0"
+backlog_id: "CTX-003"
+title: "Remediate CTX-001 AI Context Truth And Contract Findings"
+category: "ai-context-governance"
+status: "resolved"
+priority: "HIGH"
+summary: "Resolve the five findings from the post-AIC-007 audit, then obtain an independent post-remediation audit before closure."
+created_at: "2026-07-12T18:26:13+08:00"
+updated_at: "2026-07-12T18:55:41+08:00"
+origin_refs:
+  - ".dev/workflows/2026-07-12-post-aic-007-ai-context-audit/reports/01-audit-report.md"
+recommended_owner_skill: "ai-context-governance"
+handoff_condition: "Execute the bounded governance tasks on the dedicated workflow branch; request ai-context-auditor for independent verification after remediation."
+workflow_refs:
+  - ".dev/workflows/2026-07-12-ai-context-truth-contract-remediation/workflow.yaml"
+task_refs:
+  - ".dev/workflows/2026-07-12-ai-context-truth-contract-remediation/tasks/AICR-001.json"
+  - ".dev/workflows/2026-07-12-ai-context-truth-contract-remediation/tasks/AICR-002.json"
+  - ".dev/workflows/2026-07-12-ai-context-truth-contract-remediation/tasks/AICR-003.json"
+  - ".dev/workflows/2026-07-12-ai-context-truth-contract-remediation/tasks/AICR-004.json"
+  - ".dev/workflows/2026-07-12-ai-context-truth-contract-remediation/tasks/AICR-005.json"
+resolution_ref: ".dev/workflows/2026-07-12-ai-context-truth-contract-remediation/reports/02-remediation-report.md"
+decision_needed: "No user decision currently blocks remediation; escalate only if project-structure reclassification requires a new architecture rule."
+inventory_notes:
+  - "Baseline decision is remediation-recommended with score 7.9/10."
+  - "Scope excludes src, tests, product implementation, unrelated backlog, and broad translation work."
+  - "Independent post-remediation audit confirmed all five findings resolved with no regression; bounded score 9.3/10 and decision healthy-with-followups."

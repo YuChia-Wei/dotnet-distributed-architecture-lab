@@ -1,0 +1,82 @@
+asset_id: "ai-context-auditor"
+schema_version: "1.0"
+asset_type: "skill-spec"
+title: "AI Context Auditor"
+purpose: "Perform evidence-backed AI context analysis or recurring self-audits with an independent baseline pass, a repository-aware skill pass, explicit product-code exclusions, and an optional durable report when persistence is requested."
+portability: "portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+capability_slots:
+  - "context-audit"
+triggers:
+  - "AI context audit"
+  - "AI context self-audit"
+  - "AI context self-check"
+  - "context health check"
+  - "prompt repository audit"
+  - "governance drift audit"
+  - "自檢 AI context"
+  - "檢查 AI context 品質"
+inputs:
+  - "repository root and active collaboration instructions"
+  - "optional audit focus, comparison request, or previous report"
+  - "AI context roots, registries, indexes, policies, wrappers, prompts, workflow records, and context validation tooling"
+outputs:
+  - "independent baseline assessment"
+  - "repository-aware skill and policy assessment"
+  - "comparison of confirmed, added, downgraded, and overturned findings"
+  - "severity-ranked findings with file-backed evidence"
+  - "durable baseline or post-remediation audit report under <artifact-root>/reports/01-audit-report.md or reports/03-post-remediation-audit-report.md"
+  - "code-review handoff when product source or test code is requested"
+  - "conversation-only assessment when persistence is not requested"
+constraints:
+  - "Operate read-only with respect to audited context; when remediation is authorized, hand it to ai-context-governance instead of expanding this skill."
+  - "Default to an allowlist of AI context and governance surfaces instead of scanning the entire repository."
+  - "Exclude src, tests, test, app, apps, product source trees, generated output, dependencies, bin, and obj unless the user changes the task to code review."
+  - "Do not inspect product source or test implementation merely because files are present or because a broad recursive command would include them."
+  - "When the user asks to scan or assess product code, stop the scope expansion and recommend code-reviewer or another applicable code review skill."
+  - "Do not claim a check ran unless command output or direct evidence exists."
+  - "Do not treat historical workflow records or examples as active truth without an active index or policy saying so."
+  - "Keep the independent baseline separate from repository-specific skill conclusions until the comparison stage."
+  - "Remain read-only with respect to audited context; writing owned workflow metadata and audit reports does not authorize remediation."
+  - "Never overwrite a baseline report with post-remediation results."
+  - "Use workflow ids in YYYY-MM-DD-topic[-NN] form and ISO 8601 timestamps with an explicit offset."
+  - "For an audit-only workflow, create or switch to its dedicated branch before writing artifacts; when participating in a governance-owned lifecycle, use that workflow branch instead of creating a second workflow branch."
+  - "Treat pre-completion merge or push as a checkpoint; use --no-ff for merges unless another strategy is explicitly requested."
+  - "Use transient direct mode when the result stays in the conversation and there is no repository mutation, remediation, or durable report, even if the analysis has multiple passes or sub-agents."
+  - "Treat report wording as durable only when the user asks to save, persist, land, or retain the report in the repository."
+  - "For durable report-only audits, commit only auditor-owned workflow and report artifacts; do not include changes to audited context."
+workflow:
+  - step: 1
+    description: "Read the active repository instructions, confirm whether the requested output is transient or durable, establish an AI-context allowlist, record exclusions, apply the code-review handoff gate, and establish the correct dedicated branch only before durable workflow artifacts."
+  - step: 2
+    description: "Perform an independent baseline pass using general AI context, knowledge-base, documentation, and runtime-governance engineering principles without using repository governance claims as the scoring rubric."
+  - step: 3
+    description: "Perform a repository-aware pass using applicable context governance, workflow, language, routing, wrapper, and validation policies or skills."
+  - step: 4
+    description: "For large repositories, delegate bounded structure, content, and runtime audits when sub-agents are available, while keeping synthesis and evidence verification with the main agent."
+  - step: 5
+    description: "Compare both passes, rank findings, distinguish active defects from deferred or historical material, and record validation evidence."
+  - step: 6
+    description: "Return a conversation-only assessment in transient mode, or create the applicable baseline or post-remediation report from the canonical template, update only auditor-owned workflow artifacts, and return the report path in durable mode."
+references:
+  - ".ai/assets/skills/ai-context-auditor/references/scope-and-routing.md"
+  - ".ai/assets/skills/ai-context-auditor/references/audit-playbook.md"
+  - ".ai/assets/skills/ai-context-auditor/references/output-contract.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/AI-CONTEXT-AUDITOR-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/AI-CONTEXT-AUDITOR-SKILL-GUIDE.md"
+report_template: ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md"
+workflow_templates:
+  locator: ".ai/assets/skills/ai-context-auditor/templates/workflow-locator-template.yaml"
+  plan: ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-workflow-plan-template.md"
+  task: ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-task-template.json"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/ai-context-auditor/"
+  codex:
+    wrapper_path: ".agents/skills/ai-context-auditor/"
+status: "active"

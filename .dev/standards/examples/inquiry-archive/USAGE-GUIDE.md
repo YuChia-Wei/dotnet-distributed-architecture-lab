@@ -5,23 +5,23 @@
 ### 1) Define an Inquiry
 
 ```csharp
-public interface IFindPbisBySprintIdInquiry
+public interface IFindWorkItemsByIterationIdInquiry
 {
-    IReadOnlyList<string> FindBySprintId(SprintId sprintId);
+    IReadOnlyList<string> FindByIterationId(IterationId sprintId);
 }
 ```
 
 ### 2) Implement with EF Core
 
 ```csharp
-public sealed class EfFindPbisBySprintIdInquiry : IFindPbisBySprintIdInquiry
+public sealed class EfFindWorkItemsByIterationIdInquiry : IFindWorkItemsByIterationIdInquiry
 {
     private readonly ReadDbContext _db;
 
-    public IReadOnlyList<string> FindBySprintId(SprintId sprintId)
-        => _db.Pbis.Where(p => p.SprintId == sprintId.Value && !p.Deleted)
+    public IReadOnlyList<string> FindByIterationId(IterationId sprintId)
+        => _db.WorkItems.Where(p => p.IterationId == sprintId.Value && !p.Deleted)
                   .OrderBy(p => p.OrderId)
-                  .Select(p => p.PbiId)
+                  .Select(p => p.WorkItemId)
                   .ToList();
 }
 ```
@@ -29,22 +29,22 @@ public sealed class EfFindPbisBySprintIdInquiry : IFindPbisBySprintIdInquiry
 ### 3) Use in a Reactor
 
 ```csharp
-public sealed class NotifyPbiWhenSprintStartedService : IWhenSprintStartedNotifyPbiReactor
+public sealed class NotifyWorkItemWhenIterationStartedService : IWhenIterationStartedNotifyWorkItemReactor
 {
-    private readonly IFindPbisBySprintIdInquiry _inquiry;
-    private readonly IStartPbiUseCase _useCase;
+    private readonly IFindWorkItemsByIterationIdInquiry _inquiry;
+    private readonly IStartWorkItemUseCase _useCase;
 
     public void Handle(DomainEventData message)
     {
         if (message == null) return;
 
         var domainEvent = DomainEventMapper.ToDomain(message);
-        if (domainEvent is SprintStarted started)
+        if (domainEvent is IterationStarted started)
         {
-            var pbiIds = _inquiry.FindBySprintId(SprintId.ValueOf(started.SprintId));
+            var pbiIds = _inquiry.FindByIterationId(IterationId.ValueOf(started.IterationId));
             foreach (var pbiId in pbiIds)
             {
-                _useCase.Execute(new StartPbiInput { PbiId = pbiId });
+                _useCase.Execute(new StartWorkItemInput { WorkItemId = pbiId });
             }
         }
     }
@@ -58,8 +58,8 @@ public sealed class NotifyPbiWhenSprintStartedService : IWhenSprintStartedNotify
 ```csharp
 public interface IProductArchive
 {
-    void Archive(Product product, string reason, string archivedBy);
     ArchivedProduct? FindArchivedById(ProductId productId);
+    void Save(ArchivedProduct archivedProduct);
 }
 ```
 
@@ -84,15 +84,20 @@ public sealed class EfProductArchive : IProductArchive
 {
     private readonly ReadDbContext _db;
 
-    public void Archive(Product product, string reason, string archivedBy)
+    public void Save(ArchivedProduct archivedProduct)
     {
-        // TODO: serialize full aggregate state as JSON
-        var archived = new ArchivedProduct(...);
-        _db.ArchivedProducts.Add(archived);
+        _db.ArchivedProducts.Update(archivedProduct);
         _db.SaveChanges();
     }
 }
 ```
+
+The use case or Reactor maps source facts into `ArchivedProduct`, including who,
+when, and why, before calling `Save`. The Archive adapter persists read-model
+state; it does not own an ambiguous delete operation. If physical read-model
+cleanup is required, expose it through a separate restricted purge port and
+enforce authorization, retention, legal-hold, audit, and dependent-cleanup
+gates before calling it.
 
 ## Checklist
 
@@ -100,3 +105,5 @@ public sealed class EfProductArchive : IProductArchive
 - [ ] Each inquiry handles one query only
 - [ ] Archive stores metadata (who/when/why)
 - [ ] Soft delete or archived tables are indexed
+- [ ] Normal Archive adapters do not physically remove records
+- [ ] Physical read-model purge is isolated behind a restricted capability-specific port

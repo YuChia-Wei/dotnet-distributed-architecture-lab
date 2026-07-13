@@ -18,7 +18,7 @@
 - `AggregateRoot` -> `AggregateRoot` 基底類別 (自定義)
 - `ValueObject` -> `ValueObject` 基底類別 (自定義或 record)
 - `UseCase` -> Handler 介面 / WolverineFx Handler
-- `Repository` -> `IRepository<TAggregate, TId>`
+- `Repository` -> `IAggregateRepository<TAggregate, TId>`
 - `Contract` -> `Contract` (Design by Contract helper)
 
 ## 測試

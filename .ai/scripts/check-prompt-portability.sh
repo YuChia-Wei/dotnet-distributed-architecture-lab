@@ -17,19 +17,12 @@ if [ ! -d "$PROMPTS_DIR" ]; then
   exit 1
 fi
 
-# Comma-separated extra forbidden terms can be passed by environment variable.
+# Comma-separated source- or target-repository terms must be passed by environment variable.
 # Example:
 # PORTABILITY_EXTRA_TERMS="CompanyX,DomainY" ./.ai/scripts/check-prompt-portability.sh
 EXTRA_TERMS_RAW="${PORTABILITY_EXTRA_TERMS:-}"
 
-FORBIDDEN_TERMS=(
-  "AiScrum"
-  "MQArchLab"
-  "ProductBacklogItem"
-  "SaleOrders"
-  "SaleProducts"
-  "InventoryControl"
-)
+FORBIDDEN_TERMS=()
 
 if [ -n "$EXTRA_TERMS_RAW" ]; then
   IFS=',' read -r -a EXTRA_TERMS <<< "$EXTRA_TERMS_RAW"
@@ -100,5 +93,4 @@ fi
 echo -e "${RED}✗ Prompt portability check failed (${ERRORS} group(s) failed)${NC}"
 echo -e "${YELLOW}Tip:${NC} Update prompts or expand placeholders in .ai/assets/shared/PROMPT-PORTABILITY-RULES.md"
 exit 1
-
 

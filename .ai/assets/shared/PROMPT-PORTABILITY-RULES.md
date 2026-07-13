@@ -10,7 +10,8 @@ Use these rules when creating or updating canonical shared materials and delegat
 - Keep project-specific decisions as "Project Decision Slot" notes, not fixed policy text.
 
 ## Allowed References
-- Shared standards that are intentionally copied with `.ai` and `.dev` (for example: `project-config.yaml`).
+- Shared standards and repo-init templates that are intentionally copied with `.ai` and `.dev`.
+- Generated target-repository truth such as `.dev/project-config.yaml` must be rebuilt after copying.
 - Generic architecture patterns (DDD, CQRS, Outbox, Event Sourcing).
 - Technology constraints explicitly declared by the target framework profile.
 

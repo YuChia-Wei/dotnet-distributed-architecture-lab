@@ -1,0 +1,62 @@
+asset_id: "slice-implementer"
+schema_version: "1.0"
+asset_type: "skill-spec"
+title: "Slice Implementer"
+purpose: "Implement one bounded implementation slice from requirements, specs, architecture decisions, review findings, or workflow tasks without redefining the architecture direction."
+portability: "repo-portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+capability_slots:
+  - "implementation"
+triggers:
+  - "slice implementer"
+  - "implement slice"
+  - "bounded implementation slice"
+  - "feature slice"
+  - "fix slice"
+  - "remediation slice"
+inputs:
+  - "requirement, spec, workflow task, or review findings"
+  - "bounded slice goal and explicit non-goals"
+  - "intent, scope, and mode when known"
+  - "validation requirements"
+outputs:
+  - "bounded implementation slice"
+  - "mode and reference path used"
+  - "touched files and validation notes"
+  - "explicit handoff if architecture, local change, test design, review, or compliance work remains"
+constraints:
+  - "Do not redefine architecture direction mid-slice"
+  - "Do not silently broaden the agreed slice"
+  - "Use mode references for command, query, reactor, generic, remediation, or refactor-specific rules"
+  - "Delegate local class/object/symbol technical edits to local-change-implementer when useful"
+  - "Stop and hand off when bounded context, aggregate boundary, dependency direction, or domain language is unclear"
+workflow:
+  - step: 1
+    description: "Confirm slice goal, intent, scope, mode, source truth, and non-goals"
+  - step: 2
+    description: "Load only the relevant mode reference and required local standards"
+  - step: 3
+    description: "Implement the smallest coherent slice and delegate local technical changes when useful"
+  - step: 4
+    description: "Validate, record touched files, and hand off remaining architecture, testing, review, or compliance work"
+references:
+  - ".ai/assets/skills/slice-implementer/references/input-contract.md"
+  - ".ai/assets/skills/slice-implementer/references/execution-playbook.md"
+  - ".ai/assets/skills/slice-implementer/references/handoff-rules.md"
+  - ".ai/assets/skills/slice-implementer/references/modes/command-use-case.md"
+  - ".ai/assets/skills/slice-implementer/references/modes/query-use-case.md"
+  - ".ai/assets/skills/slice-implementer/references/modes/reactor.md"
+  - ".ai/assets/skills/slice-implementer/references/modes/generic-slice.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/SLICE-IMPLEMENTER-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/SLICE-IMPLEMENTER-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/slice-implementer/"
+  codex:
+    wrapper_path: ".agents/skills/slice-implementer/"
+status: "active"

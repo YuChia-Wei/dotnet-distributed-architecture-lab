@@ -1,10 +1,28 @@
 # Document Targets
 
-This skill updates repo-specific architecture areas only.
+This skill updates repo-specific architecture and repo-init entry areas only.
 
 ## Primary Targets
 
-### `agents.md`
+### `.dev/project-config.yaml`
+
+Generate or update:
+
+- repository identity and target mode
+- detected languages and technology profiles
+- .NET SDK, target frameworks, solutions, and projects when present
+- source/test roots and host/library classifications
+- architecture, persistence, messaging, frontend, and deployment facts only when supported by evidence
+- evidence paths and unresolved facts
+
+Rules:
+
+- start from `.ai/assets/skills/repo-structure-sync/templates/project-config.template.yaml`
+- use `null` or empty collections for unknown facts
+- never copy source-template credentials, connection strings, ports, domains, queues, or product names
+- treat repository files as stronger evidence than copied `.dev/project-config.yaml`
+
+### `AGENTS.md`
 
 Update:
 
@@ -17,6 +35,31 @@ Preserve:
 
 - collaboration precedence
 - mandatory workflow rules unless the user explicitly changes them
+- skill routing rules that are framework-level rather than target-project-specific
+
+### `CLAUDE.md`
+
+Preserve the thin Claude Code project-memory adapter. It must import
+`@AGENTS.md` and must not duplicate or override the canonical collaboration
+rules. If the target repository keeps this framework's runtime entries, verify
+the adapter after updating `AGENTS.md`.
+
+### Root `README.md` and `README.en.md`
+
+Update:
+
+- repository identity
+- setup and run instructions when file-backed facts exist
+- product or framework purpose
+- directory layout that reflects the target repo
+- links to target-relevant docs
+
+Preserve:
+
+- bilingual README convention when present
+- framework usage notes when the repo is intentionally an AI context framework
+
+For empty repos, keep README content minimal and do not invent product domains, services, endpoints, or stack versions.
 
 ### `.dev/ARCHITECTURE.MD`
 

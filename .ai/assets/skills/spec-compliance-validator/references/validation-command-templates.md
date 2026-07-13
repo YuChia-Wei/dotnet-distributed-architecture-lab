@@ -4,15 +4,40 @@
 Standardize how to run validation checks and how to report results for review and compliance sign-off.
 
 ## Validation Command Set
-> Commands are templates; adapt paths to the active aggregate/use case.
+
+Commands are templates; adapt paths to the active aggregate/use case.
+
+Prefer dotnet-native validation when available. Shell commands under `.ai/scripts` are transitional helpers for this repository and should not be treated as final C# semantic validation once analyzer, architecture test, or dotnet tool replacements exist.
 
 ### 1) Spec Compliance Gate (Mandatory)
+
+Preferred target:
+
+```
+dotnet build
+dotnet test
+```
+
+Transitional helper:
+
 ```
 # read specs + generate compliance checklist + validate tests
 ./.ai/scripts/check-spec-compliance.sh <spec-file> <task-name>
 ```
 
 ### 2) Repository Compliance (Optional but recommended)
+
+Preferred target:
+
+```
+dotnet build
+dotnet test
+```
+
+Repository rules should move to Roslyn analyzer diagnostics and architecture tests.
+
+Transitional helper:
+
 ```
 ./.ai/scripts/check-repository-compliance.sh <path>
 ```

@@ -1,55 +1,55 @@
-# Reactor 編碼規範 (.NET)
+# Reactor Coding Standards (.NET)
 
-本文件定義 Reactor / event-driven handler 的編碼標準，包含介面型別、事件轉換、邊界責任與常見錯誤。
-
----
-
-## 📌 概述
-
-Reactor 用於：
-
-- 處理跨 Aggregate 的事件驅動流程
-- 更新 read model / archive / projection
-- 觸發跨 BC 的後續協作
-
-Reactor 不應被當成一般 command handler，也不應直接承載 controller concern。
+This document defines coding standards for Reactors and event-driven handlers, including interface types, event conversion, boundary responsibilities, and common errors.
 
 ---
 
-## 🔴 必須遵守的規則 (MUST FOLLOW)
+## 📌 Overview
 
-### 1. Reactor 介面必須使用 `DomainEventData`
+Use a Reactor to:
 
-所有 Reactor 介面必須繼承：
+- handle event-driven flows across Aggregates;
+- update a read model, archive, or projection;
+- trigger follow-up collaboration across Bounded Contexts.
+
+A Reactor must not be treated as a general command handler or directly carry Controller concerns.
+
+---
+
+## 🔴 Mandatory Rules (MUST FOLLOW)
+
+### 1. Reactor Interfaces Must Use `DomainEventData`
+
+Every Reactor interface must inherit from:
 
 ```csharp
 IReactor<DomainEventData>
 ```
 
 ```csharp
-// ✅ 正確
+// ✅ Correct
 public interface INotifyOrderProjectionReactor : IReactor<DomainEventData>
 {
 }
 
-// ❌ 錯誤：直接使用 DomainEvent
+// ❌ Incorrect: uses DomainEvent directly
 public interface INotifyOrderProjectionReactor : IReactor<DomainEvent>
 {
 }
 
-// ❌ 錯誤：未指定泛型
+// ❌ Incorrect: generic type is omitted
 public interface INotifyOrderProjectionReactor : IReactor
 {
 }
 ```
 
-理由：
+Rationale:
 
-- Message bus / event pipeline 傳遞的是 `DomainEventData`
-- 介面層先對齊 transport shape，實作內再轉回 domain event
-- 可以避免 reactor interface 與 event bus 型別脫節
+- The Message bus/event pipeline carries `DomainEventData`.
+- The interface layer first aligns with the transport shape; the implementation converts it back to a domain event.
+- This prevents the Reactor interface from diverging from the event bus type.
 
-### 2. Handler 先接 `DomainEventData`，再轉回 Domain Event
+### 2. A Handler Receives `DomainEventData` and Then Converts It to a Domain Event
 
 ```csharp
 public sealed class NotifyOrderProjectionReactor : INotifyOrderProjectionReactor
@@ -68,36 +68,36 @@ public sealed class NotifyOrderProjectionReactor : INotifyOrderProjectionReactor
 }
 ```
 
-禁止把 Reactor 介面直接綁死在單一 domain event class 上。
+Do not bind a Reactor interface directly to a single domain event class.
 
-### 3. Reactor 專注事件驅動協作，不直接承擔 HTTP / Controller concern
+### 3. A Reactor Focuses on Event-Driven Collaboration, Not HTTP/Controller Concerns
 
-Reactor 應只處理：
+A Reactor should handle only:
 
 - event-to-action flow
 - projection / archive update
 - cross-aggregate coordination
 - outbound integration follow-up
 
-Reactor 不應：
+A Reactor should not:
 
-- 直接處理 HTTP request / response
-- 直接成為 controller action logic
-- 把 use case command flow 與 event flow 混在一起
+- directly handle an HTTP request/response;
+- directly become Controller action logic;
+- mix a Use Case command flow with an event flow.
 
-### 4. Reactor 需考慮重送與冪等性
+### 4. A Reactor Must Account for Redelivery and Idempotency
 
-至少要有以下意識：
+At minimum, account for:
 
 - at-least-once delivery
 - duplicate delivery
-- replay / rebuild 情境
+- replay/rebuild scenarios.
 
-對外部 I/O、read-model update 或 notification，應有重複處理保護。
+External I/O, read-model updates, and notifications should be protected against duplicate processing.
 
 ---
 
-## 🎯 推薦責任邊界
+## 🎯 Recommended Responsibility Boundary
 
 ```text
 Domain Event / Integration Event
@@ -105,37 +105,37 @@ Domain Event / Integration Event
   -> Archive / Projection / Query Model / Follow-up Application Action
 ```
 
-Reactor 是 event-driven application collaborator，不是 aggregate 本身的一部分。
+A Reactor is an event-driven application collaborator, not part of the Aggregate itself.
 
 ---
 
-## ⚠️ 常見錯誤
+## ⚠️ Common Errors
 
-### 錯誤 1：Reactor 直接宣告 `IReactor<DomainEvent>`
+### Error 1: A Reactor Declares `IReactor<DomainEvent>` Directly
 
-這會讓介面與實際 bus payload 脫節。
+This makes the interface diverge from the actual bus payload.
 
-### 錯誤 2：Reactor 內直接寫 controller / API concern
+### Error 2: A Reactor Contains Controller/API Concerns
 
-Reactor 是 event handler，不是 transport adapter。
+A Reactor is an event handler, not a transport adapter.
 
-### 錯誤 3：Reactor 缺少 idempotency thinking
+### Error 3: A Reactor Does Not Account for Idempotency
 
-如果 reactor 會更新 read model、呼叫外部系統、送通知，就不能假設事件只會到一次。
-
----
-
-## 🔍 檢查清單
-
-- [ ] Reactor 介面使用 `IReactor<DomainEventData>`
-- [ ] `Handle(...)` 接收 `DomainEventData`
-- [ ] 先轉換為 domain event 再做型別判斷
-- [ ] 沒有混入 controller / HTTP concern
-- [ ] 有考慮 duplicate delivery / replay 風險
+If a Reactor updates a read model, calls an external system, or sends a notification, it cannot assume that an event arrives only once.
 
 ---
 
-## 相關文件
+## 🔍 Checklist
+
+- [ ] The Reactor interface uses `IReactor<DomainEventData>`.
+- [ ] `Handle(...)` receives `DomainEventData`.
+- [ ] It converts to a domain event before performing type checks.
+- [ ] It does not mix in Controller/HTTP concerns.
+- [ ] It accounts for duplicate-delivery/replay risks.
+
+---
+
+## Related Documents
 
 - [usecase-standards.md](usecase-standards.md)
 - [archive-standards.md](archive-standards.md)

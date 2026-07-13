@@ -1,0 +1,19 @@
+schema_version: "1.0"
+backlog_id: "CAP-001"
+title: "Technical Glossary And Terminology Capability Decision"
+category: "context-capability"
+status: "open"
+priority: "LOW"
+summary: "Decide whether technical terminology needs a dedicated skill or should remain a document pattern under the existing domain-language area."
+created_at: "2026-07-12T14:17:52+08:00"
+updated_at: "2026-07-12T14:17:52+08:00"
+origin_refs:
+  - ".dev/workflows/2026-06-implementer-taxonomy-domain-language/workflow-plan.md"
+recommended_owner_skill: "ai-context-governance"
+handoff_condition: "Collect concrete recurring terminology tasks before choosing a skill; keep noun-like knowledge in context unless a repeatable action workflow is demonstrated."
+workflow_refs: []
+task_refs: []
+resolution_ref: null
+decision_needed: "User decision: dedicated terminology skill, extend domain-language guidance, or decline until real usage evidence exists."
+inventory_notes:
+  - "This was explicitly deferred and is not required for current repository health."

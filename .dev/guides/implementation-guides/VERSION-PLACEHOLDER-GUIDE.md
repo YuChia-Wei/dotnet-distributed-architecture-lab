@@ -1,112 +1,84 @@
-# Version Placeholder Guide (Dotnet)
+# Version And Configuration Placeholder Guide (.NET)
 
-This guide documents all placeholders that should be automatically replaced when generating code from templates.
+This guide defines how template placeholders are resolved. It intentionally does not prescribe a product name, dependency version, port, provider, schema, environment, or credential.
 
-## Configuration Source
-All placeholder values come from `.dev/project-config.yaml`.
+## Evidence Sources
 
-## Available Placeholders
+Resolve values from target-repository evidence in this order:
 
-### Basic Project Information
-- `{rootNamespace}` -> MyScrum
-- `{projectName}` -> MyScrum
-- `{projectVersion}` -> 0.1.0
+1. authoritative project and configuration files;
+2. repository-owned standards or decisions;
+3. a generated `.dev/project-config.yaml` that cites the discovered evidence;
+4. an explicit user or team decision for a value that does not yet exist.
 
-### .NET & Runtime Versions
-- `{dotnetSdkVersion}` -> 8.0.x
-- `{aspnetCoreVersion}` -> 8.0.x
+Do not invent a value to make replacement succeed. Keep the placeholder unresolved and report the missing decision instead.
 
-### Dependencies
-- `{wolverineVersion}` -> 3.x (set in project-config.yaml)
-- `{efCoreVersion}` -> 8.x
-- `{npgsqlVersion}` -> 8.x
-- `{xunitVersion}` -> 2.x
-- `{nsubstituteVersion}` -> 5.x
-- `{bddfyVersion}` -> 0.x (set in project-config.yaml)
-- `{bddStyle}` -> Gherkin-style-naming
+## Placeholder Catalog
 
-### Backend Configuration
-- `{backendPort}` -> 9090
-- `{apiPrefix}` -> /v1/api
+### Project Identity
 
-### Database Configuration (Common)
-- `{dbProvider}` -> PostgreSQL
-- `{dbSchema}` -> message_store
+- `{rootNamespace}`: namespace confirmed from project files or repository convention.
+- `{projectName}`: target project or solution name.
+- `{projectVersion}`: version from the target repository's version source.
 
-### Test Environment Database
-- `{dbTestHost}` -> localhost
-- `{dbTestPort}` -> 5800
-- `{dbTestName}` -> board_test
-- `{dbTestUsername}` -> postgres
-- `{dbTestPassword}` -> root
-- `{dbTestConnectionString}` -> Host=localhost;Port=5800;Database=board_test;Username=postgres;Password=root
-- `{dbTestSchema}` -> message_store
+### .NET And Dependencies
 
-### Production Environment Database
-- `{dbProductionHost}` -> localhost
-- `{dbProductionPort}` -> 5500
-- `{dbProductionName}` -> board
-- `{dbProductionUsername}` -> postgres
-- `{dbProductionPassword}` -> root
-- `{dbProductionConnectionString}` -> Host=localhost;Port=5500;Database=board;Username=postgres;Password=root
-- `{dbProductionSchema}` -> message_store
+- `{dotnetSdkVersion}`: SDK version from `global.json`, project configuration, or CI evidence.
+- `{targetFramework}`: target framework from the relevant project file.
+- `{wolverineVersion}`, `{efCoreVersion}`, `{npgsqlVersion}`: versions from applicable package references or central package management.
+- `{xunitVersion}`, `{nsubstituteVersion}`, `{bddfyVersion}`: versions from the target test project when those packages are adopted.
+- `{bddStyle}`: `Given-When-Then`; BDDfy is the default narration library, but a team may opt out of the package while retaining GWT style.
 
-### AI Environment Database
-- `{dbAiHost}` -> localhost
-- `{dbAiPort}` -> 6600
-- `{dbAiName}` -> board_ai
-- `{dbAiUsername}` -> postgres
-- `{dbAiPassword}` -> root
-- `{dbAiConnectionString}` -> Host=localhost;Port=6600;Database=board_ai;Username=postgres;Password=root
-- `{dbAiSchema}` -> message_store
+Do not copy version examples into generated output as defaults.
 
-### Frontend Configuration
-- `{frontendFramework}` -> React
-- `{frontendLanguage}` -> TypeScript
-- `{frontendPort}` -> 3000
-- `{frontendBuildTool}` -> Vite
-- `{reactVersion}` -> 18.3.1
-- `{typescriptVersion}` -> 5.5.3
-- `{viteVersion}` -> 5.4.1
+### HTTP Host
 
-### Dynamic Placeholders (Context-Dependent)
-- `{fileName}` -> extracted from file name (e.g., task-delete-task -> delete-task)
-- `{useCaseName}` -> PascalCase (e.g., delete-task -> DeleteTask)
-- `{aggregateName}` -> extracted from context (e.g., .dev/tasks/feature/pbi -> pbi)
-- `{entityName}` -> extracted from context
+- `{backendPort}`: port from target launch, container, orchestration, or deployment configuration.
+- `{apiPrefix}`: route prefix confirmed by target endpoint or routing configuration.
+- `{allowedOrigins}`: reviewed CORS origins from environment-specific configuration.
 
-## Placeholder Processing Rules
+### Persistence
 
-### When to Process Placeholders
-1. Always check for placeholders when reading spec files or templates
-2. Read `.dev/project-config.yaml` to get latest values
-3. Replace all placeholders before generating code
+- `{dbProvider}`: provider confirmed from package and registration evidence.
+- `{dbHost}`, `{dbPort}`, `{dbName}`, `{dbUsername}`: environment-specific values from the target configuration source.
+- `{dbPasswordSecretRef}`: reference to an environment variable, secret manager key, or local developer-secret entry; never a literal password.
+- `{dbConnectionStringSecretRef}`: reference to a protected connection-string source.
+- `{dbSchema}`: schema confirmed from mappings, migrations, or an explicit decision.
 
-### Processing Steps
-1. Identify all placeholders in the template/spec
-2. Load configuration from `.dev/project-config.yaml`
-3. Replace placeholders with actual values
-4. Validate all placeholders have been replaced
+Create separate environment placeholders only for environments the target repository actually defines, for example `{db_<environment>_Host}`. Do not assume `test`, `production`, or AI-specific databases exist or share one schema.
 
-### Common Issues
-- Missing placeholder values -> check project-config.yaml
-- Duplicate placeholders -> check templates and sync
-- Context-dependent placeholders -> extract from file path or naming convention
+### Context-Dependent Names
 
-## Usage Notes
+- `{fileName}`: derived from the target artifact name.
+- `{useCaseName}`: derived from the confirmed use-case term and naming standard.
+- `{aggregateName}`: derived from domain language or an approved model.
+- `{entityName}`: derived from the target domain context.
 
-1. Automatic replacement: AI replaces placeholders when generating code
-2. Single source of truth: `.dev/project-config.yaml`
-3. Environment-specific DB config for test/production/ai
-4. Schema note: all PostgreSQL connections use `message_store` schema only
+Do not infer domain names from historical examples in this framework.
 
-## Important Reminders
+## Processing Rules
 
-- Database password is `root` (not password1)
-- All PostgreSQL connections use `message_store` schema
-- ASP.NET Core ports follow `{backendPort}`
-- PostgreSQL container ports:
-  - Test: 5800
-  - Production: 5500
-  - AI: 6600
+1. Inventory placeholders in the template or specification.
+2. Map every placeholder to a cited target-repository evidence source.
+3. Separate non-secret configuration from secret references.
+4. Replace only placeholders with confirmed values.
+5. Report unresolved placeholders and the decision or evidence needed.
+6. Verify generated output contains no unresolved placeholder and no copied credential.
 
+## Credential Safety
+
+- Never document or generate a reusable literal password, token, or connection string.
+- Use environment variables, local developer-secret stores, CI/CD secret stores, or the target platform's secret manager.
+- Examples may show variable names such as `${DB_PASSWORD}`, but must not assign a value.
+- Treat a generated `.dev/project-config.yaml` as non-secret metadata; it may record a secret reference, not secret material.
+
+## Optional Frontend Values
+
+Frontend placeholders belong in a frontend/full-stack profile, not this .NET backend guide. Resolve them only when the target repository has confirmed frontend evidence and the applicable context profile defines their ownership.
+
+## Failure Handling
+
+- Missing value: leave it unresolved, identify the evidence gap, and consider `repo-structure-sync`.
+- Conflicting values: report the conflicting sources and request a decision from the owning team.
+- Stale generated summary: refresh it from authoritative repository evidence.
+- Secret found in a template or summary: remove it from reusable context and rotate it through the target repository's security process if it was real.

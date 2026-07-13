@@ -1,10 +1,10 @@
 # Context Map Guide
 
-本指南定義 `.dev/operations/context-map.md` 的最小內容。
+本指南定義 `context-map.md` 類文件的最小內容。它是 template / authoring guidance，不表示 `.dev/operations/context-map.md` 已存在。
 
 ## 目的
 
-讓維護者快速回答：
+讓維護者在需要建立 context map 時，快速回答：
 
 - 系統目前有哪些 bounded contexts
 - 各 context 的責任邊界是什麼

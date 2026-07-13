@@ -3,12 +3,17 @@
 Generate ASP.NET Core controllers that are thin and map DTOs to Use Cases.
 
 ## Mandatory References
-- `.ai/assets/shared/common-rules.md`
-- `.ai/assets/shared/dto-conventions.md`
-- `.ai/assets/shared/testing-strategy.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/dto-conventions.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
 
 ## Rules
 - Controllers must not contain business logic
+- Inject explicit Use Case interfaces, never concrete Handlers, `IMessageBus`,
+  mediators/dispatchers, write repositories, Aggregates, or Domain services
+- Map Request DTOs to transport-neutral Use Case inputs
+- Use direct Query Repository/Service injection only when the endpoint is
+  explicitly designated as a pure-query exception
 - Use Request/Response DTOs as separate files
 - Return typed Response (ActionResult<T>)
 - Use proper HTTP status codes

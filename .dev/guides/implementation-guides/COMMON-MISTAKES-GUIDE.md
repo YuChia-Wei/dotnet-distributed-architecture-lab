@@ -45,11 +45,12 @@ dotnet add package Microsoft.EntityFrameworkCore
 
 ### 1. DI 找不到服務
 **解決方案**：
-- 在 `Program.cs` 註冊 UseCase/Handler/Repository
+- 在 `Program.cs` 明確註冊 Use Case、必要的 dispatch Handler 與 Repository
 - 確認介面與實作對應
 
 ### 2. Controller 直接依賴 Repository
-**解決方案**：改為注入 UseCase/Handler，避免跨層依賴。
+**解決方案**：Controller 改為注入 Use Case interface；只有真實
+dispatch/message adapter 才注入並呼叫 Use Case，避免跨層依賴。
 
 ## 🗃️ EF Core 錯誤
 

@@ -1,127 +1,130 @@
-# 測試編碼規範 (.NET)
+# Test Coding Standards (.NET)
 
-本文件定義各層級測試的編碼標準，包含單元測試、Handler 測試、Controller 測試和整合測試。
-
----
-
-## 📌 概述
-
-測試必須遵循 xUnit + BDDfy（Gherkin 風格命名），並使用 NSubstitute 作為 mock 工具。
-
-- **xUnit**：主要測試框架
-- **BDDfy**：Handler / 整合測試必須使用 Gherkin 風格
-- **NSubstitute**：唯一允許的 Mocking 框架
-- **禁止 Moq**：專案不使用 Moq
+This document defines coding standards for Domain, Use Case, Handler adapter, Controller, and integration tests.
 
 ---
 
-## 🏷️ Pattern 標記（自動化檢查用）
+## 📌 Overview
 
-以下標記供自動化 Code Review 腳本使用：
+All tests must express intent in Given-When-Then (GWT) style; Arrange-Act-Assert (3A) is not an acceptable substitute. xUnit + BDDfy is the default combination, with NSubstitute for mocks. A target team may explicitly opt out of BDDfy, but its C# tests must retain recognizable Given / When / Then structure and naming.
+
+- **xUnit**: Primary test framework
+- **BDDfy**: Default GWT orchestration tool; a target team may explicitly opt out of the package but not the GWT rule
+- **`.feature`**: Supported but optional; create and maintain these files only when requirements provide them directly, their design or production is explicitly requested, or the target profile adopts a Gherkin runner
+- **NSubstitute**: The only permitted mocking framework
+- **Moq prohibited**: The project does not use Moq
+
+---
+
+## 🏷️ Pattern Markers (for Automated Checks)
+
+The automated code-review scripts consume these markers:
 
 ```yaml
-# 測試框架規則
+# Test framework rules
 Pattern (forbidden, i): NUnit|MSTest|Moq|FakeItEasy|\[TestClass\]|\[TestMethod\]
 Pattern (optional, any): BDDfy|TestStack\.BDDfy|Gherkin-style
 
-# Mock 規則
+# Mock rules
 Pattern (optional, any): Substitute\.For
 
-# 禁止 BaseTestClass
+# Prohibit BaseTestClass
 Pattern (forbidden, ignore-comment): BaseTestClass|BaseUseCaseTest
 ```
 
 ---
 
-## 🔴 必須遵守的規則 (MUST FOLLOW)
+## 🔴 Mandatory Rules (MUST FOLLOW)
 
-### 1. 測試框架選擇
+### 1. Test Framework Selection
 
-| 測試類型 | 框架 | 說明 |
+| Test Type | Framework | Description |
 |---------|------|------|
-| 單元測試 | xUnit + BDDfy | Gherkin-style 命名 |
-| 整合測試 | xUnit + WebApplicationFactory | ASP.NET Core 整合測試 |
-| Mocking | NSubstitute | **禁止使用 Moq** |
-| 斷言 | FluentAssertions | 推薦使用 |
+| Unit test | xUnit + BDDfy (default) | Must use GWT; opting out of BDDfy does not permit 3A |
+| Integration test | xUnit + WebApplicationFactory | ASP.NET Core integration tests |
+| Mocking | NSubstitute | **Moq is prohibited** |
+| Assertions | FluentAssertions | Recommended |
 
 ---
 
-### 2. 禁止使用 BaseTestClass
+### 2. Do Not Use BaseTestClass
 
-**強制規定**: 測試類別必須是獨立的，不能繼承任何基底測試類別。
+**Mandatory**: Test classes must be independent and must not inherit any test base class.
 
 ```csharp
-// ❌ 錯誤：使用 BaseTestClass
-public class CreateProductHandlerTests : BaseTestClass
+// ❌ Incorrect: uses BaseTestClass
+public class CreateProductUseCaseTests : BaseTestClass
 {
     // FORBIDDEN!
 }
 
-// ❌ 錯誤：使用共用基底類別
-public class CreateProductHandlerTests : IntegrationTestBase
+// ❌ Incorrect: uses a shared base class
+public class CreateProductUseCaseTests : IntegrationTestBase
 {
     // FORBIDDEN!
 }
 
-// ✅ 正確：獨立的測試類別
-public class CreateProductHandlerTests
+// ✅ Correct: independent test class
+public class CreateProductUseCaseTests
 {
-    private readonly IRepository<Product, ProductId> _repository;
-    private readonly CreateProductHandler _handler;
+    private readonly IAggregateRepository<Product, ProductId> _repository;
+    private readonly CreateProductUseCase _useCase;
     
-    public CreateProductHandlerTests()
+    public CreateProductUseCaseTests()
     {
-        _repository = Substitute.For<IRepository<Product, ProductId>>();
-        _handler = new CreateProductHandler(_repository, ...);
+        _repository = Substitute.For<IAggregateRepository<Product, ProductId>>();
+        _useCase = new CreateProductUseCase(_repository, ...);
     }
 }
 ```
 
 ---
 
-### 3. 使用 BDDfy 與 Gherkin-Style 命名
+### 3. Use GWT; Default to BDDfy
 
-**強制規定**: Handler 和整合測試必須使用 BDDfy 與 Gherkin-style 命名。
+**Mandatory**: All tests must use Given-When-Then semantics and recognizable step names. Arrange-Act-Assert (3A) must not replace GWT. Use Case and integration tests default to BDDfy; plain xUnit may implement the same GWT structure only when the target team explicitly opts out of that package.
+
+`.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../../specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
 
 ```csharp
-// ✅ 正確：BDDfy + Gherkin-style
-public class CreateProductHandlerTests
+// ✅ Correct: BDDfy + Gherkin style
+public class CreateProductUseCaseTests
 {
-    private CreateProductCommand _command = null!;
-    private Result<ProductId> _result = null!;
-    private readonly IRepository<Product, ProductId> _repository;
-    private readonly CreateProductHandler _handler;
+    private CreateProductInput _input = null!;
+    private CreateProductOutput _output = null!;
+    private readonly IAggregateRepository<Product, ProductId> _repository;
+    private readonly CreateProductUseCase _useCase;
 
-    public CreateProductHandlerTests()
+    public CreateProductUseCaseTests()
     {
-        _repository = Substitute.For<IRepository<Product, ProductId>>();
+        _repository = Substitute.For<IAggregateRepository<Product, ProductId>>();
         var unitOfWork = Substitute.For<IUnitOfWork>();
-        var logger = Substitute.For<ILogger<CreateProductHandler>>();
-        _handler = new CreateProductHandler(_repository, unitOfWork, logger);
+        var publisher = Substitute.For<IProductEventPublisher>();
+        _useCase = new CreateProductUseCase(_repository, unitOfWork, publisher);
     }
 
     [Fact]
     public void Should_create_product_successfully_when_input_is_valid()
     {
-        this.Given(x => x.GivenAValidProductCreationCommand())
-            .When(x => x.WhenTheHandlerIsExecuted())
+        this.Given(x => x.GivenAValidProductCreationInput())
+            .When(x => x.WhenTheUseCaseIsExecuted())
             .Then(x => x.ThenTheProductShouldBeCreated())
-            .And(x => x.ThenTheResultShouldBeSuccess())
+            .And(x => x.ThenTheOutputShouldContainTheProductId())
             .BDDfy();
     }
 
-    private void GivenAValidProductCreationCommand()
+    private void GivenAValidProductCreationInput()
     {
-        _command = new CreateProductCommand(
+        _input = new CreateProductInput(
             Guid.NewGuid().ToString(),
             "Test Product",
             "user-123"
         );
     }
 
-    private async Task WhenTheHandlerIsExecuted()
+    private async Task WhenTheUseCaseIsExecuted()
     {
-        _result = await _handler.Handle(_command, CancellationToken.None);
+        _output = await _useCase.ExecuteAsync(_input, CancellationToken.None);
     }
 
     private void ThenTheProductShouldBeCreated()
@@ -129,16 +132,15 @@ public class CreateProductHandlerTests
         _repository.Received(1).SaveAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>());
     }
 
-    private void ThenTheResultShouldBeSuccess()
+    private void ThenTheOutputShouldContainTheProductId()
     {
-        _result.IsSuccess.Should().BeTrue();
-        _result.Value.Should().NotBeNull();
+        _output.ProductId.Should().NotBeNull();
     }
 }
 
-// ❌ 錯誤：純 AAA 風格（Handler 測試禁止）
+// ❌ Incorrect: replaces the Use Case business-flow test with a delivery Command and Handler
 [Fact]
-public async Task TestCreateProduct()  // 錯誤命名
+public async Task TestCreateProduct()  // Incorrect name
 {
     // Arrange
     var command = new CreateProductCommand(...);
@@ -146,68 +148,71 @@ public async Task TestCreateProduct()  // 錯誤命名
     // Act
     var result = await _handler.Handle(command, CancellationToken.None);
     
-    // Assert
-    Assert.True(result.IsSuccess);  // 沒有 BDDfy
+    // Tests only the adapter and does not directly protect Use Case orchestration.
 }
 ```
 
+Handler adapter tests must remain separate and narrow: verify only Command-to-Input mapping, exactly one
+Use Case invocation, and delivery-specific failure mapping. A Handler test that mocks a
+Repository must not duplicate responsibility for business-flow testing.
+
 ---
 
-### 4. 測試資料 ID 規範
+### 4. Test Data ID Rules
 
-**強制規定**: 所有聚合根 ID 必須使用 `Guid.NewGuid().ToString()` 來避免測試間的 ID 衝突。
+**Mandatory**: All aggregate-root IDs must use `Guid.NewGuid().ToString()` to avoid ID collisions between tests.
 
 ```csharp
-// ✅ 正確：使用 Guid 產生唯一 ID
+// ✅ Correct: use Guid to generate a unique ID
 private void GivenAValidCommand()
 {
     _command = new CreateProductCommand(
-        Guid.NewGuid().ToString(),  // ✅ 使用 Guid
+        Guid.NewGuid().ToString(),  // ✅ Use Guid
         "Test Product",
-        "user-123"  // userId 可以用固定字串
+        "user-123"  // userId may use a fixed string
     );
 }
 
-// ❌ 錯誤：使用固定的 ID
+// ❌ Incorrect: uses a fixed ID
 private void GivenAValidCommand()
 {
     _command = new CreateProductCommand(
-        "product-1",  // ❌ 固定 ID 會造成重複
+        "product-1",  // ❌ A fixed ID can cause duplicates
         "Test Product",
         "user-123"
     );
 }
 ```
 
-**例外規則**: `userId` 和 `creatorId` 可以使用固定字串，因為它們不是聚合根 ID。
+**Exception**: `userId` and `creatorId` may use fixed strings because they are not aggregate-root IDs.
 
 ---
 
-### 5. Contract Tests 用於 DBC 驗證
+### 5. Contract Tests for DBC Validation
 
-**強制規定**: Aggregate 的前置條件必須有對應的 Contract Tests。
+**Mandatory**: Aggregate preconditions must have corresponding Contract Tests.
 
 ```csharp
-// ✅ 正確：Contract Test 使用純 xUnit
+// ✅ Correct: Contract Test using plain xUnit with explicit GWT sections
 public class ProductContractTests
 {
     [Fact]
     public void Rename_Throws_WhenNameIsNull()
     {
-        // Arrange
+        // Given
         var product = CreateProductWithState(ProductState.Active);
         
-        // Act & Assert
+        // When / Then
         Assert.Throws<ArgumentNullException>(() => product.Rename(null!));
     }
     
     [Fact]
     public void Rename_Throws_WhenProductIsDeleted()
     {
-        // Arrange
+        // Given
         var product = CreateProductWithState(ProductState.Deleted);
         
-        // Act & Assert
+        // When / Then
         var ex = Assert.Throws<InvalidOperationException>(
             () => product.Rename("New Name"));
         Assert.Contains("deleted", ex.Message.ToLower());
@@ -216,12 +221,12 @@ public class ProductContractTests
     private static Product CreateProductWithState(ProductState state)
     {
         var product = new Product(ProductId.Create(), "Test");
-        // Set state via internal method or reflection
+        // Set state through an internal method or reflection
         return product;
     }
 }
 
-// ❌ 錯誤：使用 try-catch
+// ❌ Incorrect: uses try-catch
 [Fact]
 public void Rename_Throws_WhenNameIsNull()
 {
@@ -236,34 +241,34 @@ public void Rename_Throws_WhenNameIsNull()
 
 ---
 
-### 6. 使用 NSubstitute（禁止 Moq）
+### 6. Use NSubstitute (Moq Prohibited)
 
-**強制規定**: 必須使用 NSubstitute 進行 mocking，禁止使用 Moq。
+**Mandatory**: Use NSubstitute for mocking. Moq is prohibited.
 
 ```csharp
-// ✅ 正確：NSubstitute
-var repository = Substitute.For<IRepository<Product, ProductId>>();
+// ✅ Correct: NSubstitute
+var repository = Substitute.For<IAggregateRepository<Product, ProductId>>();
 repository.FindByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
     .Returns(Task.FromResult<Product?>(existingProduct));
 
-// 驗證呼叫
+// Verify the call
 await repository.Received(1).SaveAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>());
 
-// ❌ 錯誤：Moq
-var repository = new Mock<IRepository<Product, ProductId>>();  // FORBIDDEN!
+// ❌ Incorrect: Moq
+var repository = new Mock<IAggregateRepository<Product, ProductId>>();  // FORBIDDEN!
 repository.Setup(x => x.FindByIdAsync(...)).ReturnsAsync(existingProduct);
 repository.Verify(x => x.SaveAsync(...), Times.Once);
 ```
 
 ---
 
-### 7. 事件映射與測試初始化必須隔離
+### 7. Isolate Event Mapping and Test Initialization
 
-若測試依賴全域事件映射、bootstrap 或 domain event mapper 註冊：
+When tests depend on global event mapping, bootstrap, or domain-event mapper registration:
 
-- 必須使用統一 bootstrap 初始化
-- 測試本身應採防禦性初始化
-- 不可讓測試互相覆蓋全域 mapping 狀態
+- Use a single bootstrap initialization path
+- Initialize defensively within each test
+- Do not allow tests to overwrite one another's global mapping state
 
 ```csharp
 public static class TestBootstrap
@@ -286,78 +291,79 @@ public class OutboxIntegrationTests
 }
 ```
 
-若事件名稱採 mapping prefix：
+When event names use a mapping prefix:
 
-- prefix 必須一致
-- 不可在不同測試中用不同命名策略覆蓋同一 mapper
+- The prefix must be consistent
+- Different tests must not overwrite the same mapper with different naming strategies
 
-這條規則主要是為了避免：
+This rule primarily prevents:
 
-- 全域狀態污染
-- 測試順序依賴
-- 並行測試互相干擾
+- Global-state contamination
+- Test-order dependencies
+- Interference between parallel tests
 
 ---
 
-## 🎯 測試分層策略
+## 🎯 Test Layering Strategy
 
-### 測試金字塔
+### Test Pyramid
 
 ```
          /\
-        /E2E\      <- 最少 (5%)
+        /E2E\      <- Fewest (5%)
        /------\
-      /  整合  \    <- 適中 (20%)
+      /Integration\ <- Moderate (20%)
      /----------\
-    / Controller \  <- 較多 (25%)
+    / Controller \  <- More (25%)
    /--------------\
-  /   Handler     \ <- 多 (25%)
+  /   Use Case    \ <- Many (25%)
  /------------------\
-/    單元測試        \ <- 最多 (25%)
+/    Unit Tests      \ <- Most (25%)
 ----------------------
 ```
 
-### 各層測試職責
+### Responsibilities by Test Layer
 
-| 層級 | 測試內容 | 測試框架 | Mock 策略 |
+| Layer | Scope | Framework | Mock Strategy |
 |------|---------|---------|---------
 | Unit Test | Domain logic, Value Objects | xUnit | No mocks |
-| Handler Test | Business flow | xUnit + BDDfy | Mock Repository |
-| Controller Test | HTTP behavior | WebApplicationFactory | Mock Handler |
+| Use Case Test | Business flow | xUnit + BDDfy | Mock outbound ports |
+| Handler Adapter Test | Input/failure mapping | xUnit | Mock one Use Case |
+| Controller Test | HTTP behavior | WebApplicationFactory | Mock Use Case |
 | Integration Test | Database, External API | xUnit | Real dependencies |
 | E2E Test | Complete user journey | Playwright | No mocks |
 
 ---
 
-## 🎯 測試命名規範
+## 🎯 Test Naming Rules
 
-### 命名模式
+### Naming Pattern
 
 ```csharp
 // Pattern: Should_[expected_result]_when_[condition]
 
-// ✅ 好的命名
+// ✅ Good names
 Should_create_product_successfully_when_input_is_valid()
 Should_throw_exception_when_name_is_null()
 Should_return_404_when_product_not_found()
 
-// ❌ 不好的命名
-TestCreateProduct()  // 太籠統
-Test1()              // 無意義
-CreateProductTest()  // 沒有說明預期結果
+// ❌ Poor names
+TestCreateProduct()  // Too vague
+Test1()              // Meaningless
+CreateProductTest()  // Does not describe the expected result
 ```
 
-### BDDfy 步驟命名
+### BDDfy Step Naming
 
 ```csharp
-// ✅ 好的步驟名稱
-private void GivenAValidProductCreationCommand() { }
+// ✅ Good step names
+private void GivenAValidProductCreationInput() { }
 private void GivenAnExistingProduct() { }
-private async Task WhenTheHandlerIsExecuted() { }
+private async Task WhenTheUseCaseIsExecuted() { }
 private void ThenTheProductShouldBeCreated() { }
 private void ThenTheResultShouldBeSuccess() { }
 
-// ❌ 不好的步驟名稱
+// ❌ Poor step names
 private void Setup() { }
 private void DoTest() { }
 private void Check() { }
@@ -365,7 +371,7 @@ private void Check() { }
 
 ---
 
-## 🎯 測試資料建構
+## 🎯 Test Data Construction
 
 ### Test Data Builder Pattern
 
@@ -405,7 +411,7 @@ public class ProductBuilder
     }
 }
 
-// 使用
+// Usage
 var product = ProductBuilder.AProduct()
     .WithName("Custom Product")
     .WithState(ProductState.Deleted)
@@ -414,54 +420,61 @@ var product = ProductBuilder.AProduct()
 
 ---
 
-## 🔍 檢查清單
+## 🔍 Checklist
 
-### Handler 測試
-- [ ] 使用 BDDfy + Gherkin-style 命名
-- [ ] 使用 NSubstitute（不是 Moq）
-- [ ] 沒有繼承 BaseTestClass
-- [ ] 聚合根 ID 使用 `Guid.NewGuid().ToString()`
-- [ ] 命名符合 `Should_xxx_when_xxx` 模式
+### Use Case Tests
+- [ ] Uses GWT and Gherkin-style naming; does not substitute 3A
+- [ ] Uses BDDfy by default; when the target team explicitly opts out, plain xUnit still retains Given / When / Then structure
+- [ ] Uses NSubstitute, not Moq
+- [ ] Does not inherit BaseTestClass
+- [ ] Uses `Guid.NewGuid().ToString()` for aggregate-root IDs
+- [ ] Follows the `Should_xxx_when_xxx` naming pattern
+- [ ] Tests the concrete `*UseCase` directly and mocks outbound ports
 
-### Contract 測試
-- [ ] 使用純 xUnit（無 BDDfy）
-- [ ] 使用 `Assert.Throws<TException>()`
-- [ ] 有 `CreateProductWithState()` helper
-- [ ] 每個前置條件都有對應測試
+### Handler Adapter Tests
+- [ ] Mocks one Use Case interface
+- [ ] Verifies only input mapping, a single invocation, and delivery failure mapping
+- [ ] Does not replace the Use Case business-flow test with a Handler test
 
-### Controller 測試
-- [ ] 使用 WebApplicationFactory
-- [ ] Mock Handler 而非 Repository
-- [ ] 驗證 HTTP Status Code
-- [ ] 驗證 Response Body
+### Contract Tests
+- [ ] Uses GWT style; plain xUnit is allowed, but 3A is not
+- [ ] Uses `Assert.Throws<TException>()`
+- [ ] Has a `CreateProductWithState()` helper
+- [ ] Has a corresponding test for every precondition
 
-### Integration / Mapping 測試
-- [ ] 全域事件映射透過統一 bootstrap 初始化
-- [ ] 測試本身有防禦性初始化
-- [ ] 不依賴前一個測試留下的 mapper 狀態
+### Controller Tests
+- [ ] Uses WebApplicationFactory
+- [ ] Mocks a Use Case interface rather than a Handler or Repository
+- [ ] Verifies the HTTP status code
+- [ ] Verifies the response body
 
-### Profile / Environment 測試
-- [ ] 測試 profile 由 host / fixture / test command 決定
-- [ ] 不在測試類別內修改全域 environment variable
-- [ ] `TestInMemory` 不註冊 EF Core / Npgsql
-- [ ] `TestOutbox` 具備完整 persistence chain
+### Integration / Mapping Tests
+- [ ] Initializes global event mapping through a single bootstrap path
+- [ ] Initializes defensively within the test
+- [ ] Does not depend on mapper state left by a previous test
+
+### Profile / Environment Tests
+- [ ] The host, fixture, or test command selects the test profile
+- [ ] Does not modify global environment variables inside the test class
+- [ ] `TestInMemory` does not register EF Core / Npgsql
+- [ ] `TestOutbox` has a complete persistence chain
 
 ---
 
-## 📂 程式碼範例
+## 📂 Code Examples
 
-更多完整範例請參考：
+For more complete examples, see:
 
-| 範例 | 路徑 |
+| Example | Path |
 |------|------|
-| BDD Gherkin 測試 | [../examples/bdd-gherkin-test/](../examples/bdd-gherkin-test/) |
+| BDD Gherkin test | [../examples/bdd-gherkin-test/](../examples/bdd-gherkin-test/) |
 | BDD Given-When-Then | [../examples/bdd-given-when-then-example/](../examples/bdd-given-when-then-example/) |
-| UseCase 測試範例 | [../examples/use-case-test-example.md](../examples/use-case-test-example.md) |
-| 測試指南 | [../examples/testing-guide.md](../examples/testing-guide.md) |
+| Use Case test example | [../examples/use-case-test-example.md](../examples/use-case-test-example.md) |
+| Testing guide | [../examples/testing-guide.md](../examples/testing-guide.md) |
 
 ---
 
-## 相關文件
+## Related Documents
 
 - [aggregate-standards.md](aggregate-standards.md)
 - [usecase-standards.md](usecase-standards.md)

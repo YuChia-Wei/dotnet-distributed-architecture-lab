@@ -1,55 +1,81 @@
-# Generic Repository Only Rationale
+# Aggregate Repository Contract Rationale
 
-## Decision Pattern
+## Decision
 
-command side 預設只使用 generic repository：
+Portable command-side persistence uses:
 
-- `IDomainRepository<TAggregate, TId>`
+```text
+IAggregateRepository<TAggregate, TId>
+  FindByIdAsync
+  SaveAsync
+```
 
-不建立沒有新增語意的 custom repository interface。
+`TAggregate` must be an Aggregate Root.
+
+For migration compatibility:
+
+```text
+IDomainRepository<TAggregate, TId>
+  extends IAggregateRepository<TAggregate, TId>
+```
+
+New code prefers `IAggregateRepository`.
 
 ## Why
 
-### 1. 避免空殼抽象
+### Preserve the Aggregate boundary
 
-像 `IProductRepository : IRepository<Product, ProductId>` 這類介面若沒有新增能力，只是多一個名字，不會增加邊界清晰度。
+Repository persistence applies to an Aggregate Root consistency boundary. Child Entities are loaded and persisted through their owning Aggregate Root.
 
-### 2. 避免 Repository 職責膨脹
+### Avoid general-purpose CRUD
 
-一旦為每個 aggregate 建專屬 repository interface，團隊很容易把查詢方法也塞進去，破壞 CQRS 邊界。
+`IRepository<TEntity, TId>`-style abstractions make it easy to persist arbitrary Entities or table models and bypass domain invariants.
 
-### 3. Command side 的需求其實很穩定
+### Keep the portable contract adapter-neutral
 
-對 aggregate 的 command-side persistence，核心需求通常只有：
+Tracked ORM, direct SQL, document stores, and event stores have different insert/update/append mechanics. `SaveAsync` expresses persistence intent without forcing one mechanism.
 
-- load by identity
-- save
-- delete
+### Apply Interface Segregation
 
-這些不值得為每個 aggregate 重複宣告一次。
+Batch loading/persistence, physical purge, read-model query, outbox, projection, and import are separate capabilities. Not every adapter or target repo needs them.
 
-## Why Not
+## Why keep `IDomainRepository`
 
-### 每個 Aggregate 一個專屬 Repository Interface
+Existing products may already use `IDomainRepository` for valid Aggregate repositories.
 
-只有在它承載額外穩定語意、而且確實不是 query concern 時，才可能有理由存在。  
-否則大多只是樣板與重複命名。
+Keeping it as a compatibility contract:
 
-## Practical Rule
+- reduces migration noise;
+- lets analyzers inspect existing repositories immediately;
+- prevents valid legacy naming from hiding actual child-Entity repository violations.
 
-- command side / use case write side: generic repository
-- query side: query repository / query service
-- 不要把 DTO 查詢方法加進 domain repository
+Compatibility is not an exemption. The generic argument must still be an Aggregate Root.
 
-## Relationship to Use Case Rule
+## Why batch methods are not portable defaults
 
-- `Use Case` 是 HTTP 與 application inbound port 的主入口
-- `IDomainRepository<TAggregate, TId>` 是 use case / application service / message handler 在 write side 的預設 persistence port
-- repository 規則不改變 `Use Case`、`Command`、`Handler` 的責任邊界，只限制 write-side persistence vocabulary
+Some target systems need efficient identity-based loading and persistence of multiple instances of the same Aggregate type.
 
-## References
+That requirement does not prove every repository needs:
 
-- Microsoft, CQRS pattern:
-  - [https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs)
-- Martin Fowler, CQRS:
-  - [https://martinfowler.com/bliki/CQRS.html](https://martinfowler.com/bliki/CQRS.html)
+- `FindByIdsAsync`;
+- `SaveAllAsync`.
+
+Portable standards therefore document a target-specific batch capability pattern but do not publish a mandatory batch interface.
+
+Target opt-in requires measured IO need plus explicit chunking, concurrency, failure, event, outbox, and transaction semantics.
+
+## Why purge is separate
+
+Soft delete is Aggregate behavior followed by `SaveAsync`.
+
+Physical purge has retention, authorization, legal, audit, and cleanup implications. It belongs to a restricted capability port rather than the normal Aggregate Repository.
+
+## Practical Rules
+
+- Aggregate write side: `IAggregateRepository<TAggregate, TId>`.
+- Legacy compatibility: `IDomainRepository<TAggregate, TId>`.
+- Query side: ports derived from `IQueryRepository`.
+- Physical deletion: restricted purge port.
+- Batch IO: target-specific opt-in capability.
+- Technical writes: capability-specific writer.
+- No public generic CRUD repository for arbitrary Entities.

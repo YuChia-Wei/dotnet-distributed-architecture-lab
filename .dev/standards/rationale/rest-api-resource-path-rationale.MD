@@ -2,12 +2,12 @@
 
 ## Decision Pattern
 
-預設採用：
+The default is:
 
-- 建立端點使用巢狀路徑
-- 資源操作使用扁平路徑
+- nested paths for create endpoints;
+- flat paths for resource operations.
 
-例如：
+For example:
 
 - `POST /products/{productId}/pbis`
 - `GET /pbis/{pbiId}`
@@ -15,39 +15,39 @@
 
 ## Why
 
-### 1. 建立時需要表達歸屬上下文
+### 1. Creation Needs to Express Ownership Context
 
-建立操作通常需要明確表示「在哪個父集合之下新增」。  
-巢狀路徑能直接把這個上下文放進 URL，而不是只藏在 body。
+A create operation usually needs to state explicitly which parent collection receives the new resource.
+A nested path expresses this context directly in the URL instead of hiding it only in the body.
 
-### 2. 資源建立後應被視為獨立 identity
+### 2. A Created Resource Should Have an Independent Identity
 
-一旦資源已存在，它應該由自己的 identity 被尋址，而不是永遠附著在父資源路徑下。  
-這更符合 DDD 中 aggregate root 的獨立生命週期。
+Once a resource exists, it should be addressed by its own identity rather than remain permanently attached to its parent's path.
+This better reflects the independent lifecycle of an aggregate root in DDD.
 
-### 3. 路徑語意更穩定
+### 3. Path Semantics Are More Stable
 
-若資源未來可能搬移、重組、或不再綁定同一父資源，扁平資源路徑較不易受影響。
+If a resource might later move, be reorganized, or no longer belong to the same parent, a flat resource path is less likely to be affected.
 
 ## Why Not
 
-### 全部都巢狀
+### Nest Every Path
 
-缺點：
+Drawbacks:
 
-- 把資源看成父資源的附屬品
-- 容易弱化 aggregate root 的獨立 identity
-- 路徑會越長越深
+- Treats the resource as subordinate to its parent.
+- Weakens the aggregate root's independent identity.
+- Produces increasingly long and deep paths.
 
-### 全部都扁平
+### Flatten Every Path
 
-缺點：
+Drawbacks:
 
-- 建立時失去「在哪個集合中新增」的語意
-- 父資源不存在時的錯誤處理較不直觀
+- Loses the semantics of which collection receives a newly created resource.
+- Makes error handling less intuitive when the parent resource does not exist.
 
 ## Practical Rule
 
-- create: 優先巢狀
-- read/update/delete by id: 優先扁平
-- collection query: 視需要可同時提供全域與父資源 scoped 版本
+- create: prefer a nested path;
+- read/update/delete by ID: prefer a flat path;
+- collection query: provide global and parent-scoped variants when needed.

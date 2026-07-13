@@ -1,57 +1,21 @@
 # AI Assets
 
-本目錄是 portable AI assets 的 canonical source 根目錄。
+This directory is the canonical source root for portable AI assets.
 
-## 目標
+## Purpose
 
-- 保存跨 agent 可重用的單一真相
-- 讓 top-level skill、delegated sub-agent role、shared/supporting materials 有中立結構
-- 避免各個 agent runtime wrapper 各自維護完整副本
+Use `.ai/assets/` for runtime-neutral AI collaboration assets that should be reusable across agent tools. This includes canonical skill specs, delegated sub-agent role prompts, universal shared context, tech-stack profiles, and reusable templates.
 
-## 目錄結構
+## Usage
 
-```text
-.ai/assets/
-  skills/
-  sub-agent-role-prompts/
-  shared/
-  templates/
-```
+Use the nearest index file when you need a catalog of files or directories. Keep this README focused on the role and boundary of `.ai/assets/`.
 
-## 子目錄分工
+## Boundary
 
-- `skills/`
-  - canonical skill specs
-- `sub-agent-role-prompts/`
-  - canonical delegated worker-role definitions
-- `shared/`
-  - shared rules、contracts、templates、prompt packages、supporting materials
-- `templates/`
-  - canonical spec templates
-
-## 與其他目錄的分工
-
-- `.ai/assets/`
-  - canonical source
-- `.agents/skills/`
-  - current primary repo-local runtime wrappers for Codex / agent runtime
-- `.claude/skills/`
-  - Claude-compatible wrapper layer
-- `.codex/`
-  - optional Codex local config or runtime-specific state; not the canonical skill registry
-- other agent-specific wrapper roots
-  - optional compatibility layers; they may be absent in some environments and do not affect the canonical source model
-- `.dev/guides/ai-collaboration-guides/`
-  - human-facing usage guides
-- `.dev/workflows/`
-  - migration / refactor artifacts
-
-## Current Direction
-
-- `skills/` 是 top-level runtime capability 的 canonical source
-- `sub-agent-role-prompts/` 是 delegated worker-role 的 canonical source
-- `shared/` 與 `sub-agent-role-prompts/*/references/` 承接 reusable supporting materials
-- `.agents/skills/`、`.claude/skills/` 若存在，應視為 wrapper / compatibility layer，而不是 canonical source
-- 其他 agent-specific 目錄若存在，應只保留工具限定資料，不應承擔 skill / prompt canonical source
-
-
+- Keep canonical skill specs under `skills/`.
+- Keep delegated sub-agent role definitions under `sub-agent-role-prompts/`.
+- Keep universal shared materials under `shared/`.
+- Keep stack-specific reusable context under `tech-stacks/`.
+- Keep reusable asset templates under `templates/`.
+- Keep runtime-specific wrappers outside `.ai/assets/`.
+- Keep human-facing usage guides under `.dev/guides/`.

@@ -1,66 +1,66 @@
 # Problem Frame Semantics Mapping
 
-本檔案提供 `aggregate.yaml` 中常見 semantic tags 的最小約定，供 code review 與後續 problem-frame authoring 參考。
+This document defines the minimum conventions for common semantic tags in `aggregate.yaml`. Use it as a reference during code review and subsequent problem-frame authoring.
 
-## 目的
+## Purpose
 
-- 讓 `aggregate.yaml` 的欄位語意可被穩定重用
-- 讓 `.dev/standards/CODE-REVIEW-CHECKLIST.md` 提到的 semantics 有可對照來源
-- 避免每個專案用不同字詞描述同一種不變條件
+- Make field semantics in `aggregate.yaml` consistently reusable.
+- Provide a reference for the semantics mentioned in `.dev/standards/CODE-REVIEW-CHECKLIST.md`.
+- Avoid using different terms in each project for the same invariant.
 
 ## Core Semantics
 
 ### `identity`
 
-- 定義：Aggregate 或 Entity 的穩定識別值
-- 規則：
-  - 建立後不可變更
-  - 不應存在修改 identity 的 command / event
+- Definition: The stable identifier of an Aggregate or Entity.
+- Rules:
+  - It must not change after creation.
+  - No command or event should modify the identity.
 
 ### `value_immutable`
 
-- 定義：建立後不允許被更新的值
-- 規則：
-  - 無 setter
-  - 不應有對應的 update event
+- Definition: A value that cannot be updated after creation.
+- Rules:
+  - It has no setter.
+  - It should not have a corresponding update event.
 
 ### `collection_reference_immutable`
 
-- 定義：集合參考建立一次，不可被替換，但可安全改變內容
-- 規則：
-  - 集合應初始化一次
-  - 只能透過 Aggregate method 修改內容
+- Definition: A collection reference that is created once and cannot be replaced, while its contents can be changed safely.
+- Rules:
+  - The collection should be initialized once.
+  - Its contents may be modified only through an Aggregate method.
 
 ### `soft_delete_flag`
 
-- 定義：表示業務上已失效但仍需保留紀錄
-- 規則：
-  - 刪除後行為受限
-  - 應有對應 event 或明確狀態轉換
+- Definition: Indicates that a record is no longer active in the business domain but must be retained.
+- Rules:
+  - Behavior is restricted after deletion.
+  - A corresponding event or explicit state transition should exist.
 
 ### `optimistic_concurrency_version`
 
-- 定義：用於併發控制的版本值
-- 規則：
-  - 由基礎設施或框架管理
-  - 不由業務命令直接指定
+- Definition: A version value used for concurrency control.
+- Rules:
+  - It is managed by infrastructure or the framework.
+  - It is not specified directly by a business command.
 
 ### `external_authority`
 
-- 定義：本系統不能自行決定，必須以外部系統結果為準的欄位或狀態
-- 例子：
+- Definition: A field or state that this system cannot determine independently and must derive from an external system's result.
+- Examples:
   - Payment authorization result
   - External customer status
   - Carrier shipment acceptance
 
 ### `idempotency_key`
 
-- 定義：用來識別重複請求或重送回調的穩定鍵
-- 規則：
-  - 同一 key 的重試不應造成重複副作用
-  - 應能追溯到 command 或 external callback
+- Definition: A stable key used to identify duplicate requests or retried callbacks.
+- Rules:
+  - Retrying with the same key must not cause duplicate side effects.
+  - It should be traceable to a command or external callback.
 
-## 使用建議
+## Usage Guidance
 
-- 若某欄位語意已被這裡涵蓋，優先重用這些 tag。
-- 若專案需要新語意，應先在此檔補充，再在 `aggregate.yaml` 引用。
+- When a field's semantics are covered here, prefer reusing these tags.
+- When a project needs new semantics, define them here before referencing them in `aggregate.yaml`.

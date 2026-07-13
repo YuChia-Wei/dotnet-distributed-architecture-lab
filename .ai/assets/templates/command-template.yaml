@@ -1,27 +1,23 @@
-id: example-command-id
-asset_type: command
-title: Example Command
-purpose: >
-  Describe the command family intent in portable terms.
-portability: repo-portable
-audience:
-  - agent-facing
-wrapper_targets:
-  - codex
-  - gemini
-  - copilot
-source_of_truth: canonical
+asset_id: "example-command-id"
+schema_version: "1.0"
+asset_type: "command-spec"
+title: "Example Command"
+purpose: "Describe the portable command contract."
+portability: "repo-portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
 inputs:
-  - context
-  - requirements
+  - "command context"
 outputs:
-  - generated artifacts
-invocation_style:
-  - slash-command
-prompt_packages: []
+  - "command result"
 constraints:
-  - Keep wrapper-specific syntax outside canonical content
+  - "Keep wrapper-specific syntax outside canonical content."
 references: []
 examples: []
-human_guide: ""
-status: draft
+wrapper_targets:
+  - "codex"
+invocation_style: "slash-command"
+prompt_packages: []
+command_outputs:
+  - "validated command result"
+status: "draft"

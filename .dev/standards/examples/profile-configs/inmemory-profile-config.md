@@ -13,7 +13,7 @@ Repository.save() -> InMemory transport -> Reactors/Handlers
 
 ```csharp
 builder.Services.AddSingleton<IMessageBus, InMemoryMessageBus>();
-builder.Services.AddScoped<IRepository<Plan, PlanId>, InMemoryPlanRepository>();
+builder.Services.AddScoped<IAggregateRepository<Plan, PlanId>, InMemoryPlanRepository>();
 ```
 
 ## Key Points

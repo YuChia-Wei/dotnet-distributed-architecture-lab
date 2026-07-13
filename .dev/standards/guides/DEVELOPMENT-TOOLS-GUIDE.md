@@ -1,62 +1,70 @@
-# 開發工具與常用命令指南 (.NET)
+# Development Tools and Common Commands Guide (.NET)
 
-## 📋 概述
-提供 .NET 版本專案的常用工具與命令參考。
+## 📋 Overview
 
-## 🛠️ .NET CLI 命令
+Provides a reference for common tools and commands used in .NET projects.
 
-### 基本命令
+## 🛠️ .NET CLI Commands
+
+### Basic Commands
 ```bash
-# 編譯專案
+# Build the project
 dotnet build
 
-# 執行所有測試
+# Run all tests
 dotnet test
 
-# 執行特定測試類
+# Run a specific test class
 dotnet test --filter FullyQualifiedName~CreatePlanUseCaseTests
 
-# 執行特定測試方法
+# Run a specific test method
 dotnet test --filter FullyQualifiedName~CreatePlanUseCaseTests&FullyQualifiedName~ShouldCreate
 
-# 跳過測試打包
+# Publish without running tests
 dotnet publish -c Release -p:RunTests=false
 
-# 監看並重新編譯
+# Watch and rebuild
 dotnet watch --project src/Api
 ```
 
-### 依賴管理
+### Dependency Management
 ```bash
 dotnet list package
 dotnet add package WolverineFx
 dotnet restore
 ```
 
-## 🔍 Git 命令
+## 🔍 Git Commands
 
 ```bash
 git status
+git switch main
+git switch -c codex/<workflow-id>
 git add -A
 git commit -m "feat: Add new feature"
+git push -u origin codex/<workflow-id>
+git switch main
+git merge --no-ff codex/<workflow-id>
 git push origin main
 ```
 
-### 提交規範
+When an incomplete workflow needs a cross-machine handoff, prefer pushing the workflow branch. If the user explicitly requests an interim merge, still use `--no-ff` and record it as a checkpoint; then create a new continuation branch from the updated `main` when work resumes.
+
+### Commit Conventions
 ```
-feat: 新功能
-fix: 修復錯誤
-docs: 文檔更新
-style: 格式調整
-refactor: 重構
-perf: 效能改進
-test: 新增測試
-chore: 輔助工具調整
+feat: Add a feature
+fix: Fix a defect
+docs: Update documentation
+style: Adjust formatting
+refactor: Refactor code
+perf: Improve performance
+test: Add tests
+chore: Adjust supporting tools
 ```
 
-## 🐳 Docker 命令
+## 🐳 Docker Commands
 
-### PostgreSQL 本地開發
+### Local PostgreSQL Development
 ```bash
 docker run --name postgres-dev \
   -e POSTGRES_PASSWORD=password \
@@ -67,13 +75,13 @@ docker run --name postgres-dev \
 docker exec -it postgres-dev psql -U postgres -d aiplan
 ```
 
-## 🗃️ EF Core Migration 命令
+## 🗃️ EF Core Migration Commands
 ```bash
 dotnet ef migrations add Init --project src/Infrastructure --startup-project src/Api
 dotnet ef database update --project src/Infrastructure --startup-project src/Api
 ```
 
-## 🔧 IDE 快捷鍵
+## 🔧 IDE Shortcuts
 
 ### Visual Studio
 ```
@@ -85,19 +93,19 @@ Ctrl + Shift + F   # Find in Files
 
 ### VS Code
 ```
-Cmd + P            # 快速開啟
-Cmd + Shift + P    # 命令面板
-Cmd + Shift + F    # 全域搜尋
-F12                # 跳轉定義
+Cmd + P            # Quick Open
+Cmd + Shift + P    # Command Palette
+Cmd + Shift + F    # Find in Files
+F12                # Go to Definition
 ```
 
-## 🐛 調試技巧
+## 🐛 Debugging Tips
 
 ```bash
 dotnet watch --project src/Api
 ```
 
-### 日誌級別調整
+### Adjusting Log Levels
 ```json
 {
   "Logging": {
@@ -109,23 +117,24 @@ dotnet watch --project src/Api
 }
 ```
 
-## 🚀 效能分析
+## 🚀 Performance Analysis
 
 ```bash
 dotnet-counters monitor --process-id <pid>
 dotnet-trace collect --process-id <pid>
 ```
 
-## 📝 實用腳本
+## 📝 Useful Scripts
 
 ```bash
-# 取代類名（.cs）
+# Replace a class name in .cs files
 rg -l "OldClassName" src | xargs sed -i '' 's/OldClassName/NewClassName/g'
 
-# 統計程式碼行數
+# Count lines of code
 rg --files src tests | xargs wc -l
 ```
 
-## 🔗 相關資源
+## 🔗 Related Resources
+
 - https://learn.microsoft.com/dotnet
 - https://learn.microsoft.com/ef/core

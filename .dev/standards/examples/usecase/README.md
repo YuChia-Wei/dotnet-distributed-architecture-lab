@@ -22,43 +22,54 @@ Legacy patterns to avoid:
 
 ## CQRS Command vs Query
 
-### Command
-Modifies state; returns `CqrsOutput`:
+### Command-style Use Case
+Modifies state through an explicit Application inbound port:
 
 ```csharp
-public sealed class CreateTaskService : ICreateTaskUseCase
+public interface ICreateTaskUseCase
 {
-    public CqrsOutput Execute(CreateTaskInput input) { /* ... */ }
+    Task<CqrsOutput> ExecuteAsync(
+        CreateTaskInput input,
+        CancellationToken cancellationToken);
+}
 
-    // Wolverine handler entry point
-    public CqrsOutput Handle(CreateTaskInput input) => Execute(input);
+public sealed class CreateTaskUseCase : ICreateTaskUseCase
+{
+    public Task<CqrsOutput> ExecuteAsync(
+        CreateTaskInput input,
+        CancellationToken cancellationToken) { /* ... */ }
 }
 ```
 
-### Query
-Reads data; returns DTOs or a typed output:
+### Query-style Use Case
+Reads data and returns a DTO or typed output:
 
 ```csharp
-public sealed class GetPlansService : IGetPlansUseCase
+public sealed class GetPlansUseCase : IGetPlansUseCase
 {
-    public GetPlansOutput Execute(GetPlansInput input) { /* ... */ }
-    public GetPlansOutput Handle(GetPlansInput input) => Execute(input);
+    public Task<GetPlansOutput> ExecuteAsync(
+        GetPlansInput input,
+        CancellationToken cancellationToken) { /* ... */ }
 }
 ```
+
+These examples intentionally contain no Handler because they do not define a real
+dispatch/message entry. A Handler is a separate inbound adapter when such an entry
+exists.
 
 ## Structure
 
 ```
 usecase/
 ├── README.md
-├── CreatePlanUseCase.cs / CreatePlanService.cs
-├── CreateTaskUseCase.cs / CreateTaskService.cs
-├── DeleteTaskUseCase.cs / DeleteTaskService.cs
-├── RenameTaskUseCase.cs / RenameTaskService.cs
-├── AssignTagUseCase.cs / AssignTagService.cs
-├── GetPlanUseCase.cs / GetPlanService.cs
-├── GetPlansUseCase.cs / GetPlansService.cs
-├── GetTasksByDateUseCase.cs / GetTasksByDateService.cs
+├── CreatePlanUseCaseContract.cs / CreatePlanUseCase.cs
+├── CreateTaskUseCaseContract.cs / CreateTaskUseCase.cs
+├── DeleteTaskUseCaseContract.cs / DeleteTaskUseCase.cs
+├── RenameTaskUseCaseContract.cs / RenameTaskUseCase.cs
+├── AssignTagUseCaseContract.cs / AssignTagUseCase.cs
+├── GetPlanUseCaseContract.cs / GetPlanUseCase.cs
+├── GetPlansUseCaseContract.cs / GetPlansUseCase.cs
+├── GetTasksByDateUseCaseContract.cs / GetTasksByDateUseCase.cs
 └── UseCaseContracts.cs
 ```
 
@@ -72,6 +83,9 @@ usecase/
    Use `CqrsOutput` with clear failure messages.
 4. **Transactional Boundary**  
    One Use Case = one transaction boundary.
+5. **Framework Boundary**
+   Use Cases do not depend directly on Wolverine; Infrastructure adapts
+   project-owned event publisher ports.
 
 ## Testing Notes
 

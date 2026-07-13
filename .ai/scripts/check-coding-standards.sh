@@ -42,43 +42,21 @@ if [ -d "$BASE_DIR" ]; then
     echo -e "  ${GREEN}✓${NC} BASE_DIR exists: $BASE_DIR"
 else
     echo -e "  ${RED}✗${NC} BASE_DIR not found: $BASE_DIR"
-    ((SELF_CHECK_ERRORS++))
+    SELF_CHECK_ERRORS=$((SELF_CHECK_ERRORS + 1))
 fi
 
 if [ -d "$STANDARDS_DIR" ]; then
     echo -e "  ${GREEN}✓${NC} STANDARDS_DIR exists"
 else
     echo -e "  ${RED}✗${NC} STANDARDS_DIR not found: $STANDARDS_DIR"
-    ((SELF_CHECK_ERRORS++))
+    SELF_CHECK_ERRORS=$((SELF_CHECK_ERRORS + 1))
 fi
 
 if [ -d "$PROMPTS_DIR" ]; then
     echo -e "  ${GREEN}✓${NC} PROMPTS_DIR exists"
 else
     echo -e "  ${RED}✗${NC} PROMPTS_DIR not found: $PROMPTS_DIR"
-    ((SELF_CHECK_ERRORS++))
-fi
-
-# Check if files referenced in script actually exist
-echo ""
-echo -e "${BLUE}Checking files referenced in this script:${NC}"
-
-# Extract all .md files mentioned in check_prompt_references calls
-REFERENCED_PROMPTS=$(grep "check_prompt_references.*\.md\"" "$0" | sed 's/.*"\$PROMPTS_DIR\/\([^"]*\)".*/\1/' | sort -u)
-
-MISSING_PROMPTS=0
-for prompt in $REFERENCED_PROMPTS; do
-    if [ -f "$PROMPTS_DIR/$prompt" ]; then
-        echo -e "  ${GREEN}✓${NC} $prompt"
-    else
-        echo -e "  ${RED}✗${NC} $prompt - NOT FOUND (script references non-existent file)"
-        ((MISSING_PROMPTS++))
-        ((SELF_CHECK_ERRORS++))
-    fi
-done
-
-if [ $MISSING_PROMPTS -eq 0 ]; then
-    echo -e "  ${GREEN}All referenced prompt files exist${NC}"
+    SELF_CHECK_ERRORS=$((SELF_CHECK_ERRORS + 1))
 fi
 
 echo ""
@@ -153,18 +131,18 @@ if check_file_exists "$MAIN_FILE" "coding-standards.md"; then
 
     # Check required sections in main file
     echo -e "  ${BLUE}Required sections:${NC}"
-    check_section "$MAIN_FILE" "## 概述" "概述" || ((ERRORS++))
-    check_section "$MAIN_FILE" "## 專門領域編碼標準" "專門領域編碼標準" || ((ERRORS++))
-    check_section "$MAIN_FILE" "Aggregate Standards" "Aggregate Standards link" || ((ERRORS++))
-    check_section "$MAIN_FILE" "UseCase Standards" "UseCase Standards link" || ((ERRORS++))
-    check_section "$MAIN_FILE" "Controller Standards" "Controller Standards link" || ((ERRORS++))
-    check_section "$MAIN_FILE" "Repository Standards" "Repository Standards link" || ((ERRORS++))
-    check_section "$MAIN_FILE" "Test Standards" "Test Standards link" || ((ERRORS++))
-    check_section "$MAIN_FILE" "Projection Standards" "Projection Standards link" || ((ERRORS++))
-    check_section "$MAIN_FILE" "Mapper Standards" "Mapper Standards link" || ((ERRORS++))
-    check_section "$MAIN_FILE" "Archive Standards" "Archive Standards link" || ((ERRORS++))
+    check_section "$MAIN_FILE" "## Overview" "Overview" || ERRORS=$((ERRORS + 1))
+    check_section "$MAIN_FILE" "## Specialized Coding Standards" "Specialized Coding Standards" || ERRORS=$((ERRORS + 1))
+    check_section "$MAIN_FILE" "Aggregate Standards" "Aggregate Standards link" || ERRORS=$((ERRORS + 1))
+    check_section "$MAIN_FILE" "UseCase Standards" "UseCase Standards link" || ERRORS=$((ERRORS + 1))
+    check_section "$MAIN_FILE" "Controller Standards" "Controller Standards link" || ERRORS=$((ERRORS + 1))
+    check_section "$MAIN_FILE" "Repository Standards" "Repository Standards link" || ERRORS=$((ERRORS + 1))
+    check_section "$MAIN_FILE" "Test Standards" "Test Standards link" || ERRORS=$((ERRORS + 1))
+    check_section "$MAIN_FILE" "Projection Standards" "Projection Standards link" || ERRORS=$((ERRORS + 1))
+    check_section "$MAIN_FILE" "Mapper Standards" "Mapper Standards link" || ERRORS=$((ERRORS + 1))
+    check_section "$MAIN_FILE" "Archive Standards" "Archive Standards link" || ERRORS=$((ERRORS + 1))
 else
-    ((ERRORS++))
+    ERRORS=$((ERRORS + 1))
 fi
 
 echo ""
@@ -193,69 +171,27 @@ for file in "${SPECIALIZED_FILES[@]}"; do
         # Check for minimum content
         if [ "$lines" -lt 20 ]; then
             echo -e "  ${YELLOW}⚠${NC} Warning: File seems too short (< 20 lines)"
-            ((WARNINGS++))
+            WARNINGS=$((WARNINGS + 1))
         fi
 
         # Check for required sections
-        if ! grep -q "## 🔴 必須遵守的規則\|## ✅ 建議\|## 🔍 檢查清單" "$full_path"; then
+        if ! grep -Eq "^## (🔴 )?(Mandatory Rules|MUST Rules|Core Rules|Core Boundaries)|^## (🔍 )?(Checklist|Review Checklist)" "$full_path"; then
             echo -e "  ${YELLOW}⚠${NC} Warning: Missing standard sections"
-            ((WARNINGS++))
+            WARNINGS=$((WARNINGS + 1))
         fi
 
         # Check for related documents section
-        if ! grep -q "## 相關文件" "$full_path"; then
-            echo -e "  ${YELLOW}⚠${NC} Warning: Missing 相關文件 section"
-            ((WARNINGS++))
+        if ! grep -q "## Related Documents" "$full_path"; then
+            echo -e "  ${YELLOW}⚠${NC} Warning: Missing Related Documents section"
+            WARNINGS=$((WARNINGS + 1))
         fi
     else
-        ((ERRORS++))
+        ERRORS=$((ERRORS + 1))
     fi
 done
 
 echo ""
-echo -e "${YELLOW}3. Checking Canonical Supporting Material References${NC}"
-echo "----------------------------------------"
-
-# Check individual prompt files for references
-check_prompt_references() {
-    local prompt_file=$1
-    local expected_refs=$2
-    local prompt_name=$(basename "$prompt_file")
-
-    echo -e "${BLUE}$prompt_name:${NC}"
-    if [ -f "$prompt_file" ]; then
-        # Check if references main coding-standards.md
-        local has_main_ref=false
-        if grep -q "coding-standards\.md" "$prompt_file" 2>/dev/null; then
-            has_main_ref=true
-            echo -e "  ${GREEN}✓${NC} References main coding-standards.md"
-        fi
-
-        # Split expected refs by comma
-        IFS=',' read -ra REFS <<< "$expected_refs"
-        for ref in "${REFS[@]}"; do
-            if grep -q "$ref" "$prompt_file" 2>/dev/null; then
-                echo -e "  ${GREEN}✓${NC} References $ref"
-            elif [ "$has_main_ref" = true ]; then
-                # If references main file, it's acceptable (modular design)
-                echo -e "  ${BLUE}ℹ${NC} $ref covered by main coding-standards.md reference"
-            else
-                echo -e "  ${RED}✗${NC} Missing reference to $ref"
-                ((WARNINGS++))
-            fi
-        done
-    else
-        echo -e "  ${YELLOW}⚠${NC} File not found"
-        ((WARNINGS++))
-    fi
-}
-
-check_prompt_references "$PROMPTS_DIR/code-review-checklist.md" "Controller,Testing,Use Case / Application"
-check_prompt_references "$PROMPTS_DIR/testing-standards.md" "xUnit,NSubstitute,BaseTestClass"
-
-
-echo ""
-echo -e "${YELLOW}4. Checking Cross-References${NC}"
+echo -e "${YELLOW}3. Checking Cross-References${NC}"
 echo "----------------------------------------"
 
 # Check if specialized files reference back to main file
@@ -267,28 +203,28 @@ for file in "${SPECIALIZED_FILES[@]}"; do
             echo -e "  ${GREEN}✓${NC} $file → coding-standards.md"
         else
             echo -e "  ${YELLOW}⚠${NC} $file missing back reference"
-            ((WARNINGS++))
+            WARNINGS=$((WARNINGS + 1))
         fi
     fi
 done
 
 echo ""
-echo -e "${YELLOW}5. Content Consistency Check${NC}"
+echo -e "${YELLOW}4. Content Consistency Check${NC}"
 echo "----------------------------------------"
 
 # Check for duplicate content between main and specialized files
 echo -e "${BLUE}Checking for unnecessary duplication:${NC}"
 
-if grep -q "Repository 只能有三個方法" "$MAIN_FILE" 2>/dev/null && \
-   grep -q "Repository 只能有三個方法" "$STANDARDS_DIR/repository-standards.md" 2>/dev/null; then
+if grep -q "FindByIdAsync.*SaveAsync" "$MAIN_FILE" 2>/dev/null && \
+   grep -q "FindByIdAsync.*SaveAsync" "$STANDARDS_DIR/repository-standards.md" 2>/dev/null; then
     echo -e "  ${YELLOW}⚠${NC} Repository rules might be duplicated"
-    ((WARNINGS++))
+    WARNINGS=$((WARNINGS + 1))
 else
     echo -e "  ${GREEN}✓${NC} No major duplication detected"
 fi
 
 echo ""
-echo -e "${YELLOW}6. File Statistics${NC}"
+echo -e "${YELLOW}5. File Statistics${NC}"
 echo "----------------------------------------"
 
 # Calculate total lines
@@ -310,7 +246,7 @@ printf "  %-30s: %5d lines\n" "Total specialized files" "$total_lines"
 printf "  %-30s: %5d lines\n" "Grand total" "$((total_lines + main_lines))"
 
 echo ""
-echo -e "${YELLOW}7. Script Health Check${NC}"
+echo -e "${YELLOW}6. Script Health Check${NC}"
 echo "----------------------------------------"
 
 # Check health of scripts in .ai/scripts directory
@@ -329,9 +265,9 @@ else
     echo -e "  ${RED}✗${NC} Found hardcoded paths in:"
     echo "$HARDCODED_SCRIPTS" | while read script; do
         echo -e "    ${YELLOW}→${NC} $(basename "$script")"
-        ((SCRIPT_ISSUES++))
+        SCRIPT_ISSUES=$((SCRIPT_ISSUES + 1))
     done
-    ((WARNINGS++))
+    WARNINGS=$((WARNINGS + 1))
 fi
 
 # Check for executable permissions
@@ -344,7 +280,7 @@ for script in "$SCRIPTS_DIR"/*.sh; do
             echo -e "  ${YELLOW}⚠${NC} Scripts without execute permission:"
         fi
         echo -e "    ${YELLOW}→${NC} $(basename "$script")"
-        ((NON_EXEC_SCRIPTS++))
+        NON_EXEC_SCRIPTS=$((NON_EXEC_SCRIPTS + 1))
     fi
 done
 
@@ -352,7 +288,7 @@ if [ $NON_EXEC_SCRIPTS -eq 0 ]; then
     echo -e "  ${GREEN}✓${NC} All scripts have execute permission"
 else
     echo -e "  ${YELLOW}Tip: Run 'chmod +x $SCRIPTS_DIR/*.sh' to fix${NC}"
-    ((WARNINGS++))
+    WARNINGS=$((WARNINGS + 1))
 fi
 
 # Check for bash syntax errors
@@ -366,8 +302,8 @@ for script in "$SCRIPTS_DIR"/*.sh; do
                 echo -e "  ${RED}✗${NC} Scripts with syntax errors:"
             fi
             echo -e "    ${RED}→${NC} $(basename "$script")"
-            ((SYNTAX_ERRORS++))
-            ((ERRORS++))
+            SYNTAX_ERRORS=$((SYNTAX_ERRORS + 1))
+            ERRORS=$((ERRORS + 1))
         fi
     fi
 done
@@ -401,5 +337,3 @@ else
     echo "Please fix the errors before proceeding."
     exit 1
 fi
-
-

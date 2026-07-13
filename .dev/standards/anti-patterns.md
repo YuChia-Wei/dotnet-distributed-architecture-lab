@@ -1,14 +1,14 @@
-# .NET DDD WolverineFx 反模式
+# .NET DDD WolverineFx Anti-Patterns
 
-## 概述
+## Overview
 
-這份文件記錄在 .NET DDD + WolverineFx + EF Core 技術棧中應該避免的常見錯誤與反模式。
+This document records common mistakes and anti-patterns to avoid in the .NET DDD + WolverineFx + EF Core technology stack.
 
-## 領域層反模式
+## Domain Layer Anti-Patterns
 
-### 1. ❌ Anemic Domain Model（貧血領域模型）
+### 1. ❌ Anemic Domain Model
 ```csharp
-// 錯誤：只有屬性，業務邏輯外移
+// Incorrect: properties only, with business logic moved elsewhere
 public sealed class User
 {
     public string Id { get; init; }
@@ -29,7 +29,7 @@ public sealed class UserService
 }
 ```
 
-✅ **正確做法**：
+✅ **Recommended approach**:
 ```csharp
 public sealed class User : AggregateRoot
 {
@@ -40,7 +40,7 @@ public sealed class User : AggregateRoot
     public void ChangeEmail(string newEmail)
     {
         Contract.Require("Email", () => newEmail is not null);
-        var email = new Email(newEmail); // 驗證在 Value Object
+        var email = new Email(newEmail); // Validation belongs in the Value Object
         Apply(new UserEmailChanged(_id.Value, email.Value, DateProvider.Now()));
     }
 
@@ -51,9 +51,9 @@ public sealed class User : AggregateRoot
 }
 ```
 
-### 2. ❌ 過大的 Aggregate
+### 2. ❌ Oversized Aggregate
 ```csharp
-// 錯誤：Company 內含大量集合
+// Incorrect: Company contains many collections
 public sealed class Company
 {
     public List<Employee> Employees { get; } = new();
@@ -62,7 +62,7 @@ public sealed class Company
 }
 ```
 
-✅ **正確做法**：
+✅ **Recommended approach**:
 ```csharp
 public sealed class Company
 {
@@ -73,13 +73,13 @@ public sealed class Company
 public sealed class Employee
 {
     public EmployeeId Id { get; init; }
-    public CompanyId CompanyId { get; init; } // 以 ID 引用
+    public CompanyId CompanyId { get; init; } // Reference by ID
 }
 ```
 
-### 3. ❌ 直接修改狀態
+### 3. ❌ Direct State Mutation
 ```csharp
-// 錯誤：繞過事件直接修改
+// Incorrect: mutates state directly and bypasses events
 public void Complete()
 {
     _status = TaskStatus.Completed;
@@ -87,7 +87,7 @@ public void Complete()
 }
 ```
 
-✅ **正確做法**：
+✅ **Recommended approach**:
 ```csharp
 public void Complete()
 {
@@ -105,15 +105,15 @@ private void When(TaskCompleted e)
 }
 ```
 
-## 應用層反模式
+## Application Layer Anti-Patterns
 
-### 4. ❌ Use Case 中包含業務邏輯
+### 4. ❌ Business Logic in a Use Case
 ```csharp
 public sealed class CreateOrderHandler
 {
     public Task<CqrsOutput> Handle(CreateOrderInput input)
     {
-        // 錯誤：業務規則應該在 Domain
+        // Incorrect: business rules belong in the Domain
         if (input.Items.Count == 0)
             throw new BusinessException("Order must have items");
         // ...
@@ -122,11 +122,11 @@ public sealed class CreateOrderHandler
 }
 ```
 
-✅ **正確做法**：
+✅ **Recommended approach**:
 ```csharp
 public sealed class CreateOrderHandler
 {
-    private readonly IRepository<Order, OrderId> _repository;
+    private readonly IAggregateRepository<Order, OrderId> _repository;
 
     public async Task<CqrsOutput> Handle(CreateOrderInput input)
     {
@@ -137,9 +137,9 @@ public sealed class CreateOrderHandler
 }
 ```
 
-### 5. ❌ 跨 Aggregate 事務
+### 5. ❌ Cross-Aggregate Transaction
 ```csharp
-// 錯誤：同一交易修改多個 Aggregate
+// Incorrect: modifies multiple Aggregates in one transaction
 public async Task TransferEmployee(string employeeId, string fromDeptId, string toDeptId)
 {
     var employee = await _employeeRepo.FindById(employeeId);
@@ -156,62 +156,62 @@ public async Task TransferEmployee(string employeeId, string fromDeptId, string 
 }
 ```
 
-✅ **正確做法**：
+✅ **Recommended approach**:
 ```csharp
 public async Task RequestTransfer(string employeeId, string toDeptId)
 {
     var employee = await _employeeRepo.FindById(employeeId);
     employee.RequestTransfer(toDeptId);
     await _employeeRepo.Save(employee);
-    // WolverineFx handler/reactor 負責跨 Aggregate 同步
+    // A WolverineFx handler/reactor coordinates synchronization across Aggregates
 }
 ```
 
-## 持久化層反模式
+## Persistence Layer Anti-Patterns
 
-### 6. ❌ 依賴 Lazy Loading
+### 6. ❌ Relying on Lazy Loading
 ```csharp
-// 錯誤：依賴 lazy loading 造成 Aggregate 不完整
+// Incorrect: relying on lazy loading produces an incomplete Aggregate
 public class PlanData
 {
     public virtual ICollection<TaskData> Tasks { get; set; } // lazy
 }
 ```
 
-✅ **正確做法**：
-- Aggregate 載入使用明確 Include 或完整載入
-- 查詢使用 Projection/Read Model 以避免過載
+✅ **Recommended approach**:
+- Load Aggregates explicitly with `Include` or load them completely.
+- Use a Projection/Read Model for queries to avoid overloading the Aggregate.
 
-### 7. ❌ Repository 添加自定義查詢方法
+### 7. ❌ Adding Custom Query Methods to a Repository
 ```csharp
-// 錯誤：Repository 不得新增查詢方法
-public interface IUserRepository : IRepository<User, UserId>
+// Incorrect: do not add query methods to a Repository
+public interface IUserRepository : IAggregateRepository<User, UserId>
 {
     IEnumerable<User> FindByEmail(string email);
     IEnumerable<User> FindActiveUsers();
 }
 ```
 
-✅ **正確做法**：
-- Repository 僅保留 findById / save / delete
-- 查詢用 Projection/Inquiry
+✅ **Recommended approach**:
+- Keep only `FindByIdAsync` / `SaveAsync` on an Aggregate Repository.
+- Use a read-only port that inherits `IQueryRepository` for queries.
 
-### 8. ❌ Repository 包含業務邏輯
+### 8. ❌ Business Logic in a Repository
 ```csharp
-public interface IUserRepository : IRepository<User, UserId>
+public interface IUserRepository : IAggregateRepository<User, UserId>
 {
-    void DeactivateInactiveUsers(int days); // 業務規則
+    void DeactivateInactiveUsers(int days); // Business rule
 }
 ```
 
-✅ **正確做法**：
-將業務邏輯放在 Use Case/Domain，Repository 只做持久化。
+✅ **Recommended approach**:
+Place business logic in the Use Case or Domain. A Repository handles persistence only.
 
-## 測試反模式
+## Testing Anti-Patterns
 
-### 9. ❌ 為每個 Repository 自建 InMemory 實作
+### 9. ❌ Building a Custom In-Memory Implementation for Every Repository
 ```csharp
-// 錯誤：手寫 InMemory Repo，容易不一致
+// Incorrect: a hand-written in-memory Repository can easily become inconsistent
 public sealed class InMemoryPlanRepository : IPlanRepository
 {
     private readonly Dictionary<string, Plan> _storage = new();
@@ -220,34 +220,34 @@ public sealed class InMemoryPlanRepository : IPlanRepository
 }
 ```
 
-✅ **正確做法**：
-- 使用 EF Core InMemory/Sqlite provider + Outbox
-- 或使用 Testcontainers + 真實 PostgreSQL
-- 測試仍需遵守 Repository 三方法規則
+✅ **Recommended approach**:
+- Use the EF Core InMemory/SQLite provider with an Outbox.
+- Alternatively, use Testcontainers with a real PostgreSQL instance.
+- Tests must still honor the Aggregate Repository `FindByIdAsync` / `SaveAsync` contract.
 
-### 10. ❌ 測試實現細節
+### 10. ❌ Testing Implementation Details
 ```csharp
-// 錯誤：測試私有欄位
+// Incorrect: tests a private field
 Assert.True(ReflectionHelper.GetField(task, "_isCompleted"));
 ```
 
-✅ **正確做法**：驗證行為與事件。
+✅ **Recommended approach**: Verify behavior and events.
 
-### 11. ❌ 過度 Mock
+### 11. ❌ Excessive Mocking
 ```csharp
-// 錯誤：Mock 過多
-var repo = Substitute.For<IRepository>();
-var bus = Substitute.For<IMessageBus>();
+// Incorrect: too many mocks
+var repo = Substitute.For<IAggregateRepository<Order, OrderId>>();
+var eventPublisher = Substitute.For<IOrderEventPublisher>();
 var mapper = Substitute.For<IMapper>();
 ```
 
-✅ **正確做法**：盡量使用真實組件或可控基礎設施（NSubstitute 只用於必要界面）。
+✅ **Recommended approach**: Prefer real components or controlled infrastructure. Use NSubstitute only for necessary interfaces.
 
-## 架構反模式
+## Architecture Anti-Patterns
 
-### 12. ❌ 跳過架構層次
+### 12. ❌ Bypassing Architecture Layers
 ```csharp
-// 錯誤：Controller 直接操作 Repository
+// Incorrect: a Controller accesses a Repository directly
 [ApiController]
 public sealed class UserController : ControllerBase
 {
@@ -259,35 +259,36 @@ public sealed class UserController : ControllerBase
 }
 ```
 
-✅ **正確做法**：Controller → UseCase/Handler → Domain → Repository。
+✅ **Recommended approach**: Controller → Use Case interface → Use Case implementation →
+Domain / outbound ports. A Handler exists only at a real dispatch/message entry point.
 
-## 效能反模式
+## Performance Anti-Patterns
 
-### 13. ❌ N+1 查詢
-使用 Projection/Read Model 或 EF Core 的合理查詢策略避免 N+1。
+### 13. ❌ N+1 Queries
+Use a Projection/Read Model or an appropriate EF Core query strategy to avoid N+1 queries.
 
-### 14. ❌ 過度使用 Event Sourcing
-查詢應使用 Projection，避免重播所有事件。
+### 14. ❌ Excessive Event Sourcing
+Use a Projection for queries rather than replaying every event.
 
-## 其他反模式
+## Other Anti-Patterns
 
-### 15. ❌ 直接使用系統時間 API
-禁止在 Domain/Event 中直接使用 `DateTime.UtcNow`。
+### 15. ❌ Direct Use of System Time APIs
+Do not use `DateTime.UtcNow` directly in the Domain or events.
 
-✅ **正確做法**：
+✅ **Recommended approach**:
 ```csharp
 Apply(new PlanCreated(id, name, DateProvider.Now()));
 ```
 
-### 16. ❌ 測試失敗時直接修改 BDD 規格
-Gherkin 風格的情境命名代表業務規則，測試失敗時需先釐清原因並取得人類確認。
+### 16. ❌ Directly Changing BDD Specifications When Tests Fail
+Gherkin-style scenario names represent business rules. When a test fails, first identify the cause and obtain human confirmation.
 
-## 總結
+## Summary
 
-避免反模式的關鍵：
-1. 保持領域模型的豐富性
-2. 遵守架構層次和一致性邊界
-3. 正確使用 Event Sourcing 與 CQRS
-4. 測試驗證行為而非實作細節
-5. 使用可測試的時間來源（DateProvider/TimeProvider）
-6. 尊重測試規格，失敗時先確認再修改
+The keys to avoiding anti-patterns are:
+1. Keep the domain model rich.
+2. Respect architecture layers and consistency boundaries.
+3. Use Event Sourcing and CQRS correctly.
+4. Test behavior rather than implementation details.
+5. Use a testable time source (`DateProvider`/`TimeProvider`).
+6. Respect test specifications; confirm before changing them when tests fail.

@@ -42,7 +42,7 @@ Note: set the environment via `ASPNETCORE_ENVIRONMENT` (or launchSettings). Do n
 ```json
 {
   "ConnectionStrings": {
-    "Outbox": "Host=localhost;Port=5500;Database=board;Username=postgres;Password=root"
+    "Outbox": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   }
 }
 ```
@@ -65,7 +65,7 @@ Note: set the environment via `ASPNETCORE_ENVIRONMENT` (or launchSettings). Do n
 ```json
 {
   "ConnectionStrings": {
-    "Outbox": "Host=localhost;Port=5800;Database=board_test;Username=postgres;Password=root"
+    "Outbox": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   },
   "Logging": {
     "LogLevel": {
@@ -128,7 +128,7 @@ ASPNETCORE_ENVIRONMENT=inmemory dotnet run
 ASPNETCORE_ENVIRONMENT=outbox dotnet run
 # Expected:
 # - app starts on {backendPort}
-# - PostgreSQL connected at localhost:5500
+# - PostgreSQL connected at ${DB_HOST}:${DB_PORT}
 # - Wolverine outbox enabled
 ```
 

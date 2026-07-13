@@ -1,67 +1,73 @@
 # Spec Guide
 
-本文件定義 `.dev/specs/` 內規格文件的格式與撰寫方式，並整合 `SPEC-ORGANIZATION-GUIDE.md` 的組織規範。
+This document defines the format and authoring conventions for specifications under `.dev/specs/` and incorporates the organization rules from `SPEC-ORGANIZATION-GUIDE.md`.
 
-`.dev/specs/` 目前分成兩類：
+In this framework repository, `.dev/specs/` currently retains only:
 
-- `domains/`
-  - production-facing behavior specs
+- `README.MD`
+  - folder purpose, scope, and usage
+- `SPEC-GUIDE.MD`
+- `SPEC-ORGANIZATION-GUIDE.MD`
 - `tests/`
   - BDD/TDD-oriented test specs and scenario design artifacts
+
+Production/domain specs are target-repository outputs created by `repo-structure-sync` or a later workflow when source requirements exist; they are not an active subtree in this framework repository.
 
 ## 0) Terminology Boundary
 
 - `use case`
-  - production behavior 的主名稱，例如 `CreateProduct`
+  - the primary name of production behavior, such as `CreateProduct`
 - `command` / `query`
-  - 該 use case 的 request model
+  - the request model for that use case
 - `handler`
-  - 程式碼中的 application executor
+  - the application executor in code
 
-spec 應優先描述：
+Specs should primarily describe:
 
-- 系統要完成的 use case
-- 對應的 aggregate / domain event / repository / output
+- the use case the system must complete
+- the corresponding aggregate/domain event/repository/output
 
-而不是先描述：
+They should not begin with implementation types such as:
 
 - `CreateProductCommandHandler`
 - `CreateProductUseCaseService`
 
-換句話說：
+In other words:
 
-- `use case` 是 spec 的主語
-- `command` / `query` 與 `handler` 是實作映射，不必成為 spec 主檔名
+- `use case` is the subject of the spec
+- `command`/`query` and `handler` are implementation mappings and do not need to become the primary spec filename
 
-完整詞彙規則見 [`../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
+See the complete terminology rules in [`../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD).
 
 ## 1) Directory & Naming Rules
-請先遵守：
+First follow:
 - `SPEC-ORGANIZATION-GUIDE.MD`
-- Aggregate 為最小邊界
+- Aggregate as the smallest boundary
 
-production spec 應放在：
+In a target repository, production specs conventionally live under:
 
 - `.dev/specs/domains/<domain>/<entity|usecase|adapter>/...`
 
-test spec 應放在：
+In this framework repository, however, `.dev/specs/domains/` is not used as a ready-made source-of-truth directory.
+
+Test specs should live under:
 
 - `.dev/specs/tests/<domain>/aggregate/<aggregate-name>.test-spec.md`
 - `.dev/specs/tests/<domain>/use-cases/<use-case>.test-spec.md`
 - `.dev/specs/tests/<domain>/integration/<target-name>.test-spec.md`
-- 視需要再加：`.dev/specs/tests/<domain>/app-services/`、`.dev/specs/tests/<domain>/domain-services/`
-- 跨 domain 流程：`.dev/specs/tests/cross-domain/<flow-name>.test-spec.md`
-- 端對端旅程：`.dev/specs/tests/e2e/<journey-name>.test-spec.md`
+- Add when needed: `.dev/specs/tests/<domain>/app-services/` and `.dev/specs/tests/<domain>/domain-services/`
+- Cross-domain flows: `.dev/specs/tests/cross-domain/<flow-name>.test-spec.md`
+- End-to-end journeys: `.dev/specs/tests/e2e/<journey-name>.test-spec.md`
 
 ### Use Case Spec
-- 檔名格式：`[action]-[aggregate].json`
-- 例：`create-product.json`, `estimate-pbi.json`
+- Filename format: `[action]-[aggregate].json`
+- Examples: `create-product.json`, `estimate-pbi.json`
 
 ### Entity / Value Object Spec
-- 檔名格式：`[aggregate]-spec.md` 或 `*-spec.json`
+- Filename format: `[aggregate]-spec.md` or `*-spec.json`
 
 ### Adapter / Controller Spec
-- 檔名格式：`[action]-[aggregate]-controller.json`
+- Filename format: `[action]-[aggregate]-controller.json`
 
 ## 2) Use Case Spec (JSON)
 ### Required Keys
@@ -78,15 +84,15 @@ test spec 應放在：
 ### Interpretation Rules
 
 - `useCase`
-  - business operation 名稱，不是 class 名稱
+  - the business operation name, not a class name
 - `input`
-  - 對應 command / query request model 的資料形狀
+  - the data shape of the corresponding command/query request model
 - `method`
-  - aggregate constructor、aggregate method、或其他主要 domain entry point
+  - an aggregate constructor, aggregate method, or other primary domain entry point
 - `repository`
-  - command side aggregate persistence 或 query-side 主要資料存取協作者
+  - command-side aggregate persistence or the primary query-side data-access collaborator
 - `output`
-  - handler / use case 完成後回傳的 result DTO 或 output model
+  - the result DTO or output model returned when the handler/use case completes
 
 ### Optional / Recommended Keys
 - `domainModelNotes`
@@ -155,7 +161,7 @@ test spec 應放在：
   "entity": "Hours",
   "type": "ValueObject",
   "package": "tw.teddysoft.aiscrum.common.entity",
-  "description": "代表時數的值物件，支援小數點計算",
+  "description": "A value object representing hours with decimal calculations",
   "attributes": [
     { "name": "value", "type": "BigDecimal", "constraint": "nullable, >= 0, <= 99999" }
   ]
@@ -163,20 +169,21 @@ test spec 應放在：
 ```
 
 ## 5) Cross References
-每份 spec 必須能回指到：
-- 對應 Aggregate
-- 相關 Domain Event
-- 相關 Use Case / Controller
+Every spec must reference:
+- the corresponding Aggregate
+- related Domain Events
+- related Use Cases/Controllers
 
 ## 6) Review Checklist
-- 檔案是否在正確的 Aggregate 目錄
-- Use Case / Adapter / Entity 結構是否符合 JSON 格式
-- 是否包含必要欄位
-- 是否能對應到實際程式碼命名
+- Is the file in the correct Aggregate directory?
+- Do the Use Case/Adapter/Entity structures conform to the JSON format?
+- Are all required fields present?
+- Does it map to actual code naming?
 
 ## 7) Boundary with Test Specs
 
-- `.dev/specs/domains/` 回答「系統應該做什麼」
-- `.dev/specs/tests/` 回答「我要如何驗證它真的做到」
-- test spec 不應取代 production spec
-- test spec 應優先按測試目標分類，而不是把所有 scenario 平鋪在 `<domain>/`
+- Production/domain specs (when created in a target repository) answer "What should the system do?"
+- `.dev/specs/tests/` answers "How do I verify that it actually does so?"
+- Test specs must not replace production specs.
+- Test specs should primarily be classified by test target instead of placing every scenario directly under `<domain>/`.
+- This framework repository retains only rules, templates, and test-spec materials; it does not retain an active production/domain spec subtree.

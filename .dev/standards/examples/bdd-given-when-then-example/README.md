@@ -19,7 +19,7 @@ Use these examples to keep BDD tests readable and reusable in .NET.
   - Step-by-step migration guide from ezSpec to BDDfy Rule-style grouping.
 - `OUTBOX-TEST-CONFIGURATION.md`
   - Outbox test configuration for .NET.
-- `ProductOutboxRepositoryTests.cs`
+- `AggregateOutboxRepositoryTests.cs`
   - Standard Outbox repository integration scenarios (BDDfy).
 
 ## Rule Design Principles

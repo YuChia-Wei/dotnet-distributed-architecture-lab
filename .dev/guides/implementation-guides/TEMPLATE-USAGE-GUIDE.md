@@ -49,6 +49,7 @@
 
 ## 🔗 範本依賴關係
 
-- Controller 依賴 UseCase/Handler
+- Controller 預設依賴 Use Case interface；只有明確核准的純查詢 endpoint
+  可直連 Query Repository/Service
 - UseCase 依賴 Domain
 - Projection 依賴 DTO/Mapper

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace AiScrum.Tests.Infrastructure;
+namespace ExampleApp.Tests.Infrastructure;
 
 // Fixture-based test host (no base test classes).
 public sealed class TestHostFixture : IAsyncLifetime

@@ -4,11 +4,11 @@ Use this delegated sub-agent role when the main agent needs a worker focused on 
 
 ## Mandatory References
 
-- `.ai/assets/shared/common-rules.md`
-- `.ai/assets/shared/architecture-config.md`
-- `.ai/assets/shared/testing-strategy.md`
-- `.ai/assets/shared/dto-conventions.md`
-- `.ai/assets/shared/domain-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/dto-conventions.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/domain-rules.md`
 
 ## Critical Rules
 

@@ -41,17 +41,17 @@ Contract tests validate preconditions only and must be framework-light:
 - Assert precondition violations explicitly
 
 ```csharp
-public sealed class SprintContractTests
+public sealed class IterationContractTests
 {
-    private Sprint CreateSprintWithState(SprintState state)
-        => new Sprint(new SprintId("s1"), state, /* ... */);
+    private Iteration CreateIterationWithState(IterationState state)
+        => new Iteration(new IterationId("s1"), state, /* ... */);
 
     public sealed class StartContracts
     {
         [Fact]
         public void Start_requires_planned_state()
         {
-            var sprint = CreateSprintWithState(SprintState.Started);
+            var sprint = CreateIterationWithState(IterationState.Started);
             Assert.Throws<PreconditionViolationException>(
                 () => sprint.Start("scrum-master-1"));
         }

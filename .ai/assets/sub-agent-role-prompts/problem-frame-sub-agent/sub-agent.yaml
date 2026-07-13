@@ -1,7 +1,12 @@
 asset_id: "problem-frame-sub-agent"
+schema_version: "1.0"
 asset_type: "sub-agent-role-prompt"
 title: "Problem Frame Sub-Agent"
 purpose: "Define the delegated worker-role prompt for drafting a first problem frame from repository requirements, specs, code, and tests, and for preparing validator-ready inputs."
+portability: "repo-portable"
+audience: "agent-facing"
+wrapper_targets: []
+source_of_truth: "canonical"
 role_kind: "specification-sub-agent"
 triggers:
   - "problem-frame-sub-agent"
@@ -30,4 +35,7 @@ references:
   - ".ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/references/authoring-playbook.md"
   - ".ai/assets/skills/problem-frame-author/references/output-contract.md"
   - ".dev/problem-frames/README.MD"
-human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+examples:
+  - ".ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/references/authoring-playbook.md"
+human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
+status: "active"

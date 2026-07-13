@@ -41,7 +41,7 @@ TODO: Replace type names with actual ezDDD .NET types.
 
 | Concept | Expected Type Name |
 | --- | --- |
-| Repository | `IRepository<T, TId>` |
+| Aggregate Repository | `IAggregateRepository<TAggregate, TId>` |
 | Message Bus | `IMessageBus<TMessage>` |
 | Domain Event Data | `DomainEventData` |
 

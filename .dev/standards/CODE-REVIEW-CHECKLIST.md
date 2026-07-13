@@ -1,54 +1,54 @@
-# 程式碼審查檢查清單 (.NET)
+# Code Review Checklist (.NET)
 
-> 本檢查清單協助 AI 進行系統化 code review，確保 DDD/CA/CQRS 規範與品質一致。
+> This checklist helps AI agents perform systematic code reviews and maintain consistent DDD, Clean Architecture, CQRS, and quality standards.
 
-## 📋 目錄
-1. [通用檢查項目](#通用檢查項目)
-2. [Domain 層檢查](#domain-層檢查)
-3. [UseCase 層檢查](#usecase-層檢查)
-4. [Adapter 層檢查](#adapter-層檢查)
-5. [測試檢查](#測試檢查)
-6. [效能檢查](#效能檢查)
-7. [安全性檢查](#安全性檢查)
-8. [文檔檢查](#文檔檢查)
+## 📋 Contents
+1. [General Checks](#general-checks)
+2. [Domain Layer Checks](#domain-layer-checks)
+3. [UseCase Layer Checks](#usecase-layer-checks)
+4. [Adapter Layer Checks](#adapter-layer-checks)
+5. [Test Checks](#test-checks)
+6. [Performance Checks](#performance-checks)
+7. [Security Checks](#security-checks)
+8. [Documentation Checks](#documentation-checks)
 
-## ✅ 通用檢查項目
+## ✅ General Checks
 
-### 🚨 避免過度設計 (YAGNI)
-- [ ] **MUST**: 只實作 spec 檔案明確要求的功能
-- [ ] **MUST**: Domain Events 與 spec 一對一對應
-- [ ] **MUST**: 不預測未來需求，不實作「可能會用到」的功能
-- [ ] **MUST**: 不因為範例有就照抄
+### 🚨 Avoid Overengineering (YAGNI)
+- [ ] **MUST**: Implement only behavior explicitly required by the spec files.
+- [ ] **MUST**: Keep Domain Events in one-to-one correspondence with the spec.
+- [ ] **MUST**: Do not predict future requirements or implement features that might be useful later.
+- [ ] **MUST**: Do not copy behavior solely because it appears in an example.
 
-### 編碼規範
-- [ ] 遵循 C# 命名規範（類別 PascalCase、方法 camelCase）
-- [ ] 無未使用的 `using`
-- [ ] 無註解掉的程式碼
-- [ ] 適當存取修飾符
-- [ ] 遵循單一職責原則
+### Coding Conventions
+- [ ] Follow C# naming conventions (PascalCase for classes and camelCase for methods).
+- [ ] No unused `using` directives.
+- [ ] No commented-out code.
+- [ ] Use appropriate access modifiers.
+- [ ] Follow the Single Responsibility Principle.
 
-### 程式碼品質
-- [ ] 方法長度不超過 30 行（超過需拆分）
-- [ ] 類別長度不超過 300 行
-- [ ] 圈複雜度不超過 10
-- [ ] 無重複程式碼
+### Code Quality
+- [ ] Methods do not exceed 30 lines; split longer methods.
+- [ ] Classes do not exceed 300 lines.
+- [ ] Cyclomatic complexity does not exceed 10.
+- [ ] No duplicated code.
 
-### 錯誤處理
-- [ ] 適當的例外處理
-- [ ] 不捕獲過於廣泛的例外
-- [ ] 有意義的錯誤訊息
-- [ ] 資源正確釋放（`using` / `await using`）
+### Error Handling
+- [ ] Exceptions are handled appropriately.
+- [ ] Exceptions are not caught too broadly.
+- [ ] Error messages are meaningful.
+- [ ] Resources are released correctly (`using` / `await using`).
 
-## 🏛️ Domain 層檢查
+## 🏛️ Domain Layer Checks
 
-### 🚨 Event Sourcing 合規性檢查（最高優先級）
+### 🚨 Event Sourcing Compliance (Highest Priority)
 
-#### 🔴 Constructor 職責檢查
-- [ ] **CRITICAL**: Constructor 不可直接設定狀態欄位（除集合初始化）
-- [ ] **CRITICAL**: 事件必須透過 `Apply(event)` 觸發 `When(...)`
-- [ ] **CRITICAL**: 狀態賦值僅出現在 `When(...)` 中
+#### 🔴 Constructor Responsibilities
+- [ ] **CRITICAL**: Constructors must not set state fields directly, except for collection initialization.
+- [ ] **CRITICAL**: Events must invoke `When(...)` through `Apply(event)`.
+- [ ] **CRITICAL**: State assignment appears only in `When(...)` methods.
 
-#### ✅ 正確模式
+#### ✅ Correct Pattern
 ```csharp
 public sealed class Product : AggregateRoot
 {
@@ -67,144 +67,147 @@ public sealed class Product : AggregateRoot
 }
 ```
 
-#### ❌ 反模式
+#### ❌ Anti-Pattern
 ```csharp
 public Product(ProductId id, string name)
 {
-    _id = id; // ❌ 直接設定狀態
+    _id = id; // ❌ Direct state assignment
     _name = name;
-    AddDomainEvent(new ProductCreated(...)); // ❌ 沒有 Apply
+    AddDomainEvent(new ProductCreated(...)); // ❌ Apply is not used
 }
 ```
 
-### 🚨 Semantics 語意合規性檢查
-**重要**：檢查 `.dev/problem-frames/SEMANTICS.md` 與 `aggregate.yaml` 對應。
+### 🚨 Semantics Compliance
+**Important**: Verify that `.dev/problem-frames/SEMANTICS.md` corresponds to `aggregate.yaml`.
 
 #### value_immutable
-- [ ] 無 setter
-- [ ] 無修改 event
-- [ ] 只在 creation event 的 When 賦值
+- [ ] No setter.
+- [ ] No mutation event.
+- [ ] Values are assigned only in the creation event's `When` method.
 
 #### identity
-- [ ] 必須同時具備 value_immutable
-- [ ] 不存在修改 identity 的 use case/event
+- [ ] Must also have `value_immutable`.
+- [ ] No use case or event modifies the identity.
 
 #### collection_reference_immutable
-- [ ] 集合初始化一次，參考不可替換
-- [ ] 僅透過 Aggregate 方法修改集合內容
+- [ ] The collection is initialized once and its reference cannot be replaced.
+- [ ] Collection contents are modified only through Aggregate methods.
 
 #### soft_delete_flag
-- [ ] 有對應 Deleted event
-- [ ] 刪除後行為受限
+- [ ] A corresponding Deleted event exists.
+- [ ] Behavior is restricted after deletion.
 
 #### optimistic_concurrency_version
-- [ ] 版本由框架管理
-- [ ] 禁止手動修改
+- [ ] The version is managed by the framework.
+- [ ] Manual modification is prohibited.
 
-### Aggregate 套件/目錄組織
-- [ ] 每個 Aggregate 有獨立頂層資料夾/namespace
-- [ ] Aggregate 只透過 ID 互相引用
-- [ ] Value Object 不重複定義
+### Aggregate Package / Directory Organization
+- [ ] Each Aggregate has an independent top-level folder and namespace.
+- [ ] Aggregates reference one another only by ID.
+- [ ] Value Objects are not defined more than once.
 
 ### Contract / Require / Reject / Ensure
-- [ ] `Require` 用於前置條件
-- [ ] `Reject` 僅用於避免產生不必要事件
-- [ ] `Ensure` 用於後置條件
+- [ ] `Require` is used for preconditions.
+- [ ] `Reject` is used only to avoid producing unnecessary events.
+- [ ] `Ensure` is used for postconditions.
 
-## 🧩 UseCase 層檢查
+## 🧩 UseCase Layer Checks
 
-### UseCase/Handler
-- [ ] Handler 與對應 use case 名稱一致，能清楚表達這次 business operation
-- [ ] Handler 可被視為 use case implementation，或明確委派給有實際價值的 Application Service
-- [ ] 不為了名詞完整性硬多包一層只有單行轉呼叫的 `*UseCaseService`
-- [ ] Handler 足夠薄，但仍完整承擔 application orchestration
-- [ ] 不包含應放入 Aggregate 的 Domain 邏輯
-- [ ] 使用 constructor injection
-- [ ] 例外包裝為 UseCaseFailureException（若規範要求）
+### Use Case / Handler
+- [ ] The Use Case interface is an explicit inbound port; implementations use the `*UseCase` suffix.
+- [ ] Operations use `ExecuteAsync` with a required `CancellationToken`.
+- [ ] Input/Output types do not reuse HTTP, MQ, or Wolverine/MediatR contracts.
+- [ ] A Handler exists only for a real dispatch or message entry point.
+- [ ] A Handler performs mapping and invokes one Use Case; it does not own orchestration.
+- [ ] A Use Case does not depend directly on `IMessageBus` or another Use Case.
+- [ ] It contains no Domain logic that belongs in an Aggregate.
+- [ ] Constructor injection is used.
+- [ ] Exceptions are wrapped in `UseCaseFailureException` when required by the standard.
 
 ### Command / Query Boundary
-- [ ] Command / Query 是 request model，不承載業務執行邏輯
-- [ ] Command handler 處理狀態變更；Query handler 不改變 domain state
-- [ ] Query handler 優先使用 query repository / query service，不把讀取流程拉回 aggregate
-- [ ] 若抽出 Application Service，必須有明確 orchestration / reuse 價值
+- [ ] Command / Query delivery contracts do not contain business execution logic.
+- [ ] Command Use Cases handle state changes; Query Use Cases do not change domain state.
+- [ ] Query Use Cases use a query repository or query service and do not route reads back through an Aggregate.
+- [ ] A Controller may call a Query Repository/Service directly only for an explicitly approved pure-query exception.
 
 ### Repository / Domain Service Usage
-- [ ] Command side 透過 repository 載入與保存 aggregate
-- [ ] Domain service 只承載真正無法歸屬於單一 aggregate 的 domain rule
-- [ ] 沒有把 application orchestration 誤塞進 domain service
+- [ ] The command side loads and saves Aggregates through a repository.
+- [ ] A Domain Service contains only Domain rules that genuinely cannot belong to a single Aggregate.
+- [ ] Application orchestration is not misplaced in a Domain Service.
 
-### Input/Output 設計
-- [ ] Input/Output 為獨立 record/class
-- [ ] Input/Output 只包含資料欄位
-- [ ] DTO 放在 `src/Contracts` 或對應規範目錄
+### Input/Output Design
+- [ ] Input/Output types are independent records or classes.
+- [ ] Input/Output types contain data fields only.
+- [ ] DTOs are placed in `src/Contracts` or the directory required by the applicable standard.
 
-### Spec 對照檢查
-- [ ] 建立 Spec 對照表
-- [ ] 移除 spec 未要求的實作
-- [ ] Domain Events 數量與 spec 一致
+### Spec Comparison
+- [ ] Create a Spec comparison table.
+- [ ] Remove implementation not required by the spec.
+- [ ] The number of Domain Events matches the spec.
 
-## 🔌 Adapter 層檢查
+## 🔌 Adapter Layer Checks
 
 ### Controller
-- [ ] Controller 不包含業務邏輯
-- [ ] 不直接操作 Repository
-- [ ] 不直接操作 Aggregate
-- [ ] 只負責把 protocol input 轉成 command / query，並把 result 轉回 response
-- [ ] 同 BC 內若使用 bus / dispatcher 屬於 dispatch choice，不被誤當成 use case 本身
-- [ ] 使用 ProblemDetails 統一錯誤格式
+- [ ] The Controller contains no business logic.
+- [ ] It does not access a Repository directly.
+- [ ] It does not access an Aggregate directly.
+- [ ] It only converts protocol input into a command/query and converts the result into a response.
+- [ ] Using a bus or dispatcher within the same bounded context is a dispatch choice and is not mistaken for the Use Case itself.
+- [ ] `ProblemDetails` provides a consistent error format.
 
 ### Mapper
-- [ ] Mapper 在 Application/Contracts 層級
-- [ ] Mapper 為 static/sealed，禁止 DI
-- [ ] 一個 DTO 對應一個 Mapper
+- [ ] The Mapper belongs in the Application/Contracts layer.
+- [ ] The Mapper is static or sealed; dependency injection is prohibited.
+- [ ] Each DTO has one corresponding Mapper.
 
 ### Projection / Inquiry
-- [ ] 介面在 Application，實作在 Infrastructure
-- [ ] 讀模型使用 EF Core Projection
-- [ ] 不混入 Domain 行為
+- [ ] The interface is in Application and its implementation is in Infrastructure.
+- [ ] Read models use EF Core Projection.
+- [ ] No Domain behavior is mixed into the read model.
 
-## 🧪 測試檢查
+## 🧪 Test Checks
 
-### BDD 規範
-- [ ] 使用 xUnit + BDDfy（Gherkin 風格命名）
-- [ ] 禁止 BaseTestClass
-- [ ] Mock 使用 NSubstitute
+### BDD Rules
+- [ ] All tests use GWT with Gherkin-style naming; 3A does not replace GWT.
+- [ ] xUnit + BDDfy is the default. If the target team explicitly opts out of BDDfy, plain xUnit still preserves a Given / When / Then structure.
+- [ ] `BaseTestClass` is prohibited.
+- [ ] Mocks use NSubstitute.
 
-### UseCase 測試 Given/When 規範
-- [ ] Given/When 僅透過 UseCase
-- [ ] 不直接操作 Aggregate
+### UseCase Test Given/When Rules
+- [ ] Given/When steps interact only through the Use Case.
+- [ ] Tests do not manipulate the Aggregate directly.
 
-### 事件檢查
-- [ ] 事件透過 MessageBus/Outbox 驗證
-- [ ] 不直接檢查 Aggregate 內部事件列表
+### Event Checks
+- [ ] Events are verified through the MessageBus/Outbox.
+- [ ] Tests do not inspect the Aggregate's internal event list directly.
 
-### 覆蓋率
-- [ ] UseCase 100% 覆蓋
-- [ ] Domain 邏輯 100% 覆蓋
-- [ ] 錯誤與邊界情境有測試
+### Coverage
+- [ ] Use Cases have 100% coverage.
+- [ ] Domain logic has 100% coverage.
+- [ ] Error and boundary scenarios are tested.
 
-## ⚡ 效能檢查
-- [ ] 查詢使用 Projection
-- [ ] 避免 N+1
-- [ ] 批次操作優化
+## ⚡ Performance Checks
+- [ ] Queries use Projection.
+- [ ] N+1 queries are avoided.
+- [ ] Batch operations are optimized.
 
-## 🔒 安全性檢查
-- [ ] 所有輸入經驗證
-- [ ] 防止注入/XSS
-- [ ] 不記錄敏感資訊
-- [ ] API 金鑰不寫死
+## 🔒 Security Checks
+- [ ] All input is validated.
+- [ ] Injection and XSS are prevented.
+- [ ] Sensitive information is not logged.
+- [ ] API keys are not hard-coded.
 
-## 📚 文檔檢查
-- [ ] README/Spec 已更新
-- [ ] 新功能有文檔
-- [ ] Task 檔案更新（若流程要求）
+## 📚 Documentation Checks
+- [ ] README/Spec documentation is updated.
+- [ ] New features are documented.
+- [ ] Task files are updated when required by the workflow.
 
-## 🔄 Projection 實作檢查
-- [ ] 產生 Projection Interface
-- [ ] 產生 EF Core Implementation
-- [ ] 使用 Mapper 轉換結果
+## 🔄 Projection Implementation Checks
+- [ ] Create the Projection Interface.
+- [ ] Create the EF Core Implementation.
+- [ ] Use a Mapper to convert results.
 
-## 🔗 相關資源
+## 🔗 Related Resources
 - `coding-standards.md`
 - `USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`
 - `../guides/implementation-guides/COMMON-MISTAKES-GUIDE.md`

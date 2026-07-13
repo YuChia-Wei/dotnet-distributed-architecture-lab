@@ -10,6 +10,7 @@ Use `bdd-gwt-test-designer` when the main task is to design or review test scena
 - plan Then assertions and setup needs
 - suggest the right test level
 - suggest the right `.dev/specs/tests/` storage category and output path
+- design a `.feature` artifact when the user supplies one, explicitly requests it, or the target profile has selected a feature runner
 
 ## Out of Scope
 
@@ -17,6 +18,7 @@ Use `bdd-gwt-test-designer` when the main task is to design or review test scena
 - fixing test infrastructure
 - changing production code to make tests pass
 - using Gherkin `.feature` files as the default output
+- choosing a feature runner or package for the target team
 
 ## Escalate or Handoff
 

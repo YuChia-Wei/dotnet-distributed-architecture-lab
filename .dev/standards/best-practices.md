@@ -1,12 +1,12 @@
-# .NET DDD WolverineFx 最佳實踐
+# .NET DDD WolverineFx Best Practices
 
-## 概述
+## Overview
 
-本文件總結在 .NET DDD + WolverineFx + EF Core 技術棧中應遵守的最佳實踐。
+This document summarizes the best practices to follow in the .NET DDD + WolverineFx + EF Core technology stack.
 
-## 領域建模最佳實踐
+## Domain Modeling Best Practices
 
-### 1. ✅ 小而聚焦的 Aggregate
+### 1. ✅ Small, Focused Aggregates
 ```csharp
 public sealed class Plan : AggregateRoot
 {
@@ -25,7 +25,7 @@ public sealed class Plan : AggregateRoot
 }
 ```
 
-### 2. ✅ 豐富的 Value Object
+### 2. ✅ Rich Value Objects
 ```csharp
 public sealed record Email
 {
@@ -46,7 +46,7 @@ public sealed record Email
 }
 ```
 
-### 3. ✅ 明確的領域事件
+### 3. ✅ Explicit Domain Events
 ```csharp
 public static class PlanEvents
 {
@@ -60,13 +60,13 @@ public static class PlanEvents
 }
 ```
 
-## 應用層最佳實踐
+## Application Layer Best Practices
 
-### 4. ✅ 薄的 Use Case 層
+### 4. ✅ Thin Use Case Layer
 ```csharp
 public sealed class CreatePlanHandler
 {
-    private readonly IRepository<Plan, PlanId> _repository;
+    private readonly IAggregateRepository<Plan, PlanId> _repository;
 
     public async Task<CqrsOutput<PlanDto>> Handle(CreatePlanInput input)
     {
@@ -77,7 +77,7 @@ public sealed class CreatePlanHandler
 }
 ```
 
-### 5. ✅ 清晰的輸入輸出 DTO
+### 5. ✅ Clear Input and Output DTOs
 ```csharp
 public sealed record CreateTaskInput(
     string PlanId,
@@ -87,12 +87,12 @@ public sealed record CreateTaskInput(
     DateOnly? Deadline);
 ```
 
-### 6. ✅ 使用 Reactor/Handler 處理跨 Aggregate
+### 6. ✅ Use a Reactor/Handler Across Aggregates
 ```csharp
 public sealed class UnassignTaskWhenTagDeleted
 {
     private readonly IFindPlansByTagIdInquiry _inquiry;
-    private readonly IRepository<Plan, PlanId> _planRepository;
+    private readonly IAggregateRepository<Plan, PlanId> _planRepository;
 
     public async Task Handle(TagDeleted e)
     {
@@ -108,9 +108,9 @@ public sealed class UnassignTaskWhenTagDeleted
 }
 ```
 
-## 測試最佳實踐
+## Testing Best Practices
 
-### 7. ✅ BDD 風格的測試
+### 7. ✅ BDD-Style Tests
 ```gherkin
 Feature: Create Plan
   Scenario: Successfully create a plan
@@ -127,7 +127,7 @@ public sealed class CreatePlanSteps
 }
 ```
 
-### 8. ✅ 使用 Test Data Builder
+### 8. ✅ Use a Test Data Builder
 ```csharp
 public sealed class PlanTestDataBuilder
 {
@@ -140,13 +140,13 @@ public sealed class PlanTestDataBuilder
 }
 ```
 
-## 持久化最佳實踐
+## Persistence Best Practices
 
-### 9. ✅ 嚴格遵守 Repository 限制規則
-- Repository 只允許 findById / save / delete
-- 查詢使用 Projection/Inquiry
+### 9. ✅ Strictly Follow Repository Restrictions
+- A Repository permits only findById / save / delete.
+- Use a Projection/Inquiry for queries.
 
-### 10. ✅ 明確的數據映射
+### 10. ✅ Explicit Data Mapping
 ```csharp
 public static class PlanMapper
 {
@@ -160,7 +160,7 @@ public static class PlanMapper
 }
 ```
 
-### 11. ✅ 使用 Projection 優化查詢
+### 11. ✅ Optimize Queries with Projections
 ```csharp
 public sealed class PlanSummaryProjection
 {
@@ -175,47 +175,47 @@ public sealed class PlanSummaryProjection
 }
 ```
 
-## 架構最佳實踐
+## Architecture Best Practices
 
-### 12. ✅ 依賴注入使用建構子
-使用 constructor injection，避免 Service Locator。
+### 12. ✅ Use Constructor Injection
+Use constructor injection and avoid the Service Locator pattern.
 
-### 13. ✅ 使用 DateProvider / TimeProvider 產生時間戳記
-所有 Domain Events 使用可測試的時間來源。
+### 13. ✅ Generate Timestamps with DateProvider / TimeProvider
+Use a testable time source for all Domain Events.
 
-### 14. ✅ 統一的錯誤處理
-使用 `ProblemDetails` 或全域例外處理中介軟體。
+### 14. ✅ Consistent Error Handling
+Use `ProblemDetails` or global exception-handling middleware.
 
-## 效能最佳實踐
+## Performance Best Practices
 
-### 15. ✅ 合理使用快取
-使用 `IMemoryCache` 或分散式快取處理熱資料。
+### 15. ✅ Use Caching Appropriately
+Use `IMemoryCache` or a distributed cache for hot data.
 
-### 16. ✅ 批量操作優化
-必要時以批量查詢/批量保存降低往返。
+### 16. ✅ Optimize Batch Operations
+When necessary, reduce round trips with batch queries and batch saves.
 
-## 開發流程最佳實踐
+## Development Workflow Best Practices
 
-### 17. ✅ 遵循 TDD 循環
-Red → Green → Refactor。
+### 17. ✅ Follow the TDD Cycle
+Red → Green → Refactor.
 
-### 18. ✅ 持續更新文檔
-規格改動需同步更新 `.dev/specs` 與範例。
+### 18. ✅ Keep Documentation Current
+Synchronize specification changes with `.dev/specs` and examples.
 
-### 19. ✅ BDD 規格保護
-Gherkin 風格的情境命名代表業務規則，測試失敗時需先確認原因。
+### 19. ✅ Protect BDD Specifications
+Gherkin-style scenario names represent business rules. When a test fails, identify the cause before changing them.
 
-### 20. ✅ Code Review 檢查清單
-- [ ] Domain 邏輯在 Domain 層
-- [ ] Use Case 足夠薄
-- [ ] 事件命名可表達業務含義
-- [ ] 測試覆蓋主要場景
-- [ ] 遵循既定編碼規範
+### 20. ✅ Code Review Checklist
+- [ ] Domain logic resides in the Domain layer.
+- [ ] The Use Case is sufficiently thin.
+- [ ] Event names express business meaning.
+- [ ] Tests cover the primary scenarios.
+- [ ] Established coding standards are followed.
 
-## 總結
+## Summary
 
-最佳實踐的核心原則：
-1. 領域優先
-2. 簡單明確
-3. 測試驅動
-4. 持續改進
+Core best-practice principles:
+1. Domain first.
+2. Keep it simple and explicit.
+3. Test-driven development.
+4. Continuous improvement.

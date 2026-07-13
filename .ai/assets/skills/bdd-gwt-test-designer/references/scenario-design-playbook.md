@@ -10,9 +10,11 @@
 
 ## Repository Alignment
 
-- testing stack is xUnit with BDDfy-style naming guidance
+- testing stack defaults to xUnit + BDDfy; a target team may explicitly opt out of the BDDfy package
+- Given-When-Then structure and naming remain mandatory for unit, use-case, and integration tests after an opt-out; Arrange-Act-Assert (3A) is not an alternative
 - no BaseTestClass
-- BDD/Gherkin style here means scenario structure and naming, not mandatory `.feature` files
+- `.feature` files are planned/optional rather than mandatory. Default output remains scenario notes; design a `.feature` artifact when one is supplied or explicitly requested, or when the target profile selects a feature runner
+- do not infer or select a feature runner/package
 - when a requirement contains multiple acceptance criteria, map each AC to one or more scenarios
 
 ## Recommended Design Sequence

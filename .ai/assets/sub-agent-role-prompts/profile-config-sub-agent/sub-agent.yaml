@@ -1,7 +1,12 @@
 asset_id: "profile-config-sub-agent"
+schema_version: "1.0"
 asset_type: "sub-agent-role-prompt"
 title: "Profile Config Sub-Agent"
 purpose: "Define the delegated worker-role prompt for configuring environment profiles and appsettings-based setup."
+portability: "repo-portable"
+audience: "agent-facing"
+wrapper_targets: []
+source_of_truth: "canonical"
 role_kind: "infrastructure-sub-agent"
 triggers:
   - "profile config sub-agent"
@@ -26,5 +31,8 @@ workflow:
     description: "Produce delegated configuration guidance or code changes with validation notes"
 references:
   - ".ai/assets/sub-agent-role-prompts/profile-config-sub-agent/references/implementation-playbook.md"
-human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+examples:
+  - ".ai/assets/sub-agent-role-prompts/profile-config-sub-agent/references/implementation-playbook.md"
+human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
+status: "active"
 

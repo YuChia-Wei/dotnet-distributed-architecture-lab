@@ -1,3 +1,4 @@
+# Runtime metadata only. Canonical skill content lives under .ai/assets/skills/ddd-ca-hex-architect/.
 interface:
   display_name: "DDD CA HEX Architect"
   short_description: "Architect workflow for DDD, CA, HEX, and MQ-first design"

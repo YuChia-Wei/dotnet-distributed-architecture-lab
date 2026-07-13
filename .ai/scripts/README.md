@@ -1,104 +1,178 @@
-# AI Scripts Collection
+# AI Scripts
 
-這個目錄包含自動化檢查與驗證腳本，用於支援目前的 .NET 10 + WolverineFx + Dapper/Npgsql + EF Core 工作流。
+This directory contains transitional AI workflow scripts, context governance checks, and local tool orchestration helpers.
 
-> Note:
-> 對外預設入口已統一為 .NET 命名，legacy script names 已完成退場。
+It is no longer the long-term home for authoritative C# semantic validation. Rules that inspect C# syntax, symbols, type dependencies, attributes, or framework API usage should move to dotnet-native validation mechanisms such as Roslyn analyzers, `.editorconfig`, `dotnet format`, architecture tests, integration tests, or dotnet tools.
 
-## Quick Start
+## Current Transition
 
-### Code Review
-```bash
-./.ai/scripts/code-review.sh
-./.ai/scripts/code-review.sh HEAD~3..HEAD
-./.ai/scripts/code-review.sh staged
+Workflow: `.dev/workflows/2026-05-dotnet-script-to-analyzer-transition/`
+
+Key files:
+
+- `script-inventory.md`
+- `dotnet-validation-strategy.md`
+- `script-to-validator-mapping.md`
+
+## Retention Policy
+
+Shell or PowerShell scripts may remain when they are:
+
+- AI workflow glue;
+- prompt or context portability checks;
+- repository file-system automation;
+- local or CI orchestration over dotnet-native tools;
+- non-C# semantic checks.
+
+Shell or PowerShell scripts should be retired or replaced when they:
+
+- use grep/find/plain-text matching to decide C# architecture correctness;
+- duplicate `.editorconfig`, built-in analyzers, Roslyn analyzers, `dotnet format`, architecture tests, or dotnet tests;
+- generate regex-based C# validation scripts from markdown and present them as formal gates.
+
+## Script Classes
+
+### Keep As AI Workflow Or Context Governance
+
+- `check-prompt-portability.sh`
+- `check-coding-standards.sh`
+- `validate-ai-context.py`
+
+These scripts inspect AI context, markdown, prompt portability, or repository hygiene. They are not substitutes for dotnet C# validation.
+
+`validate-ai-context.py` checks objective repository facts: active index paths, literal table corruption, declared runtime-root status, canonical/Agents/Claude skill inventory parity, case-safe `AGENTS.md` and thin `CLAUDE.md` root entries, canonical wrapper-metadata target/path integrity, policy-scoped agent-facing language, root bilingual entry ownership/link/structural markers, rule ownership registry structure, canonical skill/sub-agent schema compliance, canonical template-family hygiene, and deterministic development capability routing. It scans both tracked and untracked non-ignored files so a new context file cannot bypass the gate before staging, while filtering tracked paths that are deleted in the working tree. Language lint uses exact path-and-line exceptions for deliberate routing triggers; other Han prose fails with a file and line number. Script source, generated/example/archive/migration material, workflows, product `src`/`test` trees, and human-facing `.dev` documentation are outside that language scan; Markdown documentation under `.ai/scripts` remains in scope. Root bilingual validation checks reciprocal ownership links, heading-level shape, and ordered backtick table paths, not full semantic parity. Canonical schema validation is structural and path-based; it does not claim semantic equivalence between projections.
+
+`validate-workflow-artifacts.py` validates post-adoption workflow locator/task metadata, complete `.dev/workflows/INDEX.MD` directory coverage, locator-backed title/owner/status/timestamp/entrypoint parity, explicit legacy/no-locator rows, and durable `.dev/backlog/items/*.yaml` identity, lifecycle, timestamp, index, and reference integrity.
+
+Fail-closed shell validation regression tests use Given-When-Then naming and
+comments and run entirely in disposable Git repositories:
+
+```powershell
+python .ai/scripts/tests/test_fail_closed_validation.py -v
+python .ai/scripts/tests/test_ai_context_wrapper_metadata.py -v
+python .ai/scripts/tests/test_ai_context_root_entries.py -v
 ```
 
-### Full Project Checks
+The shell fixture suite snapshots the real checkout before and after execution.
+The wrapper-metadata fixture invokes only the bounded validator function against
+temporary wrapper directories. Neither suite may source `check-all.sh` or
+change files, modes, or index entries outside its temporary repository.
+
+`shell-assets.yaml` classifies every tracked `.ai/scripts/**/*.sh` file as
+`retained` or `retirement_candidates`. Retained shell assets must use Git index
+mode `100755`; required entrypoints and child scripts must be retained.
+`validate-shell-assets.py` enforces this contract with `git ls-files --stage`
+instead of host filesystem executability, which is unreliable under Windows
+Git Bash and `core.filemode=false`.
+
+Required child-script calls in `check-all.sh` use the literal multiline form
+`run_check "<script>"`, description, then `"required"` on the third line. The
+shell asset validator compares those literal calls with
+`check_all_required_scripts`; changing that call shape requires updating the
+validator and its negative parity fixture in the same change.
+
+### Keep As Orchestrator Only
+
+- `check-all.sh`
+- `code-review.sh`
+
+These may remain as local workflow entry points, but their future role is to invoke dotnet-native validation and summarize outputs. They should not remain regex-based C# validators.
+
+`check-all.sh` uses four enforcement classes:
+
+- `required`: when selected by the active mode, the check must execute; missing,
+  non-executable/unlaunchable, or non-zero outcomes fail the aggregate gate;
+- `conditional-required`: absence of all applicability inputs is reported as not
+  applicable, partial configuration fails, and an applicable check is required;
+- `advisory`: execution problems and non-zero outcomes remain visible warnings
+  but do not fail otherwise successful required checks;
+- `deferred`: known future work is counted separately and is never described as
+  a selected required check.
+
+Mode-based omission is distinct from a selected required check being skipped.
+Invalid modes or extra arguments return exit code `2`. A successful aggregate
+result may contain explicit advisory warnings, deferred work, or not-applicable
+conditional checks, but it cannot contain an unexecuted selected required check.
+
+Future `check-all.sh` shape:
+
 ```bash
-./.ai/scripts/check-all.sh
-./.ai/scripts/check-all.sh --quick
-./.ai/scripts/check-all.sh --critical
+dotnet restore
+dotnet build
+dotnet test
+dotnet format --verify-no-changes
+dotnet tool run repo-context-lint
 ```
 
-### Recommended .NET-Named Checks
-```bash
-./.ai/scripts/check-projection-config.sh
-./.ai/scripts/check-dotnet-config.sh
-./.ai/scripts/check-test-di-compliance.sh
-```
+Current behavior:
 
-## Naming Policy
+- runs `dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj`;
+- does not invoke the retired repository grep checks.
 
-### Preferred active names
+### Replace With Roslyn Analyzer Or Architecture Tests
 
-- `check-projection-config.sh`
-- `check-dotnet-config.sh`
+- `check-test-compliance.sh`
 - `check-test-di-compliance.sh`
+- `check-data-class-annotations.sh`
+- `check-domain-events-compliance.sh`
+- `check-framework-api-compliance.sh`
 
-## Script Inventory
+Completed replacement:
 
-```text
-.ai/scripts/
-├── code-review.sh
-├── check-all.sh
-├── check-aggregate-compliance.sh
-├── check-archive-compliance.sh
-├── check-coding-standards.sh
-├── check-controller-compliance.sh
-├── check-data-class-annotations.sh
-├── check-domain-events-compliance.sh
-├── check-dotnet-config.sh
-├── check-framework-api-compliance.sh
-├── check-mapper-compliance.sh
-├── check-mutation-coverage.sh
-├── check-projection-compliance.sh
-├── check-projection-config.sh
-├── check-prompt-portability.sh
-├── check-repository-compliance.sh
-├── check-spec-compliance.sh
-├── check-test-compliance.sh
-├── check-test-di-compliance.sh
-├── check-usecase-compliance.sh
-├── generate-check-scripts-from-md.sh
-├── MD-SCRIPT-GENERATION-GUIDE.md
-└── generated/
-```
+- repository rules: `DBA1001` enforces canonical/compatibility inheritance,
+  Aggregate Root constraints, aggregate method surface, query-port read-only
+  behavior, and the generic writable CRUD prohibition; repository grep scripts
+  have been removed.
+- controller rules: `DBA1004`, `DBA1005`, and `DBA1006`; the controller grep scripts have been removed.
+- mapper rules: `DBA1007` and `DBA1008`; the mapper grep scripts have been removed.
+- aggregate rules: `DBA1003` and `DBA1009`; the aggregate grep scripts have been removed while invariant completeness remains test and AI review work.
+- use case rules: `DBA1002` and `DBA1010` through `DBA1012`; the use case grep scripts have been removed while transaction and error-handling design remain AI review work.
+- projection rules: `DBA1013` covers EF write operations and `DotnetBackendValidation` verifies marker-based EF model registration; the projection grep/config scripts have been removed.
 
-## Stage 6 Alignment Notes
+Analyzer source template:
 
-- `.NET` naming is now the default recommendation in docs and orchestrator scripts.
-- Legacy wrapper retirement is complete for the projection/config/test-DI script trio.
+- `tools/DotnetBackendAnalyzers/`
+- `tools/DotnetBackendAnalyzers.Tests/`
 
-## Script Notes
+### Replace With Dotnet Tool Or Tests
 
-### `code-review.sh`
+- `check-dockerfile-csproj-copy-sync.ps1`
+- `check-dotnet-config.sh`
+- `check-spec-compliance.sh`
+- `check-mutation-coverage.sh`
+- `test-profile-startup.sh`
+- `validate-dual-profile-config.sh`
 
-- smart entry point for review-time checks
-- selects checks based on changed files
+These are not necessarily Roslyn analyzer rules. They belong in dotnet tools, integration tests, config tests, Stryker.NET configuration, or CI orchestration.
 
-### `check-all.sh`
+### Retired Generated Regex Checks
 
-- full project health report
-- supports `--quick`, `--critical`, and full mode
+The markdown-to-shell generator, its parser and guide, and the `generated/`
+outputs were removed under AIC-007. The root archive grep check was also removed
+because its stale `HardDelete` text rule contradicted the active archive/purge
+standard. Historical workflow evidence retains the original transition record.
 
-### `check-projection-config.sh`
+`check-test-compliance.sh` remains temporarily as an explicitly advisory helper
+until its rules are split across `.editorconfig`, analyzers, and test architecture
+checks. It is manually maintained and cannot be regenerated from Markdown.
 
-- preferred entry point for projection/read-model configuration checks
-- canonical implementation owner
+## AI Reasoning Context
 
-### `check-dotnet-config.sh`
+Do not remove software engineering reasoning context from `.ai`, `.dev`, or skills as part of this transition.
 
-- preferred entry point for DI/config/environment checks
-- canonical implementation owner
+Analyzers and CI gates can enforce formalizable rules, but they do not replace design reasoning used by:
 
-### `check-test-di-compliance.sh`
+- `bdd-gwt-test-designer`;
+- `code-reviewer`;
+- `ddd-ca-hex-architect`;
+- requirement/spec/problem-frame authoring skills.
 
-- preferred entry point for test DI compliance checks
-- canonical implementation owner
+The context remains useful even when executable validation moves to dotnet-native tooling.
 
 ## Related Files
 
-- [AGENTS.md](../../AGENTS.md)
-- [.dev/operations/README.MD](../../.dev/operations/README.MD)
-- [.dev/specs/tests/TEST-SPEC-GUIDE.MD](../../.dev/specs/tests/TEST-SPEC-GUIDE.MD)
+- `.dev/workflows/2026-05-dotnet-script-to-analyzer-transition/script-inventory.md`
+- `.dev/workflows/2026-05-dotnet-script-to-analyzer-transition/dotnet-validation-strategy.md`
+- `.dev/workflows/2026-05-dotnet-script-to-analyzer-transition/script-to-validator-mapping.md`
+- `.ai/assets/tech-stacks/dotnet-backend/README.MD`
+- `.dev/standards/AI-CONTEXT-BOUNDARY.md`

@@ -45,7 +45,7 @@
 ## Validation Levels
 - **L1 Existence**: required items are implemented and test-covered.
 - **L3 Contract Semantics**: `require/ensure/invariant` semantics match spec.
-- **L4 GWT Semantics**: Gherkin-style steps (BDDfy) match scenario intent and order.
+- **L4 GWT Semantics**: Gherkin-style steps match scenario intent and order. BDDfy is the default profile; an explicit package opt-out does not relax GWT.
 
 ## Production Code Mapping (.NET)
 - Use case input and handlers: `src/Application/<Aggregate>/UseCases/{Commands|Queries}/`
@@ -60,7 +60,9 @@
 - Controller tests: `src/tests/Api/Controllers/<Aggregate>/`
 
 ## Testing Style Requirements
-- **xUnit + BDDfy with Gherkin-style naming (no `.feature` files)**
+- **xUnit with mandatory Given-When-Then structure and naming**; use BDDfy by default unless the target team explicitly opted out
+- **No Arrange-Act-Assert (3A) substitution** for unit, use-case, or integration tests
+- `.feature` files are optional/planned and are validated when supplied/requested or selected by the target profile; no runner/package is inferred
 - **No BaseTestClass**
 - **NSubstitute** for mocks
 - Each scenario has a corresponding test method

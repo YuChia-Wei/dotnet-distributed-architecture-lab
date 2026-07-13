@@ -1,6 +1,6 @@
 # Runbook Guide
 
-本指南定義 `.dev/operations/runbooks/` 下 runbook 文件的最小內容。
+本指南定義 `runbooks/` 下 runbook 文件的最小內容。它是 template / authoring guidance，不表示 `.dev/operations/runbooks/` 已存在。
 
 ## 目的
 

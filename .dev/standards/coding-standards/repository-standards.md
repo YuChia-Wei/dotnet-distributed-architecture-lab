@@ -1,423 +1,313 @@
-# Repository 編碼規範 (.NET)
+# Repository Coding Standards (.NET)
 
-本文件定義 Repository 的編碼標準，包含介面設計、實作原則、EF Core Entity 設計等規範。
+This document is the canonical standard for aggregate persistence and query-side data access.
 
-> **Projection 規範**: 複雜查詢相關規範請參考 [Projection 編碼規範](./projection-standards.md)
+This standard defines application-port semantics without prescribing a database, ORM, event store, or package. EF Core, Dapper, Npgsql, and other adapter content is conditional implementation guidance only.
 
----
+## Core Boundaries
 
-## 📌 概述
+Repository rules distinguish three roles:
 
-Repository 只負責 Aggregate 的基本存取（Command Side），查詢需求需透過 Query Repository + Query Service（Query Side）。
+| Role | Purpose | May modify data | Primary return type |
+| --- | --- | --- | --- |
+| Aggregate Repository | Rehydrate and persist an Aggregate Root | Yes | Aggregate Root |
+| Query Repository | Read-only access to read models | No | DTO, read model, ID, scalar, or page |
+| Capability-specific Writer | Explicit capabilities such as outbox, projection, import, or purge | Yes | Capability-defined; never an Aggregate |
 
-- **Repository 五個方法**：`FindByIdAsync`, `FindByIdsAsync`, `SaveAsync`, `SaveAllAsync`, `DeleteAsync`
-- **禁止自定義查詢方法**：複雜查詢使用 Query Repository + Query Service
-- **將讀寫模型分離**：Domain Repository 用於 Write Model，Query Repository 用於 Read Model
+A repository interface is an Application outbound port. EF Core, Dapper, SQL, event-store, file, or remote-persistence implementations are Infrastructure outbound adapters.
 
-> 📖 模式理由詳見 [../../standards/rationale/query-side-layering-rationale.MD](../../standards/rationale/query-side-layering-rationale.MD)
+## Aggregate Repository
 
----
-
-## 🏷️ Pattern 標記（自動化檢查用）
-
-以下標記供自動化 Code Review 腳本使用：
-
-```yaml
-# Repository 規則
-Pattern (required, any): IDomainRepository<
-
-# 允許的方法
-Pattern (allowed): FindByIdAsync|FindByIdsAsync|SaveAsync|SaveAllAsync|DeleteAsync
-
-# 禁止規則（Repository 不應有自定義查詢）
-Pattern (forbidden, i): GetBy|QueryBy|SearchBy|FindByName|FindByStatus
-```
-
----
-
-## 🔴 必須遵守的規則 (MUST FOLLOW)
-
-### 1. Repository Interface 設計
-
-使用泛型 Repository Interface：
+### Canonical Contract
 
 ```csharp
-// ✅ 正確：定義泛型 Repository Interface
-namespace Lab.BuildingBlocks.Application;
+public interface IAggregateRepository<TAggregate, TId>
+    where TAggregate : AggregateRoot<TId>
+{
+    Task<TAggregate?> FindByIdAsync(
+        TId id,
+        CancellationToken cancellationToken = default);
 
+    Task SaveAsync(
+        TAggregate aggregate,
+        CancellationToken cancellationToken = default);
+}
+```
+
+Rules:
+
+- `TAggregate` MUST be an Aggregate Root.
+- A child Entity MUST NOT have a Repository independently injectable by the Application.
+- `FindByIdAsync` loads only by Aggregate identity.
+- `SaveAsync` means "persist an Aggregate whose domain behavior has completed."
+- An adapter may use insert, update, upsert, tracked persistence, or event append as appropriate.
+- A Repository MUST NOT contain status, name, filter, paging, or DTO query methods.
+- A Repository MUST NOT execute domain behavior itself.
+- A Repository MUST NOT clear pending Domain Events before persistence succeeds.
+
+### Compatibility Contract
+
+Existing products may already use `IDomainRepository` for an Aggregate Repository. This compatibility contract is retained to avoid needless migration noise when adopting this context:
+
+```csharp
 public interface IDomainRepository<TAggregate, TId>
+    : IAggregateRepository<TAggregate, TId>
     where TAggregate : AggregateRoot<TId>
 {
-    // 基本操作
-    Task<TAggregate?> FindByIdAsync(TId id, CancellationToken ct = default);
-    Task SaveAsync(TAggregate aggregate, CancellationToken ct = default);
-    Task DeleteAsync(TAggregate aggregate, CancellationToken ct = default);
-
-    // 批次操作（效能優化，語意相同）
-    Task<IReadOnlyList<TAggregate>> FindByIdsAsync(IEnumerable<TId> ids, CancellationToken ct = default);
-    Task SaveAllAsync(IEnumerable<TAggregate> aggregates, CancellationToken ct = default);
-}
-
-// 在 Handler 中使用
-public sealed class CreateProductHandler
-{
-    private readonly IDomainRepository<Product, ProductId> _repository;
-
-    public CreateProductHandler(IDomainRepository<Product, ProductId> repository)
-    {
-        _repository = repository;
-    }
-}
-
-// ❌ 錯誤：為每個 Aggregate 創建特定 Interface 加入額外方法
-public interface IProductRepository : IDomainRepository<Product, ProductId>
-{
-    Task<Product?> GetByNameAsync(string name);  // ❌ 不應該加入查詢方法
 }
 ```
 
----
+Rules:
 
-### 2. Repository 實作 (EF Core)
+- New code SHOULD prefer `IAggregateRepository<TAggregate, TId>`.
+- `IDomainRepository<TAggregate, TId>` is not a second repository model.
+- Every Aggregate Root constraint still applies to the compatibility contract.
+- `IDomainRepository<ChildEntity, TId>` is a violation and MUST NOT be excused for compatibility.
+- An aggregate-specific interface is permitted only for compatibility or as an explicit type alias; it MUST NOT add methods beyond the shared contract.
+- A meaningless empty interface created only for renaming is forbidden.
+
+## Forbidden Generic Write Interfaces
+
+Application code MUST NOT depend on a public CRUD abstraction accepting arbitrary Entities or table models, such as:
+
+- `IRepository<TEntity, TId>`
+- `IGenericRepository<TEntity, TId>`
+- `IWritableRepository<TEntity, TId>`
+- `ICrudRepository<TEntity, TId>`
+
+Infrastructure adapters may internally use private/internal DAOs, table gateways, or persistence helpers, but MUST NOT expose them directly as Application ports.
+
+## Query Repository
+
+### Marker
 
 ```csharp
-// ✅ 正確：Product Repository 實作
-public class ProductRepository : IRepository<Product, ProductId>
+public interface IQueryRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public ProductRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
-    public async Task<Product?> FindByIdAsync(ProductId id, CancellationToken ct = default)
-    {
-        var data = await _context.Products
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id.Value, ct);
-
-        return data is null ? null : ProductMapper.ToDomain(data);
-    }
-
-    public async Task SaveAsync(Product aggregate, CancellationToken ct = default)
-    {
-        var data = ProductMapper.ToData(aggregate);
-
-        var existing = await _context.Products
-            .FirstOrDefaultAsync(x => x.Id == data.Id, ct);
-
-        if (existing is null)
-        {
-            await _context.Products.AddAsync(data, ct);
-        }
-        else
-        {
-            _context.Entry(existing).CurrentValues.SetValues(data);
-        }
-
-        aggregate.ClearDomainEvents();
-    }
-
-    public async Task DeleteAsync(Product aggregate, CancellationToken ct = default)
-    {
-        var data = await _context.Products
-            .FirstOrDefaultAsync(x => x.Id == aggregate.Id.Value, ct);
-
-        if (data is not null)
-        {
-            _context.Products.Remove(data);
-        }
-
-        aggregate.ClearDomainEvents();
-    }
 }
 ```
 
----
-
-### 3. InMemory Repository（測試用）
+A query-specific port MUST implement the marker:
 
 ```csharp
-// ✅ 正確：InMemory Repository 實作
-public class InMemoryRepository<TAggregate, TId> : IRepository<TAggregate, TId>
+public interface IProductQueryRepository : IQueryRepository
+{
+    Task<ProductDetailsDto?> FindDetailsAsync(
+        ProductId id,
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<ProductId>> FindIdsByStatusAsync(
+        ProductStatus status,
+        CancellationToken cancellationToken = default);
+}
+```
+
+Rules:
+
+- A Query Repository is a read-only port.
+- It may return a DTO, read model, ID, scalar, or page.
+- Returning an Aggregate Root or child Entity that can be modified and saved is forbidden.
+- `Save`, `Add`, `Update`, `Delete`, `Remove`, and equivalent persistence writes are forbidden.
+- Query criteria may follow the use case/read model and need not imitate an Aggregate Repository.
+- Query Repository implementations belong in Infrastructure.
+
+### Optional Query Service
+
+A simple Query may depend directly on a Query Repository at the Application boundary.
+
+Add an Application Query Service only when it:
+
+- combines multiple Query Repositories or external read sources;
+- contains a reusable query policy; or
+- performs calculation or orchestration beyond simple mapping.
+
+Do not require a pass-through Query Service for every Query.
+
+## Delete and Purge
+
+### Soft delete
+
+Soft delete is Aggregate behavior:
+
+```csharp
+aggregate.Delete(actorId, reason);
+await repository.SaveAsync(aggregate, cancellationToken);
+```
+
+A Repository SHOULD NOT replace an Aggregate deletion invariant with physical row deletion.
+
+### Physical purge
+
+Physical deletion uses a separate, restricted capability port and does not belong in the shared Aggregate Repository:
+
+```csharp
+public interface IAggregatePurgePort<TAggregate, TId>
     where TAggregate : AggregateRoot<TId>
 {
-    private readonly Dictionary<TId, TAggregate> _store = new();
-
-    public Task<TAggregate?> FindByIdAsync(TId id, CancellationToken ct = default)
-    {
-        _store.TryGetValue(id, out var aggregate);
-        return Task.FromResult(aggregate);
-    }
-
-    public Task SaveAsync(TAggregate aggregate, CancellationToken ct = default)
-    {
-        _store[aggregate.Id] = aggregate;
-        aggregate.ClearDomainEvents();
-        return Task.CompletedTask;
-    }
-
-    public Task DeleteAsync(TAggregate aggregate, CancellationToken ct = default)
-    {
-        _store.Remove(aggregate.Id);
-        aggregate.ClearDomainEvents();
-        return Task.CompletedTask;
-    }
+    Task PurgeAsync(
+        TId id,
+        CancellationToken cancellationToken = default);
 }
 ```
 
----
+A Purge Use Case MUST first address:
 
-### 4. DI 註冊
+- authorization;
+- retention policy;
+- legal/audit constraints;
+- Aggregate eligibility; and
+- related outbox/archive/attachment cleanup policy.
 
-```csharp
-// ✅ 正確：在 Program.cs 或 ServiceExtensions 中註冊
-public static class RepositoryServiceExtensions
-{
-    public static IServiceCollection AddRepositories(this IServiceCollection services)
-    {
-        services.AddScoped<IRepository<Product, ProductId>, ProductRepository>();
-        services.AddScoped<IRepository<Sprint, SprintId>, SprintRepository>();
-        services.AddScoped<IRepository<ProductBacklogItem, PbiId>, PbiRepository>();
+## Transactions and Unit of Work
 
-        return services;
-    }
-}
-```
+Eventual consistency is the default for cross-Aggregate coordination.
 
----
+A normal single-Aggregate Use Case does not automatically inject `IUnitOfWork` merely because it uses a Repository.
 
-## 🎯 EF Core Entity (Data Model) 設計
-
-### Entity 結構
+Depend on it explicitly only when a Use Case requires multiple persistence participants to commit or roll back together:
 
 ```csharp
-// ✅ 正確：EF Core Entity 設計
-namespace YourProject.Infrastructure.Persistence.Entities;
-
-public class ProductData
-{
-    public string Id { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public string State { get; set; } = string.Empty;
-    public string CreatorId { get; set; } = string.Empty;
-    public bool IsDeleted { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
-
-    // 複雜物件序列化為 JSON
-    public string? DefinitionOfDoneJson { get; set; }
-    public string? TagsJson { get; set; }
-
-    // 導航屬性（如需要）
-    public List<TaskData> Tasks { get; set; } = new();
-
-    // 樂觀鎖
-    public byte[] RowVersion { get; set; } = Array.Empty<byte>();
-}
-```
-
-### Fluent Configuration
-
-```csharp
-// ✅ 正確：使用 Fluent API 配置
-public class ProductDataConfiguration : IEntityTypeConfiguration<ProductData>
-{
-    public void Configure(EntityTypeBuilder<ProductData> builder)
-    {
-        builder.ToTable("products");
-
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .HasColumnName("product_id")
-            .HasMaxLength(50)
-            .IsRequired();
-
-        builder.Property(x => x.Name)
-            .HasMaxLength(100)
-            .IsRequired();
-
-        builder.Property(x => x.IsDeleted)
-            .IsRequired();
-
-        builder.Property(x => x.RowVersion)
-            .IsRowVersion();
-
-        // 索引
-        builder.HasIndex(x => x.Name);
-        builder.HasIndex(x => x.State);
-
-        // 軟刪除過濾
-        builder.HasQueryFilter(x => !x.IsDeleted);
-    }
-}
-```
-
----
-
-## 🎯 Query Side 分層（嚴格 CQRS）
-
-查詢操作採用 **Query Repository + Query Service** 雙層設計。
-
-### 介面與實作放置位置
-
-| 類型 | 介面位置 | 實作位置 |
-|------|---------|---------|
-| `IDomainRepository<T, TId>` | `BuildingBlocks.Application` | `<Domain>.Infrastructure/Repositories` |
-| `I<Domain>QueryRepository` | `<Domain>.Applications/Ports` | `<Domain>.Infrastructure/QueryRepositories` |
-| `I<Domain>QueryService` | `<Domain>.Applications/Ports` | `<Domain>.Applications/QueryServices` |
-
-### Query Repository（Infrastructure 層）
-
-```csharp
-// ✅ 正確：Query Repository - 純資料存取，回傳 DTO/ID
-public interface IProductQueryRepository
-{
-    Task<ProductDto?> GetByIdAsync(Guid productId, CancellationToken ct = default);
-    Task<IReadOnlyList<ProductDto>> GetByStateAsync(string state, CancellationToken ct = default);
-    Task<IReadOnlyList<Guid>> GetIdsByStateAsync(string state, CancellationToken ct = default);
-}
-```
-
-| 規則 | 說明 |
-|------|------|
-| ✅ 允許 | 回傳 DTO、ID 列表 |
-| ✅ 允許 | 使用 Dapper 或 EF Core Projection |
-| ❌ 禁止 | 包含業務邏輯 |
-| ❌ 禁止 | 回傳 Aggregate |
-
-### Query Service（Application 層）
-
-```csharp
-// ✅ 正確：Query Service - 查詢業務邏輯
-public interface IProductQueryService
-{
-    // 組合多個 Repository 查詢
-    Task<ProductWithDetailsDto> GetProductWithDetailsAsync(Guid productId, CancellationToken ct = default);
-
-    // 提供 IDs 給 Command Handler 使用
-    Task<IReadOnlyList<Guid>> GetActiveProductIdsAsync(CancellationToken ct = default);
-}
-```
-
-| 規則 | 說明 |
-|------|------|
-| ✅ 允許 | 組合多個 Query Repository |
-| ✅ 允許 | 包含計算、轉換邏輯 |
-| ✅ 允許 | 回傳 ID 列表供 Command 使用 |
-| ❌ 禁止 | 直接存取資料庫 |
-| ❌ 禁止 | 回傳 Aggregate |
-
----
-
-## 🎯 事務管理
-
-### 使用 IUnitOfWork
-
-```csharp
-// ✅ 正確：定義 IUnitOfWork
 public interface IUnitOfWork
 {
-    Task<int> CommitAsync(CancellationToken ct = default);
-}
-
-// EF Core 實作
-public class EfCoreUnitOfWork : IUnitOfWork
-{
-    private readonly DbContext _context;
-
-    public EfCoreUnitOfWork(DbContext context)
-    {
-        _context = context;
-    }
-
-    public Task<int> CommitAsync(CancellationToken ct = default)
-    {
-        return _context.SaveChangesAsync(ct);
-    }
-}
-
-// 在 Handler 中使用
-public sealed class CreateProductHandler
-{
-    private readonly IRepository<Product, ProductId> _repository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public async Task<Result<ProductId>> Handle(
-        CreateProductCommand command,
-        CancellationToken ct)
-    {
-        var product = new Product(...);
-
-        await _repository.SaveAsync(product, ct);
-        await _unitOfWork.CommitAsync(ct);  // 提交交易
-
-        return Result.Success(product.Id);
-    }
+    Task CommitAsync(CancellationToken cancellationToken = default);
 }
 ```
 
----
+Rules:
 
-## 🎯 效能優化
+- The explicit dependency communicates an exceptional strong-consistency requirement.
+- A Repository participating in an external Unit of Work MUST NOT commit independently.
+- Repository-owned independent commits MUST NOT break Aggregate + Outbox atomicity.
+- Transaction middleware/decorators may implement mechanics but MUST NOT hide the strong-consistency dependency declared by the Use Case.
 
-### 使用 AsNoTracking
+Domain Event lifecycle:
+
+1. Execute Use Case orchestration and Aggregate behavior.
+2. Obtain pending Domain Events.
+3. Atomically persist Aggregate state/events and required Outbox records.
+4. Commit。
+5. Acknowledge/clear pending events only after a successful commit.
+6. Preserve retry and optimistic-concurrency semantics on failure.
+
+## Target-specific Aggregate Batch Capability
+
+Portable building blocks do not publish a mandatory `IAggregateBatchRepository`.
+
+A target repository may define a batch port only when supported by measured evidence, for example:
 
 ```csharp
-// ✅ 正確：只讀查詢使用 AsNoTracking
-public async Task<Product?> FindByIdAsync(ProductId id, CancellationToken ct)
+public interface IProductAggregateBatchPort
 {
-    var data = await _context.Products
-        .AsNoTracking()  // 提升效能
-        .FirstOrDefaultAsync(x => x.Id == id.Value, ct);
+    Task<IReadOnlyList<ProductAggregate>> FindByIdsAsync(
+        IReadOnlyCollection<ProductId> ids,
+        CancellationToken cancellationToken = default);
 
-    return data is null ? null : ProductMapper.ToDomain(data);
+    Task SaveAllAsync(
+        IReadOnlyCollection<ProductAggregate> aggregates,
+        CancellationToken cancellationToken = default);
 }
 ```
 
----
+Enabling conditions:
 
-## 🔍 檢查清單
+- expected cardinality is actually greater than one;
+- N+1 IO, latency, or throughput problems have been measured;
+- the adapter can provide effective batch optimization;
+- missing/duplicate IDs, ordering, and maximum batch size are defined;
+- optimistic concurrency, partial failure, retry, and resume are defined;
+- pending-event and Outbox semantics are defined for each Aggregate; and
+- the batch port is excluded from default templates, default DI, and ordinary Use Cases.
 
-### Repository Interface
-- [ ] 使用泛型 `IRepository<TAggregate, TId>`
-- [ ] 只有三個基本方法
-- [ ] 透過 DI 註冊
+The batch port:
 
-### Repository 實作
-- [ ] 使用 EF Core
-- [ ] 呼叫 `ClearDomainEvents()` 在 Save/Delete 後
-- [ ] 使用 `AsNoTracking()` 於只讀查詢
+- does not inherit `IAggregateRepository<TAggregate, TId>`;
+- accepts only Aggregate Roots;
+- keeps `FindByIdsAsync` identity-based;
+- does not allow status/filter queries; and
+- MUST NOT replace executing Aggregate behavior individually.
 
-### EF Core Entity
-- [ ] 使用 Fluent API 配置
-- [ ] 有主鍵
-- [ ] 有樂觀鎖 (RowVersion)
-- [ ] 有軟刪除過濾 (`HasQueryFilter`)
-- [ ] 有必要的索引
+`IUnitOfWork` determines the all-or-nothing business transaction; batch methods determine only the IO shape.
 
-### 效能
-- [ ] 避免 N+1 查詢
-- [ ] 使用 `Include` 預載
-- [ ] 支援分頁查詢
+Bulk work defaults to bounded chunks, retry, and resumable progress. A single long transaction over an unbounded collection is forbidden.
 
----
+Imports, migrations, projection rebuilds, or purges that do not execute normal Aggregate behavior SHOULD use a capability-specific writer rather than an Aggregate batch port.
 
-## 📂 程式碼範例
+## Conditional Adapter Guidance
 
-更多完整範例請參考：
+### EF Core
 
-| 範例 | 路徑 |
-|------|------|
-| Outbox + Repository 範例 | [../examples/outbox/](../examples/outbox/) |
-| Profile Configs 範例 | [../examples/profile-configs/](../examples/profile-configs/) |
+- Query/read-model flows SHOULD use `AsNoTracking` or direct projection according to the tracking policy.
+- Whether Aggregate loads are tracked depends on the adapter's direct domain mapping, persistence-model mapping, or tracked-aggregate strategy.
+- Use a cardinality-appropriate async terminal operator such as `ToListAsync`, `SingleOrDefaultAsync`, `FirstOrDefaultAsync`, `AnyAsync`, or `CountAsync`.
+- Sync-over-async is forbidden.
+- Optimistic concurrency MUST have explicit token/version mapping and conflict handling.
+- Domain Events MUST NOT be cleared before `SaveChangesAsync` succeeds.
 
----
+### Dapper / direct SQL
 
-## 相關文件
+- Connection/transaction lifetime MUST align with the Unit of Work or adapter atomic operation.
+- Update/delete SQL MUST check an optimistic-concurrency version or equivalent condition.
+- Multi-statement Aggregate persistence and Outbox writes MUST share an atomic boundary.
+- Tests and review verify mapping completeness.
 
-- [aggregate-standards.md](aggregate-standards.md)
-- [mapper-standards.md](mapper-standards.md)
-- [projection-standards.md](projection-standards.md)
+### Event store
+
+- Append MUST include an expected version or equivalent concurrency condition.
+- Append only pending events.
+- Mark events committed only after append/commit succeeds.
+- A snapshot is an optimization and MUST NOT replace the event stream as source of truth.
+
+## Automated Validation Ownership
+
+Repository semantic diagnostics use Roslyn symbol/type analysis; filenames or grep are not CI authority.
+
+Validation MUST cover:
+
+- the canonical `IAggregateRepository<,>` generic argument is an Aggregate Root;
+- compatibility `IDomainRepository<,>` and every derived interface follow the same rules;
+- the shared Aggregate Repository method surface contains only `FindByIdAsync` and `SaveAsync`;
+- ports marked as Query Repositories contain no writes or mutable domain return types;
+- a child Entity cannot be a repository root; and
+- default severity for violations is `error`.
+
+The target repository enables analyzer/architecture-test rules for target-specific batch ports through a local marker. The portable analyzer does not depend on an unfinished Use Case/Handler taxonomy.
+
+## Review Checklist
+
+### Aggregate Repository
+
+- [ ] Uses `IAggregateRepository<TAggregate, TId>` or compatible `IDomainRepository<TAggregate, TId>`.
+- [ ] `TAggregate` is an Aggregate Root.
+- [ ] The shared contract contains only `FindByIdAsync` and `SaveAsync`.
+- [ ] No child Entity repository exists.
+- [ ] No DTO/filter/paging query methods exist.
+- [ ] The Repository does not execute domain behavior.
+
+### Query Repository
+
+- [ ] Implements the `IQueryRepository` marker.
+- [ ] Returns only read-side types, IDs, or scalars.
+- [ ] Contains no persistence writes.
+- [ ] A simple Query has no needless pass-through Query Service.
+
+### Transaction / Events
+
+- [ ] `IUnitOfWork` is used only for an explicit strong-consistency Use Case.
+- [ ] A Repository does not commit independently while participating in a Unit of Work.
+- [ ] Atomicity of Aggregate state/events and Outbox is defined.
+- [ ] Pending events are cleared/acknowledged only after commit succeeds.
+
+### Optional Batch
+
+- [ ] The target repository has measured evidence and explicit batch semantics.
+- [ ] The batch port is absent from the portable/default contract.
+- [ ] Bulk work uses bounded chunks.
+- [ ] Partial failure, retry, concurrency, and event/outbox behavior are defined.
+
+## Related Documents
+
+- [Aggregate Standards](aggregate-standards.md)
+- [Projection Standards](projection-standards.md)
+- [Use Case Standards](usecase-standards.md)
+- [Generic Repository Rationale](../rationale/generic-repository-only-rationale.MD)
+- [Query-side Layering Rationale](../rationale/query-side-layering-rationale.MD)

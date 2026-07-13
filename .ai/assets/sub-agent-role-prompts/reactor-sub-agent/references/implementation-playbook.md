@@ -4,15 +4,17 @@ Use this delegated sub-agent role when the main agent needs a worker focused on 
 
 ## Mandatory References
 
-- `.ai/assets/shared/common-rules.md`
-- `.ai/assets/shared/architecture-config.md`
-- `.ai/assets/shared/testing-strategy.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
 
 ## Rules
 
 - Reactors handle event data, not domain entities
 - Use WolverineFx message handlers for event processing
-- Do not query another aggregate's repository directly; use query services
+- Do not query another aggregate's write repository directly; use a read-only
+  `IQueryRepository` port or an established QueryService when composition or policy
+  requires one
 
 ## Output Structure
 

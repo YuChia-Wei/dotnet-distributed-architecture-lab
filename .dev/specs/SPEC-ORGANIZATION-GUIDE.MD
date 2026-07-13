@@ -1,199 +1,109 @@
-# Spec 檔案組織指南
+# Spec File Organization Guide
 
-> 此指南說明如何正確組織 spec 檔案，以反映領域模型的 Aggregate 邊界。
+This document explains how to organize specs by bounded context, aggregate, and test target. This framework repository does not retain an active production/domain spec subtree; production specs are target-repository outputs, usually created by `repo-structure-sync` or a later workflow when source requirements exist. This repository retains rules, templates, and `.dev/specs/tests/`.
 
-## 📁 目錄結構原則
+## Directory Structure
 
-目前 `.dev/specs/` 建議分成：
-
-- `domains/`
-  - 依 bounded context / aggregate 放 production-facing specs
-- `tests/`
-  - 依 bounded context / 測試目標類型 放 test specs
-
-### ✅ 正確結構
 ```text
+Framework repo (.dev/specs/):
+  README.MD
+  SPEC-GUIDE.MD
+  SPEC-ORGANIZATION-GUIDE.MD
+  tests/
+    <bounded-context>/
+      aggregate/
+      use-cases/
+      integration/
+    cross-domain/
+    e2e/
+
+Target repo (.dev/specs/ when production specs exist):
+  domains/
+    <bounded-context>/
+      <aggregate>/
+        entity/
+          <aggregate>-spec.md
+        usecase/
+          <action>-<aggregate>.json
+```
+
+## Placement Rules
+
+1. Identify the aggregate primarily operated on by the use case.
+2. Confirm the bounded context that owns the aggregate.
+3. Use the same bounded-context/aggregate perspective for production and test specs.
+4. A relationship does not imply ownership. Do not place B's spec in A's aggregate directory merely because A references B.
+5. If bounded-context or aggregate ownership is unclear, use `ddd-ca-hex-architect` first; do not guess the path.
+6. This framework repository retains only guides, templates, and test-spec materials; it does not host an active `domains/` subtree.
+
+## Naming Rules
+
+- Use case spec: `<action>-<aggregate>.json`
+- Entity/aggregate spec: `<aggregate>-spec.md`
+- Test spec: `<target>.test-spec.md`
+- Use kebab-case for directories and filenames.
+
+## Neutral Example
+
+```text
+Target repo:
 .dev/specs/
-├── domains/
-│   ├── product/
-│   │   ├── entity/
-│   │   │   └── product-spec.md
-│   │   └── usecase/
-│   │       ├── create-product.json
-│   │       └── update-product.json
-│   ├── order/
-│   │   ├── entity/
-│   │   │   └── order-spec.md
-│   │   └── usecase/
-│   │       ├── place-order.json
-│   │       ├── ship-order.json
-│   │       ├── deliver-order.json
-│   │       └── cancel-order.json
-│   └── inventory-item/
-│       ├── entity/
-│       │   └── inventory-item-spec.md
-│       └── usecase/
-│           ├── decrease-stock.json
-│           ├── increase-stock.json
-│           └── restock.json
-└── tests/
-    ├── order/
-    │   ├── aggregate/
-    │   ├── integration/
-    │   └── use-cases/
-    │       └── place-order.test-spec.md
-    ├── inventory-item/
-    │   └── use-cases/
-    │       └── decrease-stock.test-spec.md
-    ├── cross-domain/
-    └── e2e/
+  domains/
+    <context-a>/
+      <aggregate-a>/
+        entity/
+          <aggregate-a>-spec.md
+        usecase/
+          create-<aggregate-a>.json
+          update-<aggregate-a>.json
+    <context-b>/
+      <aggregate-b>/
+        usecase/
+          process-<aggregate-b>.json
+  tests/
+    <context-a>/
+      aggregate/
+        <aggregate-a>.test-spec.md
+      use-cases/
+        create-<aggregate-a>.test-spec.md
+      integration/
+        <aggregate-a>-persistence.test-spec.md
 ```
 
-### ❌ 錯誤結構
+## Common Mistakes
+
+### Placing by Relationship Instead of Ownership
+
 ```text
-.dev/specs/
-└── domains/
-    └── product/
-        └── usecase/
-        ├── create-product.json
-        ├── create-pbi.json        ❌ PBI 不應在 product 下
-        └── create-sprint.json     ❌ Sprint 不應在 product 下
+Wrong:
+domains/<context-a>/<aggregate-a>/usecase/create-<aggregate-b>.json
+
+Correct:
+domains/<context-b>/<aggregate-b>/usecase/create-<aggregate-b>.json
 ```
 
-## 🎯 判斷 Spec 應該放在哪裡
+### Placing All Use Cases at One Level
 
-### 步驟 1：識別主要 Aggregate
-問自己：「這個 Use Case 主要操作哪個 Aggregate？」
-
-### 步驟 2：檢查 Aggregate 名稱
-- `CreateProduct` → Product Aggregate → `domains/product/usecase/`
-- `CreateProductBacklogItem` → PBI Aggregate → `domains/pbi/usecase/`
-- `CreateSprint` → Sprint Aggregate → `domains/sprint/usecase/`
-
-### 步驟 3：驗證決定
-使用 [AGGREGATE-IDENTIFICATION-CHECKLIST.md](../../.ai/AGGREGATE-IDENTIFICATION-CHECKLIST.md)
-
-## 📝 命名規範
-
-### Use Case Spec 檔案
-- 格式：`[action]-[aggregate].json`
-- 範例：
-  - `create-product.json`
-  - `create-pbi.json`（不是 create-product-backlog-item.json）
-  - `estimate-pbi.json`
-
-### Entity Spec 檔案
-- 格式：`[aggregate]-spec.md`
-- 範例：
-  - `product-spec.md`
-  - `pbi-spec.md`
-  - `sprint-spec.md`
-
-### Test Spec 檔案
-- 格式：`[target].test-spec.md`
-- 範例：
-  - `place-order.test-spec.md`
-  - `decrease-stock.test-spec.md`
-  - `order-fulfillment-flow.test-spec.md`
-
-### Test Spec 目錄規則
-- aggregate 驗證：`tests/<domain>/aggregate/<aggregate-name>.test-spec.md`
-- use case 驗證：`tests/<domain>/use-cases/<use-case>.test-spec.md`
-- integration 驗證：`tests/<domain>/integration/<target-name>.test-spec.md`
-- 視需要再加：
-  - `tests/<domain>/app-services/<service-name>.test-spec.md`
-  - `tests/<domain>/domain-services/<service-name>.test-spec.md`
-- 跨 domain 流程：
-  - `tests/cross-domain/<flow-name>.test-spec.md`
-- E2E 旅程：
-  - `tests/e2e/<journey-name>.test-spec.md`
-
-## ⚠️ 常見錯誤
-
-### 錯誤 1：根據關聯關係組織
 ```text
-❌ domains/product/usecase/create-pbi.json
-   理由：雖然 PBI 有 ProductId，但 PBI 是獨立 Aggregate
+Wrong:
+specs/usecases/<use-case>.json
 
-✅ domains/pbi/usecase/create-pbi.json
+Correct:
+specs/domains/<bounded-context>/<aggregate>/usecase/<use-case>.json
 ```
 
-### 錯誤 2：根據名稱前綴組織
-```text
-❌ domains/product/usecase/create-product-backlog-item.json
-   理由：名稱誤導，PBI 不是 Product 的一部分
+## Migration Steps
 
-✅ domains/pbi/usecase/create-pbi.json
-```
+1. Confirm bounded-context and aggregate ownership.
+2. Create the correct directories.
+3. Move the spec and corresponding test specs.
+4. Update requirements, problem frames, workflow tasks, and code references.
+5. Search for old paths and validate JSON/Markdown.
 
-### 錯誤 3：集中式組織
-```text
-❌ specs/usecases/create-product.json
-❌ specs/usecases/create-pbi.json
-   理由：失去 Aggregate 邊界的可見性
+## Review Checklist
 
-✅ specs/domains/product/usecase/create-product.json
-✅ specs/domains/pbi/usecase/create-pbi.json
-```
-
-## 🔄 遷移指南
-
-如果發現 spec 檔案位置錯誤：
-
-1. **創建正確的目錄結構**
-   ```bash
-   mkdir -p .dev/specs/domains/[aggregate]/usecase
-   ```
-
-2. **移動檔案**
-   ```bash
-   mv .dev/specs/domains/product/usecase/create-sprint.json \
-      .dev/specs/domains/pbi/usecase/
-   ```
-
-3. **更新相關引用**
-   - task-*.json 中的 spec.useCase 路徑
-   - 測試檔案中的引用
-   - 文檔中的連結
-
-4. **驗證**
-   ```bash
-   # 確認沒有遺漏的引用
-   grep -r "domains/product/usecase/create-pbi" .
-   ```
-
-## 📊 Aggregate 對照表
-
-| Aggregate | Spec 目錄 | 主要 Use Cases |
-|-----------|----------|----------------|
-| Product | `domains/product/` | CreateProduct, UpdateProduct |
-| Order | `domains/order/` | PlaceOrder, ShipOrder, DeliverOrder, CancelOrder |
-| InventoryItem | `domains/inventory-item/` | DecreaseStock, IncreaseStock, Restock |
-
-## 🚀 最佳實踐
-
-1. **新增 Spec 前先確認 Aggregate**
-   - 查看 [DOMAIN-MODEL.md](../../.ai/DOMAIN-MODEL.md)
-   - 使用 [AGGREGATE-IDENTIFICATION-CHECKLIST.md](../../.ai/AGGREGATE-IDENTIFICATION-CHECKLIST.md)
-
-2. **保持一致性**
-   - Spec 結構應與程式碼套件結構一致
-   - 命名應與領域術語一致
-
-3. **定期審查**
-   - Code Review 時檢查 spec 位置
-   - 發現錯誤立即修正
-
-## 🧪 Test Spec 補充規則
-
-- test spec 與 production spec 應使用同一組 domain / aggregate 視角
-- test spec 優先對應既有 production spec，而不是自成孤島
-- 若採 BDD / TDD，請把 scenario 設計放在 `.dev/specs/tests/`
-- test spec 應優先按測試目標分類，例如 `use-cases/`、`integration/`
-- `cross-domain/` 與 `e2e/` 不應隨意掛在單一 domain 底下
-
-## 📅 更新記錄
-
-- **2025-08-12**: 初始版本，建立 spec 組織原則
-- **2025-08-12**: 將 create-pbi.json 從 product/ 移至 pbi/
-- **2026-03-31**: 新增 typed test spec taxonomy 與 cross-domain / e2e 規則
+- [ ] Spec paths reflect bounded-context and aggregate ownership.
+- [ ] Production and test specs use consistent naming.
+- [ ] Cross-domain and E2E specs are not misplaced under a single aggregate.
+- [ ] Documents use the target repository's ubiquitous language.
+- [ ] Template placeholders are not mistaken for product truth.

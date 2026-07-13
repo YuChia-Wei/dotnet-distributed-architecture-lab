@@ -52,5 +52,5 @@
 
 ## Related
 
-- `../../standards/project-structure.md`
+- `../../standards/project-structure.md` (conditional target layout; confirm adoption before applying physical paths)
 - `../../standards/coding-standards.md`

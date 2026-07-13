@@ -1,98 +1,42 @@
-# 📁 Directory Rules - 目錄使用規則（.NET）
+# Directory Rules
 
-## 🚨 重要原則：`.ai/` vs `.dev/` vs runtime wrappers
+This file is an agent-facing operational summary. The canonical policies are:
 
-### `.ai/` 目錄 - 通用 AI Coding 框架
-**只能包含**：
-- ✅ 可重用於任何專案的內容
-- ✅ 通用的編碼標準和最佳實踐
-- ✅ 技術棧範本（使用 Example/BuildingBlocks 等通用命名）
-- ✅ 通用的工作流程、canonical assets、shared supporting materials
-- ✅ 可複製到其他專案的檔案
+- `.dev/standards/AI-CONTEXT-BOUNDARY.md`
+- `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`
 
-補充：
-- `.ai/assets/` 應作為 canonical source root
-- `.ai/assets/shared/` 應作為 shared rules / examples / supporting materials 的可重用資產
+## Placement Rules
 
-**絕對不能包含**：
-- ❌ 專案名稱（如 AiScrum, CompanyX）
-- ❌ 專案特定 namespace（如 Company.Product）
-- ❌ 專案特定的業務邏輯或領域模型
-- ❌ 專案的 ADR、規格、任務
-- ❌ 專案特定的測試資料或設定
+- Put reusable agent-facing AI context under `.ai/`.
+- Put canonical reusable AI assets under `.ai/assets/`.
+- Put universal shared context under `.ai/assets/shared/`.
+- Put tech-stack-specific reusable context under `.ai/assets/tech-stacks/<profile>/`.
+- Put canonical skill specs under `.ai/assets/skills/<skill-id>/`.
+- Put canonical delegated sub-agent role prompts under `.ai/assets/sub-agent-role-prompts/<role-id>/`.
+- Put human-facing guides, requirements, specs, operations docs, standards, and workflow artifacts under `.dev/`.
+- Put runtime-specific wrappers under `.agents/skills/` and `.claude/skills/`.
 
-### `.agents/skills/` / `.claude/skills/` 目錄 - Runtime Skill Wrappers
-**應該包含**：
-- ✅ thin wrapper `SKILL.md`
-- ✅ skill 相關 metadata / agent 設定
-- ✅ 指向 canonical spec 與 human guide 的薄入口
+## README And INDEX Rule
 
-**不應作為**：
-- ❌ human-facing guide 入口
-- ❌ workflow artifact 存放位置
-- ❌ 跨 agent 的 canonical prompt/source 位置
+- README files explain the purpose, scope, and usage of the containing folder.
+- INDEX files own file and directory inventories, including per-file or per-directory descriptions.
+- Do not duplicate the same catalog in both README and INDEX.
 
-### `.dev/` 目錄 - 專案特定內容
-**應該包含**：
-- ✅ 專案的 ADR（架構決策記錄）
-- ✅ 領域規格（specs/）
-- ✅ 任務定義（tasks/）
-- ✅ 專案特定的經驗教訓（lessons/）
-- ✅ Code review 報告（reports/）
+## Decision Checklist
 
-## 🤖 AI 判斷規則
+Before creating or moving AI context, decide:
 
-### 1. 內容分類判斷
-```
-問題：這個內容是否可以原封不動地用在其他專案？
-├─ 是 → 放在 .ai/
-└─ 否 → 放在 .dev/
-```
+1. Can this content be reused across non-.NET repositories without rewrite?
+   - Use universal context under `.ai/assets/shared/`.
+2. Is it reusable only for the current .NET backend profile?
+   - Use `.ai/assets/tech-stacks/dotnet-backend/`.
+3. Is it project truth, a requirement, spec, operation fact, workflow record, or decision?
+   - Use `.dev/`.
+4. Is it a runtime entry for a specific agent tool?
+   - Use `.agents/skills/` or `.claude/skills/`.
+5. Is it primarily for human onboarding or workflow usage?
+   - Use `.dev/guides/`.
 
-### 2. 具體判斷標準
+## Validation Hints
 
-| 內容類型 | 放置位置 | 範例 |
-|---------|---------|------|
-| 編碼標準 | `.dev/standards/coding-standards/` | Repository 限制規則 |
-| agent-facing canonical skill / sub-agent / prompt materials | `.ai/` | `assets/skills/ddd-ca-hex-architect/skill.yaml`, `assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`, `assets/shared/common-rules.md` |
-| runtime skill wrapper | `.agents/skills/` / `.claude/skills/` | `ddd-ca-hex-architect/SKILL.md` |
-| human-facing AI guide | `.dev/guides/ai-collaboration-guides/` | `DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md` |
-| 專案架構決策記錄 | `.dev/adr/` | 歷史決策紀錄（如仍保留） |
-| 專案規格 | `.dev/specs/` | product-spec.json |
-| 技術範例 | `.dev/standards/examples/` | 使用 Example.* namespace |
-| 專案程式碼 | `src/` | 使用實際 root namespace |
-
-### 3. 檔案命名規則
-
-#### `.ai/` 目錄檔案
-- 使用通用術語（Product, Sprint, Task）
-- 避免專案特定術語
-- 範例程式碼使用 `Example.*` 或 `BuildingBlocks.*` 命名
-
-#### `.dev/` 目錄檔案
-- 可以使用專案特定術語
-- 可以包含專案名稱
-- 使用實際 root namespace
-
-## 🔍 檢查命令
-
-```bash
-# 檢查 .ai/ 是否包含專案特定內容（請替換你的專案名稱）
-rg -n "AiScrum|CompanyX|MyProject" .ai/ --glob "!**/.git/**"
-```
-
-## 🚀 AI 行動準則
-
-1. **創建新檔案前**：先判斷通用 or 專案特定
-2. **修改現有檔案時**：若 `.ai/` 內出現專案特定內容，需提醒並調整
-3. **Code Review 時**：檢查檔案放置是否正確
-
-## 📋 Quick Checklist
-
-- [ ] 內容是否可跨專案重用？否 → `.dev/`
-- [ ] 是否包含專案名稱或 root namespace？是 → `.dev/`
-- [ ] 是否為 ADR/spec/task？是 → `.dev/`
-- [ ] 是否為通用規範？是 → `.ai/`
-
----
-最後更新：2026-02-01
+Use `rg -uu` when scanning hidden context directories such as `.ai`, `.dev`, `.agents`, and `.claude`.

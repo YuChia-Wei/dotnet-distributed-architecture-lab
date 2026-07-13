@@ -1,20 +1,20 @@
 # Profile / Environment Configuration Standards (.NET)
 
-本文件定義 profile、environment、以及 profile-specific DI 的硬性規則。
-本文件收斂 environment loading 與 profile-specific dependency injection 的正式規則。
+This document defines mandatory rules for profiles, environments, and profile-specific DI.
+It is the authoritative standard for environment loading and profile-specific dependency injection.
 
-使用方式教學與排錯流程，應放在 `.dev/guides/implementation-guides/`，不要把操作教學混進這份標準。
+Usage tutorials and troubleshooting procedures belong in `.dev/guides/implementation-guides/`; do not mix operational guidance into this standard.
 
 ---
 
-## 🔴 必須遵守的規則 (MUST FOLLOW)
+## 🔴 Mandatory Rules (MUST FOLLOW)
 
-### 1. 環境只能由 `DOTNET_ENVIRONMENT` 或 `ASPNETCORE_ENVIRONMENT` 決定
+### 1. The Environment Must Be Determined Only by `DOTNET_ENVIRONMENT` or `ASPNETCORE_ENVIRONMENT`
 
-不得引入自製 profile 切換機制，例如 `.feature`、自訂 profile 字串拼接、或在程式內硬編碼覆蓋目前環境。
+Do not introduce a custom profile-selection mechanism, such as `.feature` files, custom profile string composition, or hard-coded environment overrides in application code.
 
 ```csharp
-// ✅ 正確：由 Host/Builder 提供當前環境
+// ✅ Correct: obtain the current environment from the Host/Builder
 var builder = WebApplication.CreateBuilder(args);
 var environmentName = builder.Environment.EnvironmentName;
 
@@ -24,18 +24,18 @@ builder.Configuration
 ```
 
 ```csharp
-// ❌ 錯誤：自行建立另一套 profile 系統
+// ❌ Incorrect: create a separate profile system
 var profile = configuration["Profile"] ?? "outbox";
 builder.Configuration.AddJsonFile($"appsettings.{profile}.json");
 ```
 
-### 2. Profile 差異必須放在 `appsettings.{Environment}.json`
+### 2. Profile Differences Must Be Stored in `appsettings.{Environment}.json`
 
-共用設定放 `appsettings.json`，環境差異放 `appsettings.{Environment}.json`。
-不要把某個特定 profile 的值硬寫回基礎 `appsettings.json`。
+Place shared settings in `appsettings.json` and environment differences in `appsettings.{Environment}.json`.
+Do not hard-code values for a specific profile back into the base `appsettings.json`.
 
 ```json
-// ✅ 正確：共用設定
+// ✅ Correct: shared settings
 {
   "Repository": {
     "Mode": "InMemory"
@@ -44,21 +44,21 @@ builder.Configuration.AddJsonFile($"appsettings.{profile}.json");
 ```
 
 ```json
-// ✅ 正確：TestOutbox 差異只放在環境檔
+// ✅ Correct: TestOutbox differences appear only in the environment file
 {
   "Repository": {
     "Mode": "Outbox"
   },
   "ConnectionStrings": {
-    "Outbox": "Host=localhost;Port=5432;Database=app_test;Username=postgres;Password=root"
+    "Outbox": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   }
 }
 ```
 
-### 3. Environment 名稱必須一致且可預測
+### 3. Environment Names Must Be Consistent and Predictable
 
-- 使用單一命名慣例，不混用多種大小寫與別名
-- 目前標準命名：
+- Use one naming convention; do not mix casing schemes or aliases.
+- Current standard names:
   - `Development`
   - `Production`
   - `InMemory`
@@ -67,59 +67,59 @@ builder.Configuration.AddJsonFile($"appsettings.{profile}.json");
   - `TestOutbox`
 
 ```bash
-# ✅ 正確
+# ✅ Correct
 DOTNET_ENVIRONMENT=TestOutbox dotnet test
 
-# ❌ 錯誤：混用自製 profile 與多值
+# ❌ Incorrect: mix a custom profile mechanism with multiple values
 DOTNET_ENVIRONMENT=test,test-outbox dotnet test
 ```
 
-### 4. Profile-specific DI 必須在 Composition Root 明確分支
+### 4. Profile-Specific DI Must Branch Explicitly at the Composition Root
 
-環境差異的 DI 註冊必須集中在 composition root 或 profile-specific registration module。
-禁止依賴 attribute scanning、自動 assembly 掃描、或在任意類別內偷偷切 profile。
+DI registrations that vary by environment must be centralized in the composition root or a profile-specific registration module.
+Do not rely on attribute scanning, automatic assembly scanning, or hidden profile switching inside arbitrary classes.
 
 ```csharp
-// ✅ 正確：集中在 composition root 分支
+// ✅ Correct: branch centrally at the composition root
 if (builder.Environment.IsEnvironment("TestOutbox") || builder.Environment.IsEnvironment("Outbox"))
 {
     services.AddDbContext<AppDbContext>(...);
-    services.AddScoped<IRepository<Product, ProductId>, OutboxProductRepository>();
+    services.AddScoped<IAggregateRepository<Product, ProductId>, OutboxProductRepository>();
 }
 else
 {
-    services.AddSingleton<IRepository<Product, ProductId>, InMemoryProductRepository>();
+    services.AddSingleton<IAggregateRepository<Product, ProductId>, InMemoryProductRepository>();
 }
 ```
 
-### 5. InMemory profile 不得註冊 EF Core / Npgsql 依賴
+### 5. The InMemory Profile Must Not Register EF Core / Npgsql Dependencies
 
-InMemory 與 TestInMemory profile 必須能在沒有 DbContext、Npgsql、或 durable outbox 的情況下啟動。
+The InMemory and TestInMemory profiles must start without a DbContext, Npgsql, or a durable outbox.
 
 ```csharp
-// ❌ 錯誤：InMemory profile 仍註冊 DbContext
+// ❌ Incorrect: the InMemory profile still registers a DbContext
 services.AddDbContext<AppDbContext>(...);
 ```
 
-### 6. Outbox profile 必須完整註冊 persistence chain
+### 6. The Outbox Profile Must Register the Complete Persistence Chain
 
-Outbox 與 TestOutbox profile 必須完整包含：
+The Outbox and TestOutbox profiles must include all of the following:
 
 - DbContext
 - Outbox / Wolverine persistence
-- 對應 repository 實作
+- the corresponding repository implementation
 
-禁止只有部分註冊，導致 runtime 啟動成功但執行時失敗。
+Partial registration that allows startup to succeed but fails at runtime is prohibited.
 
-### 7. 應依賴抽象，不得在一般服務 constructor 綁定特定 profile 的 infra 類型
+### 7. Depend on Abstractions; General Service Constructors Must Not Bind to Profile-Specific Infrastructure Types
 
 ```csharp
-// ✅ 正確：依賴抽象
+// ✅ Correct: depend on an abstraction
 public sealed class TestDataInitializer
 {
-    private readonly IRepository<Product, ProductId> _repository;
+    private readonly IAggregateRepository<Product, ProductId> _repository;
 
-    public TestDataInitializer(IRepository<Product, ProductId> repository)
+    public TestDataInitializer(IAggregateRepository<Product, ProductId> repository)
     {
         _repository = repository;
     }
@@ -127,7 +127,7 @@ public sealed class TestDataInitializer
 ```
 
 ```csharp
-// ❌ 錯誤：直接綁定特定 infra
+// ❌ Incorrect: bind directly to specific infrastructure
 public sealed class TestDataInitializer
 {
     public TestDataInitializer(AppDbContext dbContext)
@@ -136,26 +136,26 @@ public sealed class TestDataInitializer
 }
 ```
 
-### 8. 測試不得在測試類別內動態竄改全域 environment 狀態
+### 8. Tests Must Not Mutate Global Environment State Dynamically Inside Test Classes
 
-Profile 選擇應在 test host、fixture、或執行命令層完成，不要在測試類別內直接覆蓋全域 environment variable。
-
----
-
-## 檢查清單
-
-- [ ] 只使用 `DOTNET_ENVIRONMENT` / `ASPNETCORE_ENVIRONMENT`
-- [ ] 使用 `appsettings.{Environment}.json` 管理環境差異
-- [ ] Environment 名稱遵守既定命名
-- [ ] DI profile 分支集中於 composition root
-- [ ] InMemory profile 沒有 EF Core / Npgsql 註冊
-- [ ] Outbox profile 有完整 persistence chain
-- [ ] 一般服務依賴抽象，不直接依賴特定 infra 類型
-- [ ] 測試不在類別內修改全域 environment 狀態
+Select the profile at the test host, fixture, or execution-command layer. Do not override global environment variables directly inside a test class.
 
 ---
 
-## 相關文件
+## Checklist
+
+- [ ] Use only `DOTNET_ENVIRONMENT` / `ASPNETCORE_ENVIRONMENT`.
+- [ ] Manage environment differences through `appsettings.{Environment}.json`.
+- [ ] Follow the established environment naming convention.
+- [ ] Centralize DI profile branches at the composition root.
+- [ ] Do not register EF Core / Npgsql in the InMemory profile.
+- [ ] Register the complete persistence chain in the Outbox profile.
+- [ ] Make general services depend on abstractions rather than profile-specific infrastructure types.
+- [ ] Do not modify global environment state inside test classes.
+
+---
+
+## Related Documents
 
 - [../../guides/implementation-guides/PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md](../../guides/implementation-guides/PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md)
 - [../../guides/implementation-guides/DOTNET-DI-TEST-GUIDE.md](../../guides/implementation-guides/DOTNET-DI-TEST-GUIDE.md)

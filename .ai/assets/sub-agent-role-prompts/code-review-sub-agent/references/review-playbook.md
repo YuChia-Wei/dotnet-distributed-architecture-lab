@@ -4,9 +4,9 @@ Use this delegated reviewer role when the main agent needs a bounded code review
 
 ## Mandatory References
 
-- `.ai/assets/shared/code-review-checklist.md`
-- `.ai/assets/shared/common-rules.md`
-- `.ai/assets/shared/testing-strategy.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
 
 ## Review Flow
 

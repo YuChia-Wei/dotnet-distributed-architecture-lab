@@ -1,109 +1,137 @@
-# Archive 編碼規範 (.NET)
+# Archive Coding Standards (.NET)
 
-本文件定義 Archive Pattern 的編碼標準，負責處理 Query Model 的寫入資料庫需求。
-
----
-
-## 📌 概述
-
-Archive Pattern 用於軟刪除與歷史資料管理，在 CQRS 架構中專門用於「Query Model」寫入。
-
-- **Query Model 寫入**：Archive 負責 Query Model 的寫入資料庫需求
-- **與 Repository 區別**：Repository 只限定在 Command Model 寫入單一 Aggregate 使用
-- **事件驅動**：Reactor 收到 Domain Event 時呼叫 Archive
+This document defines coding standards for the Archive Pattern, which handles database write requirements for Query Models.
 
 ---
 
-## 🏷️ Pattern 標記（自動化檢查用）
+## 📌 Overview
 
-以下標記供自動化 Code Review 腳本使用：
+The Archive Pattern is used for soft deletion and historical data management and is dedicated to Query Model writes in a CQRS architecture.
+
+- **Query Model writes**: An Archive handles database write requirements for a Query Model.
+- **Distinction from Repository**: A Repository is limited to writing a single Aggregate in the Command Model.
+- **Event-driven**: A Reactor invokes an Archive when it receives a Domain Event.
+
+---
+
+## 🏷️ Pattern Markers (for Automated Checks)
+
+The following markers are used by automated code review scripts:
 
 ```yaml
-# Archive 規則（軟刪除支援）
+# Archive rules (soft-delete support)
 Pattern (required, any): IsDeleted|IsArchived|ArchivedAt
-
-# 禁止規則（不可硬刪除）
-Pattern (forbidden): HardDelete
 ```
 
----
-
-## 📌 核心概念
-
-**Archive** 是一種資料庫寫入模式，在 CQRS 架構中，專門用於「Query Model」：
-
-- 介面與 Write Model 的 Repository 相似，差別在於 Archive 負責 Query Model 的寫入資料庫需求
-- Repository 只限定在 Command Model 寫入單一 Aggregate 使用
-- 可寫入單表格或跨表格
-- Handler 層的 Reactor 物件收到 Domain Event 時呼叫 Archive，將資料寫入資料庫
+The marker verifies that the read model represents archive state. It is not a
+method-naming rule. Physical deletion is governed through the restricted purge
+capability described below, so a generic `HardDelete` text check would be both
+too broad and too easy to evade.
 
 ---
 
-## 🔴 必須遵守的規則 (MUST FOLLOW)
+## 📌 Core Concept
 
-### 1. Archive Interface 設計
+An **Archive** is a database write pattern dedicated to Query Models in a CQRS architecture:
 
-#### 命名空間
+- Its interface resembles a Write Model Repository, but an Archive handles database write requirements for a Query Model.
+- A Repository is limited to writing a single Aggregate in the Command Model.
+- It may write to one table or across multiple tables.
+- A Reactor in the Handler layer invokes the Archive after receiving a Domain Event and writes the data to the database.
+
+---
+
+## 🔴 Mandatory Rules (MUST FOLLOW)
+
+### 1. Archive Interface Design
+
+#### Namespace
 
 ```csharp
-// ✅ 正確：Archive 介面定義在 Application 層
+// ✅ Correct: define the Archive interface in the Application layer
 namespace YourProject.Application.Users.Archives;
 
-// ❌ 錯誤：不要放在 Infrastructure 層
-namespace YourProject.Infrastructure.Persistence;  // 錯誤！
+// ❌ Incorrect: do not place it in the Infrastructure layer
+namespace YourProject.Infrastructure.Persistence;  // Incorrect!
 ```
 
-#### Interface 命名規範
+#### Interface Naming Rules
 
 ```csharp
-// ✅ 正確：使用 I[Entity]Archive 命名（單數形）
+// ✅ Correct: use the singular I[Entity]Archive naming pattern
 public interface IUserArchive { }
 
-// ❌ 錯誤：不要使用其他命名模式
-public interface IUserRepository { }  // Read Model 不要用 Repository
-public interface UserArchive { }      // 要加 I 前綴
-public interface IUserDtoArchive { }  // 不要用 DtoArchive
+// ❌ Incorrect: do not use other naming patterns
+public interface IUserRepository { }  // Do not use Repository for a Read Model
+public interface UserArchive { }      // Add the I prefix
+public interface IUserDtoArchive { }  // Do not use DtoArchive
 ```
 
-#### Interface 定義
+#### Interface Definition
 
 ```csharp
-// ✅ 正確：定義 Archive Interface
+// ✅ Correct: define an Archive interface
 public interface IUserArchive
 {
     Task<UserData?> FindByIdAsync(string userId, CancellationToken ct = default);
     Task SaveAsync(UserData userData, CancellationToken ct = default);
-    Task DeleteAsync(UserData userData, CancellationToken ct = default);
 }
 
-// ❌ 錯誤：不要返回領域物件
+// ❌ Incorrect: do not return a domain object
 public interface IUserArchive
 {
-    Task<User?> FindByIdAsync(string userId);  // 錯誤！應返回 UserData
+    Task<User?> FindByIdAsync(string userId);  // Incorrect! Return UserData instead
 }
 
-// ❌ 錯誤：不要返回 DTO
+// ❌ Incorrect: do not return a DTO
 public interface IUserArchive
 {
-    Task<UserDto?> FindByIdAsync(string userId);  // 錯誤！應返回 UserData
+    Task<UserDto?> FindByIdAsync(string userId);  // Incorrect! Return UserData instead
 }
 ```
+
+The general Archive port owns lookup and persistence only. Archive state belongs
+to the read-side data model (`IsArchived`, `ArchivedAt`, and related audit
+metadata) and is persisted through `SaveAsync`. Do not put `DeleteAsync` on this
+port: that name hides whether the operation changes archive state or physically
+deletes data.
+
+When the application needs an explicit state transition, define a narrowly
+named operation such as `ArchiveAsync` or `MarkArchivedAsync` on a use-case- or
+capability-specific port. The operation must update archive metadata and retain
+the record.
+
+Physical read-model cleanup is a separate restricted capability. It must not be
+added to `IUserArchive` or reused as an aggregate purge mechanism:
+
+```csharp
+// Application capability for controlled read-model cleanup only.
+public interface IUserReadModelPurgePort
+{
+    Task PurgeAsync(string userId, CancellationToken ct = default);
+}
+```
+
+Calling this port requires explicit authorization plus satisfied retention,
+legal-hold, audit-evidence, and dependent-read-model cleanup gates. The adapter
+must make those decisions observable; normal Reactor and CRUD flows must not
+receive this capability.
 
 ---
 
-### 2. Archive 實作
+### 2. Archive Implementation
 
-#### 實作位置
+#### Implementation Location
 
 ```csharp
-// ✅ 正確：實作放在 Infrastructure 層
+// ✅ Correct: place the implementation in the Infrastructure layer
 namespace YourProject.Infrastructure.Persistence.Archives;
 ```
 
-#### EF Core Archive 實作
+#### EF Core Archive Implementation
 
 ```csharp
-// ✅ 正確：EF Core 實作
+// ✅ Correct: EF Core implementation
 namespace YourProject.Infrastructure.Persistence.Archives;
 
 public class EfCoreUserArchive : IUserArchive
@@ -140,34 +168,25 @@ public class EfCoreUserArchive : IUserArchive
             _context.Entry(existing).CurrentValues.SetValues(userData);
         }
     }
-
-    public async Task DeleteAsync(UserData userData, CancellationToken ct = default)
-    {
-        ArgumentNullException.ThrowIfNull(userData);
-        
-        var existing = await _context.Users
-            .FirstOrDefaultAsync(x => x.Id == userData.Id, ct);
-        
-        if (existing is not null)
-        {
-            _context.Users.Remove(existing);
-        }
-    }
 }
 ```
 
+To archive a record, construct or update `UserData` with its archive state and
+metadata, then call `SaveAsync`. An EF Archive adapter must not call `Remove` as
+part of normal archive behavior.
+
 ---
 
-### 3. DI 註冊
+### 3. DI Registration
 
 ```csharp
-// ✅ 正確：在 ServiceExtensions 中註冊
+// ✅ Correct: register in ServiceExtensions
 public static class ArchiveServiceExtensions
 {
     public static IServiceCollection AddArchives(this IServiceCollection services)
     {
         services.AddScoped<IUserArchive, EfCoreUserArchive>();
-        // 其他 Archive 註冊...
+        // Other Archive registrations...
         
         return services;
     }
@@ -176,37 +195,39 @@ public static class ArchiveServiceExtensions
 
 ---
 
-## 🎯 使用場景指南
+## 🎯 Usage Guide
 
-### 何時使用 Archive
+### When to Use an Archive
 
-- ✅ Query Model 的 CRUD 操作
-- ✅ 跨 Bounded Context 的參考資料同步
-- ✅ 事件驅動寫入 Read Model
-- ❌ Write Model 的 CRUD 操作（使用 Repository）
+- ✅ Query Model CRUD operations
+- ✅ Reference-data synchronization across Bounded Contexts
+- ✅ Event-driven Read Model writes
+- ✅ Persisting soft-delete/archive state and audit metadata
+- ❌ Write Model CRUD operations (use a Repository)
+- ❌ Physical deletion through the general Archive port
 
-### 與 Repository 的區別
+### Difference from a Repository
 
 ```csharp
-// Repository：Write Model 的 Aggregate 持久化
-IRepository<Product, ProductId> repository;
-await repository.FindByIdAsync(id);  // 返回 Product 領域物件
-await repository.SaveAsync(product); // 儲存領域物件
+// Repository: persistence for a Write Model Aggregate
+IAggregateRepository<Product, ProductId> repository;
+await repository.FindByIdAsync(id);  // Returns a Product domain object
+await repository.SaveAsync(product); // Persists a domain object
 
-// Archive：Read Model 的 Data 持久化
+// Archive: persistence for Read Model Data
 IUserArchive archive;
-await archive.FindByIdAsync(userId);   // 返回 UserData
-await archive.SaveAsync(userData);     // 儲存 Data 物件
+await archive.FindByIdAsync(userId);   // Returns UserData
+await archive.SaveAsync(userData);     // Persists a Data object
 ```
 
 ---
 
-## 🎯 事件驅動寫入範例
+## 🎯 Event-Driven Write Example
 
-### Reactor 使用 Archive
+### A Reactor Uses an Archive
 
 ```csharp
-// ✅ 正確：使用 WolverineFx 處理 Domain Event
+// ✅ Correct: use WolverineFx to handle a Domain Event
 public class UserCreatedReactor
 {
     private readonly IUserArchive _archive;
@@ -233,35 +254,39 @@ public class UserCreatedReactor
 
 ---
 
-## 🔍 檢查清單
+## 🔍 Checklist
 
 ### Archive Interface
-- [ ] 定義在 `Application` 層
-- [ ] 使用 `I[Entity]Archive` 命名
-- [ ] 返回 Data (Persistence Object) 而非領域物件或 DTO
-- [ ] 有 `FindByIdAsync`, `SaveAsync`, `DeleteAsync` 方法
-- [ ] 支援 `CancellationToken`
+- [ ] Defined in the `Application` layer.
+- [ ] Uses the `I[Entity]Archive` naming pattern.
+- [ ] Returns Data (a Persistence Object), not a domain object or DTO.
+- [ ] The general port has lookup and save operations; archive state is represented by Data.
+- [ ] Explicit archive operations use names such as `ArchiveAsync` or `MarkArchivedAsync`, never ambiguous `DeleteAsync`.
+- [ ] Physical read-model purge, when required, uses a separate restricted capability-specific port.
+- [ ] Supports `CancellationToken`.
 
-### Archive 實作
-- [ ] 實作在 `Infrastructure.Persistence.Archives`
-- [ ] 使用 EF Core
-- [ ] 使用 `ArgumentNullException.ThrowIfNull`
-- [ ] 透過 DI 註冊
+### Archive Implementation
+- [ ] Implemented in `Infrastructure.Persistence.Archives`.
+- [ ] If the adapter uses EF Core, it follows EF Core tracking/materialization guidance.
+- [ ] Uses `ArgumentNullException.ThrowIfNull`.
+- [ ] Does not use EF `Remove` for normal archive behavior.
+- [ ] Purge access is gated by authorization, retention, legal, audit, and dependent-cleanup policy.
+- [ ] Registered through DI.
 
 ---
 
-## 📂 程式碼範例
+## 📂 Code Examples
 
-更多完整範例請參考：
+For more complete examples, see:
 
-| 範例 | 路徑 |
+| Example | Path |
 |------|------|
-| Inquiry + Archive 範例 | [../examples/inquiry-archive/](../examples/inquiry-archive/) |
-| 使用指南 | [../examples/inquiry-archive/USAGE-GUIDE.md](../examples/inquiry-archive/USAGE-GUIDE.md) |
+| Inquiry + Archive examples | [../examples/inquiry-archive/](../examples/inquiry-archive/) |
+| Usage guide | [../examples/inquiry-archive/USAGE-GUIDE.md](../examples/inquiry-archive/USAGE-GUIDE.md) |
 
 ---
 
-## 相關文件
+## Related Documents
 
 - [repository-standards.md](repository-standards.md)
 - [projection-standards.md](projection-standards.md)

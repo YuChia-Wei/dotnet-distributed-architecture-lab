@@ -5,7 +5,7 @@
 # ============================================
 # Purpose: Automate mutation testing with Stryker.NET and validate thresholds
 # Usage: .ai/scripts/check-mutation-coverage.sh [entity-name]
-# Example: .ai/scripts/check-mutation-coverage.sh ProductBacklogItem
+# Example: .ai/scripts/check-mutation-coverage.sh WorkItem
 # ============================================
 
 set -euo pipefail

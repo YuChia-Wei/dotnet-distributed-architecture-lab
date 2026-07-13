@@ -1,30 +1,40 @@
-using System.Collections.Generic;
-using Example.Plans.UseCases.Port;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Example.Plans.Domain;
 
 namespace Example.Plans.UseCases;
 
-public interface IGetTasksByDateUseCase : IQuery<GetTasksByDateInput, GetTasksByDateOutput>
+/// <summary>依日期查詢任務的應用流程。</summary>
+public sealed class GetTasksByDateUseCase : IGetTasksByDateUseCase
 {
-    GetTasksByDateOutput Execute(GetTasksByDateInput input);
-}
+    private readonly ITasksByDateProjection _projection;
 
-public sealed class GetTasksByDateInput : IInput
-{
-    public string? UserId { get; set; }
-    public DateOnly? TargetDate { get; set; }
-
-    public static GetTasksByDateInput Create() => new();
-}
-
-public sealed class GetTasksByDateOutput : CqrsOutput
-{
-    public IReadOnlyList<TaskDto> Tasks { get; private set; } = new List<TaskDto>();
-
-    public static GetTasksByDateOutput Create() => new();
-
-    public GetTasksByDateOutput SetTasks(IEnumerable<TaskDto> tasks)
+    public GetTasksByDateUseCase(ITasksByDateProjection projection)
     {
-        Tasks = new List<TaskDto>(tasks);
-        return this;
+        Contract.RequireNotNull("Projection", projection);
+        _projection = projection;
+    }
+
+    public Task<GetTasksByDateOutput> ExecuteAsync(
+        GetTasksByDateInput input,
+        CancellationToken cancellationToken)
+    {
+        Contract.RequireNotNull("Input", input);
+        Contract.RequireNotNull("User id", input.UserId);
+        Contract.RequireNotNull("Target date", input.TargetDate);
+        Contract.Require("User id is not empty", () => !string.IsNullOrWhiteSpace(input.UserId));
+
+        var tasks = _projection.FindTasksByDate(input.UserId!, input.TargetDate!.Value);
+
+        var output = GetTasksByDateOutput.Create();
+        output.SetTasks(tasks);
+        output.SetExitCode(ExitCode.Success);
+
+        Contract.Ensure("Tasks list is not null", () => output.Tasks != null);
+        Contract.Ensure("All tasks match the target date", () =>
+            output.Tasks.All(task => task.Deadline.HasValue && task.Deadline == input.TargetDate));
+
+        return Task.FromResult(output);
     }
 }

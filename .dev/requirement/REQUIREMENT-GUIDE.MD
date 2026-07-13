@@ -43,7 +43,7 @@
 
 ```mermaid
 flowchart LR
-  User -->|Create PBI| API
+  User -->|Create Resource| API
   API --> UseCase
   UseCase --> Repository
 ```

@@ -25,7 +25,7 @@ Profile isolation
 └── Service isolation
     ├── Repository registrations (profile-specific)
     ├── DbContext registrations (outbox only)
-    └── Use case handlers (profile-independent)
+    └── Use Cases (profile-independent)
 ```
 
 ## Solution 1: Conditional DI Registration
@@ -38,8 +38,8 @@ public static class CommonConfiguration
 {
     public static IServiceCollection AddUseCases(this IServiceCollection services)
     {
-        services.AddScoped<ICreateProductUseCase, CreateProductHandler>();
-        services.AddScoped<IGetProductsUseCase, GetProductsHandler>();
+        services.AddScoped<ICreateProductUseCase, CreateProductUseCase>();
+        services.AddScoped<IGetProductsUseCase, GetProductsUseCase>();
         return services;
     }
 }
@@ -52,7 +52,7 @@ public static class InMemoryConfiguration
         // TODO: replace with .NET ez in-memory store classes when available
         services.AddSingleton<IMessageStore, InMemoryMessageStore>();
         services.AddSingleton<IMessageBus, InMemoryMessageBus>();
-        services.AddSingleton<IRepository<Product, ProductId>, InMemoryProductRepository>();
+        services.AddSingleton<IAggregateRepository<Product, ProductId>, InMemoryProductRepository>();
         services.AddSingleton<IProductsProjection, InMemoryProductsProjection>();
         return services;
     }
@@ -73,7 +73,7 @@ public static class OutboxConfiguration
             opts.UseDurableOutbox();
         });
 
-        services.AddScoped<IRepository<Product, ProductId>, OutboxProductRepository>();
+        services.AddScoped<IAggregateRepository<Product, ProductId>, OutboxProductRepository>();
         services.AddScoped<IProductsProjection, EfProductsProjection>();
         return services;
     }
@@ -95,7 +95,7 @@ public static class OutboxConfiguration
 // appsettings.outbox.json
 {
   "ConnectionStrings": {
-    "Outbox": "Host=localhost;Port=5432;Database=aiscrum;Username=postgres;Password=root"
+    "Outbox": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   }
 }
 ```
@@ -143,7 +143,7 @@ public static class OutboxRepositoryConfiguration
 {
     public static IServiceCollection AddOutboxRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IRepository<Product, ProductId>, OutboxProductRepository>();
+        services.AddScoped<IAggregateRepository<Product, ProductId>, OutboxProductRepository>();
         return services;
     }
 }
@@ -219,8 +219,8 @@ ASPNETCORE_ENVIRONMENT=test-inmemory
 Pitfall 2: DI registration conflicts
 ```csharp
 // Wrong: conflicting registrations with different service types
-services.AddSingleton<IRepository, InMemoryRepository>();
-services.AddSingleton<IRepository, OutboxRepository>();
+services.AddSingleton<IAggregateRepository<Product, ProductId>, InMemoryProductRepository>();
+services.AddSingleton<IAggregateRepository<Product, ProductId>, OutboxProductRepository>();
 
 // Correct: register the same service type per profile only
 ```

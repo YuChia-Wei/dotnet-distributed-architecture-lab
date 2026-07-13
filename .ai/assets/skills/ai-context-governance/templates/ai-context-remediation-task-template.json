@@ -1,0 +1,34 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "<finding-id>-<action-slug>",
+  "workflow_id": "<YYYY-MM-DD-topic[-NN]>",
+  "owner_skill": "ai-context-governance",
+  "status": "pending",
+  "created_at": "<ISO-8601-with-offset>",
+  "updated_at": "<ISO-8601-with-offset>",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "finding_ids": [],
+  "scope": {
+    "target": "",
+    "files": [],
+    "constraints": [],
+    "non_goals": []
+  },
+  "execution": {
+    "steps": [],
+    "validation": [],
+    "last_completed_step": "",
+    "next_action": ""
+  },
+  "results": {
+    "summary": "",
+    "files_changed": [],
+    "tests_run": [],
+    "finding_status": "not-addressed",
+    "residual_risk": "",
+    "follow_up_needed": true
+  }
+}

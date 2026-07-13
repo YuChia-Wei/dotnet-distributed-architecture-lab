@@ -2,11 +2,12 @@
 
 本文件定義本 repo 在多 agent 協作情境下，`skill`、`prompt`、`guide`、`workflow artifact` 的放置策略。
 
-目前主要目標是同時支援：
+目前已提供的 runtime wrapper 支援：
 
 - Codex
-- Gemini
-- GitHub Copilot
+- Claude-compatible runtimes
+
+GitHub Copilot 是規劃中的可選整合，目前 repo 並未提供其 wrapper roots。
 
 ## 核心原則
 
@@ -47,9 +48,9 @@
 
 ## 為什麼不建議把 repo skill 真相放到 runtime wrapper
 
-- 你目前同時使用 Codex、Gemini、GitHub Copilot
+- 若未來同時使用 Codex、Claude-compatible runtime、GitHub Copilot
 - `.agents/skills/` 或 `.claude/skills/` 都屬於 wrapper layer
-- 未來若還要補 `.gemini/` 或 Copilot 對應配置，會更難建立一致的 cross-agent 分工
+- 未來若還要補 Copilot 對應配置，會更難建立一致的 cross-agent 分工
 
 ## 更穩定的收納方式
 
@@ -75,16 +76,13 @@
   - current runtime skill wrappers
 - `.claude/skills/`
   - Claude runtime skill wrappers
-- `.gemini/commands/`
-  - Gemini compatibility wrappers
-- `.github/prompts/`
-  - GitHub Copilot prompt-oriented wrappers
-- `.github/copilot-instructions.md`
-  - GitHub Copilot repo-level instructions
+下列為規劃中的可選 adapter 路徑，不是目前 catalog：
+
+- `.github/prompts/`：GitHub Copilot prompt-oriented wrappers
+- `.github/copilot-instructions.md`：GitHub Copilot repo-level instructions
 
 如果未來要支援更多 agent-specific runtime 格式，再額外增加：
 
-- `.gemini/...`
 - `.github/copilot/...`
 - `.codex/...`
 

@@ -28,7 +28,7 @@
 ## 文件索引
 
 - `LEARNING-PATH.md`
-  - 專案學習路徑
+  - dotnet-backend profile-specific 學習參考；技術選擇須由 target repository 採用
 - `NEW-PROJECT-GUIDE.md`
-  - 新專案入門與 onboarding 指南
+  - retired ExampleApp onboarding example；新專案應先使用 `repo-structure-sync`
 

@@ -1,31 +1,41 @@
-using System.Collections.Generic;
-using Example.Plans.UseCases.Port;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Example.Plans.UseCases;
 
-public interface IGetPlansUseCase : IQuery<GetPlansInput, GetPlansOutput>
+/// <summary>查詢方案清單的應用流程。</summary>
+public sealed class GetPlansUseCase : IGetPlansUseCase
 {
-    GetPlansOutput Execute(GetPlansInput input);
-}
+    private readonly IPlanDtosProjection _planDtosProjection;
 
-public sealed class GetPlansInput : IInput
-{
-    public string? UserId { get; set; }
-    public string? SortBy { get; set; }
-    public string? SortOrder { get; set; }
-
-    public static GetPlansInput Create() => new();
-}
-
-public sealed class GetPlansOutput : CqrsOutput
-{
-    public IReadOnlyList<PlanDto> Plans { get; private set; } = new List<PlanDto>();
-
-    public static GetPlansOutput Create() => new();
-
-    public GetPlansOutput SetPlans(IEnumerable<PlanDto> plans)
+    public GetPlansUseCase(IPlanDtosProjection planDtosProjection)
     {
-        Plans = new List<PlanDto>(plans);
-        return this;
+        _planDtosProjection = planDtosProjection;
+    }
+
+    public Task<GetPlansOutput> ExecuteAsync(
+        GetPlansInput input,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var output = GetPlansOutput.Create();
+            var projectionInput = new PlanDtosProjectionInput
+            {
+                UserId = input.UserId,
+                SortBy = input.SortBy,
+                SortOrder = input.SortOrder
+            };
+
+            var plans = _planDtosProjection.Query(projectionInput);
+
+            output.SetPlans(plans);
+            output.SetExitCode(ExitCode.Success);
+            return Task.FromResult(output);
+        }
+        catch (Exception ex)
+        {
+            throw new UseCaseFailureException(ex);
+        }
     }
 }

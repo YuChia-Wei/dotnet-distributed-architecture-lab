@@ -1,6 +1,15 @@
-# AiScrum Project Structure and New Project Setup Guide (Dotnet)
+# Legacy ExampleApp Project Setup Guide (Dotnet)
 
-This guide explains how to create a new dotnet project based on the AiScrum structure.
+> **Status: retired onboarding example — do not execute as the current setup path.**
+>
+> The commands and topology below preserve an earlier ExampleApp profile. For a
+> real target repository, copy the framework context and run `repo-structure-sync`
+> first. That skill inventories file-backed facts and refreshes the target-specific
+> `AGENTS.md`, `.dev/`, and necessary `.ai/` entries. Do not create the legacy
+> directory tree or install the listed packages unless the target repository has
+> explicitly selected this profile.
+
+This guide documents the retired ExampleApp setup for historical comparison.
 
 ## Table of Contents
 1. Prerequisites
@@ -14,8 +23,12 @@ This guide explains how to create a new dotnet project based on the AiScrum stru
 
 ## Prerequisites
 
+All database, framework, test-library, and package requirements in this document
+are conditional on adopting the preserved ExampleApp profile; they are not
+defaults for a new target repository.
+
 ### Environment requirements
-- .NET SDK (version defined in `.dev/project-config.yaml`)
+- .NET SDK (version confirmed from `global.json`, project files, or generated `.dev/project-config.yaml`)
 - Git
 - PostgreSQL (test port 5800, production port 5500)
 - Your IDE (Rider, Visual Studio, VS Code)
@@ -26,6 +39,9 @@ This guide explains how to create a new dotnet project based on the AiScrum stru
 - CQRS fundamentals
 
 ## Step 1: Create the project skeleton
+
+> Legacy example only. Current onboarding must use `repo-structure-sync` to
+> discover and adapt the target repository instead of recreating this topology.
 
 ```bash
 # 1) Create project root
@@ -41,18 +57,21 @@ mkdir -p src/Api src/Application src/Domain src/Infrastructure src/tests
 # 4) Create .ai and .dev folders
 mkdir -p .ai/{config,guides,prompts,scripts,tech-stacks,workflows}
 mkdir -p .dev/{adr,specs,tasks}
-mkdir -p .dev/tasks/{feature,test,refactoring,frontend,main}
+mkdir -p .dev/tasks/{feature,test,refactoring,main}
 mkdir -p .dev/specs/{use-cases,aggregates,domain-events}
 ```
 
 ## Step 2: Set up AI project memory
 
 - Keep `AGENTS.md` (or your chosen memory file) updated with project-specific context.
-- Use `.dev/guides/LEARNING-PATH.md` as the onboarding reference for new agents.
+- Use `.dev/guides/learning-guides/LEARNING-PATH.md` as the onboarding reference for new agents.
 
 ## Step 3: Configure project metadata
 
-Create `.dev/project-config.yaml` as the single source of truth:
+Run `repo-structure-sync` to generate `.dev/project-config.yaml` from repository evidence:
+
+The YAML below is illustrative. Package versions and feature flags must come
+from target-repository evidence or explicit maintainer decisions.
 
 ```yaml
 projectName: MyScrum
@@ -102,6 +121,9 @@ dotnet sln add src/tests/Tests.csproj
 
 ### 4.2 Add required packages
 
+These packages are required only for the preserved WolverineFx/EF Core/
+PostgreSQL/xUnit/BDDfy example profile. They are not framework-wide defaults.
+
 In `src/Api` and `src/Infrastructure`:
 ```bash
 dotnet add src/Api package WolverineFx
@@ -138,7 +160,7 @@ dotnet test
 ## Step 5: Create the first feature
 
 ### Option 1: Use spec documents (recommended)
-1. Create use case spec in `.dev/specs/use-cases/...`
+1. Create a use case spec in the target repository spec area defined by repo-structure-sync
 2. Implement with TDD using canonical sub-agent assets:
    - `.ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`
    - `.ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml`
@@ -173,8 +195,6 @@ Use Wolverine message registration and ensure events are serializable. TODO: def
 Ensure `ASPNETCORE_ENVIRONMENT` matches `test-inmemory` or `test-outbox` and that the matching appsettings file is present.
 
 ## Next Steps
-1. Read `.dev/guides/LEARNING-PATH.md`.
-2. Use `.ai/CODE-TEMPLATES.md` for scaffolding.
+1. Read `.dev/guides/learning-guides/LEARNING-PATH.md`.
+2. Use `.ai/assets/tech-stacks/dotnet-backend/references/CODE-TEMPLATES.MD` for scaffolding.
 3. Keep `.dev/standards/`, `.dev/guides/`, and `.dev/ARCHITECTURE.MD` updated as the primary rule set.
-
-

@@ -1,24 +1,24 @@
 # Standards Rationale
 
-本目錄存放可攜式的模式選擇理由。
+This directory stores portable rationales for pattern choices.
 
-它回答的是：
+It answers:
 
-- 為什麼這套知識庫偏好某種模式
-- 為什麼不用其他常見替代方案
-- 這些規則背後的 tradeoff 是什麼
+- why this knowledge base prefers a given pattern;
+- why other common alternatives are not preferred;
+- what tradeoffs underlie these rules.
 
-## 何時放在這裡
+## When Content Belongs Here
 
-- 規則已經落地成標準文件
-- 原本理由散落在 ADR
-- 這些理由值得跟著 `.dev/` / `.ai/` 一起移植到其他專案
+- The rule already exists in a standards document.
+- Its rationale was previously scattered across ADRs.
+- The rationale is worth carrying with `.dev/` / `.ai/` into other projects.
 
-## 與 ADR 的分工
+## Division of Responsibility with ADRs
 
 - `ADR`
-  - 記錄「這個 repo 當時做了什麼決策」
+  - records which decision this repository made at a specific time;
 - `standards/rationale`
-  - 記錄「這類規則通常為什麼成立」
+  - records why this kind of rule generally holds.
 
-因此當某個 ADR 的主要剩餘價值只剩方法論理由時，應優先把理由抽到這裡，再決定是否退役該 ADR。
+Therefore, when an ADR's primary remaining value is methodological rationale, extract that rationale here before deciding whether to retire the ADR.

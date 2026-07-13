@@ -2,6 +2,9 @@ using Example.Plans.Domain;
 using Example.Plans.UseCases;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Example.Plans.Outbox;
 
@@ -19,13 +22,13 @@ public static class RepositoryConfig
         //     opts.UseDurableOutbox();
         // });
 
-        services.AddScoped<IRepository<Plan, PlanId>, OutboxRepository>();
+        services.AddScoped<IAggregateRepository<Plan, PlanId>, OutboxRepository>();
         return services;
     }
 }
 
 // TODO: Replace placeholder with ezDDD/Wolverine outbox repository integration.
-public sealed class OutboxRepository : IRepository<Plan, PlanId>
+public sealed class OutboxRepository : IAggregateRepository<Plan, PlanId>
 {
     private readonly PlanDbContext _db;
 
@@ -34,16 +37,22 @@ public sealed class OutboxRepository : IRepository<Plan, PlanId>
         _db = db;
     }
 
-    public Plan? FindById(PlanId id)
+    public async Task<Plan?> FindByIdAsync(
+        PlanId id,
+        CancellationToken cancellationToken = default)
     {
-        var data = _db.Plans.Find(id.Value);
+        var data = await _db.Plans
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.PlanId == id.Value, cancellationToken);
         return data == null ? null : PlanOutboxMapper.ToDomain(data);
     }
 
-    public void Save(Plan aggregate)
+    public async Task SaveAsync(
+        Plan aggregate,
+        CancellationToken cancellationToken = default)
     {
         var data = PlanOutboxMapper.ToData(aggregate);
         _db.Plans.Update(data);
-        _db.SaveChanges();
+        await _db.SaveChangesAsync(cancellationToken);
     }
 }

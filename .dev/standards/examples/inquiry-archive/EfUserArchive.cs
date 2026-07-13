@@ -23,12 +23,6 @@ public sealed class EfUserArchive : IUserArchive
         _db.Users.Update(entity);
         _db.SaveChanges();
     }
-
-    public void Delete(UserData entity)
-    {
-        _db.Users.Remove(entity);
-        _db.SaveChanges();
-    }
 }
 
 // TODO: Replace with actual read-side DbContext.

@@ -5,9 +5,9 @@ Your task is to review aggregate implementations for correctness, invariants, an
 
 ## Mandatory References
 - `../assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/sub-agent.yaml`
-- `.ai/assets/shared/common-rules.md`
-- `.ai/assets/shared/code-review-checklist.md`
-- `.ai/assets/shared/testing-strategy.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
 
 ## Review Focus Areas
 1) DDD boundaries and invariants (YAGNI: implement only what spec requires)
@@ -49,7 +49,7 @@ TODO: confirm final Contract API surface (Require/Ensure/Invariant naming).
 
 ## Aggregate Test Rules
 - [ ] Aggregate tests are pure unit tests (no DI, no WebApplicationFactory)
-- [ ] Use xUnit 3A pattern (Arrange-Act-Assert)
+- [ ] Use Given-When-Then structure and naming; BDDfy is the default profile unless the target team explicitly opted out, and Arrange-Act-Assert (3A) is not accepted as a substitute
 - [ ] DateProvider used for time control (if DateProvider exists)
 - [ ] No BaseTestClass usage
 

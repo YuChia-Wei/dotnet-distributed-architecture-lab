@@ -1,30 +1,30 @@
-# 資料庫遷移指南 (.NET)
+# Database Migration Guide (.NET)
 
-## 📋 概述
-本指南說明 .NET 版本的資料庫遷移策略與最佳實踐，目標是穩定、安全、可回滾。
+## 📋 Overview
+This guide describes database migration strategies and best practices for .NET, with stability, safety, and rollback capability as its goals.
 
-## 🎯 遷移策略
+## 🎯 Migration Strategy
 
-### 工具選擇
-1. **EF Core Migrations** - 標準做法（開發/測試/生產）
-2. **DbUp / Flyway** - 進階或跨語言需求（視專案需求）
+### Tool Selection
+1. **EF Core Migrations** - Standard approach (development/testing/production)
+2. **DbUp / Flyway** - Advanced or cross-language requirements (depending on project needs)
 
 ```
-開發環境: EF Core Migrations
-測試環境: EF Core Migrations + Testcontainers
-生產環境: EF Core Migrations（產生 SQL 先審核）
+Development environment: EF Core Migrations
+Test environment: EF Core Migrations + Testcontainers
+Production environment: EF Core Migrations (generate and review SQL first)
 ```
 
-## 🛠️ EF Core Migrations 設定
+## 🛠️ EF Core Migrations Configuration
 
-### 1. 必要套件
+### 1. Required Packages
 ```bash
 dotnet add package Microsoft.EntityFrameworkCore
 dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 ```
 
-### 2. 目錄結構（建議）
+### 2. Directory Structure (Recommended)
 ```
 src/Infrastructure/
 └── Migrations/
@@ -33,52 +33,52 @@ src/Infrastructure/
     └── ...
 ```
 
-### 3. 基本命令
+### 3. Basic Commands
 ```bash
-# 建立遷移
+# Create a migration
 dotnet ef migrations add InitialCreate --project src/Infrastructure --startup-project src/Api
 
-# 套用遷移
+# Apply migrations
 dotnet ef database update --project src/Infrastructure --startup-project src/Api
 
-# 產出 SQL（建議上線前審核）
+# Generate SQL (review before deployment is recommended)
 dotnet ef migrations script --project src/Infrastructure --startup-project src/Api -o migration.sql
 ```
 
-## 🔄 遷移程序
+## 🔄 Migration Procedure
 
-### 1. 開發/測試
+### 1. Development/Testing
 ```bash
 dotnet ef migrations add AddPlanTables --project src/Infrastructure --startup-project src/Api
 dotnet ef database update --project src/Infrastructure --startup-project src/Api
 ```
 
-### 2. 生產環境（建議）
+### 2. Production Environment (Recommended)
 ```bash
-# 產生 SQL，手動審核後執行
+# Generate SQL, then execute it after manual review
 dotnet ef migrations script --project src/Infrastructure --startup-project src/Api -o release.sql
 ```
 
-## 🔁 回滾策略
+## 🔁 Rollback Strategy
 
-### EF Core 回滾
+### EF Core Rollback
 ```bash
-# 回到上一個 migration
+# Return to the previous migration
 dotnet ef database update PreviousMigration --project src/Infrastructure --startup-project src/Api
 
-# 回到初始狀態（僅限測試/開發）
+# Return to the initial state (testing/development only)
 dotnet ef database update 0 --project src/Infrastructure --startup-project src/Api
 ```
 
-## 🎨 最佳實踐
+## 🎨 Best Practices
 
-1. **禁止在生產環境使用 EnsureCreated/EnsureDeleted**
-2. **產出 SQL 後審核再上線**
-3. **使用明確命名（含時間前綴）**
-4. **重要變更要有回滾策略**
-5. **Outbox / Event Store schema 必須納入遷移**
+1. **Do not use EnsureCreated/EnsureDeleted in production**
+2. **Generate and review SQL before deployment**
+3. **Use explicit names (including a time prefix)**
+4. **Provide a rollback strategy for significant changes**
+5. **Outbox / Event Store schemas must be included in migrations**
 
-## 📊 監控與健康檢查
+## 📊 Monitoring and Health Checks
 
 ### Pending migrations
 ```csharp
@@ -98,14 +98,14 @@ public sealed class MigrationHealthCheck : IHealthCheck
 }
 ```
 
-## 📋 檢查清單
+## 📋 Checklist
 
-### 遷移前
-- [ ] 完整備份資料庫
-- [ ] 測試環境驗證
-- [ ] 準備回滾計畫
+### Before Migration
+- [ ] Create a complete database backup
+- [ ] Validate in the test environment
+- [ ] Prepare a rollback plan
 
-### 遷移後
-- [ ] 驗證應用功能
-- [ ] 檢查 pending migrations
-- [ ] 監控效能指標
+### After Migration
+- [ ] Verify application functionality
+- [ ] Check pending migrations
+- [ ] Monitor performance metrics

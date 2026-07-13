@@ -1,10 +1,10 @@
 # MQ Topology Guide
 
-本指南定義 `.dev/operations/mq-topology.md` 的最小內容。
+本指南定義 `mq-topology.md` 類文件的最小內容。它是 template / authoring guidance，不表示 `.dev/operations/mq-topology.md` 已存在。
 
 ## 目的
 
-讓維護者快速回答：
+讓維護者在需要建立 MQ topology 文件時，快速回答：
 
 - 目前有哪些 broker / topic / exchange / queue
 - message route 怎麼走

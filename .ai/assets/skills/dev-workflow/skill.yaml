@@ -1,0 +1,99 @@
+asset_id: "dev-workflow"
+schema_version: "1.0"
+asset_type: "skill-spec"
+title: "Development Workflow"
+purpose: "Coordinate the multi-stage software and product development lifecycle by deciding direct mode versus workflow mode, creating development workflow artifacts, mapping stages to development capability slots, using local profiles when available, and enforcing validation and commit checkpoints."
+portability: "repo-portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+capability_slots:
+  - "workflow-orchestration"
+governance_references:
+  - ".dev/standards/WORKFLOW-GATE-POLICY.md"
+  - ".dev/standards/WORKFLOW-ARTIFACT-POLICY.md"
+  - ".dev/standards/GIT-COMMIT-POLICY.md"
+  - ".dev/TEAM-GIT-FLOW-RULES.MD"
+  - ".ai/assets/skills/README.MD"
+triggers:
+  - "dev workflow"
+  - "development workflow"
+  - "software development workflow"
+  - "product development lifecycle"
+  - "plan and execute this development workflow"
+  - "multi-stage implementation"
+  - "development skill handoff"
+inputs:
+  - "software or product development goal and explicit constraints"
+  - "runtime goal or workflow context when available"
+  - "current repository state and git status"
+  - "applicable workflow gate and commit policy"
+  - "current workflow artifacts, if any"
+  - "canonical skill registry and relevant skill specs"
+  - "available downstream skill metadata or runtime wrapper descriptions"
+  - "issue number, required branch policy, validation expectations, and handoff requirements"
+outputs:
+  - "direct-mode or workflow-mode decision"
+  - "capability-slot routing plan"
+  - "local skill routing plan when a capability profile exists"
+  - "skill discovery result with confidence when routing is inferred"
+  - "development workflow plan and task artifacts created from this skill's templates when workflow mode applies"
+  - "stage status, validation checkpoints, and commit timing recommendations"
+  - "handoff packet for downstream skills or sub-agents"
+  - "runtime coordination prompt when the user wants Codex Goal or Claude workflow integration"
+  - "fallback checklist when no matching downstream skill or profile is available"
+  - "final execution summary with validation evidence and remaining decisions"
+constraints:
+  - "Do not claim standalone fallback output has the same quality as a matching downstream specialist skill or project-specific standard."
+  - "Do not replace downstream development skills; delegate requirement, specification, problem framing, architecture, test design, implementation, review, and compliance work to the matching local skill when the profile provides one."
+  - "When no matching downstream skill exists, use fallback playbooks only to create a minimum viable checklist, handoff prompt, or quality gate."
+  - "When downstream skill mapping is inferred, report confidence and evidence before relying on the route."
+  - "Do not make a runtime goal or runtime workflow the source of truth for repository process rules; use runtime features to carry dev-workflow execution."
+  - "Do not use this skill to orchestrate AI context audits, AI context governance, documentation-only cleanup, repository initialization, or other non-development maintenance workflows; route those tasks to their owning skill."
+  - "When workflow mode applies, follow .dev/standards/WORKFLOW-ARTIFACT-POLICY.md, default artifacts to .dev/workflows/<workflow-id>/, and keep the required locator there when a development workflow declares another repository-relative artifact root."
+  - "Do not store runtime workflow artifacts under .ai/assets/skills, .agents/skills, .claude/skills, generated folders, or temporary locations."
+  - "Preserve user decisions, explicit constraints, branch rules, commit policy, and validation expectations."
+  - "Create or switch to a dedicated workflow branch before creating development workflow artifacts or making material workflow edits; never use main as the active workflow branch."
+  - "Treat a requested pre-completion push or merge as a checkpoint and keep pending workflow state active; use --no-ff for merges unless the user explicitly selects another strategy."
+  - "Ask the user only for direction decisions that cannot be safely inferred from repository evidence or existing policies."
+workflow:
+  - step: 1
+    description: "Intake the software or product development goal, current repo state, active branch, explicit constraints, and any issue number or commit expectations."
+  - step: 2
+    description: "Apply the workflow gate to choose direct mode or workflow mode."
+  - step: 3
+    description: "If workflow mode applies, create or switch to the dedicated workflow branch first, then create or update development workflow artifacts from this skill's templates under the repository-approved artifact root."
+  - step: 4
+    description: "Map each stage to a generic capability slot, then use the active capability profile or skill discovery playbook to route to a local skill or use a fallback playbook."
+  - step: 5
+    description: "Coordinate stage execution, status updates, validation checkpoints, and commit timing."
+  - step: 6
+    description: "Before the final response, verify branch and checkpoint state plus the workflow closing checklist, including whether the commit policy requires a commit; then close with evidence: branch, changed files, validation, commits, merge/checkpoint state, open decisions, and recommended next action."
+references:
+  - ".ai/assets/skills/dev-workflow/references/routing-playbook.md"
+  - ".ai/assets/skills/dev-workflow/references/skill-discovery-playbook.md"
+  - ".ai/assets/skills/dev-workflow/references/capability-profile.md"
+  - ".ai/assets/skills/dev-workflow/references/capability-profile.yaml"
+  - ".ai/assets/skills/dev-workflow/references/fallback-playbooks.md"
+  - ".ai/assets/skills/dev-workflow/references/runtime-coordination.md"
+  - ".ai/assets/skills/dev-workflow/references/workflow-artifact-playbook.md"
+  - ".ai/assets/skills/dev-workflow/references/output-contract.md"
+workflow_artifacts:
+  workflow_kind: "software-development"
+  workflow_id_pattern: "YYYY-MM-DD-topic[-NN]"
+  artifact_root_default: ".dev/workflows/<workflow-id>"
+  locator: ".ai/assets/skills/dev-workflow/templates/workflow-locator-template.yaml"
+  plan: ".ai/assets/skills/dev-workflow/templates/development-workflow-plan-template.md"
+  task: ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json"
+  review: ".ai/assets/skills/dev-workflow/templates/development-review-report-template.md"
+examples:
+  - ".dev/guides/ai-collaboration-guides/DEV-WORKFLOW-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/DEV-WORKFLOW-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/dev-workflow/"
+  codex:
+    wrapper_path: ".agents/skills/dev-workflow/"
+status: "active"

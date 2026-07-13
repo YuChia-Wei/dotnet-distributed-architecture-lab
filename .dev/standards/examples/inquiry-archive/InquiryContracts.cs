@@ -12,5 +12,4 @@ public interface IArchive<TEntity, in TId>
 {
     TEntity? FindById(TId id);
     void Save(TEntity entity);
-    void Delete(TEntity entity);
 }

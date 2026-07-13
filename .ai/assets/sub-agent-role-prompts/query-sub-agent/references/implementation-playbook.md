@@ -4,15 +4,20 @@ Use this delegated sub-agent role when the main agent needs a worker focused on 
 
 ## Mandatory References
 
-- `.ai/assets/shared/common-rules.md`
-- `.ai/assets/shared/domain-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/domain-rules.md`
 
 ## Rules
 
 - Queries must not modify domain state
 - Use read models or projections for query paths
 - Return DTOs, never domain entities
-- Use WolverineFx query handlers
+- Implement `I<Operation>UseCase` and `<Operation>UseCase` with `ExecuteAsync` and
+  a non-optional `CancellationToken`.
+- Use a transport-neutral Use Case input/output contract.
+- Add a query Handler only for a real dispatch entry; keep Wolverine conditional.
+- A Controller uses the query Use Case by default. Direct Query Repository/Service
+  access is allowed only for an explicitly selected pure-query endpoint.
 - Keep endpoint and DTO naming aligned with current bounded context terminology
 
 ## Query-Side Storage Pattern
@@ -38,5 +43,5 @@ Naming:
 
 ## Output Structure
 
-- `src/Application/<Aggregate>/UseCases/Queries/`
+- `src/Application/UseCases/<Operation>/`
 

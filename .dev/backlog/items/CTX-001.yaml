@@ -1,0 +1,23 @@
+schema_version: "1.0"
+backlog_id: "CTX-001"
+title: "Post-AIC-007 AI Context Health Re-Audit"
+category: "ai-context-audit"
+status: "resolved"
+priority: "HIGH"
+summary: "Re-run the independent AI context audit now that AIC-007 is resolved, and determine whether repository health can move from remediation-recommended to healthy or healthy-with-followups."
+created_at: "2026-07-12T14:17:52+08:00"
+updated_at: "2026-07-12T18:22:53+08:00"
+origin_refs:
+  - ".dev/workflows/2026-07-10-ai-context-self-audit/reports/03-post-remediation-audit-report.md"
+  - ".dev/workflows/2026-07-11-aic-007-fail-closed-validation/review-report.md"
+recommended_owner_skill: "ai-context-auditor"
+handoff_condition: "Authorize a durable read-only audit workflow after AIC-007 closure; exclude src, tests, and all product implementation trees."
+workflow_refs:
+  - ".dev/workflows/2026-07-12-post-aic-007-ai-context-audit/workflow.yaml"
+task_refs:
+  - ".dev/workflows/2026-07-12-post-aic-007-ai-context-audit/tasks/CTX001-001.json"
+resolution_ref: ".dev/workflows/2026-07-12-post-aic-007-ai-context-audit/reports/01-audit-report.md"
+decision_needed: "No scope decision is blocking if the standard AI-context allowlist and code exclusions are accepted."
+inventory_notes:
+  - "No active post-adoption workflow exists as of this inventory."
+  - "The prior post-remediation report explicitly made a new audit conditional on AIC-007 completion; that condition is now satisfied."

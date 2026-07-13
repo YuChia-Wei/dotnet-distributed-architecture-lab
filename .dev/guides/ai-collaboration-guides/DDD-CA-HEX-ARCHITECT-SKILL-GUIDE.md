@@ -189,7 +189,7 @@ Return:
 ## 短版範例
 
 ```text
-Use $ddd-ca-hex-architect to design a new inventory bounded context that integrates with SaleOrders through Kafka events.
+Use $ddd-ca-hex-architect to design a new inventory bounded context that integrates with <BoundedContext> through Kafka events.
 ```
 
 ```text

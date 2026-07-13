@@ -4,7 +4,7 @@ using Xunit;
 
 // TODO: Replace with Reqnroll bindings.
 // [Binding]
-namespace AiScrum.Tests.Steps;
+namespace ExampleApp.Tests.Steps;
 
 public sealed class CompleteUseCaseSteps
 {

@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Example.Plans.UseCases.Port;
 
 namespace Example.Plans.UseCases;
 
 // TODO: Replace these placeholders with the .NET ports of ezDDD/ezSpec/uContract.
 public interface IInput { }
-
-public interface ICommand<in TInput, out TOutput> where TInput : IInput { }
-
-public interface IQuery<in TInput, out TOutput> where TInput : IInput { }
 
 public enum ExitCode
 {
@@ -51,13 +49,15 @@ public sealed class UseCaseFailureException : Exception
     }
 }
 
-public interface IRepository<TAggregate, in TId>
+public interface IAggregateRepository<TAggregate, in TId>
 {
-    TAggregate? FindById(TId id);
-    void Save(TAggregate aggregate);
+    Task<TAggregate?> FindByIdAsync(TId id, CancellationToken cancellationToken = default);
+    Task SaveAsync(TAggregate aggregate, CancellationToken cancellationToken = default);
 }
 
-public interface IPlanProjection
+public interface IQueryRepository { }
+
+public interface IPlanProjection : IQueryRepository
 {
     PlanDto? FindById(string planId);
 }
@@ -69,12 +69,12 @@ public sealed class PlanDtosProjectionInput
     public string? SortOrder { get; set; }
 }
 
-public interface IPlanDtosProjection
+public interface IPlanDtosProjection : IQueryRepository
 {
     IReadOnlyList<PlanDto> Query(PlanDtosProjectionInput input);
 }
 
-public interface ITasksByDateProjection
+public interface ITasksByDateProjection : IQueryRepository
 {
     IReadOnlyList<TaskDto> FindTasksByDate(string userId, DateOnly targetDate);
 }

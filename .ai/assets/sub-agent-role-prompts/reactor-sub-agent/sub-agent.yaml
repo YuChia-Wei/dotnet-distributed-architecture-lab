@@ -1,7 +1,12 @@
 asset_id: "reactor-sub-agent"
+schema_version: "1.0"
 asset_type: "sub-agent-role-prompt"
 title: "Reactor Sub-Agent"
 purpose: "Define the delegated worker-role prompt for implementing a reactor for cross-aggregate consistency in this repository's .NET stack."
+portability: "repo-portable"
+audience: "agent-facing"
+wrapper_targets: []
+source_of_truth: "canonical"
 role_kind: "use-case-sub-agent"
 triggers:
   - "reactor sub-agent"
@@ -28,8 +33,11 @@ workflow:
     description: "Produce delegated implementation guidance or code changes with validation notes"
 references:
   - ".ai/assets/sub-agent-role-prompts/reactor-sub-agent/references/implementation-playbook.md"
-  - ".ai/assets/shared/common-rules.md"
-  - ".ai/assets/shared/architecture-config.md"
-  - ".ai/assets/shared/testing-strategy.md"
-human_guide: ".ai/SUB-AGENT-SYSTEM.MD"
+  - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
+  - ".ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md"
+  - ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"
+examples:
+  - ".ai/assets/sub-agent-role-prompts/reactor-sub-agent/references/implementation-playbook.md"
+human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
+status: "active"
 

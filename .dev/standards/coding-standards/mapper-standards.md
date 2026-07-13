@@ -1,42 +1,42 @@
-# Mapper 編碼規範 (.NET)
+# Mapper Coding Standards (.NET)
 
-本文件定義 Mapper 類別的編碼標準，負責在不同層級之間轉換資料物件。
-
----
-
-## 📌 概述
-
-Mapper 負責 Domain 與 DTO / Data 物件的轉換。
-
-- **Domain → Data**: 將領域物件轉換為持久化物件
-- **Data → Domain**: 將持久化物件轉換回領域物件
-- **Domain → DTO**: 將領域物件轉換為資料傳輸物件
+This document defines coding standards for Mapper classes that convert data objects between layers.
 
 ---
 
-## 🏷️ Pattern 標記（自動化檢查用）
+## 📌 Overview
 
-以下標記供自動化 Code Review 腳本使用：
+Mappers convert between Domain and DTO/Data objects.
+
+- **Domain → Data**: Convert a domain object to a persistence object
+- **Data → Domain**: Convert a persistence object back to a domain object
+- **Domain → DTO**: Convert a domain object to a data-transfer object
+
+---
+
+## 🏷️ Pattern Markers (for Automated Checks)
+
+The following markers are used by automated code-review scripts:
 
 ```yaml
-# Mapper 規則
-Pattern (required, any): static class|sealed class
+# Mapper rules
+Pattern (required): static class
 Pattern (required): ArgumentNullException\.ThrowIfNull
 
-# 禁止規則
+# Forbidden rules
 Pattern (forbidden, ignore-comment): I[A-Za-z0-9]*Repository|UseCase|Handler
 ```
 
 ---
 
-## 🔴 必須遵守的規則 (MUST FOLLOW)
+## 🔴 Mandatory Rules (MUST FOLLOW)
 
-### 1. 使用 Static Methods
+### 1. Use Static Methods
 
-Mapper 應該使用靜態方法，避免建立實例：
+A Mapper SHOULD use static methods and avoid instance creation:
 
 ```csharp
-// ✅ 正確：使用 static class 和 static methods
+// ✅ Correct: use a static class and static methods
 public static class ProductMapper
 {
     public static ProductData ToData(Product aggregate)
@@ -58,7 +58,7 @@ public static class ProductMapper
     {
         ArgumentNullException.ThrowIfNull(data);
         
-        // 從 Event Sourcing 重建
+        // Rebuild from Event Sourcing
         if (data.DomainEvents?.Any() == true)
         {
             var events = data.DomainEvents
@@ -70,19 +70,22 @@ public static class ProductMapper
             return product;
         }
         
-        // 從當前狀態重建
-        return new Product(
+        // Rebuild from current state. Constructor behavior is unknown here,
+        // so explicitly remove any events emitted during reconstruction.
+        var product = new Product(
             ProductId.From(data.Id),
             data.Name,
             data.CreatorId
         );
+        product.ClearDomainEvents();
+        return product;
     }
 }
 
-// ❌ 錯誤：建立 Mapper 實例
+// ❌ Incorrect: create a Mapper instance
 public class ProductMapper
 {
-    public ProductData ToData(Product aggregate)  // 非 static
+    public ProductData ToData(Product aggregate)  // Not static
     {
         // ...
     }
@@ -91,12 +94,12 @@ public class ProductMapper
 
 ---
 
-### 2. 完整的雙向轉換
+### 2. Complete Bidirectional Conversion
 
-`ToData()` 和 `ToDomain()` 必須是對稱的：
+`ToData()` and `ToDomain()` MUST be symmetrical:
 
 ```csharp
-// ✅ 正確：ToData 序列化，ToDomain 反序列化
+// ✅ Correct: ToData serializes; ToDomain deserializes
 public static class ProductMapper
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -114,7 +117,7 @@ public static class ProductMapper
             State = aggregate.State.ToString()
         };
         
-        // 序列化複雜物件
+        // Serialize a complex object
         if (aggregate.DefinitionOfDone is not null)
         {
             data.DefinitionOfDoneJson = JsonSerializer.Serialize(
@@ -132,7 +135,7 @@ public static class ProductMapper
             data.CreatorId
         );
         
-        // 反序列化複雜物件
+        // Deserialize a complex object
         if (!string.IsNullOrEmpty(data.DefinitionOfDoneJson))
         {
             var dod = JsonSerializer.Deserialize<DefinitionOfDone>(
@@ -145,20 +148,20 @@ public static class ProductMapper
 }
 ```
 
-補充要求：
+Additional requirements:
 
-- 優先沿用單一 `JsonSerializerOptions`
-- 複雜物件序列化失敗時應優雅降級，不應讓 mapper 中斷整個流程
-- 若 data 內含 domain events，`ToDomain()` 應優先走 event-based rebuild
+- Prefer reusing one `JsonSerializerOptions` instance.
+- A complex-object serialization failure SHOULD degrade gracefully rather than make the mapper terminate the entire flow.
+- If the data contains domain events, `ToDomain()` SHOULD prefer event-based rebuilding.
 
 ---
 
-### 3. IsDeleted 欄位必須映射
+### 3. The IsDeleted Field MUST Be Mapped
 
-Aggregate Root 的 Mapper 必須處理 `IsDeleted` 欄位：
+An Aggregate Root Mapper MUST handle the `IsDeleted` field:
 
 ```csharp
-// ✅ 正確：映射 IsDeleted 欄位
+// ✅ Correct: map the IsDeleted field
 public static ProductData ToData(Product aggregate)
 {
     return new ProductData
@@ -166,7 +169,7 @@ public static ProductData ToData(Product aggregate)
         Id = aggregate.Id.Value,
         Name = aggregate.Name,
         IsDeleted = aggregate.IsDeleted,  // MANDATORY!
-        // ...其他欄位
+        // ...other fields
     };
 }
 
@@ -178,7 +181,7 @@ public static Product ToDomain(ProductData data)
         data.CreatorId
     );
     
-    // MANDATORY: 恢復 IsDeleted 狀態
+    // MANDATORY: restore IsDeleted state
     if (data.IsDeleted)
     {
         product.MarkAsDeleted();
@@ -187,27 +190,27 @@ public static Product ToDomain(ProductData data)
     return product;
 }
 
-// ❌ 錯誤：遺漏 IsDeleted 映射
+// ❌ Incorrect: omit IsDeleted mapping
 public static ProductData ToData(Product aggregate)
 {
     return new ProductData
     {
         Id = aggregate.Id.Value,
         Name = aggregate.Name
-        // 缺少 IsDeleted！
+        // IsDeleted is missing!
     };
 }
 ```
 
 ---
 
-### 4. Domain Events 與 Metadata 必須映射
+### 4. Domain Events and Metadata MUST Be Mapped
 
-若 mapper 參與 write model / outbox round-trip，必須處理：
+If a mapper participates in a write-model/outbox round trip, it MUST handle:
 
 - domain events
 - event metadata
-- stream identity（若該 aggregate 採 event/outbox 模式）
+- stream identity (when the aggregate uses the event/outbox model)
 
 ```csharp
 public static ProductData ToData(Product aggregate)
@@ -233,32 +236,43 @@ public static Product ToDomain(ProductData data)
             .Cast<IDomainEvent>()
             .ToList();
 
-        return new Product(events);
+        var product = new Product(events);
+        product.ClearDomainEvents();
+        return product;
     }
 
-    // fallback rebuild by current state
+    // Fallback: rebuild from current state
 }
 ```
 
+### Pending Domain Events After Reconstruction
+
+An aggregate returned by `ToDomain()` MUST have no pending `DomainEvents`. Rehydration restores historical or persisted state; it does not represent a new business decision and MUST NOT cause those events to be published or persisted again.
+
+- A rehydration constructor SHOULD replay historical events through `When(...)` or an equivalent state-transition path that does not enqueue them as new events.
+- `ClearDomainEvents()` is not unconditionally required when the aggregate API explicitly guarantees that reconstruction leaves the pending-event collection empty.
+- If the selected constructor or replay path emits or enqueues events, or its cleanliness contract is not explicit, the mapper MUST call `ClearDomainEvents()` before returning the aggregate.
+- State-based fallback reconstruction follows the same rule; constructor side effects must not escape as pending events.
+
 ---
 
-## 🎯 處理 Value Objects
+## 🎯 Handling Value Objects
 
 ### Record Value Objects
 
 ```csharp
-// Value Object 定義
+// Value Object definition
 public sealed record ProductId(string Value)
 {
     public static ProductId From(string value) => new(value);
 }
 
-// Mapper 中使用
+// Use in a Mapper
 public static ProductData ToData(Product aggregate)
 {
     return new ProductData
     {
-        Id = aggregate.Id.Value,  // 取出內部值
+        Id = aggregate.Id.Value,  // Extract the inner value
         // ...
     };
 }
@@ -266,7 +280,7 @@ public static ProductData ToData(Product aggregate)
 public static Product ToDomain(ProductData data)
 {
     var product = new Product(
-        ProductId.From(data.Id),  // 重建 Value Object
+        ProductId.From(data.Id),  // Rebuild the Value Object
         // ...
     );
     return product;
@@ -275,12 +289,12 @@ public static Product ToDomain(ProductData data)
 
 ---
 
-## 🎯 錯誤處理策略
+## 🎯 Error-Handling Strategy
 
-### 優雅降級原則
+### Graceful-Degradation Principle
 
 ```csharp
-// ✅ 正確：捕獲異常，記錄但不中斷
+// ✅ Correct: catch and optionally log the exception without terminating
 public static Product ToDomain(ProductData data)
 {
     var product = new Product(...);
@@ -295,76 +309,76 @@ public static Product ToDomain(ProductData data)
         }
         catch (JsonException ex)
         {
-            // 可選：記錄錯誤用於除錯
+            // Optional: log the error for diagnostics
             // _logger.LogWarning(ex, "Failed to deserialize DefinitionOfDone");
             
-            // 優雅降級：繼續處理，不中斷流程
+            // Degrade gracefully: continue without terminating the flow
         }
     }
     
     return product;
 }
 
-// ❌ 錯誤：讓異常傳播
+// ❌ Incorrect: allow the exception to propagate
 public static Product ToDomain(ProductData data)
 {
     var dod = JsonSerializer.Deserialize<DefinitionOfDone>(
-        data.DefinitionOfDoneJson, JsonOptions);  // 可能拋出異常
+        data.DefinitionOfDoneJson, JsonOptions);  // May throw
     // ...
 }
 ```
 
 ---
 
-### JSON 失敗處理原則
+### JSON Failure-Handling Rules
 
-- 可以記錄 warning
-- 不應因單一複雜欄位序列化/反序列化失敗就讓整個 mapping 流程失敗
-- 但不得默默遺漏關鍵 business identity
+- A warning may be logged.
+- Failure to serialize/deserialize one complex field SHOULD NOT fail the entire mapping flow.
+- Critical business identity MUST NOT be silently omitted.
 
 ---
 
-## ⚠️ 常見錯誤
+## ⚠️ Common Mistakes
 
-### Aggregate 新增狀態但 Data/Mapper 未同步更新
+### Aggregate State Is Added Without Updating Data/Mapper
 
-**這是最容易遺漏的錯誤！**
+**This is the easiest mistake to overlook.**
 
 ```csharp
-// ❌ 錯誤：Aggregate 新增了欄位，但 Mapper 沒有處理
+// ❌ Incorrect: the Aggregate adds a field that the Mapper does not handle
 // Product.cs
 public class Product : AggregateRoot<ProductId>
 {
-    private readonly List<CommittedSprint> _committedSprints = new();  // 新增欄位
+    private readonly List<CommittedSprint> _committedSprints = new();  // New field
     
     public void CommitSprint(SprintId sprintId)
     {
-        // ... 業務邏輯
+        // ... business logic
     }
 }
 
-// ProductMapper.cs - ToData() 沒更新 ❌
-// ProductMapper.cs - ToDomain() 沒更新 ❌
-// ProductData.cs - 沒有對應欄位 ❌
+// ProductMapper.cs - ToData() was not updated ❌
+// ProductMapper.cs - ToDomain() was not updated ❌
+// ProductData.cs - no corresponding field ❌
 
-// 結果：Save() 後再 FindById()，CommittedSprints 會是空的！
+// Result: after Save() and FindById(), CommittedSprints will be empty!
 ```
 
 ```csharp
-// ✅ 正確：三個檔案必須同步更新
+// ✅ Correct: all three files MUST be updated together
 
-// 1. ProductData.cs - 新增欄位
+// 1. ProductData.cs - add a field
 public class ProductData
 {
     public string? CommittedSprintsJson { get; set; }
 }
 
-// 2. ProductMapper.ToData() - 序列化
+// 2. ProductMapper.ToData() - serialize
 data.CommittedSprintsJson = JsonSerializer.Serialize(
     aggregate.CommittedSprints.Select(s => s.SprintId.Value).ToList(),
     JsonOptions);
 
-// 3. ProductMapper.ToDomain() - 反序列化
+// 3. ProductMapper.ToDomain() - deserialize
 if (!string.IsNullOrEmpty(data.CommittedSprintsJson))
 {
     var sprintIds = JsonSerializer.Deserialize<List<string>>(
@@ -378,47 +392,47 @@ if (!string.IsNullOrEmpty(data.CommittedSprintsJson))
 
 ---
 
-## 🔍 檢查清單
+## 🔍 Checklist
 
-### Mapper 結構
-- [ ] 使用 `static class` 和 `static methods`
-- [ ] 處理 null 輸入 (`ArgumentNullException.ThrowIfNull`)
-- [ ] 配置 `JsonSerializerOptions`
+### Mapper Structure
+- [ ] Uses a `static class` and `static methods`
+- [ ] Handles null input (`ArgumentNullException.ThrowIfNull`)
+- [ ] Configures `JsonSerializerOptions`
 
-### ToData 方法
-- [ ] 映射所有基本欄位
-- [ ] 序列化複雜物件為 JSON
-- [ ] 包含 `IsDeleted` 欄位
-- [ ] 處理序列化錯誤
-- [ ] 如屬 write-model mapper，包含 domain events / metadata / stream identity
+### ToData Method
+- [ ] Maps every basic field
+- [ ] Serializes complex objects as JSON
+- [ ] Includes the `IsDeleted` field
+- [ ] Handles serialization errors
+- [ ] Includes domain events, metadata, and stream identity for a write-model mapper
 
-### ToDomain 方法
-- [ ] 優先從 events 重建（Event Sourcing）
-- [ ] 支援從狀態重建
-- [ ] 反序列化所有複雜物件
-- [ ] 恢復 `IsDeleted` 狀態
-- [ ] 呼叫 `ClearDomainEvents()`
-- [ ] 反序列化失敗時採優雅降級，不讓整體流程中斷
+### ToDomain Method
+- [ ] Prefers rebuilding from events (Event Sourcing)
+- [ ] Supports rebuilding from state
+- [ ] Deserializes every complex object
+- [ ] Restores `IsDeleted` state
+- [ ] Returns the reconstructed aggregate with no pending `DomainEvents`; calls `ClearDomainEvents()` when the constructor/replay path can enqueue events or does not explicitly guarantee cleanliness
+- [ ] Degrades gracefully on deserialization failure without terminating the entire flow
 
-### ToDto 方法
-- [ ] 有 Domain → DTO 方法
-- [ ] 有 Data → DTO 方法（for Projection）
+### ToDto Method
+- [ ] Provides a Domain → DTO method
+- [ ] Provides a Data → DTO method (for Projection)
 
 ---
 
-## 📂 程式碼範例
+## 📂 Code Examples
 
-更多完整範例請參考：
+For more complete examples, see:
 
-| 範例 | 路徑 |
+| Example | Path |
 |------|------|
-| Mapper 範例 | [../examples/mapper/](../examples/mapper/) |
-| Outbox Mapper 範例 | [../examples/outbox/](../examples/outbox/) |
-| DTO 範例 | [../examples/dto/](../examples/dto/) |
+| Mapper example | [../examples/mapper/](../examples/mapper/) |
+| Outbox Mapper example | [../examples/outbox/](../examples/outbox/) |
+| DTO example | [../examples/dto/](../examples/dto/) |
 
 ---
 
-## 相關文件
+## Related Documents
 
 - [aggregate-standards.md](aggregate-standards.md)
 - [repository-standards.md](repository-standards.md)

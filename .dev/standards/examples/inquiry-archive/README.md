@@ -68,11 +68,23 @@ public sealed class EfUserArchive : IUserArchive
 }
 ```
 
+The normal Archive port exposes lookup and save operations. Archive state and
+audit metadata belong to the read-side data model and are persisted with
+`Save`; do not add an ambiguous `Delete` operation or call EF Core `Remove`.
+If a use case benefits from an explicit transition, name it `Archive` or
+`MarkArchived` and retain the record.
+
+Physical read-model cleanup is exceptional. Model it as a separate restricted
+capability-specific port such as `IUserReadModelPurgePort.PurgeAsync`. Grant that
+capability only after authorization, retention, legal-hold, audit-evidence, and
+dependent-cleanup gates pass. It is not an aggregate purge port and must not be
+injected into normal Reactor or CRUD flows.
+
 ## Inquiry vs Projection vs Archive
 
 | Feature | Repository | Projection | Inquiry | Archive |
 |---------|------------|------------|---------|---------|
-| Purpose | CRUD | Read view | Complex query | Soft delete |
+| Purpose | Aggregate persistence | Read view | Complex query | Soft delete and retention |
 | Writes | Yes | No | No | Yes |
 | Output | Aggregate | DTO | IDs/DTO | Archived DTO |
 

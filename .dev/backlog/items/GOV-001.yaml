@@ -1,0 +1,23 @@
+schema_version: "1.0"
+backlog_id: "GOV-001"
+title: "Legacy Workflow Follow-Up Reconciliation"
+category: "workflow-governance"
+status: "open"
+priority: "MEDIUM"
+summary: "Reconcile follow-up and open-question markers in legacy no-locator workflows against later completed work so historical clues do not remain hidden or get mistaken for active tasks."
+created_at: "2026-07-12T14:17:52+08:00"
+updated_at: "2026-07-12T14:17:52+08:00"
+origin_refs:
+  - ".dev/workflows/INDEX.MD"
+  - ".dev/workflows/2026-04-14-legacy-decision-portability-consolidation/workflow-plan.md"
+  - ".dev/workflows/2026-07-repository-pattern-standards-alignment/tasks/follow-up-usecase-handler-boundary.json"
+  - ".dev/workflows/2026-07-usecase-command-handler-boundary/workflow-plan.md"
+recommended_owner_skill: "ai-context-governance"
+handoff_condition: "Run a read-only reconciliation first; promote only still-current work to separate backlog items and do not retrofit lifecycle locators unless a legacy workflow is formally resumed."
+workflow_refs: []
+task_refs: []
+resolution_ref: null
+decision_needed: "No immediate decision; request user disposition only for follow-ups that remain current after reconciliation."
+inventory_notes:
+  - "Legacy status values such as done and follow_up_needed are not current lifecycle truth."
+  - "The repository-pattern Use Case/Handler follow-up is already satisfied by a later completed workflow and must not be duplicated."

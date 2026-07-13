@@ -1,5 +1,7 @@
 # Workflows
 
+[Workflow Index](INDEX.MD)
+
 本目錄是跨 skill / subagent workflow artifact 的正式存放位置。
 
 ## 目的
@@ -19,38 +21,41 @@
 - 它與 `.dev/specs/`、`.dev/operations/`、`.dev/standards/` 共享同一條 knowledge-system 邊界
 - 只有當 repo 未來出現獨立的 repo-wide operational workflow system，才再評估是否升格到根目錄
 
-## 建議結構
+## Discovery 結構
 
 ```text
 .dev/workflows/
   <workflow-id>/
-    workflow-plan.md
-    review-report.md
-    tasks/
-      <task-id>.json
+    workflow.yaml
 ```
+
+`workflow.yaml` 是固定 locator。真正 artifact 預設放在相同目錄，也可由 workflow-owning skill 宣告其他 repository-relative `artifact_root`。詳細共通契約見 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`。
+
+`INDEX.MD` 是降低認知負載的 discovery view；locator 仍擁有 status、owner、updated time 與 entrypoint。跨 workflow 的 durable 待辦由 `.dev/backlog/` 管理，不應塞入本目錄的 index。
+
+建立新 workflow 時，必須先從預定 base branch 建立獨立 workflow branch，再建立 locator。Codex 預設使用 `codex/<workflow-id>`。Workflow 尚未完成時的 merge/push 只算 checkpoint，不得把 status 改成 completed；push-only 從遠端 workflow branch 接續，checkpoint merge 後才從更新後的 target 建立新的 continuation branch。Workflow branch 預設以 `--no-ff` 合併。
 
 ## 命名原則
 
-- `<workflow-id>`: 使用可追蹤的主題名稱，例如 `2026-03-ordering-boundary-cleanup`
-- `workflow-plan.md`: 單一 workflow 的 architect plan
-- `review-report.md`: 單一 workflow 的正式 review artifact，可承載 architecture、implementation、document、或 workflow review
-- `tasks/<task-id>.json`: 單一 stage 或單一 tactical work item
+- `<workflow-id>`：新 workflow 使用 `YYYY-MM-DD-<skill-owned-topic>[-<sequence>]`，例如 `2026-07-10-ordering-boundary-cleanup`
+- `workflow.yaml`：固定 discovery locator，記錄 owner、狀態、時間、artifact root 與 entrypoint
+- plan、task 與 report 結構：由能建立該類 workflow 的 skill 自行管理
+- 舊有 `YYYY-MM-*` workflow 保留歷史名稱，不為形式一致而全面 rename
 
-## Templates
+## Template Ownership
 
-- `templates/workflow-plan-template.md`
-- `templates/review-report-template.md`
-- `templates/workflow-task-template.json`
+- 本目錄不擁有萬用 workflow template。
+- `dev-workflow` 管理 software-development workflow templates。
+- `ai-context-governance` 管理 AI context maintenance workflow 與 remediation templates。
+- `ai-context-auditor` 管理 audit report templates。
+- 其他能建立 workflow 的 skill 應在自己的 canonical skill 目錄宣告 templates、ID 規則與 artifact layout。
 
 ## 使用原則
 
 - 小任務或單一 skill 任務，不強制建立本目錄內容
-- 只有進入 optional workflow mode 時，才建立對應 workflow 資料夾
-- 若同一 workflow 有多輪 review，可在 `review-report.md` 中追加輪次，或由使用者明確決定是否拆新 workflow
-- workflow 進入實作階段後，不應把全部結果累積到最後一次 commit；每個可驗證、可回顧、可回滾的切片都應形成獨立 commit
-- 「可提交切片」至少應滿足：範圍有邊界、主要調整已完成、最小驗證已執行，或已明確記錄無法驗證的原因
-- 若 workflow 明顯分 stage，至少每個 stage 結束時都應有對應 commit；若單一 stage 仍很大，應再往下切成較小的 commit checkpoint
+- 進入 workflow mode 時，建立對應 workflow 資料夾
+- workflow mode 的判斷以 `.dev/standards/WORKFLOW-GATE-POLICY.md` 為準
+- 多輪 review、audit 或 remediation report 是否拆檔，由 owning skill 的 artifact contract 決定；final baseline 不得被後續修正靜默覆寫
 
 ## Workflow 觸發條件
 
@@ -62,6 +67,9 @@
 - 需要保存 document refactor 的 decision trail
 - 需要整理 source-of-truth，而不是只做單次修改
 - 需要在多輪作業中追蹤哪些內容已完成、哪些刻意延後
+- 會影響未來 agent 行為、AI context 邊界、skill routing、或 runtime wrapper 結構
+
+詳細 gate 規則見 `.dev/standards/WORKFLOW-GATE-POLICY.md`。
 
 反之，若只是：
 
@@ -77,11 +85,4 @@
 - 若問題核心是 requirement、spec、runbook、context map、event catalog、AI routing 文件不足，應優先建立 document workflow
 - document workflow 的 stage 應以知識邊界切分，而不是以程式碼檔案切分
 - 若後續需要 code refactor，應在 document stage 補齊最小必要真相後再展開
-
-## Commit Discipline
-
-- workflow commit 的目的，是保留每個中間可用狀態，而不是只在全部做完後一次傾倒
-- commit 訊息應反映該切片的邊界，例如 `refactor: migrate product controllers to use case ports`
-- 若當前切片尚未完成且無法安全提交，應先縮小切片，而不是延後到整個 workflow 結束再一次提交
-- 若驗證受環境限制阻擋，仍應在 workflow artifact 中記錄阻擋原因，並在可獨立審查的範圍內先提交已完成部分
 

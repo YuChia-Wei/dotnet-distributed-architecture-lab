@@ -1,117 +1,127 @@
 # Gherkin Feature Storage Guide
 
-本文件定義本 repo 的 Gherkin `.feature` 正式存放規範。
+This conditional-enablement guide defines the official storage conventions for a target project that decides to create or maintain Gherkin `.feature` files. It does not require every project to create `.feature` files.
 
-## 1. 目的
+## 0. Enablement Conditions
 
-本 repo 同時有兩種測試相關 artifact：
+Create or maintain `.feature` files only when at least one of the following conditions applies:
+
+- The user or requirement directly provides a `.feature` file.
+- The user explicitly requests the design or generation of a `.feature` file.
+- The target profile or team has adopted Reqnroll or another Gherkin runner.
+
+When none of these conditions applies, do not proactively create `.feature` files, step definitions, or runner integration. Regardless of whether `.feature` support is enabled, every C# test must use Given-When-Then and must not substitute Arrange-Act-Assert (3A). BDDfy is the default tool, but the target team may explicitly opt out.
+
+## 1. Purpose
+
+A target project with `.feature` support enabled has two types of test artifacts:
 
 - `.dev/specs/tests/`
-  - 測試意圖、scenario design、assertion notes、coverage gaps、追溯資訊
+  - Test intent, scenario design, assertion notes, coverage gaps, and traceability information
 - `tests/Features/`
-  - 正式維護、可被 IDE / BDD 工具直接使用的 Gherkin `.feature`
+  - Officially maintained Gherkin `.feature` files that IDE and BDD tools can use directly
 
-此分工的目標是：
+This separation aims to:
 
-- 保持 `.feature` 靠近測試程式與 step definitions，提升 IDE 整合與長期維護性
-- 保持 `.dev/specs/tests/` 作為 test intent 與規格追溯區
-- 避免把規格文件區誤當成測試執行資產區
+- Keep `.feature` files close to test code and step definitions for better IDE integration and long-term maintenance.
+- Preserve `.dev/specs/tests/` as the test-intent and specification-traceability area.
+- Avoid treating the specification-document area as the executable test-asset area.
 
-## 2. 正式規範
+## 2. Official Convention
 
-正式 `.feature` 檔一律放在：
+Once enabled, place every official `.feature` file under:
 
 ```text
 tests/Features/
 ```
 
-不要把正式 `.feature` 放在：
+Do not place official `.feature` files under:
 
 - `.dev/specs/tests/`
 - `.dev/standards/examples/`
-- 任意 domain source 專案資料夾
+- Any domain source-project directory
 
-## 3. 目錄結構
+## 3. Directory Structure
 
-### Domain-local
+### Domain-Local
 
 ```text
 tests/Features/<domain>/<use-case>.feature
 ```
 
-例：
+Examples:
 
 - `tests/Features/order/place-order.feature`
 - `tests/Features/product/create-product.feature`
 - `tests/Features/inventory-item/decrease-stock.feature`
 
-### Cross-domain
+### Cross-Domain
 
 ```text
 tests/Features/cross-domain/<flow-name>.feature
 ```
 
-例：
+Example:
 
 - `tests/Features/cross-domain/place-order-and-reserve-stock.feature`
 
-### End-to-end
+### End-to-End
 
 ```text
 tests/Features/e2e/<journey-name>.feature
 ```
 
-例：
+Example:
 
 - `tests/Features/e2e/customer-places-order.feature`
 
-## 4. 命名規則
+## 4. Naming Rules
 
-- 檔名使用 kebab-case
-- 優先使用 use case / flow 名稱，不要使用模糊技術名稱
-- 一個 `.feature` 檔應聚焦一個主要 use case、跨域流程、或完整旅程
+- Use kebab-case filenames.
+- Prefer a use-case or flow name over an ambiguous technical name.
+- Keep each `.feature` file focused on one primary use case, cross-domain flow, or complete journey.
 
-建議：
+Recommended:
 
 - `place-order.feature`
 - `cancel-order.feature`
 - `product-outbox-publication.feature`
 
-避免：
+Avoid:
 
 - `OrderTests.feature`
 - `Misc.feature`
 - `Scenario1.feature`
 
-## 5. 與 `.dev/specs/tests/` 的分工
+## 5. Responsibility Split with `.dev/specs/tests/`
 
-### `.feature` 應承載
+### A `.feature` File Should Contain
 
-- Feature / Rule / Scenario 的可讀 Gherkin 流程
-- Happy path、failure path、edge case
-- 對外可觀察的 Given / When / Then
+- Readable Gherkin flows using Feature, Rule, and Scenario
+- Happy paths, failure paths, and edge cases
+- Externally observable Given, When, and Then steps
 
-### `.dev/specs/tests/*.test-spec.md` 應承載
+### `.dev/specs/tests/*.test-spec.md` Should Contain
 
 - Related production spec
-- assertion notes
-- setup / fixture notes
-- test level
-- event / message / persistence verification 補充
-- coverage gaps
-- deferred cases
-- `.feature` 檔對應路徑
+- Assertion notes
+- Setup and fixture notes
+- Test level
+- Supplementary event, message, and persistence verification
+- Coverage gaps
+- Deferred cases
+- The corresponding `.feature` path
 
-簡單判斷：
+Simple decision rule:
 
-- 若目標是讓人或工具直接閱讀 / 執行 BDD scenario -> 放 `tests/Features/`
-- 若目標是保留測試設計脈絡與補充規格 -> 放 `.dev/specs/tests/`
+- If the goal is for people or tools to read or execute a BDD scenario directly, place it under `tests/Features/`.
+- If the goal is to preserve test-design context and supplementary specification details, place it under `.dev/specs/tests/`.
 
-## 6. Step Definitions 與測試程式
+## 6. Step Definitions and Test Code
 
-step definitions 應放在測試專案內，並與 `.feature` 維持清楚對應。
+Place step definitions in a test project and maintain a clear mapping to the corresponding `.feature` files.
 
-建議：
+Recommended:
 
 ```text
 tests/<TargetProject>.Tests/Steps/
@@ -119,30 +129,30 @@ tests/<TargetProject>.Tests/Fixtures/
 tests/<TargetProject>.Tests/Support/
 ```
 
-若專案採用集中式 BDD 測試專案，也可使用：
+A project with a centralized BDD test project may instead use:
 
 ```text
 tests/Features/Steps/
 tests/Features/Support/
 ```
 
-原則：
+Principles:
 
-- `.feature` 靠近測試資產
-- step definitions 不放 `.dev/`
-- fixture / support code 不和規格文件混放
+- Keep `.feature` files close to test assets.
+- Do not place step definitions under `.dev/`.
+- Do not mix fixture or support code with specification documents.
 
-## 7. 與 Skill / Workflow 的關係
+## 7. Relationship to Skills and Workflows
 
-`bdd-gwt-test-designer` 預設先產出 scenario 設計與測試規格資訊。若要進一步落成正式 Gherkin：
+By default, `bdd-gwt-test-designer` produces scenario designs and test-spec information without assuming that `.feature` files are required. When an enablement condition applies and the design must become official Gherkin:
 
-1. 以 `.dev/specs/domains/` 作為 production behavior 真相來源
-2. 在 `.dev/specs/tests/` 沉澱 scenario 設計與 assertion notes
-3. 將可執行 Gherkin 落到 `tests/Features/`
-4. 在 test spec 中註記對應 `.feature` 路徑
+1. Use `.dev/specs/domains/` as the source of truth for production behavior.
+2. Capture scenario designs and assertion notes under `.dev/specs/tests/`.
+3. Place executable Gherkin under `tests/Features/`.
+4. Record the corresponding `.feature` path in the test spec.
 
-## 8. 既有範例的定位
+## 8. Existing Examples
 
-`.dev/standards/examples/**/.feature` 僅為示例，不是正式存放位置。
+Files under `.dev/standards/examples/**/.feature` are examples only and are not an official storage location.
 
-正式新建或維護中的 `.feature` 一律依本文件放在 `tests/Features/`。
+After `.feature` support is enabled, place every newly created or actively maintained file under `tests/Features/` according to this guide.

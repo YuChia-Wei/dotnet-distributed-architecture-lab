@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "repo-structure-sync",
+  "generationStatus": "template",
+  "repository": {
+    "name": null,
+    "mode": null,
+    "description": null
+  },
+  "languages": [],
+  "technologyProfiles": [],
+  "dotnet": {
+    "sdkVersion": null,
+    "targetFrameworks": [],
+    "solutions": [],
+    "projects": []
+  },
+  "sourceLayout": {
+    "sourceRoots": [],
+    "testRoots": [],
+    "executableProjects": [],
+    "libraryProjects": []
+  },
+  "runtimeHosts": [],
+  "architecture": {
+    "styles": [],
+    "boundedContexts": [],
+    "dependencyRules": []
+  },
+  "persistence": {
+    "providers": [],
+    "libraries": [],
+    "connectionStringSources": []
+  },
+  "messaging": {
+    "brokers": [],
+    "libraries": [],
+    "topologyDocuments": []
+  },
+  "frontend": {
+    "detected": false,
+    "frameworks": [],
+    "sourceRoots": []
+  },
+  "deployment": {
+    "containerFiles": [],
+    "orchestrationFiles": [],
+    "environments": []
+  },
+  "evidence": {
+    "files": [],
+    "confirmedByUser": []
+  },
+  "unresolved": {
+    "facts": [],
+    "decisions": []
+  }
+}

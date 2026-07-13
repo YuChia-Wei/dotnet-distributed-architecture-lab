@@ -1,7 +1,13 @@
 asset_id: "problem-frame-author"
+schema_version: "1.0"
 asset_type: "skill-spec"
 title: "Problem Frame Author"
 purpose: "Draft a first problem frame from existing requirements, specs, ADRs, code, or tests for this repository, with emphasis on CBF use cases and validator-ready output."
+portability: "repo-portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+capability_slots:
+  - "problem-framing"
 triggers:
   - "problem frame"
   - "draft problem frame"
@@ -42,4 +48,5 @@ wrapper_metadata:
   claude:
     wrapper_path: ".claude/skills/problem-frame-author/"
   codex:
-    runtime_wrapper_path: ".agents/skills/problem-frame-author/"
+    wrapper_path: ".agents/skills/problem-frame-author/"
+status: "active"

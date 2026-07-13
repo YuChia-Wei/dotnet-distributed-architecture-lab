@@ -1,60 +1,46 @@
 # .ai Index
 
-本文件是 `.ai/` 的 agent-facing 索引。
+This index owns the file and directory catalog for `.ai/`. The `.ai/README.MD` file explains the folder purpose and boundary.
 
-## Core
+## Entry Documents
 
-- `README.MD`
-  - `.ai/` 目錄用途與分工
-- `DIRECTORY-RULES.MD`
-  - `.ai/` 與 `.dev/` 的放置規則
-- `SUB-AGENT-SYSTEM.MD`
-  - sub-agent 系統、routing、artifact 讀寫規則
-- `CODE-REVIEW-INDEX.MD`
-  - code review workflow 入口
+| Path | Description |
+| --- | --- |
+| `README.MD` | Purpose, scope, and usage of `.ai/`. |
+| `INDEX.MD` | File and directory catalog for `.ai/`. |
+| `DIRECTORY-RULES.MD` | Operational placement rules that point to canonical boundary and language policies. |
+| `SUB-AGENT-SYSTEM.MD` | Active sub-agent routing and artifact handoff rules. |
 
-## Prompt Assets
+## Canonical Assets
 
-- `assets/`
-  - canonical source root for portable AI assets
-- `assets/shared/`
-  - shared rules / prompt fragments / reusable supporting materials
-- `assets/sub-agent-role-prompts/`
-  - delegated sub-agent role prompt canonical assets
-- `assets/skills/`
-  - canonical skill registry and skill specs
-- `assets/templates/`
-  - canonical templates for skills / prompts / commands
+| Path | Description |
+| --- | --- |
+| `assets/` | Canonical source root for reusable AI assets. |
+| `assets/README.MD` | Purpose and boundary of `.ai/assets/`. |
+| `assets/shared/` | Universal shared prompt fragments, rules, and supporting materials. |
+| `assets/tech-stacks/` | Tech-stack-specific reusable AI context. |
+| `assets/tech-stacks/dotnet-backend/` | .NET backend-only agent context. |
+| `assets/tech-stacks/dotnet-backend/references/` | .NET backend reference indexes, pitfalls, failure cases, and templates. |
+| `assets/skills/` | Canonical top-level skill specs. |
+| `assets/skills/README.MD` | Canonical skill registry entry. |
+| `assets/sub-agent-role-prompts/` | Canonical delegated sub-agent role prompts. |
+| `assets/templates/` | Reusable prompt, command, and skill templates. |
 
-## Script Assets
+## Scripts
 
-- `scripts/`
-  - validation / review / generation scripts
-- `scripts/generated/`
-  - generated check scripts
-- `scripts/README.md`
-  - scripts 使用入口
-
-## Supporting References
-
-- `BUILDING-BLOCKS-CLASS-INDEX.MD`
-  - BuildingBlocks 類型索引
-- `FAILURE-CASES.MD`
-  - 常見錯誤案例
-- `COMMON-PITFALLS.MD`
-  - 常見陷阱與解法
-- `CODE-TEMPLATES.MD`
-  - .NET 程式碼模板
+| Path | Description |
+| --- | --- |
+| `scripts/` | Transitional local workflow scripts and orchestration helpers. |
+| `scripts/README.md` | Script transition policy and inventory. |
+| `scripts/validate-ai-context.py` | Active index, runtime-root, table-integrity, and skill-wrapper parity validation. |
 
 ## Related Human-Facing Docs
 
-- `../.dev/guides/README.MD`
-  - human-facing guides 入口
-- `../.dev/guides/ai-collaboration-guides/README.MD`
-  - AI collaboration guides 入口
-- `../.dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md`
-  - template 移植到新 repo 後的架構同步指南
-- `../.dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md`
-  - 多 agent 情境下的 skill / prompt / guide 收納策略
-- `../.claude/skills/README.md`
-  - repo-local skill definition 入口
+| Path | Description |
+| --- | --- |
+| `../.dev/guides/README.MD` | Human-facing guide root. |
+| `../.dev/guides/ai-collaboration-guides/README.MD` | AI collaboration guide index. |
+| `../.dev/guides/ai-collaboration-guides/AI-ASSET-LOCATION-STRATEGY.md` | Human-facing strategy for AI asset placement. |
+| `../.dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md` | Repo initialization and context sync guide. |
+| `../.dev/standards/AI-CONTEXT-BOUNDARY.md` | Canonical context boundary policy. |
+| `../.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md` | Canonical language policy. |

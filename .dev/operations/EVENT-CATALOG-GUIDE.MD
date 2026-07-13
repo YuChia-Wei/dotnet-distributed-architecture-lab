@@ -1,10 +1,10 @@
 # Event Catalog Guide
 
-本指南定義 `.dev/operations/event-catalog.md` 的最小內容。
+本指南定義 `event-catalog.md` 類文件的最小內容。它是 template / authoring guidance，不表示 `.dev/operations/event-catalog.md` 已存在。
 
 ## 目的
 
-讓維護者快速回答：
+讓維護者在需要建立 event catalog 時，快速回答：
 
 - 系統有哪些 integration events
 - 誰發佈、誰消費

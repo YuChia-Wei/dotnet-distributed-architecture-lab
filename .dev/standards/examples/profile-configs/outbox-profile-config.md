@@ -38,7 +38,7 @@ builder.Services.AddWolverine(opts =>
     "Mode": "outbox"
   },
   "ConnectionStrings": {
-    "PlanDb": "Host=localhost;Port=5500;Database=board;Username=postgres;Password=root"
+    "PlanDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   },
   "Outbox": {
     "Enabled": true

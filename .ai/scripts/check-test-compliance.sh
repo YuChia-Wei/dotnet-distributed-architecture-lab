@@ -7,7 +7,8 @@
 # Purpose: Check compliance based on markdown documentation
 # 
 # THIS FILE IS AUTO-GENERATED FROM MARKDOWN - DO NOT EDIT MANUALLY
-# Regenerate with: ./generate-check-scripts-from-md.sh
+# Transitional advisory check. The markdown-to-shell generator was retired;
+# do not present this grep-based script as canonical C# semantic validation.
 # ====================================================================
 
 set -e

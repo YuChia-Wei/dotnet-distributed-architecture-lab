@@ -1,0 +1,83 @@
+schema_version: "1.0"
+updated_at: "2026-07-11T19:30:00+08:00"
+rules:
+  - rule_id: TEST-GWT-001
+    domain: testing
+    strength: invariant
+    canonical_path: .dev/standards/coding-standards/test-standards.md
+    canonical_anchor: "### 3. Use GWT; Default to BDDfy"
+    scope: dotnet-backend
+    applicability: always
+    override_policy: forbidden
+    decision_evidence: null
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
+      - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+    status: active
+  - rule_id: TEST-BDDFY-001
+    domain: testing
+    strength: profile-default
+    canonical_path: .dev/standards/coding-standards/test-standards.md
+    canonical_anchor: "### 3. Use GWT; Default to BDDfy"
+    scope: dotnet-backend
+    applicability: dotnet-backend profile is adopted
+    override_policy: explicit-target-decision
+    decision_evidence:
+      - target repository collaboration guidance
+      - target repository package and test configuration
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
+      - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+    status: active
+  - rule_id: ARCH-UOW-001
+    domain: aggregate-transaction-boundary
+    strength: profile-default
+    canonical_path: .dev/standards/coding-standards/usecase-standards.md
+    canonical_anchor: "### 7. Strong Consistency MUST Be Explicit"
+    scope: dotnet-backend
+    applicability: command use case coordinates aggregate persistence
+    override_policy: explicit-target-decision
+    decision_evidence:
+      - named all-or-nothing invariant
+      - documented same-bounded-context consistency decision
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+    status: active
+  - rule_id: MAP-EVENTS-001
+    domain: mapper-event-lifecycle
+    strength: invariant
+    canonical_path: .dev/standards/coding-standards/mapper-standards.md
+    canonical_anchor: "### Pending Domain Events After Reconstruction"
+    scope: dotnet-backend
+    applicability: a mapper reconstructs an aggregate from persisted state
+    override_policy: forbidden
+    decision_evidence: null
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+    status: active
+  - rule_id: DELETE-SOFT-001
+    domain: deletion
+    strength: conditional
+    canonical_path: .dev/standards/coding-standards/aggregate-standards.md
+    canonical_anchor: "### 0. Soft-Delete Field Requirement"
+    scope: dotnet-backend
+    applicability: target repository explicitly adopts aggregate soft deletion
+    override_policy: not-applicable
+    decision_evidence:
+      - target repository requirements or architecture decision
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+    status: active
+  - rule_id: DELETE-PURGE-001
+    domain: deletion
+    strength: conditional
+    canonical_path: .dev/standards/coding-standards/archive-standards.md
+    canonical_anchor: "## 📌 Core Concept"
+    scope: dotnet-backend
+    applicability: target repository adopts archive or physical-purge capability
+    override_policy: not-applicable
+    decision_evidence:
+      - authorization, retention, legal, audit, and cleanup policy
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+    status: active

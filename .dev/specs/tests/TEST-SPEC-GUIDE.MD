@@ -1,65 +1,65 @@
 # Test Spec Guide
 
-本指南定義如何在本 repo 內撰寫測試規格，特別適用於 BDD、TDD、Given-When-Then 與 scenario-first 開發。
+This guide defines how to write test specifications in this repository, especially for BDD, TDD, Given-When-Then, and scenario-first development.
 
-`.feature` 正式存放規範見 [GHERKIN-FEATURE-STORAGE-GUIDE.MD](./GHERKIN-FEATURE-STORAGE-GUIDE.MD)。
+All test designs and C# tests must use Given-When-Then and must not substitute 3A. BDDfy is the default tool. If the target team decides not to introduce BDDfy, plain xUnit tests must still preserve an explicit Given, When, and Then structure. `.feature` files are optional; see [GHERKIN-FEATURE-STORAGE-GUIDE.MD](./GHERKIN-FEATURE-STORAGE-GUIDE.MD) for enablement conditions and official storage conventions.
 
-## 1. 什麼情況要建立 test spec
+## 1. When to Create a Test Spec
 
-建議在下列情況建立：
+Create a test spec when:
 
-- 新 use case 要採 BDD/TDD 開發
-- 跨 bounded context 的流程需要明確驗證路徑
-- 一個 use case 有多個 business branch，需要先拆 scenario
-- 要把 acceptance criteria 轉成測試設計
+- A new use case will use BDD or TDD development.
+- A cross-bounded-context flow needs an explicit verification path.
+- A use case has multiple business branches that should be separated into scenarios first.
+- Acceptance criteria must be converted into a test design.
 
-## 2. 與 production spec 的先後順序
+## 2. Order Relative to Production Specs
 
-預設順序：
+Default order:
 
 1. `.dev/requirement/`
 2. `.dev/specs/domains/`
 3. `.dev/specs/tests/`
-4. 測試設計 / 測試實作
+4. Test design and test implementation
 
-例外：
+Exceptions:
 
-- 若你採 TDD，test spec 可以和 `.dev/specs/domains/` 幾乎同步建立
-- 但 test spec 不應取代 production spec，因為兩者關心的資訊不同
+- With TDD, a test spec may be created nearly simultaneously with `.dev/specs/domains/`.
+- A test spec must not replace a production spec because they capture different information.
 
-## 3. 檔名建議
+## 3. Filename Recommendations
 
 - `[use-case].test-spec.md`
-- 例：
+- Examples:
   - `place-order.test-spec.md`
   - `decrease-stock.test-spec.md`
   - `ship-order.test-spec.md`
 
-## 3.1 目錄建議
+## 3.1 Directory Recommendations
 
-domain-local test spec 應依測試目標分類：
+Classify domain-local test specs by their test target:
 
 - `.dev/specs/tests/<domain>/aggregate/<aggregate-name>.test-spec.md`
 - `.dev/specs/tests/<domain>/use-cases/<use-case>.test-spec.md`
 - `.dev/specs/tests/<domain>/integration/<target-name>.test-spec.md`
 
-以下分類為可選，只有真的有內容再建立：
+The following categories are optional and should be created only when they have actual content:
 
 - `.dev/specs/tests/<domain>/app-services/<service-name>.test-spec.md`
 - `.dev/specs/tests/<domain>/domain-services/<service-name>.test-spec.md`
 
-跨 bounded context 或完整旅程不要硬掛在某個 domain 之下：
+Do not force cross-bounded-context flows or complete journeys under a single domain:
 
 - `.dev/specs/tests/cross-domain/<flow-name>.test-spec.md`
 - `.dev/specs/tests/e2e/<journey-name>.test-spec.md`
 
-對應的正式 Gherkin `.feature` 建議放在：
+When a requirement directly provides or explicitly requests a `.feature` file, or the target profile uses a Gherkin runner, place the corresponding official file under:
 
 - `tests/Features/<domain>/<use-case>.feature`
 - `tests/Features/cross-domain/<flow-name>.feature`
 - `tests/Features/e2e/<journey-name>.feature`
 
-## 4. 建議章節
+## 4. Recommended Sections
 
 ```markdown
 # <Use Case> Test Spec
@@ -79,25 +79,25 @@ domain-local test spec 應依測試目標分類：
 ## Notes / Deferred Cases
 ```
 
-## 5. Scenario 撰寫規則
+## 5. Scenario-Writing Rules
 
-每個 scenario 至少要說清楚：
+Every scenario must define at least:
 
-- Given: 前置狀態與測試資料
-- When: 觸發的 use case / command / event
-- Then: 可觀察結果
+- Given: Precondition state and test data
+- When: The triggered use case, command, or event
+- Then: Observable results
 
-Then 可包含：
+Then may include:
 
-- aggregate state
-- domain event
-- integration event
-- returned dto / result
-- error or failure branch
+- Aggregate state
+- Domain event
+- Integration event
+- Returned DTO or result
+- Error or failure branch
 
-## 6. Test Level 標記
+## 6. Test-Level Labels
 
-建議在每個 test spec 標記主要驗證層級：
+Record the primary verification level in each test spec:
 
 - `unit`
 - `application`
@@ -105,39 +105,39 @@ Then 可包含：
 - `contract`
 - `end-to-end`
 
-常見對應：
+Common mappings:
 
-- `aggregate/` -> `unit` 或 `application`
+- `aggregate/` -> `unit` or `application`
 - `use-cases/` -> `application`
-- `integration/` -> `integration` 或 `contract`
-- `cross-domain/` -> `integration` 或 `contract`
+- `integration/` -> `integration` or `contract`
+- `cross-domain/` -> `integration` or `contract`
 - `e2e/` -> `end-to-end`
 
-一份 test spec 可以有主層級與次層級，但應有明確主層級。
+A test spec may have primary and secondary levels, but it must identify one clear primary level.
 
-## 7. 對分散式系統的補充
+## 7. Distributed-System Details
 
-若 use case 涉及跨 bounded context 或 MQ 行為，應另外記錄：
+When a use case involves cross-bounded-context or MQ behavior, also record:
 
-- trigger event / command
-- expected integration contract
-- idempotency concern
-- retry / duplicate delivery concern
-- eventual consistency expectation
+- Trigger event or command
+- Expected integration contract
+- Idempotency concerns
+- Retry or duplicate-delivery concerns
+- Eventual-consistency expectations
 
-## 8. 與技能/流程的關係
+## 8. Relationship to Skills and Workflows
 
-- `.dev/specs/tests/` 是測試意圖的正式文件區
-- `bdd-gwt-test-designer` 可把 requirement/spec 轉成此區的 scenarios
-- `bdd-gwt-test-designer` 應同時回傳建議存放類別，例如 `use-cases/`、`integration/`、`cross-domain/`
-- 後續 test generation 或實作時，正式 `.feature` 應建立在 `tests/Features/`，而不是 `.dev/specs/tests/`
-- `.dev/specs/tests/` 應保留 assertion notes、coverage gaps、追溯資訊與非 Gherkin 補充說明
+- `.dev/specs/tests/` is the official documentation area for test intent.
+- `bdd-gwt-test-designer` can convert requirements or specs into scenarios in this area.
+- `bdd-gwt-test-designer` should also return a recommended storage category such as `use-cases/`, `integration/`, or `cross-domain/`.
+- Subsequent test generation or implementation creates a `.feature` file only when an enablement condition applies, and places it under `tests/Features/` rather than `.dev/specs/tests/`.
+- `.dev/specs/tests/` should preserve assertion notes, coverage gaps, traceability information, and non-Gherkin supplementary details.
 
-## 9. 最小完成定義
+## 9. Minimum Definition of Done
 
-一份 test spec 至少應滿足：
+A test spec must at least:
 
-- 對應到一份既有 production spec
-- 至少列出 happy path
-- 至少列出一個 failure / edge case
-- 明確標出主要驗證層級
+- Refer to an existing production spec.
+- Include at least one happy path.
+- Include at least one failure path or edge case.
+- Identify the primary verification level.

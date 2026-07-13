@@ -2,43 +2,43 @@
 
 ## Decision Pattern
 
-測試需支援多種 profile，例如：
+Tests need to support multiple profiles, such as:
 
 - InMemory
 - Outbox / PostgreSQL integration
 
-且 profile 選擇不應硬寫在 base test class。
+Profile selection should not be hard-coded in a base test class.
 
 ## Why
 
-### 1. 同一測試應能驗證不同實作策略
+### 1. The Same Tests Should Validate Different Implementation Strategies
 
-如果 command side 同時支援 in-memory 與 outbox，測試不應只綁死一種環境。
+If the command side supports both in-memory and outbox strategies, tests should not be bound to only one environment.
 
-### 2. 環境選擇屬於 runtime concern
+### 2. Environment Selection Is a Runtime Concern
 
-測試執行用哪個 profile，本質上是配置問題，而不是測試類別繼承結構的一部分。
+The profile used for a test run is fundamentally a configuration concern, not part of the test-class inheritance structure.
 
-### 3. 避免 BaseTestClass 變成隱性全域狀態
+### 3. Avoid Turning BaseTestClass into Hidden Global State
 
-把環境選擇寫在 base class 會：
+Putting environment selection in a base class:
 
-- 增加隱藏耦合
-- 讓測試切換模式變困難
-- 讓 CI / local / integration 行為不一致
+- increases hidden coupling;
+- makes switching test modes difficult;
+- creates inconsistent CI, local, and integration behavior.
 
 ## Why Not
 
-### Base Test Class 內硬編碼環境
+### Hard-Coded Environment in a Base Test Class
 
-缺點：
+Drawbacks:
 
-- 無法清楚從執行命令看出目前測的是哪個 profile
-- 測試基底類過度強勢
-- 難以維護與擴展
+- The execution command does not clearly show which profile is under test.
+- The test base class exercises excessive control.
+- Maintenance and extension become difficult.
 
 ## Practical Rule
 
-- profile 由環境變數與 `appsettings.{Environment}.json` 決定
-- 測試本體不負責偷偷設定全域執行環境
-- 同一套測試應能在多個 profile 下重跑
+- Determine the profile through environment variables and `appsettings.{Environment}.json`.
+- Tests themselves must not set the global execution environment implicitly.
+- The same test suite should be repeatable under multiple profiles.

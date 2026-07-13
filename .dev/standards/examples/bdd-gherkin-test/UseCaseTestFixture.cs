@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AiScrum.Tests.Infrastructure;
+namespace ExampleApp.Tests.Infrastructure;
 
 // Composition-based helper for use case tests (no inheritance).
 public sealed class UseCaseTestFixture

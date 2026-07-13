@@ -9,6 +9,8 @@
 - 何時需要 workflow mode
 - 何時適合引入 subagent
 
+若任務本身是「規劃並驅動多階段 software/product development」，使用 `dev-workflow`。它負責 development direct/workflow mode、開發 skill routing、validation 與 commit checkpoint。其他多階段作業由其 domain owner skill 建立並管理 workflow；例如 AI context lifecycle 使用 `ai-context-governance`，不再經由 `dev-workflow` 統籌。
+
 ## 核心原則
 
 - 先建立對人與 AI 都可讀的文件，再進入生成或重構
@@ -18,8 +20,10 @@
 
 補充：
 
-- `workflow mode` 不只適用於程式碼重構，也適用於文件補全、文件重構、與 source-of-truth 校準
+- `workflow mode` 不只適用於程式碼重構，也適用於文件補全、文件重構與 source-of-truth 校準；但 template 與 orchestration owner 必須依 workflow kind 選擇
 - 若程式碼問題本質上來自文件缺口，應先進 document workflow，再決定是否展開 code workflow
+- AI context、prompt 邊界、skill routing、wrapper sync、README language policy 這類文件治理工作，使用 `ai-context-governance`
+- `bdd-gwt-test-designer` 只負責測試意圖、Given-When-Then scenario 與 assertion plan，不負責 AI context cleanup 或 test code generation
 
 ## 主要文件入口
 
@@ -38,9 +42,9 @@
 ### 重構交接
 
 - `.dev/workflows/`
-  - `workflow-plan.md`
-  - `review-report.md`
-  - `tasks/<task-id>.json`
+  - `<workflow-id>/workflow.yaml`：固定 locator
+  - 由 locator 指向 owning skill 定義的 artifact root 與 entrypoint
+  - development workflow 通常包含 `workflow-plan.md`、`tasks/<task-id>.json` 與選用的 `review-report.md`
 
 ## 流程 1：需求驅動開發
 
@@ -112,9 +116,12 @@
 
 依情境交給：
 
-- `command-use-case-implementer`
-- `query-use-case-implementer`
-- `reactor-implementer`
+- `slice-implementer`
+  - command use case mode
+  - query use case mode
+  - reactor mode
+  - generic slice mode
+- `local-change-implementer` when the task is only a local class, object, method, symbol, SQL/ORM, or direct-call-site change
 - 或既有 test generation prompt / subagent
 
 ### Step 6: code review
@@ -144,7 +151,7 @@
 ```text
 1. architecture diagnosis
 2. review findings
-3. staged or tactical execution
+3. slice or local execution
 4. review again
 5. iterate if needed
 ```
@@ -178,8 +185,10 @@
 
 依範圍交給：
 
-- `staged-refactor-implementer`
-- `tactical-refactor-implementer`
+- `slice-implementer`
+  - bounded feature, fix, review remediation, refactor, or documentation slice
+- `local-change-implementer`
+  - one local class, object, method, symbol, SQL/ORM, or direct-call-site technical change
 
 若是 document workflow，execution 應優先使用下列切法：
 
@@ -239,26 +248,33 @@
 - 問題本質是文件系統重整、source-of-truth 校準、ADR 整理、spec 補全、operations 補全
 - 預期會更新多個知識邊界，而不是單一小檔案
 
-若符合上述任一條件中的強訊號，應優先建立：
+若符合上述任一條件中的強訊號，應建立完整日期 workflow locator：
 
-- `.dev/workflows/<workflow-id>/`
+- `.dev/workflows/<YYYY-MM-DD-topic[-NN]>/workflow.yaml`
 
-artifact 位置：
+建立 locator 前，先從預定 base branch 建立獨立 workflow branch；Codex 預設為 `codex/<workflow-id>`。Locator 必須記錄 `branch`、`base_branch`。Workflow merge 預設使用 `--no-ff`。
 
-- `.dev/workflows/<workflow-id>/`
+Locator 固定記錄 owner skill、status、artifact root、entrypoint、`created_at` 與 `updated_at`。真正 artifact layout 與 template 由建立該類 workflow 的 skill 管理：
 
-artifact 種類：
+- software/product development lifecycle → `dev-workflow`
+- AI context 自檢 → `ai-context-auditor`
+- AI context 文件治理、整改與複檢結案 → `ai-context-governance`
+- framework 複製後的 repo 初始化 → `repo-structure-sync`
+
+artifact 預設放在 locator 同目錄；owner skill 也可宣告其他 repository-relative `artifact_root`。不要假設所有 workflow 都具有下列同名檔案。Development workflow 通常使用：
 
 - `workflow-plan.md`
-- `review-report.md`
 - `tasks/<task-id>.json`
+- `review-report.md`（需要正式 development review 時）
 
-對 document workflow 來說，artifact 應至少回答：
+對 document workflow 來說，先依 source-of-truth 判斷 owner skill，再由其 artifact 回答：
 
 - 哪一類文件是 source of truth
 - 這一輪補的是哪個知識缺口
 - 完成後可以支撐哪一種維護情境
 - 哪些內容刻意延到下一 stage
+
+若使用者在 workflow 未完成時要求 merge/push，將它記為 checkpoint handoff，不得直接標記 completed。Push-only 時從已推送的 workflow branch 接續；checkpoint merge 後才從更新後的 target 建立新的 continuation branch，再更新 locator 後繼續。
 
 ### Practical Trigger Rule
 
@@ -308,8 +324,8 @@ subagent 不應：
 ### 中游執行層
 
 - test generation
-- staged refactor implementation
-- tactical local refactor
+- bounded slice implementation
+- local technical change
 - 一般 generation subagents
 
 ### 下游驗證層
@@ -321,6 +337,7 @@ subagent 不應：
 ## 相關文件
 
 - `REQUIREMENT-AND-SPEC-DESIGNER-STRATEGY.md`
+- `DEV-WORKFLOW-SKILL-GUIDE.md`
 - `BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md`
 - `BDD-GWT-TEST-DESIGNER-PAIR-GUIDE.md`
 - `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`

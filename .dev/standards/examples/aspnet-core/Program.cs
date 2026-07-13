@@ -30,5 +30,5 @@ var app = builder.Build();
 // Initialize domain event type mapper registry (ezDDD port)
 BootstrapConfig.Initialize();
 
-app.MapGet("/", () => "AiScrumApp (.NET) is running.");
+app.MapGet("/", () => "ExampleAppApp (.NET) is running.");
 app.Run();

@@ -1,60 +1,36 @@
-# Profile-Based Testing Architecture Guide (Dotnet)
+# Profile-Based Testing Architecture Guide (.NET)
 
-## Overview
-This project uses profile-based testing to run the same tests against multiple repository implementations without rewriting test code.
+## Applicability
 
-**Write Once, Test Everywhere**: write tests once, run them across profiles.
+Profile-based testing lets the same behavioral tests exercise multiple infrastructure configurations through fixtures and dependency injection. It is an optional target-repository design, not a claim about repositories that adopt this context framework.
 
-```
-┌───────────────────┐
-│  Use Case Tests   │
-│  (xUnit + BDDfy)  │
-└─────────┬─────────┘
-          │ uses
-┌─────────▼─────────┐
-│   Test Fixtures   │
-└─────────┬─────────┘
-          │ configures
-┌─────────▼────────────────────────────────────┐
-│  Environment-based DI registrations          │
-├──────────────┬──────────────┬───────────────┤
-│ test-inmemory│ test-outbox  │ test-esdb      │
-├──────────────┼──────────────┼───────────────┤
-│ InMemory     │ PostgreSQL   │ EventStore DB │
-│ Repository   │ + Outbox     │ (planned)     │
-└──────────────┴──────────────┴───────────────┘
+Before using this pattern, discover the target repository's test projects, configuration mechanism, registered providers, and supported profile names. Do not create profiles, settings files, or external services solely because they appear in this guide.
+
+```text
+Use-case or integration tests
+           |
+        fixture
+           |
+environment/configuration-selected DI
+           |
+one of the providers confirmed by the target repository
 ```
 
-## Supported Profiles
+## Profile Inventory
 
-### 1. test-inmemory (default)
-- Purpose: fast unit-style tests during development
-- Characteristics: in-memory storage, no external dependencies
-- Speed: fastest
-- Settings: `appsettings.test-inmemory.json`
+Record confirmed profiles before authoring commands or matrices:
 
-### 2. test-outbox
-- Purpose: outbox integration tests
-- Characteristics: real PostgreSQL, transactional verification
-- Speed: medium
-- Settings: `appsettings.test-outbox.json`
-- Requires: PostgreSQL on localhost:5800 (per project-config.yaml)
+| Profile placeholder | Purpose | Provider | Configuration evidence | External dependency |
+| --- | --- | --- | --- | --- |
+| `<fast-profile>` | Fast behavioral feedback | `<confirmed-provider>` | `<confirmed-settings-or-fixture>` | `<none-or-confirmed-service>` |
+| `<integration-profile>` | Infrastructure integration | `<confirmed-provider>` | `<confirmed-settings-or-fixture>` | `<confirmed-service>` |
 
-### 3. test-esdb (planned)
-- Purpose: event sourcing integration tests
-- Characteristics: EventStoreDB integration
-- Speed: slower
-- Settings: `appsettings.test-esdb.json`
-
-### 4. test-ezes (planned)
-- Purpose: EZES event sourcing integration tests
-- Characteristics: EZES database integration
-- Speed: medium
-- Settings: `appsettings.test-ezes.json`
+Profile names, provider names, settings files, and roadmap entries must come from repository evidence or an explicit team decision. A generated `.dev/project-config.yaml`, when present, may summarize that evidence.
 
 ## Test Authoring Guide
 
-### Step 1: Use fixtures instead of base classes
+### 1. Use fixtures for shared profile setup
+
 ```csharp
 public sealed class CreateProductFeature : IClassFixture<TestProfileFixture>
 {
@@ -67,23 +43,24 @@ public sealed class CreateProductFeature : IClassFixture<TestProfileFixture>
 }
 ```
 
-### Step 2: Resolve dependencies via DI
+Rename the fixture and types to match the target repository.
+
+### 2. Resolve ports through dependency injection
+
 ```csharp
 var useCase = _fixture.Services.GetRequiredService<ICreateProductUseCase>();
-var repository = _fixture.Services.GetRequiredService<IRepository<Product, ProductId>>();
+var repository = _fixture.Services.GetRequiredService<IAggregateRepository<Product, ProductId>>();
 ```
 
-### Step 3: Write BDDfy tests with Gherkin-style naming
+Do not instantiate a concrete repository in a behavior test intended to run across providers.
+
+### 3. Use Given-When-Then style
+
+BDDfy is the default test narration library for this AI context. A target team may explicitly opt out of the package and related `.feature` tooling; tests must still use Given-When-Then structure and naming rather than Arrange-Act-Assert. `.feature` files are supported when requested or supplied, but are not mandatory.
+
 ```csharp
 public sealed class CreateProductFeature : IClassFixture<TestProfileFixture>
 {
-    private readonly TestProfileFixture _fixture;
-
-    public CreateProductFeature(TestProfileFixture fixture)
-    {
-        _fixture = fixture;
-    }
-
     [Fact]
     public void Create_product_successfully()
     {
@@ -91,173 +68,53 @@ public sealed class CreateProductFeature : IClassFixture<TestProfileFixture>
     }
 
     void Given_valid_product_creation_input() { }
-
     void When_I_execute_the_create_product_use_case() { }
-
     void Then_the_product_is_created_successfully() { }
-
     void And_a_domain_event_is_emitted() { }
 }
 ```
 
-## Running Tests
+If BDDfy is not adopted, retain explicit `Given...`, `When...`, and `Then...` sections or helper names using the target test framework.
 
-### Option 1: dotnet test with environment
+## Running Profiles
+
+Use the configuration selector already supported by the target repository. For an ASP.NET Core environment-based design, parameterized examples are:
+
 ```bash
-ASPNETCORE_ENVIRONMENT=test-inmemory dotnet test
-ASPNETCORE_ENVIRONMENT=test-outbox dotnet test
+ASPNETCORE_ENVIRONMENT=<fast-profile> dotnet test <test-project>
+ASPNETCORE_ENVIRONMENT=<integration-profile> dotnet test <test-project> --filter <target-filter>
 ```
 
-### Option 2: targeted test runs
-```bash
-ASPNETCORE_ENVIRONMENT=test-outbox dotnet test --filter FullyQualifiedName~CreateProduct
-```
+For IDE runs, set the same confirmed selector in the IDE's run configuration. Do not set or mutate a process-wide environment selector inside individual test classes.
 
-### Option 3: IDE configuration
-- Rider/VS: set `ASPNETCORE_ENVIRONMENT=test-outbox`
-- VS Code: update `.vscode/launch.json` with env var
+## Coverage Matrix
 
-## Migration Notes (old -> new)
+Build the matrix from implemented evidence instead of copying a fixed provider roadmap:
 
-### Before (manual TestContext)
-```csharp
-public class CreateProductUseCaseTest
-{
-    private readonly TestContext _context = TestContext.Instance;
+| Test suite | `<fast-profile>` | `<integration-profile>` | Evidence |
+| --- | --- | --- | --- |
+| Use-case behavior | `<supported?>` | `<supported?>` | `<test project or command>` |
+| HTTP behavior | `<supported?>` | `<supported?>` | `<test project or command>` |
+| Infrastructure integration | `<supported?>` | `<supported?>` | `<test project or command>` |
 
-    [Fact]
-    public void Test() { }
-}
-```
+## Given-When-Then Access Rules
 
-### After (fixture + DI)
-```csharp
-public sealed class CreateProductFeature : IClassFixture<TestProfileFixture>
-{
-    [Fact]
-    public void Test() { }
-}
-```
+- Given establishes behavior through public application/use-case ports unless the scenario explicitly tests lower-level infrastructure.
+- When invokes the behavior under test through the same intended boundary.
+- Then observes outcomes through supported queries, read ports, captured messages/events, or other target-repository evidence.
+- Direct aggregate or repository access must not bypass the boundary being tested. Read-only repository verification is acceptable only when the test design explicitly permits it.
 
-## Coverage Strategy
-
-```
-Profile Coverage Matrix:
-
-                 InMemory  Outbox  ESDB  EZES
-Use Case Tests      ✅       ✅     🔄    🔄
-Controller Tests    ✅       ✅     -     -
-Integration Tests   -        ✅     ✅    ✅
-E2E Tests           -        ✅     -     -
-```
-
-## Rules and Constraints
-
-### 1. Do not hardcode repository implementations
-```csharp
-// Wrong
-var repo = new InMemoryProductRepository();
-
-// Correct
-var repo = _fixture.Services.GetRequiredService<IRepository<Product, ProductId>>();
-```
-
-### 2. Do not set ASPNETCORE_ENVIRONMENT inside test classes
-```csharp
-// Wrong: hardcoded inside tests
-Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "test-inmemory");
-```
-
-### 3. Event verification
-```csharp
-// Use fixture-captured events or Wolverine tracking
-var events = _fixture.CapturedEvents;
-```
-
-## Phase-specific Access Rules
-
-**Given/When cannot access repositories directly; Then/And can.**
-
-### Wrong (Given/When)
-```csharp
-// Given
-var aggregate = new Product(...);
-_repository.Save(aggregate);
-
-// When
-var product = _repository.Get(id);
-product.ChangeName("new");
-_repository.Save(product);
-```
-
-### Correct
-```csharp
-// Given: use use case
-_createProductUseCase.Execute(input);
-
-// When: use use case
-_changeDescriptionUseCase.Execute(input);
-
-// Then: read model/repository checks allowed
-var product = _repository.Get(id);
-product.Name.Should().Be("Updated");
-```
-
-### Access Rules Summary
-
-| Phase | Repository Access | Direct Aggregate Calls | Notes |
-|------|-------------------|------------------------|-------|
-| Given | No | No | Must use use cases |
-| When | No | No | Must use use cases |
-| Then | Yes | Read-only | Can verify state |
-| And (after Then) | Yes | Read-only | Can verify state |
-
-## Event Clearing Timing
-
-When you need to clear events captured during Given, **wait until events are captured** before clearing.
-
-Wrong:
-```csharp
-_createProductUseCase.Execute(input);
-_fixture.ClearEvents();
-```
-
-Correct:
-```csharp
-_createProductUseCase.Execute(input);
-_fixture.AwaitEvents(count: 1);
-_fixture.ClearEvents();
-```
+When clearing captured events from Given, first wait for the fixture's documented capture condition; do not assume a specific `AwaitEvents` or `ClearEvents` API exists.
 
 ## Troubleshooting
 
-### Problem 1: DI container fails to build
-Cause: missing registration for the profile
-Fix: check profile-specific registration modules
-
-### Problem 2: Repository injection fails
-Cause: the profile config did not register repository
-Fix: validate `TestInMemoryConfiguration` or `TestOutboxConfiguration` modules
-
-### Problem 3: Events not captured
-Cause: fixture not used / event listeners not wired
-Fix: use the shared fixture that registers event capture
-
-### Problem 4: Outbox test profile not switching
-Cause: environment set too late
-Fix:
-1. `ASPNETCORE_ENVIRONMENT=test-outbox dotnet test`
-2. Use test runsettings or IDE env config
+1. DI container fails: verify the selected profile has an evidenced registration module.
+2. Port resolution fails: verify the target provider registers the required abstraction.
+3. Events are missing: verify the chosen fixture wires the target repository's capture mechanism.
+4. Profile does not switch: verify when and where the target configuration selector is read.
 
 ## Related Documents
-- `.ai/assets/shared/testing-standards.md`
+
+- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
 - `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml`
 - `.dev/standards/rationale/profile-based-testing-rationale.MD`
-
-## Future Extensions
-1. ESDB profile implementation
-2. EZES profile implementation
-3. Automated test data builders per profile
-4. Performance test profile
-
-

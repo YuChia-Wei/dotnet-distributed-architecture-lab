@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Context Auditor"
+  short_description: "Analyze AI context with optional durable reports"
+  default_prompt: "Use $ai-context-auditor to analyze this repository AI context. Keep it transient unless I ask to save a report."

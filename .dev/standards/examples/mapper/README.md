@@ -52,12 +52,13 @@ public static class TaskMapper
 2. Always check nulls.
 3. Provide batch conversion helpers.
 4. For event sourcing, set stream name, event data, and timestamps.
-5. Clear domain events after rebuild to avoid re-persisting.
+5. Return every reconstructed aggregate with no pending domain events. Prefer rehydration constructors that replay through `When(...)` without enqueueing; call `ClearDomainEvents()` when reconstruction can enqueue events or the constructor does not explicitly guarantee cleanliness.
 
 ## Common Mistakes
 
 - Entity mappers exposing outbox mapper (only aggregate mappers should).
 - Forgetting event sourcing metadata.
+- Returning a reconstructed aggregate with historical or constructor-emitted events still pending.
 - Using raw constructors instead of `ValueOf(...)`.
 
 ## Related Resources

@@ -1,21 +1,21 @@
-# ASP.NET Core appsettings 模板集 🔧
+# ASP.NET Core appsettings Template Set 🔧
 
 ## 🎯 Purpose
-提供完整的 `appsettings.json` 與 `appsettings.{Environment}.json` 模板，避免 Profile 與連線設定錯誤。
+Provides complete `appsettings.json` and `appsettings.{Environment}.json` templates to prevent profile and connection configuration errors.
 
-## 📋 配置檔案結構
+## 📋 Configuration File Structure
 
 ```
 src/Api/
-├── appsettings.json                # 主配置
+├── appsettings.json                # Primary configuration
 ├── appsettings.InMemory.json       # InMemory Profile
 ├── appsettings.Outbox.json         # Outbox Profile
-├── appsettings.Test.json           # 測試主配置
-├── appsettings.Test-InMemory.json  # InMemory 測試
-└── appsettings.Test-Outbox.json    # Outbox 測試
+├── appsettings.Test.json           # Primary test configuration
+├── appsettings.Test-InMemory.json  # InMemory tests
+└── appsettings.Test-Outbox.json    # Outbox tests
 ```
 
-## 1️⃣ appsettings.json（主配置）
+## 1️⃣ appsettings.json (Primary Configuration)
 
 ```json
 {
@@ -35,7 +35,7 @@ src/Api/
 }
 ```
 
-## 2️⃣ appsettings.InMemory.json（InMemory Profile）
+## 2️⃣ appsettings.InMemory.json (InMemory Profile)
 
 ```json
 {
@@ -48,7 +48,7 @@ src/Api/
 }
 ```
 
-## 3️⃣ appsettings.Outbox.json（Outbox Profile）
+## 3️⃣ appsettings.Outbox.json (Outbox Profile)
 
 ```json
 {
@@ -59,7 +59,7 @@ src/Api/
     "Provider": "PostgreSQL"
   },
   "ConnectionStrings": {
-    "MainDb": "Host=localhost;Port=5432;Database=aiscrum;Username=postgres;Password=root"
+    "MainDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   },
   "Outbox": {
     "PollingIntervalMs": 5000,
@@ -68,7 +68,7 @@ src/Api/
 }
 ```
 
-## 4️⃣ appsettings.Test.json（測試主配置）
+## 4️⃣ appsettings.Test.json (Primary Test Configuration)
 
 ```json
 {
@@ -83,7 +83,7 @@ src/Api/
 }
 ```
 
-## 5️⃣ appsettings.Test-InMemory.json（InMemory 測試）
+## 5️⃣ appsettings.Test-InMemory.json (InMemory Tests)
 
 ```json
 {
@@ -96,7 +96,7 @@ src/Api/
 }
 ```
 
-## 6️⃣ appsettings.Test-Outbox.json（Outbox 測試）
+## 6️⃣ appsettings.Test-Outbox.json (Outbox Tests)
 
 ```json
 {
@@ -107,47 +107,47 @@ src/Api/
     "Provider": "PostgreSQL"
   },
   "ConnectionStrings": {
-    "MainDb": "Host=localhost;Port=5800;Database=testdb;Username=postgres;Password=root"
+    "MainDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   }
 }
 ```
 
-## 🚨 關鍵配置解釋
+## 🚨 Key Configuration Details
 
-### 1. 為什麼需要 Profiles/Mode？
-Profile 用於切換 InMemory / Outbox 行為，避免多套配置衝突。
+### 1. Why Is Profiles/Mode Required?
+The profile switches between InMemory and Outbox behavior, preventing conflicts between configuration sets.
 
-### 2. Profile 命名規範
+### 2. Profile Naming Rules
 - `InMemory`
 - `Outbox`
 - `Test-InMemory`
 - `Test-Outbox`
 
-### 3. 資料庫 Port 分離
-- 開發環境：5432
-- 測試環境：5800
+### 3. Database Port Separation
+- Development environment: 5432
+- Test environment: 5800
 
-## 🔍 診斷命令
+## 🔍 Diagnostic Commands
 
 ```bash
-# 檢查環境變數
+# Check the environment variable
 echo $ASPNETCORE_ENVIRONMENT
 
-# 使用指定環境啟動
+# Start with the specified environment
 ASPNETCORE_ENVIRONMENT=Outbox dotnet run --project src/Api
 ```
 
-## ⚠️ 常見錯誤與解決
+## ⚠️ Common Errors and Solutions
 
-### 錯誤 1：未載入正確 appsettings.{Environment}.json
-**解決**：確認 `ASPNETCORE_ENVIRONMENT` 正確設定。
+### Error 1: The Correct appsettings.{Environment}.json Is Not Loaded
+**Solution**: Verify that `ASPNETCORE_ENVIRONMENT` is configured correctly.
 
-### 錯誤 2：Repository 無法解析
-**解決**：確認對應 profile 的 DI 註冊存在。
+### Error 2: The Repository Cannot Be Resolved
+**Solution**: Verify that the DI registrations for the corresponding profile exist.
 
-## 📝 最佳實踐
+## 📝 Best Practices
 
-1. 先用 InMemory Profile 開發
-2. Outbox Profile 需對應資料庫
-3. 測試時明確指定 Profile
-4. Production 以環境變數覆蓋敏感設定
+1. Start development with the InMemory profile.
+2. Ensure the Outbox profile has a corresponding database.
+3. Specify the profile explicitly during testing.
+4. Override sensitive settings with environment variables in production.

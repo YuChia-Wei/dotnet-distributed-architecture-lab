@@ -48,7 +48,7 @@ public sealed class CreatePlanTests : IClassFixture<TestHostFixture>
 
     void Then_the_plan_is_persisted()
     {
-        var repo = _scope.ServiceProvider.GetRequiredService<IRepository<Plan, PlanId>>();
+        var repo = _scope.ServiceProvider.GetRequiredService<IAggregateRepository<Plan, PlanId>>();
         var saved = repo.FindByIdAsync(PlanId.ValueOf(_state.Output!.Id)).Result;
         Assert.NotNull(saved);
     }

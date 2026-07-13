@@ -1,10 +1,10 @@
 # Optional Minimal Workflow Mode
 
-本文件定義四個重構 skill 的「可選的最小 workflow 模式」。
+本文件定義 architecture / review / implementer 協作時的「可選的最小 workflow 模式」。
 
 ## 為什麼是可選的
 
-這四個 skill 預設都應該可以直接使用。
+相關 skill 預設都應該可以直接使用。
 
 也就是：
 
@@ -33,20 +33,21 @@
 
 下列情況建議啟用：
 
-- 先 architect，再 review，再 staged implement，再 review
+- 先 architect，再 review，再 slice implement，再 review
 - 要保留每一輪 stage 的上下文
 - 要把 architecture decision 與 implementation scope 對齊
 - 要避免每輪都重新解釋需求與邊界
 
 ## 最小 Artifact 集
 
-只使用三個 artifact：
+固定保留一個 discovery locator，再依 development workflow 需要使用最多三類 artifacts：
 
-1. `workflow-plan.md`
-2. `review-report.md`
+1. `.dev/workflows/<workflow-id>/workflow.yaml`（固定 locator）
+2. `workflow-plan.md`
 3. `tasks/<task-id>.json`
+4. `review-report.md`（只有正式 development review 時需要）
 
-這是最小集合，不額外新增更多流程文件。
+這是 development workflow 的精簡集合，不是所有 workflow kind 的萬用格式。AI context audit 與 remediation 使用其 owner skills 的 templates 和 report layout。
 
 最小欄位定義與 handoff 規則見：
 
@@ -56,11 +57,19 @@
 
 - `.dev/workflows/<workflow-id>/`
 
+新 workflow 使用 `YYYY-MM-DD-<topic>[-NN]`。Locator 和 task 必須記錄帶時區的 ISO 8601 `created_at`、`updated_at`；artifact body 需記錄 `template_source` 與 `template_version`。
+
+進入 workflow mode 時，先建立獨立 branch，再建立 locator。Locator/plan 記錄 `branch`、`base_branch` 與 checkpoint history；workflow merge 預設 `--no-ff`。未完成時的 merge/push 只算 checkpoint；push-only 從已推送 branch 接續，checkpoint merge 後才改由新的 continuation branch 接續。
+
 ## Artifact 角色
+
+### `workflow.yaml`
+
+由 `dev-workflow` 建立並維護 locator metadata。即使 development artifact root 改到其他 repository-relative 位置，locator 仍留在 `.dev/workflows/<workflow-id>/`。
 
 ### `workflow-plan.md`
 
-由 `ddd-ca-hex-architect` 建立或更新。
+由 `dev-workflow` 使用自有 template 建立；`ddd-ca-hex-architect` 可更新已授權的 architecture sections。
 
 用途：
 
@@ -76,14 +85,14 @@
 用途：
 
 - 記錄正式 review 結果
-- 記錄 architecture-level / implementation-level / document-level / workflow-level findings
+- 記錄 architecture-level / implementation-level / development-document / workflow-level findings
 - 記錄嚴重度
 - 記錄 review decision
 - 建議下一個 skill
 
 ### `tasks/<task-id>.json`
 
-由 `staged-refactor-implementer` 或 `tactical-refactor-implementer` 建立或更新。
+由 `slice-implementer` 或 `local-change-implementer` 建立或更新。
 
 用途：
 
@@ -94,16 +103,19 @@
 ## 建議工作流
 
 ```text
-1. ddd-ca-hex-architect
-   需要時建立 workflow-plan.md
+1. dev-workflow
+   建立 workflow.yaml、workflow-plan.md 與初始 task
 
-2. code-reviewer
+2. ddd-ca-hex-architect
+   更新已授權的 architecture sections
+
+3. code-reviewer
    需要時建立 review-report.md
 
-3. staged-refactor-implementer / tactical-refactor-implementer
+4. slice-implementer / local-change-implementer
    需要時建立對應的 `tasks/<task-id>.json`
 
-4. code-reviewer
+5. code-reviewer
    對本輪結果再次 review
 ```
 
@@ -120,10 +132,9 @@
 
 若任務跨 skill、跨 stage、或需要保存決策：
 
-- 建立最小 artifact
+- 建立 locator 與必要 development artifacts
 - 由 skill 之間透過 artifact handoff
-- artifact 預設放在 `.dev/workflows/<workflow-id>/`
-- 實作進行中要維持 commit discipline；每個已完成且有最小驗證的 bounded slice 都應先 commit，再進下一個 slice
+- artifact 預設放在 `.dev/workflows/<workflow-id>/`，替代 root 必須由 locator 宣告
 
 ## 不要做的事
 
@@ -131,14 +142,13 @@
 - 不要把 workflow mode 變成每次都要跑的重流程
 - 不要讓 artifact 取代 skill 的判斷
 - 不要讓 artifact 數量繼續膨脹
-- 不要把整個 workflow 的程式碼與文件修改累積到最後一個超大 commit
 
 ## 相關模板
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
 - `../workflows/README.MD`
-- `../../workflows/templates/workflow-plan-template.md`
-- `../../workflows/templates/review-report-template.md`
-- `../../workflows/templates/workflow-task-template.json`
+- `../../../.ai/assets/skills/dev-workflow/templates/development-workflow-plan-template.md`
+- `../../../.ai/assets/skills/dev-workflow/templates/development-review-report-template.md`
+- `../../../.ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json`
 
 

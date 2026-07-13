@@ -1,7 +1,13 @@
 asset_id: "spec-author"
+schema_version: "1.0"
 asset_type: "skill-spec"
 title: "Spec Author"
 purpose: "Draft or normalize repository production specs and test specs from requirements, existing specs, or codebase facts so they align with .dev/specs structure and schema rules."
+portability: "repo-portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+capability_slots:
+  - "specification"
 triggers:
   - "spec"
   - "draft spec"
@@ -40,4 +46,5 @@ wrapper_metadata:
   claude:
     wrapper_path: ".claude/skills/spec-author/"
   codex:
-    runtime_wrapper_path: ".agents/skills/spec-author/"
+    wrapper_path: ".agents/skills/spec-author/"
+status: "active"

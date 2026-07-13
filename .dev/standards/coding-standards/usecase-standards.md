@@ -1,312 +1,280 @@
-# UseCase 編碼規範 (.NET)
+# Use Case Coding Standards (.NET)
 
-本文件定義 Use Case / Handler 層的編碼標準，包含 Command、Query、Input/Output 和 Handler 設計。
+This document defines coding standards for synchronous Command/Query Use Cases,
+Input/Output, Handlers, transactions, and the event lifecycle. The authoritative
+role relationship is defined in
+[USECASE-COMMAND-HANDLER-RELATIONSHIP.MD](../USECASE-COMMAND-HANDLER-RELATIONSHIP.MD).
 
----
+## Core Model
 
-## 📌 概述
-
-UseCase/Handler 必須遵守 CQRS 分離與交易邊界規範。
-
-- **Command** 修改狀態，返回 `Result<T>`
-- **Query** 只讀取，返回 DTO
-- **Handler** 負責協調 Domain 和 Infrastructure
-
----
-
-## 🏷️ Pattern 標記（自動化檢查用）
-
-以下標記供自動化 Code Review 腳本使用：
-
-```yaml
-# Handler 規則
-Pattern (required): Handle\(
-Pattern (required): private readonly
-
-# 禁止規則
-Pattern (forbidden, i, ignore-comment): IServiceProvider|ServiceLocator
-Pattern (forbidden): new .*Repository\(
+```text
+Controller / Handler (inbound adapter)
+  -> I<Operation>UseCase (inbound port)
+  -> <Operation>UseCase (orchestration)
+  -> Domain / outbound ports
 ```
 
----
+- A Use Case and a Handler are distinct objects.
+- By default, a synchronous API Controller directly injects the Use Case interface.
+- A Handler exists only for a real dispatch or message entry point.
+- Wolverine is a conditional adapter technology, not a portable Use Case dependency.
 
-## 🔴 必須遵守的規則 (MUST FOLLOW)
+## MUST Rules
 
-### 1. Command 與 Query 必須分離 (CQRS)
-
-WolverineFx handlers 不可混用讀寫責任。
+### 1. Interface, Implementation, and Operation Naming
 
 ```csharp
-// ✅ 正確：Command 分離
-public sealed record CreateProductCommand(
+public interface ICreateProductUseCase
+{
+    Task<CreateProductOutput> ExecuteAsync(
+        CreateProductInput input,
+        CancellationToken cancellationToken);
+}
+
+public sealed class CreateProductUseCase : ICreateProductUseCase
+{
+    public Task<CreateProductOutput> ExecuteAsync(
+        CreateProductInput input,
+        CancellationToken cancellationToken)
+    {
+        // Orchestrate Domain behavior and outbound ports.
+    }
+}
+```
+
+- Interfaces use `I<Operation>UseCase`.
+- Implementations use `<Operation>UseCase`.
+- The operation name is always `ExecuteAsync`.
+- An asynchronous operation MUST declare a non-optional `CancellationToken`.
+- A Use Case MUST NOT also expose a `Handle` entry point.
+
+### 2. Input MUST Be Separate from the Delivery Contract
+
+By default, create a dedicated, transport-neutral `*Input` for a Use Case:
+
+```csharp
+public sealed record CreateProductInput(
     string ProductId,
     string Name,
-    string UserId) : ICommand<Result<ProductId>>;
+    string UserId);
+```
 
-public sealed class CreateProductHandler
+Two exceptions are allowed:
+
+- Do not create an input when there is no input other than cancellation.
+- A single scalar built-in/BCL value may be accepted directly.
+
+The scalar exception is limited to `string`, numeric types, `bool`, `Guid`, and
+date/time types. Collections, tuples, custom records/classes, or multiple values
+MUST use a dedicated input.
+
+A Use Case MUST NOT accept:
+
+- ASP.NET Request DTO
+- Wolverine/MediatR Command or Query
+- broker contract
+- package marker interface
+
+### 3. Output MUST Be Separate from Transport
+
+```csharp
+public sealed record CreateProductOutput(ProductId ProductId);
+```
+
+A Use Case returns only the transport-neutral object produced by the completed
+operation. Return `Task` when there is no object. It MUST NOT return
+`IActionResult`, a broker acknowledgement, retry/dead-letter instructions, or a
+framework envelope.
+
+### 4. Separate Command and Query Responsibilities
+
+- A Command Use Case changes state and preserves invariants through Aggregate behavior.
+- A Query Use Case reads only a read model and does not change Domain state.
+- Create a Command/message contract only when a dispatch entry point exists.
+- A Command/message Handler maps the delivery contract to Use Case input.
+- Queries use a query Use Case by default. Only an explicitly approved read-only
+  endpoint may directly use an `IQueryRepository`-derived port or query service.
+
+### 5. Dependency Injection
+
+A Use Case uses constructor injection and depends only on Domain types and
+Application outbound ports:
+
+```csharp
+public sealed class CreateProductUseCase : ICreateProductUseCase
 {
-    private readonly IRepository<Product, ProductId> _repository;
-    
-    public CreateProductHandler(IRepository<Product, ProductId> repository)
+    private readonly IAggregateRepository<Product, ProductId> repository;
+    private readonly IApplicationEventPublisher eventPublisher;
+
+    public CreateProductUseCase(
+        IAggregateRepository<Product, ProductId> repository,
+        IApplicationEventPublisher eventPublisher)
     {
-        _repository = repository;
+        this.repository = repository;
+        this.eventPublisher = eventPublisher;
     }
-    
-    public async Task<Result<ProductId>> Handle(
+}
+```
+
+Forbidden:
+
+- `IServiceProvider` / Service Locator
+- DI registration attribute
+- framework package dependency in portable Use Case
+- direct Wolverine `IMessageBus`
+- another Use Case dependency
+
+Register explicitly with `IServiceCollection` in the composition root:
+
+```csharp
+services.AddScoped<ICreateProductUseCase, CreateProductUseCase>();
+```
+
+MUST NOT register `ICreateProductUseCase` to `CreateProductHandler`.
+
+### 6. A Handler MUST Be a Thin Inbound Adapter
+
+Create a Handler only for a real dispatch/message entry point:
+
+```csharp
+public sealed class CreateProductCommandHandler
+{
+    private readonly ICreateProductUseCase useCase;
+
+    public CreateProductCommandHandler(ICreateProductUseCase useCase)
+    {
+        this.useCase = useCase;
+    }
+
+    public Task<CreateProductOutput> HandleAsync(
         CreateProductCommand command,
-        CancellationToken ct)
+        CancellationToken cancellationToken)
     {
-        var product = new Product(
-            ProductId.From(command.ProductId),
+        var input = new CreateProductInput(
+            command.ProductId,
             command.Name,
-            command.UserId
-        );
-        
-        await _repository.SaveAsync(product, ct);
-        
-        return Result.Success(product.Id);
-    }
-}
+            command.UserId);
 
-// ✅ 正確：Query 分離
-public sealed record GetProductQuery(string ProductId) : IQuery<ProductDto?>;
-
-public sealed class GetProductHandler
-{
-    private readonly IProductQueryService _queryService;
-    
-    public GetProductHandler(IProductQueryService queryService)
-    {
-        _queryService = queryService;
-    }
-    
-    public async Task<ProductDto?> Handle(GetProductQuery query, CancellationToken ct)
-    {
-        return await _queryService.GetByIdAsync(ProductId.From(query.ProductId), ct);
+        return this.useCase.ExecuteAsync(input, cancellationToken);
     }
 }
 ```
 
----
+A Handler MUST NOT:
 
-### 2. 依賴注入必須透過 Constructor
+- load or save an Aggregate;
+- depend on a Repository or Domain Service;
+- commit a transaction;
+- publish a business event or Command;
+- inject or orchestrate multiple Use Cases.
 
-禁止使用 `IServiceProvider` 或 Service Locator 模式。
-Use case / handler / service / mapper / projection 本身也不得依賴 DI attribute 或 assembly scanning 來完成註冊，必須在 composition root 以 `IServiceCollection` 顯式註冊。
+A package-neutral convention Handler may reside in Application. A
+framework/transport-specific Handler belongs at the inbound adapter or composition
+boundary.
+
+### 7. Strong Consistency MUST Be Explicit
+
+One command changes one Aggregate by default. Events and eventual consistency are
+the default for coordination between Aggregates. A Use Case may inject
+`IUnitOfWork` for multiple Aggregates only as an exceptional same-bounded-context
+decision when all of these conditions hold:
+
+1. The business names an all-or-nothing invariant involving the Aggregates.
+2. Any eventually consistent intermediate state would be unacceptable and cannot
+   be safely compensated.
+3. The design rechecks that the Aggregate boundaries are correct instead of using
+   a transaction to hide a misplaced invariant.
+4. The decision documents the invariant, the involved Aggregates, and why eventual
+   consistency or compensation is insufficient.
+
+The following Reservation + Capacity example represents such an exceptional
+business rule; it is not a general Use Case template:
 
 ```csharp
-// ✅ 正確：Constructor Injection
-public sealed class CreateProductHandler
+public sealed class CompleteReservationUseCase
 {
-    private readonly IRepository<Product, ProductId> _repository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger<CreateProductHandler> _logger;
-    
-    public CreateProductHandler(
-        IRepository<Product, ProductId> repository,
-        IUnitOfWork unitOfWork,
-        ILogger<CreateProductHandler> logger)
-    {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
-        _logger = logger;
-    }
-}
+    private readonly IUnitOfWork unitOfWork;
 
-// ❌ 錯誤：Service Locator
-public sealed class CreateProductHandler
-{
-    public CreateProductHandler(IServiceProvider provider)
+    public async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        var repo = provider.GetService<IRepository<Product, ProductId>>();  // FORBIDDEN!
+        // Exceptional case: Reservation and Capacity are in the same bounded
+        // context and the named invariant requires both changes to succeed or
+        // neither to succeed. An intermediate overbooked state is unacceptable
+        // and cannot be safely compensated. Do not copy this as a general template.
+        // Load Reservation and Capacity, invoke Domain behavior, and save through ports.
+        await this.unitOfWork.CommitAsync(cancellationToken);
     }
 }
 ```
+
+- MUST NOT select a multi-Aggregate transaction because of shared storage, ORM or
+  framework capabilities, fewer I/O round trips, implementation convenience, or a
+  general future need.
+- MUST NOT make `IUnitOfWork` a default Use Case dependency.
+- MUST NOT span bounded contexts with one transaction; cross-bounded-context
+  coordination uses integration events and eventual consistency.
+- A Repository participating in a Unit of Work MUST NOT commit independently.
+- A Handler MUST NOT introduce a transaction or commit after the Use Case.
+- Pending Domain Events may be acknowledged or cleared only after a successful commit.
+
+### 8. Event Publication Uses an Outbound Port
+
+A Domain object produces Domain Events; the Use Case coordinates persistence,
+outbox, and the publication lifecycle.
 
 ```csharp
-// ❌ 錯誤：依賴 attribute-based DI 註冊
-[SomeDiAttribute]
-public sealed class CreateProductService : ICreateProductUseCase
+public interface IApplicationEventPublisher
 {
-}
-
-// ✅ 正確：保持純 POCO，於 composition root 顯式註冊
-public sealed class CreateProductService : ICreateProductUseCase
-{
-}
-
-services.AddScoped<ICreateProductUseCase, CreateProductService>();
-```
-
----
-
-### 3. 必須定義明確的 Command/Query Records
-
-使用 `record` 定義 Input，WolverineFx 會自動處理。
-
-```csharp
-// ✅ 正確：使用 record 定義 Command
-public sealed record CreateProductCommand(
-    string ProductId,
-    string Name,
-    string UserId,
-    string? Description = null) : ICommand<Result<ProductId>>;
-
-// ✅ 正確：使用 record 定義 Query
-public sealed record GetProductsQuery(
-    string? Filter = null,
-    int Page = 0,
-    int Size = 20) : IQuery<PagedResult<ProductDto>>;
-```
-
----
-
-### 4. Handler 必須返回 Result Pattern
-
-Command Handler 使用 `Result<T>` 包裝返回值，處理成功與失敗情況。
-
-```csharp
-// ✅ 正確：返回 Result<T>
-public async Task<Result<ProductId>> Handle(
-    CreateProductCommand command,
-    CancellationToken ct)
-{
-    try
-    {
-        var product = new Product(...);
-        await _repository.SaveAsync(product, ct);
-        await _unitOfWork.CommitAsync(ct);
-        
-        return Result.Success(product.Id);
-    }
-    catch (DomainException ex)
-    {
-        _logger.LogWarning(ex, "Domain validation failed");
-        return Result.Failure<ProductId>(ex.Message);
-    }
+    Task PublishAsync(
+        object applicationEvent,
+        CancellationToken cancellationToken);
 }
 ```
 
----
+The concrete port SHOULD use the target domain language instead of a generic bus
+abstraction. Infrastructure may implement the port with Wolverine/outbox. A Use
+Case MUST NOT inject `IMessageBus` directly or publish Commands through the publisher.
 
-## 🔍 檢查清單
+## Test Rules
+
+- A Use Case unit test directly creates the concrete `*UseCase`.
+- Mock outbound ports such as Aggregate Repository, Query Repository, gateway,
+  clock, and publisher.
+- Verify `ExecuteAsync` output, Domain behavior, persistence, and event lifecycle.
+- A Handler test verifies only mapping, one Use Case invocation, and delivery
+  failure mapping.
+- A Handler test MUST NOT replace a Use Case business-flow test.
+
+## Checklist
+
+### Use Case
+
+- [ ] Interface and concrete class names use `*UseCase`.
+- [ ] The operation is `ExecuteAsync`.
+- [ ] `CancellationToken` is not optional.
+- [ ] Input/Output are separate from HTTP, MQ, and Wolverine/MediatR.
+- [ ] Dependencies are limited to Domain types and outbound ports.
+- [ ] There is no dependency on `IServiceProvider`, `IMessageBus`, or another Use Case.
+- [ ] The transaction and event lifecycle reside in the Use Case.
+- [ ] One command changes one Aggregate by default; other Aggregate effects use events.
+- [ ] `IUnitOfWork` is absent unless a documented, named all-or-nothing invariant
+      satisfies every exceptional strong-consistency criterion above.
+- [ ] An exceptional transaction records the involved Aggregates, boundary recheck,
+      and why eventual consistency or compensation is unacceptable.
+- [ ] No transaction spans bounded contexts.
 
 ### Handler
-- [ ] 使用 Constructor Injection
-- [ ] 沒有使用 `IServiceProvider`
-- [ ] 沒有使用 DI attribute / auto-registration
-- [ ] Command Handler 返回 `Result<T>`
 
-### CQRS 分離
-- [ ] Command 和 Query 是獨立的 Handler
-- [ ] Command 使用 Repository
-- [ ] Query 使用專門的 QueryService
+- [ ] Exists only for a real dispatch/message entry point.
+- [ ] Maps delivery input to Use Case input.
+- [ ] Invokes exactly one Use Case.
+- [ ] Does not directly operate a Repository, Aggregate, transaction, or event publication.
+- [ ] Framework/transport coupling stays at the adapter/composition boundary.
 
-### Command/Query Records
-- [ ] 使用 `sealed record`
-- [ ] 實作 `ICommand<T>` 或 `IQuery<T>`
-- [ ] 使用簡單類型 (string, int, etc.)
-- [ ] 可選參數有預設值
+## Related Documents
 
----
-
-## 📋 快速複製模板
-
-### Command + Handler 模板
-
-```csharp
-// Command
-public sealed record Create[Aggregate]Command(
-    string [Aggregate]Id,
-    string Name,
-    string UserId) : ICommand<Result<[Aggregate]Id>>;
-
-// Handler
-public sealed class Create[Aggregate]Handler
-{
-    private readonly IRepository<[Aggregate], [Aggregate]Id> _repository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger<Create[Aggregate]Handler> _logger;
-
-    public Create[Aggregate]Handler(
-        IRepository<[Aggregate], [Aggregate]Id> repository,
-        IUnitOfWork unitOfWork,
-        ILogger<Create[Aggregate]Handler> logger)
-    {
-        _repository = repository;
-        _unitOfWork = unitOfWork;
-        _logger = logger;
-    }
-
-    public async Task<Result<[Aggregate]Id>> Handle(
-        Create[Aggregate]Command command,
-        CancellationToken ct)
-    {
-        try
-        {
-            var aggregate = new [Aggregate](
-                [Aggregate]Id.From(command.[Aggregate]Id),
-                command.Name,
-                command.UserId
-            );
-
-            await _repository.SaveAsync(aggregate, ct);
-            await _unitOfWork.CommitAsync(ct);
-
-            return Result.Success(aggregate.Id);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to create [Aggregate]");
-            return Result.Failure<[Aggregate]Id>(ex.Message);
-        }
-    }
-}
-```
-
-### Query + Handler 模板
-
-```csharp
-// Query
-public sealed record Get[Aggregate]Query(string [Aggregate]Id) : IQuery<[Aggregate]Dto?>;
-
-// Handler
-public sealed class Get[Aggregate]Handler
-{
-    private readonly I[Aggregate]QueryService _queryService;
-
-    public Get[Aggregate]Handler(I[Aggregate]QueryService queryService)
-    {
-        _queryService = queryService;
-    }
-
-    public async Task<[Aggregate]Dto?> Handle(
-        Get[Aggregate]Query query,
-        CancellationToken ct)
-    {
-        return await _queryService.GetByIdAsync(
-            [Aggregate]Id.From(query.[Aggregate]Id), ct);
-    }
-}
-```
-
----
-
-## 📂 程式碼範例
-
-更多完整範例請參考：
-
-| 範例 | 路徑 |
-|------|------|
-| UseCase 定義 | [../examples/usecase/](../examples/usecase/) |
-| BDD 測試範例 | [../examples/bdd-gherkin-test/](../examples/bdd-gherkin-test/) |
-| UseCase 測試 | [../examples/use-case-test-example.md](../examples/use-case-test-example.md) |
-
----
-
-## 相關文件
-
-- [aggregate-standards.md](aggregate-standards.md)
-- [mapper-standards.md](mapper-standards.md)
-- [repository-standards.md](repository-standards.md)
-- [projection-standards.md](projection-standards.md)
+- [Aggregate Standards](aggregate-standards.md)
+- [Controller Standards](controller-standards.md)
+- [Repository Standards](repository-standards.md)
+- [Test Standards](test-standards.md)
+- [Conditional target project structure profile](../project-structure.md) (apply physical layout only with target evidence or explicit adoption)

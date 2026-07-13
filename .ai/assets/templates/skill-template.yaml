@@ -1,30 +1,32 @@
-id: example-skill-id
-asset_type: skill
-title: Example Skill
-purpose: >
-  Describe what this skill is for in portable, agent-neutral terms.
-portability: repo-portable
-audience:
-  - agent-facing
-wrapper_targets:
-  - claude
-  - codex
-  - gemini
-  - copilot
-source_of_truth: canonical
+asset_id: "example-skill-id"
+schema_version: "1.0"
+asset_type: "skill-spec"
+title: "Example Skill"
+purpose: "Describe the skill responsibility in portable, agent-neutral terms."
+portability: "repo-portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
 inputs:
-  - requirements
-  - specs
+  - "requirements"
 outputs:
-  - design notes
-  - execution guidance
-triggers:
-  - example trigger
+  - "validated result"
 constraints:
-  - Keep this skill wrapper-neutral
-handoff_rules:
-  - Escalate if the task exceeds scope
+  - "Remain within the declared skill boundary."
 references: []
 examples: []
-human_guide: ""
-status: draft
+wrapper_targets:
+  - "codex"
+wrapper_metadata:
+  codex:
+    wrapper_path: ".agents/skills/example-skill-id/"
+triggers:
+  - "example skill request"
+workflow:
+  - step: 1
+    description: "Confirm scope and inputs."
+  - step: 2
+    description: "Produce and validate the bounded result."
+handoff_rules:
+  - "Return work outside this skill boundary to the orchestrating agent."
+runtime_notes: []
+status: "draft"

@@ -4,7 +4,7 @@
 Set up the testing infrastructure for a new .NET project to support multi-profile testing (test-inmemory and test-outbox).
 
 ## Prerequisites
-1. .NET SDK installed (version defined in `.dev/project-config.yaml`)
+1. .NET SDK installed (version confirmed from `global.json`, project files, or generated `.dev/project-config.yaml`)
 2. WolverineFx and EF Core packages available
 3. A shared time provider (DateProvider/TimeProvider) is defined for deterministic tests
 
@@ -88,7 +88,7 @@ public static class TestProfileRegistration
 ```json
 {
   "ConnectionStrings": {
-    "Outbox": "Host=localhost;Port=5800;Database=board_test;Username=postgres;Password=root"
+    "Outbox": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   }
 }
 ```
@@ -108,6 +108,8 @@ ASPNETCORE_ENVIRONMENT=test-outbox dotnet test --filter Profile=test-outbox
 ```
 
 ## Writing Tests
+
+Use Given-When-Then for every test; do not substitute Arrange-Act-Assert (3A). xUnit + BDDfy is the default. If the target team explicitly decides not to install BDDfy, keep the same Given / When / Then step structure in plain xUnit tests. Do not add `.feature` files or a Gherkin runner unless a feature file is supplied, the user explicitly requests its design or generation, or the target profile adopts that runner.
 
 Example BDDfy test skeleton (Gherkin-style naming, no `.feature`):
 
@@ -134,7 +136,9 @@ public sealed class CreateProductFeature : IClassFixture<TestProfileFixture>
 
     async Task When_the_use_case_is_executed()
     {
-        await _useCase.Execute(CreateProductInput.Create("product-123", "AI Scrum Assistant", "user-456"));
+        await _useCase.ExecuteAsync(
+            CreateProductInput.Create("product-123", "AI Scrum Assistant", "user-456"),
+            CancellationToken.None);
     }
 
     void Then_the_command_succeeds()
@@ -169,8 +173,6 @@ Do:
 - [ ] Tests use async-safe event checks
 
 ## Related Documents
-- `.dev/guides/PROFILE-BASED-TESTING-GUIDE.md`
+- `.dev/guides/design-guides/PROFILE-BASED-TESTING-GUIDE.md`
 - `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml`
-- `.ai/assets/shared/testing-standards.md`
-
-
+- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`

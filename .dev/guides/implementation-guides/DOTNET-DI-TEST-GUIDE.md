@@ -14,12 +14,12 @@
 public sealed class CreateProductFeature : IClassFixture<TestProfileFixture>
 {
     private readonly ICreateProductUseCase _useCase;
-    private readonly IRepository<Product, ProductId> _repository;
+    private readonly IAggregateRepository<Product, ProductId> _repository;
 
     public CreateProductFeature(TestProfileFixture fixture)
     {
         _useCase = fixture.Services.GetRequiredService<ICreateProductUseCase>();
-        _repository = fixture.Services.GetRequiredService<IRepository<Product, ProductId>>();
+        _repository = fixture.Services.GetRequiredService<IAggregateRepository<Product, ProductId>>();
     }
 }
 ```
@@ -80,8 +80,8 @@ public sealed class TestProfileFixture
 
 ### 3. Use NSubstitute for mocks
 ```csharp
-var messageBus = Substitute.For<IMessageBus>();
-services.AddSingleton(messageBus);
+var eventPublisher = Substitute.For<IProductEventPublisher>();
+services.AddSingleton(eventPublisher);
 ```
 
 ## Migration Guide
@@ -92,14 +92,14 @@ Wrong (legacy):
 ```csharp
 public sealed class TestContext
 {
-    public IRepository<Product, ProductId> Repository;
-    public IMessageBus Bus;
+    public IAggregateRepository<Product, ProductId> Repository;
+    public IProductEventPublisher EventPublisher;
 }
 ```
 
 Correct (DI + profile-based):
 ```csharp
-var repository = _services.GetRequiredService<IRepository<Product, ProductId>>();
+var repository = _services.GetRequiredService<IAggregateRepository<Product, ProductId>>();
 ```
 
 ### Step 2: Use fixtures for state reset (no BaseTestClass)
@@ -113,8 +113,8 @@ public sealed class TestProfileFixture : IAsyncLifetime
 
 ### Step 3: Replace @MockBean with NSubstitute DI overrides
 ```csharp
-var bus = Substitute.For<IMessageBus>();
-services.AddSingleton(bus);
+var eventPublisher = Substitute.For<IProductEventPublisher>();
+services.AddSingleton(eventPublisher);
 ```
 
 ## Test Profile Configuration
@@ -130,7 +130,7 @@ services.AddSingleton(bus);
 ```json
 {
   "ConnectionStrings": {
-    "Outbox": "Host=localhost;Port=5800;Database=board_test;Username=postgres;Password=root"
+    "Outbox": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   }
 }
 ```
@@ -152,7 +152,7 @@ ASPNETCORE_ENVIRONMENT=test-outbox dotnet test
 ## Automated Check
 Preferred active entry point:
 
-- `.ai/scripts/check-test-di-compliance.sh`
+- `.ai/scripts/check-test-di-compliance.sh` is a transitional helper. Prefer analyzer or test architecture rules after dotnet-native validation exists.
 
 ## Common Mistakes
 
@@ -164,13 +164,13 @@ var repo = new InMemoryProductRepository();
 
 Correct:
 ```csharp
-var repo = _services.GetRequiredService<IRepository<Product, ProductId>>();
+var repo = _services.GetRequiredService<IAggregateRepository<Product, ProductId>>();
 ```
 
 ### 2. Manual service construction
 Wrong:
 ```csharp
-var useCase = new CreateProductHandler(repo);
+var useCase = new CreateProductUseCase(repo, eventPublisher);
 ```
 
 Correct:

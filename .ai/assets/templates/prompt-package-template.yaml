@@ -1,24 +1,26 @@
-id: example-prompt-package-id
-asset_type: prompt-package
-title: Example Prompt Package
-purpose: >
-  Describe the reusable prompt package.
-portability: portable
-audience:
-  - agent-facing
-wrapper_targets:
-  - claude
-  - codex
-  - gemini
-  - copilot
-source_of_truth: canonical
+asset_id: "example-prompt-package-id"
+schema_version: "1.0"
+asset_type: "prompt-package"
+title: "Example Prompt Package"
+purpose: "Describe the reusable prompt material grouped by this package."
+portability: "portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
 inputs:
-  - source context
+  - "source context"
 outputs:
-  - prompt text
-base_prompt: ""
-shared_fragments: []
-validation_rules: []
+  - "composed prompt text"
+constraints:
+  - "Do not duplicate skill workflow policy or wrapper invocation syntax."
 references: []
 examples: []
-status: draft
+wrapper_targets:
+  - "claude"
+  - "codex"
+base_prompt: ".ai/assets/prompts/example/base.md"
+shared_fragments: []
+validation_rules:
+  - "Resolve every referenced prompt fragment."
+consumers:
+  - "example-skill-id"
+status: "draft"

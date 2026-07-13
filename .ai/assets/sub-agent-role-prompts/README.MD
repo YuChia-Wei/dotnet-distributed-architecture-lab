@@ -1,47 +1,20 @@
 # Sub-Agent Role Prompts
 
-本目錄放置 delegated sub-agent 的 canonical 定義。
+This directory contains canonical delegated sub-agent role definitions.
 
-## 角色
+## Purpose
 
-- 表達 worker-role prompt / delegation template / sub-agent role prompt
-- 不是 top-level skill
-- 給 main agent 在委派 bounded task 時作為 canonical source
+Use `.ai/assets/sub-agent-role-prompts/` for worker-role prompts and delegation templates that a main agent can use when assigning bounded work to sub-agents.
 
-常見類型：
+## Usage
 
-- implementation sub-agents
-- test-generation sub-agents
-- delegated review sub-agents
-- infrastructure / integration sub-agents
+Each sub-agent role should keep its canonical entry in `sub-agent.yaml`, with optional supporting material under `references/`.
 
-## 建議結構
+Top-level skills belong under `.ai/assets/skills/`; sub-agent role prompts are not top-level skills.
 
-```text
-.ai/assets/sub-agent-role-prompts/<sub-agent-id>/
-  sub-agent.yaml
-  references/
-```
+## Boundary
 
-## 與其他目錄的分工
-
-- `.ai/assets/skills/`
-  - top-level skills
-- `.ai/assets/sub-agent-role-prompts/`
-  - delegated sub-agent role prompts
-- `.ai/assets/shared/`
-  - shared prompt packages / common rules / templates
-
-## 例子
-
-- `command-sub-agent`
-- `query-sub-agent`
-- `reactor-sub-agent`
-- `usecase-test-sub-agent`
-- `aggregate-test-sub-agent`
-- `controller-test-sub-agent`
-- `code-review-sub-agent`
-- `aggregate-code-review-sub-agent`
-- `controller-code-review-sub-agent`
-- `reactor-code-review-sub-agent`
-
+- Keep role definitions and role-specific references here.
+- Keep shared reusable rules under `.ai/assets/shared/` or the relevant tech-stack profile.
+- Keep human-facing taxonomy and usage guidance under `.dev/guides/ai-collaboration-guides/`.
+- Keep runtime wrappers outside this directory.

@@ -7,7 +7,7 @@ assistant for the Clean Architecture + DDD + CQRS stack.
 
 ### `examples/nuget/`
 Verified NuGet dependency templates.
-Use placeholders and version sources from `.dev/project-config.yaml`.
+Use placeholders and versions confirmed from target-repository evidence. Use generated `.dev/project-config.yaml` only when present.
 
 ### `examples/aspnet-core/`
 Verified ASP.NET Core configuration templates:

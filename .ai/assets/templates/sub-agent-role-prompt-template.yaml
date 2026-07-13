@@ -1,0 +1,29 @@
+asset_id: "example-sub-agent"
+schema_version: "1.0"
+asset_type: "sub-agent-role-prompt"
+title: "Example Sub-Agent"
+purpose: "Describe the bounded delegated responsibility."
+portability: "repo-portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+inputs:
+  - "delegated task and evidence"
+outputs:
+  - "bounded result and validation notes"
+constraints:
+  - "Do not broaden scope or make integration decisions for the orchestrator."
+references: []
+examples: []
+wrapper_targets:
+  - "codex"
+role_kind: "specification-sub-agent"
+triggers:
+  - "delegate example analysis"
+workflow:
+  - step: 1
+    description: "Confirm the delegated scope and available evidence."
+  - step: 2
+    description: "Return the bounded result and validation notes."
+handoff_rules:
+  - "Return unresolved integration decisions to the orchestrating agent."
+status: "draft"

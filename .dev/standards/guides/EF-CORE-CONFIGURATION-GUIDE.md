@@ -1,11 +1,11 @@
 # EF Core Configuration Guide
 
-## 🎯 核心原則
+## 🎯 Core Principles
 
-所有 EF Core 相關的 Repository/Projection/Inquiry/Archive 必須在 DI 中正確註冊，
-並維持 DDD/CA/CQRS 分層：Domain 不依賴 EF Core，Infrastructure 才能使用 DbContext。
+All EF Core-related Repository/Projection/Inquiry/Archive implementations must be registered correctly in DI
+and preserve DDD/CA/CQRS layering: Domain does not depend on EF Core, and only Infrastructure may use DbContext.
 
-## 📦 結構建議
+## 📦 Recommended Structure
 
 ```
 src/Infrastructure/
@@ -15,7 +15,7 @@ src/Infrastructure/
 └── Archive/
 ```
 
-## 🔧 DbContext 設定
+## 🔧 DbContext Configuration
 
 ```csharp
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -25,48 +25,48 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 ```
 
-## 🧩 DI 註冊規則
+## 🧩 DI Registration Rules
 
-- Repository / Projection / Inquiry / Archive 都必須註冊於 DI
-- 只在 Infrastructure 註冊 DbContext
-- Domain 與 Application 不可直接依賴 DbContext
+- Repository / Projection / Inquiry / Archive must all be registered in DI
+- Register DbContext only in Infrastructure
+- Domain and Application must not depend directly on DbContext
 
 ```csharp
 services.AddScoped<IPlanProjection, EfPlanProjection>();
 services.AddScoped<IPlanArchive, EfPlanArchive>();
 ```
 
-## ⚠️ 常見問題
+## ⚠️ Common Issues
 
-### 問題 1: 無法解析服務
-**錯誤訊息**：
+### Issue 1: Unable to Resolve a Service
+**Error message**:
 ```
 Unable to resolve service for type 'EfPlanProjection'
 ```
 
-**解決方案**：
-- 確認類別已註冊到 DI
-- 確認 namespace 與組件掃描一致
+**Solution**:
+- Confirm that the class is registered in DI
+- Confirm that the namespace matches assembly scanning
 
-### 問題 2: 重複註冊
-**症狀**：多個實作導致衝突
+### Issue 2: Duplicate Registration
+**Symptom**: Multiple implementations cause conflicts
 
-**解決方案**：
-- 一個介面只對應一個實作
-- InMemory/Outbox 需 profile 隔離註冊
+**Solution**:
+- Map each interface to only one implementation
+- Isolate InMemory/Outbox registrations by profile
 
-## 🔍 自動檢查
+## 🔍 Automated Check
 
 ```bash
-# TODO: Rename legacy script name to check-ef-projection-config.sh.
-.ai/scripts/check-projection-config.sh
+dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj
 ```
 
-> Note: Script name is legacy; keep it until the rename is completed.
+The target repository should provide an `IProjectionReadModel` marker interface and use
+`ProjectionModelRegistrationValidator` to compare marker implementations with the assembled `DbContext.Model`.
 
-## 📋 檢查清單
+## 📋 Checklist
 
-- [ ] Repository/Projection/Inquiry/Archive 已註冊
-- [ ] DbContext 只在 Infrastructure 層使用
-- [ ] Projection 使用 AsNoTracking
-- [ ] 避免 Controller 直接依賴 DbContext
+- [ ] Repository/Projection/Inquiry/Archive are registered
+- [ ] DbContext is used only in the Infrastructure layer
+- [ ] Projections use AsNoTracking
+- [ ] Controllers do not depend directly on DbContext

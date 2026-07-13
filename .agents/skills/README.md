@@ -1,25 +1,41 @@
 # Agents Skill Wrappers
 
-本目錄放置目前 repo 內給 Codex / agent runtime 使用的 skill wrapper。
+This directory contains the current repo-local skill wrappers for Codex and compatible agent runtimes.
 
-## 角色
+## Role
 
 - `.agents/skills/`
   - runtime wrapper root
 - `.ai/assets/skills/`
-  - canonical skill registry 與單一真相
+  - canonical skill registry and source of truth
 - `.dev/guides/ai-collaboration-guides/`
   - human-facing guides
 
-## 使用方式
+## Usage
 
-1. 先到 `.ai/assets/skills/README.MD` 找完整 skill registry。
-2. 再看對應 `skill.yaml` 確認 canonical purpose、inputs、outputs、constraints、wrapper targets、human guide。
-3. 需要目前 runtime 可讀入口時，再使用 `.agents/skills/<skill>/SKILL.md` wrapper。
+1. Start with `.ai/assets/skills/README.MD` for the complete canonical skill registry.
+2. Read the matching `skill.yaml` for purpose, inputs, outputs, constraints, wrapper targets, and human guide.
+3. Use `.agents/skills/<skill>/SKILL.md` only when the current runtime needs a local wrapper entry.
 
-## Wrapper 原則
+## Available Wrappers
 
-- wrapper 不應成為 skill 規則的單一真相
-- 新增 skill 時，應先補 canonical spec，再補 runtime wrapper
-- 若 canonical spec 與 wrapper 衝突，以 `.ai/assets/skills/` 為準
-- 每個 wrapper `SKILL.md` 應只保留 canonical spec、human guide、references、runtime-specific metadata 的薄入口
+- `ai-context-governance`
+- `ai-context-auditor`
+- `bdd-gwt-test-designer`
+- `code-reviewer`
+- `dev-workflow`
+- `ddd-ca-hex-architect`
+- `local-change-implementer`
+- `problem-frame-author`
+- `repo-structure-sync`
+- `requirement-author`
+- `slice-implementer`
+- `spec-author`
+- `spec-compliance-validator`
+
+## Wrapper Rules
+
+- A wrapper must not become the source of truth for skill rules.
+- Add or update the canonical spec before adding or updating a runtime wrapper.
+- If the canonical spec and wrapper conflict, follow `.ai/assets/skills/`.
+- Each wrapper `SKILL.md` should only keep canonical spec links, human guide links, reference links, and runtime-specific metadata.
