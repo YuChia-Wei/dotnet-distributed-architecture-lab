@@ -405,3 +405,15 @@ dotnet_diagnostic.CA1305.severity = suggestion
 
 # CA1851: Possible multiple enumerations of 'IEnumerable' collection - https://github.com/dotnet/roslyn-analyzers/issues/6379
 dotnet_diagnostic.CA1851.severity = suggestion
+
+# Source-included repository architecture analyzers
+# ARC-003 tracks the existing aggregate/query repository migration. Keep this
+# diagnostic visible during staged adoption and promote it back to error when
+# that backlog item is resolved.
+dotnet_diagnostic.DBA1001.severity = warning
+
+# ARC-004 tracks the existing Use Case and Handler contract migration exposed
+# by the first analyzer-enabled product build. Keep these visible until the
+# bounded migration is complete, then restore their default error severity.
+dotnet_diagnostic.DBA1015.severity = warning
+dotnet_diagnostic.DBA1017.severity = warning

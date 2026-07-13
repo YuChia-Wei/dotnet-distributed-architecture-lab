@@ -17,7 +17,7 @@
 - `branch_segment`: `1`
 - `status`: `active`
 - `created_at`: `2026-07-13T22:37:26+08:00`
-- `updated_at`: `2026-07-13T22:46:06+08:00`
+- `updated_at`: `2026-07-13T22:52:24+08:00`
 - `template_source`: `.ai/assets/skills/dev-workflow/templates/development-workflow-plan-template.md`
 - `template_version`: `1.1.0`
 - `workflow_locator`: `.dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml`
@@ -143,11 +143,12 @@
 
 ## Progress And Handoff
 
-- Current stage: `analyzer-integration`
-- Completed stages: `assessment-and-backlog` (`DEV-001`).
+- Current stage: `critical-architecture-direction` (`DEV-003`).
+- Completed stages: `assessment-and-backlog` (`DEV-001`); `analyzer-integration` (`DEV-002`).
 - Deferred stages and reasons: None.
 - Open decisions: Exact durable messaging persistence mechanism will be selected during `DEV-003` from current Wolverine/PostgreSQL support and repository transaction evidence.
-- Continuation instructions: Complete `DEV-001`, then execute analyzer integration as `DEV-002`; do not begin product architecture remediation before `DEV-003` is approved and recorded.
+- Continuation instructions: Begin `DEV-003` with `ddd-ca-hex-architect`; do not begin product architecture remediation before its decisions are approved and recorded.
+- Analyzer-discovered follow-ups: `DEV-008` migrates staged Use Case/Handler diagnostics; `DEV-009` removes the confirmed high-severity OpenAPI dependency vulnerability.
 - Branch history and checkpoint handoffs: Segment 1 started from local `main`; no push or merge requested yet.
 
 ## Branch Lifecycle
@@ -160,6 +161,6 @@
 
 - Outcome: Active.
 - Changed artifacts: Workflow locator, plan, tasks, review report, backlog, analyzer integration.
-- Validation evidence: Workflow validator passed with 10 durable backlog items; task JSON and backlog YAML parsed successfully.
-- Commits: Workflow bootstrap committed; assessment/backlog checkpoint pending commit.
+- Validation evidence: Workflow validator passed; analyzer-enabled product build passed; analyzer tests 47/47 and runtime validation tests 2/2 passed; quick gate passed 7/7; no analyzer runtime dependency was found.
+- Commits: Workflow bootstrap and assessment/backlog checkpoints committed; analyzer integration checkpoint pending commit.
 - Residual risks: Pending implementation and final validation.
