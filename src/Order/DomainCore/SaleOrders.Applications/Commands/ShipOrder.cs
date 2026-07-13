@@ -45,7 +45,7 @@ public interface IShipOrderUseCase
 /// <summary>
 /// 發貨訂單 use case 的預設實作。
 /// </summary>
-public class ShipOrderUseCase(IOrderDomainRepository repository, IIntegrationEventPublisher publisher) : IShipOrderUseCase
+public class ShipOrderUseCase(IOrderDomainRepository repository, IOrderEventCommitter committer) : IShipOrderUseCase
 {
     /// <summary>
     /// 執行發貨訂單流程。
@@ -61,8 +61,9 @@ public class ShipOrderUseCase(IOrderDomainRepository repository, IIntegrationEve
             return;
         }
 
-        await repository.UpdateAsync(order, cancellationToken);
-
-        await publisher.PublishAsync(new OrderShipped(order.Id, input.Reason));
+        await committer.CommitAsync(
+            order,
+            [new OrderShipped(order.Id, input.Reason)],
+            cancellationToken);
     }
 }

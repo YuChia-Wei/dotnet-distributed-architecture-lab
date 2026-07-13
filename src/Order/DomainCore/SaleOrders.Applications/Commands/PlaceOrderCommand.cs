@@ -74,23 +74,20 @@ public interface IPlaceOrderUseCase
 /// 下單 use case 的預設實作。
 /// </summary>
 public class PlaceOrderUseCase(
-    IOrderDomainRepository repository,
-    IIntegrationEventPublisher publisher,
+    IOrderEventCommitter committer,
     IInventoryGateway inventoryGateway) : IPlaceOrderUseCase
 {
     /// <summary>
     /// 執行下單流程並建立訂單。
     /// </summary>
     /// <param name="input">下單所需的輸入資料。</param>
-    /// <param name="repository">訂單領域儲存庫。</param>
-    /// <param name="publisher">整合事件發布器。</param>
+    /// <param name="committer">訂單事件與 outbox 的原子提交埠。</param>
     /// <param name="inventoryGateway">庫存閘道。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>下單結果。</returns>
     public static async Task<Result<PlaceOrderOutput>> HandleAsync(
         PlaceOrderInput input,
-        IOrderDomainRepository repository,
-        IIntegrationEventPublisher publisher,
+        IOrderEventCommitter committer,
         IInventoryGateway inventoryGateway,
         CancellationToken cancellationToken)
     {
@@ -107,9 +104,10 @@ public class PlaceOrderUseCase(
             return Result<PlaceOrderOutput>.Failure("Inventory is not enough.");
         }
 
-        await repository.AddAsync(order);
-
-        await publisher.PublishAsync(new OrderPlaced(order.Id, order.ProductId, order.ProductName, order.Quantity));
+        await committer.CommitAsync(
+            order,
+            [new OrderPlaced(order.Id, order.ProductId, order.ProductName, order.Quantity)],
+            cancellationToken);
 
         return Result<PlaceOrderOutput>.Success(new PlaceOrderOutput(order.Id));
     }
@@ -122,7 +120,7 @@ public class PlaceOrderUseCase(
     /// <returns>下單結果。</returns>
     public Task<Result<PlaceOrderOutput>> ExecuteAsync(PlaceOrderInput input, CancellationToken cancellationToken = default)
     {
-        return HandleAsync(input, repository, publisher, inventoryGateway, cancellationToken);
+        return HandleAsync(input, committer, inventoryGateway, cancellationToken);
     }
 }
 

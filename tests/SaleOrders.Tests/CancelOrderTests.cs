@@ -36,8 +36,12 @@ public class CancelOrderTests
         orderRepositoryMock.Setup(x => x.GetByIdAsync(orderId, It.IsAny<CancellationToken>()))
                            .ReturnsAsync(order);
 
-        orderRepositoryMock.Setup(x => x.UpdateAsync(It.IsAny<Order>(), It.IsAny<CancellationToken>()))
-                           .Returns(Task.CompletedTask);
+        var committerMock = new Mock<IOrderEventCommitter>();
+        committerMock.Setup(x => x.CommitAsync(
+                                It.IsAny<Order>(),
+                                It.IsAny<IReadOnlyCollection<IIntegrationEvent>>(),
+                                It.IsAny<CancellationToken>()))
+                     .Returns(Task.CompletedTask);
 
         using var host = await Host.CreateDefaultBuilder()
                                    .UseWolverine(opts =>
@@ -57,6 +61,7 @@ public class CancelOrderTests
 
                                        // override repository with mock
                                        opts.Services.AddSingleton(orderRepositoryMock.Object);
+                                       opts.Services.AddSingleton(committerMock.Object);
                                    }).StartAsync();
 
         // Act
@@ -66,7 +71,35 @@ public class CancelOrderTests
 
         // Assert
         order.Status.ShouldBe(OrderStatus.Cancelled);
-        orderRepositoryMock.Verify(r => r.UpdateAsync(It.Is<Order>(o => o.Id == orderId), It.IsAny<CancellationToken>()), Times.Once);
+        committerMock.Verify(
+            c => c.CommitAsync(
+                It.Is<Order>(o => o.Id == orderId),
+                It.Is<IReadOnlyCollection<IIntegrationEvent>>(events =>
+                    events.Count == 1 &&
+                    events.Single().GetType() == typeof(OrderCancelled) &&
+                    ((OrderCancelled)events.Single()).Reason == "customer request"),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
 
+    /// <summary>驗證重複取消是 no-op，不會再次寫入事件或 outbox。</summary>
+    [Fact]
+    public async Task given_cancelled_order_when_cancelled_again_then_commit_is_skipped()
+    {
+        var order = new Order(DateTime.UtcNow, 100m, Guid.NewGuid(), "P", 1);
+        order.Cancel("initial cancellation");
+        order.MarkChangesAsCommitted(2);
+
+        var repositoryMock = new Mock<IOrderDomainRepository>();
+        repositoryMock.Setup(x => x.GetByIdAsync(order.Id, It.IsAny<CancellationToken>()))
+                      .ReturnsAsync(order);
+        var committerMock = new Mock<IOrderEventCommitter>(MockBehavior.Strict);
+        var useCase = new CancelOrderUseCase(repositoryMock.Object, committerMock.Object);
+
+        await useCase.ExecuteAsync(new CancelOrderInput(order.Id, "duplicate request"));
+
+        order.Status.ShouldBe(OrderStatus.Cancelled);
+        order.DomainEvents.ShouldBeEmpty();
+        committerMock.VerifyNoOtherCalls();
     }
 }

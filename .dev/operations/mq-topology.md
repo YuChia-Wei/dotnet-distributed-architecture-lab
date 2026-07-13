@@ -42,6 +42,10 @@ Known from current code:
 - Kafka listeners use durable inbox where configured.
 - RabbitMQ listeners use durable inbox where configured.
 - publish routes use durable outbox for integration streams and request messages.
+- `SaleOrders.WebApi` configures Wolverine PostgreSQL message persistence in the Orders database.
+- Orders appends aggregate events and `OrderIntegrationOutbox` rows in the same Dapper/Npgsql transaction through `IOrderEventCommitter`.
+- `OrderIntegrationOutboxRelay` leases committed source-outbox rows, publishes them through Wolverine, and deletes them after publication. A crash after publication and before deletion can redeliver an event, so consumers must remain idempotent.
+- The source outbox row `Id` is reused as Wolverine `DeduplicationId` and the `lab-message-id` header on every relay attempt; `AggregateId` is supplied as the partition key.
 - explicit dead-letter destinations are not yet documented in code-level runtime docs.
 - explicit retry counts or backoff classes are not yet documented in these runtime files.
 
@@ -54,9 +58,22 @@ Current maintainer rule:
 ## Operational Risks
 
 - `SaleOrders.WebApi` contains an inline comment saying the reply listener configuration is incorrect and should only publish requests, not listen to them.
+- The native Orders source outbox closes the code-level commit-to-enqueue gap, but DEV-005 remains open until a PostgreSQL failure-injection test proves rollback and recovery behavior.
 - `InventoryControl.WebApi` listens to `inventory.requests` in Kafka mode only; its RabbitMQ branch does not configure the corresponding listener, so RabbitMQ reservation is currently broken/unconfigured.
 - RabbitMQ logical names are explicit, but exchange/binding details are still implicit under Wolverine conventions.
 - Product consumer currently listens to `orders.integration.events`, but the business purpose is not yet documented in a matching handler map.
+
+## Orders Schema Upgrade
+
+Fresh Docker volumes receive the current schema from `docker-compose/sql-script/create_orders_table.sql`.
+Existing volumes must apply the idempotent migration before the upgraded Orders host starts:
+
+```powershell
+psql "postgresql://user:password@localhost:5433/orders_db" `
+  -f docker-compose/sql-script/migrations/orders/20260714_0001_add_order_integration_outbox.sql
+```
+
+The Orders runtime role also needs permission to create and use Wolverine's `wolverine_messages` schema during environment provisioning. Production deployments should apply reviewed Wolverine-generated schema changes with a migration-capable role instead of granting ongoing DDL permission to the application role.
 - The product event channel is configured on producer and consumer runtimes, but current Product use cases do not publish a confirmed product integration event.
 - Inventory and Products both support dual-broker configuration; runtime drift between Kafka and RabbitMQ setups is possible if not kept aligned.
 

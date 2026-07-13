@@ -45,7 +45,7 @@ public interface IDeliverOrderUseCase
 /// <summary>
 /// 交付訂單 use case 的預設實作。
 /// </summary>
-public class DeliverOrderUseCase(IOrderDomainRepository repository, IIntegrationEventPublisher publisher) : IDeliverOrderUseCase
+public class DeliverOrderUseCase(IOrderDomainRepository repository, IOrderEventCommitter committer) : IDeliverOrderUseCase
 {
     /// <summary>
     /// 執行交付訂單流程。
@@ -61,8 +61,9 @@ public class DeliverOrderUseCase(IOrderDomainRepository repository, IIntegration
             return;
         }
 
-        await repository.UpdateAsync(order, cancellationToken);
-
-        await publisher.PublishAsync(new OrderDelivered(order.Id, input.Reason));
+        await committer.CommitAsync(
+            order,
+            [new OrderDelivered(order.Id, input.Reason)],
+            cancellationToken);
     }
 }

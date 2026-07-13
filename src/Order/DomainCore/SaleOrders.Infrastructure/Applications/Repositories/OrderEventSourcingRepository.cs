@@ -3,6 +3,7 @@ using System.Text.Json;
 using Dapper;
 using Lab.BuildingBlocks.Application;
 using Lab.BuildingBlocks.Domains;
+using Lab.BuildingBlocks.Integrations;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 using SaleOrders.Domains.DomainEvents;
@@ -11,7 +12,7 @@ namespace SaleOrders.Infrastructure.Applications.Repositories;
 
 // dapper connection control: ./docs/problem-note/dapper-dbconnection.md
 
-public class OrderEventSourcingRepository : IOrderDomainRepository
+public class OrderEventSourcingRepository : IOrderDomainRepository, IOrderEventCommitter
 {
     private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
@@ -71,13 +72,20 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
 
     public async Task AddAsync(Order order, CancellationToken cancellationToken = default)
     {
-        await this.SaveAsync(order, cancellationToken);
+        await this.SaveAsync(order, Array.Empty<IIntegrationEvent>(), cancellationToken);
     }
 
     public async Task UpdateAsync(Order order, CancellationToken cancellationToken = default)
     {
-        await this.SaveAsync(order, cancellationToken);
+        await this.SaveAsync(order, Array.Empty<IIntegrationEvent>(), cancellationToken);
     }
+
+    /// <inheritdoc />
+    public Task CommitAsync(
+        Order order,
+        IReadOnlyCollection<IIntegrationEvent> integrationEvents,
+        CancellationToken cancellationToken)
+        => this.SaveAsync(order, integrationEvents, cancellationToken);
 
     public async Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken = default)
     {
@@ -110,7 +118,10 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
         });
     }
 
-    private async Task SaveAsync(Order order, CancellationToken cancellationToken)
+    private async Task SaveAsync(
+        Order order,
+        IReadOnlyCollection<IIntegrationEvent> integrationEvents,
+        CancellationToken cancellationToken)
     {
         var events = order.DomainEvents.ToList();
         if (!events.Any())
@@ -161,6 +172,22 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
                     EventType = eventType,
                     Data = data,
                     Timestamp = DateTime.UtcNow
+                }, transaction);
+            }
+
+            foreach (var integrationEvent in integrationEvents)
+            {
+                const string outboxSql = @"
+                INSERT INTO OrderIntegrationOutbox (Id, AggregateId, MessageType, Data, OccurredOn)
+                VALUES (@Id, @AggregateId, @MessageType, @Data::jsonb, @OccurredOn)";
+
+                await this._dbConnection.ExecuteAsync(outboxSql, new
+                {
+                    Id = Guid.CreateVersion7(),
+                    AggregateId = order.Id,
+                    MessageType = integrationEvent.GetType().Name,
+                    Data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType(), _jsonSerializerOptions),
+                    integrationEvent.OccurredOn
                 }, transaction);
             }
 

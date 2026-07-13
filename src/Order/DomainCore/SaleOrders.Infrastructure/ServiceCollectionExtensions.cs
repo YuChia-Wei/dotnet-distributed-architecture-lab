@@ -20,10 +20,18 @@ public static class ServiceCollectionExtensions
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
         // services.AddScoped<IOrderDomainRepository, OrderDomainRepository>();
-        services.AddScoped<IOrderDomainRepository, OrderEventSourcingRepository>();
-        services.AddScoped<IIntegrationEventPublisher, IntegrationEventPublisher>();
+        services.AddScoped<OrderEventSourcingRepository>();
+        services.AddScoped<IOrderDomainRepository>(sp => sp.GetRequiredService<OrderEventSourcingRepository>());
+        services.AddScoped<IOrderEventCommitter>(sp => sp.GetRequiredService<OrderEventSourcingRepository>());
+        services.AddScoped<IntegrationEventPublisher>();
+        services.AddScoped<IIntegrationEventPublisher>(sp => sp.GetRequiredService<IntegrationEventPublisher>());
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         services.AddScoped<IInventoryGateway, InventoryGateway>();
+        if (!string.IsNullOrWhiteSpace(connectionString))
+        {
+            services.AddHostedService<OrderIntegrationOutboxRelay>();
+        }
+
         return services;
     }
 }

@@ -45,7 +45,7 @@ public interface ICancelOrderUseCase
 /// <summary>
 /// 取消訂單 use case 的預設實作。
 /// </summary>
-public class CancelOrderUseCase(IOrderDomainRepository repository, IIntegrationEventPublisher publisher) : ICancelOrderUseCase
+public class CancelOrderUseCase(IOrderDomainRepository repository, IOrderEventCommitter committer) : ICancelOrderUseCase
 {
     /// <summary>
     /// 執行取消訂單流程。
@@ -61,8 +61,9 @@ public class CancelOrderUseCase(IOrderDomainRepository repository, IIntegrationE
             return;
         }
 
-        await repository.UpdateAsync(order, cancellationToken);
-
-        await publisher.PublishAsync(new OrderCancelled(order.Id, input.Reason));
+        await committer.CommitAsync(
+            order,
+            [new OrderCancelled(order.Id, input.Reason)],
+            cancellationToken);
     }
 }

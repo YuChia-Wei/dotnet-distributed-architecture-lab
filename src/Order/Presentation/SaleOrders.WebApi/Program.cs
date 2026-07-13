@@ -10,6 +10,7 @@ using SaleOrders.Infrastructure;
 using Scalar.AspNetCore;
 using Wolverine;
 using Wolverine.Kafka;
+using Wolverine.Postgresql;
 using Wolverine.RabbitMQ;
 using ServiceCollectionExtensions = SaleOrders.Applications.ServiceCollectionExtensions;
 
@@ -17,6 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseWolverine(opts =>
 {
+    var messageStoreConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is required for Wolverine message persistence.");
+    opts.PersistMessagesWithPostgresql(messageStoreConnectionString, "wolverine_messages");
+
     // Get the queue service type from environment variables
     var queueService = builder.Configuration.GetValue<string>("QUEUE_SERVICE");
 

@@ -105,7 +105,7 @@
 - Goal: Establish durable publish boundaries, command/query repository separation, broker topology completeness, publisher activation, idempotency and failure policy.
 - Capability slot: `architecture`, `implementation`, `test-design`
 - Owner skill: `ddd-ca-hex-architect`, then `slice-implementer` and `bdd-gwt-test-designer`
-- Scope: `DEV-005` durable ports/Wolverine PostgreSQL adapter; `DEV-010` CQRS repositories; `DEV-011` Kafka/RabbitMQ parity and configuration; `DEV-012` reservation idempotency/failure policy.
+- Scope: `DEV-005` source-owned PostgreSQL outbox plus Wolverine persisted relay/delivery; `DEV-010` CQRS repositories; `DEV-011` Kafka/RabbitMQ parity and configuration; `DEV-012` reservation idempotency/failure policy.
 - Non-goals: Product producer work; no external-broker dependency in default automated tests; no production claim without matching evidence.
 - Dependencies: `DEV-003`, `DEV-004` where event lifecycle is shared.
 - Validation: Analyzer-enabled build, memory-transport contract/routing tests, topology/config checks, review; real broker connectivity only through explicit manual commands.
@@ -120,7 +120,7 @@
 - Scope: Test host isolation, dependency reproducibility, critical behavior coverage.
 - Non-goals: Do not chase a numeric coverage target without behavior traceability.
 - Dependencies: Stable contracts from preceding remediation slices.
-- Validation: Full solution tests plus narrow broker/infrastructure suites without leaked processes.
+- Validation: Full solution broker-free tests plus narrow local-routing suites without leaked processes; real Kafka/RabbitMQ connectivity only by explicit manual command.
 - Commit checkpoint: `DEV-006` after each coherent test batch.
 
 ### Stage 7 — Final Review And Closure
@@ -137,18 +137,18 @@
 
 ## Validation Strategy
 
-- Requirement/spec traceability: Every backlog item links the review evidence and any governing requirement/spec/problem frame.
+- Requirement/spec traceability: Scheduled findings live in task `source_findings`; the backlog retains only future `MSG-003` work.
 - Architecture validation: `ddd-ca-hex-architect` owns direction; `code-reviewer` independently verifies implemented boundaries.
-- Test and implementation validation: Prefer narrow tests first, then analyzer-enabled `dotnet build MQArchLab.slnx`, full tests, and broker-specific integration checks.
+- Test and implementation validation: Prefer narrow tests first, then analyzer-enabled `dotnet build MQArchLab.slnx` and broker-free routing/profile tests. PostgreSQL durability is a separate required gate; real broker checks are manual opt-in.
 - Review/compliance gates: Problem-frame work requires `spec-compliance-validator` at 100%; other work requires checklist review and recorded residual risk.
 
 ## Progress And Handoff
 
-- Current stage: `critical-domain-remediation` (`DEV-004`).
+- Current stages: `critical-domain-remediation` (`DEV-004`) and the bounded `DEV-005` source-outbox slice.
 - Completed stages: `assessment-and-backlog` (`DEV-001`); `analyzer-integration` (`DEV-002`); `critical-architecture-direction` (`DEV-003`).
 - Deferred stages and reasons: Product integration producer (`MSG-003`) is deferred until a future commercial requirement approves event meaning and consumer need.
-- Open decisions: DEV-005 must verify whether Wolverine PostgreSQL envelope persistence can enlist in the existing Dapper/Npgsql transaction. If it cannot, use a native transactional outbox adapter and keep Wolverine as the delivery runtime.
-- Continuation instructions: Finish DEV-004 repository failure/concurrency coverage and validation, then execute DEV-005 before the independent MUST FIX slices.
+- Open decisions: DEV-005 selected the native Orders source outbox because Wolverine/Dapper enlistment was not established. Remaining gates are PostgreSQL failure injection, relay ownership/backoff, and recovery evidence.
+- Continuation instructions: Finish DEV-004 repository failure/concurrency coverage and the DEV-005 durability gates before the independent MUST FIX slices.
 - Analyzer-discovered follow-ups: `DEV-008` migrates staged Use Case/Handler diagnostics; `DEV-009` removes the confirmed high-severity OpenAPI dependency vulnerability.
 - Branch history and checkpoint handoffs: Segment 1 started from local `main`; no push or merge requested yet.
 
@@ -156,12 +156,12 @@
 
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `codex/2026-07-13-critical-remediation-and-analyzer-integration` | `main` | active | `fd80fb7` | local | `2026-07-13T22:53:58+08:00` | DEV-001 and DEV-002 checkpoints complete | Continue with DEV-003 on current branch |
+| 1 | `codex/2026-07-13-critical-remediation-and-analyzer-integration` | `main` | active | `9f36858` | local | `2026-07-13T23:49:30+08:00` | DEV-001 through DEV-003 complete; DEV-004 checkpoint committed | Continue DEV-004 and DEV-005 on current branch |
 
 ## Completion Summary
 
 - Outcome: Active.
 - Changed artifacts: Workflow locator, plan, tasks, review report, backlog, analyzer integration.
 - Validation evidence: Workflow validator passed; analyzer-enabled product build passed; analyzer tests 47/47 and runtime validation tests 2/2 passed; quick gate passed 7/7; no analyzer runtime dependency was found.
-- Commits: `42d8e49` workflow bootstrap; `dab7e17` assessment/backlog; `fd80fb7` analyzer integration.
-- Residual risks: DEV-004 infrastructure tests remain; Wolverine/Dapper atomic enlistment is not yet proven; remaining MUST FIX tasks are pending.
+- Commits: `42d8e49` workflow bootstrap; `dab7e17` assessment/backlog; `fd80fb7` analyzer integration; `9b2af02` approved architecture direction; `9f36858` reasoned event-sourced transitions.
+- Residual risks: DEV-004 infrastructure tests remain; DEV-005 PostgreSQL failure-injection and relay recovery evidence remains; remaining MUST FIX tasks are pending.
