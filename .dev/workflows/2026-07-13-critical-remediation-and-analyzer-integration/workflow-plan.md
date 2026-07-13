@@ -17,7 +17,7 @@
 - `branch_segment`: `1`
 - `status`: `active`
 - `created_at`: `2026-07-13T22:37:26+08:00`
-- `updated_at`: `2026-07-13T22:52:24+08:00`
+- `updated_at`: `2026-07-13T22:53:58+08:00`
 - `template_source`: `.ai/assets/skills/dev-workflow/templates/development-workflow-plan-template.md`
 - `template_version`: `1.1.0`
 - `workflow_locator`: `.dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml`
@@ -155,12 +155,12 @@
 
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `codex/2026-07-13-critical-remediation-and-analyzer-integration` | `main` | active | pending | local | `2026-07-13T22:37:26+08:00` | Initial workflow execution | Continue on current branch |
+| 1 | `codex/2026-07-13-critical-remediation-and-analyzer-integration` | `main` | active | `fd80fb7` | local | `2026-07-13T22:53:58+08:00` | DEV-001 and DEV-002 checkpoints complete | Continue with DEV-003 on current branch |
 
 ## Completion Summary
 
 - Outcome: Active.
 - Changed artifacts: Workflow locator, plan, tasks, review report, backlog, analyzer integration.
 - Validation evidence: Workflow validator passed; analyzer-enabled product build passed; analyzer tests 47/47 and runtime validation tests 2/2 passed; quick gate passed 7/7; no analyzer runtime dependency was found.
-- Commits: Workflow bootstrap and assessment/backlog checkpoints committed; analyzer integration checkpoint pending commit.
+- Commits: `42d8e49` workflow bootstrap; `dab7e17` assessment/backlog; `fd80fb7` analyzer integration.
 - Residual risks: Pending implementation and final validation.

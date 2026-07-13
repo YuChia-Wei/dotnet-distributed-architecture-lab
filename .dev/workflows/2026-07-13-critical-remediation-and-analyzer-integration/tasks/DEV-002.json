@@ -9,7 +9,7 @@
   "related_plan_id": "development-plan-2026-07-13-critical-remediation-and-analyzer-integration",
   "status": "completed",
   "created_at": "2026-07-13T22:37:26+08:00",
-  "updated_at": "2026-07-13T22:52:24+08:00",
+  "updated_at": "2026-07-13T22:53:58+08:00",
   "template_source": ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json",
   "workflow_locator": ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml",
   "scope": {
@@ -53,7 +53,7 @@
       "Quick repository gate passed 7/7 required checks",
       "NuGet audit confirmed Microsoft.OpenApi 2.0.0 high-severity vulnerability and SEC-001 ownership"
     ],
-    "commits": [],
+    "commits": ["fd80fb7 chore(dotnet-backend): integrate source analyzers into product builds"],
     "follow_up_needed": true
   }
 }
