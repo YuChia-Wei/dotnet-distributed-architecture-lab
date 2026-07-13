@@ -1,0 +1,18 @@
+command_processing:
+  steps:
+    - "Receive PlaceOrderInput through IPlaceOrderUseCase.ExecuteAsync"
+    - "Create the Order aggregate candidate for the requested product, quantity, date, and amount"
+    - "Send ReserveInventoryRequestContract through the inventory collaboration gateway"
+    - "If reservation succeeds, persist the order"
+    - "After persistence, publish the outbound OrderPlaced integration event"
+    - "Return Result<PlaceOrderOutput> with success semantics and order id"
+
+error_handling:
+  reservation_failed: "Return a failure result and do not persist the order"
+  repository_failure: "The current use case does not map repository exceptions to Result failure; the exception propagates and publication is not reached"
+  collaboration_failure: "The current use case does not map gateway exceptions or timeouts to Result failure; the exception propagates"
+
+constraint_enforcement:
+  - "Inventory reservation success is required before order persistence"
+  - "No outbound OrderPlaced integration event is published when reservation fails"
+  - "Orders must collaborate through MQ-first contracts rather than direct web API calls"

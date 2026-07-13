@@ -1,0 +1,217 @@
+schemaVersion: 1
+generatedBy: repo-structure-sync
+generationStatus: initialized
+repository:
+  name: dotnet-mq-arch-lab
+  mode: existing-repo-with-copied-context
+  description: Distributed commerce architecture lab using DDD, Clean Architecture, CQRS, PostgreSQL, and message-based bounded-context integration.
+languages:
+  - C#
+  - YAML
+  - SQL
+  - Python
+  - Bash
+technologyProfiles:
+  - dotnet-backend
+  - distributed-messaging
+  - containerized-observability
+dotnet:
+  sdkVersion: 10.0.0
+  targetFrameworks:
+    - net10.0
+    - netstandard2.0
+  solutions:
+    - path: MQArchLab.slnx
+      productProjectCount: 22
+      testProjectCount: 4
+  projects:
+    - path: src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj
+      kind: contract-library
+    - path: src/BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj
+      kind: contract-library
+    - path: src/BC-Contracts/Lab.BoundedContextContracts.Products/Lab.BoundedContextContracts.Products.csproj
+      kind: contract-library
+    - path: src/BuildingBlocks/Lab.BuildingBlocks.Application/Lab.BuildingBlocks.Application.csproj
+      kind: building-block-library
+    - path: src/BuildingBlocks/Lab.BuildingBlocks.Domains/Lab.BuildingBlocks.Domains.csproj
+      kind: building-block-library
+    - path: src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj
+      kind: building-block-library
+    - path: src/Shared/Lab.SharedKernel/Lab.SharedKernel.csproj
+      kind: shared-kernel-placeholder-library
+    - path: src/Product/DomainCore/SaleProducts.Domains/SaleProducts.Domains.csproj
+      kind: domain-library
+    - path: src/Product/DomainCore/SaleProducts.Applications/SaleProducts.Applications.csproj
+      kind: application-library
+    - path: src/Product/DomainCore/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj
+      kind: infrastructure-library
+    - path: src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj
+      kind: web-api
+    - path: src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj
+      kind: consumer
+    - path: src/Order/DomainCore/SaleOrders.Domains/SaleOrders.Domains.csproj
+      kind: domain-library
+    - path: src/Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj
+      kind: application-library
+    - path: src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj
+      kind: infrastructure-library
+    - path: src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj
+      kind: web-api
+    - path: src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj
+      kind: consumer
+    - path: src/Inventory/DomainCore/InventoryControl.Domains/InventoryControl.Domains.csproj
+      kind: domain-library
+    - path: src/Inventory/DomainCore/InventoryControl.Applications/InventoryControl.Applications.csproj
+      kind: application-library
+    - path: src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj
+      kind: infrastructure-library
+    - path: src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj
+      kind: web-api
+    - path: src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj
+      kind: consumer
+    - path: tests/SaleProducts.Tests/SaleProducts.Tests.csproj
+      kind: test
+    - path: tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj
+      kind: test
+    - path: tests/SaleOrders.Tests/SaleOrders.Tests.csproj
+      kind: test
+    - path: tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj
+      kind: test
+    - path: tools/DotnetBackendAnalyzers/DotnetBackendAnalyzers.csproj
+      kind: analyzer-library
+    - path: tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj
+      kind: test
+    - path: tools/DotnetBackendValidation/DotnetBackendValidation.csproj
+      kind: validation-library
+    - path: tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj
+      kind: test
+sourceLayout:
+  sourceRoots:
+    - src
+    - tools
+  testRoots:
+    - tests
+    - tools/DotnetBackendAnalyzers.Tests
+    - tools/DotnetBackendValidation.Tests
+  executableProjects:
+    - src/Product/Presentation/SaleProducts.WebApi
+    - src/Product/Presentation/SaleProducts.Consumer
+    - src/Order/Presentation/SaleOrders.WebApi
+    - src/Order/Presentation/SaleOrders.Consumer
+    - src/Inventory/Presentation/InventoryControl.WebApi
+    - src/Inventory/Presentation/InventoryControl.Consumer
+  libraryProjects:
+    - src/BC-Contracts
+    - src/BuildingBlocks
+    - src/Shared
+    - src/Product/DomainCore
+    - src/Order/DomainCore
+    - src/Inventory/DomainCore
+    - tools/DotnetBackendAnalyzers
+    - tools/DotnetBackendValidation
+runtimeHosts:
+  - name: SaleProducts.WebApi
+    type: aspnet-core-web-api
+    boundedContext: Products
+  - name: SaleProducts.Consumer
+    type: dotnet-generic-host-consumer
+    boundedContext: Products
+  - name: SaleOrders.WebApi
+    type: aspnet-core-web-api
+    boundedContext: Orders
+  - name: SaleOrders.Consumer
+    type: dotnet-generic-host-consumer
+    boundedContext: Orders
+  - name: InventoryControl.WebApi
+    type: aspnet-core-web-api
+    boundedContext: Inventory
+  - name: InventoryControl.Consumer
+    type: dotnet-generic-host-consumer
+    boundedContext: Inventory
+architecture:
+  styles:
+    - Domain-Driven Design
+    - Clean Architecture
+    - CQRS
+    - Ports and Adapters
+    - Event-driven integration
+  boundedContexts:
+    - name: Products
+      path: src/Product
+      primaryAggregate: Product
+    - name: Orders
+      path: src/Order
+      primaryAggregate: Order
+    - name: Inventory
+      path: src/Inventory
+      primaryAggregate: InventoryItem
+  dependencyRules:
+    - Domain projects do not depend on Infrastructure or Presentation.
+    - Application projects expose explicit use-case and outbound ports.
+    - Cross-context contracts are owned under src/BC-Contracts.
+    - Orders-to-Inventory reservation uses Wolverine request/reply messaging.
+persistence:
+  providers:
+    - PostgreSQL 16
+  libraries:
+    - Dapper 2.1.72
+    - Npgsql 10.0.2
+  connectionStringSources:
+    - docker-compose/docker-compose.yml
+    - src/Product/Presentation/SaleProducts.WebApi/appsettings.json
+    - src/Order/Presentation/SaleOrders.WebApi/appsettings.json
+    - src/Inventory/Presentation/InventoryControl.WebApi/appsettings.json
+messaging:
+  brokers:
+    - name: Apache Kafka
+      status: active-compose-profile
+    - name: RabbitMQ
+      status: partial-disabled-compose-profile
+  libraries:
+    - WolverineFx 5.32.1
+    - WolverineFx.Kafka 5.32.1
+    - WolverineFx.RabbitMQ 5.32.1
+  topologyDocuments:
+    - .dev/operations/event-catalog.md
+    - .dev/operations/mq-topology.md
+frontend:
+  detected: false
+  frameworks: []
+  sourceRoots: []
+deployment:
+  containerFiles:
+    - src/Product/Presentation/SaleProducts.WebApi/Dockerfile
+    - src/Product/Presentation/SaleProducts.Consumer/Dockerfile
+    - src/Order/Presentation/SaleOrders.WebApi/Dockerfile
+    - src/Order/Presentation/SaleOrders.Consumer/Dockerfile
+    - src/Inventory/Presentation/InventoryControl.WebApi/Dockerfile
+    - src/Inventory/Presentation/InventoryControl.Consumer/Dockerfile
+  orchestrationFiles:
+    - docker-compose/docker-compose.yml
+  environments:
+    - local-compose
+evidence:
+  files:
+    - global.json
+    - MQArchLab.slnx
+    - src/**/**.csproj
+    - tests/**/**.csproj
+    - tools/**/**.csproj
+    - src/BC-Contracts
+    - src/Product
+    - src/Order
+    - src/Inventory
+    - docker-compose/docker-compose.yml
+  confirmedByUser:
+    - AI context was refreshed and may have replaced repository-specific truth.
+unresolved:
+  facts:
+    - Exact business ownership of every Consumer subscription is not fully documented.
+    - RabbitMQ inventory request/reply is incomplete because Inventory does not configure an inventory.requests listener for that broker.
+    - products.integration.events is configured, but no current Product use case is confirmed to publish a product integration event.
+    - Retry, dead-letter, replay, and idempotency policy is incomplete.
+    - Inventory has no checked-in test project.
+    - Tool test projects are not included in MQArchLab.slnx.
+  decisions:
+    - Decide whether RabbitMQ remains a maintained runtime profile or only compatibility guidance.
+    - Decide whether analyzer and validation projects should join the main solution.

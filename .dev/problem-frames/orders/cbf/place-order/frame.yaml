@@ -1,0 +1,42 @@
+frame_type: CommandedBehaviorFrame
+domain: "orders"
+use_case: "place-order"
+summary: "Place a new order only after the inventory collaboration confirms reservation success."
+
+controlled_domain:
+  aggregate_spec: controlled-domain/aggregate.yaml
+
+frame_concerns:
+  - id: FC1
+    title: Inventory authority for reservation
+    description: Inventory collaboration decides whether stock can be reserved for the requested quantity.
+  - id: FC2
+    title: MQ-only cross-context boundary
+    description: Orders must collaborate with Inventory through MQ-first contracts and must not call another bounded context by web API.
+  - id: FC3
+    title: Persistence and publication ordering
+    description: The order is only persisted and the outbound OrderPlaced integration event is only published after reservation succeeds.
+  - id: FC4
+    title: Failure containment
+    description: A failed inventory reservation must prevent order persistence and outbound event publication.
+  - id: FC5
+    title: Eventual consistency boundary
+    description: Cross-context collaboration runs under eventual consistency assumptions and later runtime docs may add retry and duplicate handling.
+  - id: FC6
+    title: Traceable collaboration contract
+    description: Maintainers must be able to trace the place-order flow back to the inventory request and the outbound order event contract.
+
+problem_world_facts:
+  - id: PWF1
+    fact: "Orders and Inventory are separate bounded contexts."
+  - id: PWF2
+    fact: "Order placement requires successful inventory reservation before final order placement succeeds."
+  - id: PWF3
+    fact: "Cross-bounded-context communication must use MQ contracts and integration events."
+  - id: PWF4
+    fact: "The current repository defers retry, duplicate publication, and timing details to later runtime documentation."
+
+commanded_behavior:
+  actor: "Order maintainer or upstream ordering application"
+  command: "PlaceOrder"
+  desired_outcome: "Create a new Placed order and publish the outbound OrderPlaced integration event only after inventory reservation succeeds."

@@ -7,7 +7,7 @@ This document is the canonical English agent-facing root collaboration guide. `a
 ## Scope & Precedence
 
 - This document is the root collaboration guide for AI agents and humans working in this repository.
-- This repository is an AI collaboration knowledge base and reusable context framework, not a product application repository.
+- This repository is a .NET distributed-commerce architecture lab that also carries a reusable AI collaboration context framework.
 - If a subdirectory has another `AGENTS.*` file, the deeper file takes precedence.
 - Command priority: User/Approval > Subfolder AGENTS > This file > Other general documents.
 - If an IDE MCP server is configured and provides refactoring capabilities, prefer the IDE MCP refactoring tools.
@@ -23,21 +23,21 @@ This document is the canonical English agent-facing root collaboration guide. `a
 
 This repository exists to:
 
-- extract software engineering, architecture, .NET backend, and AI collaboration knowledge;
-- maintain reusable AI Agent context, skills, sub-agent prompts, and workflow rules;
-- separate universal AI context from tech-stack-specific context;
-- preserve current non-universal capability for .NET C# backend Web API development;
-- remove, isolate, or templatize historical source-project facts.
+- demonstrate a distributed commerce system built with .NET 10, DDD, Clean Architecture, CQRS, PostgreSQL, WolverineFx, and message-oriented integration;
+- maintain the active `Products`, `Orders`, and `Inventory` bounded contexts under `src/`;
+- maintain architecture analyzers and validation tooling under `tools/`;
+- carry reusable AI Agent context, skills, sub-agent prompts, and workflow rules without allowing their source-repository facts to replace this repository's product truth;
+- separate reusable context under `.ai/` from target-repository truth under source, deployment configuration, and `.dev/`.
 
-Do not treat historical sample backend information as current product truth unless a file explicitly states that it is retained as a template, migration artifact, or dotnet-backend reference.
+Treat `MQArchLab.slnx`, `global.json`, `*.csproj`, `src/`, `tests/`, and `docker-compose/` as primary evidence for current product truth. Treat `.dev/project-config.yaml` as a generated inventory that must yield to those sources when they differ. Reusable examples under `.ai/` and `.dev/standards/examples/` are guidance unless current repository evidence adopts them.
 
 ## Quick Start for AI Agents
 
-1. Read `README.md` or `README.en.md` to understand this repo's purpose.
-2. Read `.dev/standards/AI-CONTEXT-BOUNDARY.md` and `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md` before moving or rewriting AI context.
-3. Use `.ai/assets/skills/README.MD` as the canonical skill registry.
-4. Use `.dev/guides/ai-collaboration-guides/README.MD` for human-facing skill and workflow guides.
-5. Use `.ai/INDEX.MD` and `.ai/README.MD` for agent-facing AI asset navigation.
+1. Read `README.md`, `.dev/ARCHITECTURE.md`, and `.dev/project-config.yaml` to understand the product and repository structure.
+2. Use `MQArchLab.slnx`, project files, and `docker-compose/docker-compose.yml` to verify runtime or package facts.
+3. Read `.dev/standards/AI-CONTEXT-BOUNDARY.md` and `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md` before moving or rewriting AI context.
+4. Use `.ai/assets/skills/README.MD` as the canonical skill registry.
+5. Use `.dev/guides/ai-collaboration-guides/README.MD` for human-facing skill and workflow guides, and `.ai/INDEX.MD` for agent-facing AI asset navigation.
 
 ## Mandatory Workflows
 
@@ -168,8 +168,8 @@ Use these boundaries:
 
 | Path | Description |
 | :--- | :--- |
-| `README.md` | Human-facing Traditional Chinese repository identity |
-| `README.en.md` | English translation of the repository identity |
+| `README.md` | Human-facing Traditional Chinese repository identity and local run guide |
+| `README.en.md` | English translation of the repository identity and local run guide |
 | `AGENTS.md` | Canonical English agent-facing root collaboration guide |
 | `CLAUDE.md` | Thin Claude Code project-memory entry that imports `AGENTS.md` |
 | `agents.zh-tw.md` | Traditional Chinese (Taiwan) translation of the root collaboration guide |
@@ -193,7 +193,10 @@ Use these boundaries:
 
 | Path | Description |
 | :--- | :--- |
-| `.dev/README.MD` | Human-facing project knowledge index |
+| `.dev/README.MD` | Human-facing project knowledge purpose and boundary guide |
+| `.dev/INDEX.md` | Project knowledge file and directory catalog |
+| `.dev/ARCHITECTURE.md` | Evidence-backed current product architecture |
+| `.dev/project-config.yaml` | Generated target-repository inventory |
 | `.dev/standards/` | Governance, context, workflow, coding, review, and structure standards |
 | `.dev/guides/` | Human-facing guides |
 | `.dev/adr/` | ADR governance and retained decisions |
@@ -211,6 +214,16 @@ Use these boundaries:
 | `.agents/skills/<skill>/` | Current runtime skill wrapper |
 | `.claude/skills/README.md` | Claude-compatible wrapper index |
 | `.claude/skills/<skill>/` | Claude-compatible skill wrapper |
+
+### Product And Tooling Roots
+
+| Path | Description |
+| :--- | :--- |
+| `MQArchLab.slnx` | Product solution containing bounded-context and product test projects |
+| `src/` | Products, Orders, Inventory, shared contracts, building blocks, and an empty Shared Kernel placeholder project |
+| `tests/` | Products and Orders product/domain tests |
+| `tools/` | Roslyn architecture analyzers and runtime validation tooling |
+| `docker-compose/` | Local product, database, broker, and observability topology |
 
 ## Language Rules
 
