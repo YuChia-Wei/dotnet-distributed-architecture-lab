@@ -36,6 +36,26 @@ public abstract class EsAggregateRoot<TId>
     }
 
     /// <summary>
+    /// Marks the currently pending events as committed at the supplied stream version.
+    /// </summary>
+    /// <param name="committedVersion">The stream version after all pending events were appended.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the supplied version does not match the aggregate version plus its pending events.
+    /// </exception>
+    public void MarkChangesAsCommitted(int committedVersion)
+    {
+        var expectedVersion = Version + DomainEvents.Count;
+        if (committedVersion != expectedVersion)
+        {
+            throw new InvalidOperationException(
+                $"Committed version {committedVersion} does not match expected version {expectedVersion}.");
+        }
+
+        Version = committedVersion;
+        ClearDomainEvents();
+    }
+
+    /// <summary>
     /// 根據領域事件變更聚合根內部狀態
     /// </summary>
     protected abstract void When(IDomainEvent @event);

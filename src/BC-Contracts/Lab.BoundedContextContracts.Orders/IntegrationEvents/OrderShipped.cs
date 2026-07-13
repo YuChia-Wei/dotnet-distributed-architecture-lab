@@ -11,9 +11,11 @@ public record OrderShipped : IIntegrationEvent
     /// 訂單已出貨的 integration event
     /// </summary>
     /// <param name="orderId">訂單識別碼</param>
-    public OrderShipped(Guid orderId)
+    /// <param name="reason">狀態變更原因</param>
+    public OrderShipped(Guid orderId, string reason)
     {
         this.OrderId = orderId;
+        this.Reason = reason;
         this.OccurredOn = DateTime.UtcNow;
     }
 
@@ -21,6 +23,9 @@ public record OrderShipped : IIntegrationEvent
     /// 訂單識別碼
     /// </summary>
     public Guid OrderId { get; }
+
+    /// <summary>狀態變更原因</summary>
+    public string Reason { get; }
 
     /// <summary>
     /// 發生時間

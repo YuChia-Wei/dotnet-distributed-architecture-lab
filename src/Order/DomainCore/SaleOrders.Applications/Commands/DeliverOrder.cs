@@ -13,15 +13,20 @@ public sealed class DeliverOrderInput
     /// 初始化交付訂單 use case 的輸入資料。
     /// </summary>
     /// <param name="orderId">訂單識別碼。</param>
-    public DeliverOrderInput(Guid orderId)
+    /// <param name="reason">狀態變更原因。</param>
+    public DeliverOrderInput(Guid orderId, string reason)
     {
         this.OrderId = orderId;
+        this.Reason = reason;
     }
 
     /// <summary>
     /// 訂單識別碼。
     /// </summary>
     public Guid OrderId { get; }
+
+    /// <summary>狀態變更原因。</summary>
+    public string Reason { get; }
 }
 
 /// <summary>
@@ -51,10 +56,13 @@ public class DeliverOrderUseCase(IOrderDomainRepository repository, IIntegration
     {
         var order = await repository.GetByIdAsync(input.OrderId, cancellationToken) ?? throw new KeyNotFoundException($"Order {input.OrderId} not found");
 
-        order.Deliver();
+        if (!order.Deliver(input.Reason))
+        {
+            return;
+        }
 
         await repository.UpdateAsync(order, cancellationToken);
 
-        await publisher.PublishAsync(new OrderDelivered(order.Id));
+        await publisher.PublishAsync(new OrderDelivered(order.Id, input.Reason));
     }
 }

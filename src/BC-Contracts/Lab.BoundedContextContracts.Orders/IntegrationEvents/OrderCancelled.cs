@@ -11,9 +11,11 @@ public record OrderCancelled : IIntegrationEvent
     /// 訂單已取消的 integration event
     /// </summary>
     /// <param name="orderId">訂單識別碼</param>
-    public OrderCancelled(Guid orderId)
+    /// <param name="reason">狀態變更原因</param>
+    public OrderCancelled(Guid orderId, string reason)
     {
         this.OrderId = orderId;
+        this.Reason = reason;
         this.OccurredOn = DateTime.UtcNow;
     }
 
@@ -21,6 +23,9 @@ public record OrderCancelled : IIntegrationEvent
     /// 訂單識別碼
     /// </summary>
     public Guid OrderId { get; }
+
+    /// <summary>狀態變更原因</summary>
+    public string Reason { get; }
 
     /// <summary>
     /// 發生時間

@@ -13,15 +13,20 @@ public sealed class ShipOrderInput
     /// 初始化發貨訂單 use case 的輸入資料。
     /// </summary>
     /// <param name="orderId">訂單識別碼。</param>
-    public ShipOrderInput(Guid orderId)
+    /// <param name="reason">狀態變更原因。</param>
+    public ShipOrderInput(Guid orderId, string reason)
     {
         this.OrderId = orderId;
+        this.Reason = reason;
     }
 
     /// <summary>
     /// 訂單識別碼。
     /// </summary>
     public Guid OrderId { get; }
+
+    /// <summary>狀態變更原因。</summary>
+    public string Reason { get; }
 }
 
 /// <summary>
@@ -51,10 +56,13 @@ public class ShipOrderUseCase(IOrderDomainRepository repository, IIntegrationEve
     {
         var order = await repository.GetByIdAsync(input.OrderId, cancellationToken) ?? throw new KeyNotFoundException($"Order {input.OrderId} not found");
 
-        order.Ship();
+        if (!order.Ship(input.Reason))
+        {
+            return;
+        }
 
         await repository.UpdateAsync(order, cancellationToken);
 
-        await publisher.PublishAsync(new OrderShipped(order.Id));
+        await publisher.PublishAsync(new OrderShipped(order.Id, input.Reason));
     }
 }

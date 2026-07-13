@@ -62,7 +62,7 @@ public class CancelOrderTests
         // Act
         using var scope = host.Services.CreateScope();
         var useCase = scope.ServiceProvider.GetRequiredService<ICancelOrderUseCase>();
-        await useCase.ExecuteAsync(new CancelOrderInput(orderId));
+        await useCase.ExecuteAsync(new CancelOrderInput(orderId, "customer request"));
 
         // Assert
         order.Status.ShouldBe(OrderStatus.Cancelled);

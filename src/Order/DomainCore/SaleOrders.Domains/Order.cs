@@ -60,45 +60,62 @@ public class Order : EsAggregateRoot<Guid>
     /// <summary>
     /// 訂單狀態
     /// </summary>
-    public OrderStatus Status { get; private set; } = OrderStatus.Placed;
+    public OrderStatus Status { get; private set; }
 
     /// <summary>
     /// 取消訂單
     /// </summary>
-    public void Cancel()
+    public bool Cancel(string reason)
     {
+        EnsureReasonProvided(reason);
+
         if (this.Status == OrderStatus.Cancelled)
         {
-            return;
+            return false;
         }
 
-        Apply(new OrderCancelledDomainEvent(this.Id, DateTime.UtcNow));
+        Apply(new OrderCancelledDomainEvent(this.Id, reason, DateTime.UtcNow));
+        return true;
     }
 
     /// <summary>
     /// 設定訂單為已完成交付
     /// </summary>
-    public void Deliver()
+    public bool Deliver(string reason)
     {
+        EnsureReasonProvided(reason);
+
         if (this.Status == OrderStatus.Delivered)
         {
-            return;
+            return false;
         }
 
-        Apply(new OrderDeliveredDomainEvent(this.Id, DateTime.UtcNow));
+        Apply(new OrderDeliveredDomainEvent(this.Id, reason, DateTime.UtcNow));
+        return true;
     }
 
     /// <summary>
     /// 設定訂單為已出貨
     /// </summary>
-    public void Ship()
+    public bool Ship(string reason)
     {
+        EnsureReasonProvided(reason);
+
         if (this.Status == OrderStatus.Shipped)
         {
-            return;
+            return false;
         }
 
-        Apply(new OrderShippedDomainEvent(this.Id, DateTime.UtcNow));
+        Apply(new OrderShippedDomainEvent(this.Id, reason, DateTime.UtcNow));
+        return true;
+    }
+
+    private static void EnsureReasonProvided(string reason)
+    {
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            throw new ArgumentException("A reason is required for an order state transition.", nameof(reason));
+        }
     }
 
     /// <summary>

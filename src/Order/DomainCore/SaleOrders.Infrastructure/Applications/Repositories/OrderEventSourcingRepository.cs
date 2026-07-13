@@ -172,6 +172,7 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
             throw;
         }
 
+        order.MarkChangesAsCommitted(nextVersion);
         await this._dispatcher.DispatchAsync(events, cancellationToken);
     }
 }

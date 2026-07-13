@@ -24,10 +24,11 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(204)]
     public async Task<IActionResult> CancelOrder(
         [FromRoute] Guid orderId,
+        [FromBody] ChangeOrderStateRequest request,
         [FromServices] ICancelOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
-        await useCase.ExecuteAsync(new CancelOrderInput(orderId), cancellationToken);
+        await useCase.ExecuteAsync(new CancelOrderInput(orderId, request.Reason), cancellationToken);
         return this.NoContent();
     }
 
@@ -41,10 +42,11 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(204)]
     public async Task<IActionResult> ShipOrder(
         [FromRoute] Guid orderId,
+        [FromBody] ChangeOrderStateRequest request,
         [FromServices] IShipOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
-        await useCase.ExecuteAsync(new ShipOrderInput(orderId), cancellationToken);
+        await useCase.ExecuteAsync(new ShipOrderInput(orderId, request.Reason), cancellationToken);
         return this.NoContent();
     }
 
@@ -58,10 +60,11 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(204)]
     public async Task<IActionResult> DeliverOrder(
         [FromRoute] Guid orderId,
+        [FromBody] ChangeOrderStateRequest request,
         [FromServices] IDeliverOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
-        await useCase.ExecuteAsync(new DeliverOrderInput(orderId), cancellationToken);
+        await useCase.ExecuteAsync(new DeliverOrderInput(orderId, request.Reason), cancellationToken);
         return this.NoContent();
     }
 
