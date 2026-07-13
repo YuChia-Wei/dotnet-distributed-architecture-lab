@@ -34,3 +34,11 @@ This index owns the file and directory catalog for `.dev/problem-frames/`.
 ```
 
 Create target-repository problem frames from confirmed requirements, specs, code, and user-confirmed truth.
+
+## Target-Repository Frames
+
+| Path | Description |
+| --- | --- |
+| `orders/cbf/place-order/` | Commanded behavior frame for the current Orders place-order and Inventory reservation flow. |
+
+The previously copied Payments frame is not retained because no Payments bounded context exists in the current solution.

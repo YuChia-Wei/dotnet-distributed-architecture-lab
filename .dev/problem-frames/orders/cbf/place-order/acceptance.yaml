@@ -1,0 +1,48 @@
+scenarios:
+  - id: SC1
+    title: "Persist and publish after successful inventory reservation"
+    given:
+      - "The inventory reservation request for the target product will succeed"
+      - "The order repository accepts persistence"
+    when:
+      - "IPlaceOrderUseCase.ExecuteAsync is invoked with a PlaceOrderInput containing order date, amount, product id, product name, and quantity"
+    then:
+      - "A new order is persisted"
+      - "The result is successful and returns an order id"
+      - "An OrderPlaced integration event is published"
+    traces_to:
+      requirements: ["REQ-ORD-PLACE-1", "REQ-ORD-PLACE-2"]
+      frame_concerns: ["FC1", "FC2", "FC3", "FC6"]
+    planned_tests_anchor:
+      use_case_spec: ".dev/specs/tests/order/use-cases/place-order.test-spec.md#scenario-1-successful-order-placement"
+      integration_spec: ".dev/specs/tests/order/integration/order-placement-and-lifecycle-messaging.test-spec.md#scenario-1-place-order-after-successful-inventory-reservation"
+  - id: SC2
+    title: "Block order placement when inventory reservation fails"
+    given:
+      - "The inventory gateway returns Result = false"
+    when:
+      - "IPlaceOrderUseCase.ExecuteAsync is invoked with PlaceOrderInput"
+    then:
+      - "The result is a failure"
+      - "No order is persisted"
+      - "No OrderPlaced integration event is published"
+    traces_to:
+      requirements: ["REQ-ORD-PLACE-3"]
+      frame_concerns: ["FC1", "FC3", "FC4"]
+    planned_tests_anchor:
+      use_case_spec: ".dev/specs/tests/order/use-cases/place-order.test-spec.md#scenario-2-inventory-not-enough"
+      integration_spec: ".dev/specs/tests/order/integration/order-placement-and-lifecycle-messaging.test-spec.md#scenario-2-block-order-placement-when-inventory-reservation-fails"
+  - id: SC3
+    title: "Recognize deferred runtime concerns for retries and duplicates"
+    given:
+      - "The repository documents eventual consistency and MQ-first cross-context collaboration"
+    when:
+      - "Maintainers review the place-order messaging flow"
+    then:
+      - "Retry, duplicate publication, and timing concerns are recognized as deferred runtime documentation items"
+      - "The first-pass problem frame does not falsely claim those behaviors are fully specified"
+    traces_to:
+      requirements: ["REQ-ORD-PLACE-4"]
+      frame_concerns: ["FC5", "FC6"]
+    planned_tests_anchor:
+      documentation_review: "planned review of deferred runtime concerns; no current automated test anchor"

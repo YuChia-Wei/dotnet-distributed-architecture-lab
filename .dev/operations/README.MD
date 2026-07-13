@@ -1,8 +1,6 @@
 # Operations Docs
 
-本目錄存放 operations 文件的作者指南與模板約定。
-
-這裡的內容不宣稱任何現成的 runtime truth 檔案已存在。當專案真的需要 context map、event catalog、MQ topology 或 runbook 時，先依這些指南建立對應文件，再把內容對回 `requirement`、`specs`、`src` 或 contract source。
+本目錄同時存放 operations 文件的作者指南，以及經目前 `src/BC-Contracts/`、Wolverine configuration 與 Docker Compose 驗證的 target-repository runtime 文件。
 
 ## Purpose
 
@@ -19,6 +17,7 @@
 
 ## Usage
 
-- 只在專案需要具體 operations 文件時參考這裡
-- 先寫成 repo-specific 文件，再補齊實際 truth
-- 不要把這裡當成部署手冊或 production on-call 平台說明
+- 使用 `context-map.md`、`event-catalog.md` 與 `mq-topology.md` 理解目前已確認的 runtime relationships。
+- 使用 `runbooks/inventory-reservation-failure.md` 處理 Orders-to-Inventory request/reply failure path。
+- 撰寫或更新 repo-specific 文件時，必須對回 `requirement`、`specs`、`src`、contracts 與 deployment evidence。
+- 這些文件描述目前 lab topology，不代表已完成 production hardening；retry、DLQ、replay 與 idempotency 的缺口仍需明確保留。

@@ -20,7 +20,16 @@ This index owns the file and directory catalog for `.dev/specs/`.
 | `tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD` | Gherkin feature storage guidance. |
 | `tests/cross-domain/` | Cross-bounded-context test spec area. |
 | `tests/e2e/` | End-to-end journey test spec area. |
+| `tests/product/` | Product aggregate, use-case, and persistence test design; implementation coverage is partial. |
+| `tests/order/` | Order aggregate, use-case, lifecycle, and messaging test design; most listed scenarios are planned. |
+| `tests/inventory-item/` | Planned Inventory aggregate, use-case, persistence, and publication tests; no Inventory test project exists yet. |
 
 ## Target-Repo Production Specs
 
-`.dev/specs/domains/` is a target-repository convention. It should be created only in a target repository or later workflow when confirmed production specs exist.
+| Path | Description |
+| --- | --- |
+| `domains/product/` | Product aggregate and create/update/delete use-case specs. |
+| `domains/order/` | Order aggregate and place/ship/deliver/cancel use-case specs. |
+| `domains/inventory-item/` | InventoryItem aggregate and decrease/increase/restock use-case specs. |
+
+These target-repository specs were retained because matching aggregates and use cases exist under `src/`. Use `spec-compliance-validator` before treating them as a 100% compliance claim after product behavior changes.

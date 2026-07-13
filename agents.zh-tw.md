@@ -7,7 +7,7 @@
 ## 適用範圍與優先順序
 
 - 本文件是 AI agents 與人類在此 repository 中協作時的根目錄指南。
-- 這個 repository 是 AI 協作知識庫與可重用 context framework，不是產品應用程式 repository。
+- 這個 repository 是 .NET 分散式商務架構實驗室，並同時包含可重用的 AI collaboration context framework。
 - 如果子目錄有其他 `AGENTS.*` 檔案，較深層的檔案優先。
 - 指令優先順序：User/Approval > Subfolder AGENTS > This file > Other general documents。
 - 若有設定 IDE 的 MCP Server，且該 MCP Server 提供重構功能，優先使用 IDE MCP Server 的重構能力。
@@ -23,21 +23,21 @@
 
 這個 repository 的用途是：
 
-- 萃取軟體工程、架構、.NET backend 與 AI 協作知識；
-- 維護可重用的 AI Agent context、skills、sub-agent prompts 與 workflow rules；
-- 區分通用 AI context 與技術棧專用 context；
-- 保留目前的非通用能力：.NET C# backend Web API 開發；
-- 移除、隔離或 template 化歷史來源專案資訊。
+- 展示以 .NET 10、DDD、Clean Architecture、CQRS、PostgreSQL、WolverineFx 與 message-oriented integration 建立的分散式商務系統；
+- 維護 `src/` 下目前有效的 `Products`、`Orders` 與 `Inventory` bounded contexts；
+- 維護 `tools/` 下的架構 analyzer 與 validation tooling；
+- 攜帶可重用的 AI Agent context、skills、sub-agent prompts 與 workflow rules，同時避免來源 repository 真相覆蓋本 repo 的產品真相；
+- 區分 `.ai/` 的 reusable context 與 source、deployment configuration、`.dev/` 所擁有的 target-repository truth。
 
-除非檔案明確標示為 template、migration artifact 或 dotnet-backend reference，否則不要把歷史 sample backend 資訊視為目前產品真相。
+目前產品真相優先以 `MQArchLab.slnx`、`global.json`、`*.csproj`、`src/`、`tests/` 與 `docker-compose/` 為證據。`.dev/project-config.yaml` 是產生的 inventory；若與上述來源衝突，必須以上述來源為準。除非本 repo 明確採用，`.ai/` 與 `.dev/standards/examples/` 下的 reusable examples 只屬於 guidance。
 
 ## AI Agents 快速開始
 
-1. 閱讀 `README.md` 或 `README.en.md` 以理解本 repo 的用途。
-2. 在移動或重寫 AI context 前，先閱讀 `.dev/standards/AI-CONTEXT-BOUNDARY.md` 與 `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`。
-3. 使用 `.ai/assets/skills/README.MD` 作為 canonical skill registry。
-4. 使用 `.dev/guides/ai-collaboration-guides/README.MD` 查閱 human-facing skill 與 workflow guides。
-5. 使用 `.ai/INDEX.MD` 與 `.ai/README.MD` 瀏覽 agent-facing AI assets。
+1. 閱讀 `README.md`、`.dev/ARCHITECTURE.md` 與 `.dev/project-config.yaml` 以理解產品和 repository structure。
+2. 使用 `MQArchLab.slnx`、project files 與 `docker-compose/docker-compose.yml` 驗證 runtime 或 package facts。
+3. 在移動或重寫 AI context 前，先閱讀 `.dev/standards/AI-CONTEXT-BOUNDARY.md` 與 `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`。
+4. 使用 `.ai/assets/skills/README.MD` 作為 canonical skill registry。
+5. 使用 `.dev/guides/ai-collaboration-guides/README.MD` 查閱 human-facing guides，並使用 `.ai/INDEX.MD` 瀏覽 agent-facing AI assets。
 
 ## 必要工作流程
 
@@ -168,8 +168,8 @@ Workflow artifact 規則：
 
 | Path | 說明 |
 | :--- | :--- |
-| `README.md` | Human-facing 繁體中文 repository identity |
-| `README.en.md` | Repository identity 的英文翻譯 |
+| `README.md` | Human-facing 繁體中文 repository identity 與本機啟動指南 |
+| `README.en.md` | Repository identity 與本機啟動指南的英文翻譯 |
 | `AGENTS.md` | Canonical English agent-facing root collaboration guide |
 | `CLAUDE.md` | 匯入 `AGENTS.md` 的薄 Claude Code project-memory 入口 |
 | `agents.zh-tw.md` | Root collaboration guide 的繁體中文（台灣）翻譯 |
@@ -193,7 +193,10 @@ Workflow artifact 規則：
 
 | Path | 說明 |
 | :--- | :--- |
-| `.dev/README.MD` | Human-facing project knowledge index |
+| `.dev/README.MD` | Human-facing project knowledge purpose 與 boundary guide |
+| `.dev/INDEX.md` | Project knowledge 檔案與目錄索引 |
+| `.dev/ARCHITECTURE.md` | 以證據重建的目前產品架構 |
+| `.dev/project-config.yaml` | 產生自本 repo facts 的 inventory |
 | `.dev/standards/` | Governance、context、workflow、coding、review 與 structure standards |
 | `.dev/guides/` | Human-facing guides |
 | `.dev/adr/` | ADR governance and retained decisions |
@@ -211,6 +214,16 @@ Workflow artifact 規則：
 | `.agents/skills/<skill>/` | Current runtime skill wrapper |
 | `.claude/skills/README.md` | Claude-compatible wrapper index |
 | `.claude/skills/<skill>/` | Claude-compatible skill wrapper |
+
+### 產品與 Tooling 根目錄
+
+| Path | 說明 |
+| :--- | :--- |
+| `MQArchLab.slnx` | 包含 bounded-context 與 product test projects 的 solution |
+| `src/` | Products、Orders、Inventory、shared contracts、building blocks 與空的 Shared Kernel placeholder project |
+| `tests/` | Products 與 Orders 的 product/domain tests |
+| `tools/` | Roslyn architecture analyzers 與 runtime validation tooling |
+| `docker-compose/` | 本機產品、database、broker 與 observability topology |
 
 ## 語言規則
 

@@ -8,7 +8,8 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | --- | --- |
 | `README.MD` | Purpose, scope, and usage of `.dev/`. |
 | `INDEX.md` | File and directory catalog for `.dev/`. |
-| `ARCHITECTURE.md` | Framework repository architecture and context model. |
+| `ARCHITECTURE.md` | Evidence-backed architecture of the current distributed commerce lab. |
+| `project-config.yaml` | Generated inventory of current repository, stack, projects, hosts, and unresolved facts. |
 | `TEAM-GIT-FLOW-RULES.MD` | Canonical single-trunk branch and merge policy: workflow-mode branches, checkpoint continuation, and default no-ff merges. |
 
 ## Standards
@@ -42,8 +43,9 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | --- | --- |
 | `requirement/` | Requirements and requirement authoring materials. |
 | `requirement/REQUIREMENT-GUIDE.MD` | Requirement authoring guide. |
-| `requirement/TECH-STACK-REQUIREMENTS.MD` | Tech stack requirements for the framework profile. |
-| `specs/` | Spec authoring and test-spec guidance for this framework. |
+| `requirement/TECH-STACK-REQUIREMENTS.MD` | Current repository technology requirements and version ownership. |
+| `requirement/distributed-commerce-bounded-context-overview.md` | Products, Orders, and Inventory requirement baseline. |
+| `specs/` | Target-repository domain/test specs plus reusable authoring guidance. |
 | `specs/README.MD` | Purpose and usage of `.dev/specs/`. |
 | `specs/INDEX.MD` | File and directory catalog for specs. |
 | `specs/SPEC-GUIDE.MD` | Spec authoring guide. |
@@ -70,7 +72,10 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | `operations/EVENT-CATALOG-GUIDE.MD` | Event-catalog authoring guide. |
 | `operations/MQ-TOPOLOGY-GUIDE.MD` | MQ topology authoring guide. |
 | `operations/RUNBOOK-GUIDE.MD` | Runbook authoring guide. |
-| `operations/runbooks/` | Runbook folder and runbook index. |
+| `operations/runbooks/` | Target-repository operational runbooks. |
+| `operations/context-map.md` | Current bounded-context relationship map. |
+| `operations/event-catalog.md` | Current integration event and request/reply contract catalog. |
+| `operations/mq-topology.md` | Current Kafka/RabbitMQ logical channel topology. |
 
 ## Workflow Records
 
