@@ -1,0 +1,20 @@
+schema_version: "1.0"
+backlog_id: "ARC-002"
+title: "Enforce replay-safe Order state and legal transitions"
+status: "planned"
+priority: "critical"
+category: "domain"
+recommended_owner_skill: "ddd-ca-hex-architect"
+created_at: "2026-07-13T22:37:26+08:00"
+updated_at: "2026-07-13T22:37:26+08:00"
+summary: "Order initializes ES state outside When and permits illegal lifecycle transitions."
+origin_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/review-report.md#arc-002--order-event-sourced-state-and-legal-transitions-are-not-fully-protected"]
+workflow_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml"]
+task_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-003.json", ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-004.json"]
+handoff_condition: "DEV-003 must approve the Order transition matrix before DEV-004 implementation."
+resolution_ref: null
+evidence: ["src/Order/DomainCore/SaleOrders.Domains/Order.cs:63"]
+acceptance:
+  - "Event-sourced state changes occur only through replay-safe transition code."
+  - "The approved transition matrix rejects cancel, ship and deliver operations from illegal states."
+  - "GWT tests cover every allowed and rejected transition."

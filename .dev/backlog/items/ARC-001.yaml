@@ -1,0 +1,20 @@
+schema_version: "1.0"
+backlog_id: "ARC-001"
+title: "Complete event-sourced aggregate persistence lifecycle"
+status: "planned"
+priority: "critical"
+category: "architecture"
+recommended_owner_skill: "ddd-ca-hex-architect"
+created_at: "2026-07-13T22:37:26+08:00"
+updated_at: "2026-07-13T22:37:26+08:00"
+summary: "Order event-store persistence does not advance aggregate version or clear pending events after commit."
+origin_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/review-report.md#arc-001--event-sourced-aggregate-persistence-lifecycle-is-incomplete"]
+workflow_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml"]
+task_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-003.json", ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-004.json"]
+handoff_condition: "DEV-003 must define committed version and pending-event semantics before DEV-004 implementation."
+resolution_ref: null
+evidence: ["src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs:113", "src/BuildingBlocks/Lab.BuildingBlocks.Domains/AggregateRoot.cs:14"]
+acceptance:
+  - "A successful append advances the in-memory version to the committed stream version."
+  - "Committed domain events are removed from the pending collection exactly once."
+  - "Repeated saves and concurrency conflicts are covered by focused tests."

@@ -1,0 +1,20 @@
+schema_version: "1.0"
+backlog_id: "TEST-001"
+title: "Cover critical behavior using repository test standards"
+status: "planned"
+priority: "must_fix"
+category: "testing"
+recommended_owner_skill: "bdd-gwt-test-designer"
+created_at: "2026-07-13T22:37:26+08:00"
+updated_at: "2026-07-13T22:37:26+08:00"
+summary: "Only a minority of Use Cases have direct tests, Inventory has no tests, and existing tests diverge from GWT, NSubstitute and observable-event rules."
+origin_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/review-report.md#test-001--critical-behavior-coverage-and-test-conventions-are-insufficient"]
+workflow_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml"]
+task_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-004.json", ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-005.json", ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-006.json"]
+handoff_condition: "DEV-006 starts after critical contracts stabilize and must design traceable scenarios before implementation."
+resolution_ref: null
+evidence: ["tests/SaleProducts.Domains.Tests/ProductTests.cs:8", "tests/SaleOrders.Domains.Tests/OrderTests.cs:10", "tests/SaleOrders.Tests/CancelOrderTests.cs:29"]
+acceptance:
+  - "Critical Order, Product and Inventory behaviors have GWT scenarios tied to requirements/specs."
+  - "Mocks and event assertions follow repository standards."
+  - "Inventory and PlaceOrder failure paths have direct automated protection."

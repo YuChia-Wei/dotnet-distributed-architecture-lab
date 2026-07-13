@@ -1,0 +1,20 @@
+schema_version: "1.0"
+backlog_id: "ARC-003"
+title: "Separate aggregate write and query repository contracts"
+status: "planned"
+priority: "must_fix"
+category: "architecture"
+recommended_owner_skill: "ddd-ca-hex-architect"
+created_at: "2026-07-13T22:37:26+08:00"
+updated_at: "2026-07-13T22:37:26+08:00"
+summary: "Writable repository ports expose query, batch and physical-delete capabilities and Order queries replay write-side event streams."
+origin_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/review-report.md#arc-003--aggregate-repository-and-cqrs-boundaries-are-mixed"]
+workflow_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml"]
+task_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-003.json", ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-005.json"]
+handoff_condition: "DEV-003 must approve write and query port ownership before DEV-005 implementation."
+resolution_ref: null
+evidence: ["src/BuildingBlocks/Lab.BuildingBlocks.Application/IDomainRepository.cs:11", "src/Order/DomainCore/SaleOrders.Applications/Repositories/IOrderDomainRepository.cs:8"]
+acceptance:
+  - "The write-side aggregate contract contains only approved load/save operations."
+  - "Order query behavior uses a read-only query port/read model without event-stream N+1 replay."
+  - "DBA1001 is promoted from staged warning to error after the migration passes."

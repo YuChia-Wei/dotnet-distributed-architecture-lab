@@ -1,0 +1,20 @@
+schema_version: "1.0"
+backlog_id: "MSG-005"
+title: "Normalize and validate RabbitMQ configuration"
+status: "planned"
+priority: "must_fix"
+category: "configuration"
+recommended_owner_skill: "slice-implementer"
+created_at: "2026-07-13T22:37:26+08:00"
+updated_at: "2026-07-13T22:37:26+08:00"
+summary: "RabbitMQ configuration keys differ between Program and appsettings."
+origin_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/review-report.md#msg-005--rabbitmq-configuration-shape-is-inconsistent"]
+workflow_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml"]
+task_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-005.json"]
+handoff_condition: "DEV-005 may implement after the supported broker profile decision is recorded."
+resolution_ref: null
+evidence: ["src/Inventory/Presentation/InventoryControl.WebApi/Program.cs:54", "src/Inventory/Presentation/InventoryControl.WebApi/appsettings.json:2"]
+acceptance:
+  - "Program, appsettings and Compose use one configuration contract."
+  - "Missing or invalid broker configuration fails with a clear startup validation error."
+  - "Configuration validation tests cover supported broker modes."
