@@ -4,9 +4,9 @@
 
 - workflow_id: `2026-07-13-repo-structure-sync`
 - owner_skill: `repo-structure-sync`
-- status: `active`
+- status: `completed`
 - created_at: `2026-07-13T20:45:07+08:00`
-- updated_at: `2026-07-13T20:56:07+08:00`
+- updated_at: `2026-07-13T21:12:28+08:00`
 - template_source: `.ai/assets/skills/repo-structure-sync/skill.yaml`
 - template_version: `1.0`
 - branch: `codex/2026-07-13-repo-structure-sync`
@@ -29,8 +29,8 @@ Preserve the reusable AI context introduced by commit `e8e3f85` while restoring 
 | Task | Status | Purpose |
 | --- | --- | --- |
 | `RSS-001` | `completed` | Inventory repository facts and classify stale or removed project truth. |
-| `RSS-002` | `in_progress` | Synchronize project config and architecture-facing documents. |
-| `RSS-003` | `pending` | Validate AI context, workflow artifacts, references, and repository truth. |
+| `RSS-002` | `completed` | Synchronize project config and architecture-facing documents. |
+| `RSS-003` | `completed` | Validate AI context, workflow artifacts, references, and repository truth. |
 
 ## Completion Criteria
 
@@ -38,3 +38,12 @@ Preserve the reusable AI context introduced by commit `e8e3f85` while restoring 
 - `.dev/project-config.yaml` is regenerated from file-backed evidence.
 - Historical project artifacts are restored only when current repository evidence supports them.
 - Context and workflow validation pass, and Git changes are committed according to policy.
+
+## Final Evidence
+
+- Inventory: `inventory.md`
+- Sync report: `sync-report.md`
+- Synchronization commit: `1eb8348`
+- Required quick gate: 6/6 passed
+- Analyzer tests: 47/47 passed
+- Runtime validation tests: 2/2 passed

@@ -6,7 +6,7 @@ This index is the discovery view for workflow artifacts retained by `dotnet-mq-a
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |
 | --- | --- | --- | --- | --- | --- |
-| [`2026-07-13-repo-structure-sync`](2026-07-13-repo-structure-sync/workflow.yaml) | Restore repository truth after AI context refresh | `repo-structure-sync` | `active` | `2026-07-13T20:56:07+08:00` | [plan](2026-07-13-repo-structure-sync/workflow-plan.md) |
+| [`2026-07-13-repo-structure-sync`](2026-07-13-repo-structure-sync/workflow.yaml) | Restore repository truth after AI context refresh | `repo-structure-sync` | `completed` | `2026-07-13T21:12:28+08:00` | [plan](2026-07-13-repo-structure-sync/workflow-plan.md) |
 
 ## Legacy Target-Repository Workflows
 
