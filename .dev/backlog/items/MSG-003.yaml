@@ -1,17 +1,17 @@
 schema_version: "1.0"
 backlog_id: "MSG-003"
 title: "Connect Product integration events to business behavior"
-status: "planned"
+status: "open"
 priority: "must_fix"
 category: "messaging"
 recommended_owner_skill: "ddd-ca-hex-architect"
 created_at: "2026-07-13T22:37:26+08:00"
-updated_at: "2026-07-13T22:37:26+08:00"
+updated_at: "2026-07-13T23:40:00+08:00"
 summary: "Product integration publisher infrastructure exists without a confirmed Product use-case producer or integration contract."
 origin_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/review-report.md#msg-003--product-integration-publisher-is-not-connected-to-product-behavior"]
 workflow_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml"]
-task_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-003.json", ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-005.json"]
-handoff_condition: "DEV-003 must approve Product integration-event ownership or topology retirement before DEV-005."
+task_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-003.json"]
+handoff_condition: "Create a future business-priority workflow after Product event meaning, schema, and at least one consumer need are approved."
 resolution_ref: null
 evidence: ["src/Product/DomainCore/SaleProducts.Infrastructure/BuildingBlocks/IntegrationEventPublisher.cs:7", "src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs:107"]
 acceptance:

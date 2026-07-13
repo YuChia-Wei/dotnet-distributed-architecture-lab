@@ -32,5 +32,6 @@
     "commit_checkpoint": "Commit each bounded-context migration independently",
     "deferred_items": []
   },
+  "source_findings": [{"finding_id": "ARC-004", "severity": "must_fix", "origin_ref": "../analyzer-integration-report.md#diagnostic-inventory", "acceptance": ["Use Cases expose non-optional trailing CancellationToken", "Handlers adapt to exactly one Use Case", "DBA1015 and DBA1017 return to error"]}],
   "results": {"summary": "", "files_changed": [], "validation_evidence": [], "commits": [], "follow_up_needed": true}
 }

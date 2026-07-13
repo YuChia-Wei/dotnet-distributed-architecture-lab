@@ -27,5 +27,6 @@
     "commit_checkpoint": "Commit the security dependency fix independently",
     "deferred_items": []
   },
+  "source_findings": [{"finding_id": "SEC-001", "severity": "must_fix", "origin_ref": "../analyzer-integration-report.md#diagnostic-inventory", "acceptance": ["Replace Microsoft.OpenApi 2.0.0 with a compatible patched graph", "Build all affected projects", "Vulnerability audit no longer reports the high-severity finding"]}],
   "results": {"summary": "", "files_changed": [], "validation_evidence": [], "commits": [], "follow_up_needed": true}
 }

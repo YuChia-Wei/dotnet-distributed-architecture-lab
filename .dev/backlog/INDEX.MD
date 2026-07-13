@@ -6,25 +6,14 @@ This index catalogs durable work that belongs to `dotnet-mq-arch-lab` and must r
 
 | Item | Priority | Status | Owner | Workflow |
 | --- | --- | --- | --- | --- |
-| [ARC-001](items/ARC-001.yaml) | `critical` | `planned` | `ddd-ca-hex-architect` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [ARC-002](items/ARC-002.yaml) | `critical` | `planned` | `ddd-ca-hex-architect` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [MSG-001](items/MSG-001.yaml) | `critical` | `planned` | `ddd-ca-hex-architect` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [ARC-003](items/ARC-003.yaml) | `must_fix` | `planned` | `ddd-ca-hex-architect` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [ARC-004](items/ARC-004.yaml) | `must_fix` | `planned` | `slice-implementer` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [MSG-002](items/MSG-002.yaml) | `must_fix` | `planned` | `ddd-ca-hex-architect` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [MSG-003](items/MSG-003.yaml) | `must_fix` | `planned` | `ddd-ca-hex-architect` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [MSG-004](items/MSG-004.yaml) | `must_fix` | `planned` | `ddd-ca-hex-architect` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [MSG-005](items/MSG-005.yaml) | `must_fix` | `planned` | `slice-implementer` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [SEC-001](items/SEC-001.yaml) | `must_fix` | `planned` | `local-change-implementer` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [TEST-001](items/TEST-001.yaml) | `must_fix` | `planned` | `bdd-gwt-test-designer` | `2026-07-13-critical-remediation-and-analyzer-integration` |
-| [TEST-002](items/TEST-002.yaml) | `must_fix` | `planned` | `bdd-gwt-test-designer` | `2026-07-13-critical-remediation-and-analyzer-integration` |
+| [MSG-003](items/MSG-003.yaml) | `must_fix` | `open` | `ddd-ca-hex-architect` | Future commercial requirement |
 
 ## In Progress
 
-No durable backlog item is currently in progress.
+All remediation scheduled in the active workflow is owned directly by its workflow tasks.
 
 ## Resolved
 
 No resolved target-repository backlog item is currently retained.
 
-Items copied from the AI context source repository are intentionally excluded. New entries must cite evidence or a workflow in this repository.
+The CRITICAL and MUST FIX execution detail from the 2026-07-13 assessment was migrated into that workflow's tasks. Items copied from the AI context source repository are intentionally excluded. New entries must cite evidence or a workflow in this repository.

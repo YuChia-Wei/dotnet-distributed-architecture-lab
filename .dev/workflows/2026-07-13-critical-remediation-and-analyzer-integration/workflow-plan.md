@@ -17,7 +17,7 @@
 - `branch_segment`: `1`
 - `status`: `active`
 - `created_at`: `2026-07-13T22:37:26+08:00`
-- `updated_at`: `2026-07-13T22:53:58+08:00`
+- `updated_at`: `2026-07-13T23:40:00+08:00`
 - `template_source`: `.ai/assets/skills/dev-workflow/templates/development-workflow-plan-template.md`
 - `template_version`: `1.1.0`
 - `workflow_locator`: `.dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml`
@@ -27,7 +27,7 @@
 
 - Product or software outcome: Persist the repository assessment, make every CRITICAL and MUST FIX finding durably discoverable, integrate the source-included Roslyn analyzers into product builds, then remediate the critical architecture and reliability gaps through bounded reviewed slices.
 - Current lifecycle entry point: Existing implementation plus a completed conversational code review; start at review persistence, architecture direction, and a bounded tooling integration slice.
-- User constraints: Inspect and terminate only stale repository test processes; preserve Rider processes; use workflow mode; create backlog items for all CRITICAL and MUST FIX findings; implement analyzer integration in this repository.
+- User constraints: Inspect and terminate only stale repository test processes; preserve Rider processes; use workflow mode; keep scheduled CRITICAL/MUST FIX detail in workflow tasks; use Wolverine PostgreSQL first behind a replaceable port; support Kafka and RabbitMQ; use memory queues for required automated tests; run external-broker suites only when explicitly requested.
 - Non-goals: Do not kill Rider-owned processes; do not conceal existing analyzer violations; do not combine all architecture remediations into one unreviewable change; do not claim production readiness without end-to-end messaging tests.
 
 ## Inputs
@@ -61,6 +61,7 @@
 - Dependencies: Completed conversational assessment and current repository evidence.
 - Validation: YAML/JSON parse, workflow artifact validator, link/reference review.
 - Commit checkpoint: `DEV-001` after validation.
+- Historical note: This checkpoint initially created durable backlog items. After the user confirmed one workflow should execute the scheduled work, their evidence and acceptance criteria were migrated into the workflow tasks. Only deferred Product commercial work remains in the durable backlog.
 
 ### Stage 2 — Integrate Source-Included Analyzers
 
@@ -98,17 +99,17 @@
 - Validation: Narrow domain/infrastructure tests, analyzer-enabled build, relevant problem-frame compliance when applicable.
 - Commit checkpoint: `DEV-004`, split into coherent commits if the two slices validate independently.
 
-### Stage 5 — Remediate Messaging And CQRS MUST FIX Findings
+### Stage 5 — Remediate Messaging And CQRS Findings
 
 - `stage_id`: `messaging-and-cqrs-remediation`
 - Goal: Establish durable publish boundaries, command/query repository separation, broker topology completeness, publisher activation, idempotency and failure policy.
 - Capability slot: `architecture`, `implementation`, `test-design`
 - Owner skill: `ddd-ca-hex-architect`, then `slice-implementer` and `bdd-gwt-test-designer`
-- Scope: Execute one backlog item per bounded slice in dependency order.
-- Non-goals: No simultaneous multi-broker production claim without matching tests.
+- Scope: `DEV-005` durable ports/Wolverine PostgreSQL adapter; `DEV-010` CQRS repositories; `DEV-011` Kafka/RabbitMQ parity and configuration; `DEV-012` reservation idempotency/failure policy.
+- Non-goals: Product producer work; no external-broker dependency in default automated tests; no production claim without matching evidence.
 - Dependencies: `DEV-003`, `DEV-004` where event lifecycle is shared.
-- Validation: Analyzer-enabled build, broker-specific integration tests, topology/config checks, review.
-- Commit checkpoint: One checkpoint per completed backlog slice under `DEV-005`.
+- Validation: Analyzer-enabled build, memory-transport contract/routing tests, topology/config checks, review; real broker connectivity only through explicit manual commands.
+- Commit checkpoint: One checkpoint per DEV-005/010/011/012 bounded slice.
 
 ### Stage 6 — Restore Test Reliability And Coverage
 
@@ -143,11 +144,11 @@
 
 ## Progress And Handoff
 
-- Current stage: `critical-architecture-direction` (`DEV-003`).
-- Completed stages: `assessment-and-backlog` (`DEV-001`); `analyzer-integration` (`DEV-002`).
-- Deferred stages and reasons: None.
-- Open decisions: Exact durable messaging persistence mechanism will be selected during `DEV-003` from current Wolverine/PostgreSQL support and repository transaction evidence.
-- Continuation instructions: Begin `DEV-003` with `ddd-ca-hex-architect`; do not begin product architecture remediation before its decisions are approved and recorded.
+- Current stage: `critical-domain-remediation` (`DEV-004`).
+- Completed stages: `assessment-and-backlog` (`DEV-001`); `analyzer-integration` (`DEV-002`); `critical-architecture-direction` (`DEV-003`).
+- Deferred stages and reasons: Product integration producer (`MSG-003`) is deferred until a future commercial requirement approves event meaning and consumer need.
+- Open decisions: DEV-005 must verify whether Wolverine PostgreSQL envelope persistence can enlist in the existing Dapper/Npgsql transaction. If it cannot, use a native transactional outbox adapter and keep Wolverine as the delivery runtime.
+- Continuation instructions: Finish DEV-004 repository failure/concurrency coverage and validation, then execute DEV-005 before the independent MUST FIX slices.
 - Analyzer-discovered follow-ups: `DEV-008` migrates staged Use Case/Handler diagnostics; `DEV-009` removes the confirmed high-severity OpenAPI dependency vulnerability.
 - Branch history and checkpoint handoffs: Segment 1 started from local `main`; no push or merge requested yet.
 
@@ -163,4 +164,4 @@
 - Changed artifacts: Workflow locator, plan, tasks, review report, backlog, analyzer integration.
 - Validation evidence: Workflow validator passed; analyzer-enabled product build passed; analyzer tests 47/47 and runtime validation tests 2/2 passed; quick gate passed 7/7; no analyzer runtime dependency was found.
 - Commits: `42d8e49` workflow bootstrap; `dab7e17` assessment/backlog; `fd80fb7` analyzer integration.
-- Residual risks: Pending implementation and final validation.
+- Residual risks: DEV-004 infrastructure tests remain; Wolverine/Dapper atomic enlistment is not yet proven; remaining MUST FIX tasks are pending.
