@@ -18,15 +18,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseWolverine(opts =>
 {
-    var messageStoreConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-        ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is required for Wolverine message persistence.");
-    opts.PersistMessagesWithPostgresql(messageStoreConnectionString, "wolverine_messages");
-
     // Get the queue service type from environment variables
     var queueService = builder.Configuration.GetValue<string>("QUEUE_SERVICE");
 
-    if ("Kafka".Equals(queueService, StringComparison.OrdinalIgnoreCase))
+    if ("InMemory".Equals(queueService, StringComparison.OrdinalIgnoreCase))
     {
+        opts.StubAllExternalTransports();
+        opts.PublishMessage<IIntegrationEvent>().ToLocalQueue("orders-integration-events");
+        opts.PublishMessage<IInventoryRequestContract>().ToLocalQueue("inventory-requests");
+    }
+    else if ("Kafka".Equals(queueService, StringComparison.OrdinalIgnoreCase))
+    {
+        ConfigurePostgresqlPersistence(opts, builder.Configuration);
+
         // Configure Kafka
         var kafkaConnectionString = builder.Configuration.GetConnectionString("KafkaBroker");
         opts.UseKafka(kafkaConnectionString!)
@@ -56,6 +60,8 @@ builder.Host.UseWolverine(opts =>
     }
     else // Default to RabbitMQ
     {
+        ConfigurePostgresqlPersistence(opts, builder.Configuration);
+
         // Configure RabbitMQ
         var rabbitMqConnectionString = builder.Configuration.GetConnectionString("MessageBroker");
         opts.UseRabbitMq(new Uri(rabbitMqConnectionString!))
@@ -90,6 +96,13 @@ builder.Host.UseWolverine(opts =>
     // Discover services
     opts.Discovery.IncludeAssembly(typeof(ServiceCollectionExtensions).Assembly);
 });
+
+static void ConfigurePostgresqlPersistence(WolverineOptions options, IConfiguration configuration)
+{
+    var connectionString = configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is required for Wolverine message persistence.");
+    options.PersistMessagesWithPostgresql(connectionString, "wolverine_messages");
+}
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

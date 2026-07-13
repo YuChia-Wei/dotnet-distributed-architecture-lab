@@ -26,10 +26,14 @@ CREATE TABLE IF NOT EXISTS OrderIntegrationOutbox (
     Data JSONB NOT NULL,
     OccurredOn TIMESTAMP WITH TIME ZONE NOT NULL,
     CreatedOn TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    LockId UUID NULL,
     LockedUntil TIMESTAMP WITH TIME ZONE NULL,
-    Attempts INT NOT NULL DEFAULT 0
+    Attempts INT NOT NULL DEFAULT 0,
+    NextAttemptAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    LastError TEXT NULL,
+    ParkedAt TIMESTAMP WITH TIME ZONE NULL
 );
 
 CREATE INDEX IF NOT EXISTS IX_OrderIntegrationOutbox_Claim
-    ON OrderIntegrationOutbox (CreatedOn, Id)
-    WHERE LockedUntil IS NULL;
+    ON OrderIntegrationOutbox (NextAttemptAt, CreatedOn, Id)
+    WHERE ParkedAt IS NULL;

@@ -46,6 +46,8 @@ Known from current code:
 - Orders appends aggregate events and `OrderIntegrationOutbox` rows in the same Dapper/Npgsql transaction through `IOrderEventCommitter`.
 - `OrderIntegrationOutboxRelay` leases committed source-outbox rows, publishes them through Wolverine, and deletes them after publication. A crash after publication and before deletion can redeliver an event, so consumers must remain idempotent.
 - The source outbox row `Id` is reused as Wolverine `DeduplicationId` and the `lab-message-id` header on every relay attempt; `AggregateId` is supplied as the partition key.
+- Relay claims carry an owner token; failed rows back off per row and park after five attempts for manual inspection/replay.
+- `QUEUE_SERVICE=InMemory` is the automated-test profile: external transports and Wolverine PostgreSQL persistence are not configured, local queues are used, and `Messaging:OutboxRelay:Enabled=false` disables database polling.
 - explicit dead-letter destinations are not yet documented in code-level runtime docs.
 - explicit retry counts or backoff classes are not yet documented in these runtime files.
 

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Threading;
 using Lab.BoundedContextContracts.Orders.DataTransferObjects;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using SaleOrders.Applications.UseCases;
 using Shouldly;
@@ -57,14 +59,15 @@ public class GetOrderDetailsEndpointTests : IClassFixture<WebApplicationFactory<
 
         var client = this._factory.WithWebHostBuilder(builder =>
         {
-            builder.UseSetting("QUEUE_SERVICE", "Kafka");
-            builder.UseSetting("ConnectionStrings:KafkaBroker", "localhost:9092");
+            builder.ConfigureLogging(logging => logging.ClearProviders());
+            builder.UseSetting("QUEUE_SERVICE", "InMemory");
+            builder.UseSetting("Messaging:OutboxRelay:Enabled", "false");
             builder.ConfigureAppConfiguration((_, config) =>
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    ["QUEUE_SERVICE"] = "Kafka",
-                    ["ConnectionStrings:KafkaBroker"] = "localhost:9092",
+                    ["QUEUE_SERVICE"] = "InMemory",
+                    ["Messaging:OutboxRelay:Enabled"] = "false",
                 });
             });
             builder.ConfigureTestServices(services =>

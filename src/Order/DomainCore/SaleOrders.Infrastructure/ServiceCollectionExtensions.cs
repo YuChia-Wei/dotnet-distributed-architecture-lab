@@ -27,7 +27,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIntegrationEventPublisher>(sp => sp.GetRequiredService<IntegrationEventPublisher>());
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         services.AddScoped<IInventoryGateway, InventoryGateway>();
-        if (!string.IsNullOrWhiteSpace(connectionString))
+        var relayEnabled = configuration.GetValue("Messaging:OutboxRelay:Enabled", false);
+        if (relayEnabled && !string.IsNullOrWhiteSpace(connectionString))
         {
             services.AddHostedService<OrderIntegrationOutboxRelay>();
         }
