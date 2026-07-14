@@ -84,7 +84,7 @@ The goal of this document is to provide the minimum project-specific requirement
 
 ## References
 
-- `.dev/ARCHITECTURE.MD`
+- `.dev/ARCHITECTURE.md`
 - `.dev/project-config.yaml`
 - `src/Product/`
 - `src/Order/`

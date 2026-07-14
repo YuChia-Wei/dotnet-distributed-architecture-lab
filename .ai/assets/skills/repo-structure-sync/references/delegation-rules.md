@@ -16,7 +16,7 @@ These are usually safe for the low-cost pass to update directly when the facts a
 
 Delegate these when the rewrite needs synthesis instead of substitution:
 
-- `.dev/ARCHITECTURE.MD` full narrative rewrite
+- `.dev/ARCHITECTURE.md` full narrative rewrite
 - `AGENTS.md` rule sections that need architectural reinterpretation
 - cross-document conflict resolution where one change affects several docs
 - module or bounded-context naming normalization

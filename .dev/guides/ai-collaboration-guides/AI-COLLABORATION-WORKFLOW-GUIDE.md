@@ -74,7 +74,7 @@
 
 參考：
 
-- `.dev/requirement/requirement-guide.md`
+- `.dev/requirement/REQUIREMENT-GUIDE.MD`
 - `REQUIREMENT-AND-SPEC-DESIGNER-STRATEGY.md`
 
 ### Step 2: spec
@@ -85,8 +85,8 @@
 
 參考：
 
-- `.dev/specs/SPEC-GUIDE.md`
-- `.dev/specs/SPEC-ORGANIZATION-GUIDE.md`
+- `.dev/specs/SPEC-GUIDE.MD`
+- `.dev/specs/SPEC-ORGANIZATION-GUIDE.MD`
 
 ### Step 3: architecture clarification
 

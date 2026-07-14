@@ -75,7 +75,7 @@
 - 多 solution 或 mixed-stack repo
 - README 與實際專案檔互相衝突
 - bounded context 邊界不明
-- `AGENTS.md` 或 `.dev/ARCHITECTURE.MD` 的高品質重寫
+- `AGENTS.md` 或 `.dev/ARCHITECTURE.md` 的高品質重寫
 
 ## 升級判斷規則
 
@@ -92,7 +92,7 @@
 - repo 是 mixed stack，不是單純 .NET 主體
 - README / 文件與 `*.csproj`、套件參考、startup project 明顯衝突
 - 任務本身要求架構判讀，不只是同步文件
-- `.dev/ARCHITECTURE.MD` 或 `AGENTS.md` 需要重寫成新的架構敘事
+- `.dev/ARCHITECTURE.md` 或 `AGENTS.md` 需要重寫成新的架構敘事
 
 ### `P1` 代表中度複雜度
 
@@ -152,7 +152,7 @@
 
 通常應交給強模型或 sub-agent：
 
-- `.dev/ARCHITECTURE.MD` 的整段重寫
+- `.dev/ARCHITECTURE.md` 的整段重寫
 - `AGENTS.md` 涉及規則重釋的區塊
 - 多份文件之間互相牽動的衝突修正
 - 多 solution / mixed stack 的架構敘事整理
@@ -222,7 +222,7 @@ Update only the repo-specific entry and architecture sections in:
 - README.md
 - README.en.md
 - AGENTS.md
-- .dev/ARCHITECTURE.MD
+- .dev/ARCHITECTURE.md
 - .dev/project-config.yaml
 - .dev/requirement/TECH-STACK-REQUIREMENTS.MD
 - .dev/README.MD

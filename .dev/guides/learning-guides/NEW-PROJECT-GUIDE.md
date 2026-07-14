@@ -197,4 +197,4 @@ Ensure `ASPNETCORE_ENVIRONMENT` matches `test-inmemory` or `test-outbox` and tha
 ## Next Steps
 1. Read `.dev/guides/learning-guides/LEARNING-PATH.md`.
 2. Use `.ai/assets/tech-stacks/dotnet-backend/references/CODE-TEMPLATES.MD` for scaffolding.
-3. Keep `.dev/standards/`, `.dev/guides/`, and `.dev/ARCHITECTURE.MD` updated as the primary rule set.
+3. Keep `.dev/standards/`, `.dev/guides/`, and `.dev/ARCHITECTURE.md` updated as the primary rule set.

@@ -32,7 +32,7 @@ YYYY-MM-DD
 ### Follow-up
 
 - Which canonical docs must be updated because of this decision?
-  - `.dev/ARCHITECTURE.MD`
+  - `.dev/ARCHITECTURE.md`
   - `.dev/standards/`
   - `.dev/guides/`
   - `.ai/`

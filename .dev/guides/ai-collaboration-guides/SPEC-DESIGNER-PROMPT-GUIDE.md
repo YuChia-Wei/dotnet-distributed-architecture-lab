@@ -61,7 +61,7 @@
 ## 範本 1：從 requirement 產生 use case spec
 
 ```text
-Create a use case spec JSON from this requirement, following `.dev/specs/SPEC-GUIDE.md` and `.dev/specs/SPEC-ORGANIZATION-GUIDE.md`.
+Create a use case spec JSON from this requirement, following `.dev/specs/SPEC-GUIDE.MD` and `.dev/specs/SPEC-ORGANIZATION-GUIDE.MD`.
 
 Context:
 - Requirement: [paste or summarize]
@@ -107,7 +107,7 @@ Return:
 ## 範本 3：審查並修正既有 spec
 
 ```text
-Review and normalize this spec so it matches `.dev/specs/SPEC-GUIDE.md` and `.dev/specs/SPEC-ORGANIZATION-GUIDE.md`.
+Review and normalize this spec so it matches `.dev/specs/SPEC-GUIDE.MD` and `.dev/specs/SPEC-ORGANIZATION-GUIDE.MD`.
 
 Context:
 - Existing spec: [paste JSON or markdown]

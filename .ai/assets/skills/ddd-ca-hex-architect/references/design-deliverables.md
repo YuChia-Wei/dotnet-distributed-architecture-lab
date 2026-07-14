@@ -52,7 +52,7 @@ Return:
 
 ## Required Quality Checks
 
-- Check the design against `.dev/ARCHITECTURE.MD`.
+- Check the design against `.dev/ARCHITECTURE.md`.
 - Check the design against `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`.
 - Read the matching standards, guides, and architecture docs that now hold the canonical rules.
 - If the design affects code generation or review workflows, map the result back to `.ai/assets/` rather than inventing an isolated parallel standard.

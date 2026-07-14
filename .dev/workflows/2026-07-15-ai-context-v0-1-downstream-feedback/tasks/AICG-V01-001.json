@@ -1,0 +1,34 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "AICG-V01-001",
+  "workflow_id": "2026-07-15-ai-context-v0-1-downstream-feedback",
+  "owner_skill": "ai-context-governance",
+  "status": "in_progress",
+  "created_at": "2026-07-15T00:07:21+08:00",
+  "updated_at": "2026-07-15T07:09:09+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "finding_ids": ["AICG-V01-PROVENANCE", "AICG-V01-LEAKS", "AICG-V01-EXACT-CASE"],
+  "scope": {
+    "target": "Known v0.1.0 downstream AI-context installation",
+    "files": [".dev/requirement/", ".ai/scripts/", ".ai/assets/skills/", ".dev/guides/", ".dev/standards/"],
+    "constraints": ["Do not modify the source repository worktree", "Do not rewrite historical workflow records", "The feedback document was externalized by the user and is not a repository artifact"],
+    "non_goals": ["Product source review", "External service execution", "Source release implementation"]
+  },
+  "execution": {
+    "steps": ["Freeze v0.1 tag and import evidence", "Remove confirmed source lifecycle leaks", "Correct active exact-case paths", "Add exact-case validation", "Run post-remediation validation"],
+    "validation": ["python .ai/scripts/tests/test_ai_context_exact_case_paths.py -v", "python .ai/scripts/validate-ai-context.py", "python .ai/scripts/validate-workflow-artifacts.py", "python .ai/scripts/validate-shell-assets.py", "git diff --check"],
+    "last_completed_step": "Complete independent post-remediation audit and follow-up regression coverage",
+    "next_action": "Create the implementation commit and record its hash in workflow closure metadata"
+  },
+  "results": {
+    "summary": "Confirmed v0.1.0 leaks were removed, active exact-case references were corrected, and a regression gate was added.",
+    "files_changed": [".ai/scripts/README.md", ".ai/scripts/validate-ai-context.py", ".ai/scripts/tests/test_ai_context_exact_case_paths.py", ".dev/requirement/", ".ai/assets/skills/", ".dev/guides/", ".dev/standards/"],
+    "tests_run": ["python .ai/scripts/tests/test_ai_context_exact_case_paths.py -v: passed 5/5", "python .ai/scripts/validate-ai-context.py: passed", "python .ai/scripts/validate-workflow-artifacts.py: passed", "python .ai/scripts/validate-shell-assets.py: passed", "git diff --check: passed with line-ending warnings", "python -m unittest discover -s .ai/scripts/tests -p test_*.py: 35/36 passed; known fixed-count fixture failed"],
+    "finding_status": "addressed",
+    "residual_risk": "One pre-existing fail-closed fixture expects two failed dotnet commands while the runner now selects three.",
+    "follow_up_needed": true
+  }
+}
