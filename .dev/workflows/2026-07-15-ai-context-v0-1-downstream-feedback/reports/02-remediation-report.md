@@ -5,8 +5,8 @@
 - Workflow: `2026-07-15-ai-context-v0-1-downstream-feedback`
 - Task: `AICG-V01-001`
 - Owner skill: `ai-context-governance`
-- Updated: `2026-07-15T07:09:09+08:00`
-- Status: implementation and independent post-audit complete; implementation commit pending
+- Updated: `2026-07-15T07:11:00+08:00`
+- Status: completed
 
 ## Remediation Summary
 
@@ -42,8 +42,11 @@
 
 `test_fail_closed_validation.py` still expects `Required Failed: 2`, while the current critical runner selects three dotnet commands in its unavailable-command fixture. This is independent of the exact-case remediation and is documented as source framework feedback rather than silently broadened into this task.
 
-Commit evidence is recorded during the two-stage workflow closeout.
+## Commit Evidence
+
+- Implementation: `8a5fef979ca1ce9804c722a5c9acae1d8532341c`
+- Closeout metadata: committed separately after this artifact records the implementation hash.
 
 ## Closure Decision
 
-Implementation and independent post-audit are complete. The workflow remains `in_progress` until the implementation commit exists and a metadata commit records its evidence.
+Implementation, independent post-audit, validation, and implementation commit evidence are complete. The workflow is closed by the separate metadata commit.
