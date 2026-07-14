@@ -8,11 +8,11 @@
 - `branch`: `codex/2026-07-15-ai-context-v0-1-downstream-feedback`
 - `base_branch`: `main`
 - `branch_segment`: `1`
-- `status`: `in_progress`
-- `current_phase`: `remediation`
+- `status`: `completed`
+- `current_phase`: `closure`
 - `artifact_root`: `.dev/workflows/2026-07-15-ai-context-v0-1-downstream-feedback`
 - `created_at`: `2026-07-15T00:07:21+08:00`
-- `updated_at`: `2026-07-15T07:22:28+08:00`
+- `updated_at`: `2026-07-15T07:24:34+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.1.0`
 
@@ -52,11 +52,11 @@
 
 ## Resume Checkpoint
 
-- Last completed action: user restored the feedback deliverable under the workflow artifact root.
-- Current task: AICG-V01-002 feedback artifact retention and relationship correction.
-- Exact next action: validate and commit the feedback artifact with corrected workflow references, then close the correction task.
+- Last completed action: feedback artifact retention commit `ce0578d7183a08a4a14003d39f73e7936c96d77a`.
+- Current task: none; AICG-V01-002 is completed.
+- Exact next action: none; this metadata commit closes the correction.
 - Validation already completed: source tag/blob comparison, active path inventory, exact-case tests, AI-context validation, workflow validation, shell asset validation, and diff check. The full suite has one known unrelated fixed-count fixture failure.
-- Git state: prior workflow commits retained; correction changes are pending commit on the same workflow branch.
+- Git state: feedback artifact and relationship correction committed; closeout metadata staged separately.
 - Branch history and checkpoint handoffs: none.
 - Blockers or unresolved decisions: none; commit intentionally deferred.
 
@@ -66,4 +66,4 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `codex/2026-07-15-ai-context-v0-1-downstream-feedback` | `main` | uncommitted handoff | none | local | `2026-07-15T00:07:21+08:00` | user requested no commit | validate and hand off working tree |
 | 2 | `codex/2026-07-15-ai-context-v0-1-downstream-feedback` | `main` | implementation commit | `8a5fef979ca1ce9804c722a5c9acae1d8532341c` | local | `2026-07-15T07:10:50+08:00` | user authorized correction of the missing commit | commit closeout metadata |
-| 3 | `codex/2026-07-15-ai-context-v0-1-downstream-feedback` | `main` | correction | pending | local | `2026-07-15T07:22:28+08:00` | retain feedback as a workflow-owned deliverable | complete AICG-V01-002 and record commit evidence |
+| 3 | `codex/2026-07-15-ai-context-v0-1-downstream-feedback` | `main` | correction | `ce0578d7183a08a4a14003d39f73e7936c96d77a` | local | `2026-07-15T07:24:03+08:00` | retain feedback as a workflow-owned deliverable | commit closeout metadata |

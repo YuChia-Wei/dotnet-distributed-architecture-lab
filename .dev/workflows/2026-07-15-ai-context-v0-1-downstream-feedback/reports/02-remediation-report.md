@@ -5,8 +5,8 @@
 - Workflow: `2026-07-15-ai-context-v0-1-downstream-feedback`
 - Task: `AICG-V01-001`
 - Owner skill: `ai-context-governance`
-- Updated: `2026-07-15T07:22:28+08:00`
-- Status: reopened for artifact-retention correction
+- Updated: `2026-07-15T07:24:34+08:00`
+- Status: completed after artifact-retention correction
 
 ## Remediation Summary
 
@@ -37,7 +37,7 @@
 | AICG-V01-LEAKS | addressed | five source lifecycle requirements deleted | none in target |
 | AICG-V01-SCRIPT-BACKLINKS | addressed | excluded workflow links removed from script README | source package needs equivalent sanitation |
 | AICG-V01-EXACT-CASE | addressed | active references corrected; validator and tests added | independent post-audit |
-| AICG-V01-ARTIFACT-RETENTION | correction in progress | feedback restored under the workflow artifact root | validate, commit, and record evidence through AICG-V01-002 |
+| AICG-V01-ARTIFACT-RETENTION | addressed | feedback retained under the workflow artifact root and linked through plan, task, and correction report | none |
 
 ## Residual Risk
 
@@ -47,7 +47,8 @@
 
 - Implementation: `8a5fef979ca1ce9804c722a5c9acae1d8532341c`
 - Closeout metadata: committed separately after this artifact records the implementation hash.
+- Feedback artifact correction: `ce0578d7183a08a4a14003d39f73e7936c96d77a`
 
 ## Closure Decision
 
-The original remediation remains complete. The workflow is temporarily reopened to retain the feedback artifact, repair its relationships, and record correction commit evidence.
+The original remediation and feedback artifact correction are complete. The feedback is a committed workflow-owned input and deliverable.

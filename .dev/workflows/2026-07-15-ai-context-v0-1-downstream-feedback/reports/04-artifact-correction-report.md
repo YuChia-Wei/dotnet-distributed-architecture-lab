@@ -6,7 +6,7 @@
 - Task: `AICG-V01-002`
 - Owner skill: `ai-context-governance`
 - Created: `2026-07-15T07:22:28+08:00`
-- Status: in progress
+- Status: completed
 
 ## Correction Reason
 
@@ -27,4 +27,8 @@ The earlier externalization wording reflected the repository state at that check
 
 ## Validation And Commit Evidence
 
-Pending correction validation and commit.
+- `python .ai/scripts/validate-workflow-artifacts.py`: passed
+- `python .ai/scripts/validate-ai-context.py`: passed
+- `git diff --check`: passed with Windows line-ending warnings
+- Feedback artifact tracked at the canonical path: passed
+- Correction commit: `ce0578d7183a08a4a14003d39f73e7936c96d77a`
