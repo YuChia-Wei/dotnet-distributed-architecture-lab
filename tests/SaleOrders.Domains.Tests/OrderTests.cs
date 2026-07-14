@@ -89,6 +89,18 @@ public class OrderTests
     }
 
     [Fact]
+    public void Given_no_pending_events_when_same_commit_is_confirmed_again_then_state_is_unchanged()
+    {
+        var order = CreateOrder();
+        order.MarkChangesAsCommitted(1);
+
+        order.MarkChangesAsCommitted(1);
+
+        order.Version.ShouldBe(1);
+        order.DomainEvents.ShouldBeEmpty();
+    }
+
+    [Fact]
     public void Given_pending_events_when_commit_version_is_inconsistent_then_state_is_preserved()
     {
         var order = CreateOrder();
