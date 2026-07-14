@@ -15,9 +15,9 @@
 - `branch`: `codex/2026-07-13-critical-remediation-and-analyzer-integration`
 - `base_branch`: `main`
 - `branch_segment`: `1`
-- `status`: `active`
+- `status`: `completed`
 - `created_at`: `2026-07-13T22:37:26+08:00`
-- `updated_at`: `2026-07-13T23:40:00+08:00`
+- `updated_at`: `2026-07-14T23:35:00+08:00`
 - `template_source`: `.ai/assets/skills/dev-workflow/templates/development-workflow-plan-template.md`
 - `template_version`: `1.1.0`
 - `workflow_locator`: `.dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml`
@@ -144,11 +144,11 @@
 
 ## Progress And Handoff
 
-- Current stages: `critical-domain-remediation` (`DEV-004`) and the bounded `DEV-005` source-outbox slice.
-- Completed stages: `assessment-and-backlog` (`DEV-001`); `analyzer-integration` (`DEV-002`); `critical-architecture-direction` (`DEV-003`).
+- Current stages: None. Repository-side workflow execution and review are complete.
+- Completed stages: `assessment-and-backlog` (`DEV-001`); `analyzer-integration` (`DEV-002`); `critical-architecture-direction` (`DEV-003`); critical Order lifecycle and persistence (`DEV-004`); source outbox and relay (`DEV-005`); dependency remediation (`DEV-009`).
 - Deferred stages and reasons: Product integration producer (`MSG-003`) is deferred until a future commercial requirement approves event meaning and consumer need.
-- Open decisions: DEV-005 selected the native Orders source outbox because Wolverine/Dapper enlistment was not established. Remaining gates are PostgreSQL failure injection, relay ownership/backoff, and recovery evidence.
-- Continuation instructions: Finish DEV-004 repository failure/concurrency coverage and the DEV-005 durability gates before the independent MUST FIX slices.
+- Open decisions: No new maintainer decision is required. PostgreSQL and broker runtime validation is delegated to the maintainer; repository-side work requires only static syntax/configuration checks.
+- Continuation instructions: Apply the documented Orders projection rebuild and Inventory reservation migration before persistent-environment rollout, then run maintainer-owned PostgreSQL/Kafka/RabbitMQ verification explicitly.
 - Analyzer-discovered follow-ups: `DEV-008` migrates staged Use Case/Handler diagnostics; `DEV-009` removes the confirmed high-severity OpenAPI dependency vulnerability.
 - Branch history and checkpoint handoffs: Segment 1 started from local `main`; no push or merge requested yet.
 
@@ -156,12 +156,12 @@
 
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `codex/2026-07-13-critical-remediation-and-analyzer-integration` | `main` | active | `9f36858` | local | `2026-07-13T23:49:30+08:00` | DEV-001 through DEV-003 complete; DEV-004 checkpoint committed | Continue DEV-004 and DEV-005 on current branch |
+| 1 | `codex/2026-07-13-critical-remediation-and-analyzer-integration` | `main` | completed | `e85863f` | local | `2026-07-14T23:35:00+08:00` | Repository-side implementation and validation complete through DEV-012 | Final closeout commit, then maintainer-controlled merge/push |
 
 ## Completion Summary
 
-- Outcome: Active.
+- Outcome: Completed with external-service runtime verification explicitly assigned to the maintainer.
 - Changed artifacts: Workflow locator, plan, tasks, review report, backlog, analyzer integration.
-- Validation evidence: Workflow validator passed; analyzer-enabled product build passed; analyzer tests 47/47 and runtime validation tests 2/2 passed; quick gate passed 7/7; no analyzer runtime dependency was found.
-- Commits: `42d8e49` workflow bootstrap; `dab7e17` assessment/backlog; `fd80fb7` analyzer integration; `9b2af02` approved architecture direction; `9f36858` reasoned event-sourced transitions.
-- Residual risks: DEV-004 infrastructure tests remain; DEV-005 PostgreSQL failure-injection and relay recovery evidence remains; remaining MUST FIX tasks are pending.
+- Validation evidence: analyzer-enabled solution build passed with 0 warnings and 0 errors; product/order tests passed 47/47; analyzer tests passed 47/47; Docker Compose and JSON configuration validation passed; PlaceOrder CBF compliance reached 100%; no test process leaked.
+- Commits: `42d8e49` workflow bootstrap; `dab7e17` assessment/backlog; `fd80fb7` analyzer integration; `d34b063` architecture direction; `04e521a` reasoned transitions; `8f9ff26` source outbox; `8c10dfc` broker-free relay/test isolation; `4a4cbe4` architecture checkpoint; `d14fbc3` dependency remediation; `a0b5fbc` Product use-case migration; `e85863f` repository/messaging/remediation implementation.
+- Residual risks: existing Orders event streams need projection rebuild/backfill; PostgreSQL failure injection, broker connectivity, and physical error-queue naming remain maintainer-owned runtime verification; Product integration ownership remains a future commercial requirement.

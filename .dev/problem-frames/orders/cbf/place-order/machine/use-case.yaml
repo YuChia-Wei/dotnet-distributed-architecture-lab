@@ -6,6 +6,9 @@ execution:
   input_type: "PlaceOrderInput"
 
 input:
+  - name: "operationId"
+    type: "Guid"
+    required: true
   - name: "orderDate"
     type: "DateTime"
     required: true
@@ -24,7 +27,7 @@ input:
 
 preconditions:
   - id: PRE1
-    description: "PlaceOrderInput contains order date, total amount, product id, product name, and quantity; the current use case has no separate validation contract."
+    description: "PlaceOrderInput contains a caller-provided stable operation id, order date, total amount, product id, product name, and quantity."
   - id: PRE2
     description: "The inventory collaboration contract returns a successful reservation outcome."
 
@@ -32,9 +35,9 @@ postconditions:
   - id: POST1
     description: "A new Order aggregate exists with status Placed when reservation succeeds."
   - id: POST2
-    description: "The order repository persists the new order only on successful reservation."
+    description: "The source transaction persists order events and the outbound OrderPlaced outbox row only on successful reservation."
   - id: POST3
-    description: "An outbound OrderPlaced integration event is published after persistence."
+    description: "The committed outbox row is relayed with stable delivery metadata."
 
 output:
   success: "Result<PlaceOrderOutput>"

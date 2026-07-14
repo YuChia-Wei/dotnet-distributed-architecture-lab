@@ -1,10 +1,10 @@
 command_processing:
   steps:
-    - "Receive PlaceOrderInput through IPlaceOrderUseCase.ExecuteAsync"
+    - "Receive PlaceOrderInput with a stable operationId through IPlaceOrderUseCase.ExecuteAsync"
     - "Create the Order aggregate candidate for the requested product, quantity, date, and amount"
     - "Send ReserveInventoryRequestContract through the inventory collaboration gateway"
-    - "If reservation succeeds, persist the order"
-    - "After persistence, publish the outbound OrderPlaced integration event"
+    - "If reservation succeeds, atomically persist order events and the outbound OrderPlaced source-outbox row"
+    - "Relay the committed outbox row through Wolverine with a stable delivery identity"
     - "Return Result<PlaceOrderOutput> with success semantics and order id"
 
 error_handling:
