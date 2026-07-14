@@ -1,0 +1,55 @@
+{
+  "template_id": "dev-workflow/development-workflow-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-07-10T18:25:11+08:00",
+  "workflow_id": "2026-07-13-critical-remediation-and-analyzer-integration",
+  "task_id": "DEV-001",
+  "owner_skill": "dev-workflow",
+  "related_plan_id": "development-plan-2026-07-13-critical-remediation-and-analyzer-integration",
+  "status": "completed",
+  "created_at": "2026-07-13T22:37:26+08:00",
+  "updated_at": "2026-07-14T22:30:15+08:00",
+  "template_source": ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json",
+  "workflow_locator": ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml",
+  "scope": {
+    "goal": "Persist the scored review and register all CRITICAL and MUST FIX findings in the durable backlog.",
+    "target": "Workflow review report and .dev/backlog",
+    "files": [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/review-report.md", ".dev/backlog/INDEX.MD", ".dev/backlog/items/*.yaml"],
+    "constraints": ["Preserve finding severity and evidence", "Do not remediate product code in this task"],
+    "non_goals": ["Architecture redesign", "Product implementation"]
+  },
+  "inputs": {
+    "requirements": [".dev/requirement/distributed-commerce-bounded-context-overview.md"],
+    "specifications": [".dev/specs/", ".dev/problem-frames/orders/cbf/place-order/"],
+    "architecture_decisions": [".dev/ARCHITECTURE.md"],
+    "user_constraints": ["Create backlog for all CRITICAL and MUST FIX findings"]
+  },
+  "execution": {
+    "capability_slot": "review",
+    "steps": ["Persist the report", "Normalize findings into backlog items", "Update indexes and traceability"],
+    "validation": ["Parse YAML and JSON", "Run workflow artifact validator", "Check links and diff whitespace"],
+    "commit_checkpoint": "Commit after the report and backlog validate",
+    "deferred_items": []
+  },
+  "results": {
+    "summary": "Persisted the 57.5/100 repository review and registered all three CRITICAL plus seven MUST FIX findings as validated backlog items.",
+    "files_changed": [
+      ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/review-report.md",
+      ".dev/backlog/INDEX.MD",
+      ".dev/backlog/items/ARC-001.yaml",
+      ".dev/backlog/items/ARC-002.yaml",
+      ".dev/backlog/items/ARC-003.yaml",
+      ".dev/backlog/items/MSG-001.yaml",
+      ".dev/backlog/items/MSG-002.yaml",
+      ".dev/backlog/items/MSG-003.yaml",
+      ".dev/backlog/items/MSG-004.yaml",
+      ".dev/backlog/items/MSG-005.yaml",
+      ".dev/backlog/items/TEST-001.yaml",
+      ".dev/backlog/items/TEST-002.yaml"
+    ],
+    "validation_evidence": ["Workflow artifact validation passed with 10 backlog items", "All backlog YAML and task JSON parsed", "git diff --check passed"],
+    "commits": ["dab7e17 docs(architecture): persist assessment and remediation backlog"],
+    "follow_up_needed": false
+  }
+}

@@ -1,5 +1,5 @@
 using Lab.BoundedContextContracts.Orders.DataTransferObjects;
-using SaleOrders.Applications.Repositories;
+using SaleOrders.Applications.Queries;
 
 namespace SaleOrders.Applications.UseCases;
 
@@ -34,7 +34,7 @@ public interface IGetOrderDetailsUseCase
     /// <param name="input">查詢訂單明細所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>訂單明細回應；若查無資料則為 <see langword="null"/>。</returns>
-    Task<OrderDetailsResponse?> ExecuteAsync(GetOrderDetailsInput input, CancellationToken cancellationToken = default);
+    Task<OrderDetailsResponse?> ExecuteAsync(GetOrderDetailsInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -42,13 +42,13 @@ public interface IGetOrderDetailsUseCase
 /// </summary>
 public class GetOrderDetailsUseCase : IGetOrderDetailsUseCase
 {
-    private readonly IOrderDomainRepository _repository;
+    private readonly IOrderQueryRepository _repository;
 
     /// <summary>
     /// 初始化取得訂單明細 use case。
     /// </summary>
-    /// <param name="repository">訂單領域儲存庫。</param>
-    public GetOrderDetailsUseCase(IOrderDomainRepository repository)
+    /// <param name="repository">訂單唯讀查詢儲存庫。</param>
+    public GetOrderDetailsUseCase(IOrderQueryRepository repository)
     {
         this._repository = repository;
     }
@@ -59,9 +59,9 @@ public class GetOrderDetailsUseCase : IGetOrderDetailsUseCase
     /// <param name="input">查詢參數。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>包含訂單品項的回應資料。</returns>
-    public async Task<OrderDetailsResponse?> ExecuteAsync(GetOrderDetailsInput input, CancellationToken cancellationToken = default)
+    public async Task<OrderDetailsResponse?> ExecuteAsync(GetOrderDetailsInput input, CancellationToken cancellationToken)
     {
-        var order = await this._repository.GetByIdAsync(input.OrderId, cancellationToken);
+        var order = await this._repository.FindByIdAsync(input.OrderId, cancellationToken);
         if (order is null)
         {
             return null;

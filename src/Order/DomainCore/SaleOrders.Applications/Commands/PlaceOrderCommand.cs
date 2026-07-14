@@ -21,14 +21,20 @@ public sealed class PlaceOrderInput
     /// <param name="productId">商品識別碼。</param>
     /// <param name="productName">商品名稱。</param>
     /// <param name="quantity">購買數量。</param>
-    public PlaceOrderInput(DateTime orderDate, decimal totalAmount, Guid productId, string productName, int quantity)
+    public PlaceOrderInput(Guid operationId, DateTime orderDate, decimal totalAmount, Guid productId, string productName, int quantity)
     {
+        this.OperationId = operationId;
         this.OrderDate = orderDate;
         this.TotalAmount = totalAmount;
         this.ProductName = productName;
         this.Quantity = quantity;
         this.ProductId = productId;
     }
+
+    /// <summary>
+    /// 呼叫端提供、跨重試保持不變的邏輯操作識別碼。
+    /// </summary>
+    public Guid OperationId { get; }
 
     /// <summary>
     /// 商品識別碼。
@@ -67,37 +73,31 @@ public interface IPlaceOrderUseCase
     /// <param name="input">下單所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>下單結果。</returns>
-    Task<Result<PlaceOrderOutput>> ExecuteAsync(PlaceOrderInput input, CancellationToken cancellationToken = default);
+    Task<Result<PlaceOrderOutput>> ExecuteAsync(PlaceOrderInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
 /// 下單 use case 的預設實作。
 /// </summary>
 public class PlaceOrderUseCase(
-    IOrderDomainRepository repository,
-    IIntegrationEventPublisher publisher,
+    IOrderEventCommitter committer,
     IInventoryGateway inventoryGateway) : IPlaceOrderUseCase
 {
     /// <summary>
     /// 執行下單流程並建立訂單。
     /// </summary>
     /// <param name="input">下單所需的輸入資料。</param>
-    /// <param name="repository">訂單領域儲存庫。</param>
-    /// <param name="publisher">整合事件發布器。</param>
-    /// <param name="inventoryGateway">庫存閘道。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>下單結果。</returns>
-    public static async Task<Result<PlaceOrderOutput>> HandleAsync(
+    public async Task<Result<PlaceOrderOutput>> ExecuteAsync(
         PlaceOrderInput input,
-        IOrderDomainRepository repository,
-        IIntegrationEventPublisher publisher,
-        IInventoryGateway inventoryGateway,
         CancellationToken cancellationToken)
     {
         var order = new Order(input.OrderDate, input.TotalAmount, input.ProductId, input.ProductName, input.Quantity);
 
         var reserveInventoryResponseContract = await inventoryGateway.ReserveAsync(new ReserveInventoryRequestContract
         {
+            OperationId = input.OperationId,
             ProductId = order.ProductId,
             Quantity = order.Quantity
         }, cancellationToken);
@@ -107,22 +107,12 @@ public class PlaceOrderUseCase(
             return Result<PlaceOrderOutput>.Failure("Inventory is not enough.");
         }
 
-        await repository.AddAsync(order);
-
-        await publisher.PublishAsync(new OrderPlaced(order.Id, order.ProductId, order.ProductName, order.Quantity));
+        await committer.CommitAsync(
+            order,
+            [new OrderPlaced(order.Id, order.ProductId, order.ProductName, order.Quantity)],
+            cancellationToken);
 
         return Result<PlaceOrderOutput>.Success(new PlaceOrderOutput(order.Id));
-    }
-
-    /// <summary>
-    /// 執行下單 use case。
-    /// </summary>
-    /// <param name="input">下單所需的輸入資料。</param>
-    /// <param name="cancellationToken">取消權杖。</param>
-    /// <returns>下單結果。</returns>
-    public Task<Result<PlaceOrderOutput>> ExecuteAsync(PlaceOrderInput input, CancellationToken cancellationToken = default)
-    {
-        return HandleAsync(input, repository, publisher, inventoryGateway, cancellationToken);
     }
 }
 

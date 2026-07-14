@@ -5,7 +5,8 @@ using Wolverine;
 namespace SaleOrders.Infrastructure.BuildingBlocks;
 
 /// <inheritdoc />
-public class IntegrationEventPublisher(IMessageBus messageBus, ILogger<IntegrationEventPublisher> logger) : IIntegrationEventPublisher
+public class IntegrationEventPublisher(IMessageBus messageBus, ILogger<IntegrationEventPublisher> logger)
+    : IIntegrationEventPublisher
 {
     /// <summary>
     /// 發布整合事件
@@ -17,5 +18,22 @@ public class IntegrationEventPublisher(IMessageBus messageBus, ILogger<Integrati
     {
         logger.LogInformation("publish integration event: {IntegrationEvent}", integrationEvent);
         await messageBus.PublishAsync(integrationEvent);
+    }
+
+    /// <inheritdoc />
+    public async Task PublishAsync(IIntegrationEvent integrationEvent, IntegrationMessageDelivery delivery)
+    {
+        logger.LogInformation(
+            "Publish integration event {MessageId}: {IntegrationEvent}",
+            delivery.MessageId,
+            integrationEvent);
+
+        var options = new DeliveryOptions
+        {
+            DeduplicationId = delivery.MessageId.ToString("N"),
+            PartitionKey = delivery.PartitionKey
+        };
+        options.WithHeader("lab-message-id", delivery.MessageId.ToString("D"));
+        await messageBus.PublishAsync(integrationEvent, options);
     }
 }

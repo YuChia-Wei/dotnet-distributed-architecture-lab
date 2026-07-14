@@ -128,8 +128,9 @@ This catalog tracks integration events and request/reply contracts visible in `s
 ## Delivery Semantics
 
 - Request/reply reservation flow is synchronous from the caller perspective, but still mediated by the message bus.
-- Integration events are published through Wolverine with durable outbox enabled in runtime configuration.
-- Consumer handling should assume at-least-once delivery unless stronger guarantees are explicitly documented later.
+- Orders lifecycle events are atomically staged in `OrderIntegrationOutbox` and relayed with a stable message identity through the PostgreSQL-persisted Orders Wolverine runtime.
+- Other hosts currently configure durable endpoint flags, but persisted durability is not proven until each host configures and tests a message store.
+- Consumer handling should assume at-least-once delivery and deduplicate by stable message identity unless stronger guarantees are explicitly documented later.
 
 ## Ownership and Versioning Rules
 

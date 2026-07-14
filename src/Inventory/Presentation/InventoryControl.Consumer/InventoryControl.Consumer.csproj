@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BC-Contracts\Lab.BoundedContextContracts.Products\Lab.BoundedContextContracts.Products.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
   </ItemGroup>
 
   <ItemGroup>

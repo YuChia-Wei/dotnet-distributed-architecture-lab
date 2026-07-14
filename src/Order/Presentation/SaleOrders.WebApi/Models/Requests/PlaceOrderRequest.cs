@@ -2,14 +2,17 @@
 
 public record PlaceOrderRequest
 {
-    public PlaceOrderRequest(DateTime OrderDate, decimal TotalAmount, Guid productId, string ProductName, int Quantity)
+    public PlaceOrderRequest(Guid OperationId, DateTime OrderDate, decimal TotalAmount, Guid productId, string ProductName, int Quantity)
     {
+        this.OperationId = OperationId;
         this.OrderDate = OrderDate;
         this.TotalAmount = TotalAmount;
         this.ProductName = ProductName;
         this.Quantity = Quantity;
         this.ProductId = productId;
     }
+
+    public Guid OperationId { get; }
 
     public Guid ProductId { get; }
 

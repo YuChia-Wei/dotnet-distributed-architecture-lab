@@ -1,0 +1,32 @@
+{
+  "template_id": "dev-workflow/development-workflow-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-07-10T18:25:11+08:00",
+  "workflow_id": "2026-07-13-critical-remediation-and-analyzer-integration",
+  "task_id": "DEV-009",
+  "owner_skill": "local-change-implementer",
+  "related_plan_id": "development-plan-2026-07-13-critical-remediation-and-analyzer-integration",
+  "status": "completed",
+  "created_at": "2026-07-13T22:52:24+08:00",
+  "updated_at": "2026-07-14T22:30:15+08:00",
+  "template_source": ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json",
+  "workflow_locator": ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml",
+  "scope": {
+    "goal": "Upgrade the vulnerable Microsoft.OpenApi dependency path without unrelated package churn.",
+    "target": "Microsoft.AspNetCore.OpenApi/Microsoft.OpenApi dependency graph",
+    "files": ["src/*/Presentation/*.WebApi/*.csproj", "tests/SaleOrders.Tests/SaleOrders.Tests.csproj"],
+    "constraints": ["Use a compatible patched version", "Keep the dependency radius local", "Verify the advisory feed after restore"],
+    "non_goals": ["Broad package modernization"]
+  },
+  "inputs": {"requirements": [], "specifications": [], "architecture_decisions": [], "user_constraints": ["Prioritize critical and must-fix findings"]},
+  "execution": {
+    "capability_slot": "local-change",
+    "steps": ["Confirm fixed compatible version", "Update direct dependency control", "Restore/build", "Run vulnerability audit"],
+    "validation": ["dotnet build MQArchLab.slnx --no-restore", "dotnet list MQArchLab.slnx package --vulnerable --include-transitive --no-restore"],
+    "commit_checkpoint": "Commit the security dependency fix independently",
+    "deferred_items": []
+  },
+  "source_findings": [{"finding_id": "SEC-001", "severity": "must_fix", "origin_ref": "../analyzer-integration-report.md#diagnostic-inventory", "acceptance": ["Replace Microsoft.OpenApi 2.0.0 with a compatible patched graph", "Build all affected projects", "Vulnerability audit no longer reports the high-severity finding"]}],
+  "results": {"summary": "Pinned Microsoft.OpenApi 2.7.5 in all three Web API hosts, preserving Microsoft.AspNetCore.OpenApi 10.0.7 and avoiding broader package churn.", "files_changed": ["src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj", "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj", "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"], "validation_evidence": ["Solution restore passed for 27 projects", "dotnet nuget why resolves Microsoft.OpenApi 2.7.5 for the affected projects", "Solution vulnerability audit reports no vulnerable packages", "Solution build passed with zero errors"], "commits": ["d14fbc3"], "follow_up_needed": false}
+}

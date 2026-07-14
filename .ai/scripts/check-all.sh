@@ -237,15 +237,19 @@ run_check "check-coding-standards.sh" \
     "required" "true" "true"
 
 run_command_check "dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj" \
-    "Dotnet Backend Analyzer Template Tests" \
+    "Dotnet Backend Analyzer Self Tests" \
     "required" "true" "true"
 
 run_command_check "dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj" \
-    "Dotnet Backend Configuration Validation Tests" \
+    "Dotnet Backend Runtime Validation Self Tests" \
     "required" "true" "true"
 
-# Repository source validation is covered by DBA1001 in analyzer tests.
-# Mapper source validation is covered by DBA1007-DBA1008 in analyzer tests.
+run_command_check "dotnet build MQArchLab.slnx --no-restore" \
+    "Analyzer-Enabled Product Build" \
+    "required" "true" "true"
+
+# Analyzer self-tests verify rule behavior. The product build above proves the
+# source-included analyzers execute against this repository's production code.
 
 # ====================================================================
 # Important Checks (run in full and quick modes)
@@ -255,11 +259,12 @@ if [ "$MODE" != "critical" ]; then
     echo ""
     echo -e "${MAGENTA}════ Important Checks ════${NC}"
     
-    # Aggregate and UseCase source validation is covered by DBA1002-DBA1003 and DBA1009-DBA1012.
+    # Aggregate and UseCase source validation is covered by the analyzer-enabled product build.
     
-    # Controller compliance is covered by DBA1004-DBA1006 in analyzer tests.
+    # Controller compliance is covered by the analyzer-enabled product build.
 
-    # Projection source and EF model registration are covered by DBA1013 and configuration validation tests.
+    # Projection source is covered by the analyzer-enabled product build. EF model
+    # registration validation remains tool-only until this Dapper target has an EF projection model.
     
     # Spec compliance is important
     run_spec_compliance_check

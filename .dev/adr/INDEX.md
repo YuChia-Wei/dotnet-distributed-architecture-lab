@@ -1,6 +1,6 @@
 # ADR Index
 
-This directory currently contains governance documents only and does not retain active `ADR-*.md` records.
+This directory contains ADR governance and active target-repository decisions.
 
 ## Current Contents
 
@@ -9,6 +9,13 @@ This directory currently contains governance documents only and does not retain 
 | `README.md` | ADR governance guidance |
 | `ADR-TEMPLATE.md` | Template for a new ADR |
 | `WHEN-TO-CREATE-ADR.MD` | Criteria for creating an ADR |
+
+## Active Decisions
+
+| ADR | Status | Decision |
+| --- | --- | --- |
+| [ADR-001](ADR-001-reasoned-order-state-transitions.md) | Accepted | Require a recorded reason for every actual Order state change while keeping same-state requests as no-ops. |
+| [ADR-002](ADR-002-pluggable-durable-messaging.md) | Accepted | Keep durable messaging behind project-owned ports with Wolverine PostgreSQL as the first adapter and broker-free default tests. |
 
 ## Status Rule
 

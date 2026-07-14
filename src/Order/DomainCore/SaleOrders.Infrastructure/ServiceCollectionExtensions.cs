@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using SaleOrders.Applications.Gateways;
+using SaleOrders.Applications.Queries;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Infrastructure.Applications.Repositories;
 using SaleOrders.Infrastructure.BuildingBlocks;
@@ -20,10 +21,20 @@ public static class ServiceCollectionExtensions
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
         // services.AddScoped<IOrderDomainRepository, OrderDomainRepository>();
-        services.AddScoped<IOrderDomainRepository, OrderEventSourcingRepository>();
-        services.AddScoped<IIntegrationEventPublisher, IntegrationEventPublisher>();
+        services.AddScoped<OrderEventSourcingRepository>();
+        services.AddScoped<IOrderDomainRepository>(sp => sp.GetRequiredService<OrderEventSourcingRepository>());
+        services.AddScoped<IOrderEventCommitter>(sp => sp.GetRequiredService<OrderEventSourcingRepository>());
+        services.AddScoped<IOrderQueryRepository, OrderQueryRepository>();
+        services.AddScoped<IntegrationEventPublisher>();
+        services.AddScoped<IIntegrationEventPublisher>(sp => sp.GetRequiredService<IntegrationEventPublisher>());
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         services.AddScoped<IInventoryGateway, InventoryGateway>();
+        var relayEnabled = configuration.GetValue("Messaging:OutboxRelay:Enabled", false);
+        if (relayEnabled && !string.IsNullOrWhiteSpace(connectionString))
+        {
+            services.AddHostedService<OrderIntegrationOutboxRelay>();
+        }
+
         return services;
     }
 }

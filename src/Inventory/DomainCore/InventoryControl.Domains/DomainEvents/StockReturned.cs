@@ -11,7 +11,6 @@ public class StockReturned : IDomainEvent
         this.ProductId = productId;
         this.ReturnedQuantity = returnedQuantity;
         this.CurrentStock = currentStock;
-        throw new NotImplementedException();
     }
 
     public Guid EventId { get; init; } = Guid.NewGuid();

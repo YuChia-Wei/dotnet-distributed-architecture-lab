@@ -14,4 +14,9 @@ public interface IIntegrationEventPublisher
     /// <param name="integrationEvent">欲發布的訊息內容</param>
     /// <returns>代表非同步操作的工作物件</returns>
     Task PublishAsync(IIntegrationEvent integrationEvent);
+
+    /// <summary>Publishes an event with stable delivery metadata.</summary>
+    /// <remarks>Adapters that support deduplication or partitioning should preserve this metadata.</remarks>
+    Task PublishAsync(IIntegrationEvent integrationEvent, IntegrationMessageDelivery delivery)
+        => this.PublishAsync(integrationEvent);
 }

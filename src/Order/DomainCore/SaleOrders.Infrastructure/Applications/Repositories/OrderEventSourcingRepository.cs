@@ -3,6 +3,7 @@ using System.Text.Json;
 using Dapper;
 using Lab.BuildingBlocks.Application;
 using Lab.BuildingBlocks.Domains;
+using Lab.BuildingBlocks.Integrations;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 using SaleOrders.Domains.DomainEvents;
@@ -11,7 +12,7 @@ namespace SaleOrders.Infrastructure.Applications.Repositories;
 
 // dapper connection control: ./docs/problem-note/dapper-dbconnection.md
 
-public class OrderEventSourcingRepository : IOrderDomainRepository
+public class OrderEventSourcingRepository : IOrderDomainRepository, IOrderEventCommitter
 {
     private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
@@ -43,7 +44,7 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
         this._dispatcher = dispatcher;
     }
 
-    public async Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Order?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         const string sql = "SELECT EventType, Data FROM OrderEvents WHERE StreamId = @StreamId ORDER BY Version";
         var eventsData = await this._dbConnection.QueryAsync<(string EventType, string Data)>(sql, new
@@ -69,48 +70,22 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
         return order;
     }
 
-    public async Task AddAsync(Order order, CancellationToken cancellationToken = default)
+    public Task SaveAsync(Order order, CancellationToken cancellationToken = default)
     {
-        await this.SaveAsync(order, cancellationToken);
+        return this.CommitCoreAsync(order, Array.Empty<IIntegrationEvent>(), cancellationToken);
     }
 
-    public async Task UpdateAsync(Order order, CancellationToken cancellationToken = default)
-    {
-        await this.SaveAsync(order, cancellationToken);
-    }
+    /// <inheritdoc />
+    public Task CommitAsync(
+        Order order,
+        IReadOnlyCollection<IIntegrationEvent> integrationEvents,
+        CancellationToken cancellationToken)
+        => this.CommitCoreAsync(order, integrationEvents, cancellationToken);
 
-    public async Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellationToken = default)
-    {
-        // WARNING: This is inefficient for a large number of aggregates.
-        // A read model (projection) is a better approach for list views.
-        const string sql = "SELECT DISTINCT StreamId FROM OrderEvents";
-        var streamIds = await this._dbConnection.QueryAsync<Guid>(sql);
-
-        var orders = new List<Order>();
-        foreach (var streamId in streamIds)
-        {
-            var order = await this.GetByIdAsync(streamId, cancellationToken);
-            if (order != null)
-            {
-                orders.Add(order);
-            }
-        }
-
-        return orders;
-    }
-
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        // This is a hard delete of the event stream, which is not standard practice in Event Sourcing.
-        // A better approach is to use a 'deleted' event (soft delete).
-        const string sql = "DELETE FROM OrderEvents WHERE StreamId = @StreamId";
-        await this._dbConnection.ExecuteAsync(sql, new
-        {
-            StreamId = id
-        });
-    }
-
-    private async Task SaveAsync(Order order, CancellationToken cancellationToken)
+    private async Task CommitCoreAsync(
+        Order order,
+        IReadOnlyCollection<IIntegrationEvent> integrationEvents,
+        CancellationToken cancellationToken)
     {
         var events = order.DomainEvents.ToList();
         if (!events.Any())
@@ -164,6 +139,45 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
                 }, transaction);
             }
 
+            foreach (var integrationEvent in integrationEvents)
+            {
+                const string outboxSql = @"
+                INSERT INTO OrderIntegrationOutbox (Id, AggregateId, MessageType, Data, OccurredOn)
+                VALUES (@Id, @AggregateId, @MessageType, @Data::jsonb, @OccurredOn)";
+
+                await this._dbConnection.ExecuteAsync(outboxSql, new
+                {
+                    Id = Guid.CreateVersion7(),
+                    AggregateId = order.Id,
+                    MessageType = integrationEvent.GetType().Name,
+                    Data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType(), _jsonSerializerOptions),
+                    integrationEvent.OccurredOn
+                }, transaction);
+            }
+
+            const string readModelSql = @"
+            INSERT INTO Orders (Id, OrderDate, TotalAmount, ProductId, ProductName, Quantity)
+            VALUES (@Id, @OrderDate, @TotalAmount, @ProductId, @ProductName, @Quantity)
+            ON CONFLICT (Id) DO UPDATE
+            SET OrderDate = EXCLUDED.OrderDate,
+                TotalAmount = EXCLUDED.TotalAmount,
+                ProductId = EXCLUDED.ProductId,
+                ProductName = EXCLUDED.ProductName,
+                Quantity = EXCLUDED.Quantity";
+
+            await this._dbConnection.ExecuteAsync(
+                readModelSql,
+                new
+                {
+                    order.Id,
+                    order.OrderDate,
+                    order.TotalAmount,
+                    order.ProductId,
+                    order.ProductName,
+                    order.Quantity
+                },
+                transaction);
+
             transaction.Commit();
         }
         catch
@@ -172,6 +186,7 @@ public class OrderEventSourcingRepository : IOrderDomainRepository
             throw;
         }
 
+        order.MarkChangesAsCommitted(nextVersion);
         await this._dispatcher.DispatchAsync(events, cancellationToken);
     }
 }

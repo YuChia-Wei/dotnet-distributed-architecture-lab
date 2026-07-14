@@ -106,7 +106,9 @@ dotnet tool run repo-context-lint
 
 Current behavior:
 
-- runs `dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj`;
+- runs analyzer and runtime-validation self-tests;
+- runs `dotnet build MQArchLab.slnx --no-restore`, which proves the source-included analyzer executes against production projects through `src/Directory.Build.props`;
+- keeps `DBA1001`, `DBA1015`, and `DBA1017` as visible staged-adoption warnings linked to target-repository backlog items, with error severity restored after their migrations;
 - does not invoke the retired repository grep checks.
 
 ### Replace With Roslyn Analyzer Or Architecture Tests
@@ -126,7 +128,7 @@ Completed replacement:
 - controller rules: `DBA1004`, `DBA1005`, and `DBA1006`; the controller grep scripts have been removed.
 - mapper rules: `DBA1007` and `DBA1008`; the mapper grep scripts have been removed.
 - aggregate rules: `DBA1003` and `DBA1009`; the aggregate grep scripts have been removed while invariant completeness remains test and AI review work.
-- use case rules: `DBA1002` and `DBA1010` through `DBA1012`; the use case grep scripts have been removed while transaction and error-handling design remain AI review work.
+- use case and Handler rules: `DBA1002`, `DBA1010` through `DBA1012`, and `DBA1014` through `DBA1017`; the use case grep scripts have been removed while transaction and error-handling design remain AI review work.
 - projection rules: `DBA1013` covers EF write operations and `DotnetBackendValidation` verifies marker-based EF model registration; the projection grep/config scripts have been removed.
 
 Analyzer source template:

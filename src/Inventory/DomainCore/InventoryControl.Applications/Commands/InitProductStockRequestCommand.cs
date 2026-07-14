@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using InventoryControl.Applications.Repositories;
+using InventoryControl.Applications.Queries;
 using InventoryControl.Domains;
 using Lab.BuildingBlocks.Application;
 
@@ -44,13 +45,15 @@ public interface IInitProductStockUseCase
     /// <param name="input">初始化庫存所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>初始化庫存結果。</returns>
-    Task<Result<InitProductStockOutput>> ExecuteAsync(InitProductStockInput input, CancellationToken cancellationToken = default);
+    Task<Result<InitProductStockOutput>> ExecuteAsync(InitProductStockInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
 /// 初始化商品庫存 use case 的預設實作。
 /// </summary>
-public class InitProductStockUseCase(IInventoryItemDomainRepository repository) : IInitProductStockUseCase
+public class InitProductStockUseCase(
+    IInventoryItemDomainRepository repository,
+    IInventoryItemQueryRepository queries) : IInitProductStockUseCase
 {
     /// <summary>
     /// 執行初始化商品庫存 use case。
@@ -58,23 +61,11 @@ public class InitProductStockUseCase(IInventoryItemDomainRepository repository) 
     /// <param name="input">初始化庫存所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>初始化庫存結果。</returns>
-    public Task<Result<InitProductStockOutput>> ExecuteAsync(InitProductStockInput input, CancellationToken cancellationToken = default)
-    {
-        return HandleAsync(input, repository, cancellationToken);
-    }
-
-    /// <summary>
-    /// 執行初始化商品庫存核心流程。
-    /// </summary>
-    /// <param name="input">初始化庫存所需的輸入資料。</param>
-    /// <param name="repository">庫存領域儲存庫。</param>
-    /// <returns>初始化庫存結果。</returns>
-    public static async Task<Result<InitProductStockOutput>> HandleAsync(
+    public async Task<Result<InitProductStockOutput>> ExecuteAsync(
         InitProductStockInput input,
-        IInventoryItemDomainRepository repository,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
-        var inventoryItem = await repository.GetByProductIdAsync(input.ProductId);
+        var inventoryItem = await queries.FindByProductIdAsync(input.ProductId, cancellationToken);
 
         if (inventoryItem != null)
         {

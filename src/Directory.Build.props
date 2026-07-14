@@ -1,0 +1,9 @@
+<Project>
+  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)..\tools\DotnetBackendAnalyzers\DotnetBackendAnalyzers.csproj')">
+    <ProjectReference
+      Include="$(MSBuildThisFileDirectory)..\tools\DotnetBackendAnalyzers\DotnetBackendAnalyzers.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+      PrivateAssets="all" />
+  </ItemGroup>
+</Project>

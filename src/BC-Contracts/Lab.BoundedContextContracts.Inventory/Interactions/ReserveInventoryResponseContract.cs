@@ -8,5 +8,7 @@
 /// </remarks>
 public record ReserveInventoryResponseContract
 {
+    public Guid OperationId { get; init; }
     public bool Result { get; set; }
+    public string? FailureReason { get; init; }
 }

@@ -3,7 +3,7 @@ aggregate: "Order"
 contracts:
   preconditions:
     - id: PRE1
-      rule: "The order constructor receives orderDate, totalAmount, productId, productName, and quantity."
+      rule: "The use case receives a stable operationId and the order constructor receives orderDate, totalAmount, productId, productName, and quantity."
     - id: PRE2
       rule: "The application flow only finalizes order placement after successful inventory reservation."
   postconditions:
@@ -12,7 +12,7 @@ contracts:
     - id: POST2
       rule: "OrderPlacedDomainEvent represents the successful placement within the Orders bounded context."
     - id: POST3
-      rule: "The outbound OrderPlaced integration event is published after persistence."
+      rule: "The outbound OrderPlaced integration event is stored in the source outbox in the same transaction as order events, then relayed with stable delivery metadata."
   invariants:
     - id: INV1
       rule: "A failed inventory reservation must not be represented as a placed order."
@@ -25,7 +25,7 @@ invariants:
       rule: "Cross-context communication is modeled through contracts and integration events, not direct internal model sharing."
   local:
     - id: INV4
-      rule: "Order placement persistence and outbound event publication occur only after reservation success."
+      rule: "Order event persistence and outbound outbox creation occur atomically only after reservation success."
 
 behavior:
   signature: "Order(orderDate, totalAmount, productId, productName, quantity)"

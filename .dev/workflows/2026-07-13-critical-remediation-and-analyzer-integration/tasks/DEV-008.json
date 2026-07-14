@@ -1,0 +1,37 @@
+{
+  "template_id": "dev-workflow/development-workflow-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-07-10T18:25:11+08:00",
+  "workflow_id": "2026-07-13-critical-remediation-and-analyzer-integration",
+  "task_id": "DEV-008",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-07-13-critical-remediation-and-analyzer-integration",
+  "status": "completed",
+  "created_at": "2026-07-13T22:49:30+08:00",
+  "updated_at": "2026-07-14T23:35:00+08:00",
+  "template_source": ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json",
+  "workflow_locator": ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml",
+  "scope": {
+    "goal": "Migrate existing Use Case and Handler contracts so staged DBA1015 and DBA1017 diagnostics can return to error severity.",
+    "target": "Product, Order and Inventory Application/adapter contracts",
+    "files": ["src/Product/", "src/Order/", "src/Inventory/", ".editorconfig"],
+    "constraints": ["Split by bounded context", "Preserve delivery behavior", "Restore analyzer error severities only after migration"],
+    "non_goals": ["Repository CQRS migration tracked by ARC-003", "New business behavior"]
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [".dev/standards/coding-standards/usecase-standards.md"],
+    "architecture_decisions": ["tools/DotnetBackendAnalyzers/README.md"],
+    "user_constraints": ["Integrate upstream analyzers without hiding existing findings"]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "steps": ["Split diagnostics by bounded context", "Migrate Use Case contracts and direct adapters", "Update tests", "Restore DBA1015 and DBA1017 to error"],
+    "validation": ["Analyzer-enabled bounded-context builds", "Narrow affected tests", "Full analyzer-enabled solution build"],
+    "commit_checkpoint": "Commit each bounded-context migration independently",
+    "deferred_items": []
+  },
+  "source_findings": [{"finding_id": "ARC-004", "severity": "must_fix", "origin_ref": "../analyzer-integration-report.md#diagnostic-inventory", "acceptance": ["Use Cases expose non-optional trailing CancellationToken", "Handlers adapt to exactly one Use Case", "DBA1015 and DBA1017 return to error"]}],
+  "results": {"summary": "Completed Product, Orders and Inventory use-case/handler migration and restored DBA1015/DBA1017 to error severity.", "files_changed": ["src/Product/", "src/Order/", "src/Inventory/", ".editorconfig", "tests/"], "validation_evidence": ["dotnet build MQArchLab.slnx --no-restore passed with 0 warnings and 0 errors", "Product and Order solution tests passed 47/47", "DotnetBackendAnalyzers.Tests passed 47/47"], "commits": ["a0b5fbc", "e85863f"], "follow_up_needed": false}
+}

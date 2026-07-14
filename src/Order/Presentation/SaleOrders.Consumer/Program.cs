@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Confluent.Kafka.Extensions.OpenTelemetry;
+using Lab.BuildingBlocks.Integrations.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Logs;
@@ -10,10 +12,11 @@ using Wolverine;
 using Wolverine.Kafka;
 using Wolverine.RabbitMQ;
 
-var queueServiceUri = Environment.GetEnvironmentVariable("QUEUE_SERVICE") ?? string.Empty;
-ArgumentNullException.ThrowIfNull(queueServiceUri);
-var brokerConnectionString = Environment.GetEnvironmentVariable("BrokerConnectionString") ?? string.Empty;
-ArgumentNullException.ThrowIfNull(brokerConnectionString);
+var configuration = new ConfigurationManager()
+    .AddEnvironmentVariables()
+    .AddCommandLine(args)
+    .Build();
+var messaging = MessagingTransportOptions.FromConfiguration(configuration);
 
 var builder = Host.CreateDefaultBuilder(args)
                   .ConfigureServices((ctx, services) =>
@@ -53,18 +56,22 @@ var builder = Host.CreateDefaultBuilder(args)
                   })
                   .UseWolverine(opts =>
                   {
-                      if (queueServiceUri.Equals("Kafka", StringComparison.OrdinalIgnoreCase))
+                      if (messaging.Profile == MessagingTransportProfile.InMemory)
                       {
-                          opts.UseKafka(brokerConnectionString)
+                          opts.StubAllExternalTransports();
+                      }
+                      else if (messaging.Profile == MessagingTransportProfile.Kafka)
+                      {
+                          opts.UseKafka(messaging.GetRequiredKafkaConnectionString())
                               .AutoProvision();
 
                           // 接收 產品服務 的整合事件
                           opts.ListenToKafkaTopic("products.integration.events")
                               .UseDurableInbox();
                       }
-                      else if (queueServiceUri.Equals("RabbitMQ", StringComparison.OrdinalIgnoreCase))
+                      else
                       {
-                          opts.UseRabbitMq(new Uri(brokerConnectionString))
+                          opts.UseRabbitMq(messaging.GetRequiredRabbitMqUri())
                               .AutoProvision();
 
                           // 接收 產品服務 的整合事件

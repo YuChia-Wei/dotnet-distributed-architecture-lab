@@ -9,5 +9,4 @@ namespace InventoryControl.Applications.Repositories;
 /// </summary>
 public interface IInventoryItemDomainRepository : IDomainRepository<InventoryItem, Guid>
 {
-    Task<InventoryItem?> GetByProductIdAsync(Guid productId);
 }

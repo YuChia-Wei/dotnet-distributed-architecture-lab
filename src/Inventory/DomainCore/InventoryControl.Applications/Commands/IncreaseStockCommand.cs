@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using InventoryControl.Applications.Repositories;
+using InventoryControl.Applications.Queries;
 using Lab.BuildingBlocks.Application;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 using Lab.BuildingBlocks.Integrations;
@@ -45,7 +46,7 @@ public interface IIncreaseStockUseCase
     /// <param name="input">增加庫存所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>進貨結果。</returns>
-    Task<Result<IncreaseStockOutput>> ExecuteAsync(IncreaseStockInput input, CancellationToken cancellationToken = default);
+    Task<Result<IncreaseStockOutput>> ExecuteAsync(IncreaseStockInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -53,6 +54,7 @@ public interface IIncreaseStockUseCase
 /// </summary>
 public class IncreaseStockUseCase(
     IInventoryItemDomainRepository repository,
+    IInventoryItemQueryRepository queries,
     IIntegrationEventPublisher publisher) : IIncreaseStockUseCase
 {
     /// <summary>
@@ -61,26 +63,14 @@ public class IncreaseStockUseCase(
     /// <param name="input">增加庫存所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>進貨結果。</returns>
-    public Task<Result<IncreaseStockOutput>> ExecuteAsync(IncreaseStockInput input, CancellationToken cancellationToken = default)
-    {
-        return HandleAsync(input, repository, publisher, cancellationToken);
-    }
-
-    /// <summary>
-    /// 執行增加庫存核心流程。
-    /// </summary>
-    /// <param name="input">增加庫存所需的輸入資料。</param>
-    /// <param name="repository">庫存領域儲存庫。</param>
-    /// <param name="publisher">整合事件發布器。</param>
-    /// <param name="cancellationToken">取消權杖。</param>
-    /// <returns>進貨結果。</returns>
-    public static async Task<Result<IncreaseStockOutput>> HandleAsync(
+    public async Task<Result<IncreaseStockOutput>> ExecuteAsync(
         IncreaseStockInput input,
-        IInventoryItemDomainRepository repository,
-        IIntegrationEventPublisher publisher,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
-        var inventoryItem = await repository.GetByProductIdAsync(input.ProductId);
+        var itemId = await queries.FindByProductIdAsync(input.ProductId, cancellationToken);
+        var inventoryItem = itemId is null
+            ? null
+            : await repository.FindByIdAsync(itemId.Id, cancellationToken);
         if (inventoryItem is null)
         {
             return Result<IncreaseStockOutput>.Failure("InventoryItemNotFound");

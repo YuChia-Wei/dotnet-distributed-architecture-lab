@@ -173,9 +173,9 @@ services:
     pull_policy: build
     container_name: orders-api
     environment:
-      - QUEUE_SERVICE=Kafka
-#      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
-      - ConnectionStrings__KafkaBroker=kafka:9092
+      - Messaging__Profile=Kafka
+      - Messaging__Kafka__ConnectionString=kafka:9092
+#      - Messaging__RabbitMq__ConnectionString=amqp://guest:guest@rabbitmq:5672
       - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-order;Port=5432;Database=orders_db;Pooling=true;
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
       - OTEL_SERVICE_NAME=orders-api
@@ -195,9 +195,9 @@ services:
     pull_policy: build
     container_name: orders-consumer
     environment:
-      - QUEUE_SERVICE=Kafka
-#      - BrokerConnectionString=amqp://guest:guest@rabbitmq:5672
-      - BrokerConnectionString=kafka:9092
+      - Messaging__Profile=Kafka
+      - Messaging__Kafka__ConnectionString=kafka:9092
+#      - Messaging__RabbitMq__ConnectionString=amqp://guest:guest@rabbitmq:5672
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
       - OTEL_SERVICE_NAME=orders-consumer
     depends_on:
@@ -255,9 +255,9 @@ services:
     pull_policy: build
     container_name: inventory-api
     environment:
-      - QUEUE_SERVICE=Kafka
-#      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
-      - ConnectionStrings__KafkaBroker=kafka:9092
+      - Messaging__Profile=Kafka
+      - Messaging__Kafka__ConnectionString=kafka:9092
+#      - Messaging__RabbitMq__ConnectionString=amqp://guest:guest@rabbitmq:5672
       - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-inventory;Port=5432;Database=inventory_db;Pooling=true;
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
       - OTEL_SERVICE_NAME=inventory-api
@@ -277,9 +277,9 @@ services:
     pull_policy: build
     container_name: inventory-consumer
     environment:
-      - QUEUE_SERVICE=Kafka
-#      - BrokerConnectionString=amqp://guest:guest@rabbitmq:5672
-      - BrokerConnectionString=kafka:9092
+      - Messaging__Profile=Kafka
+      - Messaging__Kafka__ConnectionString=kafka:9092
+#      - Messaging__RabbitMq__ConnectionString=amqp://guest:guest@rabbitmq:5672
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
       - OTEL_SERVICE_NAME=inventory-consumer
       - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-inventory;Port=5432;Database=inventory_db;Pooling=true;

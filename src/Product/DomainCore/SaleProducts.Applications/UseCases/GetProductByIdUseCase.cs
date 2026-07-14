@@ -34,7 +34,7 @@ public interface IGetProductByIdUseCase
     /// <param name="input">查詢產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>產品 DTO。</returns>
-    Task<ProductDto> ExecuteAsync(GetProductByIdInput input, CancellationToken cancellationToken = default);
+    Task<ProductDto> ExecuteAsync(GetProductByIdInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -48,7 +48,7 @@ public sealed class GetProductByIdUseCase(IProductQueryService queryService) : I
     /// <param name="input">查詢產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>產品 DTO。</returns>
-    public async Task<ProductDto> ExecuteAsync(GetProductByIdInput input, CancellationToken cancellationToken = default)
+    public async Task<ProductDto> ExecuteAsync(GetProductByIdInput input, CancellationToken cancellationToken)
     {
         var product = await queryService.GetByIdAsync(input.Id, cancellationToken);
         if (product == null)

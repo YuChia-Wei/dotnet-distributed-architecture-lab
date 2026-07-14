@@ -20,7 +20,7 @@ It distinguishes between:
 | Kafka | `inventory.integration.events` | `InventoryControl.WebApi` | downstream listeners | stock change integration stream |
 | Kafka | `products.integration.events` | configured by `SaleProducts.WebApi`; no confirmed current producer use case | `SaleOrders.Consumer` and possible downstream listeners | configured route, not a confirmed active product integration stream |
 | RabbitMQ | `orders.integration.events` | `SaleOrders.WebApi` | `SaleProducts.Consumer`, `InventoryControl.Consumer`, other listeners | RabbitMQ variant of order lifecycle stream |
-| RabbitMQ | `inventory.requests` | `SaleOrders.WebApi` | no current `InventoryControl.WebApi` RabbitMQ listener | broken/unconfigured reservation request flow |
+| RabbitMQ | `inventory.requests` | `SaleOrders.WebApi` | `InventoryControl.WebApi` | request/reply inventory reservation |
 | RabbitMQ | `orders.outbound.replies` | Wolverine reply channel used by `Orders` | `SaleOrders.WebApi` | reply inbox for reservation flow |
 | RabbitMQ | `inventory.integration.events` | `InventoryControl.WebApi` | downstream listeners | RabbitMQ variant of stock change stream |
 | RabbitMQ | `products.integration.events` | configured by `SaleProducts.WebApi`; no confirmed current producer use case | `SaleOrders.Consumer` and possible downstream listeners | configured route, not a confirmed active product integration stream |
@@ -42,8 +42,17 @@ Known from current code:
 - Kafka listeners use durable inbox where configured.
 - RabbitMQ listeners use durable inbox where configured.
 - publish routes use durable outbox for integration streams and request messages.
-- explicit dead-letter destinations are not yet documented in code-level runtime docs.
-- explicit retry counts or backoff classes are not yet documented in these runtime files.
+- `SaleOrders.WebApi` configures Wolverine PostgreSQL message persistence in the Orders database.
+- `InventoryControl.WebApi` configures Wolverine PostgreSQL message persistence for Kafka and RabbitMQ profiles; the in-memory profile deliberately skips external persistence.
+- Orders appends aggregate events and `OrderIntegrationOutbox` rows in the same Dapper/Npgsql transaction through `IOrderEventCommitter`.
+- `OrderIntegrationOutboxRelay` leases committed source-outbox rows, publishes them through Wolverine, and deletes them after publication. A crash after publication and before deletion can redeliver an event, so consumers must remain idempotent.
+- The source outbox row `Id` is reused as Wolverine `DeduplicationId` and the `lab-message-id` header on every relay attempt; `AggregateId` is supplied as the partition key.
+- Relay claims carry an owner token; failed rows back off per row and park after five attempts for manual inspection/replay.
+- `Messaging:Profile=InMemory` is the automated-test profile: external transports and Wolverine PostgreSQL persistence are not configured, local queues are used, and `Messaging:OutboxRelay:Enabled=false` disables database polling.
+- `Messaging:Profile` accepts only `InMemory`, `Kafka`, or `RabbitMq`. Kafka requires `Messaging:Kafka:ConnectionString`; RabbitMQ requires an absolute `amqp` or `amqps` URI at `Messaging:RabbitMq:ConnectionString`. Missing or unknown values fail during startup configuration.
+- Inventory reservation transient persistence failures retry after 100 ms, 500 ms, and 2 seconds, then move to Wolverine's error queue.
+- Reservation outcomes are keyed by the caller-provided stable operation ID. Successful replay republishes with that operation ID as the stable delivery/deduplication ID so a publish-after-commit retry does not create a new logical message identity.
+- Broker-specific physical error queue/topic naming remains implicit in Wolverine transport conventions and requires runtime verification.
 
 Current maintainer rule:
 
@@ -53,17 +62,40 @@ Current maintainer rule:
 
 ## Operational Risks
 
-- `SaleOrders.WebApi` contains an inline comment saying the reply listener configuration is incorrect and should only publish requests, not listen to them.
-- `InventoryControl.WebApi` listens to `inventory.requests` in Kafka mode only; its RabbitMQ branch does not configure the corresponding listener, so RabbitMQ reservation is currently broken/unconfigured.
+- The native Orders source outbox closes the code-level commit-to-enqueue gap, but DEV-005 remains open until a PostgreSQL failure-injection test proves rollback and recovery behavior.
+- Kafka and RabbitMQ both route reservation requests to `inventory.requests` and return responses through Wolverine's request reply endpoint (`orders.outbound.replies` on the Orders side). This topology still requires the maintainer's explicit broker runtime verification.
 - RabbitMQ logical names are explicit, but exchange/binding details are still implicit under Wolverine conventions.
 - Product consumer currently listens to `orders.integration.events`, but the business purpose is not yet documented in a matching handler map.
+
+## Orders Schema Upgrade
+
+Fresh Docker volumes receive the current schema from `docker-compose/sql-script/create_orders_table.sql`.
+Existing volumes must apply the idempotent migration before the upgraded Orders host starts:
+
+```powershell
+psql "postgresql://user:password@localhost:5433/orders_db" `
+  -f docker-compose/sql-script/migrations/orders/20260714_0001_add_order_integration_outbox.sql
+```
+
+The Orders runtime role also needs permission to create and use Wolverine's `wolverine_messages` schema during environment provisioning. Production deployments should apply reviewed Wolverine-generated schema changes with a migration-capable role instead of granting ongoing DDL permission to the application role.
+
+## Inventory Schema Upgrade
+
+Fresh Docker volumes receive the reservation operation table from `docker-compose/sql-script/create_inventoryitems_table.sql`.
+Existing volumes must apply the idempotent migration before enabling durable reservation handling:
+
+```powershell
+psql "postgresql://user:password@localhost:5435/inventory_db" `
+  -f docker-compose/sql-script/migrations/inventory/20260714_0001_add_inventory_reservations.sql
+```
+
+The Inventory runtime role needs permission to create and use Wolverine's `wolverine_messages` schema under Kafka and RabbitMQ profiles. Production deployments should apply reviewed schema changes with a migration-capable role.
 - The product event channel is configured on producer and consumer runtimes, but current Product use cases do not publish a confirmed product integration event.
 - Inventory and Products both support dual-broker configuration; runtime drift between Kafka and RabbitMQ setups is possible if not kept aligned.
 
 ## Deferred Items
 
 - explicit RabbitMQ exchange/binding map
-- retry count/backoff policy documentation
-- dead-letter queue/topic naming
+- broker-specific dead-letter queue/topic naming
 - replay procedures
 - confirmed consumer ownership matrix per channel

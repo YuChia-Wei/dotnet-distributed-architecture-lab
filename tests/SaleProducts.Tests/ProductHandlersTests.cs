@@ -23,7 +23,7 @@ public class ProductUseCasesTests
         var repository = new FakeProductRepository(product);
         var useCase = new DeleteProductUseCase(repository);
 
-        await useCase.ExecuteAsync(new DeleteProductInput(product.Id));
+        await useCase.ExecuteAsync(new DeleteProductInput(product.Id), CancellationToken.None);
 
         Assert.Contains(product.DomainEvents, e => e is ProductDeleted);
         Assert.Equal(1, repository.SaveCalls);
@@ -44,7 +44,7 @@ public class ProductUseCasesTests
         };
         var useCase = new GetAllProductsUseCase(service);
 
-        var result = await useCase.ExecuteAsync(new GetAllProductsInput());
+        var result = await useCase.ExecuteAsync(new GetAllProductsInput(), CancellationToken.None);
 
         Assert.Single(result);
         Assert.Equal(1, service.GetAllCalls);
@@ -60,7 +60,7 @@ public class ProductUseCasesTests
         var useCase = new GetProductByIdUseCase(service);
 
         await Assert.ThrowsAsync<KeyNotFoundException>(() =>
-            useCase.ExecuteAsync(new GetProductByIdInput(Guid.NewGuid())));
+            useCase.ExecuteAsync(new GetProductByIdInput(Guid.NewGuid()), CancellationToken.None));
     }
 
     /// <summary>

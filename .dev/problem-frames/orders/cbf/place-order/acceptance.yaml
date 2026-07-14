@@ -5,11 +5,11 @@ scenarios:
       - "The inventory reservation request for the target product will succeed"
       - "The order repository accepts persistence"
     when:
-      - "IPlaceOrderUseCase.ExecuteAsync is invoked with a PlaceOrderInput containing order date, amount, product id, product name, and quantity"
+      - "IPlaceOrderUseCase.ExecuteAsync is invoked with a PlaceOrderInput containing stable operation id, order date, amount, product id, product name, and quantity"
     then:
       - "A new order is persisted"
       - "The result is successful and returns an order id"
-      - "An OrderPlaced integration event is published"
+      - "An OrderPlaced integration event is committed to the source outbox"
     traces_to:
       requirements: ["REQ-ORD-PLACE-1", "REQ-ORD-PLACE-2"]
       frame_concerns: ["FC1", "FC2", "FC3", "FC6"]
@@ -33,16 +33,18 @@ scenarios:
       use_case_spec: ".dev/specs/tests/order/use-cases/place-order.test-spec.md#scenario-2-inventory-not-enough"
       integration_spec: ".dev/specs/tests/order/integration/order-placement-and-lifecycle-messaging.test-spec.md#scenario-2-block-order-placement-when-inventory-reservation-fails"
   - id: SC3
-    title: "Recognize deferred runtime concerns for retries and duplicates"
+    title: "Preserve stable identities across reservation and delivery retries"
     given:
-      - "The repository documents eventual consistency and MQ-first cross-context collaboration"
+      - "The caller supplies a stable operation id for a logical place-order attempt"
     when:
-      - "Maintainers review the place-order messaging flow"
+      - "The reservation or outbound delivery is retried"
     then:
-      - "Retry, duplicate publication, and timing concerns are recognized as deferred runtime documentation items"
-      - "The first-pass problem frame does not falsely claim those behaviors are fully specified"
+      - "The reservation request preserves the caller operation id"
+      - "Replayed successful reservation delivery preserves the same message id"
+      - "Duplicate reservation handling does not decrement stock twice"
     traces_to:
       requirements: ["REQ-ORD-PLACE-4"]
       frame_concerns: ["FC5", "FC6"]
     planned_tests_anchor:
-      documentation_review: "planned review of deferred runtime concerns; no current automated test anchor"
+      use_case_test: "tests/SaleOrders.Tests/PlaceOrderTests.cs"
+      reservation_test: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs"

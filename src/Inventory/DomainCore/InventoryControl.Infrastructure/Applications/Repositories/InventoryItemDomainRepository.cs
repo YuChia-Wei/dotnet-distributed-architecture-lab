@@ -5,13 +5,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using InventoryControl.Applications.Repositories;
+using InventoryControl.Applications.Queries;
 using InventoryControl.Domains;
 using Lab.BuildingBlocks.Application;
 using Lab.BuildingBlocks.Domains;
 
 namespace InventoryControl.Infrastructure.Applications.Repositories;
 
-public class InventoryItemDomainRepository : IInventoryItemDomainRepository
+public class InventoryItemDomainRepository : IInventoryItemDomainRepository, IInventoryItemQueryRepository
 {
     private readonly IDbConnection _dbConnection;
     private readonly IDomainEventDispatcher _dispatcher;
@@ -66,12 +67,12 @@ public class InventoryItemDomainRepository : IInventoryItemDomainRepository
         });
     }
 
-    public async Task<InventoryItem?> GetByProductIdAsync(Guid productId)
+    public async Task<InventoryItemReadModel?> FindByProductIdAsync(
+        Guid productId,
+        CancellationToken cancellationToken = default)
     {
-        const string sql = "SELECT * FROM InventoryItems WHERE ProductId = @ProductId";
-        return await this._dbConnection.QuerySingleOrDefaultAsync<InventoryItem>(sql, new
-        {
-            ProductId = productId
-        });
+        const string sql = "SELECT Id, ProductId, Stock FROM InventoryItems WHERE ProductId = @ProductId";
+        return await this._dbConnection.QuerySingleOrDefaultAsync<InventoryItemReadModel>(
+            new CommandDefinition(sql, new { ProductId = productId }, cancellationToken: cancellationToken));
     }
 }

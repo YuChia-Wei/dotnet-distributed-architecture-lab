@@ -19,6 +19,7 @@ public class InventoryGateway : IInventoryGateway
     {
         var cmd = new ReserveInventoryRequestContract
         {
+            OperationId = requestContract.OperationId,
             ProductId = requestContract.ProductId,
             Quantity = requestContract.Quantity
         };

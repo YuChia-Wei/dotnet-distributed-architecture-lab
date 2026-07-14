@@ -33,7 +33,7 @@ public interface IDeleteProductUseCase
     /// </summary>
     /// <param name="input">刪除產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    Task ExecuteAsync(DeleteProductInput input, CancellationToken cancellationToken = default);
+    Task ExecuteAsync(DeleteProductInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -46,7 +46,7 @@ public sealed class DeleteProductUseCase(IDomainRepository<Product, Guid> reposi
     /// </summary>
     /// <param name="input">刪除產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    public async Task ExecuteAsync(DeleteProductInput input, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(DeleteProductInput input, CancellationToken cancellationToken)
     {
         var product = await repository.FindByIdAsync(input.Id, cancellationToken);
         if (product == null)

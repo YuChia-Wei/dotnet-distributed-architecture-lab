@@ -1,29 +1,39 @@
 using Confluent.Kafka.Extensions.OpenTelemetry;
 using InventoryControl.Applications;
 using InventoryControl.Infrastructure;
+using InventoryControl.Infrastructure.Messaging;
 using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
+using Lab.BuildingBlocks.Integrations.Configuration;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
 using Wolverine;
 using Wolverine.Kafka;
+using Wolverine.Postgresql;
 using Wolverine.RabbitMQ;
 using ServiceCollectionExtensions = InventoryControl.Applications.ServiceCollectionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
+var messaging = MessagingTransportOptions.FromConfiguration(builder.Configuration);
 
 builder.Host.UseWolverine(opts =>
 {
-    // Get the queue service type from environment variables
-    var queueService = builder.Configuration.GetValue<string>("QUEUE_SERVICE");
+    InventoryReservationFailurePolicy.Configure(opts);
 
-    if ("Kafka".Equals(queueService, StringComparison.OrdinalIgnoreCase))
+    if (messaging.Profile == MessagingTransportProfile.InMemory)
     {
+        opts.StubAllExternalTransports();
+        opts.LocalQueue("inventory-requests");
+        opts.PublishMessage<IIntegrationEvent>().ToLocalQueue("inventory-integration-events");
+    }
+    else if (messaging.Profile == MessagingTransportProfile.Kafka)
+    {
+        ConfigurePostgresqlPersistence(opts, builder.Configuration);
+
         // Configure Kafka
-        var kafkaConnectionString = builder.Configuration.GetConnectionString("KafkaBroker");
-        opts.UseKafka(kafkaConnectionString!)
+        opts.UseKafka(messaging.GetRequiredKafkaConnectionString())
             .AutoProvision();
 
         // 監聽跨服務間的要求資料
@@ -32,13 +42,8 @@ builder.Host.UseWolverine(opts =>
             .ListenerCount(3)
             .UseDurableInbox();
 
-        // 如果想把整合命令的回應也視為一種整合事件，可以這樣設定，wolverine 會在 request contract handler 完成處理並回應時，額外回應物件到這邊
-        // opts.Publish(rule =>
-        // {
-        //     rule.MessagesImplementing<IInventoryResponseContract>();
-        //     rule.ToKafkaTopic("inventory.responses")
-        //         .UseDurableOutbox();
-        // });
+        // Request replies use Wolverine's reply endpoint carried by the request envelope.
+        // Do not broadcast response contracts to a second integration topic.
 
         // 設定整合事件的發布通道
         opts.Publish(rule =>
@@ -48,12 +53,18 @@ builder.Host.UseWolverine(opts =>
                 .UseDurableOutbox();
         });
     }
-    else // Default to RabbitMQ
+    else
     {
+        ConfigurePostgresqlPersistence(opts, builder.Configuration);
+
         // Configure RabbitMQ
-        var rabbitMqConnectionString = builder.Configuration.GetConnectionString("MessageBroker");
-        opts.UseRabbitMq(new Uri(rabbitMqConnectionString!))
+        opts.UseRabbitMq(messaging.GetRequiredRabbitMqUri())
             .AutoProvision();
+
+        opts.ListenToRabbitQueue("inventory.requests")
+            .ProcessInline()
+            .ListenerCount(3)
+            .UseDurableInbox();
 
         opts.Publish(rule =>
         {
@@ -70,6 +81,13 @@ builder.Host.UseWolverine(opts =>
     opts.Discovery.IncludeAssembly(typeof(ServiceCollectionExtensions).Assembly);
     opts.Discovery.IncludeAssembly(typeof(Program).Assembly);
 });
+
+static void ConfigurePostgresqlPersistence(WolverineOptions options, IConfiguration configuration)
+{
+    var connectionString = configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is required for Wolverine message persistence.");
+    options.PersistMessagesWithPostgresql(connectionString, "wolverine_messages");
+}
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

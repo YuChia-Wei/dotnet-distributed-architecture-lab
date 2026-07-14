@@ -2,6 +2,7 @@ using Confluent.Kafka.Extensions.OpenTelemetry;
 using Lab.BoundedContextContracts.Inventory.Interactions;
 using Lab.BuildingBlocks.Domains;
 using Lab.BuildingBlocks.Integrations;
+using Lab.BuildingBlocks.Integrations.Configuration;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -10,21 +11,27 @@ using SaleOrders.Infrastructure;
 using Scalar.AspNetCore;
 using Wolverine;
 using Wolverine.Kafka;
+using Wolverine.Postgresql;
 using Wolverine.RabbitMQ;
 using ServiceCollectionExtensions = SaleOrders.Applications.ServiceCollectionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
+var messaging = MessagingTransportOptions.FromConfiguration(builder.Configuration);
 
 builder.Host.UseWolverine(opts =>
 {
-    // Get the queue service type from environment variables
-    var queueService = builder.Configuration.GetValue<string>("QUEUE_SERVICE");
-
-    if ("Kafka".Equals(queueService, StringComparison.OrdinalIgnoreCase))
+    if (messaging.Profile == MessagingTransportProfile.InMemory)
     {
+        opts.StubAllExternalTransports();
+        opts.PublishMessage<IIntegrationEvent>().ToLocalQueue("orders-integration-events");
+        opts.PublishMessage<IInventoryRequestContract>().ToLocalQueue("inventory-requests");
+    }
+    else if (messaging.Profile == MessagingTransportProfile.Kafka)
+    {
+        ConfigurePostgresqlPersistence(opts, builder.Configuration);
+
         // Configure Kafka
-        var kafkaConnectionString = builder.Configuration.GetConnectionString("KafkaBroker");
-        opts.UseKafka(kafkaConnectionString!)
+        opts.UseKafka(messaging.GetRequiredKafkaConnectionString())
             .AutoProvision();
 
         opts.Publish(rule =>
@@ -41,19 +48,19 @@ builder.Host.UseWolverine(opts =>
                 .UseDurableOutbox();
         });
 
-        // The following listener is incorrect for the Order service.
-        // It should only publish requests, not listen to them.
+        // Wolverine routes request/reply responses back through this dedicated reply endpoint.
         opts.ListenToKafkaTopic("orders.outbound.replies")
             .UseForReplies()
             .ProcessInline()
             .ListenerCount(3)
             .UseDurableInbox();
     }
-    else // Default to RabbitMQ
+    else
     {
+        ConfigurePostgresqlPersistence(opts, builder.Configuration);
+
         // Configure RabbitMQ
-        var rabbitMqConnectionString = builder.Configuration.GetConnectionString("MessageBroker");
-        opts.UseRabbitMq(new Uri(rabbitMqConnectionString!))
+        opts.UseRabbitMq(messaging.GetRequiredRabbitMqUri())
             .AutoProvision();
 
         opts.Publish(rule =>
@@ -70,8 +77,7 @@ builder.Host.UseWolverine(opts =>
                 .UseDurableOutbox();
         });
 
-        // The following listener is incorrect for the Order service.
-        // It should only publish requests, not listen to them.
+        // Wolverine routes request/reply responses back through this dedicated reply endpoint.
         opts.ListenToRabbitQueue("orders.outbound.replies")
             .UseForReplies()
             .ProcessInline()
@@ -85,6 +91,13 @@ builder.Host.UseWolverine(opts =>
     // Discover services
     opts.Discovery.IncludeAssembly(typeof(ServiceCollectionExtensions).Assembly);
 });
+
+static void ConfigurePostgresqlPersistence(WolverineOptions options, IConfiguration configuration)
+{
+    var connectionString = configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is required for Wolverine message persistence.");
+    options.PersistMessagesWithPostgresql(connectionString, "wolverine_messages");
+}
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
