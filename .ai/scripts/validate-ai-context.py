@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import posixpath
 import re
 import subprocess
 import sys
@@ -14,6 +15,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 TABLE_PATH = re.compile(r"^\|\s*`([^`]+)`\s*\|")
+PATH_REFERENCE = re.compile(r"`([^`\n]+)`|\]\(([^)\s]+)\)")
 ACTIVE_RUNTIME_ROOTS = (Path(".agents/skills"), Path(".claude/skills"))
 PLANNED_RUNTIME_ROOTS = (
     Path(".github/prompts"),
@@ -114,6 +116,51 @@ def validate_index(index: Path, errors: list[str]) -> None:
             continue
         if not target.exists():
             errors.append(f"{index}:{line_number}: missing catalog path: {match.group(1)}")
+
+
+def validate_exact_case_references(files: list[Path], errors: list[str], root: Path = ROOT) -> None:
+    """Reject active internal references whose casing differs from the Git path."""
+    exact_paths: set[str] = set()
+    for path in files:
+        normalized = path.as_posix()
+        exact_paths.add(normalized)
+        parent = path.parent
+        while parent != Path("."):
+            exact_paths.add(parent.as_posix())
+            parent = parent.parent
+
+    canonical_by_case = {path.casefold(): path for path in exact_paths}
+    active_files = [
+        path
+        for path in files
+        if path.suffix.lower() in LANGUAGE_EXTENSIONS
+        and path.parts
+        and path.parts[0].lower() in {".ai", ".agents", ".claude", ".dev"}
+        and not any(part.lower() in LANGUAGE_SKIP_PARTS for part in path.parts)
+        and Path(".ai/scripts/tests") not in (path, *path.parents)
+        and (not path.parts or path.parts[0].lower() not in PRODUCT_ROOTS)
+    ]
+
+    for source in active_files:
+        for line_number, line in enumerate((root / source).read_text(encoding="utf-8").splitlines(), 1):
+            for match in PATH_REFERENCE.finditer(line):
+                value = (match.group(1) or match.group(2)).strip("<>")
+                value = value.split("#", 1)[0].rstrip("/.,;:")
+                if not value or any(marker in value for marker in ("<", ">", "*", "{", "}")):
+                    continue
+                if value.startswith(("http://", "https://", "mailto:", "#")):
+                    continue
+                if value.startswith((".ai/", ".dev/", ".agents/", ".claude/")):
+                    candidate = posixpath.normpath(value)
+                elif value.startswith(("./", "../")):
+                    candidate = posixpath.normpath((source.parent / Path(value)).as_posix())
+                else:
+                    continue
+                canonical = canonical_by_case.get(candidate.casefold())
+                if canonical is not None and canonical != candidate:
+                    errors.append(
+                        f"{source}:{line_number}: exact-case mismatch: {value} -> {canonical}"
+                    )
 
 
 def is_language_surface(path: Path, indexes: set[Path]) -> bool:
@@ -595,6 +642,8 @@ def main() -> int:
 
     for index in indexes:
         validate_index(index, errors)
+
+    validate_exact_case_references(files, errors)
 
     index_set = set(indexes)
     language_files = [path for path in files if is_language_surface(path, index_set)]

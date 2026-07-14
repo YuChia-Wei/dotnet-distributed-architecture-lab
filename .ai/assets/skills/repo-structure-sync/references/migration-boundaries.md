@@ -22,7 +22,7 @@ Usually keep these areas as reusable collaboration structure:
 
 Do not carry these over as project truth. Rebuild them from the target repository's file tree, solution files, project files, package references, infrastructure config, and confirmed local docs:
 
-- `.dev/ARCHITECTURE.MD`
+- `.dev/ARCHITECTURE.md`
 - `.dev/project-config.yaml`
 - `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`
 - bounded-context requirements and project-specific non-functional requirements
@@ -53,7 +53,7 @@ When the target repo is empty or near-empty:
 - keep `AGENTS.md` as a minimal collaboration entry;
 - keep `CLAUDE.md` as a thin `@AGENTS.md` adapter without duplicated rules;
 - do not create fake architecture, bounded-context, package, broker, database, or endpoint facts;
-- mark `.dev/ARCHITECTURE.MD` and tech-stack requirements as awaiting project initialization if those files are present;
+- mark `.dev/ARCHITECTURE.md` and tech-stack requirements as awaiting project initialization if those files are present;
 - ask for product and stack direction before invoking requirement or architecture design skills.
 
 ## Directory-Specific Rules
@@ -95,7 +95,7 @@ Before finishing a sync:
 - confirm root README files describe the target repo rather than the source template repo
 - confirm `AGENTS.md` stack and directory rules match the target repo
 - confirm `CLAUDE.md` still imports `@AGENTS.md` and contains no copied rule body
-- confirm `.dev/ARCHITECTURE.MD` and `.dev/requirement/TECH-STACK-REQUIREMENTS.MD` are rebuilt from target facts
+- confirm `.dev/ARCHITECTURE.md` and `.dev/requirement/TECH-STACK-REQUIREMENTS.MD` are rebuilt from target facts
 - confirm `.dev/domain-language/` contains templates only or target-validated domain terms
 - confirm `.ai/scripts/README.md` lists only scripts that still apply
 - search `.dev/specs/` and `.dev/operations/` for source-repo names, routes, services, event names, queues, and topics

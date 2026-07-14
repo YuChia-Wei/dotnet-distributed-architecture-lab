@@ -19,7 +19,7 @@
 
 ## 參考規範
 
-- `.dev/requirement/requirement-guide.md`
+- `.dev/requirement/REQUIREMENT-GUIDE.MD`
 - `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`
 
 ## 輸出目標
@@ -49,7 +49,7 @@
 ## 範本 1：從討論筆記整理 requirement
 
 ```text
-Help me draft a requirement document that follows `.dev/requirement/requirement-guide.md`.
+Help me draft a requirement document that follows `.dev/requirement/REQUIREMENT-GUIDE.MD`.
 
 Context:
 - Topic: [topic]
@@ -72,7 +72,7 @@ Return:
 ## 範本 2：補齊缺失欄位
 
 ```text
-Review this draft requirement and complete the missing sections according to `.dev/requirement/requirement-guide.md`.
+Review this draft requirement and complete the missing sections according to `.dev/requirement/REQUIREMENT-GUIDE.MD`.
 
 Context:
 - Existing draft: [paste draft]
@@ -94,7 +94,7 @@ Return:
 ## 範本 3：先做 requirement 骨架
 
 ```text
-Create a requirement skeleton for this topic using `.dev/requirement/requirement-guide.md`.
+Create a requirement skeleton for this topic using `.dev/requirement/REQUIREMENT-GUIDE.MD`.
 
 Context:
 - Topic: [topic]

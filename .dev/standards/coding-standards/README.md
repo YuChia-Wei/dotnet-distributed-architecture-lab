@@ -126,7 +126,7 @@ This framework may retain conditional/reference guidance for EF Core, Dapper, Np
 
 ## 📚 Related Documents
 
-- [Architecture Document](../../ARCHITECTURE.MD) - Overall architecture design
+- [Architecture Document](../../ARCHITECTURE.md) - Overall architecture design
 - [Technology Stack Requirements](../../requirement/TECH-STACK-REQUIREMENTS.MD) - Detailed technology-stack requirements
 - [ADR Index](../../adr/INDEX.md) - Architecture decision records
 - [Code Review Checklist](../CODE-REVIEW-CHECKLIST.md) - Code review checklist

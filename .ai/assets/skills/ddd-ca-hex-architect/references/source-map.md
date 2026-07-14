@@ -4,7 +4,7 @@ Use this file to map a user request to the smallest useful subset of the repo's 
 
 ## Core Sources
 
-- `.dev/ARCHITECTURE.MD`: repo-wide style and layer model
+- `.dev/ARCHITECTURE.md`: repo-wide style and layer model
 - `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`: stack and tool constraints
 - `.dev/standards/README.md`: standards lookup index
 - `.ai/SUB-AGENT-SYSTEM.MD`: prompt-family overview

@@ -4,7 +4,7 @@ Use this mode when the slice implements one bounded query-side use case.
 
 ## Mandatory References
 
-- `.dev/ARCHITECTURE.MD`
+- `.dev/ARCHITECTURE.md`
 - `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`
 - `.ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml`
 - `.ai/assets/sub-agent-role-prompts/query-sub-agent/references/implementation-playbook.md`
