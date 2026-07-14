@@ -54,7 +54,7 @@ public interface IUpdateProductUseCase
     /// </summary>
     /// <param name="input">更新產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    Task ExecuteAsync(UpdateProductInput input, CancellationToken cancellationToken = default);
+    Task ExecuteAsync(UpdateProductInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -67,7 +67,7 @@ public sealed class UpdateProductUseCase(IDomainRepository<Product, Guid> reposi
     /// </summary>
     /// <param name="input">更新產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    public async Task ExecuteAsync(UpdateProductInput input, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(UpdateProductInput input, CancellationToken cancellationToken)
     {
         var product = await repository.FindByIdAsync(input.Id, cancellationToken);
         if (product == null)

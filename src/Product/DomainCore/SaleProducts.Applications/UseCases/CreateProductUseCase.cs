@@ -89,7 +89,7 @@ public interface ICreateProductUseCase
     /// <param name="input">建立產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>建立完成後的產品資料。</returns>
-    Task<CreateProductOutput> ExecuteAsync(CreateProductInput input, CancellationToken cancellationToken = default);
+    Task<CreateProductOutput> ExecuteAsync(CreateProductInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -103,7 +103,7 @@ public sealed class CreateProductUseCase(IDomainRepository<Product, Guid> reposi
     /// <param name="input">建立產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>建立完成後的產品資料。</returns>
-    public async Task<CreateProductOutput> ExecuteAsync(CreateProductInput input, CancellationToken cancellationToken = default)
+    public async Task<CreateProductOutput> ExecuteAsync(CreateProductInput input, CancellationToken cancellationToken)
     {
         var product = new Product(input.Name, input.Description, input.Price);
         await repository.SaveAsync(product, cancellationToken);

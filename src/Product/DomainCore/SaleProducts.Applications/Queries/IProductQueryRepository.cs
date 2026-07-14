@@ -1,9 +1,10 @@
 using SaleProducts.Applications.Dtos;
+using Lab.BuildingBlocks.Application;
 
 namespace SaleProducts.Applications.Queries;
 
-public interface IProductQueryRepository
+public interface IProductQueryRepository : IQueryRepository
 {
-    Task<IReadOnlyList<ProductDto>> GetAllAsync(CancellationToken cancellationToken = default);
-    Task<ProductDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<ProductDto>> GetAllAsync(CancellationToken cancellationToken);
+    Task<ProductDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 }

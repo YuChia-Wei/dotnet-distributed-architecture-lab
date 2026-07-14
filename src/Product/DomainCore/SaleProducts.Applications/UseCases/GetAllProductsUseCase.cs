@@ -21,7 +21,7 @@ public interface IGetAllProductsUseCase
     /// <param name="input">查詢所有產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>產品 DTO 清單。</returns>
-    Task<IReadOnlyList<ProductDto>> ExecuteAsync(GetAllProductsInput input, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<ProductDto>> ExecuteAsync(GetAllProductsInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -35,6 +35,6 @@ public sealed class GetAllProductsUseCase(IProductQueryService queryService) : I
     /// <param name="input">查詢所有產品所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>產品 DTO 清單。</returns>
-    public Task<IReadOnlyList<ProductDto>> ExecuteAsync(GetAllProductsInput input, CancellationToken cancellationToken = default)
+    public Task<IReadOnlyList<ProductDto>> ExecuteAsync(GetAllProductsInput input, CancellationToken cancellationToken)
         => queryService.GetAllAsync(cancellationToken);
 }

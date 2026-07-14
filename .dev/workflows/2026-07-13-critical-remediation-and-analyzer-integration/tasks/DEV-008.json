@@ -7,9 +7,9 @@
   "task_id": "DEV-008",
   "owner_skill": "slice-implementer",
   "related_plan_id": "development-plan-2026-07-13-critical-remediation-and-analyzer-integration",
-  "status": "pending",
+  "status": "in_progress",
   "created_at": "2026-07-13T22:49:30+08:00",
-  "updated_at": "2026-07-13T22:49:30+08:00",
+  "updated_at": "2026-07-14T20:44:23+08:00",
   "template_source": ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json",
   "workflow_locator": ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml",
   "scope": {
@@ -33,5 +33,5 @@
     "deferred_items": []
   },
   "source_findings": [{"finding_id": "ARC-004", "severity": "must_fix", "origin_ref": "../analyzer-integration-report.md#diagnostic-inventory", "acceptance": ["Use Cases expose non-optional trailing CancellationToken", "Handlers adapt to exactly one Use Case", "DBA1015 and DBA1017 return to error"]}],
-  "results": {"summary": "", "files_changed": [], "validation_evidence": [], "commits": [], "follow_up_needed": true}
+  "results": {"summary": "Product bounded-context migration completed as the first DEV-008 checkpoint; Orders and Inventory remain in progress.", "files_changed": ["src/Product/DomainCore/SaleProducts.Applications/Queries/IProductQueryRepository.cs", "src/Product/DomainCore/SaleProducts.Applications/UseCases/", "src/BuildingBlocks/Lab.BuildingBlocks.Application/IQueryRepository.cs", "tests/SaleProducts.Tests/ProductHandlersTests.cs"], "validation_evidence": ["dotnet build MQArchLab.slnx --no-restore succeeded", "SaleProducts.Tests passed 3/3", "DotnetBackendAnalyzers.Tests passed 47/47"], "commits": [], "follow_up_needed": true}
 }
