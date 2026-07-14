@@ -8,13 +8,13 @@
   "owner_skill": "ai-context-governance",
   "status": "completed",
   "created_at": "2026-07-15T00:07:21+08:00",
-  "updated_at": "2026-07-15T07:11:00+08:00",
+  "updated_at": "2026-07-15T07:22:28+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICG-V01-PROVENANCE", "AICG-V01-LEAKS", "AICG-V01-EXACT-CASE"],
   "scope": {
     "target": "Known v0.1.0 downstream AI-context installation",
     "files": [".dev/requirement/", ".ai/scripts/", ".ai/assets/skills/", ".dev/guides/", ".dev/standards/"],
-    "constraints": ["Do not modify the source repository worktree", "Do not rewrite historical workflow records", "The feedback document was externalized by the user and is not a repository artifact"],
+    "constraints": ["Do not modify the source repository worktree", "Do not rewrite historical audit conclusions", "Feedback artifact ownership is corrected by AICG-V01-002"],
     "non_goals": ["Product source review", "External service execution", "Source release implementation"]
   },
   "execution": {
