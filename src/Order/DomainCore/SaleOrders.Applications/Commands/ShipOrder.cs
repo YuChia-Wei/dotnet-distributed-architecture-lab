@@ -39,7 +39,7 @@ public interface IShipOrderUseCase
     /// </summary>
     /// <param name="input">發貨訂單所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    Task ExecuteAsync(ShipOrderInput input, CancellationToken cancellationToken = default);
+    Task ExecuteAsync(ShipOrderInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -52,9 +52,9 @@ public class ShipOrderUseCase(IOrderDomainRepository repository, IOrderEventComm
     /// </summary>
     /// <param name="input">發貨訂單所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    public async Task ExecuteAsync(ShipOrderInput input, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(ShipOrderInput input, CancellationToken cancellationToken)
     {
-        var order = await repository.GetByIdAsync(input.OrderId, cancellationToken) ?? throw new KeyNotFoundException($"Order {input.OrderId} not found");
+        var order = await repository.FindByIdAsync(input.OrderId, cancellationToken) ?? throw new KeyNotFoundException($"Order {input.OrderId} not found");
 
         if (!order.Ship(input.Reason))
         {

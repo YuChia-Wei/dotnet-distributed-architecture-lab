@@ -39,7 +39,7 @@ public interface ICancelOrderUseCase
     /// </summary>
     /// <param name="input">取消訂單所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    Task ExecuteAsync(CancelOrderInput input, CancellationToken cancellationToken = default);
+    Task ExecuteAsync(CancelOrderInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -52,9 +52,9 @@ public class CancelOrderUseCase(IOrderDomainRepository repository, IOrderEventCo
     /// </summary>
     /// <param name="input">取消訂單所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    public async Task ExecuteAsync(CancelOrderInput input, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(CancelOrderInput input, CancellationToken cancellationToken)
     {
-        var order = await repository.GetByIdAsync(input.OrderId, cancellationToken) ?? throw new KeyNotFoundException($"Order {input.OrderId} not found");
+        var order = await repository.FindByIdAsync(input.OrderId, cancellationToken) ?? throw new KeyNotFoundException($"Order {input.OrderId} not found");
 
         if (!order.Cancel(input.Reason))
         {

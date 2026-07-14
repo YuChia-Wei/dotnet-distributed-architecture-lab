@@ -1,9 +1,3 @@
-CREATE TABLE IF NOT EXISTS InventoryItems (
-    Id UUID PRIMARY KEY,
-    ProductId UUID NOT NULL,
-    Stock INT NOT NULL
-);
-
 CREATE UNIQUE INDEX IF NOT EXISTS UX_InventoryItems_ProductId
     ON InventoryItems (ProductId);
 

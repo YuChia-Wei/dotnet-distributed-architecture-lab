@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using SaleOrders.Applications.Gateways;
+using SaleOrders.Applications.Queries;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Infrastructure.Applications.Repositories;
 using SaleOrders.Infrastructure.BuildingBlocks;
@@ -23,6 +24,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<OrderEventSourcingRepository>();
         services.AddScoped<IOrderDomainRepository>(sp => sp.GetRequiredService<OrderEventSourcingRepository>());
         services.AddScoped<IOrderEventCommitter>(sp => sp.GetRequiredService<OrderEventSourcingRepository>());
+        services.AddScoped<IOrderQueryRepository, OrderQueryRepository>();
         services.AddScoped<IntegrationEventPublisher>();
         services.AddScoped<IIntegrationEventPublisher>(sp => sp.GetRequiredService<IntegrationEventPublisher>());
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using Moq;
+using NSubstitute;
 using SaleOrders.Applications.UseCases;
 using Shouldly;
 
@@ -53,9 +53,11 @@ public class GetOrderDetailsEndpointTests : IClassFixture<WebApplicationFactory<
             ],
         };
 
-        var useCaseMock = new Mock<IGetOrderDetailsUseCase>();
-        useCaseMock.Setup(useCase => useCase.ExecuteAsync(It.Is<GetOrderDetailsInput>(input => input.OrderId == orderId), It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(expected);
+        var useCase = Substitute.For<IGetOrderDetailsUseCase>();
+        useCase.ExecuteAsync(
+                   Arg.Is<GetOrderDetailsInput>(input => input.OrderId == orderId),
+                   Arg.Any<CancellationToken>())
+               .Returns(expected);
 
         var client = this._factory.WithWebHostBuilder(builder =>
         {
@@ -73,7 +75,7 @@ public class GetOrderDetailsEndpointTests : IClassFixture<WebApplicationFactory<
             builder.ConfigureTestServices(services =>
             {
                 services.RemoveAll<IGetOrderDetailsUseCase>();
-                services.AddSingleton(useCaseMock.Object);
+                services.AddSingleton(useCase);
             });
         }).CreateClient();
 
@@ -87,6 +89,8 @@ public class GetOrderDetailsEndpointTests : IClassFixture<WebApplicationFactory<
         payload!.OrderId.ShouldBe(expected.OrderId);
         payload.LineItems.Count.ShouldBe(expected.LineItems.Count);
         payload.LineItems[0].ShouldBe(expected.LineItems[0]);
-        useCaseMock.Verify(useCase => useCase.ExecuteAsync(It.IsAny<GetOrderDetailsInput>(), It.IsAny<CancellationToken>()), Times.Once);
+        await useCase.Received(1).ExecuteAsync(
+            Arg.Any<GetOrderDetailsInput>(),
+            Arg.Any<CancellationToken>());
     }
 }

@@ -1,4 +1,5 @@
 using InventoryControl.Applications.UseCases;
+using InventoryControl.Applications.Reservations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace InventoryControl.Applications;
@@ -20,6 +21,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IInitProductStockUseCase, InitProductStockUseCase>();
         services.AddScoped<IRestockUseCase, RestockUseCase>();
         services.AddScoped<IGetInventoryItemAvailableQuantityUseCase, GetInventoryItemAvailableQuantityUseCase>();
+        services.AddScoped<IReserveInventoryUseCase, ReserveInventoryUseCase>();
         return services;
     }
 }

@@ -21,14 +21,20 @@ public sealed class PlaceOrderInput
     /// <param name="productId">商品識別碼。</param>
     /// <param name="productName">商品名稱。</param>
     /// <param name="quantity">購買數量。</param>
-    public PlaceOrderInput(DateTime orderDate, decimal totalAmount, Guid productId, string productName, int quantity)
+    public PlaceOrderInput(Guid operationId, DateTime orderDate, decimal totalAmount, Guid productId, string productName, int quantity)
     {
+        this.OperationId = operationId;
         this.OrderDate = orderDate;
         this.TotalAmount = totalAmount;
         this.ProductName = productName;
         this.Quantity = quantity;
         this.ProductId = productId;
     }
+
+    /// <summary>
+    /// 呼叫端提供、跨重試保持不變的邏輯操作識別碼。
+    /// </summary>
+    public Guid OperationId { get; }
 
     /// <summary>
     /// 商品識別碼。
@@ -67,7 +73,7 @@ public interface IPlaceOrderUseCase
     /// <param name="input">下單所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>下單結果。</returns>
-    Task<Result<PlaceOrderOutput>> ExecuteAsync(PlaceOrderInput input, CancellationToken cancellationToken = default);
+    Task<Result<PlaceOrderOutput>> ExecuteAsync(PlaceOrderInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -81,20 +87,17 @@ public class PlaceOrderUseCase(
     /// 執行下單流程並建立訂單。
     /// </summary>
     /// <param name="input">下單所需的輸入資料。</param>
-    /// <param name="committer">訂單事件與 outbox 的原子提交埠。</param>
-    /// <param name="inventoryGateway">庫存閘道。</param>
     /// <param name="cancellationToken">取消權杖。</param>
     /// <returns>下單結果。</returns>
-    public static async Task<Result<PlaceOrderOutput>> HandleAsync(
+    public async Task<Result<PlaceOrderOutput>> ExecuteAsync(
         PlaceOrderInput input,
-        IOrderEventCommitter committer,
-        IInventoryGateway inventoryGateway,
         CancellationToken cancellationToken)
     {
         var order = new Order(input.OrderDate, input.TotalAmount, input.ProductId, input.ProductName, input.Quantity);
 
         var reserveInventoryResponseContract = await inventoryGateway.ReserveAsync(new ReserveInventoryRequestContract
         {
+            OperationId = input.OperationId,
             ProductId = order.ProductId,
             Quantity = order.Quantity
         }, cancellationToken);
@@ -110,17 +113,6 @@ public class PlaceOrderUseCase(
             cancellationToken);
 
         return Result<PlaceOrderOutput>.Success(new PlaceOrderOutput(order.Id));
-    }
-
-    /// <summary>
-    /// 執行下單 use case。
-    /// </summary>
-    /// <param name="input">下單所需的輸入資料。</param>
-    /// <param name="cancellationToken">取消權杖。</param>
-    /// <returns>下單結果。</returns>
-    public Task<Result<PlaceOrderOutput>> ExecuteAsync(PlaceOrderInput input, CancellationToken cancellationToken = default)
-    {
-        return HandleAsync(input, committer, inventoryGateway, cancellationToken);
     }
 }
 

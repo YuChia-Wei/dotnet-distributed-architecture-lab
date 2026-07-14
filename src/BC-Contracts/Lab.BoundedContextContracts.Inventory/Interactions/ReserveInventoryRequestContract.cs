@@ -8,6 +8,7 @@
 /// </remarks>
 public record ReserveInventoryRequestContract : IInventoryRequestContract
 {
+    public Guid OperationId { get; init; }
     public Guid ProductId { get; init; }
     public int Quantity { get; init; }
 }

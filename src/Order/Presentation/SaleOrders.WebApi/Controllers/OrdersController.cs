@@ -83,7 +83,7 @@ public class OrdersController : ControllerBase
         CancellationToken cancellationToken)
     {
         var placeOrderResult = await useCase.ExecuteAsync(
-                                   new PlaceOrderInput(request.OrderDate, request.TotalAmount, request.ProductId, request.ProductName, request.Quantity),
+                                   new PlaceOrderInput(request.OperationId, request.OrderDate, request.TotalAmount, request.ProductId, request.ProductName, request.Quantity),
                                    cancellationToken);
 
         if (!placeOrderResult.IsSuccess)

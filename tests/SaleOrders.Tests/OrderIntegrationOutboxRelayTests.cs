@@ -6,7 +6,7 @@ using System.Reflection;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
 using Lab.BuildingBlocks.Integrations;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 using SaleOrders.Infrastructure.BuildingBlocks;
 using Shouldly;
 using Wolverine;
@@ -50,15 +50,14 @@ public sealed class OrderIntegrationOutboxRelayTests
         var messageId = Guid.CreateVersion7();
         var delivery = new IntegrationMessageDelivery(messageId, "order-42");
         var capturedOptions = new List<DeliveryOptions>();
-        var messageBus = new Mock<IMessageBus>();
-        messageBus.Setup(bus => bus.PublishAsync(
-                      It.IsAny<IIntegrationEvent>(),
-                      It.IsAny<DeliveryOptions>()))
-                  .Callback<IIntegrationEvent, DeliveryOptions>((_, options) => capturedOptions.Add(options))
+        var messageBus = Substitute.For<IMessageBus>();
+        messageBus.PublishAsync(
+                      Arg.Any<IIntegrationEvent>(),
+                      Arg.Do<DeliveryOptions>(options => capturedOptions.Add(options)))
                   .Returns(ValueTask.CompletedTask);
         var publisher = new IntegrationEventPublisher(
-            messageBus.Object,
-            Mock.Of<Microsoft.Extensions.Logging.ILogger<IntegrationEventPublisher>>());
+            messageBus,
+            Substitute.For<Microsoft.Extensions.Logging.ILogger<IntegrationEventPublisher>>());
         var integrationEvent = new OrderCancelled(Guid.CreateVersion7(), "customer request");
 
         // When

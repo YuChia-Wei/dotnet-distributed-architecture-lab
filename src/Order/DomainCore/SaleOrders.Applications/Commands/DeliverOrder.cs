@@ -39,7 +39,7 @@ public interface IDeliverOrderUseCase
     /// </summary>
     /// <param name="input">交付訂單所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    Task ExecuteAsync(DeliverOrderInput input, CancellationToken cancellationToken = default);
+    Task ExecuteAsync(DeliverOrderInput input, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -52,9 +52,9 @@ public class DeliverOrderUseCase(IOrderDomainRepository repository, IOrderEventC
     /// </summary>
     /// <param name="input">交付訂單所需的輸入資料。</param>
     /// <param name="cancellationToken">取消權杖。</param>
-    public async Task ExecuteAsync(DeliverOrderInput input, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(DeliverOrderInput input, CancellationToken cancellationToken)
     {
-        var order = await repository.GetByIdAsync(input.OrderId, cancellationToken) ?? throw new KeyNotFoundException($"Order {input.OrderId} not found");
+        var order = await repository.FindByIdAsync(input.OrderId, cancellationToken) ?? throw new KeyNotFoundException($"Order {input.OrderId} not found");
 
         if (!order.Deliver(input.Reason))
         {
