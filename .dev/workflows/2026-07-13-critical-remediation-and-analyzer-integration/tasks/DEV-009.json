@@ -9,7 +9,7 @@
   "related_plan_id": "development-plan-2026-07-13-critical-remediation-and-analyzer-integration",
   "status": "completed",
   "created_at": "2026-07-13T22:52:24+08:00",
-  "updated_at": "2026-07-14T20:27:54+08:00",
+  "updated_at": "2026-07-14T22:30:15+08:00",
   "template_source": ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json",
   "workflow_locator": ".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml",
   "scope": {
@@ -28,5 +28,5 @@
     "deferred_items": []
   },
   "source_findings": [{"finding_id": "SEC-001", "severity": "must_fix", "origin_ref": "../analyzer-integration-report.md#diagnostic-inventory", "acceptance": ["Replace Microsoft.OpenApi 2.0.0 with a compatible patched graph", "Build all affected projects", "Vulnerability audit no longer reports the high-severity finding"]}],
-  "results": {"summary": "Pinned Microsoft.OpenApi 2.7.5 in all three Web API hosts, preserving Microsoft.AspNetCore.OpenApi 10.0.7 and avoiding broader package churn.", "files_changed": ["src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj", "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj", "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"], "validation_evidence": ["Solution restore passed for 27 projects", "dotnet nuget why resolves Microsoft.OpenApi 2.7.5 for the affected projects", "Solution vulnerability audit reports no vulnerable packages", "Solution build passed with zero errors"], "commits": [], "follow_up_needed": false}
+  "results": {"summary": "Pinned Microsoft.OpenApi 2.7.5 in all three Web API hosts, preserving Microsoft.AspNetCore.OpenApi 10.0.7 and avoiding broader package churn.", "files_changed": ["src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj", "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj", "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"], "validation_evidence": ["Solution restore passed for 27 projects", "dotnet nuget why resolves Microsoft.OpenApi 2.7.5 for the affected projects", "Solution vulnerability audit reports no vulnerable packages", "Solution build passed with zero errors"], "commits": ["d14fbc3"], "follow_up_needed": false}
 }
