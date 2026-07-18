@@ -92,6 +92,24 @@ class SyntheticShellAssetRepo:
         self._require_success(updated)
         return runner
 
+    def add_command_runner(self, required_commands: list[str]) -> str:
+        runner = ".ai/scripts/check-all.sh"
+        body = ["#!/bin/bash"]
+        for command in required_commands:
+            body.extend(
+                (
+                    f'run_command_check "{command}" \\',
+                    f'    "Fixture {command}" \\',
+                    '    "required" "true" "true"',
+                )
+            )
+        (self.root / runner).write_text("\n".join(body) + "\n", encoding="utf-8", newline="\n")
+        added = run(["git", "add", "--", runner], self.root)
+        self._require_success(added)
+        updated = run(["git", "update-index", "--chmod=+x", "--", runner], self.root)
+        self._require_success(updated)
+        return runner
+
     def write_manifest(
         self,
         *,
@@ -99,6 +117,7 @@ class SyntheticShellAssetRepo:
         retirement_candidates: list[str] | None = None,
         required_entrypoints: list[str] | None = None,
         check_all_required_scripts: list[str] | None = None,
+        check_all_required_commands: list[str] | None = None,
     ) -> None:
         manifest = {
             "schema_version": "1.0",
@@ -106,6 +125,7 @@ class SyntheticShellAssetRepo:
             "retirement_candidates": retirement_candidates or [],
             "required_entrypoints": required_entrypoints or [],
             "check_all_required_scripts": check_all_required_scripts or [],
+            "check_all_required_commands": check_all_required_commands or [],
         }
         (self.scripts / "shell-assets.yaml").write_text(
             yaml.safe_dump(manifest, sort_keys=False),
@@ -274,10 +294,10 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             # When quick mode reaches spec compliance.
             result = fixture.execute("--quick")
 
-            # Then it records N/A without selecting or failing another required check.
+            # Then spec and optional commit-range validation record N/A without failing.
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
             self.assertIn("NOT APPLICABLE", result.stdout)
-            self.assertRegex(result.stdout, r"Not Applicable: .*1")
+            self.assertRegex(result.stdout, r"Not Applicable: .*2")
             self.assertRegex(result.stdout, r"Required Failed: .*0")
         finally:
             fixture.close()
@@ -511,6 +531,27 @@ class ShellAssetValidationGwtTests(unittest.TestCase):
             self.assertEqual(1, result.returncode)
             self.assertIn("check_all required-script coverage mismatch", result.stdout)
             self.assertIn(f"missing=['{spec}']", result.stdout)
+        finally:
+            fixture.close()
+
+    def test_gwt_016_given_required_command_omitted_when_validated_then_parity_fails(self) -> None:
+        fixture = SyntheticShellAssetRepo()
+        try:
+            # Given the runner invokes two literal required commands but declares one.
+            runner = fixture.add_command_runner(["python first.py", "python second.py"])
+            fixture.write_manifest(
+                retained=[runner],
+                required_entrypoints=[runner],
+                check_all_required_commands=["python first.py"],
+            )
+
+            # When aggregate command registration is compared by set.
+            result = fixture.validate()
+
+            # Then the missing command fails closed without relying on a fixed count.
+            self.assertEqual(1, result.returncode)
+            self.assertIn("check_all required-command coverage mismatch", result.stdout)
+            self.assertIn("python second.py", result.stdout)
         finally:
             fixture.close()
 

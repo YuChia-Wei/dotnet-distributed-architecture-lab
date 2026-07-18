@@ -3,9 +3,9 @@
 ## Template Metadata
 
 - `template_id`: `ai-context-governance-maintenance-workflow-plan`
-- `template_version`: `1.1.0`
+- `template_version`: `1.2.0`
 - `created_at`: `2026-07-10T18:22:49+08:00`
-- `updated_at`: `2026-07-11T00:22:30+08:00`
+- `updated_at`: `2026-07-13T23:11:56+08:00`
 
 ## Workflow Metadata
 
@@ -21,7 +21,7 @@
 - `created_at`: `<ISO-8601-with-offset>`
 - `updated_at`: `<ISO-8601-with-offset>`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
-- `template_version`: `1.1.0`
+- `template_version`: `1.2.0`
 
 ## Objective And Scope
 
@@ -32,9 +32,9 @@
 
 ## Artifact Contract
 
-- Baseline audit: `<artifact-root>/reports/01-audit-report.md`
-- Remediation report: `<artifact-root>/reports/02-remediation-report.md`
-- Post-remediation audit: `<artifact-root>/reports/03-post-remediation-audit-report.md`
+- Baseline assessment: `.dev/assessments/<baseline-assessment-id>/assessment.yaml`
+- Remediation report: `<artifact-root>/reports/remediation-report.md`
+- Verification assessment: `.dev/assessments/<verification-assessment-id>/assessment.yaml`
 - Tasks: `<artifact-root>/tasks/`
 
 ## Finding Triage

@@ -1,6 +1,6 @@
 ---
 name: slice-implementer
-description: Implement one bounded implementation slice from requirements, specs, architecture decisions, review findings, or workflow tasks using mode references such as command, query, reactor, generic, remediation, or refactor without redefining architecture direction.
+description: Implement one bounded implementation slice from requirements, specs, architecture decisions, review findings, or workflow tasks using exactly one command, query, reactor, or generic execution mode plus optional overlays such as remediation, without redefining architecture direction.
 ---
 
 # Slice Implementer
@@ -20,6 +20,7 @@ This is a thin current-runtime wrapper.
   - `.ai/assets/skills/slice-implementer/references/modes/query-use-case.md`
   - `.ai/assets/skills/slice-implementer/references/modes/reactor.md`
   - `.ai/assets/skills/slice-implementer/references/modes/generic-slice.md`
+  - `.ai/assets/skills/slice-implementer/references/overlays/remediation.md`
 
 ## Wrapper Rules
 

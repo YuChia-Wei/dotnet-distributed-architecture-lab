@@ -19,7 +19,7 @@ Allow bilingual variants for stable entry files:
 - `README.zh-tw.md`
 - `AGENTS.md`
 - `agents.en.md`
-- `agents.zh-tw.md`
+- `AGENTS.zh-TW.md`
 
 Do not create translation pairs for every guide or standard unless the user explicitly asks for a translation workflow.
 

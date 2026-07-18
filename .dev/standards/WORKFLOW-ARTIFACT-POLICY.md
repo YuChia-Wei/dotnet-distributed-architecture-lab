@@ -21,11 +21,12 @@ Required locator fields:
 
 ```yaml
 schema_version: "1.0"
+lifecycle_contract: "1.0"
 workflow_id: "YYYY-MM-DD-topic"
 workflow_kind: "skill-defined-kind"
 title: "Human-readable title"
 owner_skill: "workflow-owning-skill"
-status: "active"
+status: "in_progress"
 artifact_root: ".dev/workflows/YYYY-MM-DD-topic"
 entrypoint: "workflow-plan.md"
 created_at: "2026-07-10T18:17:55+08:00"
@@ -114,6 +115,14 @@ pending -> in_progress -> completed
 ```
 
 Use `deferred` only with a recorded reason and handoff condition. Skills may add domain-specific states without redefining the shared meanings.
+
+Locators generated from template version `1.2.0` or later opt into
+`lifecycle_contract: "1.0"`. Under that prospective contract:
+
+- an `in_progress` workflow has exactly one `in_progress` task;
+- a `completed` workflow has no unfinished task and uses `completed` or `closed` as `current_phase`;
+- a completed task has a non-empty result summary and an addressed finding status;
+- legacy locators without the field remain compatible and are not silently reinterpreted.
 
 ## Final and Derived Artifacts
 

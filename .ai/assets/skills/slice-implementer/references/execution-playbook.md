@@ -4,15 +4,16 @@ This file defines how to implement one safe bounded implementation slice.
 
 ## Slice Template
 
-1. Restate the slice goal.
-2. List in-scope files, modules, or behavior.
-3. List explicit non-goals.
+1. Restate the slice goal and intent.
+2. Separate authorization, normative truth, and finding evidence.
+3. List in-scope files, modules, or behavior plus explicit non-goals.
 4. Identify behavior that must remain stable.
-5. Select the relevant mode reference.
-6. Apply the smallest coherent change set.
-7. Use `local-change-implementer` for local class/object/symbol technical edits when useful.
-8. Update or add tests if the slice requires it.
-9. Validate and record deferred items.
+5. Select exactly one execution mode reference.
+6. Load applicable overlays without replacing the execution mode.
+7. Apply the smallest coherent change set.
+8. Use `local-change-implementer` for local class/object/symbol technical edits when useful.
+9. Update or add tests if the slice requires it.
+10. Validate and record deferred items.
 
 ## Preferred Slice Types
 

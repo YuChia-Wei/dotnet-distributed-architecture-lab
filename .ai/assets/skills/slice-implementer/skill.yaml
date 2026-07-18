@@ -16,26 +16,28 @@ triggers:
   - "fix slice"
   - "remediation slice"
 inputs:
-  - "requirement, spec, workflow task, or review findings"
-  - "bounded slice goal and explicit non-goals"
-  - "intent, scope, and mode when known"
+  - "authorization source, normative truth, and optional finding evidence"
+  - "bounded slice goal, acceptance criteria, and explicit non-goals"
+  - "intent, scope, execution mode, and optional overlays"
   - "validation requirements"
 outputs:
   - "bounded implementation slice"
-  - "mode and reference path used"
+  - "intent, execution mode, overlays, and reference paths used"
   - "touched files and validation notes"
   - "explicit handoff if architecture, local change, test design, review, or compliance work remains"
 constraints:
   - "Do not redefine architecture direction mid-slice"
   - "Do not silently broaden the agreed slice"
-  - "Use mode references for command, query, reactor, generic, remediation, or refactor-specific rules"
+  - "Select exactly one execution mode reference: command, query, reactor, or generic"
+  - "Apply remediation as an overlay without replacing the selected execution mode"
+  - "Do not treat workflow authorization or finding evidence as a substitute for normative requirements, specs, standards, or ADRs"
   - "Delegate local class/object/symbol technical edits to local-change-implementer when useful"
   - "Stop and hand off when bounded context, aggregate boundary, dependency direction, or domain language is unclear"
 workflow:
   - step: 1
-    description: "Confirm slice goal, intent, scope, mode, source truth, and non-goals"
+    description: "Confirm slice goal, intent, scope, execution mode, overlays, layered sources, acceptance criteria, and non-goals"
   - step: 2
-    description: "Load only the relevant mode reference and required local standards"
+    description: "Load exactly one execution mode reference, any applicable overlay, and required local standards"
   - step: 3
     description: "Implement the smallest coherent slice and delegate local technical changes when useful"
   - step: 4
@@ -48,6 +50,7 @@ references:
   - ".ai/assets/skills/slice-implementer/references/modes/query-use-case.md"
   - ".ai/assets/skills/slice-implementer/references/modes/reactor.md"
   - ".ai/assets/skills/slice-implementer/references/modes/generic-slice.md"
+  - ".ai/assets/skills/slice-implementer/references/overlays/remediation.md"
 examples:
   - ".dev/guides/ai-collaboration-guides/SLICE-IMPLEMENTER-SKILL-GUIDE.md"
 human_guide: ".dev/guides/ai-collaboration-guides/SLICE-IMPLEMENTER-SKILL-GUIDE.md"

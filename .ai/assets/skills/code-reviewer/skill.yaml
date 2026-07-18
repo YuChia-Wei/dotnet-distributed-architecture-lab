@@ -16,7 +16,7 @@ inputs:
   - "target file or reviewed scope"
   - "repo standards and checklist rules"
 outputs:
-  - "review report"
+  - "transient conversational review or standalone durable assessment"
   - "architecture-level findings"
   - "code-level findings"
   - "review scores"
@@ -25,6 +25,8 @@ constraints:
   - "Do not output a staged refactoring plan"
   - "Preserve software engineering reasoning even when analyzer or test output is available"
   - "Treat .ai/scripts C# grep checks as transitional aids, not final semantic validation"
+  - "Keep review read-only; route remediation to dev-workflow or the appropriate implementer"
+  - "Pin durable assessments to the reviewed Git revision and use ASM-YYYYMMDD-NNN#CR-NNN finding references"
 workflow:
   - step: 1
     description: "Read the review index and checklist"
@@ -32,10 +34,16 @@ workflow:
     description: "Classify the reviewed scope and build a checklist comparison"
   - step: 3
     description: "Separate architecture-level and code-level findings"
+  - step: 4
+    description: "Return transient findings in conversation or persist an explicitly requested large review as a standalone assessment"
 references:
   - ".ai/assets/tech-stacks/dotnet-backend/references/CODE-REVIEW-INDEX.MD"
   - ".ai/assets/skills/code-reviewer/references/checklist-reference.md"
+  - ".ai/assets/skills/code-reviewer/references/output-contract.md"
   - ".dev/standards/CODE-REVIEW-CHECKLIST.md"
+  - ".dev/standards/ASSESSMENT-ARTIFACT-POLICY.md"
+templates:
+  - ".ai/assets/skills/code-reviewer/templates/code-review-assessment-report-template.md"
 examples:
   - ".dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md"
 human_guide: ".dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md"

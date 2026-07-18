@@ -1,39 +1,49 @@
 # AI Context Auditor Output Contract
 
-This contract has two output modes.
+Canonical ownership rule: `ASSESSMENT-ARTIFACT-001`.
+
+This contract has three routing cases and two report surfaces.
 
 ## Transient Direct Mode
 
 When the user does not ask to persist the result, return the assessment in the conversation. Do not create a branch, workflow artifact, report file, or commit. Multiple passes and sub-agent analysis do not change this mode. Do not mutate audited context or remediate findings.
 
-## Durable Report Mode
+## Standalone Durable Assessment Mode
 
-When the user asks to save, persist, land, or retain the audit in the repository, create or update a durable Markdown report from:
+When the user asks to save, persist, land, or retain the audit without authorizing remediation, allocate an assessment ID and create the locator from:
+
+```text
+.dev/assessments/templates/assessment-locator-template.yaml
+```
+
+Create the durable Markdown report from:
 
 ```text
 .ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md
 ```
 
-Baseline destination:
+Destination:
 
 ```text
-<artifact-root>/reports/01-audit-report.md
+.dev/assessments/<ASM-YYYYMMDD-NNN>/report.md
 ```
 
-Post-remediation destination:
+Use `.dev/assessments/<assessment-id>/assessment.yaml` as the stable locator and update `.dev/assessments/INDEX.MD`. Do not create workflow artifacts solely because the assessment is persisted.
 
-```text
-<artifact-root>/reports/03-post-remediation-audit-report.md
-```
+A standalone assessment uses its own dedicated assessment branch. An audit stage inside a governance-owned lifecycle uses the governance workflow branch and must not open a competing assessment branch. Keep draft resume metadata current before any push or merge handoff.
 
-Use `.dev/workflows/<YYYY-MM-DD-topic[-NN]>/workflow.yaml` as the stable locator. For audit-only workflows, initialize the locator, plan, and task from the templates owned by this skill. For a governance-owned lifecycle, update only the auditor-owned report and audit task fields authorized by that workflow.
+## Governance Workflow Participation
 
-An audit-only workflow uses its own dedicated branch. An audit stage inside a governance-owned lifecycle uses the governance workflow branch and must not open a competing workflow branch. Report push/merge handoffs separately from final audit completion.
+When remediation is already authorized, create the baseline or verification
+assessment under `.dev/assessments/` on the active governance workflow branch.
+Reference the workflow from the assessment locator and reference the assessment
+and selected finding IDs from workflow tasks. The auditor remains read-only and
+does not author remediation conclusions.
 
 The report must include metadata and scope, explicit code exclusions, methodology and evidence, both audit passes, their comparison, strengths, severity-ranked findings, validation and skipped checks, deferred items and code-review handoffs, and prioritized actions.
 
-Include ISO 8601 `created_at` and `updated_at` values with an explicit offset plus `template_source` and `template_version`. Do not mark the report final while high-severity claims lack file-backed evidence.
+Include ISO 8601 `created_at` and `updated_at` values with an explicit offset plus locator and report template sources and versions. Pin the assessed subject commit. Do not mark the assessment final while high-severity claims lack file-backed evidence.
 
-The final response must return the overall assessment, highest-priority findings, scope exclusions, validation summary, recommended next skill, and whether remediation was intentionally not performed. Include a report path only in durable mode; in transient mode state that no repository artifact was created.
+The final response must return the overall assessment, highest-priority findings, scope exclusions, validation summary, recommended next skill, and whether remediation was intentionally not performed. Include the assessment ID and report path only in durable mode; in transient mode state that no repository artifact was created.
 
 If source-code review was requested, return the handoff instead of an AI context finding about unread code.

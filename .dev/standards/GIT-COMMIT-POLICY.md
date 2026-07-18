@@ -44,6 +44,12 @@ Use these commit types:
 | `refactor` | Structure changes without intended behavior change. |
 | `test` | Test additions or corrections. |
 | `chore` | Tooling, housekeeping, generated metadata, or repository maintenance. |
+| `merge` | Intentional non-fast-forward integration commits. |
+
+The executable subset of this policy is declared in
+`GIT-COMMIT-POLICY.yaml` and enforced by
+`.ai/scripts/validate-git-commits.py`. The Markdown document remains the
+human-facing source for intent and exceptions; keep both files synchronized.
 
 ## Scope
 
@@ -84,7 +90,32 @@ Co-Authored-By: <AI runtime/model> <noreply@provider-domain>
 
 Small direct-mode commits may omit the body when the title is sufficient and the user did not ask for detailed traceability.
 
-Transient read-only analysis has no repository artifacts and therefore requires no branch, workflow, or commit. A durable report-only audit commits only auditor-owned workflow and report artifacts; read-only evidence gathering does not authorize changes to the audited context. Remediation commits belong to the governance workflow that owns those changes.
+Transient read-only analysis has no repository artifacts and therefore requires no branch, workflow, or commit. A durable report-only assessment commits only assessment-owned artifacts and required assessment index updates; read-only evidence gathering does not authorize changes to the assessed context. Remediation commits belong to the workflow that owns those changes.
+
+Standalone durable assessments commit only assessment-owned artifacts and index
+updates. They do not create workflow artifacts solely for persistence and do not
+authorize remediation of the assessed surface.
+
+## Assessment Search Identity
+
+Follow `.dev/standards/ASSESSMENT-ARTIFACT-POLICY.md` for assessment identity
+and lifecycle. Assessment creation and material assessment-update subjects must
+include the stable ID:
+
+```text
+docs(assessment): [ASM-20260713-001] add AI context health assessment
+```
+
+Add an `Assessment-Id` trailer before the AI signature trailer:
+
+```text
+Assessment-Id: ASM-20260713-001
+Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
+```
+
+Downstream commits may use repeatable `Assessment-Id` trailers without placing
+every assessment ID in the subject. Preserve the ID when amending, rebasing,
+cherry-picking, or otherwise rewriting a commit.
 
 ## AI Model Signature Trailer
 
@@ -121,6 +152,7 @@ Create a commit when:
 - a policy or source-of-truth document is introduced;
 - a file move or large rename is completed and references are checked;
 - the user explicitly asks for a commit.
+- a standalone assessment draft reaches a durable resume checkpoint or becomes final.
 
 Do not commit when:
 
@@ -164,3 +196,14 @@ Before commit, run the narrowest meaningful validation:
 
 The commit body must mention skipped validation when the skipped check would normally apply.
 AI-assisted commits must also satisfy the AI model signature trailer contract above.
+
+For workflow closeout, validate the workflow branch range explicitly:
+
+```bash
+python .ai/scripts/validate-git-commits.py --range main..HEAD --workflow-id <workflow-id>
+```
+
+`check-all.sh` runs this check when `COMMIT_RANGE` is set. Set
+`WORKFLOW_ID` with it for workflow-stage section and identity validation.
+Human-only commits are outside the AI-signature contract and should not be
+included in a range whose purpose is AI-assisted workflow closeout.

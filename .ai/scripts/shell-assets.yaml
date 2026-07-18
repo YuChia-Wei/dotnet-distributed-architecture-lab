@@ -21,3 +21,10 @@ required_entrypoints:
 check_all_required_scripts:
   - .ai/scripts/check-coding-standards.sh
   - .ai/scripts/check-spec-compliance.sh
+check_all_required_commands:
+  - python .ai/scripts/validate-workflow-artifacts.py
+  - python .ai/scripts/validate-ai-context.py
+  - python .ai/scripts/validate-shell-assets.py
+  - dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj
+  - dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj
+  - dotnet build MQArchLab.slnx --no-restore

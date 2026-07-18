@@ -8,6 +8,8 @@ any single workflow. It is not a second workflow engine.
 - `INDEX.MD` owns the backlog catalog and current item state.
 - `items/<item-id>.yaml` owns the problem, priority, origin, acceptance boundary,
   and workflow handoff for one durable item.
+- `.dev/assessments/<assessment-id>/` owns durable observations and finding
+  evidence that may be selected as backlog work.
 - `.dev/workflows/<workflow-id>/` owns execution plans, tasks, evidence, and
   commits after work is scheduled.
 - A workflow must link its source backlog item. The backlog item must link the
@@ -28,3 +30,5 @@ in backlog items.
 - Record full-date timestamps with an explicit UTC offset.
 - Preserve `origin_refs`, `workflow_refs`, and `task_refs` so deferred findings
   remain traceable without copying workflow progress.
+- Reference assessment findings as `<assessment-id>#<finding-id>` in
+  `origin_refs`; do not copy the full assessment report into a backlog item.

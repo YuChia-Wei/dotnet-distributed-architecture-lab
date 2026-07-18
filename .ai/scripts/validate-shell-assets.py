@@ -16,6 +16,8 @@ MANIFEST = Path(".ai/scripts/shell-assets.yaml")
 GROUPS = ("retained", "retirement_candidates")
 REQUIRED_GROUPS = ("required_entrypoints", "check_all_required_scripts")
 RUN_CHECK_START = re.compile(r'^\s*run_check\s+"([^"]+)"\s*\\\s*$')
+RUN_COMMAND_START = re.compile(r'^\s*run_command_check\s+"([^"]+)"\s*\\\s*$')
+COMMAND_GROUPS = ("check_all_required_commands",)
 
 
 def runner_required_scripts(errors: list[str], modes: dict[str, str]) -> set[str] | None:
@@ -33,6 +35,25 @@ def runner_required_scripts(errors: list[str], modes: dict[str, str]) -> set[str
         match = RUN_CHECK_START.match(line)
         if match and index + 2 < len(lines) and lines[index + 2].strip().startswith('"required"'):
             required.add(f".ai/scripts/{match.group(1)}")
+    return required
+
+
+def runner_required_commands(errors: list[str], modes: dict[str, str]) -> set[str] | None:
+    runner = ".ai/scripts/check-all.sh"
+    if runner not in modes:
+        return None
+    try:
+        lines = (ROOT / runner).read_text(encoding="utf-8").splitlines()
+    except (OSError, UnicodeDecodeError) as exc:
+        errors.append(f"{runner}: cannot inspect required command declarations: {exc}")
+        return set()
+
+    required: set[str] = set()
+    for index, line in enumerate(lines):
+        match = RUN_COMMAND_START.match(line)
+        if match and not match.group(1).startswith("$") and index + 2 < len(lines):
+            if lines[index + 2].strip().startswith('"required"'):
+                required.add(match.group(1))
     return required
 
 
@@ -74,7 +95,7 @@ def main() -> int:
         errors.append(f"{MANIFEST}: schema_version must be 1.0")
 
     values: dict[str, list[str]] = {}
-    for group in (*GROUPS, *REQUIRED_GROUPS):
+    for group in (*GROUPS, *REQUIRED_GROUPS, *COMMAND_GROUPS):
         items = manifest.get(group)
         if not isinstance(items, list) or not all(isinstance(item, str) and item for item in items):
             errors.append(f"{MANIFEST}: {group} must be a list of non-empty paths")
@@ -113,6 +134,16 @@ def main() -> int:
                 f"{MANIFEST}: check_all required-script coverage mismatch; "
                 f"missing={sorted(runner_required - declared_required)}, "
                 f"extra={sorted(declared_required - runner_required)}"
+            )
+
+    runner_commands = runner_required_commands(errors, modes)
+    if runner_commands is not None:
+        declared_commands = set(values.get("check_all_required_commands", []))
+        if runner_commands != declared_commands:
+            errors.append(
+                f"{MANIFEST}: check_all required-command coverage mismatch; "
+                f"missing={sorted(runner_commands - declared_commands)}, "
+                f"extra={sorted(declared_commands - runner_commands)}"
             )
 
     if errors:

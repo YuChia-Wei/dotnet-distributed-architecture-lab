@@ -1,0 +1,25 @@
+schema_version: "1.0"
+allowed_types:
+  - docs
+  - workflow
+  - feat
+  - fix
+  - refactor
+  - test
+  - chore
+  - merge
+subject_pattern: '^(docs|workflow|feat|fix|refactor|test|chore|merge)\((?:#[0-9]+(?:,#[0-9]+)*\|)?[a-z0-9][a-z0-9-]*\): .+$'
+workflow:
+  required_sections:
+    - Why
+    - What
+    - Validation
+    - Workflow
+  require_identity_match: true
+assessment:
+  subject_id_pattern: 'ASM-[0-9]{8}-[0-9]{3}'
+  trailer: Assessment-Id
+ai_signature:
+  trailer: Co-Authored-By
+  value_pattern: '^.+ <noreply@[^ >]+>$'
+  final_non_empty_line: true

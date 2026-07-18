@@ -15,6 +15,23 @@ import yaml
 
 ADOPTION_DATE = date(2026, 7, 10)
 BRANCH_POLICY_DATE = date(2026, 7, 11)
+IMPLEMENTATION_CONTRACT_DATE = date(2026, 7, 14)
+DEV_TASK_TEMPLATE = ".ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json"
+EXECUTION_MODES = {"command", "query", "reactor", "generic"}
+IMPLEMENTATION_INTENTS = {
+    "feature",
+    "bug-fix",
+    "review-remediation",
+    "validation-failure-remediation",
+    "behavior-correction",
+    "refactor",
+    "cleanup",
+}
+IMPLEMENTATION_OVERLAYS = {"remediation"}
+REMEDIATION_INTENTS = {"review-remediation", "validation-failure-remediation"}
+WORKFLOW_STATUSES = {"planned", "in_progress", "completed", "blocked", "cancelled"}
+TASK_STATUSES = {"pending", "in_progress", "completed", "deferred", "blocked", "cancelled"}
+TERMINAL_TASK_STATUSES = {"completed", "deferred", "cancelled"}
 ID_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})-[a-z0-9][a-z0-9-]*$")
 TASK_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 REQUIRED_LOCATOR = {
@@ -231,6 +248,133 @@ def timestamp(value: str, label: str, errors: list[str]) -> datetime | None:
     return parsed
 
 
+def validate_implementation_contract(
+    task: dict, label: str, errors: list[str], task_created: datetime | None
+) -> None:
+    if task.get("template_source") != DEV_TASK_TEMPLATE:
+        return
+    if task_created is None or task_created.date() < IMPLEMENTATION_CONTRACT_DATE:
+        return
+
+    execution = task.get("execution")
+    if not isinstance(execution, dict):
+        errors.append(f"{label}: execution must be a mapping")
+        return
+
+    contract = execution.get("implementation_contract")
+    is_implementation = (
+        execution.get("capability_slot") == "implementation"
+        or task.get("owner_skill") == "slice-implementer"
+        or contract is not None
+    )
+    if not is_implementation:
+        return
+    if execution.get("capability_slot") != "implementation":
+        errors.append(f"{label}: implementation_contract requires capability_slot implementation")
+    if "mode" in execution:
+        errors.append(f"{label}: use implementation_contract.execution_mode, not execution.mode")
+
+    inputs = task.get("inputs")
+    if isinstance(inputs, dict):
+        for deprecated in ("source_truth", "source_findings"):
+            if deprecated in inputs:
+                errors.append(f"{label}: deprecated inputs.{deprecated} collapses source responsibilities")
+
+    if not isinstance(contract, dict):
+        errors.append(f"{label}: implementation task requires implementation_contract mapping")
+        return
+
+    required = {
+        "intent",
+        "execution_mode",
+        "overlays",
+        "authorization_source",
+        "normative_truth",
+        "finding_evidence",
+        "subject_revision",
+        "acceptance_criteria",
+    }
+    missing = sorted(required - contract.keys())
+    if missing:
+        errors.append(f"{label}: implementation_contract missing fields {', '.join(missing)}")
+        return
+
+    intent = contract["intent"]
+    if intent not in IMPLEMENTATION_INTENTS:
+        errors.append(f"{label}: unsupported implementation intent {intent!r}")
+    mode = contract["execution_mode"]
+    if mode not in EXECUTION_MODES:
+        errors.append(f"{label}: execution_mode must be command, query, reactor, or generic")
+
+    overlays = contract["overlays"]
+    if not isinstance(overlays, list) or any(value not in IMPLEMENTATION_OVERLAYS for value in overlays):
+        errors.append(f"{label}: overlays must contain only supported overlay names")
+        overlays = []
+    elif len(overlays) != len(set(overlays)):
+        errors.append(f"{label}: overlays must not contain duplicates")
+    remediation_selected = "remediation" in overlays
+    if intent in REMEDIATION_INTENTS and not remediation_selected:
+        errors.append(f"{label}: remediation intent requires remediation overlay")
+    if intent not in REMEDIATION_INTENTS and remediation_selected:
+        errors.append(f"{label}: remediation overlay requires a remediation intent")
+
+    for field in ("authorization_source", "normative_truth", "acceptance_criteria"):
+        value = contract[field]
+        if not isinstance(value, list) or not value or not all(isinstance(item, str) and item.strip() for item in value):
+            errors.append(f"{label}: implementation_contract.{field} must be a non-empty string list")
+    findings = contract["finding_evidence"]
+    if not isinstance(findings, list) or not all(isinstance(item, str) and item.strip() for item in findings):
+        errors.append(f"{label}: implementation_contract.finding_evidence must be a string list")
+    elif intent in REMEDIATION_INTENTS and not findings:
+        errors.append(f"{label}: remediation intent requires finding_evidence")
+
+    revision = contract["subject_revision"]
+    if not isinstance(revision, str) or (revision and not re.fullmatch(r"[0-9a-fA-F]{40}", revision)):
+        errors.append(f"{label}: subject_revision must be empty or a 40-character Git SHA")
+
+
+def validate_lifecycle_contract(
+    locator: dict[str, str], tasks: list[tuple[str, dict]], label: str, errors: list[str]
+) -> None:
+    """Validate prospective workflow/task semantic consistency when opted in."""
+    contract = locator.get("lifecycle_contract")
+    if contract is None:
+        return
+    if contract != "1.0":
+        errors.append(f"{label}: lifecycle_contract must be 1.0")
+        return
+
+    workflow_status = locator.get("status", "")
+    if workflow_status not in WORKFLOW_STATUSES:
+        errors.append(f"{label}: unsupported workflow status {workflow_status!r}")
+
+    statuses: list[tuple[str, str]] = []
+    for task_label, task in tasks:
+        status = str(task.get("status", ""))
+        statuses.append((task_label, status))
+        if status not in TASK_STATUSES:
+            errors.append(f"{task_label}: unsupported task status {status!r}")
+        if status == "completed":
+            results = task.get("results")
+            if not isinstance(results, dict):
+                errors.append(f"{task_label}: completed task requires results mapping")
+                continue
+            if not isinstance(results.get("summary"), str) or not results["summary"].strip():
+                errors.append(f"{task_label}: completed task requires non-empty results.summary")
+            if results.get("finding_status") in (None, "", "not-addressed"):
+                errors.append(f"{task_label}: completed task requires an addressed results.finding_status")
+
+    in_progress = [task_label for task_label, status in statuses if status == "in_progress"]
+    if workflow_status == "in_progress" and len(in_progress) != 1:
+        errors.append(f"{label}: in_progress workflow requires exactly one in_progress task; found={in_progress}")
+    if workflow_status == "completed":
+        unfinished = [task_label for task_label, status in statuses if status not in TERMINAL_TASK_STATUSES]
+        if unfinished:
+            errors.append(f"{label}: completed workflow has unfinished tasks {unfinished}")
+        if locator.get("current_phase") not in {"completed", "closed"}:
+            errors.append(f"{label}: completed workflow current_phase must be completed or closed")
+
+
 def main() -> int:
     repo = Path(__file__).resolve().parents[2]
     discovery_root = repo / ".dev" / "workflows"
@@ -301,6 +445,7 @@ def main() -> int:
         if not entrypoint.is_file():
             errors.append(f"{locator_path.relative_to(repo)}: entrypoint does not exist in artifact_root")
         task_root = root / "tasks"
+        task_records: list[tuple[str, dict]] = []
         if task_root.is_dir():
             seen: set[str] = set()
             for task_path in sorted(task_root.glob("*.json")):
@@ -309,6 +454,7 @@ def main() -> int:
                 except (json.JSONDecodeError, UnicodeDecodeError) as exc:
                     errors.append(f"{task_path.relative_to(repo)}: invalid JSON: {exc}")
                     continue
+                task_records.append((str(task_path.relative_to(repo)), task))
                 missing_task = sorted(REQUIRED_TASK - task.keys())
                 if missing_task:
                     errors.append(f"{task_path.relative_to(repo)}: missing fields {', '.join(missing_task)}")
@@ -324,6 +470,13 @@ def main() -> int:
                 task_updated = timestamp(task["updated_at"], f"{task_path.relative_to(repo)} updated_at", errors)
                 if task_created and task_updated and task_updated < task_created:
                     errors.append(f"{task_path.relative_to(repo)}: updated_at is earlier than created_at")
+                validate_implementation_contract(task, str(task_path.relative_to(repo)), errors, task_created)
+        validate_lifecycle_contract(
+            locator,
+            task_records,
+            str(locator_path.relative_to(repo)),
+            errors,
+        )
 
     indexed_workflows = validate_workflow_index(repo, discovery_root, errors)
     backlog_items = validate_backlog(repo, errors)

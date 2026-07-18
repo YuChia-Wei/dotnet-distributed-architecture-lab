@@ -29,3 +29,8 @@ Use `bdd-gwt-test-designer` when:
 
 Use `code-reviewer` for .NET backend review findings.
 Use `spec-compliance-validator` when problem-frame compliance must be gated.
+
+For remediation, the implementer records finding dispositions and evidence but
+does not rewrite the originating assessment or review. Return the result to the
+workflow owner, and use a new review or verification assessment when independent
+closure evidence is required.

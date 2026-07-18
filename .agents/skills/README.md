@@ -21,6 +21,7 @@ This directory contains the current repo-local skill wrappers for Codex and comp
 
 - `ai-context-governance`
 - `ai-context-auditor`
+- `ai-context-upgrader`
 - `bdd-gwt-test-designer`
 - `code-reviewer`
 - `dev-workflow`
