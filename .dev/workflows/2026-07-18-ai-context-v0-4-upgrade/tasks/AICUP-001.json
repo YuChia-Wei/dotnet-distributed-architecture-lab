@@ -6,9 +6,9 @@
   "task_id": "AICUP-001",
   "workflow_id": "2026-07-18-ai-context-v0-4-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-07-18T20:33:26+08:00",
-  "updated_at": "2026-07-18T20:33:26+08:00",
+  "updated_at": "2026-07-18T20:40:48+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICUP-BASELINE"],
   "scope": {
@@ -20,15 +20,20 @@
   "execution": {
     "steps": ["Build v0.3.0 and v0.4.0 packages from immutable tags", "Validate archive envelopes and source identities", "Inventory target selection and changes", "Classify automatic candidates, reconciliation items, and exclusions"],
     "validation": ["package validators for v0.3.0 and v0.4.0", "Git tag resolution", "target hash and ownership evidence"],
-    "last_completed_step": "Verified source identities and target rollback boundary",
-    "next_action": "Build immutable-tag packages and produce dry-run classifications"
+    "last_completed_step": "Validated both immutable-tag packages and classified all 555 v0.3.0 distributable paths against the v0.1.0 base and target bytes",
+    "next_action": "AICUP-002 applies 482 safe candidates and reconciles 68 locally changed paths"
   },
   "results": {
-    "summary": "",
+    "summary": "Verified published release identities, reproduced and validated v0.3.0 and v0.4.0 packages from immutable tags, and classified the v0.3.0 target plan as 433 base-identical replacements, 49 absent adds, 4 already-current files, 68 locally changed reconciliations, and 1 target-only path.",
     "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
+    "tests_run": [
+      "validate-ai-context-package.py v0.3.0 archive: passed",
+      "validate-ai-context-package.py v0.4.0 archive: passed",
+      "v0.3.0 package planner dry-run: 555 operations",
+      "Git/file SHA-256 three-way classification: 555 paths accounted for"
+    ],
+    "finding_status": "resolved",
     "residual_risk": "Target predates governed package inventory, so v0.1.0 path identity alone cannot authorize replacement.",
-    "follow_up_needed": true
+    "follow_up_needed": false
   }
 }

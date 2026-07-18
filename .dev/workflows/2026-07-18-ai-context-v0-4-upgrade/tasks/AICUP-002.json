@@ -6,9 +6,9 @@
   "task_id": "AICUP-002",
   "workflow_id": "2026-07-18-ai-context-v0-4-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "pending",
+  "status": "in_progress",
   "created_at": "2026-07-18T20:33:26+08:00",
-  "updated_at": "2026-07-18T20:33:26+08:00",
+  "updated_at": "2026-07-18T20:40:48+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICUP-V03"],
   "scope": {
@@ -21,7 +21,7 @@
     "steps": ["Review v0.1.0→v0.2.0 contracts", "Review v0.3.0 package plan", "Apply accepted reusable framework paths", "Synchronize target context", "Validate and record v0.3.0 provenance"],
     "validation": ["target AI-context validators", "workflow validator", "version validator", "git diff --check"],
     "last_completed_step": "",
-    "next_action": "Wait for AICUP-001 classification"
+    "next_action": "Apply v0.3.0 safe candidates and three-way reconcile the 68 changed paths"
   },
   "results": {
     "summary": "",

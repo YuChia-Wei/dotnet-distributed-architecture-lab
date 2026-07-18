@@ -19,7 +19,7 @@
 - `current_phase`: `remediation-planning`
 - `artifact_root`: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade`
 - `created_at`: `2026-07-18T20:33:26+08:00`
-- `updated_at`: `2026-07-18T20:33:26+08:00`
+- `updated_at`: `2026-07-18T20:40:48+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.1.0`
 
@@ -69,11 +69,11 @@
 
 ## Resume Checkpoint
 
-- Last completed action: Verified the target starts clean on `main`, created the dedicated workflow branch, and confirmed immutable v0.1.0, v0.3.0, and v0.4.0 source identities.
-- Current task: `AICUP-001`
-- Exact next action: Build and validate v0.3.0 and v0.4.0 packages from immutable tags, then produce the target three-way classification.
-- Validation already completed: target `git status --short --branch`; source tag resolution; published v0.4.0 registry and migration contract inspection.
-- Git state: workflow bootstrap artifacts are uncommitted on `codex/2026-07-18-ai-context-v0-4-upgrade`.
+- Last completed action: Built and validated immutable v0.3.0 and v0.4.0 packages, completed the v0.1.0/base/incoming/target hash classification, and finalized `AICUP-001`.
+- Current task: `AICUP-002`
+- Exact next action: Apply 49 absent v0.3.0 package files, replace 433 byte-identical v0.1.0 files, and three-way reconcile 68 locally changed paths.
+- Validation already completed: target and source Git identities; both package validators; v0.3.0 package dry-run; 555-path hash classification.
+- Git state: `AICUP-001` evidence awaits its workflow-stage commit on `codex/2026-07-18-ai-context-v0-4-upgrade`.
 - Branch history and checkpoint handoffs: segment 1 created from synchronized `main` at `d3d7f18`.
 - Blockers or unresolved decisions: none at bootstrap; package reconciliation may surface target-owned semantic choices.
 
@@ -81,4 +81,4 @@
 
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `codex/2026-07-18-ai-context-v0-4-upgrade` | `main` (`d3d7f18`) | workflow start | pending | local | `2026-07-18T20:33:26+08:00` | Progressive upgrade requires durable reconciliation evidence | Continue `AICUP-001` after bootstrap commit |
+| 1 | `codex/2026-07-18-ai-context-v0-4-upgrade` | `main` (`d3d7f18`) | workflow start | `66b70cd` | local | `2026-07-18T20:33:26+08:00` | Progressive upgrade requires durable reconciliation evidence | Continue `AICUP-001` after bootstrap commit |
