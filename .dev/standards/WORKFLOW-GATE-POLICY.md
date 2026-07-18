@@ -7,9 +7,10 @@ This policy defines when an agent should create workflow artifacts proactively i
 | Mode | Use |
 | --- | --- |
 | Direct mode | Small, single-pass work that does not need long-lived context. |
+| Assessment mode | Read-only analysis that needs a durable report but does not authorize remediation or execution tracking. |
 | Workflow mode | Multi-stage work that changes source-of-truth, crosses skill boundaries, or needs task status tracking. |
 
-Mode is determined by persistence and mutation, not by the number of analysis steps alone. A transient read-only analysis may use multiple passes or sub-agents in direct mode when it does not write a repository report, mutate repository files, or perform remediation. A user request for a "report" means a durable repository artifact only when the user asks to save, persist, land, or otherwise retain it in the repository.
+Mode is determined by intent, mutation, and execution tracking, not by the number of analysis steps alone. A transient read-only analysis may use multiple passes or sub-agents in direct mode when it does not write a repository report, mutate repository files, or perform remediation. A user request for a "report" means a durable repository artifact only when the user asks to save, persist, land, or otherwise retain it in the repository. Persistence by itself selects assessment mode, not workflow mode.
 
 ## Must Create a Workflow
 
@@ -43,7 +44,24 @@ Transient read-only analysis is also direct mode even when it is multi-stage or 
 - no repository file is mutated;
 - no finding is remediated.
 
-When a read-only audit must save a durable report, use workflow mode and a dedicated branch. The audited surfaces remain read-only; commits may contain only the audit skill's owned locator, plan, task, and report artifacts. Authorized remediation is a separate governance lifecycle and follows the normal workflow rules.
+## Assessment Mode
+
+Use assessment mode when all of these are true:
+
+- the requested result is a durable audit, large code review, architecture assessment, or similar observation;
+- the assessed surfaces remain read-only;
+- remediation or implementation is not authorized;
+- task-level execution tracking is not required beyond the assessment locator's draft resume checkpoint.
+
+Follow `.dev/standards/ASSESSMENT-ARTIFACT-POLICY.md`. Create a dedicated
+assessment branch before writing `.dev/assessments/<assessment-id>/`, but do not
+create a workflow locator solely because the report is durable. Commits contain
+only assessment-owned artifacts and required assessment index updates.
+
+If remediation is authorized later, create a new workflow and reference the
+assessment and selected finding IDs. If assessment and remediation are requested
+together, use workflow mode for execution while keeping the assessment report
+under `.dev/assessments/`.
 
 ## Workflow Artifacts
 

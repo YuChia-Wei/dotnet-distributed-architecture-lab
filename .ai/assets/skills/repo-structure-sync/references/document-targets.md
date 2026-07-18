@@ -1,5 +1,7 @@
 # Document Targets
 
+Rule IDs: `TECH-SELECT-001`.
+
 This skill updates repo-specific architecture and repo-init entry areas only.
 
 ## Primary Targets
@@ -10,6 +12,7 @@ Generate or update:
 
 - repository identity and target mode
 - detected languages and technology profiles
+- target technology selections using the canonical generic selection record
 - .NET SDK, target frameworks, solutions, and projects when present
 - source/test roots and host/library classifications
 - architecture, persistence, messaging, frontend, and deployment facts only when supported by evidence
@@ -36,6 +39,8 @@ Preserve:
 - collaboration precedence
 - mandatory workflow rules unless the user explicitly changes them
 - skill routing rules that are framework-level rather than target-project-specific
+
+Use `.ai/assets/skills/repo-structure-sync/templates/public-root/AGENTS.md` only as the installation seed. After the target-specific English rewrite is final, optionally derive `AGENTS.zh-TW.md` through the low-cost `context-translator` role. Do not copy a pretranslated root template.
 
 ### `CLAUDE.md`
 

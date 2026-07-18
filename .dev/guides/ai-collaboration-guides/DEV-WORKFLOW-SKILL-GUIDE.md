@@ -70,6 +70,17 @@
 
 目前本 repo 預設使用 Profile mode。
 
+### Implementation Task Contract
+
+當 task 的 `execution.capability_slot` 是 `implementation`，必須填寫
+`execution.implementation_contract`，將 intent、execution mode、overlays、授權來源、
+normative truth、finding evidence、subject revision 與 acceptance criteria 分開。
+
+Execution mode 只能是 `command`、`query`、`reactor` 或 `generic`。正式 review finding
+或 validation failure 的修正使用 `remediation` overlay，而不是 `mode: remediation`。
+非 implementation task 保留 `implementation_contract: null`。新 task 不應再使用
+`source_truth` 或 `source_findings` 這類會混合責任的欄位。
+
 ## Runtime Coordination：Codex Goal 與 Claude Workflow
 
 `dev-workflow` 可以和 runtime 內建的 goal / workflow 功能搭配，但分工不同：

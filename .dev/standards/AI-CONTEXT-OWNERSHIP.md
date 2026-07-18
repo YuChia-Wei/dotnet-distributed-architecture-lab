@@ -35,6 +35,11 @@ Do not use an unqualified `mandatory` or `default` when the applicable strength 
 
 Target evidence may select technologies or replace a profile default. It cannot silently remove a framework invariant.
 
+Technology defaults and overrides use
+[Target Technology Selection Policy](TECHNOLOGY-SELECTION-POLICY.md) and one
+generic target-owned selection record. Do not invent a separate override
+mechanism for each package family.
+
 ## Consumer Contract
 
 Every registered derived consumer must:

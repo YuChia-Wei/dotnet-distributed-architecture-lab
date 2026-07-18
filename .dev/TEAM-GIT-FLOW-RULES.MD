@@ -80,6 +80,25 @@ claude/2026-07-11-payment-refactor-stage-1
 
 Create the branch before creating `.dev/workflows/<workflow-id>/workflow.yaml`. Record the branch and base branch in the locator.
 
+## Assessment Branches
+
+Standalone durable assessments use a dedicated short-lived branch without a
+workflow locator:
+
+```text
+codex/assessment/<lowercase-assessment-id>
+claude/assessment/<lowercase-assessment-id>
+```
+
+Create the branch before `.dev/assessments/<assessment-id>/assessment.yaml` or
+the report. Keep assessed surfaces read-only and commit only assessment-owned
+artifacts plus required assessment index updates. If an assessment is produced
+inside an existing authorized workflow, use the workflow branch instead of
+creating a competing assessment branch.
+
+Assessment branches follow the normal `--no-ff` merge rule unless the user
+explicitly selects another strategy.
+
 ## Merge Rule
 
 Use `--no-ff` for workflow and multi-commit branches so the branch work remains visible as a grouped unit.

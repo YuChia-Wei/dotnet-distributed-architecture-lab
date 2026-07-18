@@ -32,7 +32,7 @@ It preserves the design intent of DDD, Clean Architecture, CQRS, and Event Sourc
 
 ### 5. [Test Standards](./coding-standards/test-standards.md)
 - xUnit + BDDfy default testing rules; GWT remains mandatory and 3A prohibited when the target team disables BDDfy
-- NSubstitute mock usage rules
+- target-selected mocking rules with NSubstitute as the default
 - Profile-based testing
 
 ### 6. [Projection Standards](./coding-standards/projection-standards.md)
@@ -119,7 +119,7 @@ It preserves the design intent of DDD, Clean Architecture, CQRS, and Event Sourc
 | Domain Events | `./src/<Domain>/DomainCore/<DomainName>.Domains/DomainEvents` |
 | Domain Event Handlers | `./src/<Domain>/DomainCore/<DomainName>.Applications/DomainEventHandlers` |
 | Integration Event Handlers | `./src/<Domain>/Presentation/<DomainName>.Consumer/IntegrationEventHandlers` |
-| Integration Event Schema | `./src/BC-Contracts/Lab.MessageSchemas.<Domain>` |
+| Integration Event Schema | `./src/BC-Contracts/<Company>.BoundedContextContracts.<Domain>` |
 
 ### ⚠ Repository and Query Port Rules
 
@@ -127,7 +127,7 @@ Portable Aggregate Repository：
 
 ```csharp
 public interface IAggregateRepository<TAggregate, TId>
-    where TAggregate : AggregateRoot<TId>
+    where TAggregate : IAggregateRoot<TId>
 {
     Task<TAggregate?> FindByIdAsync(TId id, CancellationToken cancellationToken = default);
     Task SaveAsync(TAggregate aggregate, CancellationToken cancellationToken = default);
@@ -139,7 +139,7 @@ Compatibility：
 ```csharp
 public interface IDomainRepository<TAggregate, TId>
     : IAggregateRepository<TAggregate, TId>
-    where TAggregate : AggregateRoot<TId>
+    where TAggregate : IAggregateRoot<TId>
 {
 }
 ```
@@ -166,7 +166,8 @@ Full rules:
 
 ### ⚠ Profile-Based Testing
 - **Do not use BaseTestClass or BaseUseCaseTest as test base classes**
-- All tests must support the `test-inmemory` and `test-outbox` profiles
+- Tests that adopt both persistence profiles must support the canonical
+  `TestInMemory` and `TestOutbox` environment names.
 - Control profiles with `appsettings.*.json`
 - Follow [Profile / Environment Configuration Standards](./coding-standards/profile-configuration-standards.md) for profile naming, loading, DI branches, and profile-specific infrastructure rules
 

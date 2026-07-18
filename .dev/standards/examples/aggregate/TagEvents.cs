@@ -1,17 +1,20 @@
 using System;
 using System.Collections.Generic;
+using BuildingBlocks.Domain;
 using Example.Plans.Domain;
 
 namespace Example.Tags.Domain;
 
 public static class TagEvents
 {
-    public interface IInternalDomainEvent
+    public interface IInternalDomainEvent : IDomainEvent
     {
         Guid Id { get; }
         DateTimeOffset OccurredOn { get; }
         IReadOnlyDictionary<string, string> Metadata { get; }
         string Source { get; }
+
+        Guid IDomainEvent.EventId => Id;
     }
 
     public interface IConstructionEvent { }

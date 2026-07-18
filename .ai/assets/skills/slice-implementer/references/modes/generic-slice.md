@@ -14,7 +14,7 @@ Use this mode when the slice is bounded but does not fit command, query, or reac
 
 ## Rules
 
-- Keep the slice source-truth explicit.
+- Keep authorization, normative truth, and finding evidence explicitly separated.
 - Do not redesign architecture direction.
 - Do not broaden the slice when adjacent issues are discovered.
 - Prefer existing repository patterns.

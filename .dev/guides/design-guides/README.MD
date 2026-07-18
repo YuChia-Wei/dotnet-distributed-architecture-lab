@@ -24,15 +24,6 @@
 - `.dev/standards/`
 - `.dev/guides/ai-collaboration-guides/`
 
-## 文件索引
+## 導航
 
-- `DATA-CLASS-STANDARDS.md`
-  - data class 設計準則與使用界線
-- `EZDDD-FRAMEWORK-REFERENCE.md`
-  - ezDDD framework 概念對照與參考
-- `FRAMEWORK-API-INTEGRATION-GUIDE.md`
-  - framework API integration 設計與使用方式
-- `PROFILE-BASED-TESTING-GUIDE.md`
-  - profile-based testing 設計方式
-- `TEST-DATA-PREPARATION-GUIDE.md`
-  - 測試資料準備與設計注意事項
+文件目錄由 [INDEX.MD](INDEX.MD) 維護。

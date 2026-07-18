@@ -12,10 +12,12 @@ Generate ASP.NET Core controllers that are thin and map DTOs to Use Cases.
 - Inject explicit Use Case interfaces, never concrete Handlers, `IMessageBus`,
   mediators/dispatchers, write repositories, Aggregates, or Domain services
 - Map Request DTOs to transport-neutral Use Case inputs
+- Invoke `ExecuteAsync(input, cancellationToken)` and forward the non-optional
+  request `CancellationToken`
 - Use direct Query Repository/Service injection only when the endpoint is
   explicitly designated as a pure-query exception
 - Use Request/Response DTOs as separate files
-- Return typed Response (ActionResult<T>)
+- Return typed Response (`Task<ActionResult<T>>`)
 - Use proper HTTP status codes
 
 ## Output Structure

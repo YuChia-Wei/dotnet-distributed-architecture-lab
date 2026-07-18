@@ -11,9 +11,9 @@ public sealed class EventSourcedAggregateMutationAnalyzerTests
         var diagnostics = await AnalyzerTestHelper.GetDiagnosticsAsync(
             new EventSourcedAggregateMutationAnalyzer(),
             """
-            public abstract class EsAggregateRoot<TId, TEvent> { }
+            public abstract class EsAggregateRoot<TId> { }
 
-            public sealed class Order : EsAggregateRoot<string, object>
+            public sealed class Order : EsAggregateRoot<string>
             {
                 public string State { get; private set; } = "New";
 
@@ -39,9 +39,9 @@ public sealed class EventSourcedAggregateMutationAnalyzerTests
         var diagnostics = await AnalyzerTestHelper.GetDiagnosticsAsync(
             new EventSourcedAggregateMutationAnalyzer(),
             """
-            public abstract class EsAggregateRoot<TId, TEvent> { }
+            public abstract class EsAggregateRoot<TId> { }
 
-            public sealed class Order : EsAggregateRoot<string, object>
+            public sealed class Order : EsAggregateRoot<string>
             {
                 public string State { get; private set; } = "New";
 
@@ -64,6 +64,52 @@ public sealed class EventSourcedAggregateMutationAnalyzerTests
             public abstract class AggregateRoot<TId> { }
 
             public sealed class Order : AggregateRoot<string>
+            {
+                public string State { get; private set; } = "New";
+
+                public void Confirm()
+                {
+                    State = "Confirmed";
+                }
+            }
+            """);
+
+        Assert.Empty(diagnostics);
+    }
+
+    [Fact]
+    public async Task Reports_mutation_for_indirect_descendant_of_canonical_es_aggregate()
+    {
+        var diagnostics = await AnalyzerTestHelper.GetDiagnosticsAsync(
+            new EventSourcedAggregateMutationAnalyzer(),
+            """
+            public abstract class EsAggregateRoot<TId> { }
+            public abstract class ProductEsAggregate<TId> : EsAggregateRoot<TId> { }
+
+            public sealed class Order : ProductEsAggregate<string>
+            {
+                public string State { get; private set; } = "New";
+
+                public void Confirm()
+                {
+                    State = "Confirmed";
+                }
+            }
+            """);
+
+        var diagnostic = Assert.Single(diagnostics);
+        Assert.Equal("DBA1009", diagnostic.Id);
+    }
+
+    [Fact]
+    public async Task Does_not_apply_event_sourcing_rule_to_interface_first_normal_aggregate()
+    {
+        var diagnostics = await AnalyzerTestHelper.GetDiagnosticsAsync(
+            new EventSourcedAggregateMutationAnalyzer(),
+            """
+            public interface IAggregateRoot<TId> { }
+
+            public sealed class Order : IAggregateRoot<string>
             {
                 public string State { get; private set; } = "New";
 

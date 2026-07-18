@@ -1,0 +1,33 @@
+schema_version: "1.0"
+record_type: "example-evidence-manifest"
+allowed_tiers:
+  - "executable-tested"
+  - "structure-validated"
+  - "illustrative"
+  - "reference-only"
+  - "historical"
+default_allowed_tiers:
+  - "illustrative"
+  - "historical"
+required_entry_fields:
+  - "path"
+  - "tier"
+  - "claim"
+  - "reason"
+  - "validators"
+  - "build_commands"
+  - "test_commands"
+tier_requirements:
+  executable-tested:
+    required_nonempty:
+      - "build_commands"
+      - "test_commands"
+  structure-validated:
+    required_nonempty:
+      - "validators"
+  illustrative:
+    required_nonempty: []
+  reference-only:
+    required_nonempty: []
+  historical:
+    required_nonempty: []

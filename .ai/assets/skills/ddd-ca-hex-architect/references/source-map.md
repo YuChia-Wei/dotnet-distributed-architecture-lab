@@ -6,7 +6,8 @@ Use this file to map a user request to the smallest useful subset of the repo's 
 
 - `.dev/ARCHITECTURE.md`: repo-wide style and layer model
 - `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`: stack and tool constraints
-- `.dev/standards/README.md`: standards lookup index
+- `.dev/standards/INDEX.MD`: standards lookup index
+- `.dev/standards/README.md`: standards purpose and placement boundary
 - `.ai/SUB-AGENT-SYSTEM.MD`: prompt-family overview
 
 ## Prompt Families

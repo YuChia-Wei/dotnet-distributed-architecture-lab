@@ -15,8 +15,8 @@
 ### Rule Resolution Order
 
 1. Apply type-first detection for Aggregate rules:
-   - `EsAggregateRoot<TId>` uses ES rules.
-   - `AggregateRoot<TId>` (non-ES) does not use `Apply/When` rules.
+   - `EsAggregateRoot<TId>` uses ES rules (`AGGREGATE-ES-001`).
+   - `IAggregateRoot<TId>` (normal, non-ES) does not use `Apply/When` rules.
 2. Repository rules use `IAggregateRepository<TAggregate, TId>` as the write-side baseline; `IDomainRepository<TAggregate, TId>` is only a compatibility entry point that must inherit it.
 3. Query capabilities belong in a read-only query port inheriting `IQueryRepository`. An additional QueryService is needed only for composition, policy, or calculation requirements.
 4. `.dev/project-config.yaml` is only a supporting signal. When it conflicts with the type, use the type and mark the mismatch MUST FIX.
@@ -25,13 +25,13 @@
 
 | File Pattern | Checklist Location | Review Focus | Priority |
 |---------|------------|---------|--------|
-| `src/Domain/**/Aggregates/*.cs` | [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Aggregate (type-first detection)** | 1. Detect `EsAggregateRoot` or `AggregateRoot` first.<br>2. Check Apply/When only for ES.<br>3. Check invariants and event consistency for non-ES. | **CRITICAL** |
+| `src/Domain/**/Aggregates/*.cs` | [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Aggregate (type-first detection)** | 1. Detect `EsAggregateRoot<TId>` or `IAggregateRoot<TId>` first.<br>2. Check Apply/When only for ES.<br>3. Check invariants and state transitions for non-ES. | **CRITICAL** |
 | `src/Application/**/UseCases/**/*.cs` | [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Use Case / Handler** | 1. Explicit `I*UseCase` inbound port.<br>2. `ExecuteAsync` and transport-neutral contract.<br>3. Handler does not own orchestration. | HIGH |
 | `src/**/Repositories/*.cs` | [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Repository** | 1. Write side conforms to `IAggregateRepository<TAggregate, TId>`.<br>2. Generic type is an Aggregate Root.<br>3. Query and write capabilities are separated. | HIGH |
 | `src/Api/Controllers/*.cs` | [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Controller** | 1. Controller is sufficiently thin.<br>2. DTO is in a separate file.<br>3. HTTP status is correct. | MEDIUM |
 | `src/Application/**/Ports/**/*Mapper.cs`<br>`src/Infrastructure/**/Mappers/*.cs` | [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Mapper** | 1. Mapper is static/sealed.<br>2. One Mapper per DTO.<br>3. Outbox ToDomain handles both with-events and without-events cases. | **HIGH** |
-| `src/Infrastructure/**/Outbox/*Data.cs` | [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **Adapter / Mapper**<br>+ [Outbox README](../../../../../.dev/standards/examples/outbox/README.md) | 1. Implements `IOutboxData<TId>`.<br>2. Domain events field is marked NotMapped.<br>3. EF Core key/column naming is correct. | MEDIUM |
-| `src/tests/**/*.cs` | [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **BDD Rules / UseCase Tests** | 1. xUnit GWT structure and naming (BDDfy is the default profile and may be explicitly disabled by the team).<br>2. Do not use 3A or BaseTestClass.<br>3. Use NSubstitute. | HIGH |
+| `src/Infrastructure/**/Outbox/*Data.cs` | [Repository Standards](../../../../../.dev/standards/coding-standards/repository-standards.md)<br>+ [Mapper Standards](../../../../../.dev/standards/coding-standards/mapper-standards.md) | 1. Preserve Aggregate + Outbox atomicity.<br>2. Keep serialized data separate from Domain types.<br>3. Apply target-selected EF/SQL mapping rules. | MEDIUM |
+| `src/tests/**/*.cs` | [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)<br>→ **BDD Rules / UseCase Tests** | 1. xUnit GWT structure and naming (BDDfy is the default profile and may be explicitly disabled by the team).<br>2. Do not use 3A or BaseTestClass.<br>3. Use the target `testing.mocking` selection; default to NSubstitute. | HIGH |
 
 ---
 
@@ -106,7 +106,7 @@ public static Plan ToDomain(PlanData data)
 - **Complete checklist**: [CODE-REVIEW-CHECKLIST.md](../../../../../.dev/standards/CODE-REVIEW-CHECKLIST.md)
 - **Aggregate rules**: [aggregate-standards.md](../../../../../.dev/standards/coding-standards/aggregate-standards.md)
 - **Mapper rules**: [mapper-standards.md](../../../../../.dev/standards/coding-standards/mapper-standards.md)
-- **Outbox example**: [examples/outbox/README.md](../../../../../.dev/standards/examples/outbox/README.md)
+- **Outbox lifecycle**: [repository-standards.md](../../../../../.dev/standards/coding-standards/repository-standards.md)
 
 ---
 
@@ -137,7 +137,7 @@ For aggregate review, use this detection order before applying rules:
 
 1. Type hierarchy in BuildingBlocks domain (primary):
    - `EsAggregateRoot<TId>` => apply Event Sourcing checks (`Apply/When`) as CRITICAL.
-   - `AggregateRoot<TId>` and not `EsAggregateRoot<TId>` => do NOT apply `Apply/When` checks.
+   - `IAggregateRoot<TId>` and not `EsAggregateRoot<TId>` => do NOT apply `Apply/When` checks.
 2. `.dev/project-config.yaml` architecture pattern (secondary hint only).
 3. If type and config disagree:
    - report `TYPE-CONFIG MISMATCH` as MUST FIX,

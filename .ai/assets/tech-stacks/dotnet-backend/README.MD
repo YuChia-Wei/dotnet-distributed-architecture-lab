@@ -10,7 +10,7 @@ Included:
 - ASP.NET Core backend host configuration
 - command, query, reactor, aggregate, repository, projection, and controller patterns
 - Dapper, EF Core, PostgreSQL, WolverineFx, RabbitMQ, Kafka, Outbox, and Event Sourcing guidance
-- xUnit Given-When-Then testing rules, with BDDfy as the default profile, optional `.feature` support, and NSubstitute mocking rules
+- xUnit Given-When-Then testing rules, with BDDfy and NSubstitute as overridable profile defaults and optional `.feature` support
 
 Excluded:
 
@@ -32,7 +32,10 @@ Excluded:
 ## References
 
 - `references/BUILDING-BLOCKS-CLASS-INDEX.MD`
+- [BuildingBlocks reconstruction contract](../../../../.dev/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md)
 - `references/CODE-REVIEW-INDEX.MD`
+- `source-includes/domain/` - optional interface-first Domain contracts and the
+  executable-tested `EsAggregateRoot<TId>` source include
 - `references/CODE-TEMPLATES.MD`
 - `references/COMMON-PITFALLS.MD`
 - `references/FAILURE-CASES.MD`

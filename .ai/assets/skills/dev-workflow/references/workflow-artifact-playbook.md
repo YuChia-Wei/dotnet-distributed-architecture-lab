@@ -46,6 +46,29 @@ Each task JSON should capture:
 - execution steps, validation, and deferred items;
 - results after completion.
 
+When `execution.capability_slot` is `implementation`, replace the template's
+null `implementation_contract` with:
+
+```json
+{
+  "intent": "review-remediation",
+  "execution_mode": "command",
+  "overlays": ["remediation"],
+  "authorization_source": ["<user request or workflow task reference>"],
+  "normative_truth": ["<requirement, spec, standard, or ADR>"],
+  "finding_evidence": ["<assessment-id>#<finding-id>"],
+  "subject_revision": "<40-character Git SHA or empty string>",
+  "acceptance_criteria": ["<observable completion criterion>"]
+}
+```
+
+- Use exactly one `execution_mode`: `command`, `query`, `reactor`, or `generic`.
+- Use the `remediation` overlay only with `review-remediation` or
+  `validation-failure-remediation` intent.
+- Keep authorization, normative truth, and finding evidence separate.
+- Do not use deprecated `mode`, `source_truth`, or `source_findings` fields.
+- Leave `implementation_contract` null for non-implementation tasks.
+
 Use these statuses:
 
 ```text

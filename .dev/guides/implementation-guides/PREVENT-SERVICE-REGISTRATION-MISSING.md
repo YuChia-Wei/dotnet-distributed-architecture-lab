@@ -62,7 +62,7 @@ echo "Planned profile: [inmemory/outbox]"
 
 #### Option A: InMemory first, Outbox later (recommended)
 ```csharp
-if (env.IsEnvironment("inmemory") || env.IsEnvironment("test-inmemory"))
+if (env.IsEnvironment("InMemory") || env.IsEnvironment("TestInMemory"))
 {
     services.AddInMemoryProfile();
 }

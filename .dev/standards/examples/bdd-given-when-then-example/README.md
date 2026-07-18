@@ -17,7 +17,7 @@ Use these examples to keep BDD tests readable and reusable in .NET.
   - Rule granularity guidance and examples.
 - `rule-migration-guide.md`
   - Step-by-step migration guide from ezSpec to BDDfy Rule-style grouping.
-- `OUTBOX-TEST-CONFIGURATION.md`
+- `../outbox/OUTBOX-TEST-CONFIGURATION.md`
   - Outbox test configuration for .NET.
 - `AggregateOutboxRepositoryTests.cs`
   - Standard Outbox repository integration scenarios (BDDfy).

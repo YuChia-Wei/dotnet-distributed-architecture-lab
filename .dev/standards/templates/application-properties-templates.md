@@ -10,9 +10,8 @@ src/Api/
 ├── appsettings.json                # Primary configuration
 ├── appsettings.InMemory.json       # InMemory Profile
 ├── appsettings.Outbox.json         # Outbox Profile
-├── appsettings.Test.json           # Primary test configuration
-├── appsettings.Test-InMemory.json  # InMemory tests
-└── appsettings.Test-Outbox.json    # Outbox tests
+├── appsettings.TestInMemory.json   # InMemory tests
+└── appsettings.TestOutbox.json     # Outbox tests
 ```
 
 ## 1️⃣ appsettings.json (Primary Configuration)
@@ -21,9 +20,6 @@ src/Api/
 {
   "App": {
     "Name": "ai-scrum"
-  },
-  "Profiles": {
-    "Mode": "InMemory"
   },
   "Logging": {
     "LogLevel": {
@@ -39,9 +35,6 @@ src/Api/
 
 ```json
 {
-  "Profiles": {
-    "Mode": "InMemory"
-  },
   "Persistence": {
     "Provider": "InMemory"
   }
@@ -52,9 +45,6 @@ src/Api/
 
 ```json
 {
-  "Profiles": {
-    "Mode": "Outbox"
-  },
   "Persistence": {
     "Provider": "PostgreSQL"
   },
@@ -68,12 +58,12 @@ src/Api/
 }
 ```
 
-## 4️⃣ appsettings.Test.json (Primary Test Configuration)
+## 4️⃣ appsettings.TestInMemory.json (InMemory Tests)
 
 ```json
 {
-  "Profiles": {
-    "Mode": "Test-InMemory"
+  "Persistence": {
+    "Provider": "InMemory"
   },
   "Logging": {
     "LogLevel": {
@@ -83,26 +73,10 @@ src/Api/
 }
 ```
 
-## 5️⃣ appsettings.Test-InMemory.json (InMemory Tests)
+## 5️⃣ appsettings.TestOutbox.json (Outbox Tests)
 
 ```json
 {
-  "Profiles": {
-    "Mode": "Test-InMemory"
-  },
-  "Persistence": {
-    "Provider": "InMemory"
-  }
-}
-```
-
-## 6️⃣ appsettings.Test-Outbox.json (Outbox Tests)
-
-```json
-{
-  "Profiles": {
-    "Mode": "Test-Outbox"
-  },
   "Persistence": {
     "Provider": "PostgreSQL"
   },
@@ -114,14 +88,16 @@ src/Api/
 
 ## 🚨 Key Configuration Details
 
-### 1. Why Is Profiles/Mode Required?
-The profile switches between InMemory and Outbox behavior, preventing conflicts between configuration sets.
+### 1. How Is The Profile Selected?
+Set `DOTNET_ENVIRONMENT` or `ASPNETCORE_ENVIRONMENT`. The host loads the
+matching `appsettings.{Environment}.json`; configuration files do not select
+their own profile.
 
 ### 2. Profile Naming Rules
 - `InMemory`
 - `Outbox`
-- `Test-InMemory`
-- `Test-Outbox`
+- `TestInMemory`
+- `TestOutbox`
 
 ### 3. Database Port Separation
 - Development environment: 5432

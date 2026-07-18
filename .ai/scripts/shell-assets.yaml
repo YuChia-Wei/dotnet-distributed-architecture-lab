@@ -1,23 +1,116 @@
-schema_version: "1.0"
-retained:
-  - .ai/scripts/check-all.sh
-  - .ai/scripts/check-coding-standards.sh
-  - .ai/scripts/check-data-class-annotations.sh
-  - .ai/scripts/check-domain-events-compliance.sh
-  - .ai/scripts/check-dotnet-config.sh
-  - .ai/scripts/check-framework-api-compliance.sh
-  - .ai/scripts/check-mutation-coverage.sh
-  - .ai/scripts/check-prompt-portability.sh
-  - .ai/scripts/check-spec-compliance.sh
-  - .ai/scripts/check-test-compliance.sh
-  - .ai/scripts/check-test-di-compliance.sh
-  - .ai/scripts/code-review.sh
-  - .ai/scripts/test-profile-startup.sh
-  - .ai/scripts/validate-dual-profile-config.sh
-retirement_candidates: []
+schema_version: "2.0"
+contract:
+  distribution_rule: "packaged means shipped for execution or compatibility; it is not semantic endorsement"
+  authority_rule: "shell assets never replace Roslyn analyzers, compiled validators, tests, or canonical standards"
+
+assets:
+  - path: .ai/scripts/check-all.sh
+    role: active-orchestrator
+    lifecycle: active
+    distribution: packaged
+    authority: orchestration-only
+    replacement: null
+  - path: .ai/scripts/check-coding-standards.sh
+    role: context-validator
+    lifecycle: active
+    distribution: packaged
+    authority: structural
+    replacement: null
+  - path: .ai/scripts/check-prompt-portability.sh
+    role: context-validator
+    lifecycle: active
+    distribution: packaged
+    authority: context
+    replacement: null
+  - path: .ai/scripts/code-review.sh
+    role: compatibility-entrypoint
+    lifecycle: compatibility
+    distribution: packaged
+    authority: advisory
+    replacement: "Use code-reviewer plus analyzer/test evidence; retain this shell entrypoint for manual compatibility."
+  - path: .ai/scripts/check-spec-compliance.sh
+    role: compatibility-entrypoint
+    lifecycle: compatibility
+    distribution: packaged
+    authority: advisory
+    replacement: "Use spec-compliance-validator and DBA analyzer/test evidence; retain the shell route while target workflows still invoke it."
+  - path: .ai/scripts/check-mutation-coverage.sh
+    role: manual-advisory
+    lifecycle: compatibility
+    distribution: packaged
+    authority: advisory
+    replacement: "Use target-owned Stryker.NET configuration and CI thresholds."
+  - path: .ai/scripts/test-profile-startup.sh
+    role: manual-advisory
+    lifecycle: compatibility
+    distribution: packaged
+    authority: advisory
+    replacement: "Use target-owned startup/integration tests with explicit profile selection."
+  - path: .ai/scripts/check-data-class-annotations.sh
+    role: transitional-helper
+    lifecycle: transitional
+    distribution: packaged
+    authority: advisory
+    replacement: "Replace C# grep heuristics with a Roslyn analyzer or compiled architecture test."
+  - path: .ai/scripts/check-domain-events-compliance.sh
+    role: transitional-helper
+    lifecycle: transitional
+    distribution: packaged
+    authority: advisory
+    replacement: "Replace C# event-shape grep heuristics with analyzer rules and event contract tests."
+  - path: .ai/scripts/check-dotnet-config.sh
+    role: transitional-helper
+    lifecycle: transitional
+    distribution: packaged
+    authority: advisory
+    replacement: "Use target technology selections plus compiled configuration validation."
+  - path: .ai/scripts/check-framework-api-compliance.sh
+    role: transitional-helper
+    lifecycle: transitional
+    distribution: packaged
+    authority: advisory
+    replacement: "Use target-selected framework analyzers, architecture tests, and integration tests."
+  - path: .ai/scripts/check-test-compliance.sh
+    role: transitional-helper
+    lifecycle: retirement-candidate
+    distribution: packaged
+    authority: advisory
+    replacement: "Removed from automatic gates; use target testing selections, analyzers, and executable test architecture checks. Retain packaged compatibility for the v0.4.0 migration window."
+  - path: .ai/scripts/check-test-di-compliance.sh
+    role: transitional-helper
+    lifecycle: transitional
+    distribution: packaged
+    authority: advisory
+    replacement: "Replace test-source grep heuristics with analyzer or compiled test architecture rules."
+  - path: .ai/scripts/validate-dual-profile-config.sh
+    role: transitional-helper
+    lifecycle: transitional
+    distribution: packaged
+    authority: advisory
+    replacement: "Use target profile selections and DotnetBackendValidation configuration tests."
+
 required_entrypoints:
   - .ai/scripts/check-all.sh
   - .ai/scripts/code-review.sh
 check_all_required_scripts:
   - .ai/scripts/check-coding-standards.sh
   - .ai/scripts/check-spec-compliance.sh
+check_all_required_commands:
+  - python .ai/scripts/validate-assessment-artifacts.py
+  - python .ai/scripts/tests/test_assessment_artifacts.py -v
+  - python .ai/scripts/validate-workflow-artifacts.py
+  - python .ai/scripts/tests/test_workflow_implementation_contract.py -v
+  - python .ai/scripts/tests/test_workflow_lifecycle_contract.py -v
+  - python .ai/scripts/tests/test_git_commit_policy.py -v
+  - python .ai/scripts/validate-ai-context.py
+  - python .ai/scripts/validate-ai-context-versions.py
+  - python .ai/scripts/tests/test_ai_context_package_apply.py -v
+  - python .ai/scripts/validate-shell-assets.py
+  - python .ai/scripts/tests/test_fail_closed_validation.py -v
+  - python .ai/scripts/tests/test_coding_standards_integrity_contract.py -v
+  - python .ai/scripts/tests/test_profile_projection_contract.py -v
+  - python .ai/scripts/tests/test_document_projection_contract.py -v
+  - python .ai/scripts/tests/test_ai_context_source_include_evidence.py -v
+  - dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj
+  - dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj
+  - dotnet test tools/DotnetBackendBuildingBlocks.Tests/DotnetBackendBuildingBlocks.Tests.csproj

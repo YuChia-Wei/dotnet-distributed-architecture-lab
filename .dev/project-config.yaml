@@ -174,6 +174,58 @@ messaging:
   topologyDocuments:
     - .dev/operations/event-catalog.md
     - .dev/operations/mq-topology.md
+technologySelections:
+  - slot: testing.mocking
+    value: NSubstitute and Moq by test project
+    status: selected
+    source: repository-evidence
+    evidence:
+      - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
+      - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
+    reason: Existing bounded-context test projects use different established mocking libraries.
+  - slot: testing.bdd-runner
+    value: unresolved
+    status: unresolved
+    source: repository-evidence
+    evidence:
+      - tests
+    reason: No dedicated BDD runner package is selected by current test project files.
+  - slot: persistence.orm
+    value: Dapper
+    status: selected
+    source: repository-evidence
+    evidence:
+      - src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj
+    reason: Product persistence uses Dapper; EF Core is limited to validation tooling.
+  - slot: persistence.database
+    value: PostgreSQL
+    status: selected
+    source: repository-evidence
+    evidence:
+      - docker-compose/docker-compose.yml
+    reason: PostgreSQL is the active product persistence provider.
+  - slot: messaging.broker
+    value: Apache Kafka and RabbitMQ profiles
+    status: selected
+    source: repository-evidence
+    evidence:
+      - docker-compose/docker-compose.yml
+      - src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Configuration/MessagingTransportOptions.cs
+    reason: The repository implements selectable Kafka and RabbitMQ transport profiles.
+  - slot: messaging.framework
+    value: WolverineFx
+    status: selected
+    source: repository-evidence
+    evidence:
+      - src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj
+    reason: WolverineFx is the application messaging and dispatch framework.
+  - slot: observability.runtime
+    value: OpenTelemetry
+    status: selected
+    source: repository-evidence
+    evidence:
+      - src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj
+    reason: Presentation projects configure OpenTelemetry instrumentation and export.
 frontend:
   detected: false
   frameworks: []

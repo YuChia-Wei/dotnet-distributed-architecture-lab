@@ -2,7 +2,7 @@
 
 Agent-loading projection of the canonical [Test Coding Standards](../../../../../.dev/standards/coding-standards/test-standards.md).
 
-Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`.
+Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`.
 
 ## Execution Summary
 - **Framework**: xUnit
@@ -10,7 +10,7 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`.
 - **Minimum test style**: All unit, use-case, and integration tests use Given-When-Then structure and naming. Arrange-Act-Assert (3A) is not an alternative.
 - **Feature assets**: `.feature` files are planned/optional, not required by default. Support them when supplied or explicitly requested, or when the target profile selects a feature runner; do not select a runner or package without project evidence.
 - **No BaseTestClass**: Tests must not inherit from shared base classes
-- **Mocking**: NSubstitute only
+- **Mocking**: Use the target `testing.mocking` selection; default to NSubstitute
 
 ## Core Rules
 - Do not hardcode environment/profile inside test classes
@@ -21,7 +21,7 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`.
 ## Profile Switching Pattern (xUnit)
 - Use `ICollectionFixture<TFixture>` to set environment variables before test execution
 - Example fixture (conceptual):
-  - Set `ASPNETCORE_ENVIRONMENT=test-inmemory`
+  - Set `ASPNETCORE_ENVIRONMENT=TestInMemory`
   - Initialize test service container
 
 ## Test Types
@@ -33,9 +33,13 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`.
   Use Case interface, not a Handler or Repository
 - **Reactor Tests**: Event-driven tests with async verification
 
-## NSubstitute Rules
-- Use `Substitute.For<T>()`
-- Avoid strict mocks unless explicitly required
+## Mocking Selection Rules
+- Resolve `testing.mocking` from `.dev/project-config.yaml` when present.
+- Use NSubstitute and `Substitute.For<T>()` when no target override exists.
+- When another library is explicitly selected, use its equivalent interaction
+  syntax without changing GWT structure or test independence.
+- Avoid strict mocks unless explicitly required.
+- Do not mix mocking libraries without a documented migration decision.
 
 
 ## ezSpec -> GWT Test Mapping Rules (Dotnet)
@@ -134,15 +138,15 @@ children[1].Order.Should().Be(1);
 ## Dual-Profile Execution (Dotnet)
 
 ### When `dualProfileSupport: true`
-- Run **all relevant use case tests** twice: `test-inmemory` and `test-outbox`.
+- Run **all relevant use case tests** twice: `TestInMemory` and `TestOutbox`.
 - Do NOT hardcode environment in test classes.
 - Prefer xUnit fixtures/collections to set `ASPNETCORE_ENVIRONMENT` before host startup.
 
 ### Execution Options
 1) **Two test runs (recommended in CI)**
 ```bash
-ASPNETCORE_ENVIRONMENT=test-inmemory dotnet test
-ASPNETCORE_ENVIRONMENT=test-outbox dotnet test
+ASPNETCORE_ENVIRONMENT=TestInMemory dotnet test
+ASPNETCORE_ENVIRONMENT=TestOutbox dotnet test
 ```
 
 2) **Two test projects (if isolation needed)**

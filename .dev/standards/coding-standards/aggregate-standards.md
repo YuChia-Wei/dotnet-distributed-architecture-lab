@@ -2,14 +2,23 @@
 
 This document defines coding standards for Aggregates, Entities, Value Objects, and Domain Events.
 
+Contract semantics are defined in
+[Design By Contract Semantics](../DESIGN-BY-CONTRACT.md). Names such as
+`Contract.Require` and `Contract.Ensure` in snippets are illustrative helper
+names, not a required package API.
+
 ---
 
 ## 📌 Overview
 
-An Aggregate is a core DDD model and MUST follow the Event Sourcing and invariant-preservation rules.
+An Aggregate is a core DDD model and MUST preserve its invariants. Event Sourcing
+is an explicit Aggregate profile, not a requirement for every Aggregate.
 
 - The **Aggregate Root** is the only public modification entry point.
-- **State changes** are recorded through Domain Events.
+- A normal Aggregate implements `IAggregateRoot<TId>` directly and may keep
+  current state without replay mechanics.
+- An event-sourced Aggregate derives from or behaviorally implements
+  `EsAggregateRoot<TId>` and records state changes through Domain Events.
 - **Immutability**: Value Objects MUST be immutable.
 - **Transaction boundary**: one Command modifies one Aggregate by default. Coordinate
   other Aggregates through events and eventual consistency. A same-boundary
@@ -19,20 +28,26 @@ An Aggregate is a core DDD model and MUST follow the Event Sourcing and invarian
 
 ---
 
-## 🏷️ Pattern Markers for Automated Checks
+## 🏷️ Automated Check Boundaries
 
-The following markers are consumed by automated code-review scripts:
+`DBA1009` applies only to descendants of a type named `EsAggregateRoot`.
+`DBA1003` checks Aggregate/Entity infrastructure dependencies. Invariant
+completeness, event completeness, and target deletion-policy adoption still
+require tests and review.
+
+Rule IDs: `AGGREGATE-ES-001`, `DELETE-SOFT-001`,
+`CONTRACT-SEMANTICS-001`.
 
 ```yaml
-# Aggregate Root rules
-Pattern (required): Apply\(
-Pattern (required): protected override void When
-Pattern (required): Ensure\.|Contract\.|Guard\.
-Pattern (optional): IsDeleted
-
-# Forbidden rules
-Pattern (forbidden, ignore-comment): DbContext
-Pattern (forbidden): new .*Service\(
+normal-aggregate:
+  type: IAggregateRoot<TId>
+  apply-when-required: false
+event-sourced-aggregate:
+  type: EsAggregateRoot<TId>
+  apply-when-required: true
+  analyzer: DBA1009
+all-aggregates:
+  infrastructure-dependency-analyzer: DBA1003
 ```
 
 ---
@@ -42,25 +57,26 @@ Pattern (forbidden): new .*Service\(
 **Problem**: Initializing a collection field in the constructor after `base()` clears data restored by event replay.
 
 ```csharp
-// ❌ Incorrect: clears event-replayed data
-public class ScrumTeam : AggregateRoot<ScrumTeamId>
+// ❌ Incorrect: Replay can dispatch When before _members is initialized here
+public class ScrumTeam : EsAggregateRoot<ScrumTeamId>
 {
     private readonly List<TeamMember> _members;
     
-    public ScrumTeam(IEnumerable<IDomainEvent> domainEvents) : base(domainEvents)
+    public ScrumTeam(IEnumerable<IDomainEvent> domainEvents)
     {
-        _members = new List<TeamMember>();  // Incorrect: clears the data that was just replayed
+        Replay(domainEvents);
+        _members = new List<TeamMember>();  // Too late for replay transitions
     }
 }
 
 // ✅ Correct: initialize at field declaration
-public class ScrumTeam : AggregateRoot<ScrumTeamId>
+public class ScrumTeam : EsAggregateRoot<ScrumTeamId>
 {
     private readonly List<TeamMember> _members = new();  // Correct initialization timing
     
-    public ScrumTeam(IEnumerable<IDomainEvent> domainEvents) : base(domainEvents)
+    public ScrumTeam(IEnumerable<IDomainEvent> domainEvents)
     {
-        // _members already exists, so event replay data is preserved
+        Replay(domainEvents); // called from the derived constructor body
     }
 }
 ```
@@ -69,20 +85,25 @@ public class ScrumTeam : AggregateRoot<ScrumTeamId>
 
 ## 🔴 Active Rules
 
-### 0. Soft-Delete Field Requirement
+### 0. Soft-Delete Default Profile
 
-Rule ID: `DELETE-SOFT-001` (`conditional`).
+Rule ID: `DELETE-SOFT-001` (`profile-default`).
 
-When target-repository requirements or an architecture decision explicitly adopt
-aggregate soft deletion, each affected Aggregate must support the following
-field and event-application behavior. Aggregates are not required to add an
-`IsDeleted` field when the capability is not selected.
+The dotnet-backend Aggregate Repository profile defaults to soft deletion.
+Affected Aggregates support the following field and event-application behavior,
+and deletion is persisted through `SaveAsync`.
+
+A target may explicitly opt out for an Aggregate or repository profile when its
+requirements or architecture decision select another lifecycle. The opt-out
+must be recorded in target evidence such as `.dev/project-config.yaml`
+architecture capability selections, requirements, or an ADR. An opted-out
+Aggregate is not required to add `IsDeleted`.
 
 #### Adopted Aggregate Root Must Have an `IsDeleted` Field and Handling Logic
 
 ```csharp
 // ✅ Correct when soft deletion is adopted
-public class WorkItem : AggregateRoot<WorkItemId>
+public class WorkItem : EsAggregateRoot<WorkItemId>
 {
     public bool IsDeleted { get; private set; }  // Required soft-delete marker
     
@@ -156,31 +177,45 @@ public void CreateTask(TaskId taskId, string name, int? estimatedHours, string c
 ### 1. Inheritance Rules
 
 ```csharp
-// ✅ Event Sourcing Aggregate
-public class Product : AggregateRoot<ProductId>
+// ✅ Normal state-based Aggregate: no shared base class required
+public class Product : IAggregateRoot<ProductId>
 {
-    // Required implementation:
+    public ProductId Id { get; }
+
+    // Product-owned behavior and invariants.
+    // Apply/When and replay mechanics are not required.
+}
+
+// ✅ Event-sourced Aggregate: the only optional supplied base class
+public class EventSourcedProduct : EsAggregateRoot<ProductId>
+{
+    public override ProductId Id { get; }
+
+    // Required event transition:
     protected override void When(IDomainEvent @event) { ... }
-    
-    // Properties
-    public ProductId Id { get; private set; }
+
     public string Name { get; private set; } = string.Empty;
     public ProductState State { get; private set; }
     public bool IsDeleted { get; private set; }
 }
 ```
 
+Do not introduce `DomainEntity<TId>`, non-ES `AggregateRoot<TId>`, or
+`ValueObject` base classes as default requirements. See the
+[BuildingBlocks Reconstruction Contract](../BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md).
+
 ### 2. Constructor Design
 
 ```csharp
 // ✅ Correct: provide two constructors
-public class Product : AggregateRoot<ProductId>
+public class Product : EsAggregateRoot<ProductId>
 {
     private readonly List<Task> _tasks = new();  // Initialize at field declaration
     
     // Constructor for Event Sourcing reconstruction
-    public Product(IEnumerable<IDomainEvent> events) : base(events)
+    public Product(IEnumerable<IDomainEvent> events)
     {
+        Replay(events);
     }
     
     // Public constructor for creating a new instance
@@ -449,15 +484,20 @@ protected override void When(IDomainEvent @event)
 ## 🔍 Checklist
 
 ### Aggregate Root
-- [ ] Inherits `AggregateRoot<TId>`.
-- [ ] Provides an Event Sourcing reconstruction constructor.
+- [ ] Implements `IAggregateRoot<TId>` directly, or uses
+      `EsAggregateRoot<TId>` only when Event Sourcing is selected.
+- [ ] Does not require another shared Aggregate/Entity/ValueObject base class.
+- [ ] If event-sourced, provides a reconstruction constructor that calls
+      `Replay(history)` from the derived constructor body.
 - [ ] Provides a public constructor, not a static factory.
-- [ ] Implements `protected override void When(IDomainEvent @event)`.
-- [ ] Has an `IsDeleted` field for soft deletion.
+- [ ] If event-sourced, implements
+      `protected override void When(IDomainEvent @event)`.
+- [ ] Has an `IsDeleted` field under the default soft-delete profile, or records an explicit target opt-out.
 - [ ] Command methods check preconditions.
 - [ ] Command methods check postconditions.
-- [ ] Applies Domain Events correctly (`Apply`).
-- [ ] Collection fields are initialized at declaration.
+- [ ] If event-sourced, applies Domain Events correctly (`Apply`).
+- [ ] If event-sourced, collection fields are initialized before `Replay` and
+      replay is not initiated from a base constructor.
 - [ ] The command changes one Aggregate by default.
 - [ ] Cross-Aggregate effects use events and eventual consistency by default.
 - [ ] Any exceptional same-boundary multi-Aggregate transaction satisfies and
@@ -489,7 +529,6 @@ For more complete examples, see:
 | Aggregate examples | [../examples/aggregate/](../examples/aggregate/) |
 | Domain Events | [../examples/aggregate/PlanEvents.cs](../examples/aggregate/PlanEvents.cs) |
 | Value Objects | [../examples/aggregate/PlanId.cs](../examples/aggregate/PlanId.cs) |
-| Outbox + Data examples | [../examples/outbox/](../examples/outbox/) |
 
 ---
 
@@ -499,3 +538,5 @@ For more complete examples, see:
 - [mapper-standards.md](mapper-standards.md)
 - [repository-standards.md](repository-standards.md)
 - [test-standards.md](test-standards.md)
+- [BuildingBlocks Reconstruction Contract](../BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md)
+- [Design By Contract Semantics](../DESIGN-BY-CONTRACT.md)

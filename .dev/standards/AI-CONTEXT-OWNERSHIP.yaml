@@ -59,7 +59,7 @@ rules:
     domain: deletion
     strength: conditional
     canonical_path: .dev/standards/coding-standards/aggregate-standards.md
-    canonical_anchor: "### 0. Soft-Delete Field Requirement"
+    canonical_anchor: "### 0. Soft-Delete Default Profile"
     scope: dotnet-backend
     applicability: target repository explicitly adopts aggregate soft deletion
     override_policy: not-applicable

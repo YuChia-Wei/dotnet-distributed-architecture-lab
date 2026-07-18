@@ -22,7 +22,7 @@ A repository interface is an Application outbound port. EF Core, Dapper, SQL, ev
 
 ```csharp
 public interface IAggregateRepository<TAggregate, TId>
-    where TAggregate : AggregateRoot<TId>
+    where TAggregate : IAggregateRoot<TId>
 {
     Task<TAggregate?> FindByIdAsync(
         TId id,
@@ -52,7 +52,7 @@ Existing products may already use `IDomainRepository` for an Aggregate Repositor
 ```csharp
 public interface IDomainRepository<TAggregate, TId>
     : IAggregateRepository<TAggregate, TId>
-    where TAggregate : AggregateRoot<TId>
+    where TAggregate : IAggregateRoot<TId>
 {
 }
 ```
@@ -142,7 +142,7 @@ Physical deletion uses a separate, restricted capability port and does not belon
 
 ```csharp
 public interface IAggregatePurgePort<TAggregate, TId>
-    where TAggregate : AggregateRoot<TId>
+    where TAggregate : IAggregateRoot<TId>
 {
     Task PurgeAsync(
         TId id,

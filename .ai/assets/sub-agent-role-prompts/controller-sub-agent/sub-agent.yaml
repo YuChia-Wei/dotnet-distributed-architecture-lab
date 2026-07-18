@@ -23,12 +23,13 @@ outputs:
 constraints:
   - "Controllers must stay thin and avoid business logic"
   - "Controllers depend on Use Case interfaces, not Handlers, IMessageBus, mediators, write repositories, or Domain services"
+  - "Controllers invoke ExecuteAsync and forward a non-optional request CancellationToken"
   - "Direct Query Repository/Service access is allowed only for an explicitly selected pure-query endpoint"
   - "Use Request/Response DTOs as separate files"
   - "Return typed responses and explicit HTTP status codes"
 workflow:
   - step: 1
-    description: "Confirm the controller boundary and target use case contract"
+    description: "Confirm the controller boundary and target ExecuteAsync use case contract"
   - step: 2
     description: "Apply shared controller, DTO, and testing conventions"
   - step: 3

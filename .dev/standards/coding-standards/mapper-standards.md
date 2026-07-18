@@ -156,9 +156,11 @@ Additional requirements:
 
 ---
 
-### 3. The IsDeleted Field MUST Be Mapped
+### 3. The IsDeleted Field MUST Be Mapped When Soft Delete Applies
 
-An Aggregate Root Mapper MUST handle the `IsDeleted` field:
+Under the `DELETE-SOFT-001` default profile, an Aggregate Root Mapper MUST
+handle the `IsDeleted` field. A target with an evidenced soft-delete opt-out
+does not add or map a synthetic field.
 
 ```csharp
 // ✅ Correct: map the IsDeleted field
@@ -347,7 +349,7 @@ public static Product ToDomain(ProductData data)
 ```csharp
 // ❌ Incorrect: the Aggregate adds a field that the Mapper does not handle
 // Product.cs
-public class Product : AggregateRoot<ProductId>
+public class Product : IAggregateRoot<ProductId>
 {
     private readonly List<CommittedSprint> _committedSprints = new();  // New field
     
@@ -402,7 +404,7 @@ if (!string.IsNullOrEmpty(data.CommittedSprintsJson))
 ### ToData Method
 - [ ] Maps every basic field
 - [ ] Serializes complex objects as JSON
-- [ ] Includes the `IsDeleted` field
+- [ ] Includes the `IsDeleted` field when `DELETE-SOFT-001` applies
 - [ ] Handles serialization errors
 - [ ] Includes domain events, metadata, and stream identity for a write-model mapper
 
@@ -410,7 +412,7 @@ if (!string.IsNullOrEmpty(data.CommittedSprintsJson))
 - [ ] Prefers rebuilding from events (Event Sourcing)
 - [ ] Supports rebuilding from state
 - [ ] Deserializes every complex object
-- [ ] Restores `IsDeleted` state
+- [ ] Restores `IsDeleted` state when `DELETE-SOFT-001` applies
 - [ ] Returns the reconstructed aggregate with no pending `DomainEvents`; calls `ClearDomainEvents()` when the constructor/replay path can enqueue events or does not explicitly guarantee cleanliness
 - [ ] Degrades gracefully on deserialization failure without terminating the entire flow
 
@@ -427,7 +429,6 @@ For more complete examples, see:
 | Example | Path |
 |------|------|
 | Mapper example | [../examples/mapper/](../examples/mapper/) |
-| Outbox Mapper example | [../examples/outbox/](../examples/outbox/) |
 | DTO example | [../examples/dto/](../examples/dto/) |
 
 ---

@@ -80,11 +80,14 @@ public sealed record ProjectName
 ### Aggregate Root Structure
 
 ```csharp
-public sealed class Plan : EsAggregateRoot<PlanId, PlanEvents.IPlanEvent>
+public sealed class Plan : EsAggregateRoot<PlanId>
 {
     public const string Category = "Plan";
 
-    public Plan(IEnumerable<PlanEvents.IPlanEvent> events) : base(events) { }
+    public Plan(IEnumerable<PlanEvents.IPlanEvent> events)
+    {
+        Replay(events);
+    }
 
     public Plan(PlanId planId, string name, string userId)
     {
@@ -126,7 +129,7 @@ public void Rename(string newName)
 ### Event Handlers
 
 ```csharp
-protected override void When(PlanEvents.IPlanEvent @event)
+protected override void When(IDomainEvent @event)
 {
     switch (@event)
     {
@@ -167,6 +170,9 @@ public override void EnsureInvariant()
 - Do not set state directly outside `When(...)`.
 - Keep events immutable.
 - Avoid overgrown aggregates; split when necessary.
+- Treat this folder as illustrative. The executable-tested mechanical
+  `EsAggregateRoot<TId>` source and behavior contract are linked from
+  [the BuildingBlocks reconstruction contract](../../BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md).
 
 ## Related Examples
 - `../usecase/` - Use case patterns

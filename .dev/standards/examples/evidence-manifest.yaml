@@ -1,0 +1,128 @@
+schema_version: "1.0"
+manifest_id: "DOTNET-EXAMPLES-EVIDENCE-001"
+schema: ".dev/standards/examples/evidence-schema.yaml"
+updated_at: "2026-07-16T21:33:25+08:00"
+default_tier: "historical"
+default_claim: "Unclassified legacy provenance; not active or copy-ready guidance."
+default_reason: "Legacy material defaults downward until explicit evidence supports promotion."
+
+entries:
+  - path: "aggregate/"
+    tier: "illustrative"
+    claim: "Illustrates Aggregate and Event Sourcing concepts; not a compiled template."
+    reason: "Contains converted and placeholder BuildingBlocks/EzDDD shapes without an independent build route."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "aspnet-core/"
+    tier: "reference-only"
+    claim: "On-demand ASP.NET Core configuration reference."
+    reason: "Target profiles and adapters are conditional and no coherent build route is owned here."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "bdd-gherkin-example/"
+    tier: "reference-only"
+    claim: "Reference Gherkin feature examples."
+    reason: "Feature-runner adoption is target-selected and no runner is asserted here."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "bdd-given-when-then-example/"
+    tier: "reference-only"
+    claim: "On-demand BDDfy Given-When-Then mapping reference."
+    reason: "Source snippets contain incomplete fixture integrations and are not a standalone compiled test project."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "contract/"
+    tier: "historical"
+    claim: "Historical uContract and Design-by-Contract source lineage."
+    reason: "The API has no approved .NET realization; current standards own invariant and validation semantics."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "controller/"
+    tier: "illustrative"
+    claim: "Illustrates an async ASP.NET Core Controller-to-Use-Case boundary."
+    reason: "The example aligns to ExecuteAsync and CancellationToken but is not a standalone compiled application."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "dto/"
+    tier: "illustrative"
+    claim: "Illustrates DTO placement and shapes."
+    reason: "No standalone compilation route is owned here."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "generation-templates/"
+    tier: "reference-only"
+    claim: "On-demand legacy generation input, not verified source of truth."
+    reason: "Generated output is not built or tested by this repository."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "inquiry-archive/"
+    tier: "reference-only"
+    claim: "On-demand query/archive concept reference."
+    reason: "Target persistence and archive behavior remain conditional."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "mapper/"
+    tier: "reference-only"
+    claim: "On-demand mapper concept reference."
+    reason: "No compiled example project verifies the complete mapping surface."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "nuget/"
+    tier: "reference-only"
+    claim: "On-demand package-layout reference with target-selected versions."
+    reason: "Target package versions and selections must come from target evidence."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "outbox/"
+    tier: "reference-only"
+    claim: "On-demand Outbox concept reference."
+    reason: "Broker, ORM, and transaction adapters are target-selected."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "profile-configs/"
+    tier: "reference-only"
+    claim: "On-demand historical profile configuration variants."
+    reason: "Profile selector consolidation remains part of AIC-001 remediation."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "projection/"
+    tier: "reference-only"
+    claim: "On-demand projection and read-model reference."
+    reason: "Persistence-specific implementations are conditional."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "reference/"
+    tier: "historical"
+    claim: "Historical Java/EzDDD import and migration provenance."
+    reason: "Retained for concept extraction and lineage; not active implementation guidance."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "use-case-injection/"
+    tier: "illustrative"
+    claim: "Illustrates Use Case injection boundaries."
+    reason: "No standalone compilation route is owned here."
+    validators: []
+    build_commands: []
+    test_commands: []
+  - path: "usecase/"
+    tier: "reference-only"
+    claim: "On-demand Use Case lineage and orchestration reference."
+    reason: "Placeholder CqrsOutput and contract APIs are not current canonical API truth."
+    validators: []
+    build_commands: []
+    test_commands: []

@@ -41,17 +41,17 @@
 
 ## 自檢與修正生命週期
 
-只在對話中回覆的 transient read-only analysis 不屬於 remediation workflow，也不需要 branch、artifacts 或 commit。當使用者授權修正時，治理工作才建立 durable workflow；若基準稽核需要成為正式追蹤證據，應先由 auditor 以 durable report mode 落地。
+只在對話中回覆的 transient read-only analysis 不屬於 remediation workflow，也不需要 branch、artifacts 或 commit。當使用者授權修正時，治理工作才建立 durable workflow；若基準稽核需要成為正式追蹤證據，應先由 auditor 建立 standalone assessment。
 
 完整的 AI context 維護流程由本 skill 協調：
 
-1. `ai-context-auditor` 產生唯讀基準報告 `reports/01-audit-report.md`。
+1. `ai-context-auditor` 產生唯讀 baseline assessment，存放於 `.dev/assessments/<assessment-id>/report.md`。
 2. 本 skill 逐項分類 findings、建立 tasks 並執行已授權修正。
-3. 本 skill 產生 `reports/02-remediation-report.md`，記錄每個 finding 的處置與證據。
-4. `ai-context-auditor` 獨立複檢並產生 `reports/03-post-remediation-audit-report.md`。
+3. 本 skill 產生 `reports/remediation-report.md`，以 `<assessment-id>#<finding-id>` 記錄每個 finding 的處置與證據。
+4. `ai-context-auditor` 獨立複檢並建立新的 verification assessment。
 5. 本 skill 對照三份報告、確認 commit 與 validation，最後結案或明確 defer。
 
-基準報告不得被修正報告或複檢結果覆寫。
+Baseline assessment 不得被修正報告或 verification assessment 覆寫或複製成第二份 truth。
 
 ## Workflow 與時間欄位
 

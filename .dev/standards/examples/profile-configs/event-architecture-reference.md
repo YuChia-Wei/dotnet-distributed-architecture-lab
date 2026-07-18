@@ -21,7 +21,7 @@ Repository.save() -> PostgreSQL (outbox) -> Wolverine outbox relay
 var builder = WebApplication.CreateBuilder(args);
 var env = builder.Environment;
 
-if (env.IsEnvironment("Outbox") || env.IsEnvironment("Test-Outbox"))
+if (env.IsEnvironment("Outbox") || env.IsEnvironment("TestOutbox"))
 {
     builder.Services.AddPlanDataSource(builder.Configuration);
     builder.Services.AddOutboxRepositories(builder.Configuration);
@@ -36,10 +36,12 @@ else
 
 ## Profile Detection Pattern
 
-Use environment names or configuration values to switch:
+Use the host environment name to switch. Do not introduce a configuration-key
+selector such as `Repository:Mode`:
 
 ```csharp
-if (config.GetValue<string>("Repository:Mode") == "outbox")
+if (builder.Environment.IsEnvironment("Outbox")
+    || builder.Environment.IsEnvironment("TestOutbox"))
 {
     // outbox setup
 }

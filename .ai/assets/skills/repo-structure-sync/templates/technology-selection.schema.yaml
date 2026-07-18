@@ -1,0 +1,31 @@
+schema_version: "1.0"
+record_type: "target-technology-selection"
+collection_path: ".dev/project-config.yaml#technologySelections"
+slot_pattern: "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$"
+required_fields:
+  - "slot"
+  - "value"
+  - "status"
+  - "source"
+  - "evidence"
+  - "reason"
+allowed_statuses:
+  - "selected"
+  - "not-applicable"
+  - "unresolved"
+allowed_sources:
+  - "repository-evidence"
+  - "explicit-target-decision"
+resolution_order:
+  - "explicit-target-decision"
+  - "repository-evidence"
+  - "framework-profile-default"
+  - "unresolved"
+default_slots:
+  - "testing.mocking"
+  - "testing.bdd-runner"
+  - "persistence.orm"
+  - "persistence.database"
+  - "messaging.broker"
+  - "messaging.framework"
+  - "observability.runtime"

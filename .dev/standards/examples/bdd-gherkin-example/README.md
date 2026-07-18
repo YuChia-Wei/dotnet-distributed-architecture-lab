@@ -11,16 +11,18 @@ Use these examples to keep BDD tests readable and reusable in .NET.
 
 ## Contents
 
-- `complete-usecase-with-rules.feature` + `CompleteUseCaseSteps.cs`
-  - Full-feature use case example with multiple rules.
+- `complete-usecase-with-rules.feature`
+  - Full-feature Use Case scenario example. Target-owned bindings are required.
+- `create-task-usecase.feature`
+  - Domain-oriented Use Case scenarios retained without placeholder step bindings.
 - `rule-design-before-after.md`
   - Rule granularity guidance and examples.
 - `rule-migration-guide.md`
   - Step-by-step migration guide from ezSpec to Gherkin Rule blocks.
-- `OUTBOX-TEST-CONFIGURATION.md`
-  - Outbox test configuration for .NET.
-- `aggregate-outbox-repository.feature` + `AggregateOutboxRepositorySteps.cs`
-  - Standard Outbox repository integration scenarios.
+- `../outbox/OUTBOX-TEST-CONFIGURATION.md`
+  - Shared Outbox test configuration for both BDD modes.
+- `aggregate-outbox-repository.feature`
+  - Standard Outbox repository integration scenarios without placeholder bindings.
 
 ## Rule Design Principles
 

@@ -52,6 +52,16 @@
 - 需要區分 architecture-level 與 code-level 問題
 - 需要驗證一輪實作後是否收斂
 
+一般 review 預設只在對話中回傳，不建立 artifact。若明確要求保存大型或正式
+code review，使用 `.dev/assessments/<ASM-YYYYMMDD-NNN>/`，並將被審查的 Git
+revision 固定在 assessment locator。Finding 在報告內使用 `CR-NNN`，跨文件引用
+使用 `<assessment-id>#<finding-id>`。保存報告不代表已授權修正；後續 remediation
+交給 `dev-workflow`、`slice-implementer` 或 `local-change-implementer`。
+
+若 review 與修正已在同一個 development workflow 中獲得授權，assessment 使用該
+workflow branch 並建立關聯，不另開競爭分支。修正後的驗證應建立新的 assessment，
+而不是覆寫原始 findings。
+
 ### 用 `slice-implementer`
 
 當問題是「依照既定方向，把這個 bounded slice 做出來」：

@@ -1,23 +1,13 @@
 # Generation Templates (.NET)
 
-This folder contains full-module templates for AI-generated code in the
-.NET CA/DDD/CQRS stack. Use these when generating complete features,
-not just single-file examples.
+This folder contains legacy generation-oriented references for the .NET
+CA/DDD/CQRS stack. They are not verified generators or copy-ready modules.
 
 ## How This Differs from examples/[pattern]
 - `examples/[pattern]/` = single pattern examples
 - `generation-templates/` = multi-file, full module templates
 
 ## Template List
-
-### aggregate-usecase-full.md
-Full Aggregate + Use Case template:
-- Value Objects (IDs)
-- Domain Events + type mapping
-- Aggregate root
-- Use case interface + input DTO
-- Service implementation
-- Test references (xUnit + BDDfy)
 
 ### reactor-full.md
 Reactor template:

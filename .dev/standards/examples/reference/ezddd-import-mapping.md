@@ -12,12 +12,14 @@ and update them once the real packages are available.
 | Value Object | `IValueObject` | Prefer immutable records. |
 | Domain Event | `IDomainEvent` | Public events. |
 | Internal Domain Event | `IInternalDomainEvent` | Internal events for aggregate. |
-| Aggregate Root | `AggregateRoot<TId, TEvent>` | Non-ES aggregate. |
-| ES Aggregate Root | `EsAggregateRoot<TId, TEvent>` | Event-sourced aggregate. |
+| Aggregate Root | Java EzDDD `AggregateRoot<TId, TEvent>` | Historical source shape; current .NET normal Aggregates implement `IAggregateRoot<TId>` directly. |
+| ES Aggregate Root | Java EzDDD `EsAggregateRoot<TId, TEvent>` | Historical source shape; current optional .NET abstraction is `EsAggregateRoot<TId>`. |
 | Domain Event Mapper | `DomainEventMapper` | Map to/from `DomainEventData`. |
 | Domain Event Type Mapper | `DomainEventTypeMapper` | Maps event type names. |
 
-TODO: Replace type names with actual ezDDD .NET types.
+This file is historical provenance, not an active .NET import plan. Current
+BuildingBlocks truth is the
+[BuildingBlocks Reconstruction Contract](../../BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md).
 
 ## CQRS Concepts
 

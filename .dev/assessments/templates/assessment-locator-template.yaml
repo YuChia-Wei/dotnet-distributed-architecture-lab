@@ -1,0 +1,40 @@
+template_metadata:
+  template_id: "assessment-locator"
+  template_version: "1.0.0"
+  template_created_at: "2026-07-13T23:04:10+08:00"
+  template_updated_at: "2026-07-13T23:04:10+08:00"
+
+schema_version: "1.0"
+assessment_id: "<ASM-YYYYMMDD-NNN>"
+commit_search_id: "<ASM-YYYYMMDD-NNN>"
+assessment_type: "<skill-defined-type>"
+title: "<Human-readable title>"
+owner_skill: "<assessment-producing-skill>"
+status: "draft"
+report: "report.md"
+artifact_branch: "<runtime-prefix>/assessment/<lowercase-assessment-id>"
+base_branch: "main"
+created_at: "<ISO-8601-with-offset>"
+updated_at: "<ISO-8601-with-offset>"
+template_source: ".dev/assessments/templates/assessment-locator-template.yaml"
+template_version: "1.0.0"
+report_template_source: ".ai/assets/skills/<owner-skill>/templates/<report-template>.md"
+report_template_version: "<version>"
+subject_ref:
+  repository: "<repository-identity>"
+  branch: "<assessed-branch>"
+  commit: "<40-character-commit-sha>"
+scope:
+  included: []
+  excluded: []
+relations:
+  supersedes: []
+  superseded_by: []
+  related_assessments: []
+  workflow_refs: []
+  backlog_refs: []
+  adr_refs: []
+resume:
+  last_completed_action: ""
+  next_action: "<required-while-draft>"
+  blockers: []

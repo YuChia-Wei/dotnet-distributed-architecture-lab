@@ -47,7 +47,7 @@ Note: set the environment via `ASPNETCORE_ENVIRONMENT` (or launchSettings). Do n
 }
 ```
 
-### 4. appsettings.test-inmemory.json
+### 4. appsettings.TestInMemory.json
 ```json
 {
   "Data": {
@@ -61,7 +61,7 @@ Note: set the environment via `ASPNETCORE_ENVIRONMENT` (or launchSettings). Do n
 }
 ```
 
-### 5. appsettings.test-outbox.json
+### 5. appsettings.TestOutbox.json
 ```json
 {
   "ConnectionStrings": {
@@ -79,7 +79,7 @@ Note: set the environment via `ASPNETCORE_ENVIRONMENT` (or launchSettings). Do n
 
 ### InMemory profile (ezapp 2.0.0 intent)
 ```csharp
-if (env.IsEnvironment("inmemory") || env.IsEnvironment("test-inmemory"))
+if (env.IsEnvironment("InMemory") || env.IsEnvironment("TestInMemory"))
 {
     services.AddInMemoryProfile();
     // TODO: ensure InMemory store + message DB + broker are registered
@@ -88,7 +88,7 @@ if (env.IsEnvironment("inmemory") || env.IsEnvironment("test-inmemory"))
 
 ### Outbox profile
 ```csharp
-if (env.IsEnvironment("outbox") || env.IsEnvironment("test-outbox"))
+if (env.IsEnvironment("Outbox") || env.IsEnvironment("TestOutbox"))
 {
     services.AddDbContext<AppDbContext>(o =>
         o.UseNpgsql(configuration.GetConnectionString("Outbox")));
@@ -108,8 +108,8 @@ if (env.IsEnvironment("outbox") || env.IsEnvironment("test-outbox"))
 
 ### Environment selection
 ```bash
-ASPNETCORE_ENVIRONMENT=test-inmemory dotnet test
-ASPNETCORE_ENVIRONMENT=test-outbox dotnet test
+ASPNETCORE_ENVIRONMENT=TestInMemory dotnet test
+ASPNETCORE_ENVIRONMENT=TestOutbox dotnet test
 ```
 
 ## Verification
@@ -134,8 +134,8 @@ ASPNETCORE_ENVIRONMENT=outbox dotnet run
 
 ### 3. Verify tests
 ```bash
-ASPNETCORE_ENVIRONMENT=test-inmemory dotnet test
-ASPNETCORE_ENVIRONMENT=test-outbox dotnet test
+ASPNETCORE_ENVIRONMENT=TestInMemory dotnet test
+ASPNETCORE_ENVIRONMENT=TestOutbox dotnet test
 ```
 
 ## FAQ

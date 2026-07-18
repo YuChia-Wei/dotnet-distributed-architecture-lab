@@ -30,31 +30,6 @@
 - `.dev/guides/ai-collaboration-guides/`
 - `.dev/workflows/`
 
-## 文件索引
+## 導航
 
-- `COMMON-MISTAKES-GUIDE.md`
-  - 常見錯誤與避免方式
-- `COMPLETE-ASPNET-CORE-SETUP-GUIDE.md`
-  - ASP.NET Core setup 完整流程
-- `CORS-SETUP.md`
-  - CORS 設定
-- `DUAL-PROFILE-CONFIGURATION-GUIDE.md`
-  - dual-profile configuration 設定
-- `FAQ.md`
-  - 常見問題入口
-- `NEW-PROJECT-TEST-SETUP-GUIDE.md`
-  - 新專案測試設定流程
-- `PREVENT-SERVICE-REGISTRATION-MISSING.md`
-  - DI registration / dependency resolution 問題排查指南
-- `PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md`
-  - profile 複雜度處理方案
-- `quick-setup.md`
-  - 快速初始化流程
-- `DOTNET-DI-TEST-GUIDE.md`
-  - .NET DI 測試指南，現行請對照 xUnit fixture 與 `IServiceCollection`
-- `TEMPLATE-SYNC-GUIDE.md`
-  - template sync 操作方式
-- `TEMPLATE-USAGE-GUIDE.md`
-  - template 使用方式
-- `VERSION-PLACEHOLDER-GUIDE.md`
-  - version placeholder 相關作法
+文件目錄由 [INDEX.MD](INDEX.MD) 維護。

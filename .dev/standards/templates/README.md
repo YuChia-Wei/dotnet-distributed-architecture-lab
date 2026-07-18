@@ -2,7 +2,6 @@
 
 Reusable configuration templates for .NET projects.
 
-## Planned Templates
-- application-properties-templates.md -> appsettings.*.json templates
-- profile-isolated-configurations.md -> profile isolation patterns
-- project-config-template.json -> .NET fields and defaults
+Use [INDEX.MD](INDEX.MD) for the current template catalog. Target-owned project
+configuration templates used by repository initialization are maintained under
+`.ai/assets/skills/repo-structure-sync/templates/`.

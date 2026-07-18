@@ -53,7 +53,8 @@ and [Use Case Standards](../../../../../.dev/standards/coding-standards/usecase-
 - Use `IServiceCollection` registration, not scanning.
 - Persistence and query technologies are target-repository decisions. Apply
   technology-specific rules only when the selected adapter uses that technology.
-- Testing: xUnit + NSubstitute, no `BaseTestClass`.
+- Testing: xUnit, no `BaseTestClass`, and the target `testing.mocking`
+  selection; NSubstitute is the profile default.
 
 ## HEX Interpretation
 

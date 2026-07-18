@@ -64,7 +64,7 @@
 - **No Arrange-Act-Assert (3A) substitution** for unit, use-case, or integration tests
 - `.feature` files are optional/planned and are validated when supplied/requested or selected by the target profile; no runner/package is inferred
 - **No BaseTestClass**
-- **NSubstitute** for mocks
+- target `testing.mocking` selection for mocks; NSubstitute by default
 - Each scenario has a corresponding test method
 - Each `then` condition has a dedicated assertion
 - Event publication checks must be async-safe (awaitable, no sleep)

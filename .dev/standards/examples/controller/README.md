@@ -16,6 +16,8 @@ invoke the application layer, and format responses.
 controller/
 ├── README.md
 ├── CreateTaskController.cs
+├── CreateTaskRequest.cs
+├── CreateTaskResponse.cs
 └── (TODO) GlobalExceptionHandler.cs / filters
 ```
 
@@ -34,14 +36,18 @@ public sealed class CreateTaskController : ControllerBase
     }
 
     [HttpPost("plans/{planId}/projects/{projectName}/tasks")]
-    public IActionResult CreateTask(string planId, string projectName, CreateTaskRequest request)
+    public async Task<ActionResult<CreateTaskResponse>> CreateTaskAsync(
+        string planId,
+        string projectName,
+        CreateTaskRequest request,
+        CancellationToken cancellationToken)
     {
         var input = CreateTaskInput.Create();
         input.PlanId = PlanId.ValueOf(planId);
         input.ProjectName = ProjectName.ValueOf(projectName);
         input.TaskName = request.TaskName;
 
-        var output = _useCase.Execute(input);
+        var output = await _useCase.ExecuteAsync(input, cancellationToken);
         if (output.ExitCode == ExitCode.Success)
         {
             return Created("", new { taskId = output.Id });
@@ -71,8 +77,10 @@ app.UseExceptionHandler(errorApp =>
 
 1. No domain logic in controllers.
 2. Controllers depend on Use Case abstractions only.
-3. Use DTOs for request/response models.
-4. Return appropriate HTTP status codes.
+3. Invoke `ExecuteAsync` and forward the non-optional request
+   `CancellationToken`.
+4. Use separate `record` DTOs for request/response models.
+5. Return `ActionResult<TResponse>` with appropriate HTTP status codes.
 
 ## Related Resources
 - `../usecase/`

@@ -1,0 +1,27 @@
+template_metadata:
+  template_id: "ai-context-source-manifest"
+  template_version: "1.0.0"
+  created_at: "2026-07-14T21:51:28+08:00"
+  updated_at: "2026-07-14T21:51:28+08:00"
+
+schema_version: "1.0"
+source:
+  repository: "<canonical-repository-identity>"
+  release_id: "REL-v0.0.0"
+  version: "v0.0.0"
+  tag: "v0.0.0"
+  commit: "<40-character-lowercase-git-sha>"
+installation:
+  initialized_by: "repo-structure-sync"
+  imported_at: "<ISO-8601-with-offset>"
+  last_upgraded_at: null
+previous_source: null
+local_overrides: []
+reconciliation:
+  unresolved: []
+last_migration:
+  status: "completed"
+  from_version: null
+  to_version: "v0.0.0"
+  completed_at: "<ISO-8601-with-offset>"
+  evidence: "<validation-command-or-artifact>"

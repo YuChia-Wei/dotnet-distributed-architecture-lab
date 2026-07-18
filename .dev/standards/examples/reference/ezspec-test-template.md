@@ -8,7 +8,7 @@ It preserves Rule-based grouping and Given/When/Then semantics via naming and fl
 - Every use case must have at least one BDD scenario.
 - Use Rule-prefixed test method names to group scenarios by business intent.
 - Do NOT use base test classes. Use fixtures and composition.
-- Use NSubstitute for mocks.
+- Resolve `testing.mocking` from target technology selections; default to NSubstitute.
 
 ## BDDfy Test Template
 

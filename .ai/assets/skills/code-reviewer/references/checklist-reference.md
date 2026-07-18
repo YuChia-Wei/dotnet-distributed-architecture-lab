@@ -5,7 +5,8 @@
 ```
 Aggregate Root:
   - src/Domain/**/Aggregates/*.cs
-  - Any class inheriting from AggregateRoot<TId>
+  - Any class implementing `IAggregateRoot<TId>` or inheriting from
+    `EsAggregateRoot<TId>`
 
 Domain Event:
   - src/Domain/**/Events/*Events.cs
@@ -55,5 +56,6 @@ Test:
 - Event-sourced aggregate state is assigned only in `When(...)`.
 - Domain events should be immutable records with required metadata.
 - DI uses `IServiceCollection`; no attribute-based scanning.
-- Tests use xUnit, no `BaseTestClass`, and NSubstitute for mocks.
+- Tests use xUnit, no `BaseTestClass`, and the target `testing.mocking`
+  selection; NSubstitute is the default.
 - Query behavior must not be mixed into write repositories.

@@ -1,0 +1,28 @@
+schema_version: 1.0.0
+template_set: repo-structure-sync-public-seeds
+source_root: .
+ownership: target-template
+install_behavior: seed
+mappings:
+  - source: public-root/AGENTS.md
+    target: AGENTS.md
+  - source: public-root/CLAUDE.md
+    target: CLAUDE.md
+  - source: public-root/README.md
+    target: README.md
+  - source: public-catalogs/dev/README.MD
+    target: .dev/README.MD
+  - source: public-catalogs/dev/INDEX.md
+    target: .dev/INDEX.md
+  - source: public-catalogs/dev/adr/INDEX.md
+    target: .dev/adr/INDEX.md
+  - source: public-catalogs/dev/assessments/INDEX.MD
+    target: .dev/assessments/INDEX.MD
+  - source: public-catalogs/dev/backlog/INDEX.MD
+    target: .dev/backlog/INDEX.MD
+  - source: public-catalogs/dev/specs/INDEX.MD
+    target: .dev/specs/INDEX.MD
+  - source: public-catalogs/dev/problem-frames/INDEX.md
+    target: .dev/problem-frames/INDEX.md
+  - source: public-catalogs/dev/workflows/INDEX.MD
+    target: .dev/workflows/INDEX.MD

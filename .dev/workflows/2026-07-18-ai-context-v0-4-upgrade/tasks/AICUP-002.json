@@ -1,0 +1,43 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "AICUP-002",
+  "workflow_id": "2026-07-18-ai-context-v0-4-upgrade",
+  "owner_skill": "ai-context-governance",
+  "status": "completed",
+  "created_at": "2026-07-18T20:33:26+08:00",
+  "updated_at": "2026-07-18T20:48:43+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "finding_ids": ["AICUP-V03"],
+  "scope": {
+    "target": "Progressive reconciliation and upgrade to governed v0.3.0",
+    "files": [".ai/**", ".agents/**", ".claude/**", ".dev/AI-CONTEXT-SOURCE.yaml", "target-approved .dev framework paths", "root adapters"],
+    "constraints": ["Account for v0.2.0 breaking contracts", "Preserve target-owned truth", "Apply only reviewed package paths", "Validate before recording v0.3.0 provenance"],
+    "non_goals": ["Source workflow or release history import", "Product code changes", "v0.4.0 application"]
+  },
+  "execution": {
+    "steps": ["Review v0.1.0→v0.2.0 contracts", "Review v0.3.0 package plan", "Apply accepted reusable framework paths", "Synchronize target context", "Validate and record v0.3.0 provenance"],
+    "validation": ["target AI-context validators", "workflow validator", "version validator", "git diff --check"],
+    "last_completed_step": "Validated the reconciled v0.3.0 target and recorded intermediate provenance with all 72 local differences",
+    "next_action": "AICUP-003 uses the governed v0.3.0 files.yaml to plan v0.4.0"
+  },
+  "results": {
+    "summary": "Applied 49 absent package paths, replaced 433 byte-identical v0.1.0 paths, retained 4 already-current files, cleanly merged 11 changed files, preserved 57 target-conflict files, synchronized target indexes, CLAUDE adapter, and shell registry, then recorded v0.3.0 provenance with 72 explicit local override paths.",
+    "files_changed": [".agents/", ".ai/", ".claude/", ".dev/AI-CONTEXT-SOURCE.yaml", ".dev/ framework guidance and templates", "CLAUDE.md", "tools/"],
+    "tests_run": [
+      "python .ai/scripts/validate-ai-context.py: passed",
+      "python .ai/scripts/validate-workflow-artifacts.py: passed",
+      "python .ai/scripts/validate-shell-assets.py: passed",
+      "python .ai/scripts/tests/test_ai_context_exact_case_paths.py -v: passed 5/5",
+      "python .ai/scripts/validate-ai-context-versions.py with target manifest: passed",
+      "dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj --no-restore: passed 47/47 after serial retry",
+      "dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj --no-restore: passed 2/2",
+      "dotnet build MQArchLab.slnx --no-restore: passed with 0 errors and 6 existing nullable warnings"
+    ],
+    "finding_status": "resolved",
+    "residual_risk": "The 72 v0.3.0 deviations remain explicit local overrides and must be reclassified against v0.4.0; they are not unresolved provenance.",
+    "follow_up_needed": false
+  }
+}

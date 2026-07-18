@@ -75,6 +75,6 @@
 
 1. 新增或調整 skill
 2. 決定是否需要新增或更新 human-facing guide
-3. 更新 `.dev/guides/ai-collaboration-guides/README.MD`
+3. 更新 `.dev/guides/ai-collaboration-guides/INDEX.MD`
 4. 更新 `.dev/INDEX.md` 或其他必要索引
 5. 確認 guide 與 skill 本體沒有雙重真相

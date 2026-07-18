@@ -19,8 +19,8 @@ Profile isolation
 │   ├── appsettings.json
 │   ├── appsettings.inmemory.json
 │   ├── appsettings.outbox.json
-│   ├── appsettings.test-inmemory.json
-│   └── appsettings.test-outbox.json
+│   ├── appsettings.TestInMemory.json
+│   └── appsettings.TestOutbox.json
 │
 └── Service isolation
     ├── Repository registrations (profile-specific)
@@ -163,8 +163,8 @@ Create a `.sh` script to scan for environment gating and check that:
 |---------|-----------|---------|-----------------|-------------|-----------------|
 | inmemory | ❌ | ❌ | InMemoryRepository | InMemoryMessageBus | InMemoryProjection |
 | outbox | ✅ | ✅ | OutboxRepository | DurableMessageBus | EfProjection |
-| test-inmemory | ❌ | ❌ | InMemoryRepository | InMemoryMessageBus | InMemoryProjection |
-| test-outbox | ✅ | ✅ | OutboxRepository | DurableMessageBus | EfProjection |
+| TestInMemory | ❌ | ❌ | InMemoryRepository | InMemoryMessageBus | InMemoryProjection |
+| TestOutbox | ✅ | ✅ | OutboxRepository | DurableMessageBus | EfProjection |
 
 > ezapp 2.0.0 intent: InMemory and Outbox profiles both use OutboxRepository semantics; they differ in the storage and message transport implementations.
 
@@ -185,12 +185,12 @@ config/
 
 ### 2. Profile enable rules
 ```csharp
-if (env.IsEnvironment("inmemory") || env.IsEnvironment("test-inmemory"))
+if (env.IsEnvironment("InMemory") || env.IsEnvironment("TestInMemory"))
 {
     services.AddInMemoryProfile();
 }
 
-if (env.IsEnvironment("outbox") || env.IsEnvironment("test-outbox"))
+if (env.IsEnvironment("Outbox") || env.IsEnvironment("TestOutbox"))
 {
     services.AddOutboxProfile(config);
 }
@@ -210,10 +210,10 @@ if (env.IsEnvironment("outbox") || env.IsEnvironment("test-outbox"))
 Pitfall 1: Profile inheritance in config
 ```bash
 # Wrong
-ASPNETCORE_ENVIRONMENT=test,test-inmemory
+ASPNETCORE_ENVIRONMENT=TestInMemory
 
 # Correct
-ASPNETCORE_ENVIRONMENT=test-inmemory
+ASPNETCORE_ENVIRONMENT=TestInMemory
 ```
 
 Pitfall 2: DI registration conflicts

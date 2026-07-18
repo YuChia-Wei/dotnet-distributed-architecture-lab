@@ -146,7 +146,7 @@ public CreateRecordUseCase(IAggregateRepository<Record, RecordId> repository)
 ## Aggregate Constructor Template
 
 ```csharp
-public sealed class Record : AggregateRoot<RecordId>
+public sealed class Record : EsAggregateRoot<RecordId>
 {
     public Record(RecordId recordId, RecordName name)
     {

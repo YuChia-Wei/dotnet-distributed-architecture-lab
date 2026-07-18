@@ -10,7 +10,7 @@ Generate reactor tests using xUnit with mandatory Given-When-Then structure and 
 
 ## Rules
 - Follow ezSpec -> BDDfy mapping rules in .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
-- Use NSubstitute for mocks
+- Resolve the target `testing.mocking` selection; use NSubstitute by default
 - Verify event handling and side effects
 - Async verification required
 - Each then/and condition must map to an explicit assertion step

@@ -34,17 +34,23 @@ public sealed class NotifyWorkItemWhenIterationStartedService : IWhenIterationSt
     private readonly IFindWorkItemsByIterationIdInquiry _inquiry;
     private readonly IStartWorkItemUseCase _useCase;
 
-    public void Handle(DomainEventData message)
+    public async Task HandleAsync(
+        DomainEventData message,
+        CancellationToken cancellationToken)
     {
         if (message == null) return;
 
         var domainEvent = DomainEventMapper.ToDomain(message);
         if (domainEvent is IterationStarted started)
         {
-            var pbiIds = _inquiry.FindByIterationId(IterationId.ValueOf(started.IterationId));
+            var pbiIds = await _inquiry.FindByIterationIdAsync(
+                IterationId.ValueOf(started.IterationId),
+                cancellationToken);
             foreach (var pbiId in pbiIds)
             {
-                _useCase.Execute(new StartWorkItemInput { WorkItemId = pbiId });
+                await _useCase.ExecuteAsync(
+                    new StartWorkItemInput { WorkItemId = pbiId },
+                    cancellationToken);
             }
         }
     }

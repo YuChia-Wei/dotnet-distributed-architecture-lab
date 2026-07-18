@@ -1,0 +1,65 @@
+asset_id: "ai-context-upgrader"
+schema_version: "1.0"
+asset_type: "skill-spec"
+title: "AI Context Upgrader"
+purpose: "Plan and execute a version-aware upgrade of this AI context framework in an already initialized target repository by comparing the previous framework version, requested framework version, and current target state while preserving target-owned truth and local overrides."
+portability: "portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+triggers:
+  - "upgrade AI context"
+  - "update copied AI context"
+  - "compare framework versions"
+  - "migrate AI context version"
+  - "refresh framework context"
+inputs:
+  - "target `.dev/AI-CONTEXT-SOURCE.yaml` or an explicit unresolved-provenance decision"
+  - "requested published framework version"
+  - "Git-accessible previous and requested framework trees"
+  - "current target repository state and target-owned overrides"
+outputs:
+  - "validated source and target version identity"
+  - "classified upgrade plan with automatic-candidate, reconcile, and exclude paths"
+  - "migration-guide checklist for the selected version path"
+  - "applied changes only when explicitly authorized"
+  - "updated target provenance after successful validation"
+constraints:
+  - "Use `repo-structure-sync` instead when the target has not been initialized"
+  - "Do not overwrite target-owned collaboration, requirement, spec, ADR, architecture, operations, or project configuration truth without explicit reconciliation"
+  - "Do not copy source-repository workflow records, assessment instances, backlog, Git metadata, caches, or release history into a target; reusable assessment governance files remain normal candidates"
+  - "Do not scan product `src/` or `tests/`; route source review to `code-reviewer`"
+  - "Treat MCP graphs, IDE indexes, semantic search, and other external tools only as discovery accelerators; verify every decision with Git or repository files"
+  - "Remain read-only during discovery and planning; require explicit authorization before applying an upgrade"
+  - "Do not update provenance until the selected changes and required validation succeed"
+workflow:
+  - step: 1
+    description: "Read the version policy, target provenance, requested release record, migration guide, and repository-specific collaboration instructions"
+  - step: 2
+    description: "Fail closed on unresolved refs, invalid manifests, unpublished versions, dirty or unpreserved target changes, or missing source identity"
+  - step: 3
+    description: "Compare previous framework, requested framework, and current target state; classify every relevant changed path"
+  - step: 4
+    description: "Present automatic candidates, reconciliation items, exclusions, migrations, validation, and rollback boundary"
+  - step: 5
+    description: "After authorization, apply only the accepted paths, preserve target truth, and run the target's required validation"
+  - step: 6
+    description: "Update `.dev/AI-CONTEXT-SOURCE.yaml` only after successful validation and report unresolved items"
+references:
+  - ".dev/standards/AI-CONTEXT-VERSION-POLICY.md"
+  - ".ai/assets/skills/ai-context-upgrader/references/upgrade-playbook.md"
+  - ".ai/assets/skills/ai-context-upgrader/references/three-way-merge-boundaries.md"
+  - ".ai/assets/skills/ai-context-upgrader/references/provenance-contract.md"
+  - ".ai/assets/skills/ai-context-upgrader/references/output-contract.md"
+  - ".ai/assets/skills/ai-context-upgrader/templates/ai-context-source-template.yaml"
+examples:
+  - ".dev/guides/ai-collaboration-guides/AI-CONTEXT-UPGRADER-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/AI-CONTEXT-UPGRADER-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/ai-context-upgrader/"
+  codex:
+    wrapper_path: ".agents/skills/ai-context-upgrader/"
+status: "active"

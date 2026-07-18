@@ -192,7 +192,7 @@ There are no direct .NET packages yet. Preserve the concepts and use TODOs where
 Use Wolverine message registration and ensure events are serializable. TODO: define a shared event registration pattern.
 
 ### Q3: Tests failing because of profile mismatch
-Ensure `ASPNETCORE_ENVIRONMENT` matches `test-inmemory` or `test-outbox` and that the matching appsettings file is present.
+Ensure `ASPNETCORE_ENVIRONMENT` matches `TestInMemory` or `TestOutbox` and that the matching appsettings file is present.
 
 ## Next Steps
 1. Read `.dev/guides/learning-guides/LEARNING-PATH.md`.

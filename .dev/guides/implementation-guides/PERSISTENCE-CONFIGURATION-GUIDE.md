@@ -50,7 +50,53 @@
 - Infrastructure/Persistence:
   - DbContext, EF Core mapping, persistence registration
 
+## EF Core Registration Profile
+
+Use this section only when the target's `persistence.orm` selection is EF Core.
+The Domain and Application layers must not depend on `DbContext`.
+
+```csharp
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    var connectionString =
+        builder.Configuration.GetConnectionString("Main");
+    options.UseNpgsql(connectionString);
+});
+
+services.AddScoped<IPlanProjection, EfPlanProjection>();
+services.AddScoped<IPlanArchive, EfPlanArchive>();
+```
+
+The provider call is illustrative. Replace `UseNpgsql` with the provider chosen
+by the target repository.
+
+Register every selected Repository, Projection, Inquiry, and Archive adapter in
+Infrastructure. Keep InMemory and database-backed registrations isolated by
+the target's selected profile so a test-only profile does not connect to a real
+database.
+
+## Validation
+
+```bash
+dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj
+```
+
+When the target uses the supplied validation pattern, it provides an
+`IProjectionReadModel` marker and uses
+`ProjectionModelRegistrationValidator` to compare marker implementations with
+the assembled EF Core model.
+
+Checklist:
+
+- Repository, Projection, Inquiry, and Archive adapters are registered.
+- `DbContext` and provider APIs remain in Infrastructure.
+- Read-only projections use `AsNoTracking` when applicable.
+- Controllers and Domain types do not depend on `DbContext`.
+
 ## Related
 
 - `../../standards/project-structure.md` (conditional target layout; confirm adoption before applying physical paths)
 - `../../standards/coding-standards.md`
+- `DATABASE-MIGRATION-GUIDE.md`
+- `PREVENT-SERVICE-REGISTRATION-MISSING.md`
+- `../../standards/TECHNOLOGY-SELECTION-POLICY.md`

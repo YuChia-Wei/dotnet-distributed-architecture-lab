@@ -36,7 +36,7 @@ cp -r /path/to/ai-plan/.dev .dev
 - WolverineFx
 - EF Core (Npgsql/SqlServer)
 - xUnit + BDDfy (Gherkin-style naming only)
-- NSubstitute
+- Target `testing.mocking` selection (NSubstitute by default)
 
 ### 4. 建立第一個 Aggregate
 使用 AI 指令建立 Aggregate：

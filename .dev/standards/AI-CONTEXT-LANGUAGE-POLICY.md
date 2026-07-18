@@ -34,7 +34,7 @@ Bilingual variants are allowed for stable entry points only:
 - `README.zh-tw.md`
 - `AGENTS.md`
 - `agents.en.md`
-- `agents.zh-tw.md`
+- `AGENTS.zh-TW.md`
 
 `CLAUDE.md` is an English runtime-specific entry, not a bilingual content
 owner. Keep it thin and import the canonical `AGENTS.md` instead of translating

@@ -227,7 +227,7 @@ public static class ProductMapper
 ### Step 3: Infrastructure configuration
 ```csharp
 // Program.cs
-if (env.IsEnvironment("outbox") || env.IsEnvironment("test-outbox"))
+if (env.IsEnvironment("Outbox") || env.IsEnvironment("TestOutbox"))
 {
     services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(configuration.GetConnectionString("Outbox")));
@@ -267,7 +267,7 @@ Fix: ensure outbox registrations only in outbox environments
 | OutboxMapper | Class structure | Nested class
 | OutboxData | Mapping | EF Core mapping
 | OutboxData | Non-persistent fields | [NotMapped]
-| Configuration | Environment | outbox/test-outbox only
+| Configuration | Environment | `Outbox` / `TestOutbox` only
 
 ## Related Resources
 - `.dev/standards/coding-standards.md`

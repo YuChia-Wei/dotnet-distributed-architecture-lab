@@ -1,8 +1,8 @@
 # AGENTS.md
 
-[Traditional Chinese](agents.zh-tw.md)
+[Traditional Chinese](AGENTS.zh-TW.md)
 
-This document is the canonical English agent-facing root collaboration guide. `agents.zh-tw.md` is its Traditional Chinese (Taiwan) translation.
+This document is the canonical English agent-facing root collaboration guide. `AGENTS.zh-TW.md` is its Traditional Chinese (Taiwan) translation.
 
 ## Scope & Precedence
 
@@ -172,7 +172,7 @@ Use these boundaries:
 | `README.en.md` | English translation of the repository identity and local run guide |
 | `AGENTS.md` | Canonical English agent-facing root collaboration guide |
 | `CLAUDE.md` | Thin Claude Code project-memory entry that imports `AGENTS.md` |
-| `agents.zh-tw.md` | Traditional Chinese (Taiwan) translation of the root collaboration guide |
+| `AGENTS.zh-TW.md` | Traditional Chinese (Taiwan) translation of the root collaboration guide |
 
 ### AI Assets (`.ai/`)
 

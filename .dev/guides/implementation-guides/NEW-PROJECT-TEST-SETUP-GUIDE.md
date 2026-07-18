@@ -1,7 +1,7 @@
 # New Project Test Setup Guide (Dotnet)
 
 ## Purpose
-Set up the testing infrastructure for a new .NET project to support multi-profile testing (test-inmemory and test-outbox).
+Set up the testing infrastructure for a new .NET project to support multi-profile testing (`TestInMemory` and `TestOutbox`).
 
 ## Prerequisites
 1. .NET SDK installed (version confirmed from `global.json`, project files, or generated `.dev/project-config.yaml`)
@@ -58,14 +58,14 @@ public static class TestProfileRegistration
 {
     public static IServiceCollection AddTestProfiles(this IServiceCollection services, IConfiguration config)
     {
-        var environment = config["ASPNETCORE_ENVIRONMENT"] ?? "test-inmemory";
+        var environment = config["ASPNETCORE_ENVIRONMENT"] ?? "TestInMemory";
 
-        if (environment == "test-inmemory")
+        if (environment == "TestInMemory")
         {
             services.AddInMemoryProfile();
         }
 
-        if (environment == "test-outbox")
+        if (environment == "TestOutbox")
         {
             services.AddOutboxProfile(config);
         }
@@ -77,14 +77,14 @@ public static class TestProfileRegistration
 
 ### Step 3: Configure test settings
 
-`appsettings.test-inmemory.json`
+`appsettings.TestInMemory.json`
 ```json
 {
   "Data": { "DisableEfCore": true }
 }
 ```
 
-`appsettings.test-outbox.json`
+`appsettings.TestOutbox.json`
 ```json
 {
   "ConnectionStrings": {
@@ -98,13 +98,13 @@ public static class TestProfileRegistration
 Use xUnit traits and `dotnet test --filter` instead of JUnit suites.
 
 ```csharp
-[Trait("Profile", "test-inmemory")]
+[Trait("Profile", "TestInMemory")]
 public sealed class CreateProductFeature : IClassFixture<TestProfileFixture> { }
 ```
 
 ```bash
-ASPNETCORE_ENVIRONMENT=test-inmemory dotnet test --filter Profile=test-inmemory
-ASPNETCORE_ENVIRONMENT=test-outbox dotnet test --filter Profile=test-outbox
+ASPNETCORE_ENVIRONMENT=TestInMemory dotnet test --filter Profile=TestInMemory
+ASPNETCORE_ENVIRONMENT=TestOutbox dotnet test --filter Profile=TestOutbox
 ```
 
 ## Writing Tests
@@ -159,7 +159,7 @@ Do not:
 
 Do:
 1. Use fixtures for DI setup
-2. Use NSubstitute for mocks
+2. Resolve `testing.mocking` from target technology selections; default to NSubstitute
 3. Keep profile registrations isolated
 4. Clear events between scenarios
 5. Use `dotnet test` with environment variables

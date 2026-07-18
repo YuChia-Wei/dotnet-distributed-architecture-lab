@@ -92,7 +92,9 @@ Each outbox repository must include integration tests:
 3. Soft-delete behavior
 4. Optimistic concurrency/versioning
 
-Use xUnit + BDDfy (Gherkin-style naming) and NSubstitute for mocks.
+Use xUnit + BDDfy by default. Resolve `testing.mocking` from target technology
+selections; NSubstitute is the default when the target has not selected another
+mocking library.
 Refer to the dotnet test examples when implemented (TODO).
 
 ## Best Practices
@@ -103,5 +105,5 @@ Refer to the dotnet test examples when implemented (TODO).
 - Keep events idempotent with stable IDs.
 
 ## Related Files
-- `../bdd-given-when-then-example/OUTBOX-TEST-CONFIGURATION.md`
+- `OUTBOX-TEST-CONFIGURATION.md`
 - `../bdd-given-when-then-example/ProductOutboxRepositoryTests.cs` (TODO)
