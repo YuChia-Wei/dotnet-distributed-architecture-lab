@@ -12,20 +12,20 @@
 - `report_id`: `remediation-report-2026-07-18-ai-context-v0-4-upgrade`
 - `workflow_id`: `2026-07-18-ai-context-v0-4-upgrade`
 - `owner_skill`: `ai-context-governance`
-- `status`: `verification-pending`
+- `status`: `completed`
 - `created_at`: `2026-07-18T20:48:43+08:00`
-- `updated_at`: `2026-07-18T21:08:30+08:00`
+- `updated_at`: `2026-07-18T21:14:30+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-remediation-report-template.md`
 - `template_version`: `1.0.0`
 - `baseline_report`: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade/reports/01-audit-report.md`
-- `post_remediation_report`: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade/reports/03-post-remediation-audit-report.md`
+- `post_remediation_report`: `.dev/assessments/ASM-20260718-001/report.md`
 
 ## Remediation Summary
 
 - Authorized scope: Progressive target upgrade from known historical v0.1.0 through governed v0.3.0 to published v0.4.0.
 - Completed scope: Source and package identity validation; v0.1.0→v0.2.0 contract accounting; governed v0.3.0 intermediate adoption; v0.4.0 planning, application, reconciliation, validation, and final provenance.
 - Validation summary: The final full target gate passed 19/19, including 49 analyzer tests, 2 validation tests, 5 BuildingBlocks behavior tests, safe-apply tests, and all v0.4.0 projection/evidence contracts. The solution build passed with 0 errors and 6 pre-existing nullable warnings.
-- Closure decision: `verification-pending`; implementation is complete and only the independent post-upgrade audit and workflow closure remain.
+- Closure decision: `completed`; independent assessment `ASM-20260718-001` rated the target `healthy-with-followups` with no release-blocking findings.
 
 ## Finding Resolution Matrix
 
@@ -33,8 +33,8 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | `AICUP-BASELINE` | P0 | `resolved` | Workflow baseline evidence | Two package validators and 555-path classification | `2c43b85` | None |
 | `AICUP-V03` | P0 | `resolved` | Reusable framework roots, target synchronization, provenance | Target validators, 47 analyzer tests, 2 validation tests, solution build | `6b4da5d` | None; served as the governed v0.4.0 base |
-| `AICUP-V04` | P0 | `resolved` | v0.4.0 framework paths, target technology selections, root exact-case translation, provenance | Full gate 19/19, solution build, version validation | pending stage commit | 65 recorded downstream deviations; zero missing package paths |
-| `AICUP-CLOSEOUT` | P1 | `in-progress` | Post-upgrade audit and workflow evidence | Pending independent audit | pending | Audit closure pending |
+| `AICUP-V04` | P0 | `resolved` | v0.4.0 framework paths, target technology selections, root exact-case translation, provenance | Full gate 19/19, solution build, version validation | `21c6b61` | 65 recorded downstream deviations; zero missing package paths |
+| `AICUP-CLOSEOUT` | P1 | `resolved-with-accepted-residual` | Assessment and workflow evidence | `ASM-20260718-001`: healthy-with-followups | `65fe3f2` | `AIC-001` is a non-blocking upstream package portability follow-up |
 
 ## v0.3.0 Changes And Evidence
 
@@ -59,4 +59,4 @@
 
 | Finding | Reason | Owner | Next Action |
 | --- | --- | --- | --- |
-| `AICUP-CLOSEOUT` | Independent verification must remain separate from remediation | `ai-context-auditor` | Audit the committed v0.4.0 target and close the workflow if no blocking findings remain |
+| `ASM-20260718-001#AIC-001` | Source-release-only tests remain packaged/documented but cannot run in downstream installations | source framework maintainers | Correct the package profile or README in a later governed source release; retain the target runner override until then |

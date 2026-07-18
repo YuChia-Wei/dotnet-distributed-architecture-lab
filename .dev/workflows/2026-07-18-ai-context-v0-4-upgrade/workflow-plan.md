@@ -15,11 +15,11 @@
 - `branch`: `codex/2026-07-18-ai-context-v0-4-upgrade`
 - `base_branch`: `main`
 - `branch_segment`: `1`
-- `status`: `in_progress`
-- `current_phase`: `verification`
+- `status`: `completed`
+- `current_phase`: `closed`
 - `artifact_root`: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade`
 - `created_at`: `2026-07-18T20:33:26+08:00`
-- `updated_at`: `2026-07-18T21:08:30+08:00`
+- `updated_at`: `2026-07-18T21:14:30+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.1.0`
 
@@ -45,7 +45,7 @@
 
 - Baseline inventory: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade/reports/01-audit-report.md`
 - Upgrade/remediation report: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade/reports/02-remediation-report.md`
-- Post-upgrade audit: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade/reports/03-post-remediation-audit-report.md`
+- Post-upgrade assessment: `.dev/assessments/ASM-20260718-001/report.md`
 - Tasks: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade/tasks/`
 - Package plans and extracted archives: temporary workspace outside the target repository; not retained as target truth.
 
@@ -69,16 +69,18 @@
 
 ## Resume Checkpoint
 
-- Last completed action: Applied 151 safe v0.4.0 operations, reconciled 15 modified paths, validated all 568 package paths with 65 explicit downstream deviations and zero missing files, and finalized v0.4.0 provenance.
-- Current task: `AICUP-004`
-- Exact next action: Commit the validated v0.4.0 stage, then run the independent post-upgrade audit.
+- Last completed action: Independent assessment `ASM-20260718-001` rated the committed v0.4.0 target healthy-with-followups with no release-blocking findings; `AIC-001` is an accepted non-blocking upstream portability residual.
+- Current task: none; all workflow tasks are completed.
+- Exact next action: Keep the completed branch local until the user requests merge or push.
 - Validation already completed: v0.3.0 and v0.4.0 package validators; derived v0.4.0 upgrade plan; full target gate 19/19; AI-context, workflow, shell asset, exact-case, profile, document, source-include, and version validators; analyzer tests 49/49; validation tests 2/2; BuildingBlocks behavior tests 5/5; solution build with 0 errors and 6 pre-existing nullable warnings.
-- Git state: reconciled v0.4.0 package changes, target technology selections, exact-case root translation, and final provenance await the required workflow-stage commit.
+- Git state: v0.4.0 implementation commit `21c6b61` and assessment commit `65fe3f2` are complete; closure metadata awaits the final workflow commit.
 - Branch history and checkpoint handoffs: segment 1 created from synchronized `main` at `d3d7f18`.
-- Blockers or unresolved decisions: none. Upstream package metadata and source-only gate defects were resolved through reproducible workflow-local metadata and target runner overrides.
+- Blockers or unresolved decisions: none. `ASM-20260718-001#AIC-001` remains a non-blocking upstream follow-up and does not require a target decision.
 
 ## Branch Lifecycle
 
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `codex/2026-07-18-ai-context-v0-4-upgrade` | `main` (`d3d7f18`) | workflow start | `66b70cd` | local | `2026-07-18T20:33:26+08:00` | Progressive upgrade requires durable reconciliation evidence | Continue `AICUP-001` after bootstrap commit |
+| 1 | `codex/2026-07-18-ai-context-v0-4-upgrade` | `main` (`d3d7f18`) | v0.4.0 implementation | `21c6b61` | local | `2026-07-18T21:08:30+08:00` | Freeze the fully validated target for independent verification | Run post-remediation assessment |
+| 1 | `codex/2026-07-18-ai-context-v0-4-upgrade` | `main` (`d3d7f18`) | independent assessment | `65fe3f2` | local | `2026-07-18T21:14:30+08:00` | Record healthy-with-followups verification at the committed target revision | Close workflow with accepted residual |

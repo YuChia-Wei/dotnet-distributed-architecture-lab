@@ -6,9 +6,9 @@
   "task_id": "AICUP-004",
   "workflow_id": "2026-07-18-ai-context-v0-4-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-07-18T20:33:26+08:00",
-  "updated_at": "2026-07-18T21:08:30+08:00",
+  "updated_at": "2026-07-18T21:14:30+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICUP-CLOSEOUT"],
   "scope": {
@@ -20,15 +20,15 @@
   "execution": {
     "steps": ["Finalize v0.4.0 provenance", "Run independent post-upgrade audit", "Reconcile all findings", "Run final validators", "Commit closure evidence"],
     "validation": ["provenance/version validation", "AI-context validation", "workflow validation", "shell assets validation", "git diff --check", "clean workflow branch state"],
-    "last_completed_step": "Finalized and validated v0.4.0 provenance",
-    "next_action": "Run an independent post-upgrade AI-context audit"
+    "last_completed_step": "Accepted independent assessment ASM-20260718-001 as healthy-with-followups and finalized workflow evidence",
+    "next_action": "Merge or push the completed workflow branch only when requested"
   },
   "results": {
-    "summary": "",
-    "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
-    "residual_risk": "",
+    "summary": "Finalized v0.4.0 provenance and accepted independent post-remediation assessment ASM-20260718-001 with no release-blocking findings.",
+    "files_changed": [".dev/assessments/ASM-20260718-001/**", ".dev/assessments/INDEX.MD", ".dev/workflows/2026-07-18-ai-context-v0-4-upgrade/**", ".dev/workflows/INDEX.MD"],
+    "tests_run": ["python .ai/scripts/validate-assessment-artifacts.py: passed", "python .ai/scripts/validate-workflow-artifacts.py: passed", "python .ai/scripts/validate-ai-context.py: passed", "python .ai/scripts/validate-ai-context-versions.py: passed", "python .ai/scripts/validate-shell-assets.py: passed", "git diff --check: passed"],
+    "finding_status": "resolved-with-accepted-residual",
+    "residual_risk": "ASM-20260718-001#AIC-001 records a non-blocking upstream package portability mismatch; the target runner override prevents operational impact.",
     "follow_up_needed": true
   }
 }
