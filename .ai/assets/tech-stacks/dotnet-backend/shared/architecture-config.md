@@ -10,6 +10,11 @@
 - **eventsourcing**: Event store + replay
 
 ## Mapping Rules
+- Rule ID `PROJECT-GRAMMAR-001`: when a target adopts the `.slnx` profile, group
+  product projects under `/<workload>/DomainCore/` and
+  `/<workload>/Presentation/`; workload means Bounded Context for a
+  micro-system mono repo and the repository's system for a mono-system repo.
+- Logical solution folders do not require matching physical directories.
 - Command flows use an explicit Use Case and
   `IAggregateRepository<TAggregate, TId>` for Aggregate Roots
 - Query flows default to an explicit Use Case and read-only ports inheriting

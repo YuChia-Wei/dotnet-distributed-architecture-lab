@@ -219,37 +219,98 @@ echo -e "${BLUE}Starting checks at $(date '+%Y-%m-%d %H:%M:%S')${NC}"
 echo ""
 echo -e "${MAGENTA}════ Critical Checks ════${NC}"
 
-run_command_check "python .ai/scripts/validate-workflow-artifacts.py" \
-    "Workflow Artifact Metadata" \
+run_command_check "python .ai/scripts/validate-assessment-artifacts.py" \
+    "Assessment Artifact Metadata" \
     "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_assessment_artifacts.py -v" \
+    "Assessment Artifact Fail-Closed Tests" \
+    "required" "true" "true"
+
+  run_command_check "python .ai/scripts/validate-workflow-artifacts.py" \
+      "Workflow Artifact Metadata" \
+      "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_workflow_implementation_contract.py -v" \
+      "Workflow Implementation Contract Fail-Closed Tests" \
+      "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_workflow_lifecycle_contract.py -v" \
+    "Workflow Lifecycle Contract Fail-Closed Tests" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_git_commit_policy.py -v" \
+    "Git Commit Policy Fail-Closed Tests" \
+    "required" "true" "true"
+
+if [ -n "${COMMIT_RANGE:-}" ]; then
+    COMMIT_VALIDATION_COMMAND="python .ai/scripts/validate-git-commits.py --range '$COMMIT_RANGE'"
+    if [ -n "${WORKFLOW_ID:-}" ]; then
+        COMMIT_VALIDATION_COMMAND="$COMMIT_VALIDATION_COMMAND --workflow-id '$WORKFLOW_ID'"
+    fi
+    run_command_check "$COMMIT_VALIDATION_COMMAND" \
+        "Selected Git Commit Messages" \
+        "required" "true" "true"
+else
+    echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Selected Git Commit Messages (COMMIT_RANGE not set)"
+    NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+fi
 
 run_command_check "python .ai/scripts/validate-ai-context.py" \
     "AI Context Navigation and Runtime Contracts" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/validate-ai-context-versions.py" \
+    "AI Context Release And Version Contracts" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_ai_context_package_apply.py -v" \
+    "AI Context Safe Apply GWT Tests" \
     "required" "true" "true"
 
 run_command_check "python .ai/scripts/validate-shell-assets.py" \
     "Shell Asset Classification And Git Modes" \
     "required" "true" "true"
 
+run_command_check "python .ai/scripts/tests/test_fail_closed_validation.py -v" \
+    "Aggregate Runner And Shell Registry Fail-Closed Tests" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_coding_standards_integrity_contract.py -v" \
+    "Coding Standards Integrity Claim Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_profile_projection_contract.py -v" \
+    "Profile Projection Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_document_projection_contract.py -v" \
+    "Documentation Projection Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_ai_context_source_include_evidence.py -v" \
+    "Source-Include Evidence Contract" \
+    "required" "true" "true"
+
 # Coding standards are fundamental for AI context and standards docs
 run_check "check-coding-standards.sh" \
-    "Coding Standards Compliance" \
+    "Coding Standards Structural Integrity" \
     "required" "true" "true"
 
 run_command_check "dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj" \
-    "Dotnet Backend Analyzer Self Tests" \
+    "Dotnet Backend Analyzer Template Tests" \
     "required" "true" "true"
 
 run_command_check "dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj" \
-    "Dotnet Backend Runtime Validation Self Tests" \
+    "Dotnet Backend Configuration Validation Tests" \
     "required" "true" "true"
 
-run_command_check "dotnet build MQArchLab.slnx --no-restore" \
-    "Analyzer-Enabled Product Build" \
+run_command_check "dotnet test tools/DotnetBackendBuildingBlocks.Tests/DotnetBackendBuildingBlocks.Tests.csproj" \
+    "Dotnet Backend BuildingBlocks Behavior Tests" \
     "required" "true" "true"
 
-# Analyzer self-tests verify rule behavior. The product build above proves the
-# source-included analyzers execute against this repository's production code.
+# Repository source validation is covered by DBA1001 in analyzer tests.
+# Mapper source validation is covered by DBA1007-DBA1008 in analyzer tests.
 
 # ====================================================================
 # Important Checks (run in full and quick modes)
@@ -259,12 +320,11 @@ if [ "$MODE" != "critical" ]; then
     echo ""
     echo -e "${MAGENTA}════ Important Checks ════${NC}"
     
-    # Aggregate and UseCase source validation is covered by the analyzer-enabled product build.
+    # Aggregate and UseCase source validation is covered by DBA1002-DBA1003 and DBA1009-DBA1012.
     
-    # Controller compliance is covered by the analyzer-enabled product build.
+    # Controller compliance is covered by DBA1004-DBA1006 in analyzer tests.
 
-    # Projection source is covered by the analyzer-enabled product build. EF model
-    # registration validation remains tool-only until this Dapper target has an EF projection model.
+    # Projection source and EF model registration are covered by DBA1013 and configuration validation tests.
     
     # Spec compliance is important
     run_spec_compliance_check
@@ -282,12 +342,7 @@ fi
 if [ "$MODE" == "full" ]; then
     echo ""
     echo -e "${MAGENTA}════ Additional Checks ════${NC}"
-    
-    # Test compliance
-    run_check "check-test-compliance.sh" \
-        "Test Standards Compliance" \
-        "advisory" "false" "false"
-    
+
     # Test DI compliance helper remains transitional
     run_deferred_check "check-test-di-compliance.sh" \
         "Test DI Compliance" \

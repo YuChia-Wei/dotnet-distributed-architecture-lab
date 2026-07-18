@@ -11,7 +11,7 @@ Generate use case tests with mandatory Given-When-Then structure and naming. Use
 ## Rules
 - Follow ezSpec -> BDDfy mapping rules in .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
 - No BaseTestClass
-- Use NSubstitute for mocks
+- Resolve the target `testing.mocking` selection; use NSubstitute by default
 - Verify domain events with async-safe assertions
 - Each AC maps to a Scenario; each then/and becomes an explicit Then/And assertion
 

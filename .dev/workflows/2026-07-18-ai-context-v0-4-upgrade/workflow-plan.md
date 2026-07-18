@@ -16,10 +16,10 @@
 - `base_branch`: `main`
 - `branch_segment`: `1`
 - `status`: `in_progress`
-- `current_phase`: `remediation`
+- `current_phase`: `verification`
 - `artifact_root`: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade`
 - `created_at`: `2026-07-18T20:33:26+08:00`
-- `updated_at`: `2026-07-18T20:48:43+08:00`
+- `updated_at`: `2026-07-18T21:08:30+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.1.0`
 
@@ -69,13 +69,13 @@
 
 ## Resume Checkpoint
 
-- Last completed action: Applied and reconciled v0.3.0, validated all 555 package paths, recorded 72 target overrides, and created validated intermediate provenance.
-- Current task: `AICUP-003`
-- Exact next action: Commit the v0.3.0 checkpoint, then run the v0.4.0 planner with the governed v0.3.0 `files.yaml`.
-- Validation already completed: package validators; v0.3.0 dry-run and apply receipt; 555-path result comparison; AI-context, workflow, shell asset, exact-case, and version validators; analyzer tests 47/47; validation tests 2/2; solution build with 0 errors and 6 pre-existing nullable warnings.
-- Git state: reconciled v0.3.0 package changes and provenance await the required workflow-stage commit.
+- Last completed action: Applied 151 safe v0.4.0 operations, reconciled 15 modified paths, validated all 568 package paths with 65 explicit downstream deviations and zero missing files, and finalized v0.4.0 provenance.
+- Current task: `AICUP-004`
+- Exact next action: Commit the validated v0.4.0 stage, then run the independent post-upgrade audit.
+- Validation already completed: v0.3.0 and v0.4.0 package validators; derived v0.4.0 upgrade plan; full target gate 19/19; AI-context, workflow, shell asset, exact-case, profile, document, source-include, and version validators; analyzer tests 49/49; validation tests 2/2; BuildingBlocks behavior tests 5/5; solution build with 0 errors and 6 pre-existing nullable warnings.
+- Git state: reconciled v0.4.0 package changes, target technology selections, exact-case root translation, and final provenance await the required workflow-stage commit.
 - Branch history and checkpoint handoffs: segment 1 created from synchronized `main` at `d3d7f18`.
-- Blockers or unresolved decisions: none at bootstrap; package reconciliation may surface target-owned semantic choices.
+- Blockers or unresolved decisions: none. Upstream package metadata and source-only gate defects were resolved through reproducible workflow-local metadata and target runner overrides.
 
 ## Branch Lifecycle
 

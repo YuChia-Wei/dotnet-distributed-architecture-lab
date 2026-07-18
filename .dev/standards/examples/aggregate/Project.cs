@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using BuildingBlocks.Domain;
 using Example.Tags.Domain;
 
 namespace Example.Plans.Domain;
 
-public sealed class Project : IEntity<ProjectId>
+public sealed class Project : IDomainEntity<ProjectId>
 {
     private readonly Dictionary<TaskId, Task> _tasks = new();
 
@@ -126,10 +127,4 @@ public sealed class Task
     public bool HasTag(TagId tagId) => _tags.Contains(tagId);
     public void AssignTag(TagId tagId) => _tags.Add(tagId);
     public void UnassignTag(TagId tagId) => _tags.Remove(tagId);
-}
-
-// TODO: Replace with EzDdd.Entity<TId> when the .NET port is available.
-public interface IEntity<out TId>
-{
-    TId Id { get; }
 }

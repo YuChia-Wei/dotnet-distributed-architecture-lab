@@ -27,9 +27,19 @@ def git(*args: str, root: Path = ROOT) -> str:
     return result.stdout
 
 
-def selected_commits(commit_range: str | None, commit: str | None, root: Path = ROOT) -> list[str]:
+def selected_commits(
+    commit_range: str | None,
+    commit: str | None,
+    root: Path = ROOT,
+    *,
+    first_parent: bool = False,
+) -> list[str]:
     if commit_range:
-        return [line for line in git("rev-list", "--reverse", commit_range, root=root).splitlines() if line]
+        arguments = ["rev-list"]
+        if first_parent:
+            arguments.append("--first-parent")
+        arguments.extend(["--reverse", commit_range])
+        return [line for line in git(*arguments, root=root).splitlines() if line]
     return [git("rev-parse", commit or "HEAD", root=root).strip()]
 
 
@@ -76,7 +86,10 @@ def validate_message(
             if assessment_id not in assessment_trailers:
                 errors.append(f"{sha}: subject assessment ID lacks matching Assessment-Id trailer: {assessment_id}")
 
-    if workflow_id:
+    # A standalone assessment keeps its assessment commit contract even when a
+    # later workflow merges the assessment branch and validates the combined
+    # range. Only workflow-stage commits require workflow body sections.
+    if workflow_id and not assessment_ids:
         workflow = policy["workflow"]
         assert isinstance(workflow, dict)
         required = [str(value) for value in workflow["required_sections"]]
@@ -114,7 +127,11 @@ def main() -> int:
     args = parser.parse_args()
 
     policy = yaml.safe_load(POLICY_PATH.read_text(encoding="utf-8"))
-    shas = selected_commits(args.commit_range, args.commit)
+    shas = selected_commits(
+        args.commit_range,
+        args.commit,
+        first_parent=bool(args.workflow_id and args.commit_range),
+    )
     if not shas:
         print("Git commit validation failed: selected range contains no commits")
         return 1

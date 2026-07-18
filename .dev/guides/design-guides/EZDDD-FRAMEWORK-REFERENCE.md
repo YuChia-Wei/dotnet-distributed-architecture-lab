@@ -23,7 +23,7 @@
 
 ## 測試
 - xUnit + BDDfy (Gherkin-style naming only)
-- NSubstitute (Mock)
+- Target `testing.mocking` selection (NSubstitute by default)
 
 ## TODO
 - 建立 .NET 版 ezddd/ezspec 封裝套件

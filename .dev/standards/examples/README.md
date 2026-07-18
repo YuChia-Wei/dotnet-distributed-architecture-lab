@@ -1,38 +1,35 @@
 # Examples (.NET)
 
-This directory contains .NET examples and templates used by the AI coding
-assistant for the Clean Architecture + DDD + CQRS stack.
+This directory contains .NET examples and historical/reference material used by
+the AI coding assistant for the Clean Architecture + DDD + CQRS stack.
 
-## Verified Templates (Single Source of Truth)
+## Evidence Contract
 
-### `examples/nuget/`
-Verified NuGet dependency templates.
-Use placeholders and versions confirmed from target-repository evidence. Use generated `.dev/project-config.yaml` only when present.
+[`evidence-manifest.yaml`](evidence-manifest.yaml) is the machine-readable
+classification source. Its allowed tiers and evidence requirements are defined
+by [`evidence-schema.yaml`](evidence-schema.yaml).
+Placeholder-family outcomes and canonical replacements are recorded in
+[`placeholder-disposition.yaml`](placeholder-disposition.yaml).
 
-### `examples/aspnet-core/`
-Verified ASP.NET Core configuration templates:
-- `Program.cs`
-- `appsettings.*.json`
-- profile-based wiring
+The tiers are:
 
-### `examples/generation-templates/`
-Full module templates used for code generation.
+- `executable-tested`: implementation with declared build and test commands;
+- `structure-validated`: structure/configuration with named validators;
+- `illustrative`: explanatory snippets that are not copy-ready;
+- `reference-only`: conceptual material selected on demand;
+- `historical`: retained provenance and migration evidence.
 
-## Directory Highlights
+Unclassified legacy material defaults to `historical`. Nothing is promoted to a
+stronger tier by inference.
 
-- `contract/` - Design by Contract docs and examples
-- `projection/` - Read model/projection patterns
-- `usecase/` - Use case interfaces + services
-- `test/` - BDDfy + xUnit patterns (Gherkin-style naming)
-- `bdd-gherkin-example/` - Reqnroll `.feature` examples (reference only)
-- `bdd-gherkin-test/` - Reqnroll `.feature` test patterns (reference only)
-- `reference/` - Reference docs
+There is currently no directory-wide verified-template or single-source-of-truth
+claim. Target package versions, technology selections, namespaces, and physical
+layouts must come from target repository evidence.
 
-## Contract Quick Reference
+Use [`INDEX.md`](INDEX.md) for the folder catalog. `README.md` owns purpose,
+boundaries, and evidence interpretation; `INDEX.md` owns navigation.
 
-```csharp
-Contract.RequireNotNull("param", param);
-Contract.Require(condition, "reason");
-Contract.Ensure(condition, "reason");
-Contract.Invariant(condition, "reason");
-```
+Placeholder-heavy families are routed as `reference-only` or `historical` until
+their APIs are rewritten against current canonical standards. Their presence is
+not permission to copy unresolved EzDDD, uContract, persistence, or test-host
+shapes into a target.

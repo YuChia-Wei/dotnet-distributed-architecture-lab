@@ -9,6 +9,7 @@
   },
   "languages": [],
   "technologyProfiles": [],
+  "technologySelections": [],
   "dotnet": {
     "sdkVersion": null,
     "targetFrameworks": [],
@@ -25,7 +26,8 @@
   "architecture": {
     "styles": [],
     "boundedContexts": [],
-    "dependencyRules": []
+    "dependencyRules": [],
+    "capabilitySelections": []
   },
   "persistence": {
     "providers": [],

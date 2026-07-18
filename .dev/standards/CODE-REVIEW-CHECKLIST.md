@@ -171,7 +171,8 @@ public Product(ProductId id, string name)
 - [ ] All tests use GWT with Gherkin-style naming; 3A does not replace GWT.
 - [ ] xUnit + BDDfy is the default. If the target team explicitly opts out of BDDfy, plain xUnit still preserves a Given / When / Then structure.
 - [ ] `BaseTestClass` is prohibited.
-- [ ] Mocks use NSubstitute.
+- [ ] Mocks use the target `testing.mocking` selection; NSubstitute is the default.
+- [ ] A target override is evidenced and the test suite does not mix libraries without a migration decision.
 
 ### UseCase Test Given/When Rules
 - [ ] Given/When steps interact only through the Use Case.

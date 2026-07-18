@@ -1,194 +1,82 @@
-# Building Blocks Class Index (Conceptual Layer)
+# BuildingBlocks Contract Index
 
-This is a **conceptual design** class index for the .NET Building Blocks and describes target classes for the complete architecture.
-This document is a reusable .NET backend building-block reference; it does not claim that the framework repository implements these types.
+This is a navigation index for portable dotnet-backend BuildingBlocks contracts.
+It is not a catalog of a complete package or a promise that every historical
+class should be recreated.
 
-If a target repo needs an implementation index, `repo-structure-sync` or a documentation workflow must generate it from actual source code rather than copying it from the source template.
+Read the
+[BuildingBlocks Reconstruction Contract](../../../../../.dev/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md)
+before selecting a type. Target implementations and namespaces remain
+target-owned.
 
-> [!NOTE]
-> The namespaces below are target design names. Update them when the actual packages are complete.
+Rule ID: `AGGREGATE-ES-001`.
 
-## Domain Layer Core Classes
+## Active Portable Domain Contracts
 
-```
-BuildingBlocks.Domain.DomainEntity<TId>        # Domain entity base (Id + DomainEvents)
-BuildingBlocks.Domain.AggregateRoot<TId>       # Aggregate Root base (Version)
-BuildingBlocks.Domain.EsAggregateRoot<TId>     # ES Aggregate Root (Apply/When pattern)
-BuildingBlocks.Domain.IDomainEvent             # Domain event interface (EventId + OccurredOn)
-BuildingBlocks.Domain.IAggregateRoot<TId>      # Aggregate Root interface
-BuildingBlocks.Domain.IDomainEntity<TId>       # Entity interface
-BuildingBlocks.Domain.ValueObject              # Value Object base (design target)
-BuildingBlocks.Domain.InternalDomainEvent      # Internal event (design target)
-BuildingBlocks.Domain.DomainEventTypeMapper    # Event type mapping (design target)
-```
+| Contract | Default form | Status | Evidence |
+| --- | --- | --- | --- |
+| `IDomainEntity<TId>` | interface | optional when reusable identity marking is useful | [source include](../source-includes/domain/IDomainEntity.cs) |
+| `IAggregateRoot<TId>` | interface | canonical Aggregate marker | [source include](../source-includes/domain/IAggregateRoot.cs) |
+| `IDomainEvent` | interface | canonical event marker | [source include](../source-includes/domain/IDomainEvent.cs) |
+| `EsAggregateRoot<TId>` | optional abstract class | only approved default-profile base class | [source include](../source-includes/domain/EsAggregateRoot.cs) and [behavior contract](../../../../../.dev/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md#optional-esaggregateroottid-behavior-contract) |
 
-## Use Case Layer Core Classes
+Normal Aggregates implement `IAggregateRoot<TId>` directly. Entities may express
+identity directly or implement `IDomainEntity<TId>`. Value Objects prefer
+immutable `record` or `record struct` types.
 
-```
-BuildingBlocks.Application.Cqrs.Input
-BuildingBlocks.Application.Cqrs.ExitCode
-BuildingBlocks.Application.Cqrs.UseCaseFailureException
-BuildingBlocks.Application.Cqrs.Command
-BuildingBlocks.Application.Cqrs.CqrsOutput
-```
+The default profile does not require:
 
-## Repository Pattern Classes
+- `DomainEntity<TId>`;
+- non-ES `AggregateRoot<TId>`;
+- a `ValueObject` base class;
+- shared test base classes.
 
-```
-BuildingBlocks.Domain.IAggregateRepository<TAggregate, TId> # Aggregate Root Repository (FindByIdAsync/SaveAsync)
-BuildingBlocks.Domain.IDomainRepository<TAggregate, TId>    # Legacy-product compatibility alias; must inherit IAggregateRepository
-BuildingBlocks.Application.Queries.IQueryRepository         # Read-only Query Port marker
-BuildingBlocks.Application.Repositories.IAggregatePurgePort<TAggregate, TId> # Restricted physical deletion capability
-BuildingBlocks.Application.Repositories.IUnitOfWork          # Explicit strongly consistent transaction boundary
-BuildingBlocks.Application.Repositories.OutboxRepository     # Only when selected by the target technology configuration
-BuildingBlocks.Application.Repositories.IOutboxData
-BuildingBlocks.Application.Repositories.IOutboxMapper
-BuildingBlocks.Application.Repositories.IRepositoryPeer
-BuildingBlocks.Application.Repositories.IStoreData
-```
+## Active Portable Application Ports
 
-The portable core does not define general writable CRUD or a standard batch repository. If measured needs lead a target repo to create a batch port, it must also define chunking, concurrency, failure, domain-event, and outbox semantics.
+| Contract | Responsibility |
+| --- | --- |
+| `IAggregateRepository<TAggregate, TId>` | `FindByIdAsync` and `SaveAsync` for one Aggregate boundary |
+| `IQueryRepository` | read-only query-port marker |
+| `IAggregatePurgePort<TAggregate, TId>` | restricted physical-deletion capability |
+| target-named event publisher port | Application-owned outbound integration boundary when messaging is selected |
+| target-named transaction port | explicit strongly consistent boundary only when requirements justify it |
 
-## Query Pattern Classes
+`IDomainRepository<TAggregate, TId>` is a compatibility alias only when a target
+already owns that name. A generic writable CRUD repository and generic batch
+repository are not part of the portable core.
 
-```
-BuildingBlocks.Application.Queries.IQuery
-BuildingBlocks.Application.Queries.IQueryRepository
-BuildingBlocks.Application.Queries.IProjection
-BuildingBlocks.Application.Queries.IProjectionInput
-BuildingBlocks.Application.Queries.IArchive
-```
+## Target-Selected Implementations
 
-## Domain Event Data Classes
+The following are capability categories, not canonical BuildingBlocks classes:
 
-```
-BuildingBlocks.Application.Events.DomainEventData
-BuildingBlocks.Application.Events.DomainEventMapper
-BuildingBlocks.Application.Events.ExternalDomainEvent
-BuildingBlocks.Application.Events.ExternalDomainEventDto
-BuildingBlocks.Application.Events.InternalDomainEventDto
-```
+- persistence adapters, ORM clients, event stores, and repository peers;
+- Outbox stores and relay implementations;
+- message producers, consumers, and broker clients;
+- projection, import, archive, and purge writers;
+- observability, tracing, metrics, logging, and AOP components;
+- in-memory test adapters;
+- serialization and event-type mapping implementations.
 
-## Messaging Classes
+They belong to product Infrastructure or CrossCutting projects and use names
+chosen by the target. Technology selections such as EF Core, Dapper, Wolverine,
+Kafka, RabbitMQ, or an observability library must come from target evidence.
 
-```
-BuildingBlocks.Messaging.MessageProducer
-BuildingBlocks.Messaging.PostEventFailureException
-```
+## Historical Names
 
-## Reactor Pattern Classes
+Names such as `Input`, `ExitCode`, `CqrsOutput`, `MessageProducer`,
+`OutboxRepositoryPeer`, `InMemoryOrmDb`, `MessageDbClient`, BDDfy, and uContract
+originated in Java/EzDDD or lab-specific designs. They may still be useful
+concepts, but they are not active canonical type requirements.
 
-```
-BuildingBlocks.Application.Reactors.IReactor
-BuildingBlocks.Application.Reactors.IGenericReactor
-```
-
-## Outbox Infrastructure Classes (Conditional)
-
-```
-BuildingBlocks.Infrastructure.Outbox.OutboxRepositoryPeer
-BuildingBlocks.Infrastructure.Outbox.OutboxStore
-BuildingBlocks.Infrastructure.Outbox.OutboxClient
-BuildingBlocks.Infrastructure.Outbox.OutboxStoreAdapter
-BuildingBlocks.Infrastructure.Outbox.EfCoreOutboxClient
-BuildingBlocks.Infrastructure.Outbox.IOrmClient
-```
-
-These Outbox/ORM classes apply only when the target repository selects the corresponding implementation. This framework does not prescribe a database, ORM, or messaging package.
-
-## InMemory Infrastructure Classes
-
-### Outbox InMemory Support
-```
-BuildingBlocks.Infrastructure.Outbox.InMemoryOrmDb
-BuildingBlocks.Infrastructure.Outbox.InMemoryOrmClient
-```
-
-### Event Store InMemory Support
-```
-BuildingBlocks.Infrastructure.EventStore.InMemoryMessageDb
-BuildingBlocks.Infrastructure.EventStore.InMemoryMessageDbClient
-```
-
-### Message Broker InMemory Support
-```
-BuildingBlocks.Messaging.InMemoryMessageBroker
-BuildingBlocks.Messaging.InMemoryMessageProducer
-BuildingBlocks.Messaging.InMemoryProducer
-BuildingBlocks.Messaging.InMemoryConsumer
-BuildingBlocks.Messaging.InternalInMemoryMessageConsumer
-BuildingBlocks.Messaging.ExternalInMemoryMessageConsumer
-```
-
-## Event Sourcing Infrastructure Classes
-
-```
-BuildingBlocks.Application.Repositories.EsRepository
-BuildingBlocks.Application.Repositories.EventStoreData
-BuildingBlocks.Application.Repositories.EventStoreMapper
-BuildingBlocks.Infrastructure.EventStore.EsRepositoryPeer
-BuildingBlocks.Infrastructure.EventStore.EventStore
-BuildingBlocks.Infrastructure.EventStore.MessageDbClient
-BuildingBlocks.Infrastructure.EventStore.MessageData
-BuildingBlocks.Infrastructure.EventStore.CatchUpRelay
-BuildingBlocks.Infrastructure.EventStore.VolatileRelay
-BuildingBlocks.Infrastructure.EventStore.MessageDbToDomainEventDataConverter
-```
-
-## Testing Support Classes (BDDfy)
-
-```
-TestStack.BDDfy.BDDfyExtensions
-TestStack.BDDfy.Xunit.BddfyFactAttribute
-```
-
-## Design by Contract Classes (uContract)
-
-```
-UContract.Contract
-UContract.PreconditionViolationException
-UContract.PostconditionViolationException
-```
-
-## Utility Classes
-
-```
-BuildingBlocks.Common.Converter
-BuildingBlocks.Infrastructure.OptimisticLockingFailureException
-```
+Use the provenance matrix in the
+[reconstruction contract](../../../../../.dev/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md#provenance-and-concept-disposition)
+when deciding whether to retain, rename, or replace one in a target.
 
 ## Usage
 
-1. **Find a class**: Use Ctrl+F to search for the class name.
-2. **Confirm the namespace**: Copy the full path into a using directive.
-3. **Avoid guessing**: If it does not exist, verify it in the Building Blocks project.
-
-## Important Notes
-
-### Concept vs Implementation
-- 📘 This document is a **conceptual design** index covering the complete architecture target.
-- 📗 Implemented classes in a target repo require a separate implementation index based on actual source code.
-- ✅ `BuildingBlocks.*` is provisional naming and does not represent final packages.
-
-### Common Incorrect Paths (Avoid)
-- ❌ `DomainModel.*` → ✅ `BuildingBlocks.Domain.*`
-- ❌ `Infrastructure.Common.*` → ✅ `BuildingBlocks.Infrastructure.*`
-- ❌ `EventSourcingAggregate` → ✅ `EsAggregateRoot`
-
-### Reactor Interface Usage
-```csharp
-public interface MyReactor : IReactor<DomainEventData>
-{
-}
-```
-
-### InMemory Repository Configuration Example (Illustrative)
-```csharp
-public static IServiceCollection AddInMemoryRepositories(this IServiceCollection services)
-{
-    services.AddSingleton<InMemoryOrmDb<ProductData>>();
-    services.AddSingleton<InMemoryMessageDb>();
-    services.AddSingleton<InMemoryMessageDbClient>();
-    return services;
-}
-```
+1. Select the capability from current requirements and architecture decisions.
+2. Read the normative standard for its semantics.
+3. Prefer an interface or product-owned type.
+4. Use `EsAggregateRoot<TId>` only for an event-sourced Aggregate.
+5. Treat copied source includes as target-owned and reconcile upgrades through
+   `ai-context-upgrader`.

@@ -2,6 +2,9 @@
 
 This directory stores portable rationales for pattern choices.
 
+Use [INDEX.MD](INDEX.MD) to discover the retained rationale records. Keep this
+README focused on the purpose and boundary of the folder.
+
 It answers:
 
 - why this knowledge base prefers a given pattern;

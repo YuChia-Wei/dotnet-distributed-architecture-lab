@@ -12,7 +12,7 @@ var env = builder.Environment;
 var config = builder.Configuration;
 
 // Profile-based registration
-if (env.IsEnvironment("Outbox") || env.IsEnvironment("Test-Outbox"))
+if (env.IsEnvironment("Outbox") || env.IsEnvironment("TestOutbox"))
 {
     builder.Services.AddPlanDataSource(config);
     builder.Services.AddOutboxRepositories(config);

@@ -16,17 +16,21 @@ public sealed class CreateTaskController : ControllerBase
     }
 
     [HttpPost("plans/{planId}/projects/{projectName}/tasks")]
-    public IActionResult CreateTask(
+    [ProducesResponseType<CreateTaskResponse>(StatusCodes.Status201Created)]
+    [ProducesResponseType<CreateTaskResponse>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<CreateTaskResponse>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CreateTaskResponse>> CreateTaskAsync(
         [FromRoute] string planId,
         [FromRoute] string projectName,
-        [FromBody] CreateTaskRequest request)
+        [FromBody] CreateTaskRequest request,
+        CancellationToken cancellationToken)
     {
         var input = CreateTaskInput.Create();
         input.PlanId = PlanId.ValueOf(planId);
         input.ProjectName = ProjectName.ValueOf(projectName);
         input.TaskName = request.TaskName;
 
-        var output = _createTaskUseCase.Execute(input);
+        var output = await _createTaskUseCase.ExecuteAsync(input, cancellationToken);
 
         if (output.ExitCode == ExitCode.Success)
         {
@@ -36,7 +40,7 @@ public sealed class CreateTaskController : ControllerBase
                 Message = "Task created successfully",
                 Success = true
             };
-            return StatusCode(201, response);
+            return StatusCode(StatusCodes.Status201Created, response);
         }
 
         var error = new CreateTaskResponse
@@ -52,17 +56,5 @@ public sealed class CreateTaskController : ControllerBase
         }
 
         return BadRequest(error);
-    }
-
-    public sealed class CreateTaskRequest
-    {
-        public string TaskName { get; set; } = string.Empty;
-    }
-
-    public sealed class CreateTaskResponse
-    {
-        public string? TaskId { get; set; }
-        public string? Message { get; set; }
-        public bool Success { get; set; }
     }
 }

@@ -21,7 +21,7 @@ observed layout and record unresolved structure through `repo-structure-sync`.
 - WolverineFx (CQRS / Messaging)
 - EF Core + provider (Npgsql/SqlServer)
 - xUnit + BDDfy (Gherkin-style naming only)
-- NSubstitute
+- Target `testing.mocking` selection (NSubstitute by default)
 
 ### 3. Configuration
 Use `appsettings.json` and `appsettings.{Environment}.json`.
@@ -32,11 +32,14 @@ Example:
   "ConnectionStrings": {
     "MainDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
   },
-  "Profiles": {
-    "Mode": "outbox"
+  "Outbox": {
+    "Enabled": true
   }
 }
 ```
+
+Select `Outbox` through `DOTNET_ENVIRONMENT` or `ASPNETCORE_ENVIRONMENT`; the
+configuration document does not select its own profile.
 
 ### 4. Outbox / Event Sourcing
 - Configure WolverineFx with persistence/outbox

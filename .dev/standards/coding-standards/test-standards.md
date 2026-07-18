@@ -1,18 +1,23 @@
 # Test Coding Standards (.NET)
 
+Rule ID: `CONTRACT-SEMANTICS-001` applies when tests verify preconditions,
+postconditions, or invariants.
+
 This document defines coding standards for Domain, Use Case, Handler adapter, Controller, and integration tests.
 
 ---
 
 ## 📌 Overview
 
-All tests must express intent in Given-When-Then (GWT) style; Arrange-Act-Assert (3A) is not an acceptable substitute. xUnit + BDDfy is the default combination, with NSubstitute for mocks. A target team may explicitly opt out of BDDfy, but its C# tests must retain recognizable Given / When / Then structure and naming.
+Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`.
+
+All tests must express intent in Given-When-Then (GWT) style; Arrange-Act-Assert (3A) is not an acceptable substitute. xUnit + BDDfy is the default combination, with NSubstitute as the default mocking selection. A target team may explicitly opt out of BDDfy, but its C# tests must retain recognizable Given / When / Then structure and naming. A target may replace NSubstitute through the generic `testing.mocking` selection defined by [Target Technology Selection Policy](../TECHNOLOGY-SELECTION-POLICY.md).
 
 - **xUnit**: Primary test framework
 - **BDDfy**: Default GWT orchestration tool; a target team may explicitly opt out of the package but not the GWT rule
 - **`.feature`**: Supported but optional; create and maintain these files only when requirements provide them directly, their design or production is explicitly requested, or the target profile adopts a Gherkin runner
-- **NSubstitute**: The only permitted mocking framework
-- **Moq prohibited**: The project does not use Moq
+- **NSubstitute**: Default mocking framework
+- **Target override**: Another mocking library is permitted only through an explicit `testing.mocking` selection
 
 ---
 
@@ -22,7 +27,7 @@ The automated code-review scripts consume these markers:
 
 ```yaml
 # Test framework rules
-Pattern (forbidden, i): NUnit|MSTest|Moq|FakeItEasy|\[TestClass\]|\[TestMethod\]
+Pattern (forbidden, i): NUnit|MSTest|\[TestClass\]|\[TestMethod\]
 Pattern (optional, any): BDDfy|TestStack\.BDDfy|Gherkin-style
 
 # Mock rules
@@ -42,7 +47,7 @@ Pattern (forbidden, ignore-comment): BaseTestClass|BaseUseCaseTest
 |---------|------|------|
 | Unit test | xUnit + BDDfy (default) | Must use GWT; opting out of BDDfy does not permit 3A |
 | Integration test | xUnit + WebApplicationFactory | ASP.NET Core integration tests |
-| Mocking | NSubstitute | **Moq is prohibited** |
+| Mocking | NSubstitute by default | Use the explicit target `testing.mocking` selection when present |
 | Assertions | FluentAssertions | Recommended |
 
 ---
@@ -241,9 +246,18 @@ public void Rename_Throws_WhenNameIsNull()
 
 ---
 
-### 6. Use NSubstitute (Moq Prohibited)
+### 6. Mocking Library Selection
 
-**Mandatory**: Use NSubstitute for mocking. Moq is prohibited.
+NSubstitute is the `TEST-MOCK-001` profile default. Before generating or
+reviewing mocks, resolve `testing.mocking` through
+`.dev/project-config.yaml#technologySelections` and
+[Target Technology Selection Policy](../TECHNOLOGY-SELECTION-POLICY.md).
+
+- When no target selection exists, use NSubstitute.
+- When an evidenced target selection exists, use that library consistently.
+- Do not mix mocking libraries without an explicit migration decision.
+- Changing the library does not change GWT, test independence, or boundary
+  interaction rules.
 
 ```csharp
 // ✅ Correct: NSubstitute
@@ -254,8 +268,8 @@ repository.FindByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
 // Verify the call
 await repository.Received(1).SaveAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>());
 
-// ❌ Incorrect: Moq
-var repository = new Mock<IAggregateRepository<Product, ProductId>>();  // FORBIDDEN!
+// Valid only when the target explicitly selects Moq
+var repository = new Mock<IAggregateRepository<Product, ProductId>>();
 repository.Setup(x => x.FindByIdAsync(...)).ReturnsAsync(existingProduct);
 repository.Verify(x => x.SaveAsync(...), Times.Once);
 ```
@@ -425,7 +439,8 @@ var product = ProductBuilder.AProduct()
 ### Use Case Tests
 - [ ] Uses GWT and Gherkin-style naming; does not substitute 3A
 - [ ] Uses BDDfy by default; when the target team explicitly opts out, plain xUnit still retains Given / When / Then structure
-- [ ] Uses NSubstitute, not Moq
+- [ ] Uses the resolved `testing.mocking` selection; defaults to NSubstitute
+- [ ] Does not mix mocking libraries without an explicit migration decision
 - [ ] Does not inherit BaseTestClass
 - [ ] Uses `Guid.NewGuid().ToString()` for aggregate-root IDs
 - [ ] Follows the `Should_xxx_when_xxx` naming pattern
@@ -467,16 +482,15 @@ For more complete examples, see:
 
 | Example | Path |
 |------|------|
-| BDD Gherkin test | [../examples/bdd-gherkin-test/](../examples/bdd-gherkin-test/) |
+| Reqnroll/Gherkin reference | [../examples/bdd-gherkin-example/](../examples/bdd-gherkin-example/) |
 | BDD Given-When-Then | [../examples/bdd-given-when-then-example/](../examples/bdd-given-when-then-example/) |
-| Use Case test example | [../examples/use-case-test-example.md](../examples/use-case-test-example.md) |
-| Testing guide | [../examples/testing-guide.md](../examples/testing-guide.md) |
 
 ---
 
 ## Related Documents
 
 - [aggregate-standards.md](aggregate-standards.md)
+- [Design By Contract Semantics](../DESIGN-BY-CONTRACT.md)
 - [usecase-standards.md](usecase-standards.md)
 - [controller-standards.md](controller-standards.md)
 - [profile-configuration-standards.md](profile-configuration-standards.md)

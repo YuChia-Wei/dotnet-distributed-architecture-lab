@@ -3,15 +3,19 @@
 This file is an agent-loading projection. Normative ownership and precedence are
 defined by [AI Context Rule Ownership](../../../../../.dev/standards/AI-CONTEXT-OWNERSHIP.md).
 
-Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `ARCH-UOW-001`,
-`MAP-EVENTS-001`, `DELETE-SOFT-001`, `DELETE-PURGE-001`.
+Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`,
+`TECH-SELECT-001`, `ARCH-UOW-001`,
+`MAP-EVENTS-001`, `DELETE-SOFT-001`, `DELETE-PURGE-001`,
+`CONTRACT-SEMANTICS-001`, `PROJECT-GRAMMAR-001`.
 
 ## Execution Summary
 1. **DTO rule**: Request/Response DTOs are **separate files** (NOT inner classes).
 2. **Testing strategy**: **xUnit + BDDfy is the default profile**; a target team may explicitly decline BDDfy, but all unit, use-case, and integration tests must still use **Given-When-Then structure and naming**, never Arrange-Act-Assert (3A). `.feature` files are optional/planned and supported when supplied, explicitly requested, or enabled by an explicit target profile; **NO BaseTestClass**.
-3. **Mocking**: Use **NSubstitute**.
+3. **Mocking**: Resolve `testing.mocking` from target technology selections;
+   default to **NSubstitute** when no explicit selection exists.
 4. **Comments**: Allow **doc comments only** (XML Doc / JSDoc); forbid explanatory inline comments.
-5. **Contracts**: Aggregate/UseCase use Contract; Entity/ValueObject/DomainEvent use Objects/Guard.
+5. **Contracts**: preserve precondition, postcondition, and invariant semantics;
+   helper/package names are target-selected, not framework API truth.
 
 ## ABSOLUTELY FORBIDDEN
 - Hardcode environment/profile inside test classes.
@@ -24,6 +28,12 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `ARCH-UOW-001`,
 
 ## ALWAYS REQUIRED
 - If `repo-structure-sync` generated `.dev/project-config.yaml`, use it as a secondary summary of confirmed environment and architecture facts.
+- When the target adopts the `.slnx` profile, map product projects to
+  `/<workload>/DomainCore/` and `/<workload>/Presentation/` without forcing the
+  same physical directory layout.
+- Resolve ORM, broker, mocking, and similar choices through the generic
+  `technologySelections` records defined by `TECH-SELECT-001`; do not infer a
+  technology from examples.
 - Prefer project files, source types, and deployment configuration when they conflict with generated context.
 - Keep controllers thin: map DTOs <-> use cases only.
 - Model Use Cases as explicit `I<Operation>UseCase` inbound ports implemented by
@@ -43,10 +53,14 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `ARCH-UOW-001`,
   `IQueryRepository`-derived ports for read models.
 - Treat `IDomainRepository<TAggregate, TId>` as a compatibility alias that inherits
   `IAggregateRepository<TAggregate, TId>`.
+- Soft deletion is the Aggregate Repository profile default. Require `IsDeleted`
+  and mapper coverage unless target evidence records an explicit opt-out.
 
 ## Layered Validation Rules
-- **Aggregate Root / Use Case**: Contract.require / ensure / invariant
-- **Entity / Value Object / Domain Event**: Objects/Guard null checks
+- **Aggregate Root / Use Case**: explicit preconditions, postconditions, and
+  invariants through target-selected guards/contracts plus focused tests.
+- **Entity / Value Object / Domain Event**: constructor guards and invariant
+  preservation.
 
 ## DTO Location Rules
 - Directory: `src/Api/Contracts/<Aggregate>/{Requests|Responses}`
@@ -107,11 +121,11 @@ TODO: finalize mapper rules for domain event serialization and metadata fields.
 - Use environment checks to select DI registrations.
 
 ```csharp
-if (env.IsEnvironment("test-inmemory"))
+if (env.IsEnvironment("TestInMemory"))
 {
     services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("InMemory"));
 }
-else if (env.IsEnvironment("test-outbox"))
+else if (env.IsEnvironment("TestOutbox"))
 {
     services.AddDbContext<AppDbContext>(o => o.UseNpgsql(configuration.GetConnectionString("Outbox")));
 }

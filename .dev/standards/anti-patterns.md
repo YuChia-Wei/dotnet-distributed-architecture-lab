@@ -241,7 +241,7 @@ var eventPublisher = Substitute.For<IOrderEventPublisher>();
 var mapper = Substitute.For<IMapper>();
 ```
 
-✅ **Recommended approach**: Prefer real components or controlled infrastructure. Use NSubstitute only for necessary interfaces.
+✅ **Recommended approach**: Prefer real components or controlled infrastructure. Use the target-selected mocking library only for necessary interfaces; default to NSubstitute.
 
 ## Architecture Anti-Patterns
 

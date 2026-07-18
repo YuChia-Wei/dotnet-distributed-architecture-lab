@@ -306,3 +306,4 @@ For more complete examples, see:
 
 - [usecase-standards.md](usecase-standards.md)
 - [test-standards.md](test-standards.md)
+- [REST API resource path rationale](../rationale/rest-api-resource-path-rationale.MD)

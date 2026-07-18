@@ -16,6 +16,9 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 TABLE_PATH = re.compile(r"^\|\s*`([^`]+)`\s*\|")
 PATH_REFERENCE = re.compile(r"`([^`\n]+)`|\]\(([^)\s]+)\)")
+ACTIVE_SCRIPT_REFERENCE = re.compile(
+    r"(?<![A-Za-z0-9_.-])(?:\./)?(?P<path>\.ai/scripts/[A-Za-z0-9._/-]+\.(?:py|sh))"
+)
 ACTIVE_RUNTIME_ROOTS = (Path(".agents/skills"), Path(".claude/skills"))
 PLANNED_RUNTIME_ROOTS = (
     Path(".github/prompts"),
@@ -30,6 +33,8 @@ LANGUAGE_ROOTS = (
     Path(".ai"),
     Path(".agents"),
     Path(".claude"),
+    Path(".codex"),
+    Path(".github/agents"),
     Path(".dev/standards"),
     Path(".dev/specs"),
     Path(".dev/problem-frames"),
@@ -58,6 +63,20 @@ ASSET_STATUSES = {"draft", "active", "deprecated", "historical"}
 WRAPPER_TARGETS = {"claude", "codex", "copilot"}
 CAPABILITY_PROFILE = Path(
     ".ai/assets/skills/dev-workflow/references/capability-profile.yaml"
+)
+PROJECT_CONFIG_TEMPLATE = Path(
+    ".ai/assets/skills/repo-structure-sync/templates/project-config.template.yaml"
+)
+TECHNOLOGY_SELECTION_SCHEMA = Path(
+    ".ai/assets/skills/repo-structure-sync/templates/technology-selection.schema.yaml"
+)
+EXAMPLE_EVIDENCE_SCHEMA = Path(".dev/standards/examples/evidence-schema.yaml")
+EXAMPLE_EVIDENCE_MANIFEST = Path(".dev/standards/examples/evidence-manifest.yaml")
+EXAMPLE_PLACEHOLDER_DISPOSITION = Path(
+    ".dev/standards/examples/placeholder-disposition.yaml"
+)
+SOURCE_INCLUDE_EVIDENCE_MANIFEST = Path(
+    ".ai/assets/tech-stacks/dotnet-backend/source-includes/evidence-manifest.yaml"
 )
 CLAUDE_ENTRY_TEMPLATE = """# Claude Code Project Instructions
 
@@ -118,12 +137,13 @@ def validate_index(index: Path, errors: list[str]) -> None:
             errors.append(f"{index}:{line_number}: missing catalog path: {match.group(1)}")
 
 
-def validate_exact_case_references(files: list[Path], errors: list[str], root: Path = ROOT) -> None:
+def validate_exact_case_references(
+    files: list[Path], errors: list[str], root: Path = ROOT
+) -> None:
     """Reject active internal references whose casing differs from the Git path."""
     exact_paths: set[str] = set()
     for path in files:
-        normalized = path.as_posix()
-        exact_paths.add(normalized)
+        exact_paths.add(path.as_posix())
         parent = path.parent
         while parent != Path("."):
             exact_paths.add(parent.as_posix())
@@ -135,14 +155,15 @@ def validate_exact_case_references(files: list[Path], errors: list[str], root: P
         for path in files
         if path.suffix.lower() in LANGUAGE_EXTENSIONS
         and path.parts
-        and path.parts[0].lower() in {".ai", ".agents", ".claude", ".dev"}
+        and path.parts[0].lower() in {".ai", ".agents", ".claude", ".codex", ".dev", ".github"}
         and not any(part.lower() in LANGUAGE_SKIP_PARTS for part in path.parts)
         and Path(".ai/scripts/tests") not in (path, *path.parents)
-        and (not path.parts or path.parts[0].lower() not in PRODUCT_ROOTS)
+        and path.parts[0].lower() not in PRODUCT_ROOTS
     ]
 
     for source in active_files:
-        for line_number, line in enumerate((root / source).read_text(encoding="utf-8").splitlines(), 1):
+        text = (root / source).read_text(encoding="utf-8")
+        for line_number, line in enumerate(text.splitlines(), 1):
             for match in PATH_REFERENCE.finditer(line):
                 value = (match.group(1) or match.group(2)).strip("<>")
                 value = value.split("#", 1)[0].rstrip("/.,;:")
@@ -150,7 +171,7 @@ def validate_exact_case_references(files: list[Path], errors: list[str], root: P
                     continue
                 if value.startswith(("http://", "https://", "mailto:", "#")):
                     continue
-                if value.startswith((".ai/", ".dev/", ".agents/", ".claude/")):
+                if value.startswith((".ai/", ".dev/", ".agents/", ".claude/", ".codex/", ".github/")):
                     candidate = posixpath.normpath(value)
                 elif value.startswith(("./", "../")):
                     candidate = posixpath.normpath((source.parent / Path(value)).as_posix())
@@ -160,6 +181,311 @@ def validate_exact_case_references(files: list[Path], errors: list[str], root: P
                 if canonical is not None and canonical != candidate:
                     errors.append(
                         f"{source}:{line_number}: exact-case mismatch: {value} -> {canonical}"
+                    )
+
+
+def validate_active_script_references(
+    files: list[Path], errors: list[str], root: Path = ROOT
+) -> None:
+    """Reject active AI-context commands that point to missing local scripts."""
+    indexes = set(active_indexes(files))
+    active_files = [
+        path
+        for path in files
+        if is_language_surface(path, indexes)
+        and Path(".ai/scripts/tests") not in (path, *path.parents)
+    ]
+
+    for source in active_files:
+        text = (root / source).read_text(encoding="utf-8")
+        for line_number, line in enumerate(text.splitlines(), 1):
+            for match in ACTIVE_SCRIPT_REFERENCE.finditer(line):
+                script_path = Path(match.group("path"))
+                if not (root / script_path).is_file():
+                    errors.append(
+                        f"{source}:{line_number}: active script reference does not exist: "
+                        f"{script_path.as_posix()}"
+                    )
+
+
+def validate_technology_selection_contract(
+    errors: list[str],
+    root: Path = ROOT,
+    template_path: Path = PROJECT_CONFIG_TEMPLATE,
+    schema_path: Path = TECHNOLOGY_SELECTION_SCHEMA,
+) -> None:
+    """Validate the target-owned generic technology-selection template contract."""
+    try:
+        template = yaml.safe_load((root / template_path).read_text(encoding="utf-8"))
+        schema = yaml.safe_load((root / schema_path).read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        errors.append(f"technology selection contract cannot be loaded: {exc}")
+        return
+
+    if not isinstance(template, dict):
+        errors.append(f"{template_path}: root must be a mapping")
+        return
+    if not isinstance(schema, dict):
+        errors.append(f"{schema_path}: root must be a mapping")
+        return
+
+    if template.get("technologySelections") != []:
+        errors.append(
+            f"{template_path}: technologySelections must default to an empty collection"
+        )
+    architecture = template.get("architecture")
+    if not isinstance(architecture, dict) or architecture.get("capabilitySelections") != []:
+        errors.append(
+            f"{template_path}: architecture.capabilitySelections must default to an empty collection"
+        )
+
+    expected_fields = {"slot", "value", "status", "source", "evidence", "reason"}
+    required_fields = schema.get("required_fields")
+    if not isinstance(required_fields, list) or set(required_fields) != expected_fields:
+        errors.append(
+            f"{schema_path}: required_fields must equal {sorted(expected_fields)}"
+        )
+
+    for key, expected in (
+        ("allowed_statuses", {"selected", "not-applicable", "unresolved"}),
+        ("allowed_sources", {"repository-evidence", "explicit-target-decision"}),
+    ):
+        values = schema.get(key)
+        if not isinstance(values, list) or set(values) != expected:
+            errors.append(f"{schema_path}: {key} must equal {sorted(expected)}")
+
+    slot_pattern = schema.get("slot_pattern")
+    if not isinstance(slot_pattern, str):
+        errors.append(f"{schema_path}: slot_pattern must be a string")
+    else:
+        try:
+            re.compile(slot_pattern)
+        except re.error as exc:
+            errors.append(f"{schema_path}: invalid slot_pattern: {exc}")
+
+
+def validate_example_evidence_contract(
+    errors: list[str],
+    root: Path = ROOT,
+    manifest_path: Path = EXAMPLE_EVIDENCE_MANIFEST,
+    schema_path: Path = EXAMPLE_EVIDENCE_SCHEMA,
+) -> None:
+    """Validate machine-readable example tiers and fail closed on evidence inflation."""
+    try:
+        manifest = yaml.safe_load((root / manifest_path).read_text(encoding="utf-8"))
+        schema = yaml.safe_load((root / schema_path).read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        errors.append(f"example evidence contract cannot be loaded: {exc}")
+        return
+
+    if not isinstance(manifest, dict) or not isinstance(schema, dict):
+        errors.append("example evidence manifest and schema roots must be mappings")
+        return
+
+    expected_tiers = {
+        "executable-tested",
+        "structure-validated",
+        "illustrative",
+        "reference-only",
+        "historical",
+    }
+    allowed_tiers = schema.get("allowed_tiers")
+    if not isinstance(allowed_tiers, list) or set(allowed_tiers) != expected_tiers:
+        errors.append(f"{schema_path}: allowed_tiers must equal {sorted(expected_tiers)}")
+        return
+
+    default_allowed = schema.get("default_allowed_tiers")
+    default_tier = manifest.get("default_tier")
+    if (
+        not isinstance(default_allowed, list)
+        or set(default_allowed) != {"illustrative", "historical"}
+        or default_tier not in default_allowed
+    ):
+        errors.append(
+            f"{manifest_path}: default_tier must be illustrative or historical"
+        )
+
+    required_fields = schema.get("required_entry_fields")
+    if not isinstance(required_fields, list):
+        errors.append(f"{schema_path}: required_entry_fields must be a list")
+        return
+    required = set(required_fields)
+    tier_requirements = schema.get("tier_requirements")
+    if not isinstance(tier_requirements, dict):
+        errors.append(f"{schema_path}: tier_requirements must be a mapping")
+        return
+
+    entries = manifest.get("entries")
+    if not isinstance(entries, list):
+        errors.append(f"{manifest_path}: entries must be a list")
+        return
+
+    seen: set[str] = set()
+    example_root = root / manifest_path.parent
+    for index, entry in enumerate(entries):
+        label = f"{manifest_path}:entries[{index}]"
+        if not isinstance(entry, dict):
+            errors.append(f"{label}: entry must be a mapping")
+            continue
+        missing = sorted(required - set(entry))
+        if missing:
+            errors.append(f"{label}: missing required fields: {missing}")
+            continue
+
+        path_value = entry.get("path")
+        tier = entry.get("tier")
+        if not isinstance(path_value, str) or not path_value:
+            errors.append(f"{label}: path must be a non-empty string")
+            continue
+        if path_value in seen:
+            errors.append(f"{label}: duplicate path {path_value}")
+        seen.add(path_value)
+        candidate = Path(path_value)
+        if candidate.is_absolute() or ".." in candidate.parts:
+            errors.append(f"{label}: path must remain under examples: {path_value}")
+        elif not (example_root / candidate).exists():
+            errors.append(f"{label}: classified path does not exist: {path_value}")
+
+        if tier not in expected_tiers:
+            errors.append(f"{label}: invalid tier {tier!r}")
+            continue
+        requirement = tier_requirements.get(tier)
+        if not isinstance(requirement, dict):
+            errors.append(f"{schema_path}: missing requirement for tier {tier}")
+            continue
+        for field in requirement.get("required_nonempty", []):
+            value = entry.get(field)
+            if not isinstance(value, list) or not value:
+                errors.append(f"{label}: tier {tier} requires non-empty {field}")
+
+        if tier == "structure-validated":
+            for validator in entry.get("validators", []):
+                if not isinstance(validator, str) or not (root / validator).is_file():
+                    errors.append(f"{label}: declared validator does not exist: {validator}")
+
+    readme = root / manifest_path.parent / "README.md"
+    if readme.is_file():
+        readme_text = readme.read_text(encoding="utf-8")
+        for claim in ("Verified Templates", "Single Source of Truth"):
+            if claim in readme_text:
+                errors.append(f"{readme.relative_to(root)}: unsupported claim remains: {claim}")
+
+    stale_versions = root / manifest_path.parent / ".versions.json"
+    if stale_versions.exists():
+        errors.append(
+            f"{stale_versions.relative_to(root)}: stale source-sync metadata must be retired"
+        )
+
+
+def validate_source_include_evidence(
+    errors: list[str],
+    root: Path = ROOT,
+    manifest_path: Path = SOURCE_INCLUDE_EVIDENCE_MANIFEST,
+) -> None:
+    """Validate executable-tested claims for source-includable framework assets."""
+    try:
+        manifest = yaml.safe_load((root / manifest_path).read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        errors.append(f"source-include evidence manifest cannot be loaded: {exc}")
+        return
+
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("entries"), list):
+        errors.append(f"{manifest_path}: entries must be a list")
+        return
+
+    asset_root = root / manifest_path.parent
+    for index, entry in enumerate(manifest["entries"]):
+        label = f"{manifest_path}:entries[{index}]"
+        if not isinstance(entry, dict):
+            errors.append(f"{label}: entry must be a mapping")
+            continue
+
+        path_value = entry.get("path")
+        candidate = Path(path_value) if isinstance(path_value, str) else None
+        if (
+            candidate is None
+            or candidate.is_absolute()
+            or ".." in candidate.parts
+            or not (asset_root / candidate).is_dir()
+        ):
+            errors.append(f"{label}: source-include path must be an existing local directory")
+
+        if entry.get("tier") != "executable-tested":
+            errors.append(f"{label}: source includes must declare executable-tested tier")
+
+        for field in ("build_commands", "test_commands"):
+            value = entry.get(field)
+            if not isinstance(value, list) or not value:
+                errors.append(f"{label}: executable-tested tier requires non-empty {field}")
+
+        test_project = entry.get("test_project")
+        if not isinstance(test_project, str) or not (root / test_project).is_file():
+            errors.append(f"{label}: declared test_project does not exist: {test_project}")
+
+
+def validate_example_placeholder_disposition(
+    errors: list[str],
+    root: Path = ROOT,
+    disposition_path: Path = EXAMPLE_PLACEHOLDER_DISPOSITION,
+    evidence_path: Path = EXAMPLE_EVIDENCE_MANIFEST,
+) -> None:
+    """Validate placeholder outcomes against evidence tiers and canonical replacements."""
+    try:
+        disposition = yaml.safe_load((root / disposition_path).read_text(encoding="utf-8"))
+        evidence = yaml.safe_load((root / evidence_path).read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        errors.append(f"example placeholder disposition cannot be loaded: {exc}")
+        return
+
+    if not isinstance(disposition, dict) or not isinstance(disposition.get("entries"), list):
+        errors.append(f"{disposition_path}: entries must be a list")
+        return
+    if not isinstance(evidence, dict) or not isinstance(evidence.get("entries"), list):
+        errors.append(f"{evidence_path}: entries must be a list")
+        return
+
+    evidence_tiers = {
+        entry.get("path"): entry.get("tier")
+        for entry in evidence["entries"]
+        if isinstance(entry, dict)
+    }
+    allowed_dispositions = {
+        "bounded-rewrite",
+        "reference-only",
+        "historical",
+        "retired",
+    }
+    for index, entry in enumerate(disposition["entries"]):
+        label = f"{disposition_path}:entries[{index}]"
+        if not isinstance(entry, dict):
+            errors.append(f"{label}: entry must be a mapping")
+            continue
+
+        path_value = entry.get("path")
+        outcome = entry.get("disposition")
+        tier = entry.get("evidence_tier")
+        replacements = entry.get("canonical_replacements")
+        if not isinstance(path_value, str) or not path_value:
+            errors.append(f"{label}: path must be a non-empty string")
+            continue
+        if outcome not in allowed_dispositions:
+            errors.append(f"{label}: invalid disposition {outcome!r}")
+        if outcome == "retired":
+            if path_value in evidence_tiers:
+                errors.append(f"{label}: retired path must not remain in evidence manifest")
+        elif evidence_tiers.get(path_value) != tier:
+            errors.append(
+                f"{label}: evidence_tier {tier!r} does not match manifest "
+                f"{evidence_tiers.get(path_value)!r}"
+            )
+
+        if not isinstance(replacements, list) or not replacements:
+            errors.append(f"{label}: canonical_replacements must be non-empty")
+        else:
+            for replacement in replacements:
+                if not isinstance(replacement, str) or not (root / replacement).exists():
+                    errors.append(
+                        f"{label}: canonical replacement does not exist: {replacement}"
                     )
 
 
@@ -221,9 +547,9 @@ def validate_bilingual_entries(errors: list[str]) -> None:
         ),
         (
             Path("AGENTS.md"),
-            "[Traditional Chinese](agents.zh-tw.md)",
+            "[Traditional Chinese](AGENTS.zh-TW.md)",
             "canonical English",
-            Path("agents.zh-tw.md"),
+            Path("AGENTS.zh-TW.md"),
             "[English](AGENTS.md)",
             "翻譯",
         ),
@@ -267,9 +593,9 @@ def validate_bilingual_entries(errors: list[str]) -> None:
             )
 
     required_agent_rows = {
-        "README.md", "README.en.md", "AGENTS.md", "agents.zh-tw.md", "CLAUDE.md"
+        "README.md", "README.en.md", "AGENTS.md", "AGENTS.zh-TW.md", "CLAUDE.md"
     }
-    for path in (Path("AGENTS.md"), Path("agents.zh-tw.md")):
+    for path in (Path("AGENTS.md"), Path("AGENTS.zh-TW.md")):
         if not (ROOT / path).is_file():
             continue
         _, table_paths = markdown_structure(path)
@@ -640,10 +966,15 @@ def main() -> int:
     files = tracked_files()
     indexes = active_indexes(files)
 
+    validate_exact_case_references(files, errors)
+    validate_active_script_references(files, errors)
+    validate_technology_selection_contract(errors)
+    validate_example_evidence_contract(errors)
+    validate_example_placeholder_disposition(errors)
+    validate_source_include_evidence(errors)
+
     for index in indexes:
         validate_index(index, errors)
-
-    validate_exact_case_references(files, errors)
 
     index_set = set(indexes)
     language_files = [path for path in files if is_language_surface(path, index_set)]

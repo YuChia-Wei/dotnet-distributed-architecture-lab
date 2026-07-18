@@ -84,7 +84,8 @@ with actual ezDDD .NET implementations once available.
   - Relevant event triggers expected action
   - Irrelevant events are ignored
 - Use fixture-based DI to register the reactor and dependencies.
-- Use NSubstitute for external services.
+- Resolve `testing.mocking` from target technology selections for external
+  service test doubles; default to NSubstitute.
 
 ## Common Pitfalls
 

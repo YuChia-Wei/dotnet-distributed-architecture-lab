@@ -119,10 +119,35 @@ class SyntheticShellAssetRepo:
         check_all_required_scripts: list[str] | None = None,
         check_all_required_commands: list[str] | None = None,
     ) -> None:
+        assets = [
+            {
+                "path": path,
+                "role": "context-validator",
+                "lifecycle": "active",
+                "distribution": "packaged",
+                "authority": "structural",
+                "replacement": None,
+            }
+            for path in retained
+        ]
+        assets.extend(
+            {
+                "path": path,
+                "role": "transitional-helper",
+                "lifecycle": "retirement-candidate",
+                "distribution": "packaged",
+                "authority": "advisory",
+                "replacement": "fixture replacement",
+            }
+            for path in (retirement_candidates or [])
+        )
         manifest = {
-            "schema_version": "1.0",
-            "retained": retained,
-            "retirement_candidates": retirement_candidates or [],
+            "schema_version": "2.0",
+            "contract": {
+                "distribution_rule": "fixture distribution rule",
+                "authority_rule": "fixture authority rule",
+            },
+            "assets": assets,
             "required_entrypoints": required_entrypoints or [],
             "check_all_required_scripts": check_all_required_scripts or [],
             "check_all_required_commands": check_all_required_commands or [],
@@ -157,7 +182,6 @@ class SyntheticRunnerRepo:
         self._write_stub(self.bin / "dotnet", 'printf "dotnet %s\\n" "$*" >> .aic-sentinel\nexit "${DOTNET_STUB_EXIT:-0}"')
         self._write_child("check-coding-standards.sh", "CODING_STUB_EXIT")
         self._write_child("check-spec-compliance.sh", "SPEC_STUB_EXIT")
-        self._write_child("check-test-compliance.sh", "ADVISORY_STUB_EXIT")
 
     def close(self) -> None:
         self._temporary.cleanup()
@@ -185,6 +209,8 @@ class SyntheticRunnerRepo:
         merged_environment["PATH"] = str(self.bin) + os.pathsep + merged_environment["PATH"]
         merged_environment.pop("SPEC_FILE", None)
         merged_environment.pop("TASK_NAME", None)
+        merged_environment.pop("COMMIT_RANGE", None)
+        merged_environment.pop("WORKFLOW_ID", None)
         if environment:
             merged_environment.update(environment)
         return subprocess.run(
@@ -252,7 +278,7 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
 
             # Then the aggregate fails exactly one required check.
             self.assertEqual(1, result.returncode)
-            self.assertIn("Coding Standards Compliance returned non-zero", result.stdout)
+            self.assertIn("Coding Standards Structural Integrity returned non-zero", result.stdout)
             self.assertRegex(result.stdout, r"Required Failed: .*1")
         finally:
             fixture.close()
@@ -261,29 +287,32 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
         fixture = SyntheticRunnerRepo()
         try:
             # Given deterministic dotnet command stubs return command-not-found semantics.
-            # When critical mode executes both required dotnet checks.
+            # When critical mode executes all required dotnet checks.
             result = fixture.execute("--critical", environment={"DOTNET_STUB_EXIT": "127"})
 
-            # Then both selected command checks fail without workstation dependency.
+            # Then all three selected command checks fail without workstation dependency.
             self.assertEqual(1, result.returncode)
-            self.assertRegex(result.stdout, r"Required Failed: .*2")
-            self.assertEqual(2, sum(line.startswith("dotnet ") for line in fixture.sentinel()))
+            self.assertRegex(result.stdout, r"Required Failed: .*3")
+            self.assertEqual(3, sum(line.startswith("dotnet ") for line in fixture.sentinel()))
         finally:
             fixture.close()
 
-    def test_gwt_005_given_advisory_failure_when_full_runs_then_visible_but_nonblocking(self) -> None:
+    def test_gwt_005_given_retirement_candidate_when_modes_run_then_it_is_never_selected(self) -> None:
         fixture = SyntheticRunnerRepo()
         try:
-            # Given all required stubs pass and the advisory child returns nonzero.
-            # When full mode executes.
-            result = fixture.execute("--full", environment={"ADVISORY_STUB_EXIT": "9"})
+            # Given the stale helper is a packaged retirement candidate.
+            # When every supported mode executes.
+            results = (
+                fixture.execute("--critical"),
+                fixture.execute("--quick"),
+                fixture.execute("--full"),
+            )
 
-            # Then the gate passes with a visible advisory warning.
-            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("ADVISORY", result.stdout)
-            self.assertRegex(result.stdout, r"Advisory Warnings: .*1")
-            self.assertRegex(result.stdout, r"Required Failed: .*0")
-            self.assertIn("Passed with 1 Advisory Warning", result.stdout)
+            # Then no aggregate mode routes to its obsolete policy.
+            for result in results:
+                self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+                self.assertNotIn("Test Standards Compliance", result.stdout)
+                self.assertRegex(result.stdout, r"Advisory Warnings: .*0")
         finally:
             fixture.close()
 
@@ -372,7 +401,7 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             )
             self.assertNotIn("Test Standards Compliance", critical.stdout)
             self.assertNotIn("Test Standards Compliance", quick.stdout)
-            self.assertIn("Test Standards Compliance", full.stdout)
+            self.assertNotIn("Test Standards Compliance", full.stdout)
         finally:
             fixture.close()
 
@@ -408,11 +437,11 @@ class ShellAssetValidationGwtTests(unittest.TestCase):
         if cls.real_before != cls.real_after:
             raise AssertionError("synthetic fixture tests mutated the real repository")
 
-    def test_gwt_002_given_retained_mode_100644_when_validated_then_it_fails(self) -> None:
+    def test_gwt_002_given_tracked_asset_mode_100644_when_validated_then_it_fails(self) -> None:
         fixture = SyntheticShellAssetRepo()
         fixture_root = fixture.root
         try:
-            # Given a retained shell tracked with Git mode 100644.
+            # Given a classified shell tracked with Git mode 100644.
             script = fixture.add_shell("required.sh", mode="100644")
             fixture.write_manifest(retained=[script], required_entrypoints=[script])
 
@@ -422,7 +451,7 @@ class ShellAssetValidationGwtTests(unittest.TestCase):
             # Then index truth rejects the path regardless of host executability.
             self.assertEqual(1, result.returncode)
             self.assertIn(script, result.stdout)
-            self.assertIn("must use Git mode 100755, found 100644", result.stdout)
+            self.assertIn("tracked shell asset must use Git mode 100755, found 100644", result.stdout)
         finally:
             fixture.close()
         self.assertFalse(fixture_root.exists())
@@ -446,17 +475,17 @@ class ShellAssetValidationGwtTests(unittest.TestCase):
         finally:
             fixture.close()
 
-    def test_gwt_013_given_invalid_lifecycle_groups_when_validated_then_invariants_fail(self) -> None:
+    def test_gwt_013_given_invalid_asset_records_when_validated_then_invariants_fail(self) -> None:
         cases = (
-            ("overlap", ["lifecycle groups overlap"]),
-            ("duplicate", ["retained contains duplicate paths"]),
-            ("required-outside", ["required_entrypoints must be a subset of retained"]),
+            ("overlap", ["assets contains duplicate path"]),
+            ("duplicate", ["assets contains duplicate path"]),
+            ("required-outside", ["required_entrypoints contains non-runnable lifecycle path"]),
         )
         for case, messages in cases:
             with self.subTest(case=case):
                 fixture = SyntheticShellAssetRepo()
                 try:
-                    # Given a manifest violating one lifecycle invariant.
+                    # Given a manifest violating one asset-record invariant.
                     retained = fixture.add_shell("retained.sh")
                     outside = fixture.add_shell("outside.sh")
                     if case == "overlap":
@@ -476,7 +505,7 @@ class ShellAssetValidationGwtTests(unittest.TestCase):
                             required_entrypoints=[outside],
                         )
 
-                    # When shell asset validation checks lifecycle ownership.
+                    # When shell asset validation checks role and lifecycle ownership.
                     result = fixture.validate()
 
                     # Then the matching invariant is reported as a failure.
@@ -489,7 +518,7 @@ class ShellAssetValidationGwtTests(unittest.TestCase):
     def test_gwt_014_given_valid_manifest_when_validated_then_counts_and_exit_pass(self) -> None:
         fixture = SyntheticShellAssetRepo()
         try:
-            # Given complete classification, executable retained paths, and valid subsets.
+            # Given complete classification, executable active paths, and valid subsets.
             entrypoint = fixture.add_shell("entrypoint.sh")
             child = fixture.add_shell("child.sh")
             fixture.write_manifest(
@@ -501,13 +530,42 @@ class ShellAssetValidationGwtTests(unittest.TestCase):
             # When shell asset validation runs.
             result = fixture.validate()
 
-            # Then it passes with truthful retained, retirement, and tracked counts.
+            # Then it passes with truthful role, lifecycle, and tracked counts.
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn(
-                "passed for 2 retained executable asset(s), 0 retirement candidate(s), "
-                "and 2 tracked shell asset(s)",
-                result.stdout,
+            self.assertIn("passed for 2 tracked asset(s)", result.stdout)
+            self.assertIn("'active': 2", result.stdout)
+            self.assertIn("'context-validator': 2", result.stdout)
+        finally:
+            fixture.close()
+
+    def test_gwt_017_given_transitional_asset_without_replacement_when_validated_then_it_fails(self) -> None:
+        fixture = SyntheticShellAssetRepo()
+        try:
+            # Given a transitional helper that omits its replacement direction.
+            script = fixture.add_shell("transitional.sh")
+            fixture.write_manifest(retained=[script])
+            manifest_path = fixture.scripts / "shell-assets.yaml"
+            manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+            manifest["assets"][0].update(
+                {
+                    "role": "transitional-helper",
+                    "lifecycle": "transitional",
+                    "authority": "advisory",
+                    "replacement": None,
+                }
             )
+            manifest_path.write_text(
+                yaml.safe_dump(manifest, sort_keys=False),
+                encoding="utf-8",
+                newline="\n",
+            )
+
+            # When lifecycle validation runs.
+            result = fixture.validate()
+
+            # Then packaging retention cannot hide an unspecified replacement.
+            self.assertEqual(1, result.returncode)
+            self.assertIn("replacement is required for non-active lifecycle", result.stdout)
         finally:
             fixture.close()
 

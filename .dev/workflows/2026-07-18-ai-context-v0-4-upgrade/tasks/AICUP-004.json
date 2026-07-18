@@ -6,9 +6,9 @@
   "task_id": "AICUP-004",
   "workflow_id": "2026-07-18-ai-context-v0-4-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "pending",
+  "status": "in_progress",
   "created_at": "2026-07-18T20:33:26+08:00",
-  "updated_at": "2026-07-18T20:33:26+08:00",
+  "updated_at": "2026-07-18T21:08:30+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICUP-CLOSEOUT"],
   "scope": {
@@ -20,8 +20,8 @@
   "execution": {
     "steps": ["Finalize v0.4.0 provenance", "Run independent post-upgrade audit", "Reconcile all findings", "Run final validators", "Commit closure evidence"],
     "validation": ["provenance/version validation", "AI-context validation", "workflow validation", "shell assets validation", "git diff --check", "clean workflow branch state"],
-    "last_completed_step": "",
-    "next_action": "Wait for AICUP-003 validation"
+    "last_completed_step": "Finalized and validated v0.4.0 provenance",
+    "next_action": "Run an independent post-upgrade AI-context audit"
   },
   "results": {
     "summary": "",

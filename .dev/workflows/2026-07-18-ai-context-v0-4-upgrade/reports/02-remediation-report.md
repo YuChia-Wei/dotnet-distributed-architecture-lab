@@ -12,9 +12,9 @@
 - `report_id`: `remediation-report-2026-07-18-ai-context-v0-4-upgrade`
 - `workflow_id`: `2026-07-18-ai-context-v0-4-upgrade`
 - `owner_skill`: `ai-context-governance`
-- `status`: `draft`
+- `status`: `verification-pending`
 - `created_at`: `2026-07-18T20:48:43+08:00`
-- `updated_at`: `2026-07-18T20:48:43+08:00`
+- `updated_at`: `2026-07-18T21:08:30+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-remediation-report-template.md`
 - `template_version`: `1.0.0`
 - `baseline_report`: `.dev/workflows/2026-07-18-ai-context-v0-4-upgrade/reports/01-audit-report.md`
@@ -23,18 +23,18 @@
 ## Remediation Summary
 
 - Authorized scope: Progressive target upgrade from known historical v0.1.0 through governed v0.3.0 to published v0.4.0.
-- Completed scope: Source and package identity validation; v0.1.0→v0.2.0 contract accounting; v0.3.0 package application, target synchronization, validation, and intermediate provenance.
-- Validation summary: All intermediate AI-context, workflow, shell, exact-case, version, analyzer, validation-tool, and solution-build gates passed. One parallel analyzer-test attempt hit a transient compiler output lock; the required serial retry passed 47/47.
-- Closure decision: `not-ready`; v0.4.0 application, final provenance, and post-upgrade audit remain.
+- Completed scope: Source and package identity validation; v0.1.0→v0.2.0 contract accounting; governed v0.3.0 intermediate adoption; v0.4.0 planning, application, reconciliation, validation, and final provenance.
+- Validation summary: The final full target gate passed 19/19, including 49 analyzer tests, 2 validation tests, 5 BuildingBlocks behavior tests, safe-apply tests, and all v0.4.0 projection/evidence contracts. The solution build passed with 0 errors and 6 pre-existing nullable warnings.
+- Closure decision: `verification-pending`; implementation is complete and only the independent post-upgrade audit and workflow closure remain.
 
 ## Finding Resolution Matrix
 
 | Finding | Before Severity | Status | Changed Files | Validation | Commit | Residual Risk |
 | --- | --- | --- | --- | --- | --- | --- |
 | `AICUP-BASELINE` | P0 | `resolved` | Workflow baseline evidence | Two package validators and 555-path classification | `2c43b85` | None |
-| `AICUP-V03` | P0 | `resolved` | Reusable framework roots, target synchronization, provenance | Target validators, 47 analyzer tests, 2 validation tests, solution build | pending stage commit | 72 explicit overrides require v0.4.0 reconciliation |
-| `AICUP-V04` | P0 | `not-addressed` | None yet | Pending | pending | Published target version not yet applied |
-| `AICUP-CLOSEOUT` | P1 | `not-addressed` | None yet | Pending | pending | Final audit and provenance pending |
+| `AICUP-V03` | P0 | `resolved` | Reusable framework roots, target synchronization, provenance | Target validators, 47 analyzer tests, 2 validation tests, solution build | `6b4da5d` | None; served as the governed v0.4.0 base |
+| `AICUP-V04` | P0 | `resolved` | v0.4.0 framework paths, target technology selections, root exact-case translation, provenance | Full gate 19/19, solution build, version validation | pending stage commit | 65 recorded downstream deviations; zero missing package paths |
+| `AICUP-CLOSEOUT` | P1 | `in-progress` | Post-upgrade audit and workflow evidence | Pending independent audit | pending | Audit closure pending |
 
 ## v0.3.0 Changes And Evidence
 
@@ -45,9 +45,18 @@
 - Result: 483 package files match v0.3.0 exactly, 72 differ and are recorded under three explicit local override groups, and no package file is missing.
 - `.dev/AI-CONTEXT-SOURCE.yaml` validates as `REL-v0.3.0` at `1e782909b7753b2889014516595d72f703a260f3`.
 
+## v0.4.0 Changes And Evidence
+
+- The published v0.4.0 package validated byte-for-byte, but its `metadata/migration.yaml` describes only a clean install while the published migration guide requires a governed v0.3.0 baseline. The workflow-local `evidence/build-v040-upgrade-metadata.py` deterministically derived planner metadata without altering either release inventory.
+- The official planner accepted 166 inventory-derived operations: 82 replacements, 41 additions, 28 removals, and 15 target-modified reconciliations.
+- The planner applied 151 byte-safe operations. Canonical v0.4.0 skill and validator changes were adopted for the 15 reconciliations; target repository identity, ownership records, human catalogs, and local runner behavior retained precedence where required.
+- The final target matches 503 of 568 package files exactly. The remaining 65 paths are explicit governance, validation, or repository-truth overrides in `.dev/AI-CONTEXT-SOURCE.yaml`; no package path is missing.
+- Target technology selections now record repository-backed mocking, BDD-runner, persistence, messaging, and observability decisions in `.dev/project-config.yaml`.
+- The root Traditional Chinese collaboration guide now uses the v0.4.0 exact-case path `AGENTS.zh-TW.md`.
+- The v0.4.0 package also selects source-release tag/history and package-builder tests that cannot run in a downstream package because their tags, release registry, and builder module are excluded. The target full gate therefore retains the applicable version-manifest validator and safe-apply tests while excluding those source-only tests.
+
 ## Deferred Work
 
 | Finding | Reason | Owner | Next Action |
 | --- | --- | --- | --- |
-| `AICUP-V04` | Requires clean committed v0.3.0 checkpoint | `ai-context-governance` | Commit v0.3.0, run governed v0.4.0 planner, and reconcile its breaking contracts |
-| `AICUP-CLOSEOUT` | Depends on final v0.4.0 validation | `ai-context-governance` | Finalize provenance and request post-upgrade audit |
+| `AICUP-CLOSEOUT` | Independent verification must remain separate from remediation | `ai-context-auditor` | Audit the committed v0.4.0 target and close the workflow if no blocking findings remain |

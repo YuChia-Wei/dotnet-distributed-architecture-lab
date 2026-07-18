@@ -1,0 +1,13 @@
+schema_version: "1.0"
+manifest_id: "DOTNET-SOURCE-INCLUDES-EVIDENCE-001"
+updated_at: "2026-07-16T22:01:08+08:00"
+entries:
+  - path: "domain/"
+    tier: "executable-tested"
+    claim: "Minimal interface-first Domain contracts and optional EsAggregateRoot<TId> mechanics."
+    reason: "The source files are linked directly into a focused pure-logic test project."
+    build_commands:
+      - "dotnet build tools/DotnetBackendBuildingBlocks.Tests/DotnetBackendBuildingBlocks.Tests.csproj --no-restore"
+    test_commands:
+      - "dotnet test tools/DotnetBackendBuildingBlocks.Tests/DotnetBackendBuildingBlocks.Tests.csproj --no-build --no-restore"
+    test_project: "tools/DotnetBackendBuildingBlocks.Tests/DotnetBackendBuildingBlocks.Tests.csproj"

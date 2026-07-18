@@ -7,7 +7,7 @@ Generate controller tests using WebApplicationFactory + xUnit with mandatory Giv
 - `../assets/skills/bdd-gwt-test-designer/skill.yaml`
 
 ## Rules
-- Mock dependencies with NSubstitute
+- Mock dependencies with the target `testing.mocking` selection; use NSubstitute by default
 - Validate HTTP status codes and response shape
 - DTOs are separate files
 

@@ -21,14 +21,19 @@ outputs:
   - "repo init verdict"
   - "repo inventory"
   - "evidence-based `.dev/project-config.yaml` or an explicit not-initialized decision"
+  - "validated `.dev/AI-CONTEXT-SOURCE.yaml` when credible source release identity is available, or an explicit unresolved-provenance record"
   - "complexity verdict"
   - "safe direct update targets"
   - "source packet for escalation"
   - "updated architecture-facing docs"
+  - "derived `AGENTS.zh-TW.md` when translation is requested and a low-cost translator runtime is available"
 constraints:
   - "Keep framework-level collaboration rules unless the new repo clearly invalidates them"
   - "Do not bulk rewrite specs or operations docs unless explicitly requested"
   - "Prefer low-cost inventory first and escalate only when the checklist requires it"
+  - "Treat optional indexes, code graphs, MCP servers, IDE indexes, and semantic search only as discovery accelerators; build target-repository facts from repository-native evidence under AICTX-EVIDENCE-001."
+  - "Do not guess the copied framework version or commit; create target provenance only from credible release or import evidence."
+  - "Finalize target-specific English `AGENTS.md` before delegating `AGENTS.zh-TW.md` to the low-cost context-translator role; do not use a pretranslated root template."
 workflow:
   - step: 1
     description: "Identify target repository mode: empty repo, existing repo, or copied-template repo"
@@ -37,9 +42,11 @@ workflow:
   - step: 3
     description: "Evaluate P0 and P1 triggers to decide whether escalation is needed"
   - step: 4
-    description: "Generate or update `.dev/project-config.yaml` and architecture-facing docs only from confirmed facts"
+    description: "Generate or update `.dev/project-config.yaml`, initial AI context provenance, and architecture-facing docs only from confirmed facts"
   - step: 5
     description: "If needed, pass a compact source packet to a stronger model or sub-agent"
+  - step: 6
+    description: "After English root context is final, optionally delegate the derived Traditional Chinese translation to the low-cost context-translator and validate parity"
 references:
   - ".ai/assets/skills/repo-structure-sync/references/scan-playbook.md"
   - ".ai/assets/skills/repo-structure-sync/references/migration-boundaries.md"
@@ -48,6 +55,10 @@ references:
   - ".ai/assets/skills/repo-structure-sync/references/document-targets.md"
   - ".ai/assets/skills/repo-structure-sync/references/output-contract.md"
   - ".ai/assets/skills/repo-structure-sync/templates/project-config.template.yaml"
+  - ".ai/assets/skills/repo-structure-sync/templates/technology-selection.schema.yaml"
+  - ".ai/assets/skills/repo-structure-sync/templates/public-template-manifest.yaml"
+  - ".ai/assets/sub-agent-role-prompts/context-translator/sub-agent.yaml"
+  - ".ai/assets/skills/ai-context-upgrader/templates/ai-context-source-template.yaml"
 examples:
   - ".dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md"
 human_guide: ".dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md"

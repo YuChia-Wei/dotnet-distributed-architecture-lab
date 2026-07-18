@@ -1,69 +1,63 @@
 # Examples Index
 
-This index lists the reusable examples under `.dev/standards/examples/` without tying them to any source-stack migration history.
+This file is the navigation catalog for `.dev/standards/examples/`.
+Evidence strength comes from
+[`evidence-manifest.yaml`](evidence-manifest.yaml), not from placement in this
+directory.
+Placeholder/API disposition comes from
+[`placeholder-disposition.yaml`](placeholder-disposition.yaml).
 
-## Principles
+## Current Illustrations
 
-- examples should be understandable on their own
-- examples should demonstrate current architectural rules and implementation patterns
-- example indexes should not depend on Java -> .NET conversion notes
+- [`aggregate/`](aggregate/) — Aggregate, Entity, Value Object, and event
+  illustrations aligned to the optional `EsAggregateRoot<TId>` contract.
+- [`controller/`](controller/) — async ASP.NET Core Controller-to-Use-Case
+  boundary.
+- [`dto/`](dto/) — DTO placement and shape illustrations.
+- [`use-case-injection/`](use-case-injection/) — Use Case injection boundary.
 
-## Categories
+These are illustrative, not standalone copy-ready projects.
 
-### Aggregate Examples
+## On-Demand References
 
-- `examples/aggregate/`
-  - aggregate roots, ids, events, and value-object style patterns
+- [`aspnet-core/`](aspnet-core/) — conditional runtime/profile configuration.
+- [`bdd-given-when-then-example/`](bdd-given-when-then-example/) — BDDfy rule
+  mapping.
+- [`bdd-gherkin-example/`](bdd-gherkin-example/) — distinct Reqnroll/Gherkin
+  feature mode.
+- [`generation-templates/`](generation-templates/) — legacy generation inputs,
+  not verified generators.
+- [`inquiry-archive/`](inquiry-archive/) — query/archive concepts.
+- [`mapper/`](mapper/) — mapping concepts and incomplete portfolio examples.
+- [`nuget/`](nuget/) — package-layout reference; target versions remain
+  target-selected.
+- [`outbox/`](outbox/) — Outbox concepts with target-selected adapters.
+- [`profile-configs/`](profile-configs/) — historical profile variants.
+- [`projection/`](projection/) — projection/read-model concepts.
+- [`usecase/`](usecase/) — Use Case lineage and illustrative APIs.
 
-### ASP.NET Core / Runtime Examples
+Reference-only folders are loaded when their topic is selected. They are not
+active API or package truth.
 
-- `examples/aspnet-core/`
-  - Program setup, DI, configuration, and environment/profile examples
+## Historical Provenance
 
-### BDD / Test Examples
+- [`contract/`](contract/) — uContract/Design-by-Contract source lineage.
+- [`reference/`](reference/) — Java, EzDDD, and migration mappings.
 
-- `examples/bdd-given-when-then-example/`
-  - scenario-driven test examples
-- `examples/bdd-gherkin-example/`
-  - Gherkin-oriented reference examples
-- `examples/bdd-gherkin-test/`
-  - end-to-end BDD-style test examples
-- `examples/test/`
-  - fixture-based and use-case-oriented tests
+## Shared Fixture Ownership
 
-### Controller / API Examples
+- Hollow shared test-host fixtures were retired rather than promoted into a
+  reference product. Target tests construct only the fixtures their real
+  infrastructure requires.
+- `outbox/OUTBOX-TEST-CONFIGURATION.md` owns the shared
+  Outbox test configuration reference.
+- `appsettings.InMemory.json` and `appsettings.TestInMemory.json` intentionally
+  retain equal values because ASP.NET Core selects sibling environment files by
+  exact environment name; this is a semantic alias, not an accidental fixture
+  duplicate.
 
-- `examples/controller/`
-  - controller and request/response handling patterns
+## Maintenance
 
-### DTO / Mapper Examples
-
-- `examples/dto/`
-  - DTO design examples
-- `examples/mapper/`
-  - mapping examples between domain and data/DTO layers
-
-### Outbox / Persistence Examples
-
-- `examples/outbox/`
-  - outbox data, mapper, and persistence examples
-- `examples/projection/`
-  - read-model and projection examples
-- `examples/inquiry-archive/`
-  - query/archive style examples
-
-### Generation Templates
-
-- `examples/generation-templates/`
-  - generation-oriented templates and local utilities
-
-### Use Case Examples
-
-- `examples/usecase/`
-  - application/use-case examples and supporting service patterns
-
-## Maintenance Notes
-
-- If a new example folder is added, register it here by category.
-- Keep this file category-oriented rather than file-by-file when possible.
-- If a specific file needs emphasis, mention it in the folder README instead of rebuilding a migration matrix here.
+- Add or change a folder only with an `evidence-manifest.yaml` entry.
+- Put file-level details in the folder README.
+- Keep this file as the sole root catalog.

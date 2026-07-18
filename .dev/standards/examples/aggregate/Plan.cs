@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BuildingBlocks.Domain;
 using Example.Tags.Domain;
 
 namespace Example.Plans.Domain;
 
-public sealed class Plan : EsAggregateRoot<PlanId, PlanEvents.IPlanEvent>
+public sealed class Plan : EsAggregateRoot<PlanId>
 {
     public const string CategoryValue = "Plan";
 
@@ -17,8 +18,9 @@ public sealed class Plan : EsAggregateRoot<PlanId, PlanEvents.IPlanEvent>
     private bool _isDeleted;
 
     // Constructor for event sourcing framework to rebuild aggregate from events
-    public Plan(IEnumerable<PlanEvents.IPlanEvent> domainEvents) : base(domainEvents)
+    public Plan(IEnumerable<PlanEvents.IPlanEvent> domainEvents)
     {
+        Replay(domainEvents);
     }
 
     // Public constructor for creating new instances
@@ -48,11 +50,11 @@ public sealed class Plan : EsAggregateRoot<PlanId, PlanEvents.IPlanEvent>
         );
     }
 
-    public override string Category => CategoryValue;
+    public string Category => CategoryValue;
     public override PlanId Id => _id;
     public string Name => _name;
     public string UserId => _userId;
-    public override bool IsDeleted => _isDeleted;
+    public bool IsDeleted => _isDeleted;
 
     public void Rename(string newName)
     {
@@ -358,7 +360,7 @@ public sealed class Plan : EsAggregateRoot<PlanId, PlanEvents.IPlanEvent>
         Contract.Ensure("Tag is unassigned from task", () => task != null && !task.HasTag(tagId));
     }
 
-    public override void EnsureInvariant()
+    public void EnsureInvariant()
     {
         Contract.Invariant($"Category is '{CategoryValue}'.", () => Category == CategoryValue);
         Contract.InvariantNotNull("Plan Id", _id);
@@ -369,7 +371,7 @@ public sealed class Plan : EsAggregateRoot<PlanId, PlanEvents.IPlanEvent>
         }
     }
 
-    protected override void When(PlanEvents.IPlanEvent @event)
+    protected override void When(IDomainEvent @event)
     {
         switch (@event)
         {
@@ -440,45 +442,6 @@ public sealed class Plan : EsAggregateRoot<PlanId, PlanEvents.IPlanEvent>
                 break;
         }
     }
-}
-
-// TODO: Replace these placeholders with the .NET EzDdd + uContract ports.
-public abstract class EsAggregateRoot<TId, TEvent>
-{
-    private readonly List<TEvent> _domainEvents = new();
-
-    protected EsAggregateRoot()
-    {
-    }
-
-    protected EsAggregateRoot(IEnumerable<TEvent> domainEvents)
-    {
-        foreach (var @event in domainEvents)
-        {
-            When(@event);
-        }
-    }
-
-    protected void Apply(TEvent @event)
-    {
-        _domainEvents.Add(@event);
-        When(@event);
-    }
-
-    public IReadOnlyList<TEvent> DomainEvents => _domainEvents;
-    public TEvent? LastDomainEvent => _domainEvents.Count == 0 ? default : _domainEvents[^1];
-
-    public void ClearDomainEvents() => _domainEvents.Clear();
-
-    public int Version { get; set; }
-    public string StreamName { get; set; } = string.Empty;
-
-    public abstract string Category { get; }
-    public abstract TId Id { get; }
-    public abstract bool IsDeleted { get; }
-
-    protected abstract void When(TEvent @event);
-    public abstract void EnsureInvariant();
 }
 
 public static class DateProvider

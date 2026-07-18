@@ -38,7 +38,7 @@ TODO: define .NET implementations that mirror these concepts.
 ## Problem Background
 
 Many tests still create objects with `new` instead of using DI. This causes:
-1. Tests cannot switch between profiles (test-inmemory vs test-outbox)
+1. Tests cannot switch between profiles (`TestInMemory` vs `TestOutbox`)
 2. Tests diverge from runtime behavior
 3. Loss of framework-level test features (transactional behavior, DI validation, mock registration)
 4. Legacy manual wiring leaks into modern tests
@@ -78,8 +78,14 @@ public sealed class TestProfileFixture
 }
 ```
 
-### 3. Use NSubstitute for mocks
+### 3. Resolve the target mocking selection
+
+Resolve `.dev/project-config.yaml#technologySelections` slot
+`testing.mocking`. Use NSubstitute when the slot is absent because it is the
+dotnet-backend profile default; use the recorded target selection otherwise.
+
 ```csharp
+// NSubstitute default-profile example
 var eventPublisher = Substitute.For<IProductEventPublisher>();
 services.AddSingleton(eventPublisher);
 ```
@@ -111,7 +117,10 @@ public sealed class TestProfileFixture : IAsyncLifetime
 }
 ```
 
-### Step 3: Replace @MockBean with NSubstitute DI overrides
+### Step 3: Replace @MockBean with target-selected DI test doubles
+
+The following snippet shows the NSubstitute default:
+
 ```csharp
 var eventPublisher = Substitute.For<IProductEventPublisher>();
 services.AddSingleton(eventPublisher);
@@ -119,14 +128,14 @@ services.AddSingleton(eventPublisher);
 
 ## Test Profile Configuration
 
-### appsettings.test-inmemory.json
+### appsettings.TestInMemory.json
 ```json
 {
   "Data": { "DisableEfCore": true }
 }
 ```
 
-### appsettings.test-outbox.json
+### appsettings.TestOutbox.json
 ```json
 {
   "ConnectionStrings": {
@@ -137,17 +146,17 @@ services.AddSingleton(eventPublisher);
 
 ### Environment selection
 ```bash
-ASPNETCORE_ENVIRONMENT=test-inmemory dotnet test
-ASPNETCORE_ENVIRONMENT=test-outbox dotnet test
+ASPNETCORE_ENVIRONMENT=TestInMemory dotnet test
+ASPNETCORE_ENVIRONMENT=TestOutbox dotnet test
 ```
 
 ## Checklist
 - [ ] Tests resolve use cases via DI (no `new`)
 - [ ] No BaseTestClass or base test inheritance
-- [ ] Mocking uses NSubstitute only
+- [ ] Mocking uses the resolved `testing.mocking` selection; NSubstitute is the default
 - [ ] Profiles switch via `ASPNETCORE_ENVIRONMENT`
 - [ ] No hardcoded repository implementations in tests
-- [ ] test-inmemory and test-outbox both supported
+- [ ] `TestInMemory` and `TestOutbox` are both supported when the target adopts both profiles
 
 ## Automated Check
 Preferred active entry point:

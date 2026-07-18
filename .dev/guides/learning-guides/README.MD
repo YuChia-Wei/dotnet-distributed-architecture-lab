@@ -25,10 +25,7 @@
 - `.dev/guides/ai-collaboration-guides/`
 - `.dev/workflows/`
 
-## 文件索引
+## 導航
 
-- `LEARNING-PATH.md`
-  - dotnet-backend profile-specific 學習參考；技術選擇須由 target repository 採用
-- `NEW-PROJECT-GUIDE.md`
-  - retired ExampleApp onboarding example；新專案應先使用 `repo-structure-sync`
+文件目錄由 [INDEX.MD](INDEX.MD) 維護。
 

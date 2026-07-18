@@ -27,20 +27,26 @@ Transitional helper:
 
 ### 2) Repository Compliance (Optional but recommended)
 
-Preferred target:
+Target repository route:
 
 ```
-dotnet build
-dotnet test
+dotnet build <solution-or-project>
 ```
 
-Repository rules should move to Roslyn analyzer diagnostics and architecture tests.
+Wire the source-included `DotnetBackendAnalyzers` project into the target build as
+described in `tools/DotnetBackendAnalyzers/README.md`. Repository contract
+compliance is enforced by `DBA1001` during `dotnet build`; the former grep-based
+repository script has been removed.
 
-Transitional helper:
+Framework contributor verification:
 
 ```
-./.ai/scripts/check-repository-compliance.sh <path>
+dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj --filter FullyQualifiedName~RepositoryQueryMethodAnalyzerTests
 ```
+
+The focused test command verifies the analyzer implementation in this framework.
+It does not replace running `dotnet build` in the target repository with the
+analyzer wired into the relevant projects.
 
 ### 3) Targeted Test Runs (xUnit)
 ```

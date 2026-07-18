@@ -217,27 +217,27 @@ _repository.Save(product);
 
 Correct:
 ```csharp
-await _createProductUseCase.Execute(input);
+await _createProductUseCase.ExecuteAsync(input, CancellationToken.None);
 ```
 
 ### Mistake 2: Incomplete test data
 Wrong:
 ```csharp
-await _createProductUseCase.Execute(input);
+await _createProductUseCase.ExecuteAsync(input, CancellationToken.None);
 // missing goal and DoD setup
 ```
 
 ### Mistake 3: Forgetting to clear setup events
 Wrong:
 ```csharp
-await _createProductUseCase.Execute(input);
+await _createProductUseCase.ExecuteAsync(input, CancellationToken.None);
 await _setGoalUseCase.ExecuteAsync(goalInput, CancellationToken.None);
 // missing clear
 ```
 
 Correct:
 ```csharp
-await _createProductUseCase.Execute(input);
+await _createProductUseCase.ExecuteAsync(input, CancellationToken.None);
 await _setGoalUseCase.ExecuteAsync(goalInput, CancellationToken.None);
 await _fixture.AwaitEvents(count: 2);
 _fixture.ClearEvents();

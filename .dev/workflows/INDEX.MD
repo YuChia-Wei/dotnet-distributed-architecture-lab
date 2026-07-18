@@ -6,7 +6,7 @@ This index is the discovery view for workflow artifacts retained by `dotnet-mq-a
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |
 | --- | --- | --- | --- | --- | --- |
-| [`2026-07-18-ai-context-v0-4-upgrade`](2026-07-18-ai-context-v0-4-upgrade/workflow.yaml) | Upgrade downstream AI context from v0.1.0 to v0.4.0 | `ai-context-governance` | `in_progress` | `2026-07-18T20:48:43+08:00` | [plan](2026-07-18-ai-context-v0-4-upgrade/workflow-plan.md) |
+| [`2026-07-18-ai-context-v0-4-upgrade`](2026-07-18-ai-context-v0-4-upgrade/workflow.yaml) | Upgrade downstream AI context from v0.1.0 to v0.4.0 | `ai-context-governance` | `in_progress` | `2026-07-18T21:08:30+08:00` | [plan](2026-07-18-ai-context-v0-4-upgrade/workflow-plan.md) |
 | [`2026-07-15-ai-context-v0-1-downstream-feedback`](2026-07-15-ai-context-v0-1-downstream-feedback/workflow.yaml) | Reconcile v0.1.0 downstream AI context | `ai-context-governance` | `completed` | `2026-07-15T07:24:34+08:00` | [plan](2026-07-15-ai-context-v0-1-downstream-feedback/workflow-plan.md) |
 | [`2026-07-13-critical-remediation-and-analyzer-integration`](2026-07-13-critical-remediation-and-analyzer-integration/workflow.yaml) | Remediate critical architecture findings and integrate repository analyzers | `dev-workflow` | `completed` | `2026-07-14T22:30:15+08:00` | [plan](2026-07-13-critical-remediation-and-analyzer-integration/workflow-plan.md) |
 | [`2026-07-13-repo-structure-sync`](2026-07-13-repo-structure-sync/workflow.yaml) | Restore repository truth after AI context refresh | `repo-structure-sync` | `completed` | `2026-07-13T21:12:28+08:00` | [plan](2026-07-13-repo-structure-sync/workflow-plan.md) |

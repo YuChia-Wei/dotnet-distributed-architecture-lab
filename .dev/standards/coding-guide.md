@@ -23,7 +23,7 @@
 ### 2. Preserved Example Profile
 - **Purpose**: Historical Todo List example; not this repository's product identity
 - **Tech Stack**: .NET, ASP.NET Core, WolverineFx, EF Core, CQRS, Event Sourcing
-- **Tests**: xUnit + BDDfy (Gherkin-style naming), NSubstitute (no BaseTestClass)
+- **Tests**: xUnit + BDDfy (Gherkin-style naming), NSubstitute default (no BaseTestClass)
 
 ### 3. Key Principles
 - ✅ DO: Follow existing patterns, use explicit loading, write tests first
@@ -53,7 +53,7 @@ adopted this legacy profile. They are not universal framework requirements.
 - Repository limited to findById / save / delete.
 - Use WolverineFx for CQRS/MQ/Event Sourcing.
 - EF Core is the primary ORM.
-- xUnit + BDDfy for BDD (Gherkin-style naming), NSubstitute for mocks.
+- xUnit + BDDfy for BDD (Gherkin-style naming), with NSubstitute as the default mocking selection.
 - No BaseTestClass usage.
 
 ## Common Pitfalls

@@ -58,5 +58,5 @@ This checklist enforces DDD, Clean Architecture, CQRS, Event Sourcing, Outbox, a
 - [ ] xUnit tests use Given-When-Then structure and naming; BDDfy is the default unless the target team explicitly opted out, and 3A is not used as a substitute
 - [ ] `.feature` files are treated as optional and are only required when supplied/requested or selected by the target profile
 - [ ] No BaseTestClass
-- [ ] NSubstitute used for mocks
+- [ ] Target `testing.mocking` selection is used; NSubstitute is the default
 - [ ] Async-safe event verification

@@ -6,6 +6,7 @@ from __future__ import annotations
 import importlib.util
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import yaml
 
@@ -84,6 +85,31 @@ Assessment-Id: ASM-20260715-001
 Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
 """
         self.assertEqual([], self.validate(message, workflow_id=None))
+
+    def test_gwt_009_given_standalone_assessment_in_workflow_range_when_validated_then_assessment_contract_applies(self) -> None:
+        message = """docs(assessment): [ASM-20260715-001] add report
+
+Assessment-Id: ASM-20260715-001
+Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
+"""
+        self.assertEqual([], self.validate(message, workflow_id=WORKFLOW_ID))
+
+    def test_gwt_010_given_workflow_range_when_selected_then_first_parent_excludes_merged_branch_history(self) -> None:
+        with mock.patch.object(VALIDATOR, "git", return_value="abc123\ndef456\n") as git:
+            commits = VALIDATOR.selected_commits(
+                "base..HEAD",
+                None,
+                first_parent=True,
+            )
+
+        self.assertEqual(["abc123", "def456"], commits)
+        git.assert_called_once_with(
+            "rev-list",
+            "--first-parent",
+            "--reverse",
+            "base..HEAD",
+            root=VALIDATOR.ROOT,
+        )
 
 
 if __name__ == "__main__":

@@ -10,6 +10,11 @@ Read, in order:
 4. requested `.dev/releases/<version>/release.yaml` and `migration-guide.md` from the trusted framework release registry;
 5. the three-way boundary and output contract in this skill.
 
+When a release migration guide projects a workflow file-disposition manifest,
+treat `kept`, `moved-to`, `merged-into`, and `retired` as incoming intent only.
+The projected disposition can improve path discovery, but it cannot establish
+the target's base bytes, ownership, local changes, or write authorization.
+
 Use `repo-structure-sync` if no initialization has occurred. If framework files exist but provenance is absent, stop automatic upgrade classification and produce an unresolved-provenance inventory. The user must identify a credible base or authorize a manual baseline reconciliation.
 
 ## Discovery
@@ -29,6 +34,7 @@ The plan must state:
 - from/to release ID, version, tag, and commit;
 - manifest state and unresolved provenance;
 - changed paths by classification and reason;
+- incoming file dispositions and their target-side three-way classification;
 - ordered migrations and validation;
 - rollback boundary;
 - items requiring user decision.
@@ -36,6 +42,12 @@ The plan must state:
 ## Application
 
 Apply only explicitly accepted paths. Never use a bulk copy over the repository root. Re-read a path immediately before writing when it is target-owned or previously classified for reconciliation.
+
+For `moved-to` or `merged-into`, preserve target-local source content until its
+destination has been reconciled. For `retired`, remove automatically only when
+the target source is byte-identical to base and the migration guide explicitly
+permits automatic removal. A disposition marked `kept` remains a normal
+three-way candidate; it is not a force-replace instruction.
 
 After changes, run the target's narrow AI-context validation and then its required repository gate. If validation fails, retain the previous provenance and report the failed changes and rollback options.
 

@@ -3,9 +3,12 @@
 ## Purpose
 Provides complete .NET DI and configuration templates that fully isolate the InMemory and Outbox profiles to prevent configuration conflicts.
 
-## 🚨 Important Concept (ezapp 2.0.0 Correspondence)
-The two ezDDD/ezapp InMemory and Outbox repository concepts must be preserved in .NET.
-For now, implement the corresponding behavior in .NET through custom interfaces and configuration, preserving the concept with TODO markers.
+## Canonical Selection Boundary
+
+`DOTNET_ENVIRONMENT` or `ASPNETCORE_ENVIRONMENT` selects the profile. Do not
+introduce `Profiles:Mode`, `Repository:Mode`, or another configuration key as a
+second selector. Persistence implementations remain target-owned behind the
+same application/domain ports.
 
 ## 📁 Recommended Configuration Structure
 
@@ -44,8 +47,9 @@ public static class InMemoryConfiguration
     public static IServiceCollection AddInMemory(
         this IServiceCollection services, IConfiguration config)
     {
-        // TODO: InMemory Outbox repository + message storage
-        services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase("app"));
+        // Register direct in-memory repository and local transport adapters.
+        // Do not register EF Core, Npgsql, or a durable outbox in this profile.
+        services.AddSingleton<IProductRepository, InMemoryProductRepository>();
         return services;
     }
 }
@@ -73,18 +77,24 @@ public static class OutboxConfiguration
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCommonServices();
 
-var mode = builder.Configuration["Profiles:Mode"];
-if (mode == "InMemory")
+if (builder.Environment.IsEnvironment("InMemory")
+    || builder.Environment.IsEnvironment("TestInMemory"))
 {
     builder.Services.AddInMemory(builder.Configuration);
 }
-else if (mode == "Outbox")
+else if (builder.Environment.IsEnvironment("Outbox")
+    || builder.Environment.IsEnvironment("TestOutbox"))
 {
     builder.Services.AddOutbox(builder.Configuration);
+}
+else
+{
+    throw new InvalidOperationException(
+        $"Unsupported environment '{builder.Environment.EnvironmentName}'.");
 }
 ```
 
 ## ⚠️ Important Reminders
 - InMemory and Outbox configurations and DI registrations must remain isolated.
-- Repository interfaces must remain consistent (`findById` / `save` / `delete`).
+- Repository interfaces must remain consistent across profiles.
 - WolverineFx and Outbox semantics and event flows must be preserved.

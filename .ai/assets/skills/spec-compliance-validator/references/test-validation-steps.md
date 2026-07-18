@@ -1,5 +1,7 @@
 # Test Validation Steps (Dotnet)
 
+Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`.
+
 ## Purpose
 Provide a repeatable checklist to verify tests comply with mandatory Given-When-Then rules, the default xUnit + BDDfy profile or an explicit project opt-out, spec-compliance requirements, and repository conventions.
 
@@ -14,7 +16,7 @@ Provide a repeatable checklist to verify tests comply with mandatory Given-When-
 - Unit, use-case, and integration tests do not substitute Arrange-Act-Assert (3A) for GWT.
 - `.feature` assets are optional unless supplied/requested or required by an explicitly selected target feature-runner profile; never infer a runner/package.
 - **No BaseTestClass** or shared test base types.
-- **NSubstitute** is the only mocking library.
+- Resolve the target `testing.mocking` selection; default to **NSubstitute**.
 - No debug logging (Console.WriteLine / ad-hoc logs).
 
 ## Step 1: Locate Tests by Type
@@ -43,7 +45,9 @@ For each scenario:
 - No `Thread.Sleep` / blocking waits for events.
 
 ## Step 6: Mocking Rules
-- Mocks/stubs are created with NSubstitute only.
+- Mocks/stubs use the resolved target mocking selection.
+- When no target selection exists, use NSubstitute.
+- Do not mix mocking libraries without an explicit migration decision.
 - Verify interactions for external boundaries (repositories, message bus, clocks, etc.).
 
 ## Step 7: Contract Test Rules

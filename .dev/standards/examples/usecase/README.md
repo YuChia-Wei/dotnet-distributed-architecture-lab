@@ -16,7 +16,7 @@ Legacy patterns to avoid:
 - `BlockingMessageBus` (replaced by InMemory message broker)
 
 .NET equivalents are **TODO** until ezDDD/ezapp ports exist. Keep the architecture intent:
-- Profile-based wiring (`test-inmemory` vs `test-outbox`)
+- Profile-based wiring (`TestInMemory` vs `TestOutbox`)
 - Repository + Outbox with Wolverine + EF Core
 - In-memory implementations for fast tests
 
@@ -91,7 +91,7 @@ usecase/
 
 - Use xUnit + BDDfy (Gherkin-style naming).
 - Do **not** use BaseTestClass patterns.
-- Use NSubstitute for mocks.
+- Resolve `testing.mocking` from target technology selections; default to NSubstitute.
 - Prefer DI + in-memory profiles for fast tests.
 
 ## Related Resources
