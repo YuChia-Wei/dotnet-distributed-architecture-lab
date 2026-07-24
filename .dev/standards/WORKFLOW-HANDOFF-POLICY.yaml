@@ -1,0 +1,43 @@
+schema_version: "1.0"
+checkpoint_schema_version: "1.0"
+checkpoint_registry_path: ".dev/workflows/handoff-checkpoints.yaml"
+release_phase_contract_path: ".dev/releases/release-phase-checks.yaml"
+critical_command_pattern: '^(?:bash|(?:"[^"]*bash(?:\.exe)?"|[^\s]*bash(?:\.exe)?))\s+(?:\./)?\.ai/scripts/check-all\.sh\s+--critical$'
+model_sources:
+  - runtime-reported
+  - provider-reported
+  - user-declared
+  - unavailable
+attribution_kinds:
+  - repository-created-local-ai-trailer
+  - provider-native-coauthor-trailer
+  - provider-native-authorship-or-signed-session
+fixture_statuses:
+  - captured
+  - blocked
+required_fixture_paths:
+  - copilot-cli
+  - copilot-cloud-agent
+  - claude
+  - codex-local
+continuation_modes:
+  - normal
+  - repair-only
+  - blocked
+release_phases:
+  - candidate
+  - tag
+  - publication
+  - finalization
+output:
+  normalization: utf8-lf
+  max_tail_lines: 40
+  max_tail_line_characters: 500
+git_read_allowlist:
+  - branch
+  - log
+  - merge-base
+  - rev-parse
+  - show
+  - status
+  - symbolic-ref

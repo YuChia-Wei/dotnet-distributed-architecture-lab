@@ -1,11 +1,12 @@
 asset_id: "controller-sub-agent"
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Controller Sub-Agent"
 purpose: "Define the delegated worker role for implementing thin ASP.NET Core controllers that map DTOs to use cases without embedding business logic."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
+adapter_metadata: {}
 source_of_truth: "canonical"
 role_kind: "controller-sub-agent"
 triggers:

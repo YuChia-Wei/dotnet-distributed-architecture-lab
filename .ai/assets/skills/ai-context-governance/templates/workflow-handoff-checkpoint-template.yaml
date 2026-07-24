@@ -1,0 +1,76 @@
+schema_version: "1.0"
+checkpoint_id: "<workflow-id>-<task-id>-handoff"
+created_at: "<ISO-8601-with-offset>"
+repository:
+  root: "."
+  branch: "<exact-branch>"
+  validated_commit: "<40-character-git-sha>"
+  checkpoint_commit_source: "containing-commit"
+  dirty_state: "clean"
+  status_porcelain_sha256: "<lowercase-sha256>"
+workflow:
+  workflow_id: "<workflow-id>"
+  task_id: "<current-task-id>"
+resume:
+  last_completed_action: "<last-completed-action>"
+  exact_next_action: "<one-exact-next-action>"
+  hidden_context_required: false
+critical_gate:
+  command: "bash .ai/scripts/check-all.sh --critical"
+  observed_at: "<ISO-8601-with-offset>"
+  exit_code: 0
+  outcome: "passed"
+  output:
+    normalization: "utf8-lf"
+    sha256: "<lowercase-sha256>"
+    line_count: 1
+    tail:
+      - "<bounded-output-line>"
+continuation:
+  allowed: true
+  mode: "normal"
+  reason: "Critical gate passed."
+  repair_task_id: null
+  failure_ids: []
+release_handoff: false
+release_phase_check: null
+execution_provenance:
+  runtime: "<runtime-name>"
+  model: null
+  reasoning_effort: null
+  model_source: "unavailable"
+  evidence_ref: "<why-runtime-metadata-is-unavailable>"
+attribution:
+  preservation_required: true
+  evidence_union_version: "1.0"
+  selected_evidence:
+    kind: "repository-created-local-ai-trailer"
+    commit: "<same-as-repository-validated-commit>"
+    author: "<observed-author-name-and-email>"
+    committer: "<observed-committer-name-and-email>"
+    signature_status: "unsigned"
+    session_ref: null
+    observed_trailer: "<exact-observed-co-authored-by-trailer>"
+    message_sha256: "<lowercase-sha256>"
+    fixture_ref: "<repository-relative-evidence-reference>"
+  fixture_status:
+    - path_id: "copilot-cli"
+      status: "blocked"
+      commit: null
+      evidence_ref: "<repository-relative-evidence-reference>"
+      reason: "<why-a-real-provider-generated-fixture-is-unavailable>"
+    - path_id: "copilot-cloud-agent"
+      status: "blocked"
+      commit: null
+      evidence_ref: "<repository-relative-evidence-reference>"
+      reason: "<why-a-real-provider-generated-fixture-is-unavailable>"
+    - path_id: "claude"
+      status: "blocked"
+      commit: null
+      evidence_ref: "<repository-relative-evidence-reference>"
+      reason: "<why-a-real-provider-generated-fixture-is-unavailable>"
+    - path_id: "codex-local"
+      status: "blocked"
+      commit: null
+      evidence_ref: "<repository-relative-evidence-reference>"
+      reason: "<why-a-real-provider-generated-fixture-is-unavailable>"

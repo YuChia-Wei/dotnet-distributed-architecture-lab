@@ -6,9 +6,9 @@
   "task_id": "AICUP6-002",
   "workflow_id": "2026-07-25-ai-context-v0-6-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-07-25T07:05:01+08:00",
-  "updated_at": "2026-07-25T07:11:40+08:00",
+  "updated_at": "2026-07-25T07:20:24+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICUP6-V050"],
   "scope": {
@@ -20,15 +20,15 @@
   "execution": {
     "steps": ["Apply safe operations", "Reconcile preserved paths", "Run required validation", "Update v0.5.0 provenance", "Commit checkpoint"],
     "validation": ["Target required gate", "AI-context and workflow validators", "Clean worktree after commit"],
-    "last_completed_step": "",
-    "next_action": "Begin after AICUP6-001 completes."
+    "last_completed_step": "Applied 67 automatic operations, reconciled 44 acknowledged paths, passed the 211-test framework suite, and advanced provenance to REL-v0.5.0.",
+    "next_action": "Commit the intermediate checkpoint and plan the v0.5.0-to-v0.6.0 component-aware migration."
   },
   "results": {
-    "summary": "",
-    "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
-    "residual_risk": "The target remains on validated v0.4.0 provenance.",
+    "summary": "The target now has a governed v0.5.0 intermediate checkpoint. Framework-owned validation surfaces were aligned while target standards, guides, backlog, and repository configuration remained authoritative.",
+    "files_changed": [".ai/**", ".agents/**", ".claude/**", ".dev/AI-CONTEXT-SOURCE.yaml", ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md"],
+    "tests_run": ["python -m unittest discover -s .ai/scripts/tests -p test_*.py: 211 passed, 1 skipped", "python .ai/scripts/validate-shell-assets.py: passed", "python .ai/scripts/validate-ai-context.py: intermediate-only findings retained", "python .ai/scripts/validate-workflow-artifacts.py: target backlog schema finding retained"],
+    "finding_status": "addressed",
+    "residual_risk": "The published v0.5.0 downstream profile and stricter validators expose known intermediate-only findings documented in report 03; final v0.6.0 validation remains required.",
     "follow_up_needed": true
   }
 }

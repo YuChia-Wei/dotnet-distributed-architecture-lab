@@ -1,0 +1,21 @@
+{
+  "task_id": "<release-task-id>",
+  "title": "Prepare REL-<vMAJOR.MINOR.PATCH> publication",
+  "status": "planned",
+  "created_at": "<ISO-8601-offset-timestamp>",
+  "updated_at": "<ISO-8601-offset-timestamp>",
+  "scope": {
+    "release_id": "REL-<vMAJOR.MINOR.PATCH>",
+    "release_record": ".dev/releases/<vMAJOR.MINOR.PATCH>/release.yaml",
+    "out_of_scope": [
+      "creating or moving Git tags",
+      "mutating an already published release"
+    ]
+  },
+  "steps": [
+    "Instantiate the release templates without copying a previous release instance.",
+    "Run the sanctioned candidate and pre-tag commands from the release runbook.",
+    "Record only observed evidence and hand off tag creation to the user."
+  ],
+  "results": null
+}

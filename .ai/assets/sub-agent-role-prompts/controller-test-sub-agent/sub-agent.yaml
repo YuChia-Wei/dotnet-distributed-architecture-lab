@@ -1,11 +1,12 @@
 asset_id: "controller-test-sub-agent"
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Controller Test Sub-Agent"
 purpose: "Define the delegated worker role for implementing controller/API tests using WebApplicationFactory, xUnit, and repository HTTP contract rules."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
+adapter_metadata: {}
 source_of_truth: "canonical"
 role_kind: "test-generation-sub-agent"
 triggers:

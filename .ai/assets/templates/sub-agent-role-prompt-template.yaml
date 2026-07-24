@@ -1,5 +1,5 @@
 asset_id: "example-sub-agent"
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Example Sub-Agent"
 purpose: "Describe the bounded delegated responsibility."
@@ -14,8 +14,8 @@ constraints:
   - "Do not broaden scope or make integration decisions for the orchestrator."
 references: []
 examples: []
-wrapper_targets:
-  - "codex"
+wrapper_targets: []
+adapter_metadata: {}
 role_kind: "specification-sub-agent"
 triggers:
   - "delegate example analysis"

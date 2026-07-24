@@ -1,19 +1,20 @@
-# Shared Utilities (Required)
+# Shared Utility Examples
 
-These utilities are required in new .NET projects.
+These utilities illustrate capabilities a target may implement when its
+requirements and selected profiles need them. They are not mandatory shared
+package APIs.
 
-## ezDDD .NET InMemory Infrastructure
+## In-Memory Infrastructure
 
-In the legacy stack, ezDDD provides in-memory implementations.  
-In .NET, these must be created or ported. Preserve the same intent.
+The historical source stack supplied in-memory implementations. A .NET target
+may provide project-owned implementations or select compatible packages while
+preserving the same testing intent.
 
-Expected components (to be implemented in .NET):
+Illustrative components:
 - InMemoryOrmDb / InMemoryOrmClient
 - InMemoryMessageDb / InMemoryMessageDbClient
 - InMemoryMessageBroker
 - InMemoryMessageProducer
-
-TODO: Implement these in the ezDDD .NET library.
 
 ## DateProvider
 
@@ -47,7 +48,7 @@ public static class InMemoryRepositoryConfig
     public static IServiceCollection AddInMemoryRepositories(
         this IServiceCollection services)
     {
-        // TODO: Add in-memory message store + broker from ezDDD .NET
+        // Add target-selected in-memory message store and broker when required.
         // services.AddSingleton<InMemoryMessageDb>();
         // services.AddSingleton<InMemoryMessageBroker>();
 
@@ -62,4 +63,4 @@ public static class InMemoryRepositoryConfig
 ## Notes
 
 - Do not reintroduce custom GenericInMemoryRepository classes.
-- Use the framework-provided in-memory components once available.
+- Resolve in-memory components from target-owned contracts and technology selections.

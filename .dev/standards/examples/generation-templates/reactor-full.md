@@ -7,7 +7,7 @@ Generate reactors for eventual consistency using:
 - CQRS
 - Event Sourcing
 - Wolverine for message handling
-- ezDDD concepts (to be implemented in .NET)
+- project-owned domain and application contracts
 
 ## Reactor Interface Definition
 
@@ -98,4 +98,4 @@ Use the test generation template (`test-case-full.md`).
 - Use `DomainEventData` as the message type.
 - Keep idempotency checks inside the handler.
 - Use Wolverine handler conventions (Task Handle).
-- TODO: finalize ezDDD .NET interfaces and mapper APIs.
+- Resolve interfaces and mapper APIs from the target repository's selected contracts.

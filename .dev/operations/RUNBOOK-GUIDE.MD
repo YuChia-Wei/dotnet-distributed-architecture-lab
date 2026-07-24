@@ -19,6 +19,10 @@
   <incident-name>.md
 ```
 
+AI context framework 的冷啟動發布程序使用
+[`runbooks/AI-CONTEXT-RELEASE-PUBLICATION-RUNBOOK.MD`](runbooks/AI-CONTEXT-RELEASE-PUBLICATION-RUNBOOK.MD)。
+它是 release-governance runbook，不應被複製成舊版本 instance。
+
 ## 每份 Runbook 最小章節
 
 ```markdown

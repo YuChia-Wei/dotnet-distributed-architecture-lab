@@ -4,6 +4,10 @@
 
 本目錄是跨 skill / subagent workflow artifact 的正式存放位置。
 
+跨 model、runtime、host、machine 與 fresh-session 的 machine-readable
+checkpoint 統一登錄於 `handoff-checkpoints.yaml`，並依
+`.dev/standards/WORKFLOW-HANDOFF-POLICY.md` 驗證。
+
 ## 目的
 
 - 保存跨 skill handoff 所需的 `plan`、`review-report`、`task`

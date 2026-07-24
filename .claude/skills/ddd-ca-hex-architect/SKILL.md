@@ -1,6 +1,6 @@
 ---
 name: ddd-ca-hex-architect
-description: Design and refactor architecture in this repository using DDD, Clean Architecture, CQRS, MQ-first integration, and a Hexagonal Architecture view of ports and adapters. Use when Codex needs to shape bounded contexts, aggregates, commands, queries, reactors, contracts, project structure, standards-aligned refactors, or reusable AI prompts/workflows for this repo's .NET stack.
+description: Design and refactor architecture in this repository using DDD, Clean Architecture, CQRS, MQ-first integration, and a Hexagonal Architecture view of ports and adapters. Use when Claude needs to shape bounded contexts, aggregates, commands, queries, reactors, contracts, project structure, standards-aligned refactors, or reusable AI prompts/workflows for this repo's .NET stack.
 ---
 
 # DDD CA HEX Architect

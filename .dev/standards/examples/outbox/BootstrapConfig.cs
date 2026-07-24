@@ -26,7 +26,7 @@ public static class BootstrapConfig
     }
 }
 
-// TODO: Replace these placeholders with ezDDD .NET ports.
+// Example placeholders; replace them with target-owned mapping contracts.
 public sealed class DomainEventTypeMapper
 {
     private readonly Dictionary<string, Type> _map = new();

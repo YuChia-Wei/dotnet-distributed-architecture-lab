@@ -1,0 +1,15 @@
+schema_version: "1.0"
+workflow_id: "<YYYY-MM-DD-release-topic>"
+workflow_type: "release-publication"
+status: "planned"
+branch: "<dedicated-branch>"
+base_branch: "main"
+created_at: "<ISO-8601-offset-timestamp>"
+updated_at: "<ISO-8601-offset-timestamp>"
+release:
+  release_id: "REL-<vMAJOR.MINOR.PATCH>"
+  version: "<vMAJOR.MINOR.PATCH>"
+  record: ".dev/releases/<vMAJOR.MINOR.PATCH>/release.yaml"
+  phase_contract: ".dev/releases/release-phase-checks.yaml"
+tasks:
+  - "<release-task-id>"

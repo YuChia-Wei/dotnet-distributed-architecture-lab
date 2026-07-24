@@ -32,6 +32,13 @@ def main() -> int:
     parser.add_argument("--package-root", type=Path, required=True)
     parser.add_argument("--target-root", type=Path, required=True)
     parser.add_argument("--previous-files", type=Path)
+    parser.add_argument(
+        "--previous-version",
+        help=(
+            "Exact source version for schema 2 upgrades; must be supplied with "
+            "--previous-files"
+        ),
+    )
     parser.add_argument("--acknowledge", action="append", default=[])
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--plan-output", type=Path)
@@ -45,7 +52,12 @@ def main() -> int:
             ):
                 if output == forbidden_root or output.is_relative_to(forbidden_root):
                     raise ApplyError(f"--plan-output must be outside the {label}")
-        plan = build_plan(args.package_root, args.target_root, args.previous_files)
+        plan = build_plan(
+            args.package_root,
+            args.target_root,
+            args.previous_files,
+            args.previous_version,
+        )
         content = yaml.safe_dump(plan, sort_keys=False, allow_unicode=True)
         if args.plan_output:
             args.plan_output.write_text(content, encoding="utf-8", newline="\n")

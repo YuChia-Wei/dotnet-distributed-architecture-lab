@@ -139,8 +139,42 @@ class PackageApplyFixture:
             "".join(checksum_lines), encoding="utf-8", newline="\n"
         )
 
-    def plan(self) -> dict:
-        return APPLY.build_plan(self.package, self.target, self.previous_path)
+    def plan(self, previous_version: str | None = None) -> dict:
+        return APPLY.build_plan(self.package, self.target, self.previous_path, previous_version)
+
+    def make_schema_v2_migration(
+        self,
+        clean_install_operations: list[dict],
+        sources: list[dict],
+    ) -> None:
+        """Replace the fixture migration with schema v2 and re-seal its envelope."""
+        files_path = self.package / "metadata/files.yaml"
+        migration = {
+            "schema_version": "2.0.0",
+            "package_id": "fixture-v1.0.0",
+            "to": {"version": "1.0.0", "manifest_sha256": APPLY.sha256_bytes(files_path.read_bytes())},
+            "clean_install": {"operations": clean_install_operations},
+            "sources": sources,
+            "safety": {
+                "dry_run_default": True,
+                "clean_worktree_required": True,
+                "starting_commit_required": True,
+                "abort_on_unacknowledged_reconciliation": True,
+            },
+        }
+        (self.package / "metadata/migration.yaml").write_text(
+            yaml.safe_dump(migration, sort_keys=False), encoding="utf-8", newline="\n"
+        )
+        checksum_lines = []
+        for path in sorted(
+            (item for item in self.package.rglob("*") if item.is_file() and item.name != "SHA256SUMS.txt"),
+            key=lambda item: item.relative_to(self.package).as_posix().encode("utf-8"),
+        ):
+            relative = path.relative_to(self.package).as_posix()
+            checksum_lines.append(f"{APPLY.sha256_bytes(path.read_bytes())}  {relative}\n")
+        (self.package / "metadata/SHA256SUMS.txt").write_text(
+            "".join(checksum_lines), encoding="utf-8", newline="\n"
+        )
 
 
 def operation(identifier: str, kind: str, path: str, ownership: str = "framework-managed", from_path: str | None = None) -> dict:
@@ -158,6 +192,94 @@ def operation(identifier: str, kind: str, path: str, ownership: str = "framework
 
 
 class AiContextPackageApplyGwtTests(unittest.TestCase):
+    def test_gwt_000_given_schema_v1_upgrade_envelope_when_exact_previous_manifest_is_supplied_then_reader_compatibility_remains(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            # Given a legacy schema v1 package and its governed previous inventory.
+            fixture.add_target(".ai/rule.md", b"old\n")
+            fixture.commit_target()
+            fixture.make_package(
+                {".ai/rule.md": (b"new\n", "framework-managed", "0644")},
+                [operation("001-replace", "replace", ".ai/rule.md")],
+                {".ai/rule.md": (b"old\n", "framework-managed", "0644")},
+            )
+            # When the schema v1 reader plans without a schema v2 version argument.
+            plan = fixture.plan()
+            # Then the legacy source identity and operation remain usable.
+            self.assertEqual(["replace"], [item["action"] for item in plan["operations"]])
+        finally:
+            fixture.close()
+
+    def test_gwt_001_given_schema_v2_clean_install_when_planned_without_previous_identity_then_it_uses_clean_operations(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            # Given a v2 envelope with an independent clean-install route.
+            fixture.make_package(
+                {".ai/rule.md": (b"incoming\n", "framework-managed", "0644")},
+                [],
+            )
+            fixture.make_schema_v2_migration([operation("001-clean", "add", ".ai/rule.md")], [])
+            # When no previous inventory or version is supplied.
+            plan = fixture.plan()
+            # Then the planner selects only the clean-install operation.
+            self.assertEqual(["add"], [item["action"] for item in plan["operations"]])
+            self.assertFalse((fixture.target / ".ai/rule.md").exists())
+        finally:
+            fixture.close()
+
+    def test_gwt_002_given_schema_v2_source_when_exact_version_and_sha_match_then_that_source_is_selected(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            # Given a v2 migration source bound to the governed prior manifest.
+            previous = {".ai/rule.md": (b"old\n", "framework-managed", "0644")}
+            fixture.add_target(".ai/rule.md", b"old\n")
+            fixture.commit_target()
+            fixture.make_package({".ai/rule.md": (b"new\n", "framework-managed", "0644")}, [], previous)
+            assert fixture.previous_path is not None
+            fixture.make_schema_v2_migration(
+                [],
+                [{
+                    "version": "0.9.0",
+                    "manifest_sha256": APPLY.sha256_bytes(fixture.previous_path.read_bytes()),
+                    "operations": [operation("001-replace", "replace", ".ai/rule.md")],
+                }],
+            )
+            # When the exact source version and manifest are supplied.
+            plan = fixture.plan("0.9.0")
+            # Then only the matched source is used.
+            self.assertEqual(["replace"], [item["action"] for item in plan["operations"]])
+        finally:
+            fixture.close()
+
+    def test_gwt_003_given_schema_v2_unknown_mismatched_or_duplicate_source_when_planned_then_it_fails_closed(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            # Given a v2 package with a governed prior inventory.
+            previous = {".ai/rule.md": (b"old\n", "framework-managed", "0644")}
+            fixture.make_package({".ai/rule.md": (b"new\n", "framework-managed", "0644")}, [], previous)
+            assert fixture.previous_path is not None
+            source = {
+                "version": "0.9.0",
+                "manifest_sha256": APPLY.sha256_bytes(fixture.previous_path.read_bytes()),
+                "operations": [operation("001-replace", "replace", ".ai/rule.md")],
+            }
+            fixture.make_schema_v2_migration([], [source, dict(source)])
+            # When the sources are ambiguous, then selection fails before target mutation.
+            with self.assertRaisesRegex(APPLY.ApplyError, "duplicate|ambiguous"):
+                fixture.plan("0.9.0")
+
+            # Given one source with a different declared identity.
+            fixture.make_schema_v2_migration([], [source])
+            # When the caller provides an unknown version or a manifest paired with the wrong version.
+            with self.assertRaisesRegex(APPLY.ApplyError, "unknown|source"):
+                fixture.plan("0.8.0")
+            with self.assertRaisesRegex(APPLY.ApplyError, "SHA|source|manifest"):
+                wrong_manifest = fixture.root / "not-the-source.yaml"
+                wrong_manifest.write_text("files: []\n", encoding="utf-8")
+                APPLY.build_plan(fixture.package, fixture.target, wrong_manifest, "0.9.0")
+        finally:
+            fixture.close()
+
     def test_gwt_001_given_absent_paths_when_clean_install_is_planned_then_dry_run_binds_without_writes(self) -> None:
         fixture = PackageApplyFixture()
         try:
@@ -440,7 +562,7 @@ class AiContextPackageApplyGwtTests(unittest.TestCase):
             # When the CLI runs without the explicit --apply flag.
             result = subprocess.run(
                 [
-                    "python",
+                    sys.executable,
                     str(ROOT / ".ai/scripts/plan-ai-context-package-apply.py"),
                     "--package-root",
                     str(fixture.package),
@@ -471,7 +593,7 @@ class AiContextPackageApplyGwtTests(unittest.TestCase):
                 # When the CLI is asked to write a plan inside either protected root.
                 result = subprocess.run(
                     [
-                        "python",
+                        sys.executable,
                         str(ROOT / ".ai/scripts/plan-ai-context-package-apply.py"),
                         "--package-root",
                         str(fixture.package),

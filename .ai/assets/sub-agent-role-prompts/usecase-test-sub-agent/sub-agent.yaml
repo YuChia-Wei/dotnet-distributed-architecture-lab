@@ -1,11 +1,12 @@
 asset_id: "usecase-test-sub-agent"
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Use Case Test Sub-Agent"
 purpose: "Define the delegated worker role for implementing use case tests from scenario design, repository rules, and testing strategy."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
+adapter_metadata: {}
 source_of_truth: "canonical"
 role_kind: "test-generation-sub-agent"
 triggers:

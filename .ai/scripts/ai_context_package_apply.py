@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -13,6 +14,9 @@ from pathlib import Path, PurePosixPath
 from typing import Iterable
 
 import yaml
+
+
+VERSION_RE = re.compile(r"^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 
 
 class ApplyError(ValueError):
@@ -28,6 +32,15 @@ class FileState:
 
 def sha256_bytes(content: bytes) -> str:
     return hashlib.sha256(content).hexdigest()
+
+
+def normalize_version(value: object, label: str) -> str:
+    if not isinstance(value, str):
+        raise ApplyError(f"{label} must be a stable semantic version")
+    match = VERSION_RE.fullmatch(value)
+    if match is None:
+        raise ApplyError(f"{label} must be a stable semantic version")
+    return ".".join(match.groups())
 
 
 def safe_path(value: object, label: str) -> str:
@@ -227,25 +240,128 @@ def validate_package_root(package_root: Path) -> tuple[dict, dict[str, dict], di
     return package, records, migration, manifest_sha
 
 
-def previous_records(path: Path | None, migration: dict) -> dict[str, dict]:
+def schema_1_migration_selection(
+    path: Path | None,
+    previous_version_value: str | None,
+    migration: dict,
+) -> tuple[dict[str, dict], list[dict], str | None]:
     from_data = migration.get("from")
     if not isinstance(from_data, dict):
         raise ApplyError("migration from must be a mapping")
     expected = from_data.get("manifest_sha256")
     version = from_data.get("version")
     if expected is None and version is None:
-        if path is not None:
-            raise ApplyError("clean install must not supply a previous files manifest")
-        return {}
+        if path is not None or previous_version_value is not None:
+            raise ApplyError("clean install must not supply previous source identity")
+        operations = migration.get("operations")
+        if not isinstance(operations, list):
+            raise ApplyError("migration operations must be a list")
+        return {}, operations, None
     if not isinstance(expected, str) or len(expected) != 64 or not isinstance(version, str):
         raise ApplyError("upgrade migration requires previous version and manifest SHA")
     if path is None:
         raise ApplyError("upgrade migration requires --previous-files")
+    declared_version = normalize_version(version, "migration source version")
+    if (
+        previous_version_value is not None
+        and normalize_version(previous_version_value, "previous version") != declared_version
+    ):
+        raise ApplyError("previous version does not match migration.from")
     content = path.read_bytes()
     if sha256_bytes(content) != expected:
         raise ApplyError("previous files manifest SHA does not match migration.from")
     records, _ = inventory_records(load_yaml(path, "previous files.yaml"), "previous inventory")
-    return records
+    operations = migration.get("operations")
+    if not isinstance(operations, list):
+        raise ApplyError("migration operations must be a list")
+    return records, operations, declared_version
+
+
+def schema_2_migration_selection(
+    path: Path | None,
+    previous_version_value: str | None,
+    migration: dict,
+) -> tuple[dict[str, dict], list[dict], str | None]:
+    clean_install = migration.get("clean_install")
+    sources = migration.get("sources")
+    if not isinstance(clean_install, dict) or not isinstance(
+        clean_install.get("operations"), list
+    ):
+        raise ApplyError("schema 2 migration clean_install.operations must be a list")
+    if not isinstance(sources, list):
+        raise ApplyError("schema 2 migration sources must be a list")
+    normalized_sources: list[tuple[str, str, list[dict]]] = []
+    versions: set[str] = set()
+    identities: set[tuple[str, str]] = set()
+    for raw in sources:
+        if not isinstance(raw, dict):
+            raise ApplyError("schema 2 migration sources must be mappings")
+        version = normalize_version(raw.get("version"), "migration source version")
+        if raw.get("version") != version:
+            raise ApplyError("migration source version must omit the v prefix")
+        digest = raw.get("manifest_sha256")
+        operations = raw.get("operations")
+        if (
+            not isinstance(digest, str)
+            or len(digest) != 64
+            or any(char not in "0123456789abcdef" for char in digest)
+        ):
+            raise ApplyError("migration source manifest_sha256 must be lowercase SHA-256")
+        if not isinstance(operations, list):
+            raise ApplyError("migration source operations must be a list")
+        identity = (version, digest)
+        if version in versions or identity in identities:
+            raise ApplyError(f"duplicate or ambiguous migration source: {version}")
+        versions.add(version)
+        identities.add(identity)
+        normalized_sources.append((version, digest, operations))
+    expected_order = sorted(
+        normalized_sources,
+        key=lambda item: tuple(int(part) for part in item[0].split(".")),
+    )
+    if normalized_sources != expected_order:
+        raise ApplyError("migration sources must use semantic-version order")
+    if path is None and previous_version_value is None:
+        return {}, clean_install["operations"], None
+    if path is None or previous_version_value is None:
+        raise ApplyError(
+            "schema 2 upgrade requires --previous-version and --previous-files"
+        )
+    selected_version = normalize_version(previous_version_value, "previous version")
+    content = path.read_bytes()
+    selected_sha = sha256_bytes(content)
+    matches = [
+        item
+        for item in normalized_sources
+        if item[0] == selected_version and item[1] == selected_sha
+    ]
+    if not matches:
+        raise ApplyError(
+            "previous version and files manifest SHA do not match a supported migration source"
+        )
+    if len(matches) != 1:
+        raise ApplyError("previous source identity is ambiguous")
+    records, _ = inventory_records(
+        load_yaml(path, "previous files.yaml"), "previous inventory"
+    )
+    return records, matches[0][2], selected_version
+
+
+def migration_selection(
+    path: Path | None,
+    previous_version_value: str | None,
+    migration: dict,
+) -> tuple[dict[str, dict], list[dict], str | None]:
+    schema_version = migration.get("schema_version")
+    if schema_version == "1.0.0":
+        return schema_1_migration_selection(
+            path, previous_version_value, migration
+        )
+    if schema_version == "2.0.0":
+        return schema_2_migration_selection(
+            path, previous_version_value, migration
+        )
+    raise ApplyError(f"unsupported migration schema version: {schema_version!r}")
 
 
 def state_matches(state: FileState, record: dict) -> bool:
@@ -265,14 +381,16 @@ def build_plan(
     package_root: Path,
     target_root: Path,
     previous_files_path: Path | None = None,
+    previous_version_value: str | None = None,
 ) -> dict:
     target = target_root.resolve()
     head = clean_target_head(target)
     package, incoming, migration, manifest_sha = validate_package_root(package_root)
-    previous = previous_records(previous_files_path, migration)
-    operations = migration.get("operations")
-    if not isinstance(operations, list):
-        raise ApplyError("migration operations must be a list")
+    previous, operations, selected_version = migration_selection(
+        previous_files_path,
+        previous_version_value,
+        migration,
+    )
     ids: set[str] = set()
     touched_paths: dict[str, str] = {}
     operation_paths: list[str] = []
@@ -388,10 +506,14 @@ def build_plan(
         "package_id": package["package_id"],
         "package_version": package.get("version"),
         "package_manifest_sha256": manifest_sha,
+        "migration_sha256": sha256_bytes(
+            (package_root / "metadata/migration.yaml").read_bytes()
+        ),
         "package_root": str(package_root.resolve()),
         "target_root": str(target),
         "target_starting_commit": head,
         "previous_files": str(previous_files_path.resolve()) if previous_files_path else None,
+        "previous_version": selected_version,
         "observed": observed,
         "operations": planned,
     }
@@ -417,6 +539,10 @@ def apply_plan(plan: dict, acknowledgements: set[str] | None = None) -> dict:
     package, incoming, migration, manifest_sha = validate_package_root(package_root)
     if manifest_sha != plan.get("package_manifest_sha256"):
         raise ApplyError("package manifest changed after planning")
+    if sha256_bytes((package_root / "metadata/migration.yaml").read_bytes()) != plan.get(
+        "migration_sha256"
+    ):
+        raise ApplyError("migration contract changed after planning")
     if clean_target_head(target) != plan.get("target_starting_commit"):
         raise ApplyError("target HEAD changed after planning")
     current_observed = observation(plan.get("observed", {}).keys(), target)

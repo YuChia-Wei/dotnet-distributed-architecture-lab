@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Example.Shared.InquiryArchive;
 
-// TODO: Replace these placeholders with ezDDD .NET ports.
+// Framework-neutral placeholders; replace them with target-owned contracts.
 public interface IInquiry<in TInput, out TOutput>
 {
     TOutput Query(TInput input);

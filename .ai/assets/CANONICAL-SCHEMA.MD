@@ -1,8 +1,9 @@
 # Canonical Asset Schema
 
-This document defines canonical asset metadata schema version `1.0`. Canonical
-manifests use `asset_id` as their identifier field; the legacy `id` field is not
-part of this schema.
+This document defines canonical asset metadata schema version `1.0` and the
+`sub-agent-role-prompt` version `1.1` extension. Canonical manifests use
+`asset_id` as their identifier field; the legacy `id` field is not part of this
+schema.
 
 The active manifest families are currently `skill-spec` (`skill.yaml`) and
 `sub-agent-role-prompt` (`sub-agent.yaml`). `command-spec` and `prompt-package`
@@ -31,7 +32,7 @@ Every canonical asset manifest must include these fields:
 | Field | Type | Allowed values or rule |
 | --- | --- | --- |
 | `asset_id` | `string` | Lowercase kebab-case; unique within the repository |
-| `schema_version` | `string` | Exactly `"1.0"` |
+| `schema_version` | `string` | `"1.0"` except `sub-agent-role-prompt`, which uses `"1.1"` |
 | `asset_type` | `enum` | `skill-spec`, `sub-agent-role-prompt`, `command-spec`, `prompt-package` |
 | `title` | `string` | Human-readable asset name |
 | `purpose` | `string` | One concise statement of responsibility |
@@ -86,12 +87,33 @@ A `sub-agent-role-prompt` requires all common fields plus:
 | `role_kind` | `string` | Non-empty role taxonomy identifier |
 | `triggers` | `string[]` | At least one delegation intent |
 | `workflow` | `workflow-step[]` | Ordered delegated-worker contract |
+| `adapter_metadata` | `object` | Keys exactly match `wrapper_targets`; empty when the role remains dynamically loaded |
 
 `handoff_rules` is an optional `string[]` of conditions returned to the
 orchestrating agent. Version `1.0` leaves `role_kind` open because the active
 taxonomy contains domain-, use-case-, infrastructure-, testing-, review-, and
 coordination-oriented role families. A future schema may introduce a closed
 enum only after that taxonomy has its own migration decision.
+
+Version `1.1` makes dynamic canonical loading the default integration mode. An
+empty `wrapper_targets` sequence and empty `adapter_metadata` mapping declare
+that the orchestrating agent or owning skill reads the canonical role and
+delegates through a generic worker. A role receives runtime-native integration
+only when a concrete runtime-specific model, tool, permission, or invocation
+need justifies promotion.
+
+For a promoted role, each `adapter_metadata` value is an object with:
+
+- `adapter_path`: an exact repository-relative file path with `/` separators,
+  no placeholder or glob syntax, and no repository escape;
+- `adapter_format`: `toml` or `markdown-yaml-frontmatter`.
+
+The metadata keys must exactly match the unique `wrapper_targets` values.
+Adapter paths must be unique, exist with exact casing under the target runtime
+root, use that runtime's supported filename format, cite the canonical
+`sub-agent.yaml`, and be included by the portable package profile. An adapter
+may select runtime-specific model, tool, permission, or invocation behavior,
+but it remains thin and does not become the normative role owner.
 
 The role prompt is bounded delegated behavior, not an independently routed
 user-facing skill. The orchestrating agent remains responsible for integration,
@@ -128,3 +150,8 @@ Schema version `1.0` intentionally standardizes `asset_id`, scalar
 Assets that use `id`, `asset_type: skill`, `portability: universal`, free-form
 audience values that are not one of the declared scalar enums, or a list-valued `source_of_truth` must be migrated before they
 claim conformance to `1.0`.
+
+`sub-agent-role-prompt` version `1.1` adds the required adapter disposition and
+exact target-to-path contract. A version `1.0` sub-agent manifest must be
+migrated by recording empty adapter metadata for dynamic loading or exact
+metadata for every promoted runtime target.

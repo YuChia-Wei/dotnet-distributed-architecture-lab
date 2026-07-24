@@ -1,11 +1,12 @@
 asset_id: "controller-code-review-sub-agent"
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Controller Code Review Sub-Agent"
 purpose: "Define the delegated reviewer role for ASP.NET Core controllers, DTO mapping boundaries, and HTTP semantics."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
+adapter_metadata: {}
 source_of_truth: "canonical"
 role_kind: "review-sub-agent"
 triggers:

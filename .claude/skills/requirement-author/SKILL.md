@@ -1,6 +1,6 @@
 ---
 name: requirement-author
-description: Draft or normalize requirement documents for this repository from rough notes, existing requirement files, architecture references, or codebase facts. Use when Codex needs to turn unstructured problem statements into `.dev/requirement/`-aligned markdown without yet expanding into use-case specs.
+description: Draft or normalize requirement documents for this repository from rough notes, existing requirement files, architecture references, or codebase facts. Use when Claude needs to turn unstructured problem statements into `.dev/requirement/`-aligned markdown without yet expanding into use-case specs.
 ---
 
 # Requirement Author

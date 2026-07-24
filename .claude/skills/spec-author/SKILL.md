@@ -1,6 +1,6 @@
 ---
 name: spec-author
-description: Draft or normalize production specs and test specs for this repository from requirements, existing specs, or codebase facts. Use when Codex needs to turn requirement truth into `.dev/specs/`-aligned JSON or markdown without yet claiming code or test completion.
+description: Draft or normalize production specs and test specs for this repository from requirements, existing specs, or codebase facts. Use when Claude needs to turn requirement truth into `.dev/specs/`-aligned JSON or markdown without yet claiming code or test completion.
 ---
 
 # Spec Author

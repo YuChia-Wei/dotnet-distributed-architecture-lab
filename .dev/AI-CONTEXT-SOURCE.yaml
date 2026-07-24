@@ -2,25 +2,25 @@ template_metadata:
   template_id: "ai-context-source-manifest"
   template_version: "1.0.0"
   created_at: "2026-07-14T21:51:28+08:00"
-  updated_at: "2026-07-18T21:08:30+08:00"
+  updated_at: "2026-07-25T07:20:24+08:00"
 
 schema_version: "1.0"
 source:
   repository: "https://github.com/YuChia-Wei/ai-collaboration-prompts-dotnet-backend.git"
-  release_id: "REL-v0.4.0"
-  version: "v0.4.0"
-  tag: "v0.4.0"
-  commit: "5af1db672928f9d51f55fee04183ad27b79fb9f8"
+  release_id: "REL-v0.5.0"
+  version: "v0.5.0"
+  tag: "v0.5.0"
+  commit: "1477181f0b43fa7ee82fcd482141758ac9e22eb6"
 installation:
   initialized_by: "ai-context-upgrader"
   imported_at: "2026-07-13T20:42:19+08:00"
   imported_at_source: "git-history:e8e3f85bbcdfc54e832697129e3db1c4edca41d5"
-  last_upgraded_at: "2026-07-18T21:08:30+08:00"
+  last_upgraded_at: "2026-07-25T07:20:24+08:00"
 previous_source:
-  release_id: "REL-v0.3.0"
-  version: "v0.3.0"
-  tag: "v0.3.0"
-  commit: "1e782909b7753b2889014516595d72f703a260f3"
+  release_id: "REL-v0.4.0"
+  version: "v0.4.0"
+  tag: "v0.4.0"
+  commit: "5af1db672928f9d51f55fee04183ad27b79fb9f8"
 local_overrides:
   - id: "DOTNET-MQ-V04-GOVERNANCE"
     paths:
@@ -106,7 +106,7 @@ reconciliation:
   unresolved: []
 last_migration:
   status: "completed"
-  from_version: "v0.3.0"
-  to_version: "v0.4.0"
-  completed_at: "2026-07-18T21:08:30+08:00"
-  evidence: ".dev/workflows/2026-07-18-ai-context-v0-4-upgrade/reports/02-remediation-report.md and AICUP-003 validation results"
+  from_version: "v0.4.0"
+  to_version: "v0.5.0"
+  completed_at: "2026-07-25T07:20:24+08:00"
+  evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md and AICUP6-002 validation results"

@@ -1,0 +1,59 @@
+schema_version: "<release-record-schema-version>"
+release_id: "REL-<vMAJOR.MINOR.PATCH>"
+version: "<vMAJOR.MINOR.PATCH>"
+status: "validated"
+record_origin: "governed"
+distribution_kind: "governed-package"
+installable: true
+tag: null
+commit: null
+tagged_at: null
+recorded_at: null
+created_at: "<ISO-8601-offset-timestamp>"
+updated_at: "<ISO-8601-offset-timestamp>"
+planning:
+  backlog_refs:
+    - ".dev/backlog/items/<BACKLOG-ID>.yaml"
+compatibility:
+  breaking_changes: <true-or-false>
+  minimum_source_version: "<vMAJOR.MINOR.PATCH-or-null>"
+  reconciliation_sources:
+    - "<vMAJOR.MINOR.PATCH>"
+  automatic_upgrade_sources:
+    - "<vMAJOR.MINOR.PATCH>"
+  affected_contracts:
+    - "<affected-public-contract>"
+artifacts:
+  release_notes: "release-notes.md"
+  migration_guide: "migration-guide.md"
+distribution:
+  profile_id: "dotnet-backend"
+  package_id: "ai-context-dotnet-backend-<vMAJOR.MINOR.PATCH>"
+  schema_versions:
+    package: "<package-schema-version>"
+    files: "<files-schema-version>"
+    migration: "<migration-schema-version>"
+  artifacts:
+    zip: "ai-context-dotnet-backend-<vMAJOR.MINOR.PATCH>.zip"
+    zip_checksum: "ai-context-dotnet-backend-<vMAJOR.MINOR.PATCH>.zip.sha256"
+    tar_gz: "ai-context-dotnet-backend-<vMAJOR.MINOR.PATCH>.tar.gz"
+    tar_gz_checksum: "ai-context-dotnet-backend-<vMAJOR.MINOR.PATCH>.tar.gz.sha256"
+  migration:
+    default_mode: "dry-run"
+    apply_requires_clean_worktree: true
+    apply_requires_acknowledged_reconciliation: true
+  publication:
+    tag_owner: "user"
+    trigger: "user-created-tag"
+    automation: "github-actions"
+    creates_or_moves_tag: false
+validation:
+  evidence: "<validation-evidence-summary>"
+  workflow_id: "<workflow-id>"
+  related_workflows: []
+  related_assessments: []
+  package_status: "<planned-or-validated>"
+  post_merge_status: "pending"
+  failed_publication_run: null
+  published_run: null
+  public_release_url: null

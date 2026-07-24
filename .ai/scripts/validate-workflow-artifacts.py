@@ -60,6 +60,7 @@ REQUIRED_TASK = {
 }
 BACKLOG_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 BACKLOG_STATUSES = {"open", "planned", "in_progress", "resolved", "declined"}
+RELEASE_VERSION_RE = re.compile(r"^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$")
 WORKFLOW_INDEX_ROW = re.compile(
     r"^\| \[`([^`]+)`\]\(([^)]+/workflow\.yaml)\) \| (.*?) \| `([^`]+)` \| `([^`]+)` \| `([^`]+)` \| \[plan\]\(([^)]+)\) \|$"
 )
@@ -98,6 +99,42 @@ def reference_path(repo: Path, value: str) -> Path:
     return repo / value.split("#", 1)[0]
 
 
+def validate_backlog_release(
+    release: object,
+    backlog_status: str,
+    label: str,
+    errors: list[str],
+) -> None:
+    if not isinstance(release, dict):
+        errors.append(f"{label}: release must be a mapping")
+        return
+    required = {"target", "completed_in", "published_in"}
+    missing = sorted(required - release.keys())
+    if missing:
+        errors.append(f"{label}: release missing fields {', '.join(missing)}")
+        return
+
+    target = release["target"]
+    if not isinstance(target, str) or (
+        target != "unassigned" and not RELEASE_VERSION_RE.fullmatch(target)
+    ):
+        errors.append(f"{label}: release.target must be vMAJOR.MINOR.PATCH or unassigned")
+
+    for key in ("completed_in", "published_in"):
+        value = release[key]
+        if value is not None and (
+            not isinstance(value, str) or not RELEASE_VERSION_RE.fullmatch(value)
+        ):
+            errors.append(f"{label}: release.{key} must be null or vMAJOR.MINOR.PATCH")
+
+    completed = release["completed_in"]
+    published = release["published_in"]
+    if backlog_status == "resolved" and completed is None:
+        errors.append(f"{label}: resolved backlog item requires release.completed_in")
+    if published is not None and completed is None:
+        errors.append(f"{label}: release.published_in requires release.completed_in")
+
+
 def validate_backlog(repo: Path, errors: list[str]) -> int:
     backlog_root = repo / ".dev" / "backlog"
     item_root = backlog_root / "items"
@@ -117,7 +154,7 @@ def validate_backlog(repo: Path, errors: list[str]) -> int:
     required = {
         "schema_version", "backlog_id", "title", "category", "status", "summary",
         "created_at", "updated_at", "origin_refs", "recommended_owner_skill",
-        "handoff_condition", "workflow_refs", "task_refs", "resolution_ref",
+        "handoff_condition", "workflow_refs", "task_refs", "resolution_ref", "release",
     }
     for path in item_paths:
         label = str(path.relative_to(repo))
@@ -141,6 +178,7 @@ def validate_backlog(repo: Path, errors: list[str]) -> int:
             errors.append(f"{label}: schema_version must be 1.0")
         if item["status"] not in BACKLOG_STATUSES:
             errors.append(f"{label}: unsupported status {item['status']!r}")
+        validate_backlog_release(item["release"], str(item["status"]), label, errors)
         created = timestamp(str(item["created_at"]), f"{label} created_at", errors)
         updated = timestamp(str(item["updated_at"]), f"{label} updated_at", errors)
         if created and updated and updated < created:

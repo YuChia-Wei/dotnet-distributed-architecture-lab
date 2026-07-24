@@ -1,11 +1,12 @@
 asset_id: "code-review-sub-agent"
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Code Review Sub-Agent"
 purpose: "Define the delegated reviewer role for general .NET code review against DDD, Clean Architecture, CQRS, Event Sourcing, and repository testing rules."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
+adapter_metadata: {}
 source_of_truth: "canonical"
 role_kind: "review-sub-agent"
 triggers:

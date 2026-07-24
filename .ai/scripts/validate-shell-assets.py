@@ -21,7 +21,13 @@ ROLES = {
     "manual-advisory",
     "transitional-helper",
 }
-LIFECYCLES = {"active", "compatibility", "transitional", "retirement-candidate"}
+LIFECYCLES = {
+    "active",
+    "compatibility",
+    "transitional",
+    "retirement-candidate",
+    "deprecated",
+}
 DISTRIBUTIONS = {"packaged", "source-only"}
 AUTHORITIES = {"orchestration-only", "structural", "context", "advisory"}
 REQUIRED_GROUPS = ("required_entrypoints", "check_all_required_scripts")
@@ -127,7 +133,12 @@ def validate_manifest(manifest: object, modes: dict[str, str], errors: list[str]
         if record.get("authority") not in AUTHORITIES:
             errors.append(f"{label}.authority is unsupported")
         replacement = record.get("replacement")
-        if record.get("lifecycle") in {"compatibility", "transitional", "retirement-candidate"}:
+        if record.get("lifecycle") in {
+            "compatibility",
+            "transitional",
+            "retirement-candidate",
+            "deprecated",
+        }:
             if not isinstance(replacement, str) or not replacement.strip():
                 errors.append(f"{label}.replacement is required for non-active lifecycle")
         elif replacement is not None:
@@ -135,8 +146,12 @@ def validate_manifest(manifest: object, modes: dict[str, str], errors: list[str]
         if record.get("role") == "transitional-helper" and record.get("lifecycle") not in {
             "transitional",
             "retirement-candidate",
+            "deprecated",
         }:
-            errors.append(f"{label}: transitional-helper must use transitional or retirement-candidate lifecycle")
+            errors.append(
+                f"{label}: transitional-helper must use transitional, "
+                "retirement-candidate, or deprecated lifecycle"
+            )
 
     if set(assets) != set(modes):
         errors.append(

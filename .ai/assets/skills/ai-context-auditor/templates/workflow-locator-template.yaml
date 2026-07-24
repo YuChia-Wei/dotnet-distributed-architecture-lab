@@ -1,8 +1,12 @@
+# Historical compatibility template. New durable audits use standalone
+# assessment artifacts under `.dev/assessments/`.
 template_metadata:
   template_id: "ai-context-auditor-workflow-locator"
   template_version: "1.2.0"
   created_at: "2026-07-10T18:22:49+08:00"
   updated_at: "2026-07-15T08:36:00+08:00"
+  status: "historical"
+  superseded_by: ".dev/assessments/templates/assessment-locator-template.yaml"
 
 workflow_id: "<YYYY-MM-DD-topic[-NN]>"
 schema_version: "1.0"

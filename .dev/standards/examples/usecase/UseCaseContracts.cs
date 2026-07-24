@@ -6,7 +6,7 @@ using Example.Plans.UseCases.Port;
 
 namespace Example.Plans.UseCases;
 
-// TODO: Replace these placeholders with the .NET ports of ezDDD/ezSpec/uContract.
+// Framework-neutral placeholders; replace them with target-owned contracts.
 public interface IInput { }
 
 public enum ExitCode

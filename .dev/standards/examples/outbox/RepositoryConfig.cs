@@ -27,7 +27,7 @@ public static class RepositoryConfig
     }
 }
 
-// TODO: Replace placeholder with ezDDD/Wolverine outbox repository integration.
+// Replace this placeholder with the target-selected outbox repository integration.
 public sealed class OutboxRepository : IAggregateRepository<Plan, PlanId>
 {
     private readonly PlanDbContext _db;

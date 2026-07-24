@@ -36,7 +36,7 @@
 - Frame concerns coverage (FC1–FC6)
 - Scenario coverage (all scenarios mapped to tests)
 - Contract checks (PRE/POST/INV)
-- ezSpec GWT semantic alignment (Given/When/Then/And)
+- Given-When-Then semantic alignment (Given/When/Then/And), independent of the selected .NET test library
 
 ### SWF-Only
 - Acceptance criteria (AC1–ACn) coverage
@@ -44,10 +44,15 @@
 
 ## Validation Levels
 - **L1 Existence**: required items are implemented and test-covered.
+- **L2 Coverage Mapping**: every scenario, acceptance criterion, constraint, and expected outcome maps to an implementation or assertion.
 - **L3 Contract Semantics**: `require/ensure/invariant` semantics match spec.
 - **L4 GWT Semantics**: Gherkin-style steps match scenario intent and order. BDDfy is the default profile; an explicit package opt-out does not relax GWT.
 
 ## Production Code Mapping (.NET)
+
+Resolve exact paths from target-repository evidence such as project files,
+`.dev/project-config.yaml`, and the active project structure. The paths below
+are conventional examples, not required framework-repository locations.
 - Use case input and handlers: `src/Application/<Aggregate>/UseCases/{Commands|Queries}/`
 - Domain aggregate: `src/Domain/<Aggregate>/Aggregates/<Aggregate>.cs`
 - Domain events: `src/Domain/<Aggregate>/Events/`
@@ -55,6 +60,9 @@
 - Outbox/EF Core integration (if required): `src/Infrastructure/` (exact location per project config)
 
 ## Test Code Mapping (.NET)
+
+Resolve the test root from the target repository. The paths below are
+conventional examples and must not override target-owned layout truth.
 - Use case tests: `src/tests/Application/<Aggregate>/UseCases/`
 - Contract tests: `src/tests/Domain/<Aggregate>/Contracts/<Aggregate>ContractTests.cs`
 - Controller tests: `src/tests/Api/Controllers/<Aggregate>/`
