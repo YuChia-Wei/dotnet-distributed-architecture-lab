@@ -2,7 +2,7 @@
 
 ## Status
 
-- Verdict: `ready-to-plan`
+- Verdict: `ready-to-apply-v0.5.0`
 - Target provenance: valid `REL-v0.4.0`
 - Requested release: published `REL-v0.6.0`
 - Required route: `v0.4.0 -> v0.5.0 -> v0.6.0`
@@ -21,8 +21,9 @@ Initial Git-backed three-way discovery for v0.4.0-to-v0.5.0 classified:
 - 63 reconciliation paths;
 - 171 source-only exclusions.
 
-The package planner remains authoritative for the exact installable payload and
-operation IDs. Its plan will be retained after immutable archive validation.
+The package planner is authoritative for the exact installable payload and
+operation IDs. The immutable package validation and exact dry plan are recorded
+in `02-v0.5.0-package-plan.md`.
 
 ## Reconciliation Defaults
 

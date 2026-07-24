@@ -6,9 +6,9 @@
   "task_id": "AICUP6-001",
   "workflow_id": "2026-07-25-ai-context-v0-6-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-07-25T07:05:01+08:00",
-  "updated_at": "2026-07-25T07:05:01+08:00",
+  "updated_at": "2026-07-25T07:11:40+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICUP6-ROUTE", "AICUP6-INVENTORY"],
   "scope": {
@@ -20,15 +20,15 @@
   "execution": {
     "steps": ["Validate release identities", "Build and validate immutable packages", "Run the v0.5.0 planner", "Persist classification and reconciliation operation IDs"],
     "validation": ["Package validator and archive parity", "Workflow validator", "git diff --check"],
-    "last_completed_step": "Confirmed the required v0.4.0-to-v0.5.0-to-v0.6.0 release route and initial Git classification.",
-    "next_action": "Build exact package envelopes and run the v0.5.0 dry plan."
+    "last_completed_step": "Validated immutable v0.5.0 and v0.6.0 packages and persisted the exact v0.5.0 dry-plan classification.",
+    "next_action": "Apply the v0.5.0 automatic operations with explicit reconciliation acknowledgements, then perform path-level manual reconciliation."
   },
   "results": {
-    "summary": "",
-    "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
-    "residual_risk": "No package operation has been planned or applied yet.",
+    "summary": "The required v0.4.0 -> v0.5.0 -> v0.6.0 route is proven. Both destination packages passed archive validation, and the v0.5.0 planner produced 111 deterministic operations: 50 replace, 17 add, and 44 reconcile.",
+    "files_changed": [".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/01-upgrade-plan.md", ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/02-v0.5.0-package-plan.md"],
+    "tests_run": ["validate-ai-context-package.py for v0.5.0 ZIP/tar pair", "validate-ai-context-package.py for v0.6.0 ZIP/tar pair", "plan-ai-context-package-apply.py --previous-version v0.4.0"],
+    "finding_status": "addressed",
+    "residual_risk": "The 44 reconciliation operations still require explicit acknowledgement and path-level manual review during application.",
     "follow_up_needed": true
   }
 }
