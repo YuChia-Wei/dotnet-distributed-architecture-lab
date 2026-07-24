@@ -1,0 +1,34 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "AICUP6-001",
+  "workflow_id": "2026-07-25-ai-context-v0-6-upgrade",
+  "owner_skill": "ai-context-governance",
+  "status": "in_progress",
+  "created_at": "2026-07-25T07:05:01+08:00",
+  "updated_at": "2026-07-25T07:05:01+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "finding_ids": ["AICUP6-ROUTE", "AICUP6-INVENTORY"],
+  "scope": {
+    "target": "Immutable package validation and v0.4.0-to-v0.5.0 planning",
+    "files": [".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/**"],
+    "constraints": ["Remain read-only outside workflow artifacts until the package plan is reviewed", "Use exact published inventories and tags"],
+    "non_goals": ["Apply v0.5.0", "Modify product src or tests"]
+  },
+  "execution": {
+    "steps": ["Validate release identities", "Build and validate immutable packages", "Run the v0.5.0 planner", "Persist classification and reconciliation operation IDs"],
+    "validation": ["Package validator and archive parity", "Workflow validator", "git diff --check"],
+    "last_completed_step": "Confirmed the required v0.4.0-to-v0.5.0-to-v0.6.0 release route and initial Git classification.",
+    "next_action": "Build exact package envelopes and run the v0.5.0 dry plan."
+  },
+  "results": {
+    "summary": "",
+    "files_changed": [],
+    "tests_run": [],
+    "finding_status": "not-addressed",
+    "residual_risk": "No package operation has been planned or applied yet.",
+    "follow_up_needed": true
+  }
+}
