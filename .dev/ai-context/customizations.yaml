@@ -2,7 +2,7 @@ template_metadata:
   template_id: "ai-context-customizations"
   template_version: "1.0.0"
   created_at: "2026-07-24T00:50:47+08:00"
-  updated_at: "2026-07-25T07:56:49+08:00"
+  updated_at: "2026-07-25T08:07:46+08:00"
 
 schema_version: "1.0"
 customizations:
@@ -61,9 +61,9 @@ customizations:
       evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/04-v0.6.0-package-plan.md"
     disposition: "merge"
     post_upgrade_audit:
-      assessment_id: null
-      status: "not-run"
-      evidence: ""
+      assessment_id: "ASM-20260725-001"
+      status: "verified"
+      evidence: ".dev/assessments/ASM-20260725-001/report.md"
     validation:
       - "python .ai/scripts/validate-ai-context.py"
       - "python .ai/scripts/validate-ai-context-target.py"
@@ -119,11 +119,11 @@ customizations:
       version: "v0.6.0"
       status: "equivalent-candidate"
       evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/04-v0.6.0-package-plan.md"
-    disposition: "unresolved"
+    disposition: "supersede"
     post_upgrade_audit:
-      assessment_id: null
-      status: "not-run"
-      evidence: ""
+      assessment_id: "ASM-20260725-001"
+      status: "verified"
+      evidence: ".dev/assessments/ASM-20260725-001/report.md"
     validation:
       - "python .ai/scripts/validate-shell-assets.py"
       - "python -m unittest discover -s .ai/scripts/tests -p test_*.py"
@@ -180,9 +180,9 @@ customizations:
       evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/04-v0.6.0-package-plan.md"
     disposition: "retain"
     post_upgrade_audit:
-      assessment_id: null
-      status: "not-run"
-      evidence: ""
+      assessment_id: "ASM-20260725-001"
+      status: "verified"
+      evidence: ".dev/assessments/ASM-20260725-001/report.md"
     validation:
       - "python .ai/scripts/validate-ai-context.py"
       - "python .ai/scripts/validate-workflow-artifacts.py"
