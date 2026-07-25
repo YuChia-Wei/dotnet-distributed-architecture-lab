@@ -17,12 +17,12 @@
 - `status`: `final`
 - `audit_date`: `2026-07-25`
 - `created_at`: `2026-07-25T08:06:11+08:00`
-- `updated_at`: `2026-07-25T08:06:11+08:00`
+- `updated_at`: `2026-07-25T08:34:41+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md`
 - `template_version`: `1.0.0`
 - `repository`: `dotnet-mq-arch-lab`
 - `branch`: `codex/2026-07-25-ai-context-v0-6-upgrade`
-- `subject_commit`: `4e079a0f8c94b3347029a044a671fec771d8f3fe`
+- `subject_commit`: `3204d96cd1d16d9cffc5d99d2ef6f8353b5b5a9a`
 - `previous_report`: `.dev/assessments/ASM-20260718-001/report.md`
 
 ## Executive Summary
@@ -123,7 +123,7 @@ No actionable findings were identified at the pinned subject commit.
 
 | Check | Result | Evidence / Notes |
 | --- | --- | --- |
-| Git state | passed | subject commit `4e079a0f8c94b3347029a044a671fec771d8f3fe`; only the intentional untracked apply-pending receipt remained outside the subject |
+| Git state | passed | subject commit `3204d96cd1d16d9cffc5d99d2ef6f8353b5b5a9a`; only the intentional untracked apply-pending receipt remained outside the subject |
 | Registry and wrapper parity | passed | 16 canonical skills; 16 Codex and 16 Claude wrapper directories |
 | Path and reference checks | passed | 23 active indexes, 338 language-policy files, 34 canonical manifests, 10 capability mappings |
 | Schema / structured file parse | passed | target, AI-context, workflow, and shell validators passed |
@@ -169,6 +169,7 @@ git diff --check
 
 - The audit assessed committed downstream state, not the source repository's post-tag branch.
 - During pre-assessment review, a disabled ANSI-color difference was corrected and committed before the subject revision was pinned.
+- The subject SHA was refreshed after the unpublished workflow branch added required commit-policy trailers; assessed content and conclusions are unchanged.
 - `ASM-20260718-001` remains unchanged as the active pre-upgrade baseline.
 
 ## Lifecycle Handoff
