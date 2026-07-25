@@ -17,12 +17,12 @@
 - `status`: `final`
 - `audit_date`: `2026-07-25`
 - `created_at`: `2026-07-25T08:29:51+08:00`
-- `updated_at`: `2026-07-25T08:29:51+08:00`
+- `updated_at`: `2026-07-25T08:35:18+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md`
 - `template_version`: `1.0.0`
 - `repository`: `dotnet-mq-arch-lab`
 - `branch`: `codex/2026-07-25-ai-context-v0-6-upgrade`
-- `subject_commit`: `ec0bfede68fad727d347a765f8820e7146deb07c`
+- `subject_commit`: `da5668f5fb5492ddc649ee8a8dffbfc2a5dc0eba`
 - `previous_report`: `.dev/assessments/ASM-20260725-001/report.md`
 
 ## Executive Summary
@@ -124,7 +124,7 @@ No actionable findings were identified at the pinned subject commit.
 
 | Check | Result | Evidence / Notes |
 | --- | --- | --- |
-| Git subject | passed | committed subject `ec0bfede68fad727d347a765f8820e7146deb07c` |
+| Git subject | passed | committed subject `da5668f5fb5492ddc649ee8a8dffbfc2a5dc0eba` |
 | Finalized provenance | passed | target validator accepts `REL-v0.6.0`; unresolved reconciliation is empty |
 | Registry and wrapper parity | passed | 16 canonical skills; 16 Codex and 16 Claude wrapper directories |
 | Validation supersession | passed | 15 of 15 committed blobs exactly match tag `v0.6.0` |
@@ -170,6 +170,7 @@ git diff --check
 
 - `ASM-20260725-001` remains unchanged and valid for its earlier candidate commit.
 - This assessment covers the owner-approved SDK correction and durable LF rule added afterward.
+- The subject SHA was refreshed after the unpublished workflow branch added required commit-policy trailers; assessed content and conclusions are unchanged.
 
 ## Lifecycle Handoff
 

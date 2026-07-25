@@ -15,7 +15,7 @@ report: "report.md"
 artifact_branch: "codex/2026-07-25-ai-context-v0-6-upgrade"
 base_branch: "main"
 created_at: "2026-07-25T08:29:51+08:00"
-updated_at: "2026-07-25T08:29:51+08:00"
+updated_at: "2026-07-25T08:35:18+08:00"
 template_source: ".dev/assessments/templates/assessment-locator-template.yaml"
 template_version: "1.0.0"
 report_template_source: ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md"
@@ -23,7 +23,7 @@ report_template_version: "1.0.0"
 subject_ref:
   repository: "dotnet-mq-arch-lab"
   branch: "codex/2026-07-25-ai-context-v0-6-upgrade"
-  commit: "ec0bfede68fad727d347a765f8820e7146deb07c"
+  commit: "da5668f5fb5492ddc649ee8a8dffbfc2a5dc0eba"
 scope:
   included:
     - "AGENTS.md, AGENTS.zh-TW.md, CLAUDE.md, root repository identity, global.json, and .gitattributes"
