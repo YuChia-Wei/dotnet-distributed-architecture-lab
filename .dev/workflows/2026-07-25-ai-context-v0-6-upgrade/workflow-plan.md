@@ -20,7 +20,7 @@
 - `current_phase`: `completed`
 - `artifact_root`: `.dev/workflows/2026-07-25-ai-context-v0-6-upgrade`
 - `created_at`: `2026-07-25T07:05:01+08:00`
-- `updated_at`: `2026-07-25T08:31:36+08:00`
+- `updated_at`: `2026-07-25T08:35:56+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 
@@ -62,7 +62,7 @@
 - Current task: none; all workflow tasks are completed.
 - Exact next action: keep the completed branch local unless the user separately requests merge or push.
 - Validation already completed: immutable package validation for v0.5.0 and v0.6.0; framework unit suite 251 passed and 1 skipped; target, AI-context, workflow, assessment, shell, and dependency validators; quick gate 30/30; solution build 0 errors with 6 pre-existing nullable warnings.
-- Git state: v0.5.0 checkpoint `1519b3d`, v0.6.0 candidate `4e35a24`, validation alignment `4e079a0`, first assessment `6079210`, compatibility finalization `ec0bfed`, and final assessment `085e165` are committed; closeout metadata awaits this final workflow commit.
+- Git state: v0.5.0 checkpoint `714677f`, v0.6.0 candidate `366c8bd`, validation alignment `3204d96`, first assessment `02e56d5`, compatibility finalization `da5668f`, final assessment `c7f4255`, and closeout `cb2aafa` are committed; assessment subject metadata was refreshed after the policy-trailer rebase.
 - Branch history and checkpoint handoffs: segment 1 remains local; no push or merge requested.
 - Blockers or unresolved decisions: none.
 
@@ -71,5 +71,6 @@
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `codex/2026-07-25-ai-context-v0-6-upgrade` | `main@2eeddf392ca79deb4407c47d13ad53178015ba90` | started | pending | local | `2026-07-25T07:05:01+08:00` | Execute the authorized progressive upgrade with explicit stage checkpoints. | Continue `AICUP6-001`. |
-| 1 | `codex/2026-07-25-ai-context-v0-6-upgrade` | `main@2eeddf392ca79deb4407c47d13ad53178015ba90` | v0.6.0 finalized candidate | `ec0bfed` | local | `2026-07-25T08:29:02+08:00` | Record SDK, LF, provenance, and 30-of-30 gate evidence. | Run final independent assessment. |
-| 1 | `codex/2026-07-25-ai-context-v0-6-upgrade` | `main@2eeddf392ca79deb4407c47d13ad53178015ba90` | independent assessment | `085e165` | local | `2026-07-25T08:31:36+08:00` | Record healthy final verification with no actionable findings. | Close workflow locally. |
+| 1 | `codex/2026-07-25-ai-context-v0-6-upgrade` | `main@2eeddf392ca79deb4407c47d13ad53178015ba90` | v0.6.0 finalized candidate | `da5668f` | local | `2026-07-25T08:29:02+08:00` | Record SDK, LF, provenance, and 30-of-30 gate evidence. | Run final independent assessment. |
+| 1 | `codex/2026-07-25-ai-context-v0-6-upgrade` | `main@2eeddf392ca79deb4407c47d13ad53178015ba90` | independent assessment | `c7f4255` | local | `2026-07-25T08:31:36+08:00` | Record healthy final verification with no actionable findings. | Close workflow locally. |
+| 1 | `codex/2026-07-25-ai-context-v0-6-upgrade` | `main@2eeddf392ca79deb4407c47d13ad53178015ba90` | workflow closeout | `cb2aafa` | local | `2026-07-25T08:35:56+08:00` | Complete tasks, bind final assessment evidence, and satisfy commit policy. | Keep local unless merge or push is requested. |
