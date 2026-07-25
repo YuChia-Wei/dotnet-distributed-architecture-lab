@@ -36,7 +36,7 @@ Treat the following as the largest acceptable default slice:
 - one repository cleanup in one module
 - one targeted cross-file behavior correction
 
-Anything larger should be split by `dev-workflow`.
+Anything larger should be split by `software-development-orchestrator`.
 
 ## Safety Rules
 

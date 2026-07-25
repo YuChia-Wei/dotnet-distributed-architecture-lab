@@ -1,0 +1,80 @@
+schema_version: "1.0"
+transition_id: "SKILL-001-v0.6.0"
+release_target: "v0.6.0"
+state: "activated"
+activation_mode: "atomic"
+owner_skill: "ai-context-governance"
+source_workflow_id: "2026-07-24-v0-6-config-skill-transition"
+
+taxonomy:
+  ai-context-lifecycle:
+    target_members:
+      - "ai-context-auditor"
+      - "ai-context-governance"
+      - "ai-context-init"
+      - "ai-context-upgrader"
+    compatibility_members:
+      - "repo-structure-sync"
+  software-development:
+    target_members:
+      - "bdd-gwt-test-designer"
+      - "code-reviewer"
+      - "ddd-ca-hex-architect"
+      - "local-change-implementer"
+      - "problem-frame-author"
+      - "requirement-author"
+      - "slice-implementer"
+      - "software-development-orchestrator"
+      - "spec-author"
+      - "spec-compliance-validator"
+    compatibility_members:
+      - "dev-workflow"
+
+transitions:
+  - current_identifier: "repo-structure-sync"
+    candidate_identifier: "ai-context-init"
+    family: "ai-context-lifecycle"
+    current_lifecycle: "deprecated"
+    candidate_lifecycle: "active"
+    compatibility_lifecycle_after_activation: "deprecated"
+    removal_target: null
+    historical_identifier_rewrite: false
+  - current_identifier: "dev-workflow"
+    candidate_identifier: "software-development-orchestrator"
+    family: "software-development"
+    current_lifecycle: "deprecated"
+    candidate_lifecycle: "active"
+    compatibility_lifecycle_after_activation: "deprecated"
+    removal_target: null
+    historical_identifier_rewrite: false
+
+activation_gate:
+  deterministic_evaluation:
+    status: "passed"
+    corpus: ".ai/evaluation/corpus-manifest.yaml"
+    baseline: ".ai/evaluation/baselines/v1.yaml"
+    compatibility_fixture: ".ai/evaluation/fixtures/identifier-compatibility.yaml"
+  model_in_loop_evaluation:
+    status: "passed"
+    evaluation_id: "EVAL-001-terra-v0.6.0"
+    candidate_model: "gpt-5.6-terra"
+    candidate_repetitions: 2
+    judge_model: "gpt-5.6-terra"
+    judge_repetitions: 1
+    cases_per_candidate: 4
+    critical_safety_result: "8/8"
+    full_rubric_result: "8/8"
+    critical_safety_threshold: "8/8"
+    full_rubric_threshold: "at-least-7/8"
+    report_sha256: "f41e65b125fb2f90dc8897da5407fe89813fba8aa01ef97fb8c7c378f219684f"
+    retained_evidence_sha256:
+      terra-candidate-a.yaml: "7b5a952fcdd38b104ecbebd8018b0acbc7c31db85a10ef4f6a179304c0d9fd8a"
+      terra-candidate-b.yaml: "78c81bbdb124a380b7c5243c6398e28081cc87a28fc55a82df12020e093459d5"
+      terra-judge.yaml: "863bbe93af16fca2674366ab5aa078182035bca632c41d6bd5111236b8538dd3"
+
+activation_contract:
+  - "Both candidate identifiers activated in one governed change after every activation gate passed."
+  - "Each current identifier is a thin deprecated compatibility entry pointing to its active candidate identifier."
+  - "Historical owner_skill, initialized_by, generatedBy, workflow, task, assessment, release, and provenance values remain unchanged."
+  - "Neither compatibility identifier has a scheduled removal release."
+  - "software-development-orchestrator ends at approved development closeout or PR-ready handoff; delivery, deployment, maintenance-window, production verification, and rollback orchestration remain outside its scope."

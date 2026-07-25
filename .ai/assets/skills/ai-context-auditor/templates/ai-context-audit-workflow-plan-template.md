@@ -1,5 +1,10 @@
 # AI Context Audit Workflow
 
+> Historical compatibility template only. New durable read-only audits use a
+> standalone assessment locator under `.dev/assessments/` and the current
+> `ai-context-auditor` report template. The current auditor must not create this
+> workflow model.
+
 ## Template Metadata
 
 - `template_id`: `ai-context-auditor-workflow-plan`

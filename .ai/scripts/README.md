@@ -4,6 +4,46 @@ This directory contains transitional AI workflow scripts, context governance che
 
 It is no longer the long-term home for authoritative C# semantic validation. Rules that inspect C# syntax, symbols, type dependencies, attributes, or framework API usage should move to dotnet-native validation mechanisms such as Roslyn analyzers, `.editorconfig`, `dotnet format`, architecture tests, integration tests, or dotnet tools.
 
+## Source Tooling Prerequisites
+
+Repository-side Python tooling requires Python 3.11 or newer and the
+checksum-stable dependency declared in the root `requirements.txt`:
+
+```text
+PyYAML==6.0.3
+```
+
+The repository's .NET validation tools require an SDK that satisfies
+`global.json`; for v0.5.0 source work, install .NET SDK 10.0.300 or newer.
+An older 10.0 feature band such as 10.0.203 does not satisfy the declared
+10.0.300 baseline.
+
+Create and activate a virtual environment using the conventions for the host,
+then install the source dependency from the repository root:
+
+```text
+python -m venv .venv
+python -m pip install -r requirements.txt
+```
+
+On POSIX hosts the interpreter may be named `python3`. `check-all.sh` discovers
+`python` and then `python3` without changing its governed command inventory.
+Set `AI_CONTEXT_PYTHON` to an executable name or path when an explicit
+interpreter is required. Missing or failing required tools remain gate failures;
+interpreter discovery does not convert them to skips.
+
+Stock macOS installations may expose no `python` command and may provide a
+`python3` older than the 3.11 floor. Install a supported interpreter, create the
+environment with that interpreter, and set `AI_CONTEXT_PYTHON` to the resulting
+executable when needed. The override is part of the supported runner contract;
+synthetic fixture repositories remove inherited overrides before selecting
+their deterministic PATH stubs, while fixture-owned explicit overrides remain
+supported.
+
+The extracted release package has its own checksum-governed envelope
+`requirements.txt`; follow the package `INSTALL.md` rather than using this
+source-repository bootstrap.
+
 ## Current Boundary
 
 `shell-assets.yaml` is the machine-readable role, lifecycle, distribution, and
@@ -40,16 +80,22 @@ Shell or PowerShell scripts should be retired or replaced when they:
 - `validate-ai-context.py`
 - `validate-assessment-artifacts.py`
 - `validate-ai-context-versions.py`
+- `validate-ai-context-target.py`
+- `validate-ai-context-release-state.py`
+- `prepare-ai-context-release.py`
 - `validate-file-disposition-manifest.py`
 - `validate-git-commits.py`
+- `validate-workflow-handoff.py`
 - `build-ai-context-package.py`
 - `validate-ai-context-package.py`
 - `plan-ai-context-package-apply.py`
 - `render-ai-context-release-notes.py`
+- `validate-ai-behavior-evaluation.py`
+- `measure-ai-context-load.py`
 
 These scripts inspect AI context, markdown, prompt portability, or repository hygiene. They are not substitutes for dotnet C# validation.
 
-`validate-ai-context.py` checks objective repository facts: active index paths, literal table corruption, declared runtime-root status, canonical/Agents/Claude skill inventory parity, case-safe `AGENTS.md` and thin `CLAUDE.md` root entries, canonical wrapper-metadata target/path integrity, policy-scoped agent-facing language, root bilingual entry ownership/link/structural markers, rule ownership registry structure, canonical skill/sub-agent schema compliance, canonical template-family hygiene, and deterministic development capability routing. It scans both tracked and untracked non-ignored files so a new context file cannot bypass the gate before staging, while filtering tracked paths that are deleted in the working tree. Language lint uses exact path-and-line exceptions for deliberate routing triggers; other Han prose fails with a file and line number. Script source, generated/example/archive/migration material, workflows, product `src`/`test` trees, and human-facing `.dev` documentation are outside that language scan; Markdown documentation under `.ai/scripts` remains in scope. Root bilingual validation checks reciprocal ownership links, heading-level shape, and ordered backtick table paths, not full semantic parity. Canonical schema validation is structural and path-based; it does not claim semantic equivalence between projections.
+`validate-ai-context.py` checks objective repository facts: active index paths, literal table corruption, declared runtime-root status, canonical/Agents/Claude skill inventory parity, case-safe `AGENTS.md` and thin `CLAUDE.md` root entries, canonical wrapper-metadata target/path integrity, sub-agent dynamic/native dispositions, exact adapter target/path/schema/canonical-link/package-profile parity, policy-scoped agent-facing language, root bilingual entry ownership/link/structural markers, rule ownership registry structure, canonical skill/sub-agent schema compliance, canonical template-family hygiene, and deterministic development capability routing. It scans both tracked and untracked non-ignored files so a new context file cannot bypass the gate before staging, while filtering tracked paths that are deleted in the working tree. Language lint uses exact path-and-line exceptions for deliberate routing triggers; other Han prose and selected non-ASCII punctuation fail with a file and line number. Script source, generated/example/archive/migration material, workflows, product `src`/`test` trees, and human-facing `.dev` documentation are outside that language scan; Markdown documentation under `.ai/scripts` remains in scope. Root bilingual validation checks reciprocal ownership links, headings, links, fences, inline-code identifiers, tables, lists, and ordered backtick table paths. These are structural drift guards, not proof of semantic equivalence; retained semantic review remains required when a bilingual entry changes materially.
 
 `validate-workflow-artifacts.py` validates post-adoption workflow locator/task metadata, complete `.dev/workflows/INDEX.MD` directory coverage, locator-backed title/owner/status/timestamp/entrypoint parity, explicit legacy/no-locator rows, durable `.dev/backlog/items/*.yaml` identity/lifecycle/reference integrity, and fail-closed development implementation contracts for intent, execution mode, overlays, layered sources, subject revision, and acceptance criteria. Locators that opt into `lifecycle_contract: "1.0"` also enforce active-task cardinality, completed-workflow closure, and completed-task result semantics. Historical tasks and locators before their respective contract adoption remain compatible.
 
@@ -59,23 +105,65 @@ Git revision metadata, branch and timestamp contracts, lifecycle sections,
 resume safety, and assessment relationship integrity. It does not evaluate
 report prose or replace the producing skill's evidence review.
 
-`validate-ai-context-versions.py` validates governed release identity, SemVer,
-immutable published tag-to-commit mappings, compatibility declarations, and an
-optional target `.dev/AI-CONTEXT-SOURCE.yaml`. It automatically uses source mode
-when release records exist and target mode when only the installed provenance
-manifest exists. `compare-ai-context-versions.py`
+`validate-ai-context-versions.py` is the source-side release-registry validator:
+it validates governed release identity, SemVer, immutable published
+tag-to-commit mappings, and compatibility declarations. It delegates
+component-aware target provenance and semantic customization checks to the
+shared downstream library.
+
+`validate-ai-context-target.py` validates only downstream
+`.dev/ai-context/provenance.yaml` and `customizations.yaml`. It requires stable
+semantic identities, safe paths, base and decision evidence, owner
+reconciliation, active-context baseline audit, post-upgrade audit, and
+fail-closed finalization without requiring source release records, Git tags, or
+publication workflows. `compare-ai-context-versions.py`
 is a read-only Git-tree comparison helper; it proposes an automatic candidate
 only when a supplied target file is byte-identical to the recorded base. Target
 truth, deletions, absent evidence, and source history remain reconciliation or
 exclusion items.
 
+`validate-ai-context-release-state.py` applies the REL-owned
+`.dev/releases/<version>/release-phase-checks.yaml` contract to one governed
+release. The requested stable version selects the contract and each sanctioned
+command embeds that same literal version. Candidate validation rejects unresolved
+placeholders, copied lifecycle fields, impossible timestamps, unrelated or open
+backlog references, dirty worktrees, package identity drift, and generated
+provenance in authored notes while allowing prior versions in compatibility and
+migration guidance. Tag validation requires an existing annotated tag and a
+validated registry skeleton in the tagged tree. Hosted publication and
+finalization use GET-only GitHub API calls to verify the successful
+tag-triggered workflow, stable Release body, title, tag, and exact asset names.
+
+`prepare-ai-context-release.py` is the pre-tag interface. It requires the merged
+`main` candidate, reruns the candidate and critical gates, verifies the
+worktree remains clean, reads exact AI provenance from the latest registered
+handoff checkpoint, and prints a complete annotated-tag command for the
+repository owner. It never executes the printed command or pushes a ref. The
+printed command is valid only for the current `main` HEAD; any later merge to
+`main`, including lifecycle-only closeout, requires rerunning preparation and
+discarding every older printed command.
+
+`validate-dependency-versions.py` is a deterministic offline gate. In the source
+framework repository it enforces byte-identical pinned Python requirement
+mirrors, requirements-file use and one Python version across GitHub workflows,
+exact and consistent direct package versions in framework-managed
+`tools/**/*.csproj`, and an exact `global.json` SDK new enough for those tools.
+In initialized targets, source-only workflow and distribution checks become not
+applicable while managed-tool checks remain active. It does not query package
+registries or advisory databases and therefore makes no package-currency or
+vulnerability claim. The normative boundary is
+`.dev/standards/DEPENDENCY-VERSION-CONSISTENCY-POLICY.md`.
+
 `validate-file-disposition-manifest.py` validates a supplied remediation
-file-disposition manifest against repository Git facts. It enforces exact-case repository paths,
-the `kept` / `moved-to` / `merged-into` / `retired` vocabulary, destination and
-base-presence rules, and complete coverage of distributable framework paths
-changed since the recorded remediation base commit. The manifest describes
-incoming release intent only and does not replace target-side three-way
-comparison.
+file-disposition manifest against repository Git facts. Legacy schema 1.0
+enforces exact-case repository paths, the `kept` / `moved-to` / `merged-into` /
+`retired` vocabulary, destination and base-presence rules, and complete
+coverage of distributable framework paths changed since the recorded
+remediation base commit. Schema 2.0 additionally pins the subject commit,
+published-version path and blob history, portable-profile inclusion, lifecycle
+registry agreement, evidence references, and downstream proof for relocation
+or removal. The manifest describes incoming release intent only and does not
+replace target-side three-way comparison.
 
 `validate-git-commits.py` validates an explicitly selected commit or revision
 range against `.dev/standards/GIT-COMMIT-POLICY.yaml`. It enforces the subject,
@@ -83,6 +171,19 @@ final AI signature, assessment ID trailer, and—when `--workflow-id` is
 provided—ordered workflow body sections and matching workflow identity. The
 aggregate gate invokes it only when `COMMIT_RANGE` is set, so ordinary working
 tree checks do not guess whether a human-only commit used AI assistance.
+
+`validate-workflow-handoff.py` validates a bounded receiving checkpoint for
+cross-model, runtime, host, machine, and fresh-session continuation. It pins the
+validated commit and containing checkpoint commit, records a real critical-gate
+command and bounded output digest, blocks red gates outside an explicitly named
+repair task, requires REL-owned phase evidence for release handoffs, separates
+execution provenance from Git attribution, and preserves a generic
+provider-compatible evidence union. Optional `--verify-repository` checks the
+current branch, checkpoint-containing commit, worktree state, and pinned commit
+metadata using an explicit read-only Git command allowlist. `--all` discovers
+durable instances through `.dev/workflows/handoff-checkpoints.yaml`; source
+repositories require that registry, while packaged targets without a checkpoint
+registry report the check as not applicable.
 
 `build-ai-context-package.py` reads an immutable Git commit tree and the
 canonical distribution profile to produce normalized ZIP and tar.gz release
@@ -93,17 +194,31 @@ unsafe paths, output collisions, unsupported Git entry types, and existing
 output files. These source-side packaging tools are excluded from the installed
 target payload.
 
+The distribution profile assigns every projected path to exactly one component.
+Broad entries may use non-overlapping `component_overrides` to classify
+AI-context lifecycle skills, wrappers, target validators, and human guides
+without duplicating package paths. Multiple matching overrides fail closed.
+
 `plan-ai-context-package-apply.py` is the dry-run-first target-side package
 entrypoint. It runs from the extracted envelope's `payload/.ai/scripts/`
 directory, requires a clean committed target, and binds the package manifest,
-target HEAD, and observed path hashes and modes into the plan. Existing target
+target HEAD, effective component selection, selection authority evidence, and
+observed path hashes and modes into the plan. Clean installation uses the
+package default and accepts an explicit `--enable-provider repo-backlog`;
+upgrades preserve component-aware provenance or derive the legacy backlog
+provider only from a schema-1 previous inventory. Schema-2 previous inventory
+without component-aware provenance and dual provenance authorities fail
+closed. Incoming, previous, and operation sets are filtered together so a
+disabled provider never generates removal work. Existing target
 templates and locally changed managed files become reconciliation items.
 Acknowledging such an item skips it; acknowledgement never grants overwrite or
 delete permission. `--apply` rechecks the complete binding, applies only safe
 operations transactionally, and writes
 `.dev/AI-CONTEXT-APPLY-PENDING.yaml`. It never updates validated source
-provenance; `repo-structure-sync` or `ai-context-upgrader` owns validation and
-provenance finalization.
+provenance; the receipt records the resolved/default selection, authority
+evidence, and applied/skipped counts by component. Apply revalidates that
+authority before mutation. `ai-context-init` or `ai-context-upgrader` owns
+validation and provenance finalization.
 
 `render-ai-context-release-notes.py` validates a governed release candidate and
 renders the GitHub Release body from its canonical release notes, migration
@@ -112,6 +227,18 @@ governed candidate; publish mode fails unless the tagged-tree record is
 `validated`. The tag-triggered Action owns tag selection and Release mutation;
 the renderer never creates or changes Git refs or remote releases.
 
+`measure-ai-context-load.py` is the source-only deterministic measurement
+interface for representative repository-backed context traces. It requires a
+clean repository at the full declared `HEAD`, exactly the `runtime`,
+`skill-routing`, `release`, `handoff`, and `development` trace families, safe
+unique repository-relative paths within each family, and exact Git blob, byte,
+and whitespace-word evidence for every `runtime` or `full-file` load event. Its
+normalized result keeps the tracked UTF-8 `repository_corpus` separate from
+the actual `repository_loaded` events. A provider may report
+`total_prompt_tokens`; otherwise that value is null. The deterministic
+bytes-divided-by-four value is marked as a repository-loaded heuristic and is
+never treated as total prompt usage.
+
 Fail-closed validation and packaging regression tests use Given-When-Then
 naming and comments and run entirely in disposable Git repositories:
 
@@ -119,6 +246,7 @@ naming and comments and run entirely in disposable Git repositories:
 python .ai/scripts/tests/test_fail_closed_validation.py -v
 python .ai/scripts/tests/test_ai_context_wrapper_metadata.py -v
 python .ai/scripts/tests/test_ai_context_root_entries.py -v
+python .ai/scripts/tests/test_ai_context_language_policy.py -v
 python .ai/scripts/tests/test_workflow_implementation_contract.py -v
 python .ai/scripts/tests/test_workflow_lifecycle_contract.py -v
 python .ai/scripts/tests/test_assessment_artifacts.py -v
@@ -126,7 +254,31 @@ python .ai/scripts/tests/test_git_commit_policy.py -v
 python .ai/scripts/tests/test_ai_context_version_governance.py -v
 python .ai/scripts/tests/test_ai_context_package_apply.py -v
 python .ai/scripts/tests/test_ai_context_packaging.py -v
+python .ai/scripts/tests/test_dependency_version_consistency.py -v
+python .ai/scripts/tests/test_file_disposition_manifest.py -v
+python .ai/scripts/tests/test_governance_workflow_contract.py -v
 ```
+
+`test_ai_context_version_governance.py` and
+`test_ai_context_packaging.py` are source-repository release/build tests.
+`test_ai_behavior_evaluation.py` is the source-release deterministic behavior
+gate. It consumes only preclassified fixtures, performs no model or network
+calls, and compares exact normalized output with the checked-in baseline.
+`test_ai_context_load_measurement.py` proves the source-only context-load
+measurement contract in disposable synthetic Git repositories; it creates no
+official trace or release evidence.
+`test_governance_workflow_contract.py` and the concrete v0.5.0 disposition
+manifest validation are source-repository governance checks.
+`validate-source-governance.py` discovers those manifests through the stable
+source-only `.ai/distribution/governance-checks.yaml` registry so portable
+scripts do not depend on dated workflow history. They remain required when
+`check-all.sh` detects their exact source context, but the source-only
+validators, test, registry, and workflow evidence are intentionally excluded
+from public target packages. `test_ai_context_package_apply.py` and the
+synthetic file-disposition fixture suite are downstream-supported and remain
+packaged and required. A packaged `check-all.sh` reports the four source-only
+checks as not applicable instead of requiring unavailable release history, Git
+tags, builder modules, workflow evidence, or source CI configuration.
 
 The shell fixture suite snapshots the real checkout before and after execution.
 The wrapper-metadata fixture invokes only the bounded validator function against
@@ -208,7 +360,7 @@ These remain packaged for current manual or downstream invocation. Their output
 is advisory or orchestration evidence and does not override the owning skill,
 target configuration, analyzers, or tests.
 
-### Transitional Helpers
+### Deprecated Compatibility Helpers
 
 - `check-test-di-compliance.sh`
 - `check-data-class-annotations.sh`
@@ -217,20 +369,16 @@ target configuration, analyzers, or tests.
 - `check-dotnet-config.sh`
 - `validate-dual-profile-config.sh`
 
-These remain packaged temporarily but are not endorsed as long-term semantic
-validators. Each registry record names its analyzer, compiled validator,
-architecture-test, target-test, or CI replacement direction.
-
-### Retirement Candidates
-
 - `check-test-compliance.sh`
 
-This helper is no longer selected by `check-all.sh`. Its repository-root
-assumption and unconditional package rules are not compatible with reusable
-target technology selections. It remains packaged for the v0.4.0 migration
-window only; downstream repositories should replace direct invocations with
+These paths are deprecated in place. They remain packaged for compatibility and
+are not endorsed as long-term semantic validators. Each registry record names
+its analyzer, compiled validator, architecture-test, target-test, or CI
+replacement direction. `check-test-compliance.sh` is no longer selected by
+`check-all.sh`; downstream repositories should replace direct invocations with
 their selected testing stack, analyzers, and executable test architecture
-checks.
+checks. Removal or relocation requires a later governed disposition with
+downstream evidence.
 
 Completed replacement:
 

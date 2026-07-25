@@ -14,6 +14,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import yaml
 
@@ -21,6 +22,7 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[3]
 VALIDATOR_SOURCE = REPO_ROOT / ".ai/scripts/validate-shell-assets.py"
 RUNNER_SOURCE = REPO_ROOT / ".ai/scripts/check-all.sh"
+TEST_COMPLIANCE_SOURCE = REPO_ROOT / ".ai/scripts/check-test-compliance.sh"
 
 
 def run(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
@@ -44,6 +46,16 @@ def real_repo_snapshot() -> tuple[str, str, str]:
         if result.returncode != 0:
             raise RuntimeError(result.stderr.strip())
     return head.stdout, status.stdout, shell_stage.stdout
+
+
+def bash_executable() -> str | None:
+    if os.name == "nt":
+        candidates = (
+            Path(os.environ.get("ProgramFiles", "C:/Program Files")) / "Git/bin/bash.exe",
+            Path(os.environ.get("LOCALAPPDATA", "")) / "Programs/Git/bin/bash.exe",
+        )
+        return next((str(candidate) for candidate in candidates if candidate.is_file()), None)
+    return shutil.which("bash")
 
 
 class SyntheticShellAssetRepo:
@@ -178,7 +190,7 @@ class SyntheticRunnerRepo:
         self.scripts.mkdir(parents=True)
         self.bin.mkdir()
         shutil.copy2(RUNNER_SOURCE, self.scripts / RUNNER_SOURCE.name)
-        self._write_stub(self.bin / "python", 'printf "python %s\\n" "$*" >> .aic-sentinel\nexit "${PYTHON_STUB_EXIT:-0}"')
+        self.add_python_stub("python")
         self._write_stub(self.bin / "dotnet", 'printf "dotnet %s\\n" "$*" >> .aic-sentinel\nexit "${DOTNET_STUB_EXIT:-0}"')
         self._write_child("check-coding-standards.sh", "CODING_STUB_EXIT")
         self._write_child("check-spec-compliance.sh", "SPEC_STUB_EXIT")
@@ -189,20 +201,37 @@ class SyntheticRunnerRepo:
     def remove_child(self, name: str) -> None:
         (self.scripts / name).unlink()
 
+    def add_python_stub(self, name: str) -> None:
+        self._write_stub(
+            self.bin / name,
+            f'printf "{name} %s\\n" "$*" >> .aic-sentinel\nexit "${{PYTHON_STUB_EXIT:-0}}"',
+        )
+
+    def enable_source_release_context(self) -> None:
+        (self.root / ".dev/releases").mkdir(parents=True)
+        (self.root / ".ai/distribution").mkdir(parents=True)
+        (self.scripts / "ai_context_package.py").write_text(
+            "# source-only package builder marker\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+
+    def enable_source_governance_context(self) -> None:
+        workflow = self.root / ".github/workflows/governance.yml"
+        registry = self.root / ".ai/distribution/governance-checks.yaml"
+        validator = self.scripts / "validate-source-governance.py"
+        workflow.parent.mkdir(parents=True)
+        registry.parent.mkdir(parents=True, exist_ok=True)
+        workflow.write_text("# source-only governance workflow marker\n", encoding="utf-8")
+        registry.write_text("# source-only governance registry marker\n", encoding="utf-8")
+        validator.write_text("# source-only governance validator marker\n", encoding="utf-8")
+
     def execute(
         self,
         *arguments: str,
         environment: dict[str, str] | None = None,
     ) -> subprocess.CompletedProcess[str]:
-        bash = None
-        if os.name == "nt":
-            candidates = (
-                Path(os.environ.get("ProgramFiles", "C:/Program Files")) / "Git/bin/bash.exe",
-                Path(os.environ.get("LOCALAPPDATA", "")) / "Programs/Git/bin/bash.exe",
-            )
-            bash = next((str(candidate) for candidate in candidates if candidate.is_file()), None)
-        else:
-            bash = shutil.which("bash")
+        bash = bash_executable()
         if not bash:
             raise unittest.SkipTest("Bash is required for check-all.sh fixture tests")
         merged_environment = dict(os.environ)
@@ -211,6 +240,7 @@ class SyntheticRunnerRepo:
         merged_environment.pop("TASK_NAME", None)
         merged_environment.pop("COMMIT_RANGE", None)
         merged_environment.pop("WORKFLOW_ID", None)
+        merged_environment.pop("AI_CONTEXT_PYTHON", None)
         if environment:
             merged_environment.update(environment)
         return subprocess.run(
@@ -319,15 +349,27 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
     def test_gwt_006_given_no_spec_inputs_when_quick_runs_then_spec_is_not_applicable(self) -> None:
         fixture = SyntheticRunnerRepo()
         try:
-            # Given both conditional spec inputs are absent.
+            # Given both conditional spec inputs and source release context are absent.
             # When quick mode reaches spec compliance.
             result = fixture.execute("--quick")
 
-            # Then spec and optional commit-range validation record N/A without failing.
+            # Then target-inapplicable checks and optional inputs record N/A without failing.
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("NOT APPLICABLE", result.stdout)
-            self.assertRegex(result.stdout, r"Not Applicable: .*2")
+            self.assertIn("source release context not packaged", result.stdout)
+            self.assertIn("source package builder not packaged", result.stdout)
+            self.assertIn("source governance registry not packaged", result.stdout)
+            self.assertIn("source CI workflow not packaged", result.stdout)
+            self.assertRegex(result.stdout, r"Not Applicable: .*6")
             self.assertRegex(result.stdout, r"Required Failed: .*0")
+            self.assertFalse(
+                any(
+                    "test_ai_context_version_governance.py" in line
+                    or "test_ai_context_packaging.py" in line
+                    or "validate-source-governance.py" in line
+                    or "test_governance_workflow_contract.py" in line
+                    for line in fixture.sentinel()
+                )
+            )
         finally:
             fixture.close()
 
@@ -349,6 +391,28 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
         finally:
             fixture.close()
 
+    def test_gwt_007a_given_source_governance_paths_without_release_context_then_checks_are_not_applicable(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            # Given a downstream happens to retain the two source governance paths.
+            fixture.enable_source_governance_context()
+
+            # When the critical gate runs without source release/build identity.
+            result = fixture.execute("--critical")
+
+            # Then source-pinned Git/tag validation remains not applicable.
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertIn("source governance registry not packaged", result.stdout)
+            self.assertFalse(
+                any(
+                    "validate-source-governance.py" in line
+                    or "test_governance_workflow_contract.py" in line
+                    for line in fixture.sentinel()
+                )
+            )
+        finally:
+            fixture.close()
+
     def test_gwt_008_given_complete_spec_inputs_when_quick_runs_then_child_result_is_required(self) -> None:
         fixture = SyntheticRunnerRepo()
         try:
@@ -364,17 +428,48 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
         finally:
             fixture.close()
 
-    def test_gwt_009_given_deferred_check_when_quick_runs_then_only_deferred_count_increments(self) -> None:
+    def test_gwt_009_given_dependency_gate_when_quick_runs_then_it_is_required_not_deferred(self) -> None:
         fixture = SyntheticRunnerRepo()
         try:
-            # Given the dependency check has no implementation script.
-            # When quick mode reaches the declared deferred entry.
+            # Given the offline dependency validator and its fixtures are declared required.
+            # When quick mode reaches the dependency gate.
             result = fixture.execute("--quick")
 
-            # Then it is explicitly deferred and cannot fail the gate.
+            # Then both commands execute and no dependency deferral remains.
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("DEFERRED: Dependencies and Versions", result.stdout)
-            self.assertRegex(result.stdout, r"Deferred: .*1")
+            self.assertNotIn("DEFERRED: Dependencies and Versions", result.stdout)
+            self.assertIn("Offline Dependency And Version Consistency", result.stdout)
+            self.assertIn("Dependency And Version Consistency Fail-Closed Tests", result.stdout)
+            self.assertTrue(
+                any("validate-dependency-versions.py" in line for line in fixture.sentinel())
+            )
+            self.assertTrue(
+                any("test_dependency_version_consistency.py" in line for line in fixture.sentinel())
+            )
+            self.assertRegex(result.stdout, r"Deferred: .*0")
+            self.assertRegex(result.stdout, r"Required Failed: .*0")
+        finally:
+            fixture.close()
+
+    def test_gwt_009_language_gate_when_quick_runs_then_it_is_required(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            # Given the language and bilingual parity fixtures are a required gate.
+            # When quick mode reaches the AI context validators.
+            result = fixture.execute("--quick")
+
+            # Then the language suite executes and remains fail closed.
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertIn(
+                "AI Context Language And Bilingual Parity Fail-Closed Tests",
+                result.stdout,
+            )
+            self.assertTrue(
+                any(
+                    "test_ai_context_language_policy.py -v" in line
+                    for line in fixture.sentinel()
+                )
+            )
             self.assertRegex(result.stdout, r"Required Failed: .*0")
         finally:
             fixture.close()
@@ -423,6 +518,139 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             self.assertEqual([], fixture.sentinel())
         finally:
             fixture.close()
+
+    def test_gwt_012_given_source_release_context_when_critical_runs_then_source_tests_are_required(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            # Given the runner can prove it is executing in the source release repository.
+            fixture.enable_source_release_context()
+            fixture.enable_source_governance_context()
+
+            # When the critical gate executes.
+            result = fixture.execute("--critical")
+
+            # Then both source-only suites and the downstream-safe apply suite execute.
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            commands = fixture.sentinel()
+            self.assertTrue(
+                any("test_ai_context_version_governance.py -v" in line for line in commands)
+            )
+            self.assertTrue(any("test_ai_context_packaging.py -v" in line for line in commands))
+            self.assertTrue(
+                any("validate-source-governance.py" in line for line in commands)
+            )
+            self.assertTrue(
+                any("test_governance_workflow_contract.py -v" in line for line in commands)
+            )
+            self.assertTrue(
+                any("test_ai_context_package_apply.py -v" in line for line in commands)
+            )
+            self.assertNotIn("source release context not packaged", result.stdout)
+            self.assertNotIn("source governance registry not packaged", result.stdout)
+        finally:
+            fixture.close()
+
+    def test_gwt_013_given_explicit_python3_when_critical_runs_then_runner_uses_it(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            # Given the host selects a usable python3 executable explicitly.
+            fixture.add_python_stub("python3")
+
+            # When the critical gate executes with the supported override.
+            result = fixture.execute(
+                "--critical",
+                environment={"AI_CONTEXT_PYTHON": "python3"},
+            )
+
+            # Then required Python commands use that interpreter and the gate passes.
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertTrue(
+                any(line.startswith("python3 ") for line in fixture.sentinel())
+            )
+        finally:
+            fixture.close()
+
+    def test_gwt_014_given_explicit_python_missing_when_gate_starts_then_it_fails_closed(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            # Given an explicit interpreter selection cannot be resolved.
+            # When the critical gate starts.
+            result = fixture.execute(
+                "--critical",
+                environment={"AI_CONTEXT_PYTHON": "missing-aic-python"},
+            )
+
+            # Then the runner fails before launching any required check.
+            self.assertEqual(1, result.returncode)
+            self.assertIn("Python 3.11 or newer is required", result.stderr)
+            self.assertEqual([], fixture.sentinel())
+        finally:
+            fixture.close()
+
+    def test_gwt_015_given_parent_python_override_when_fixture_runs_then_path_stub_remains_authoritative(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            # Given the host exports a real interpreter for its outer gate.
+            with mock.patch.dict(
+                os.environ,
+                {"AI_CONTEXT_PYTHON": sys.executable},
+            ):
+                # When a synthetic fixture runs without its own explicit override.
+                result = fixture.execute("--quick")
+
+            # Then the fixture isolates the host override and retains its PATH stub.
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertTrue(
+                any(line.startswith("python ") for line in fixture.sentinel())
+            )
+        finally:
+            fixture.close()
+
+
+class AdvisoryRootResolutionGwtTests(unittest.TestCase):
+    def test_gwt_001_given_retained_script_when_run_from_ai_scripts_then_repo_src_is_scanned(self) -> None:
+        bash = bash_executable()
+        if not bash:
+            raise unittest.SkipTest("Bash is required for advisory path fixture tests")
+
+        with tempfile.TemporaryDirectory(prefix="aic005-test-root-") as temporary:
+            # Given the retained script is at .ai/scripts and a repository test exists.
+            root = Path(temporary)
+            scripts = root / ".ai/scripts"
+            target = root / "src/Example/Tests/SampleTest.cs"
+            scripts.mkdir(parents=True)
+            target.parent.mkdir(parents=True)
+            script = scripts / TEST_COMPLIANCE_SOURCE.name
+            shutil.copy2(TEST_COMPLIANCE_SOURCE, script)
+            script.chmod(0o755)
+            target.write_text(
+                "// Gherkin-style sample\npublic sealed class SampleTest { }\n",
+                encoding="utf-8",
+                newline="\n",
+            )
+            environment = dict(os.environ)
+            if os.name == "nt":
+                git_usr_bin = Path(bash).parent.parent / "usr/bin"
+                environment["PATH"] = (
+                    str(git_usr_bin) + os.pathsep + environment["PATH"]
+                )
+
+            # When the advisory helper resolves its repository root.
+            result = subprocess.run(
+                [bash, str(script)],
+                cwd=root,
+                env=environment,
+                check=False,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+
+            # Then it scans the repository src tree instead of the repository parent.
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertNotIn("No target files found", result.stdout)
+            self.assertIn("All checks passed", result.stdout)
 
 
 class ShellAssetValidationGwtTests(unittest.TestCase):
@@ -569,6 +797,35 @@ class ShellAssetValidationGwtTests(unittest.TestCase):
         finally:
             fixture.close()
 
+    def test_gwt_019_given_deprecated_helper_with_replacement_when_validated_then_passes(self) -> None:
+        fixture = SyntheticShellAssetRepo()
+        try:
+            # Given a deprecated-in-place helper with an explicit replacement.
+            script = fixture.add_shell("deprecated.sh")
+            fixture.write_manifest(retained=[script])
+            manifest_path = fixture.scripts / "shell-assets.yaml"
+            manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+            manifest["assets"][0].update(
+                {
+                    "role": "transitional-helper",
+                    "lifecycle": "deprecated",
+                    "authority": "advisory",
+                    "replacement": "Use the compiled validator.",
+                }
+            )
+            manifest_path.write_text(
+                yaml.safe_dump(manifest, sort_keys=False),
+                encoding="utf-8",
+                newline="\n",
+            )
+
+            # When lifecycle validation runs, then explicit deprecation is valid.
+            result = fixture.validate()
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertIn("'deprecated': 1", result.stdout)
+        finally:
+            fixture.close()
+
     def test_given_required_runner_child_omitted_when_validated_then_parity_fails(self) -> None:
         fixture = SyntheticShellAssetRepo()
         try:
@@ -610,6 +867,35 @@ class ShellAssetValidationGwtTests(unittest.TestCase):
             self.assertEqual(1, result.returncode)
             self.assertIn("check_all required-command coverage mismatch", result.stdout)
             self.assertIn("python second.py", result.stdout)
+        finally:
+            fixture.close()
+
+    def test_gwt_018_given_required_command_format_changes_when_validated_then_parity_fails(self) -> None:
+        fixture = SyntheticShellAssetRepo()
+        try:
+            # Given the manifest owns one command but the runner call no longer
+            # follows the retained literal multiline format.
+            runner = fixture.add_command_runner(["python first.py"])
+            fixture.write_manifest(
+                retained=[runner],
+                required_entrypoints=[runner],
+                check_all_required_commands=["python first.py"],
+            )
+            (fixture.root / runner).write_text(
+                "#!/bin/bash\n"
+                'run_command_check "python first.py" "Fixture" "required" "true" "true"\n',
+                encoding="utf-8",
+                newline="\n",
+            )
+
+            # When the shell registry validator compares the retained grammar.
+            result = fixture.validate()
+
+            # Then formatting drift fails closed rather than silently removing
+            # a required command from the governed set.
+            self.assertEqual(1, result.returncode)
+            self.assertIn("check_all required-command coverage mismatch", result.stdout)
+            self.assertIn("extra=['python first.py']", result.stdout)
         finally:
             fixture.close()
 

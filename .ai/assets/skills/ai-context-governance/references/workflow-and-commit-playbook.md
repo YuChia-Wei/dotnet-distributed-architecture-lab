@@ -34,12 +34,18 @@ If the base id already exists, append `-02`, `-03`, and so on. Do not infer sequ
 
 When the user requests merge or push before the AI-context workflow is complete:
 
+- follow `.dev/standards/WORKFLOW-HANDOFF-POLICY.md`;
 - commit a coherent validated checkpoint;
 - use `git merge --no-ff` when merge is requested;
 - keep the workflow and unfinished remediation tasks active;
 - record the checkpoint type, commit, remote/target, last completed work, and exact next action;
 - resume a push-only handoff from the pushed branch;
 - after a checkpoint merge, resume from the updated target on a new dedicated continuation branch instead of editing the target branch.
+- before a model, runtime, host, machine, or fresh-session transfer, create the
+  machine-readable receiving checkpoint and verify it with
+  `validate-workflow-handoff.py`;
+- preserve provider-native Git attribution and keep unavailable provider
+  fixtures explicitly blocked rather than inventing an identity.
 
 ## Commit Policy
 

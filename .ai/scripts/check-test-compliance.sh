@@ -3,12 +3,12 @@
 # ====================================================================
 # Test Compliance Check
 # 
-# Generated from: test-standards.md
-# Purpose: Check compliance based on markdown documentation
-# 
-# THIS FILE IS AUTO-GENERATED FROM MARKDOWN - DO NOT EDIT MANUALLY
-# Transitional advisory check. The markdown-to-shell generator was retired;
-# do not present this grep-based script as canonical C# semantic validation.
+# Historical input: test-standards.md
+# Purpose: Transitional advisory check based on markdown documentation
+#
+# Manually maintained legacy asset. The markdown-to-shell generator was retired;
+# do not present this grep-based script as generated, reproducible, or canonical
+# C# semantic validation.
 # ====================================================================
 
 set -e
@@ -22,7 +22,7 @@ NC='[0m' # No Color
 
 # Directories
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASE_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+BASE_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SRC_DIR="$BASE_DIR/src"
 
 TARGET_FILES=$(find "$SRC_DIR" -type f \( -path "*/Tests/*.cs" -o -name "*Test*.cs" \) -not -path "*/bin/*" -not -path "*/obj/*")

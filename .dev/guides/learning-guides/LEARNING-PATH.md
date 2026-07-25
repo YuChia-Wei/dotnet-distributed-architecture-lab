@@ -115,18 +115,41 @@ public void When(IDomainEvent @event)
 public readonly record struct ProductId(string Value);
 ```
 
-### Use case handler shape (Wolverine)
-```csharp
-public static class CreateProduct
-{
-    public record Command(string Name);
+### Use Case and Optional Dispatch Handler
 
-    public static CqrsOutput Handle(Command command, IProductRepository repo)
+Read
+[`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
+before applying a runtime-specific Handler convention. The Use Case owns
+application orchestration; a Handler exists only for a real dispatch/message
+entry and maps one delivery input to one Use Case invocation.
+
+```csharp
+public sealed class CreateProductUseCase : ICreateProductUseCase
+{
+    private readonly IAggregateRepository<Product, ProductId> _repository;
+
+    public async Task<CqrsOutput> ExecuteAsync(
+        CreateProductInput input,
+        CancellationToken cancellationToken)
     {
-        // validate with Contract.require/ensure
-        // create aggregate and save
-        return CqrsOutput.Ok();
+        var product = Product.Create(input.Name);
+        await _repository.SaveAsync(product, cancellationToken);
+        return CqrsOutput.Success();
     }
+}
+
+public sealed record CreateProductCommand(string Name);
+
+public sealed class CreateProductCommandHandler
+{
+    private readonly ICreateProductUseCase _useCase;
+
+    public Task<CqrsOutput> Handle(
+        CreateProductCommand command,
+        CancellationToken cancellationToken)
+        => _useCase.ExecuteAsync(
+            new CreateProductInput(command.Name),
+            cancellationToken);
 }
 ```
 

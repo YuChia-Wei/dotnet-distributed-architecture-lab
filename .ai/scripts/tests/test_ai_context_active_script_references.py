@@ -29,6 +29,7 @@ class ActiveScriptReferenceValidationTests(unittest.TestCase):
             ".ai/assets/skills/sample-validator/references/validation-command-templates.md"
         ),
         existing_scripts: tuple[str, ...] = (),
+        source_release_context: bool = False,
     ) -> list[str]:
         with tempfile.TemporaryDirectory(prefix="ai-context-script-reference-") as temporary:
             root = Path(temporary)
@@ -40,6 +41,13 @@ class ActiveScriptReferenceValidationTests(unittest.TestCase):
                 (root / script).parent.mkdir(parents=True, exist_ok=True)
                 (root / script).write_text("#!/usr/bin/env bash\n", encoding="utf-8")
                 files.append(script)
+            if source_release_context:
+                (root / ".dev/releases").mkdir(parents=True)
+                (root / ".ai/distribution").mkdir(parents=True)
+                builder = Path(".ai/scripts/ai_context_package.py")
+                (root / builder).parent.mkdir(parents=True, exist_ok=True)
+                (root / builder).write_text("# source builder\n", encoding="utf-8")
+                files.append(builder)
 
             errors: list[str] = []
             VALIDATOR.validate_active_script_references(files, errors, root=root)
@@ -66,6 +74,25 @@ class ActiveScriptReferenceValidationTests(unittest.TestCase):
         )
 
         self.assertEqual([], errors)
+
+    def test_gwt_004_given_packaged_source_only_reference_when_target_validates_then_it_is_not_applicable(self) -> None:
+        errors = self.validate(
+            "python .ai/scripts/tests/test_ai_context_packaging.py -v\n"
+            "python .ai/scripts/tests/test_ai_context_version_governance.py -v\n"
+        )
+
+        self.assertEqual([], errors)
+
+    def test_gwt_005_given_source_only_reference_missing_in_source_context_when_validated_then_fails(self) -> None:
+        errors = self.validate(
+            "python .ai/scripts/tests/test_ai_context_version_governance.py -v\n",
+            source_release_context=True,
+        )
+
+        self.assertTrue(any("active script reference does not exist" in error for error in errors))
+        self.assertTrue(
+            any(".ai/scripts/tests/test_ai_context_version_governance.py" in error for error in errors)
+        )
 
 
 if __name__ == "__main__":

@@ -40,6 +40,6 @@
     <PackageVersion Include="Reqnroll" Version="$(ReqnrollVersion)" />
     <!-- TODO: Add adapter packages (Reqnroll.Xunit) as needed. -->
 
-    <!-- TODO: Add ezDDD .NET packages and uContract once names are finalized. -->
+    <!-- Add only target-selected packages required by project-owned contracts. -->
   </ItemGroup>
 </Project>

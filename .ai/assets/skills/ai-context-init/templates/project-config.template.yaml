@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "ai-context-init",
+  "generationStatus": "template",
+  "repository": {
+    "name": null,
+    "mode": null,
+    "description": null
+  },
+  "languages": [],
+  "technologyProfiles": [],
+  "technologySelections": [],
+  "dotnet": {
+    "sdkVersion": null,
+    "targetFrameworks": [],
+    "solutions": [],
+    "projects": []
+  },
+  "sourceLayout": {
+    "sourceRoots": [],
+    "testRoots": [],
+    "executableProjects": [],
+    "libraryProjects": []
+  },
+  "runtimeHosts": [],
+  "architecture": {
+    "styles": [],
+    "boundedContexts": [],
+    "dependencyRules": [],
+    "capabilitySelections": []
+  },
+  "persistence": {
+    "providers": [],
+    "libraries": [],
+    "connectionStringSources": []
+  },
+  "messaging": {
+    "brokers": [],
+    "libraries": [],
+    "topologyDocuments": []
+  },
+  "frontend": {
+    "detected": false,
+    "frameworks": [],
+    "sourceRoots": []
+  },
+  "deployment": {
+    "containerFiles": [],
+    "orchestrationFiles": [],
+    "environments": []
+  },
+  "evidence": {
+    "files": [],
+    "confirmedByUser": []
+  },
+  "unresolved": {
+    "facts": [],
+    "decisions": []
+  }
+}

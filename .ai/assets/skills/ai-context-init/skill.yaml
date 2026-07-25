@@ -1,0 +1,77 @@
+asset_id: "ai-context-init"
+schema_version: "1.0"
+asset_type: "skill-spec"
+title: "AI Context Init"
+purpose: "Initialize a target repository after this AI context framework has been copied in by scanning repository facts and refreshing repo-specific architecture sections in `.dev/`, `.ai/`, and `AGENTS.md` while keeping framework-level collaboration rules stable."
+portability: "portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+triggers:
+  - "repo init"
+  - "initialize copied AI context"
+  - "repo sync"
+  - "structure sync"
+  - "portable install"
+  - "template copy"
+inputs:
+  - "target repository file tree, including empty or near-empty repositories"
+  - "solution files and csproj files"
+  - "copied template docs that may be stale"
+outputs:
+  - "repo init verdict"
+  - "repo inventory"
+  - "evidence-based `.dev/project-config.yaml` or an explicit not-initialized decision"
+  - "atomic `.dev/ai-context/provenance.yaml` and `customizations.yaml` initialization when credible source evidence is available, or an unresolved no-write result"
+  - "complexity verdict"
+  - "safe direct update targets"
+  - "source packet for escalation"
+  - "updated architecture-facing docs"
+  - "derived `AGENTS.zh-TW.md` when translation is requested and a low-cost translator runtime is available"
+constraints:
+  - "Keep framework-level collaboration rules unless the new repo clearly invalidates them"
+  - "Do not bulk rewrite specs or operations docs unless explicitly requested"
+  - "Prefer low-cost inventory first and escalate only when the checklist requires it"
+  - "Treat optional indexes, code graphs, MCP servers, IDE indexes, and semantic search only as discovery accelerators; build target-repository facts from repository-native evidence under AICTX-EVIDENCE-001."
+  - "Do not guess the copied framework version or commit; create target provenance only from credible release or import evidence."
+  - "Never retain dual provenance authorities; follow the shared semantic customization lifecycle and write neither schema-2 authority when source evidence is incomplete."
+  - "Finalize target-specific English `AGENTS.md` before delegating `AGENTS.zh-TW.md` to the low-cost context-translator role; do not use a pretranslated root template."
+workflow:
+  - step: 1
+    description: "Identify target repository mode: empty repo, existing repo, or copied-template repo"
+  - step: 2
+    description: "Run a low-cost inventory pass and extract only file-backed facts"
+  - step: 3
+    description: "Evaluate P0 and P1 triggers to decide whether escalation is needed"
+  - step: 4
+    description: "Generate or update `.dev/project-config.yaml`; atomically initialize provenance and the customization ledger only from credible source facts; update architecture-facing docs from confirmed facts"
+  - step: 5
+    description: "If needed, pass a compact source packet to a stronger model or sub-agent"
+  - step: 6
+    description: "After English root context is final, optionally delegate the derived Traditional Chinese translation to the low-cost context-translator and validate parity"
+references:
+  - ".ai/assets/skills/ai-context-init/references/scan-playbook.md"
+  - ".ai/assets/skills/ai-context-init/references/migration-boundaries.md"
+  - ".ai/assets/skills/ai-context-init/references/escalation-checklist.md"
+  - ".ai/assets/skills/ai-context-init/references/delegation-rules.md"
+  - ".ai/assets/skills/ai-context-init/references/document-targets.md"
+  - ".ai/assets/skills/ai-context-init/references/output-contract.md"
+  - ".ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md"
+  - ".ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml"
+  - ".ai/assets/skills/ai-context-init/templates/project-config.template.yaml"
+  - ".ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml"
+  - ".ai/assets/skills/ai-context-init/templates/public-template-manifest.yaml"
+  - ".ai/assets/sub-agent-role-prompts/context-translator/sub-agent.yaml"
+  - ".ai/assets/skills/ai-context-upgrader/templates/provenance-template.yaml"
+  - ".ai/assets/skills/ai-context-upgrader/templates/customizations-template.yaml"
+examples:
+  - ".dev/guides/ai-collaboration-guides/AI-CONTEXT-INIT-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/AI-CONTEXT-INIT-SKILL-GUIDE.md"
+wrapper_targets:
+  - "claude"
+  - "codex"
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/ai-context-init/"
+  codex:
+    wrapper_path: ".agents/skills/ai-context-init/"
+status: "active"

@@ -4,6 +4,11 @@
 
 This document summarizes the best practices to follow in the .NET DDD + WolverineFx + EF Core technology stack.
 
+When this learning-oriented summary conflicts with
+[`coding-standards/`](coding-standards/) or
+[`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](USECASE-COMMAND-HANDLER-RELATIONSHIP.MD),
+those canonical standards take precedence.
+
 ## Domain Modeling Best Practices
 
 ### 1. ✅ Small, Focused Aggregates
@@ -62,18 +67,33 @@ public static class PlanEvents
 
 ## Application Layer Best Practices
 
-### 4. ✅ Thin Use Case Layer
+### 4. ✅ Use Case Owns Application Orchestration
 ```csharp
-public sealed class CreatePlanHandler
+public sealed class CreatePlanUseCase : ICreatePlanUseCase
 {
     private readonly IAggregateRepository<Plan, PlanId> _repository;
 
-    public async Task<CqrsOutput<PlanDto>> Handle(CreatePlanInput input)
+    public async Task<CqrsOutput<PlanDto>> ExecuteAsync(
+        CreatePlanInput input,
+        CancellationToken cancellationToken)
     {
         var plan = new Plan(PlanId.New(), input.Name, input.UserId);
-        await _repository.Save(plan);
+        await _repository.SaveAsync(plan, cancellationToken);
         return CqrsOutput.Of(PlanMapper.ToDto(plan));
     }
+}
+
+// Optional: create this adapter only when a real dispatch entry exists.
+public sealed class CreatePlanCommandHandler
+{
+    private readonly ICreatePlanUseCase _useCase;
+
+    public Task<CqrsOutput<PlanDto>> Handle(
+        CreatePlanCommand command,
+        CancellationToken cancellationToken)
+        => _useCase.ExecuteAsync(
+            new CreatePlanInput(command.Name, command.UserId),
+            cancellationToken);
 }
 ```
 

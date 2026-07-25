@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Example.Shared.Outbox;
 
-// TODO: Replace these placeholders with ezDDD .NET ports.
+// Framework-neutral placeholders; replace them with target-owned contracts.
 public interface IOutboxData<TId>
 {
     TId Id { get; set; }

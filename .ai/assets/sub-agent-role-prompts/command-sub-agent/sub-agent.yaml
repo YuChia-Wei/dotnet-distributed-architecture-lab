@@ -1,11 +1,12 @@
 asset_id: "command-sub-agent"
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Command Sub-Agent"
 purpose: "Define the delegated worker-role prompt for implementing a command use case in this repository's .NET stack."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
+adapter_metadata: {}
 source_of_truth: "canonical"
 role_kind: "use-case-sub-agent"
 triggers:

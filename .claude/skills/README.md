@@ -21,17 +21,22 @@ This directory contains Claude-compatible skill wrappers.
 
 - `ai-context-governance`
 - `ai-context-auditor`
+- `ai-context-init`
+- `ai-context-upgrader`
 - `bdd-gwt-test-designer`
 - `code-reviewer`
-- `dev-workflow`
 - `ddd-ca-hex-architect`
 - `local-change-implementer`
 - `problem-frame-author`
-- `repo-structure-sync`
 - `requirement-author`
 - `slice-implementer`
+- `software-development-orchestrator`
 - `spec-author`
 - `spec-compliance-validator`
+
+Deprecated compatibility wrappers remain available for `repo-structure-sync`
+and `dev-workflow`. Route new work to their active replacements and preserve
+historical identifiers.
 
 ## Wrapper Rules
 
@@ -39,4 +44,3 @@ This directory contains Claude-compatible skill wrappers.
 - Add or update the canonical spec before adding or updating a wrapper.
 - If the canonical spec and wrapper conflict, follow `.ai/assets/skills/`.
 - Each wrapper `SKILL.md` should only keep canonical spec links, human guide links, reference links, and runtime-specific metadata.
-

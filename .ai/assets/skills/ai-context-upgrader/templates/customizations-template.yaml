@@ -1,0 +1,47 @@
+template_metadata:
+  template_id: "ai-context-customizations"
+  template_version: "1.0.0"
+  created_at: "2026-07-24T00:50:47+08:00"
+  updated_at: "2026-07-24T00:50:47+08:00"
+
+schema_version: "1.0"
+customizations: []
+
+# Entry shape:
+# - id: "CUST-<stable-target-id>"
+#   subject:
+#     kind: "capability | rule | contract"
+#     id: "<stable-framework-or-target-identity>"
+#   relationship: "extends | replaces | deviates | target-only"
+#   reason: "<why-target-behavior-differs-from-or-extends-framework>"
+#   paths: ["<repository-relative-path>"]
+#   base_framework:
+#     version: "v0.0.0"
+#     commit: "<40-character-lowercase-git-sha>"
+#     evidence: ["<repository-relative-reference>"]
+#   dependencies:
+#     customization_ids: []
+#     subject_refs: []
+#   owner_reconciliation:
+#     status: "approved | pending | rejected"
+#     owner: "<team-or-role>"
+#     decided_at: "<ISO-8601-with-offset-or-null>"
+#     evidence: "<repository-relative-reference-or-empty>"
+#   decision_evidence:
+#     requirements: []
+#     adrs: []
+#     workflows: ["<repository-relative-workflow-reference>"]
+#   active_context_audit:
+#     assessment_id: "ASM-YYYYMMDD-NNN | null"
+#     status: "verified | finding | not-run"
+#     evidence: "<repository-relative-reference-or-empty>"
+#   incoming:
+#     version: "v0.0.0"
+#     status: "absent | partial | equivalent-candidate | conflicting"
+#     evidence: "<comparison-artifact>"
+#   disposition: "retain | merge | supersede | retire | unresolved"
+#   post_upgrade_audit:
+#     assessment_id: "ASM-YYYYMMDD-NNN | null"
+#     status: "verified | finding | not-run"
+#     evidence: "<repository-relative-reference-or-empty>"
+#   validation: ["<command-or-artifact>"]

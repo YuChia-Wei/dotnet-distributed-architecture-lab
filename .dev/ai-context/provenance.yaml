@@ -1,0 +1,44 @@
+template_metadata:
+  template_id: "ai-context-provenance"
+  template_version: "2.0.0"
+  created_at: "2026-07-24T00:50:47+08:00"
+  updated_at: "2026-07-25T08:07:46+08:00"
+
+schema_version: "2.0"
+source:
+  repository: "https://github.com/YuChia-Wei/ai-collaboration-prompts-dotnet-backend.git"
+  release_id: "REL-v0.6.0"
+  version: "v0.6.0"
+  tag: "v0.6.0"
+  commit: "8b98b5f917513f2d143f42a322050a1162bb63f9"
+installation:
+  initialized_by: "ai-context-upgrader"
+  imported_at: "2026-07-13T20:42:19+08:00"
+  last_upgraded_at: "2026-07-25T08:07:46+08:00"
+selection:
+  release_model: "single-versioned-componentized-release"
+  mandatory_components:
+    - "software-development-core"
+    - "ai-context-lifecycle-core"
+  profiles:
+    - "dotnet-backend"
+  providers:
+    repo-backlog:
+      enabled: true
+      preservation: "preserve-existing-if-recorded"
+customizations:
+  ledger: ".dev/ai-context/customizations.yaml"
+  schema_version: "1.0"
+previous_source:
+  release_id: "REL-v0.5.0"
+  version: "v0.5.0"
+  tag: "v0.5.0"
+  commit: "1477181f0b43fa7ee82fcd482141758ac9e22eb6"
+reconciliation:
+  unresolved: []
+last_migration:
+  status: "completed"
+  from_version: "v0.5.0"
+  to_version: "v0.6.0"
+  completed_at: "2026-07-25T08:07:46+08:00"
+  evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/06-v0.6.0-remediation-report.md"

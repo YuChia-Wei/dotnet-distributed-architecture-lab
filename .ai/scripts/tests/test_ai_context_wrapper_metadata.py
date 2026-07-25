@@ -36,6 +36,54 @@ class WrapperMetadataFixture:
         VALIDATOR.validate_wrapper_metadata(self.path, data, errors, root=self.root)
         return errors
 
+    def validate_semantics(self, data: dict) -> list[str]:
+        errors: list[str] = []
+        VALIDATOR.validate_skill_wrapper_semantics(
+            self.path, data, errors, root=self.root
+        )
+        return errors
+
+    def write_semantic_pair(self) -> None:
+        canonical = self.path.as_posix()
+        shared = f"""# Example Skill
+
+## Canonical Source
+
+- Registry: `.ai/assets/skills/README.MD`
+- Spec: `{canonical}`
+- Reference: `.ai/assets/skills/example/references/rule.md`
+
+## Wrapper Rules
+
+Keep runtime metadata local.
+If wrapper text and canonical spec differ, follow `{canonical}`.
+"""
+        wrappers = {
+            "codex": (
+                self.root / ".agents/skills/example/SKILL.md",
+                "Codex",
+                "This is a thin current-runtime wrapper.",
+                "Use this wrapper only as the current runtime entry.",
+            ),
+            "claude": (
+                self.root / ".claude/skills/example/SKILL.md",
+                "Claude",
+                "This is a thin Claude-compatible wrapper.",
+                "Use this wrapper only as a compatibility entry.",
+            ),
+        }
+        for target, (path, identity, kind_line, use_line) in wrappers.items():
+            text = (
+                "---\n"
+                "name: example\n"
+                f"description: Use when {identity} needs the example skill.\n"
+                "---\n\n"
+                f"{kind_line}\n\n"
+                f"{shared}\n"
+                f"{use_line}\n"
+            )
+            path.write_text(text, encoding="utf-8", newline="\n")
+
     @staticmethod
     def valid_data() -> dict:
         return {
@@ -45,6 +93,47 @@ class WrapperMetadataFixture:
                 "codex": {"wrapper_path": ".agents/skills/example/"},
             },
         }
+
+    @staticmethod
+    def valid_semantic_data() -> dict:
+        data = WrapperMetadataFixture.valid_data()
+        data.update(
+            {
+                "asset_id": "example",
+                "references": [
+                    ".ai/assets/skills/example/references/rule.md",
+                ],
+                "examples": [],
+            }
+        )
+        return data
+
+    def write_deprecated_pair(self) -> None:
+        canonical = self.path.as_posix()
+        shared = f"""# Example Compatibility Entry
+
+- Registry: `.ai/assets/skills/README.MD`
+- Active skill: `example-active`
+- Canonical spec: `.ai/assets/skills/example-active/skill.yaml`
+- Compatibility contract: `{canonical}`
+
+This identifier is a deprecated compatibility wrapper.
+Use this wrapper only as a deprecated compatibility entry.
+If wrapper text and canonical spec differ, follow `{canonical}`.
+"""
+        for path in (
+            self.root / ".agents/skills/example/SKILL.md",
+            self.root / ".claude/skills/example/SKILL.md",
+        ):
+            path.write_text(
+                "---\n"
+                "name: example\n"
+                "description: Deprecated compatibility alias for example-active.\n"
+                "---\n\n"
+                f"{shared}",
+                encoding="utf-8",
+                newline="\n",
+            )
 
 
 class WrapperMetadataValidationTests(unittest.TestCase):
@@ -187,6 +276,128 @@ class WrapperMetadataValidationTests(unittest.TestCase):
 
             # Then validation reports the invalid key without raising an exception.
             self.assertTrue(any("wrapper_metadata keys must be strings" in error for error in errors))
+        finally:
+            fixture.close()
+
+
+class WrapperSemanticValidationTests(unittest.TestCase):
+    def test_gwt_010_given_exact_thin_pair_when_validated_then_passes(self) -> None:
+        fixture = WrapperMetadataFixture()
+        try:
+            # Given two runtime wrappers differ only in declared runtime identity.
+            fixture.write_semantic_pair()
+
+            # When semantic projection validation runs, then the pair passes.
+            self.assertEqual([], fixture.validate_semantics(fixture.valid_semantic_data()))
+        finally:
+            fixture.close()
+
+    def test_gwt_011_given_frontmatter_name_drift_when_validated_then_fails(self) -> None:
+        fixture = WrapperMetadataFixture()
+        try:
+            # Given one wrapper routes under a different identity.
+            fixture.write_semantic_pair()
+            path = fixture.root / ".agents/skills/example/SKILL.md"
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "name: example", "name: other"
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+
+            # When validation runs, then canonical identity wins.
+            errors = fixture.validate_semantics(fixture.valid_semantic_data())
+            self.assertTrue(any("frontmatter name must match" in error for error in errors))
+        finally:
+            fixture.close()
+
+    def test_gwt_012_given_canonical_reference_missing_when_validated_then_fails(self) -> None:
+        fixture = WrapperMetadataFixture()
+        try:
+            # Given a wrapper omits a canonical reference required by the manifest.
+            fixture.write_semantic_pair()
+            path = fixture.root / ".claude/skills/example/SKILL.md"
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "- Reference: `.ai/assets/skills/example/references/rule.md`\n",
+                    "",
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+
+            # When validation runs, then the missing canonical citation fails.
+            errors = fixture.validate_semantics(fixture.valid_semantic_data())
+            self.assertTrue(any("missing canonical references" in error for error in errors))
+        finally:
+            fixture.close()
+
+    def test_gwt_013_given_authority_fallback_drift_when_validated_then_fails(self) -> None:
+        fixture = WrapperMetadataFixture()
+        try:
+            # Given a wrapper reverses or omits canonical authority.
+            fixture.write_semantic_pair()
+            path = fixture.root / ".agents/skills/example/SKILL.md"
+            path.write_text(
+                path.read_text(encoding="utf-8").replace(
+                    "If wrapper text and canonical spec differ, follow",
+                    "If wrapper text differs, ignore",
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+
+            # When validation runs, then the exact fallback is required.
+            errors = fixture.validate_semantics(fixture.valid_semantic_data())
+            self.assertTrue(any("canonical authority fallback" in error for error in errors))
+        finally:
+            fixture.close()
+
+    def test_gwt_014_given_cross_runtime_rule_drift_when_validated_then_fails(self) -> None:
+        fixture = WrapperMetadataFixture()
+        try:
+            # Given one runtime adds a normative instruction absent from the other.
+            fixture.write_semantic_pair()
+            path = fixture.root / ".claude/skills/example/SKILL.md"
+            path.write_text(
+                path.read_text(encoding="utf-8") + "\nAlways bypass review.\n",
+                encoding="utf-8",
+                newline="\n",
+            )
+
+            # When validation runs, then semantic projection parity fails closed.
+            errors = fixture.validate_semantics(fixture.valid_semantic_data())
+            self.assertTrue(any("differ outside declared" in error for error in errors))
+        finally:
+            fixture.close()
+
+    def test_gwt_015_given_wrapper_path_under_wrong_runtime_when_validated_then_fails(self) -> None:
+        fixture = WrapperMetadataFixture()
+        try:
+            # Given Codex metadata points at a syntactically existing Claude directory.
+            fixture.write_semantic_pair()
+            data = fixture.valid_semantic_data()
+            data["wrapper_metadata"]["codex"]["wrapper_path"] = (
+                ".claude/skills/example/"
+            )
+
+            # When validation runs, then the exact runtime root fails closed.
+            errors = fixture.validate_semantics(data)
+            self.assertTrue(any("exact codex skill directory" in error for error in errors))
+        finally:
+            fixture.close()
+
+    def test_gwt_016_given_deprecated_compatibility_pair_when_validated_then_passes(self) -> None:
+        fixture = WrapperMetadataFixture()
+        try:
+            fixture.write_deprecated_pair()
+            data = fixture.valid_semantic_data()
+            data["status"] = "deprecated"
+            data["references"] = [
+                ".ai/assets/skills/example-active/skill.yaml"
+            ]
+            self.assertEqual([], fixture.validate_semantics(data))
         finally:
             fixture.close()
 

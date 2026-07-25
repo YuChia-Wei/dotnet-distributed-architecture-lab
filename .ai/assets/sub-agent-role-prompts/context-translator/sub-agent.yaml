@@ -1,5 +1,5 @@
 asset_id: context-translator
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: sub-agent-role-prompt
 title: Context Translator
 purpose: Translate one finalized agent-facing Markdown document into Traditional Chinese (Taiwan) as a derived human-review artifact without changing normative meaning.
@@ -9,6 +9,16 @@ wrapper_targets:
   - codex
   - claude
   - copilot
+adapter_metadata:
+  codex:
+    adapter_path: .codex/agents/context-translator.toml
+    adapter_format: toml
+  claude:
+    adapter_path: .claude/agents/context-translator.md
+    adapter_format: markdown-yaml-frontmatter
+  copilot:
+    adapter_path: .github/agents/context-translator.agent.md
+    adapter_format: markdown-yaml-frontmatter
 source_of_truth: canonical
 role_kind: documentation-sub-agent
 triggers:

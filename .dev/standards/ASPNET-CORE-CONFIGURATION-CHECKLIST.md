@@ -9,7 +9,7 @@ This checklist records configuration mistakes commonly encountered in .NET proje
 ### ❌ Error: Using the Wrong Port
 ```json
 // Incorrect
-"MainDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
+"MainDb": "Host=${DB_HOST};Port=3306;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"
 
 // Correct
 "MainDb": "Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}"

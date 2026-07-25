@@ -13,6 +13,10 @@ workflow_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-int
 task_refs: [".dev/workflows/2026-07-13-critical-remediation-and-analyzer-integration/tasks/DEV-003.json"]
 handoff_condition: "Create a future business-priority workflow after Product event meaning, schema, and at least one consumer need are approved."
 resolution_ref: null
+release:
+  target: "unassigned"
+  completed_in: null
+  published_in: null
 evidence: ["src/Product/DomainCore/SaleProducts.Infrastructure/BuildingBlocks/IntegrationEventPublisher.cs:7", "src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs:107"]
 acceptance:
   - "Product integration-event ownership and schema are explicit."

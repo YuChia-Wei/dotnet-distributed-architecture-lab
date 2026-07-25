@@ -60,7 +60,7 @@ public sealed class AssignTagUseCase : IAssignTagUseCase
     }
 }
 
-// TODO: Replace with the Tag aggregate from the ezDDD .NET port.
+// Example placeholder; replace with the target repository's Tag aggregate.
 namespace Example.Tags.Domain
 {
     public sealed class Tag

@@ -60,6 +60,7 @@ canonical source：
 - `aggregate-sub-agent`
 - `usecase-test-sub-agent`
 - `code-review-sub-agent`
+- `context-translator`
 
 canonical source：
 
@@ -93,6 +94,8 @@ canonical source：
 
 - `ai-context-governance`
   - 整理 `.ai/`、`.dev/`、`.agents/`、`.claude/` 的 AI context 邊界、語言政策、skill routing、wrapper sync 與 context migration
+- `context-translator`
+  - 英文 canonical context 定稿後，執行有明確 source/output 的 bounded 繁中衍生翻譯；它是 delegated role，不是 top-level skill
 - 不要把純 AI 文件整理、prompt 邊界整理、README 語言策略、或 wrapper/index sync 交給 `bdd-gwt-test-designer`
 - `bdd-gwt-test-designer` 只在主要工作是測試意圖、Given-When-Then scenario、assertion plan 時使用
 

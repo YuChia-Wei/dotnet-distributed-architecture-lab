@@ -1,0 +1,189 @@
+template_metadata:
+  template_id: "ai-context-customizations"
+  template_version: "1.0.0"
+  created_at: "2026-07-24T00:50:47+08:00"
+  updated_at: "2026-07-25T08:31:36+08:00"
+
+schema_version: "1.0"
+customizations:
+  - id: "CUST-DOTNET-MQ-GOVERNANCE"
+    subject:
+      kind: "rule"
+      id: "downstream-ai-context-governance-projection"
+    relationship: "extends"
+    reason: "Retain target-specific governance, downstream package projection, workflow documentation, and repository boundary details while merging the v0.6.0 lifecycle and orchestration contracts."
+    paths:
+      - ".ai/INDEX.MD"
+      - ".ai/assets/skills/ai-context-auditor/references/audit-playbook.md"
+      - ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md"
+      - ".ai/assets/skills/ai-context-governance/references/context-boundary-playbook.md"
+      - ".ai/assets/skills/ai-context-governance/references/output-contract.md"
+      - ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-report-template.md"
+      - ".dev/guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md"
+      - ".dev/guides/ai-collaboration-guides/README.MD"
+      - ".dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md"
+      - ".dev/guides/ai-collaboration-guides/REQUIREMENT-DESIGNER-PROMPT-GUIDE.md"
+      - ".dev/guides/ai-collaboration-guides/SPEC-DESIGNER-PROMPT-GUIDE.md"
+      - ".dev/guides/learning-guides/NEW-PROJECT-GUIDE.md"
+      - ".dev/operations/README.MD"
+      - ".dev/standards/AI-CONTEXT-BOUNDARY.md"
+      - ".dev/standards/AI-CONTEXT-OWNERSHIP.yaml"
+      - ".dev/standards/README.md"
+      - ".dev/standards/coding-standards/README.md"
+    base_framework:
+      version: "v0.5.0"
+      commit: "1477181f0b43fa7ee82fcd482141758ac9e22eb6"
+      evidence:
+        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md"
+        - ".dev/assessments/ASM-20260718-001/report.md"
+    dependencies:
+      customization_ids: []
+      subject_refs:
+        - "rule:ai-context-boundary"
+        - "contract:downstream-package-projection"
+    owner_reconciliation:
+      status: "approved"
+      owner: "dotnet-mq-arch-lab maintainer"
+      decided_at: "2026-07-25T07:56:49+08:00"
+      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
+    decision_evidence:
+      requirements: []
+      adrs: []
+      workflows:
+        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
+    active_context_audit:
+      assessment_id: "ASM-20260718-001"
+      status: "verified"
+      evidence: ".dev/assessments/ASM-20260718-001/report.md"
+    incoming:
+      version: "v0.6.0"
+      status: "partial"
+      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/04-v0.6.0-package-plan.md"
+    disposition: "merge"
+    post_upgrade_audit:
+      assessment_id: "ASM-20260725-002"
+      status: "verified"
+      evidence: ".dev/assessments/ASM-20260725-002/report.md"
+    validation:
+      - "python .ai/scripts/validate-ai-context.py"
+      - "python .ai/scripts/validate-ai-context-target.py"
+      - "bash ./.ai/scripts/check-all.sh --quick"
+
+  - id: "CUST-DOTNET-MQ-VALIDATION"
+    subject:
+      kind: "contract"
+      id: "downstream-validation-runtime"
+    relationship: "deviates"
+    reason: "The historical downstream validation override is no longer required because the repository now standardizes on PowerShell 7 and the owner approved full adoption of the v0.6.0 validation behavior."
+    paths:
+      - ".ai/scripts/check-all.sh"
+      - ".ai/scripts/check-data-class-annotations.sh"
+      - ".ai/scripts/check-domain-events-compliance.sh"
+      - ".ai/scripts/check-dotnet-config.sh"
+      - ".ai/scripts/check-framework-api-compliance.sh"
+      - ".ai/scripts/check-mutation-coverage.sh"
+      - ".ai/scripts/check-prompt-portability.sh"
+      - ".ai/scripts/check-spec-compliance.sh"
+      - ".ai/scripts/check-test-compliance.sh"
+      - ".ai/scripts/check-test-di-compliance.sh"
+      - ".ai/scripts/code-review.sh"
+      - ".ai/scripts/shell-assets.yaml"
+      - ".ai/scripts/test-profile-startup.sh"
+      - ".ai/scripts/tests/test_ai_context_exact_case_paths.py"
+      - ".ai/scripts/validate-dual-profile-config.sh"
+    base_framework:
+      version: "v0.5.0"
+      commit: "1477181f0b43fa7ee82fcd482141758ac9e22eb6"
+      evidence:
+        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md"
+        - ".dev/assessments/ASM-20260718-001/report.md"
+    dependencies:
+      customization_ids: []
+      subject_refs:
+        - "contract:target-validation-gate"
+    owner_reconciliation:
+      status: "approved"
+      owner: "dotnet-mq-arch-lab maintainer"
+      decided_at: "2026-07-25T07:56:49+08:00"
+      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
+    decision_evidence:
+      requirements: []
+      adrs: []
+      workflows:
+        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
+    active_context_audit:
+      assessment_id: "ASM-20260718-001"
+      status: "verified"
+      evidence: ".dev/assessments/ASM-20260718-001/report.md"
+    incoming:
+      version: "v0.6.0"
+      status: "equivalent-candidate"
+      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/04-v0.6.0-package-plan.md"
+    disposition: "supersede"
+    post_upgrade_audit:
+      assessment_id: "ASM-20260725-002"
+      status: "verified"
+      evidence: ".dev/assessments/ASM-20260725-002/report.md"
+    validation:
+      - "python .ai/scripts/validate-shell-assets.py"
+      - "python -m unittest discover -s .ai/scripts/tests -p test_*.py"
+      - "bash ./.ai/scripts/check-all.sh --quick"
+
+  - id: "CUST-DOTNET-MQ-REPO-TRUTH"
+    subject:
+      kind: "contract"
+      id: "target-repository-truth-boundary"
+    relationship: "target-only"
+    reason: "Preserve initialized repository identity, catalogs, active workflows, backlog discovery, runtime entry contracts, SDK selection, and repository-specific configuration."
+    paths:
+      - ".dev/INDEX.md"
+      - ".dev/README.MD"
+      - ".dev/adr/INDEX.md"
+      - ".dev/backlog/INDEX.MD"
+      - ".dev/problem-frames/INDEX.md"
+      - ".dev/specs/INDEX.MD"
+      - ".dev/workflows/INDEX.MD"
+      - ".editorconfig"
+      - ".gitattributes"
+      - "AGENTS.md"
+      - "CLAUDE.md"
+      - "README.md"
+      - "global.json"
+    base_framework:
+      version: "v0.5.0"
+      commit: "1477181f0b43fa7ee82fcd482141758ac9e22eb6"
+      evidence:
+        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md"
+        - ".dev/assessments/ASM-20260718-001/report.md"
+    dependencies:
+      customization_ids: []
+      subject_refs:
+        - "contract:repository-identity"
+        - "contract:target-owned-truth"
+    owner_reconciliation:
+      status: "approved"
+      owner: "dotnet-mq-arch-lab maintainer"
+      decided_at: "2026-07-25T07:56:49+08:00"
+      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
+    decision_evidence:
+      requirements: []
+      adrs: []
+      workflows:
+        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
+    active_context_audit:
+      assessment_id: "ASM-20260718-001"
+      status: "verified"
+      evidence: ".dev/assessments/ASM-20260718-001/report.md"
+    incoming:
+      version: "v0.6.0"
+      status: "conflicting"
+      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/04-v0.6.0-package-plan.md"
+    disposition: "retain"
+    post_upgrade_audit:
+      assessment_id: "ASM-20260725-002"
+      status: "verified"
+      evidence: ".dev/assessments/ASM-20260725-002/report.md"
+    validation:
+      - "python .ai/scripts/validate-ai-context.py"
+      - "python .ai/scripts/validate-workflow-artifacts.py"
+      - "dotnet build MQArchLab.slnx --no-restore"

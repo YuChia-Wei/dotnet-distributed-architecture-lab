@@ -19,5 +19,8 @@ Start with `.ai/INDEX.MD` when you need a file or directory catalog. Use this RE
 - Canonical sub-agent role prompts belong under `.ai/assets/sub-agent-role-prompts/`.
 - Runtime wrappers belong under `.agents/skills/` and `.claude/skills/`.
 - Human-facing guides and workflow artifacts belong under `.dev/`.
+- Release-side deterministic evaluation fixtures and baselines belong under
+  `.ai/evaluation/`; they are source governance evidence, not downstream
+  product payload.
 
 Detailed file and directory descriptions belong in `.ai/INDEX.MD`.

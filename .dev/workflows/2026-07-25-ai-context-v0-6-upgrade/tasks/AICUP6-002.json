@@ -1,0 +1,34 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "AICUP6-002",
+  "workflow_id": "2026-07-25-ai-context-v0-6-upgrade",
+  "owner_skill": "ai-context-governance",
+  "status": "completed",
+  "created_at": "2026-07-25T07:05:01+08:00",
+  "updated_at": "2026-07-25T07:20:24+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "finding_ids": ["AICUP6-V050"],
+  "scope": {
+    "target": "Apply and validate the governed v0.5.0 intermediate release",
+    "files": [".ai/**", ".agents/**", ".claude/**", ".dev/**", ".github/**", "AGENTS.md", "AGENTS.zh-TW.md", "CLAUDE.md"],
+    "constraints": ["Preserve target-owned truth", "Commit a clean intermediate checkpoint before v0.6.0 planning"],
+    "non_goals": ["Apply v0.6.0", "Import source history"]
+  },
+  "execution": {
+    "steps": ["Apply safe operations", "Reconcile preserved paths", "Run required validation", "Update v0.5.0 provenance", "Commit checkpoint"],
+    "validation": ["Target required gate", "AI-context and workflow validators", "Clean worktree after commit"],
+    "last_completed_step": "Applied 67 automatic operations, reconciled 44 acknowledged paths, passed the 211-test framework suite, and advanced provenance to REL-v0.5.0.",
+    "next_action": "Commit the intermediate checkpoint and plan the v0.5.0-to-v0.6.0 component-aware migration."
+  },
+  "results": {
+    "summary": "The target now has a governed v0.5.0 intermediate checkpoint. Framework-owned validation surfaces were aligned while target standards, guides, backlog, and repository configuration remained authoritative.",
+    "files_changed": [".ai/**", ".agents/**", ".claude/**", ".dev/AI-CONTEXT-SOURCE.yaml", ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md"],
+    "tests_run": ["python -m unittest discover -s .ai/scripts/tests -p test_*.py: 211 passed, 1 skipped", "python .ai/scripts/validate-shell-assets.py: passed", "python .ai/scripts/validate-ai-context.py: intermediate-only findings retained", "python .ai/scripts/validate-workflow-artifacts.py: target backlog schema finding retained"],
+    "finding_status": "addressed",
+    "residual_risk": "The published v0.5.0 downstream profile and stricter validators expose known intermediate-only findings documented in report 03; final v0.6.0 validation remains required.",
+    "follow_up_needed": true
+  }
+}

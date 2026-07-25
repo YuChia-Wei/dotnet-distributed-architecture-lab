@@ -1,11 +1,12 @@
 asset_id: "mutation-testing-sub-agent"
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Mutation Testing Sub-Agent"
 purpose: "Define the delegated worker-role prompt for improving mutation coverage with Stryker.NET and contract-oriented testing."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
+adapter_metadata: {}
 source_of_truth: "canonical"
 role_kind: "testing-enhancement-sub-agent"
 triggers:

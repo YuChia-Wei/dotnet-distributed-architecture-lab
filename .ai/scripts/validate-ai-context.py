@@ -7,8 +7,9 @@ import posixpath
 import re
 import subprocess
 import sys
+import tomllib
 from collections import Counter
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import yaml
 
@@ -18,6 +19,25 @@ TABLE_PATH = re.compile(r"^\|\s*`([^`]+)`\s*\|")
 PATH_REFERENCE = re.compile(r"`([^`\n]+)`|\]\(([^)\s]+)\)")
 ACTIVE_SCRIPT_REFERENCE = re.compile(
     r"(?<![A-Za-z0-9_.-])(?:\./)?(?P<path>\.ai/scripts/[A-Za-z0-9._/-]+\.(?:py|sh))"
+)
+SOURCE_ONLY_SCRIPT_REFERENCES = frozenset(
+    {
+        Path(".ai/scripts/tests/test_ai_context_packaging.py"),
+        Path(".ai/scripts/tests/test_ai_context_release_state.py"),
+        Path(".ai/scripts/tests/test_ai_context_version_governance.py"),
+        Path(".ai/scripts/tests/test_ai_behavior_evaluation.py"),
+        Path(".ai/scripts/tests/test_ai_context_load_measurement.py"),
+        Path(".ai/scripts/tests/test_github_workflow_contract.py"),
+        Path(".ai/scripts/tests/test_governance_workflow_contract.py"),
+        Path(".ai/scripts/tests/test_prepare_ai_context_release.py"),
+        Path(".ai/scripts/tests/test_release_notes_renderer.py"),
+        Path(".ai/scripts/tests/test_repository_config_contract.py"),
+        Path(".ai/scripts/tests/test_skill_transition_contract.py"),
+        Path(".ai/scripts/validate-ai-context-versions.py"),
+        Path(".ai/scripts/validate-repository-config-contract.py"),
+        Path(".ai/scripts/validate-skill-transition.py"),
+        Path(".ai/scripts/validate-source-governance.py"),
+    }
 )
 ACTIVE_RUNTIME_ROOTS = (Path(".agents/skills"), Path(".claude/skills"))
 PLANNED_RUNTIME_ROOTS = (
@@ -29,6 +49,7 @@ LANGUAGE_SKIP_PARTS = SKIP_PARTS | {"examples", "example", "generated"}
 PRODUCT_ROOTS = {"src", "test", "tests"}
 LANGUAGE_EXTENSIONS = {".md", ".yaml", ".yml", ".json"}
 HAN = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]")
+NON_ASCII_AGENT_PUNCTUATION = re.compile(r"[：。]")
 LANGUAGE_ROOTS = (
     Path(".ai"),
     Path(".agents"),
@@ -54,21 +75,64 @@ LANGUAGE_ALLOWLIST: dict[Path, frozenset[str]] = {
 OWNERSHIP_REGISTRY = Path(".dev/standards/AI-CONTEXT-OWNERSHIP.yaml")
 RULE_STRENGTHS = {"invariant", "profile-default", "conditional", "example", "historical"}
 RULE_STATUSES = {"active", "deprecated", "historical"}
-ASSET_SCHEMA_VERSION = "1.0"
+ASSET_SCHEMA_VERSIONS = {
+    "skill.yaml": "1.0",
+    "sub-agent.yaml": "1.1",
+}
 KEBAB_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 ASSET_PORTABILITY = {"portable", "repo-portable", "wrapper-specific"}
 ASSET_AUDIENCES = {"agent-facing", "human-facing", "mixed"}
 ASSET_SOURCES = {"canonical", "wrapper", "generated"}
 ASSET_STATUSES = {"draft", "active", "deprecated", "historical"}
 WRAPPER_TARGETS = {"claude", "codex", "copilot"}
+SKILL_WRAPPER_CONTRACTS = {
+    "codex": {
+        "root": PurePosixPath(".agents/skills"),
+        "entry": "SKILL.md",
+        "identity": "Codex",
+        "kind_line": "This is a thin current-runtime wrapper.",
+        "use_line": "Use this wrapper only as the current runtime entry.",
+    },
+    "claude": {
+        "root": PurePosixPath(".claude/skills"),
+        "entry": "SKILL.md",
+        "identity": "Claude",
+        "kind_line": "This is a thin Claude-compatible wrapper.",
+        "use_line": "Use this wrapper only as a compatibility entry.",
+    },
+}
+DEPRECATED_WRAPPER_KIND_LINE = (
+    "This identifier is a deprecated compatibility wrapper."
+)
+DEPRECATED_WRAPPER_USE_LINE = (
+    "Use this wrapper only as a deprecated compatibility entry."
+)
+PACKAGE_PROFILE = Path(".ai/distribution/profiles/dotnet-backend.yaml")
+SUB_AGENT_ADAPTER_CONTRACTS = {
+    "codex": {
+        "root": PurePosixPath(".codex/agents"),
+        "format": "toml",
+        "suffixes": (".toml",),
+    },
+    "claude": {
+        "root": PurePosixPath(".claude/agents"),
+        "format": "markdown-yaml-frontmatter",
+        "suffixes": (".md",),
+    },
+    "copilot": {
+        "root": PurePosixPath(".github/agents"),
+        "format": "markdown-yaml-frontmatter",
+        "suffixes": (".md", ".agent.md"),
+    },
+}
 CAPABILITY_PROFILE = Path(
-    ".ai/assets/skills/dev-workflow/references/capability-profile.yaml"
+    ".ai/assets/skills/software-development-orchestrator/references/capability-profile.yaml"
 )
 PROJECT_CONFIG_TEMPLATE = Path(
-    ".ai/assets/skills/repo-structure-sync/templates/project-config.template.yaml"
+    ".ai/assets/skills/ai-context-init/templates/project-config.template.yaml"
 )
 TECHNOLOGY_SELECTION_SCHEMA = Path(
-    ".ai/assets/skills/repo-structure-sync/templates/technology-selection.schema.yaml"
+    ".ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml"
 )
 EXAMPLE_EVIDENCE_SCHEMA = Path(".dev/standards/examples/evidence-schema.yaml")
 EXAMPLE_EVIDENCE_MANIFEST = Path(".dev/standards/examples/evidence-manifest.yaml")
@@ -188,6 +252,11 @@ def validate_active_script_references(
     files: list[Path], errors: list[str], root: Path = ROOT
 ) -> None:
     """Reject active AI-context commands that point to missing local scripts."""
+    source_release_context = (
+        (root / ".dev/releases").is_dir()
+        and (root / ".ai/distribution").is_dir()
+        and (root / ".ai/scripts/ai_context_package.py").is_file()
+    )
     indexes = set(active_indexes(files))
     active_files = [
         path
@@ -202,6 +271,11 @@ def validate_active_script_references(
             for match in ACTIVE_SCRIPT_REFERENCE.finditer(line):
                 script_path = Path(match.group("path"))
                 if not (root / script_path).is_file():
+                    if (
+                        script_path in SOURCE_ONLY_SCRIPT_REFERENCES
+                        and not source_release_context
+                    ):
+                        continue
                     errors.append(
                         f"{source}:{line_number}: active script reference does not exist: "
                         f"{script_path.as_posix()}"
@@ -504,21 +578,32 @@ def is_language_surface(path: Path, indexes: set[Path]) -> bool:
     )
 
 
-def validate_language(path: Path, errors: list[str]) -> None:
-    """Reject Han prose except exact, path-scoped routing trigger fragments."""
+def validate_language(
+    path: Path, errors: list[str], *, root: Path = ROOT
+) -> None:
+    """Reject Han prose and selected non-ASCII punctuation outside exact exceptions."""
     allowed_lines = LANGUAGE_ALLOWLIST.get(path, frozenset())
-    text = (ROOT / path).read_text(encoding="utf-8")
+    text = (root / path).read_text(encoding="utf-8")
     for line_number, line in enumerate(text.splitlines(), 1):
-        if HAN.search(line) and line not in allowed_lines:
+        if line in allowed_lines:
+            continue
+        if HAN.search(line):
             errors.append(f"{path}:{line_number}: unexpected Han text in agent-facing context")
+        if NON_ASCII_AGENT_PUNCTUATION.search(line):
+            errors.append(
+                f"{path}:{line_number}: unexpected non-ASCII punctuation "
+                "in agent-facing context"
+            )
 
 
-def markdown_structure(path: Path) -> tuple[list[int], list[str]]:
+def markdown_structure(
+    path: Path, *, root: Path = ROOT
+) -> tuple[list[int], list[str]]:
     """Return heading levels and ordered path-like backtick values in table rows."""
     headings: list[int] = []
     table_paths: list[str] = []
     fenced = False
-    for line in (ROOT / path).read_text(encoding="utf-8").splitlines():
+    for line in (root / path).read_text(encoding="utf-8").splitlines():
         if line.lstrip().startswith("```"):
             fenced = not fenced
             continue
@@ -534,7 +619,56 @@ def markdown_structure(path: Path) -> tuple[list[int], list[str]]:
     return headings, table_paths
 
 
-def validate_bilingual_entries(errors: list[str]) -> None:
+def markdown_parity_structure(
+    path: Path,
+    entry_files: frozenset[str],
+    *,
+    root: Path = ROOT,
+) -> dict[str, object]:
+    """Return deterministic Markdown structure without claiming prose equivalence."""
+    links: list[str] = []
+    fences: list[str] = []
+    inline_code: list[str] = []
+    table_columns: list[int] = []
+    list_markers: list[tuple[int, str]] = []
+    fenced = False
+
+    def normalize(value: str) -> str:
+        return "<bilingual-entry-file>" if value in entry_files else value
+
+    for line in (root / path).read_text(encoding="utf-8").splitlines():
+        stripped = line.lstrip()
+        if stripped.startswith("```"):
+            fences.append(stripped)
+            fenced = not fenced
+            continue
+        if fenced:
+            continue
+        links.extend(
+            normalize(value)
+            for value in re.findall(r"\[[^\]]+\]\(([^)\s]+)\)", line)
+        )
+        inline_code.extend(
+            normalize(value) for value in re.findall(r"`([^`\n]+)`", line)
+        )
+        if stripped.startswith("|"):
+            table_columns.append(len(line.strip().split("|")[1:-1]))
+        list_match = re.match(r"^(\s*)([-+*]|\d+\.)\s+", line)
+        if list_match:
+            list_markers.append((len(list_match.group(1)), list_match.group(2)))
+
+    return {
+        "links": links,
+        "fences": fences,
+        "inline_code": Counter(inline_code),
+        "table_columns": table_columns,
+        "list_markers": list_markers,
+    }
+
+
+def validate_bilingual_entries(
+    errors: list[str], *, root: Path = ROOT
+) -> None:
     """Validate entry-file ownership and reciprocal links, not semantic parity."""
     contracts = (
         (
@@ -563,12 +697,12 @@ def validate_bilingual_entries(errors: list[str]) -> None:
         translation_marker,
     ) in contracts:
         for path in (canonical, translation):
-            if not (ROOT / path).is_file():
+            if not (root / path).is_file():
                 errors.append(f"missing bilingual entry file: {path}")
-        if not (ROOT / canonical).is_file() or not (ROOT / translation).is_file():
+        if not (root / canonical).is_file() or not (root / translation).is_file():
             continue
-        canonical_text = (ROOT / canonical).read_text(encoding="utf-8")
-        translation_text = (ROOT / translation).read_text(encoding="utf-8")
+        canonical_text = (root / canonical).read_text(encoding="utf-8")
+        translation_text = (root / translation).read_text(encoding="utf-8")
         if canonical_link not in canonical_text:
             errors.append(f"{canonical}: missing reciprocal translation link to {translation}")
         if translation_link not in translation_text:
@@ -577,8 +711,10 @@ def validate_bilingual_entries(errors: list[str]) -> None:
             errors.append(f"{canonical}: missing canonical ownership marker")
         if translation_marker not in translation_text:
             errors.append(f"{translation}: missing translation ownership marker")
-        canonical_headings, canonical_paths = markdown_structure(canonical)
-        translation_headings, translation_paths = markdown_structure(translation)
+        canonical_headings, canonical_paths = markdown_structure(canonical, root=root)
+        translation_headings, translation_paths = markdown_structure(
+            translation, root=root
+        )
         if canonical_headings != translation_headings:
             errors.append(
                 f"{canonical} <-> {translation}: heading-level structural parity mismatch"
@@ -591,14 +727,33 @@ def validate_bilingual_entries(errors: list[str]) -> None:
             errors.append(
                 f"{canonical} <-> {translation}: backtick table-path order parity mismatch"
             )
+        entry_files = frozenset((canonical.as_posix(), translation.as_posix()))
+        canonical_parity = markdown_parity_structure(
+            canonical, entry_files, root=root
+        )
+        translation_parity = markdown_parity_structure(
+            translation, entry_files, root=root
+        )
+        parity_labels = {
+            "links": "link-target order",
+            "fences": "fence-marker order",
+            "inline_code": "inline-code identifier multiset",
+            "table_columns": "table-column shape",
+            "list_markers": "list-marker shape",
+        }
+        for key, label in parity_labels.items():
+            if canonical_parity[key] != translation_parity[key]:
+                errors.append(
+                    f"{canonical} <-> {translation}: {label} parity mismatch"
+                )
 
     required_agent_rows = {
         "README.md", "README.en.md", "AGENTS.md", "AGENTS.zh-TW.md", "CLAUDE.md"
     }
     for path in (Path("AGENTS.md"), Path("AGENTS.zh-TW.md")):
-        if not (ROOT / path).is_file():
+        if not (root / path).is_file():
             continue
-        _, table_paths = markdown_structure(path)
+        _, table_paths = markdown_structure(path, root=root)
         missing = sorted(required_agent_rows - set(table_paths))
         if missing:
             errors.append(f"{path}: missing required root entry table rows: {missing}")
@@ -788,6 +943,499 @@ def validate_wrapper_metadata(
             errors.append(f"{label}.wrapper_path does not exist: {wrapper_value}")
 
 
+def wrapper_frontmatter(
+    path: Path, text: str, errors: list[str]
+) -> dict | None:
+    """Parse one Markdown YAML frontmatter mapping without prose fallbacks."""
+    if not text.startswith("---\n") or "\n---\n" not in text[4:]:
+        errors.append(f"{path}: wrapper must start with YAML frontmatter")
+        return None
+    raw, _ = text[4:].split("\n---\n", 1)
+    try:
+        data = yaml.safe_load(raw)
+    except yaml.YAMLError as exc:
+        errors.append(f"{path}: invalid wrapper frontmatter: {exc}")
+        return None
+    if not isinstance(data, dict):
+        errors.append(f"{path}: wrapper frontmatter must be a mapping")
+        return None
+    return data
+
+
+def canonical_wrapper_references(path: Path, data: dict) -> set[str]:
+    """Collect canonical paths that every runtime wrapper must cite."""
+    references = {".ai/assets/skills/README.MD", path.as_posix()}
+    for key in ("references", "examples"):
+        values = data.get(key, [])
+        if isinstance(values, list):
+            references.update(value for value in values if isinstance(value, str))
+    for key in ("human_guide", "report_template"):
+        value = data.get(key)
+        if isinstance(value, str):
+            references.add(value)
+    for key in ("workflow_templates", "report_templates", "assessment_template"):
+        values = data.get(key)
+        if isinstance(values, dict):
+            references.update(value for value in values.values() if isinstance(value, str))
+    return references
+
+
+def normalized_wrapper_projection(
+    text: str, target: str, *, deprecated: bool = False
+) -> str:
+    """Normalize only declared runtime identity and compatibility boilerplate."""
+    contract = SKILL_WRAPPER_CONTRACTS[target]
+    if deprecated:
+        normalized = text.replace(
+            DEPRECATED_WRAPPER_KIND_LINE,
+            "This identifier is a deprecated compatibility wrapper.",
+        )
+        normalized = normalized.replace(
+            DEPRECATED_WRAPPER_USE_LINE,
+            "Use this wrapper only as a deprecated compatibility entry.",
+        )
+    else:
+        normalized = text.replace(
+            contract["kind_line"], "This is a thin <runtime> wrapper."
+        )
+        normalized = normalized.replace(
+            contract["use_line"], "Use this wrapper only as the <runtime> entry."
+        )
+    return normalized.replace(contract["identity"], "<runtime>")
+
+
+def validate_skill_wrapper_semantics(
+    path: Path,
+    data: dict,
+    errors: list[str],
+    *,
+    root: Path = ROOT,
+) -> None:
+    """Validate identity, canonical citations, and cross-runtime projection parity."""
+    asset_id = data.get("asset_id")
+    targets = data.get("wrapper_targets")
+    metadata = data.get("wrapper_metadata")
+    if (
+        not isinstance(asset_id, str)
+        or not isinstance(targets, list)
+        or not isinstance(metadata, dict)
+    ):
+        return
+
+    projections: dict[str, str] = {}
+    deprecated = data.get("status") == "deprecated"
+    for target in sorted(set(targets) & set(SKILL_WRAPPER_CONTRACTS)):
+        target_metadata = metadata.get(target)
+        if not isinstance(target_metadata, dict):
+            continue
+        wrapper_value = target_metadata.get("wrapper_path")
+        if not isinstance(wrapper_value, str):
+            continue
+        contract = SKILL_WRAPPER_CONTRACTS[target]
+        expected_directory = contract["root"] / asset_id
+        actual_directory = PurePosixPath(wrapper_value.rstrip("/"))
+        label = f"{path}: wrapper_metadata.{target}"
+        if actual_directory != expected_directory:
+            errors.append(
+                f"{label}.wrapper_path must be the exact {target} skill directory "
+                f"{expected_directory.as_posix()}/"
+            )
+            continue
+        entry = Path(actual_directory.as_posix()) / contract["entry"]
+        entry_path = root / entry
+        if not entry_path.is_file():
+            errors.append(f"{label}: missing wrapper entry file {entry}")
+            continue
+        text = entry_path.read_text(encoding="utf-8")
+        frontmatter = wrapper_frontmatter(entry, text, errors)
+        if frontmatter is None:
+            continue
+        if frontmatter.get("name") != asset_id:
+            errors.append(
+                f"{entry}: frontmatter name must match canonical asset_id {asset_id}"
+            )
+        description = frontmatter.get("description")
+        if not isinstance(description, str) or not description.strip():
+            errors.append(f"{entry}: frontmatter description must be non-empty")
+
+        required_references = canonical_wrapper_references(path, data)
+        cited = set(re.findall(r"`([^`\n]+)`", text))
+        missing = sorted(required_references - cited)
+        if missing:
+            errors.append(f"{entry}: missing canonical references {missing}")
+        authority_line = (
+            f"If wrapper text and canonical spec differ, follow `{path.as_posix()}`."
+        )
+        if authority_line not in text:
+            errors.append(f"{entry}: missing exact canonical authority fallback")
+        kind_line = (
+            DEPRECATED_WRAPPER_KIND_LINE
+            if deprecated
+            else contract["kind_line"]
+        )
+        use_line = (
+            DEPRECATED_WRAPPER_USE_LINE
+            if deprecated
+            else contract["use_line"]
+        )
+        if kind_line not in text or use_line not in text:
+            errors.append(f"{entry}: missing exact {target} thin-wrapper identity")
+        projections[target] = normalized_wrapper_projection(
+            text, target, deprecated=deprecated
+        )
+
+    if set(projections) >= {"codex", "claude"} and (
+        projections["claude"] != projections["codex"]
+    ):
+        errors.append(
+            f"{path}: Codex and Claude wrappers differ outside declared "
+            "runtime identity boilerplate"
+        )
+
+
+def yaml_string_list(value: object) -> list[str]:
+    """Normalize one YAML string-or-list field without accepting other types."""
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list) and all(isinstance(item, str) for item in value):
+        return value
+    return []
+
+
+def package_glob_matches(path: str, pattern: str) -> bool:
+    """Match the package builder's repository-relative glob semantics."""
+    expression = ""
+    index = 0
+    while index < len(pattern):
+        char = pattern[index]
+        if char == "*":
+            if index + 1 < len(pattern) and pattern[index + 1] == "*":
+                index += 2
+                if index < len(pattern) and pattern[index] == "/":
+                    expression += "(?:.*/)?"
+                    index += 1
+                else:
+                    expression += ".*"
+                continue
+            expression += "[^/]*"
+        elif char == "?":
+            expression += "[^/]"
+        else:
+            expression += re.escape(char)
+        index += 1
+    return bool(re.fullmatch(expression, path))
+
+
+def package_static_prefix(pattern: str) -> str:
+    """Return the package builder's non-wildcard source prefix."""
+    wildcard = min(
+        (pattern.find(token) for token in ("*", "?") if token in pattern),
+        default=-1,
+    )
+    if wildcard < 0:
+        return pattern.rsplit("/", 1)[0] + "/" if "/" in pattern else ""
+    slash = pattern.rfind("/", 0, wildcard)
+    return pattern[: slash + 1] if slash >= 0 else ""
+
+
+def package_target_path(entry: dict, source_pattern: str, source_path: str) -> str | None:
+    """Project one matched source through the package builder's target rules."""
+    target_rule = entry.get("target")
+    if target_rule == "preserve-relative-path":
+        return source_path
+    if isinstance(target_rule, str) and target_rule.endswith("/"):
+        prefix = package_static_prefix(source_pattern)
+        relative = (
+            source_path[len(prefix) :]
+            if prefix and source_path.startswith(prefix)
+            else PurePosixPath(source_path).name
+        )
+        return f"{target_rule}{relative}"
+    sources = yaml_string_list(entry.get("source"))
+    if (
+        isinstance(target_rule, str)
+        and len(sources) == 1
+        and "*" not in source_pattern
+        and "?" not in source_pattern
+    ):
+        return target_rule
+    return None
+
+
+def package_profile_includes(
+    adapter_path: str,
+    errors: list[str],
+    *,
+    root: Path = ROOT,
+    profile_path: Path = PACKAGE_PROFILE,
+) -> bool:
+    """Return whether the effective package profile includes one exact adapter file."""
+    label = f"{profile_path}: package inclusion for {adapter_path}"
+    resolved_profile = root / profile_path
+    if not resolved_profile.is_file():
+        if (root / ".ai/distribution").is_dir():
+            errors.append(f"{label}: source distribution profile is missing")
+            return False
+        return True
+    try:
+        profile = yaml.safe_load(resolved_profile.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        errors.append(f"{label}: cannot load profile: {exc}")
+        return False
+    if not isinstance(profile, dict):
+        errors.append(f"{label}: profile root must be a mapping")
+        return False
+    entries = profile.get("entries")
+    exclusions = profile.get("exclusions", [])
+    if not isinstance(entries, list) or not isinstance(exclusions, list):
+        errors.append(f"{label}: entries and exclusions must be lists")
+        return False
+
+    included = False
+    for entry in entries:
+        if (
+            not isinstance(entry, dict)
+            or entry.get("ownership") != "framework-managed"
+            or entry.get("install_behavior") != "managed"
+        ):
+            continue
+        for pattern in yaml_string_list(entry.get("source")):
+            if package_glob_matches(adapter_path, pattern) and package_target_path(
+                entry, pattern, adapter_path
+            ) == adapter_path:
+                included = True
+                break
+        if included:
+            break
+    excluded = False
+    for exclusion in exclusions:
+        if not isinstance(exclusion, dict):
+            continue
+        patterns = yaml_string_list(exclusion.get("patterns"))
+        exceptions = yaml_string_list(exclusion.get("except"))
+        if any(
+            package_glob_matches(adapter_path, pattern) for pattern in patterns
+        ) and not any(
+            package_glob_matches(adapter_path, pattern) for pattern in exceptions
+        ):
+            excluded = True
+            break
+    if not included or excluded:
+        errors.append(
+            f"{label}: adapter must be effectively included as framework-managed payload"
+        )
+        return False
+    return True
+
+
+def markdown_agent_parts(
+    adapter_file: Path, label: str, errors: list[str]
+) -> tuple[dict, str] | None:
+    """Parse one Markdown custom-agent file with YAML frontmatter."""
+    try:
+        text = adapter_file.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"{label}: cannot read adapter: {exc}")
+        return None
+    if not text.startswith("---"):
+        errors.append(f"{label}: Markdown adapter must start with YAML frontmatter")
+        return None
+    parts = text.split("---", 2)
+    if len(parts) != 3:
+        errors.append(f"{label}: Markdown adapter frontmatter is not closed")
+        return None
+    try:
+        metadata = yaml.safe_load(parts[1])
+    except yaml.YAMLError as exc:
+        errors.append(f"{label}: invalid YAML frontmatter: {exc}")
+        return None
+    if not isinstance(metadata, dict):
+        errors.append(f"{label}: YAML frontmatter must be a mapping")
+        return None
+    return metadata, parts[2].strip()
+
+
+def validate_sub_agent_adapter_file(
+    target: str,
+    adapter_file: Path,
+    canonical_path: Path,
+    asset_id: str,
+    errors: list[str],
+) -> None:
+    """Validate current runtime schema markers and canonical linkage."""
+    label = f"{canonical_path}: adapter_metadata.{target}.adapter_path"
+    canonical_reference = canonical_path.as_posix()
+    if target == "codex":
+        try:
+            metadata = tomllib.loads(adapter_file.read_text(encoding="utf-8"))
+        except (OSError, tomllib.TOMLDecodeError) as exc:
+            errors.append(f"{label}: invalid Codex TOML adapter: {exc}")
+            return
+        body = metadata.get("developer_instructions")
+        required = ("name", "description", "developer_instructions")
+        missing = [
+            key
+            for key in required
+            if not isinstance(metadata.get(key), str) or not metadata.get(key)
+        ]
+        if missing:
+            errors.append(f"{label}: Codex adapter missing non-empty fields {missing}")
+            return
+    else:
+        parsed = markdown_agent_parts(adapter_file, label, errors)
+        if parsed is None:
+            return
+        metadata, body = parsed
+        required = ("name", "description") if target == "claude" else ("description",)
+        missing = [
+            key
+            for key in required
+            if not isinstance(metadata.get(key), str) or not metadata.get(key)
+        ]
+        if missing:
+            errors.append(f"{label}: {target} adapter missing non-empty fields {missing}")
+            return
+        if target == "copilot":
+            if "infer" in metadata:
+                errors.append(
+                    f"{label}: Copilot infer is retired; use disable-model-invocation "
+                    "and user-invocable"
+                )
+            for key in ("disable-model-invocation", "user-invocable"):
+                if key in metadata and not isinstance(metadata[key], bool):
+                    errors.append(f"{label}: Copilot {key} must be boolean")
+
+    if metadata.get("name") != asset_id:
+        errors.append(
+            f"{label}: adapter name must equal canonical asset_id {asset_id!r}"
+        )
+    if not isinstance(body, str) or canonical_reference not in body:
+        errors.append(
+            f"{label}: adapter must cite canonical role {canonical_reference}"
+        )
+
+
+def validate_sub_agent_adapter_metadata(
+    path: Path,
+    data: dict,
+    errors: list[str],
+    *,
+    root: Path = ROOT,
+    profile_path: Path = PACKAGE_PROFILE,
+) -> None:
+    """Validate one role's dynamic disposition or exact runtime-adapter contract."""
+    targets = data.get("wrapper_targets")
+    metadata = data.get("adapter_metadata")
+    if not isinstance(targets, list) or not all(isinstance(item, str) for item in targets):
+        return
+    if len(targets) != len(set(targets)):
+        errors.append(f"{path}: wrapper_targets must not contain duplicates")
+    if not isinstance(metadata, dict):
+        errors.append(f"{path}: adapter_metadata must be a mapping")
+        return
+
+    target_set = set(targets)
+    metadata_keys = list(metadata)
+    non_string_keys = [key for key in metadata_keys if not isinstance(key, str)]
+    if non_string_keys:
+        errors.append(f"{path}: adapter_metadata keys must be strings: {non_string_keys!r}")
+    metadata_set = {key for key in metadata_keys if isinstance(key, str)}
+    if metadata_set != target_set:
+        errors.append(
+            f"{path}: adapter_metadata target parity mismatch; "
+            f"missing={sorted(target_set - metadata_set)}, "
+            f"extra={sorted(metadata_set - target_set)}"
+        )
+    if not target_set:
+        return
+
+    exact_files = {
+        candidate.relative_to(root).as_posix().casefold():
+        candidate.relative_to(root).as_posix()
+        for candidate in root.rglob("*")
+        if candidate.is_file()
+    }
+    root_resolved = root.resolve()
+    adapter_values: list[str] = []
+    asset_id = data.get("asset_id")
+    if not isinstance(asset_id, str) or not asset_id:
+        return
+
+    for target in sorted(target_set & metadata_set):
+        target_metadata = metadata[target]
+        label = f"{path}: adapter_metadata.{target}"
+        contract = SUB_AGENT_ADAPTER_CONTRACTS.get(target)
+        if contract is None:
+            continue
+        if not isinstance(target_metadata, dict):
+            errors.append(f"{label} must be a mapping")
+            continue
+        allowed_keys = {"adapter_path", "adapter_format"}
+        extra_keys = sorted(
+            (repr(key) for key in target_metadata if key not in allowed_keys)
+        )
+        if extra_keys:
+            errors.append(f"{label}: unsupported keys {extra_keys}")
+        adapter_value = target_metadata.get("adapter_path")
+        adapter_format = target_metadata.get("adapter_format")
+        if not isinstance(adapter_value, str) or not adapter_value:
+            errors.append(f"{label}.adapter_path must be a non-empty string")
+            continue
+        if adapter_format != contract["format"]:
+            errors.append(
+                f"{label}.adapter_format must be {contract['format']!r}"
+            )
+        if (
+            Path(adapter_value).is_absolute()
+            or "\\" in adapter_value
+            or any(character in adapter_value for character in "<>*?[]{}")
+        ):
+            errors.append(
+                f"{label}.adapter_path must be a repository-relative exact file "
+                "path without placeholders or globs"
+            )
+            continue
+        adapter_path = (root / adapter_value).resolve()
+        try:
+            adapter_path.relative_to(root_resolved)
+        except ValueError:
+            errors.append(f"{label}.adapter_path escapes the repository: {adapter_value}")
+            continue
+
+        posix_value = PurePosixPath(adapter_value)
+        expected_root = contract["root"]
+        if posix_value.parts[: len(expected_root.parts)] != expected_root.parts:
+            errors.append(
+                f"{label}.adapter_path must be under {expected_root.as_posix()}"
+            )
+        if not any(adapter_value.endswith(suffix) for suffix in contract["suffixes"]):
+            errors.append(
+                f"{label}.adapter_path uses an unsupported {target} filename format"
+            )
+        canonical_case = exact_files.get(adapter_value.casefold())
+        if canonical_case is not None and canonical_case != adapter_value:
+            errors.append(
+                f"{label}.adapter_path exact-case mismatch: "
+                f"{adapter_value} -> {canonical_case}"
+            )
+            continue
+        if canonical_case is None or not adapter_path.is_file():
+            errors.append(f"{label}.adapter_path does not exist: {adapter_value}")
+            continue
+
+        adapter_values.append(adapter_value)
+        package_profile_includes(
+            adapter_value, errors, root=root, profile_path=profile_path
+        )
+        validate_sub_agent_adapter_file(
+            target, adapter_path, path, asset_id, errors
+        )
+
+    folded_paths = [value.casefold() for value in adapter_values]
+    if len(folded_paths) != len(set(folded_paths)):
+        errors.append(f"{path}: adapter paths must be unique across runtime targets")
+
+
 def validate_canonical_assets(errors: list[str]) -> tuple[int, dict[str, dict]]:
     """Validate versioned skill and sub-agent manifests against the canonical contract."""
     manifests = sorted(Path(".ai/assets/skills").glob("*/skill.yaml")) + sorted(
@@ -822,8 +1470,11 @@ def validate_canonical_assets(errors: list[str]) -> tuple[int, dict[str, dict]]:
             errors.append(f"{path}: asset_id must use kebab-case")
         if asset_id != path.parent.name:
             errors.append(f"{path}: asset_id must match parent folder {path.parent.name}")
-        if data.get("schema_version") != ASSET_SCHEMA_VERSION:
-            errors.append(f"{path}: schema_version must be {ASSET_SCHEMA_VERSION}")
+        expected_schema_version = ASSET_SCHEMA_VERSIONS[path.name]
+        if data.get("schema_version") != expected_schema_version:
+            errors.append(
+                f"{path}: schema_version must be {expected_schema_version}"
+            )
         if data.get("asset_type") != expected_types[path.name]:
             errors.append(f"{path}: unexpected asset_type {data.get('asset_type')!r}")
         for key in ("title", "purpose"):
@@ -855,6 +1506,9 @@ def validate_canonical_assets(errors: list[str]) -> tuple[int, dict[str, dict]]:
         if path.name == "skill.yaml":
             skill_assets[asset_id] = data
             validate_wrapper_metadata(path, data, errors)
+            validate_skill_wrapper_semantics(path, data, errors)
+        else:
+            validate_sub_agent_adapter_metadata(path, data, errors)
         for key in ("triggers", "workflow"):
             if key not in data:
                 errors.append(f"{path}: missing type-specific field {key}")
@@ -905,8 +1559,9 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
     profile = load_yaml_mapping(CAPABILITY_PROFILE, errors)
     if profile is None:
         return 0
-    if profile.get("schema_version") != "1.0":
-        errors.append(f"{CAPABILITY_PROFILE}: schema_version must be 1.0")
+    schema_version = profile.get("schema_version")
+    if schema_version not in {"1.0", "1.1", "1.2"}:
+        errors.append(f"{CAPABILITY_PROFILE}: schema_version must be 1.0, 1.1, or 1.2")
     if not isinstance(profile.get("profile_id"), str) or not profile.get("profile_id"):
         errors.append(f"{CAPABILITY_PROFILE}: profile_id must be a non-empty string")
     if profile.get("status") != "active":
@@ -931,6 +1586,102 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
         errors.append(f"{CAPABILITY_PROFILE}: unknown mapped slots {unknown}")
     if missing:
         errors.append(f"{CAPABILITY_PROFILE}: missing required mappings {missing}")
+    contracts = profile.get("capability_contracts", {})
+    if schema_version in {"1.1", "1.2"}:
+        if not isinstance(contracts, dict):
+            errors.append(f"{CAPABILITY_PROFILE}: capability_contracts must be a mapping")
+        else:
+            test_execution = contracts.get("test-execution")
+            expected_contract = {
+                "provider_order": [
+                    "target-profile-commands",
+                    "evaluated-external-skill",
+                    "fallback-contract",
+                ],
+                "default_levels": ["unit", "integration"],
+                "conditional_levels": [
+                    "e2e",
+                    "browser",
+                    "playwright",
+                    "environment-dependent",
+                ],
+                "outcomes": [
+                    "passed",
+                    "failed",
+                    "blocked-by-environment",
+                    "not-applicable",
+                    "deferred-with-owner",
+                ],
+            }
+            if not isinstance(test_execution, dict):
+                errors.append(f"{CAPABILITY_PROFILE}: test-execution contract is required")
+            else:
+                for field, expected_values in expected_contract.items():
+                    if test_execution.get(field) != expected_values:
+                        errors.append(
+                            f"{CAPABILITY_PROFILE}: test-execution.{field} must equal {expected_values}"
+                        )
+            if "test-execution" not in allowed:
+                errors.append(f"{CAPABILITY_PROFILE}: test-execution must be an allowed slot")
+            if "test-execution" in required:
+                errors.append(f"{CAPABILITY_PROFILE}: test-execution must remain optional")
+            if "test-execution" in mappings:
+                errors.append(f"{CAPABILITY_PROFILE}: test-execution must not map to an unevaluated skill")
+    if schema_version == "1.2":
+        expected_orchestration = {
+            "activation": {
+                "intent_class": "high-level-multi-stage-software-development",
+                "skill_name_required": False,
+                "routing_basis": [
+                    "requested-outcome",
+                    "current-artifacts",
+                    "repository-policy",
+                    "approval-state",
+                ],
+            },
+            "approval": {
+                "gated_transition": "requirement-design-specification-to-implementation",
+                "pending_outcome": "pause-before-implementation",
+                "authorization_source_required": True,
+            },
+            "spec_compliance": {
+                "default_selected": False,
+                "unselected_outcome": "not-applicable",
+                "selected_gate": "100-percent-fail-closed-with-evidence",
+            },
+            "commit": {
+                "checkpoint_unit": "validated-durable-stage-or-coherent-bounded-batch",
+                "per_skill_invocation_commits": "prohibited",
+                "history_compression": "unshared-unpushed-only",
+                "preserve": ["approval", "evidence", "review", "checkpoint", "handoff"],
+            },
+            "fresh_session": {
+                "evidence_sources": [
+                    "git",
+                    "workflow-locator",
+                    "current-task",
+                    "target-policy",
+                    "registered-handoff-checkpoint",
+                ],
+                "hidden_context_required": False,
+            },
+            "closeout_evidence": [
+                "approved-requirements-and-specifications",
+                "implementation",
+                "required-tests",
+                "selected-compliance",
+                "review",
+                "validation",
+                "task-state",
+                "commits",
+                "branch-and-handoff",
+            ],
+        }
+        if profile.get("orchestration_contract") != expected_orchestration:
+            errors.append(
+                f"{CAPABILITY_PROFILE}: orchestration_contract must match the "
+                "v1.2 deterministic acceptance contract"
+            )
     for slot, skill_id in mappings.items():
         if not isinstance(skill_id, str) or skill_id not in skill_assets:
             errors.append(f"{CAPABILITY_PROFILE}: {slot} maps missing skill {skill_id!r}")
@@ -943,8 +1694,8 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
             errors.append(f"{CAPABILITY_PROFILE}: {skill_id} does not declare slot {slot}")
     expected = {str(slot): str(skill) for slot, skill in mappings.items()}
     for markdown_path, heading in (
-        (Path(".ai/assets/skills/dev-workflow/references/capability-profile.md"), "## Capability Mapping"),
-        (Path(".ai/assets/skills/dev-workflow/references/routing-playbook.md"), "## Local Profile Resolution"),
+        (Path(".ai/assets/skills/software-development-orchestrator/references/capability-profile.md"), "## Capability Mapping"),
+        (Path(".ai/assets/skills/software-development-orchestrator/references/routing-playbook.md"), "## Local Profile Resolution"),
     ):
         text = (ROOT / markdown_path).read_text(encoding="utf-8")
         section = text.split(heading, 1)[1].split("\n## ", 1)[0] if heading in text else ""

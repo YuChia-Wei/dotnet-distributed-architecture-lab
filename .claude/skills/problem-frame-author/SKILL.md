@@ -1,6 +1,6 @@
 ---
 name: problem-frame-author
-description: Draft a first problem frame for this repository from existing requirements, specs, ADRs, code, or tests. Use when Codex needs to create validator-ready CBF or SWF inputs, reverse-engineer a problem frame from code, or turn requirement/spec truth into structured problem-frame files without yet claiming spec compliance.
+description: Draft a first problem frame for this repository from existing requirements, specs, ADRs, code, or tests. Use when Claude needs to create validator-ready CBF or SWF inputs, reverse-engineer a problem frame from code, or turn requirement/spec truth into structured problem-frame files without yet claiming spec compliance.
 ---
 
 # Problem Frame Author

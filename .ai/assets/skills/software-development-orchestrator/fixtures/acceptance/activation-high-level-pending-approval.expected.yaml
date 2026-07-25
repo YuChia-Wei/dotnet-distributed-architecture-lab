@@ -1,0 +1,53 @@
+schema_version: "1.0"
+fixture_id: "DEVWF-002-activation-pending-approval"
+activated: true
+orchestrator: "software-development-orchestrator"
+activation:
+  intent_class: "high-level-multi-stage-software-development"
+  named_skills_observed: []
+  named_skill_dependency: false
+  routing_basis:
+    - "requested-outcome"
+    - "current-artifacts"
+    - "repository-policy"
+    - "approval-state"
+classification_boundary:
+  natural_language_understanding: "model-in-loop-eval"
+  deterministic_oracle_input: "preclassified-envelope"
+stages:
+  - stage_id: "stage-01"
+    intent_token: "capture-requirements"
+    capability_slot: "requirements"
+    provider: "requirement-author"
+    state: "planned"
+  - stage_id: "stage-02"
+    intent_token: "define-specification"
+    capability_slot: "specification"
+    provider: "spec-author"
+    state: "planned"
+  - stage_id: "stage-03"
+    intent_token: "design-architecture"
+    capability_slot: "architecture"
+    provider: "ddd-ca-hex-architect"
+    state: "planned"
+  - stage_id: "stage-04"
+    intent_token: "implement-approved-change"
+    capability_slot: "implementation"
+    provider: "slice-implementer"
+    state: "blocked-awaiting-approval"
+  - stage_id: "stage-05"
+    intent_token: "execute-default-tests"
+    capability_slot: "test-execution"
+    provider: "target-profile-commands"
+    state: "pending-after-approval"
+  - stage_id: "stage-06"
+    intent_token: "review-implementation"
+    capability_slot: "review"
+    provider: "code-reviewer"
+    state: "pending-after-approval"
+approval_pause:
+  paused: true
+  before_capability: "implementation"
+  transition: "requirement-design-specification-to-implementation"
+  pending_decision: "Owner approval of the requirement, design, and specification baseline."
+  authorization_source_required: true

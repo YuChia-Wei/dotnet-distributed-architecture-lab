@@ -25,7 +25,7 @@ constraints:
   - "Do not output a staged refactoring plan"
   - "Preserve software engineering reasoning even when analyzer or test output is available"
   - "Treat .ai/scripts C# grep checks as transitional aids, not final semantic validation"
-  - "Keep review read-only; route remediation to dev-workflow or the appropriate implementer"
+  - "Keep review read-only; route remediation to software-development-orchestrator or the appropriate implementer"
   - "Pin durable assessments to the reviewed Git revision and use ASM-YYYYMMDD-NNN#CR-NNN finding references"
 workflow:
   - step: 1

@@ -2,6 +2,8 @@
 
 [English](README.en.md)
 
+英文翻譯文件為 `README.en.md`。
+
 `dotnet-mq-arch-lab` 是以 .NET 10 建立的分散式商務範例專案，用來實作與驗證 DDD、Clean Architecture、CQRS、事件驅動整合、Outbox、Event Sourcing，以及以訊息佇列進行 bounded-context 協作的做法。
 
 Repository 同時維護一套可重用的 AI collaboration context；產品真相以 `src/`、`tests/`、`docker-compose/` 與 `.dev/` 中經驗證的專案文件為準，可攜式 AI 規則則以 `.ai/assets/` 為準。

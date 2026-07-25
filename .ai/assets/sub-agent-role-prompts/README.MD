@@ -10,7 +10,12 @@ Use `.ai/assets/sub-agent-role-prompts/` for worker-role prompts and delegation 
 
 Each sub-agent role should keep its canonical entry in `sub-agent.yaml`, with optional supporting material under `references/`.
 
-Current portable roles include `context-translator/`, which owns bounded low-cost Traditional Chinese (Taiwan) derivation while runtime-specific adapters remain under their runtime directories.
+Dynamic loading through the canonical `sub-agent.yaml` is the default. A role is
+promoted only for a concrete runtime-specific need, and its exact adapter paths
+are declared in `adapter_metadata`. Current portable roles include
+`context-translator/`, which owns bounded low-cost Traditional Chinese (Taiwan)
+derivation and is the only runtime-native role; its thin adapters remain under
+their runtime directories.
 
 Top-level skills belong under `.ai/assets/skills/`; sub-agent role prompts are not top-level skills.
 

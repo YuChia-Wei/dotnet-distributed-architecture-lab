@@ -185,7 +185,7 @@ Domain Event lifecycle:
 1. Execute Use Case orchestration and Aggregate behavior.
 2. Obtain pending Domain Events.
 3. Atomically persist Aggregate state/events and required Outbox records.
-4. Commit。
+4. Commit.
 5. Acknowledge/clear pending events only after a successful commit.
 6. Preserve retry and optimistic-concurrency semantics on failure.
 

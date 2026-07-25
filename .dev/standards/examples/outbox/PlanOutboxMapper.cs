@@ -124,7 +124,7 @@ public static class PlanOutboxMapper
     }
 }
 
-// TODO: Replace these placeholders with ezDDD .NET ports.
+// Example placeholders; replace them with target-owned outbox contracts.
 public interface IOutboxMapper<TAggregate, TData>
 {
     TAggregate ToDomain(TData data);

@@ -54,7 +54,7 @@ public sealed class EsFindCardsByTagIdInquiry : IFindCardsByTagIdInquiry
     }
 }
 
-// TODO: Replace placeholders below with ezDDD .NET port types.
+// Example placeholders; replace them with target-owned port types.
 public interface IEventStore
 {
     EventStreamData? GetEventsByType(string eventType);

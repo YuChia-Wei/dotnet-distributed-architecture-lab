@@ -1,0 +1,71 @@
+schema_version: "1.0"
+document: ".dev/ai-context/customizations.yaml"
+required: [schema_version, customizations]
+ordering:
+  identity: "subject-before-paths"
+customization:
+  required:
+    - id
+    - subject
+    - relationship
+    - reason
+    - paths
+    - base_framework
+    - dependencies
+    - owner_reconciliation
+    - decision_evidence
+    - active_context_audit
+    - incoming
+    - disposition
+    - post_upgrade_audit
+    - validation
+  properties:
+    id:
+      pattern: "^CUST-[A-Z0-9][A-Z0-9._-]*$"
+      unique: true
+    subject:
+      required: [kind, id]
+      kind: [capability, rule, contract]
+    relationship: [extends, replaces, deviates, target-only]
+    reason:
+      type: non-empty-string
+    paths:
+      type: unique-repository-relative-posix-path-list
+    base_framework:
+      required: [version, commit, evidence]
+    dependencies:
+      required: [customization_ids, subject_refs]
+      customization_ids: existing-customization-id-list
+      subject_refs: subject-reference-list
+    owner_reconciliation:
+      required: [status, owner, decided_at, evidence]
+      status: [approved, pending, rejected]
+    decision_evidence:
+      required: [requirements, adrs, workflows]
+      minimum_total_references: 1
+    active_context_audit:
+      required: [assessment_id, status, evidence]
+      status: [verified, finding, not-run]
+    incoming:
+      required: [version, status, evidence]
+      status: [absent, partial, equivalent-candidate, conflicting]
+    disposition: [retain, merge, supersede, retire, unresolved]
+    post_upgrade_audit:
+      required: [assessment_id, status, evidence]
+      status: [verified, finding, not-run]
+    validation:
+      type: non-empty-string-list
+finalization:
+  non_unresolved_requires:
+    owner_reconciliation.status: approved
+    active_context_audit.status: verified
+    post_upgrade_audit.status: verified
+  retire_or_supersede_requires:
+    owner_reconciliation.status: approved
+    post_upgrade_audit.status: verified
+legacy_conversion:
+  source: "schema-1 local_overrides"
+  target: "provenance.reconciliation.unresolved"
+  cardinality: "one-to-one"
+  reason: "legacy-local-override"
+  semantic_inference: forbidden

@@ -1,11 +1,12 @@
 asset_id: "profile-config-sub-agent"
-schema_version: "1.0"
+schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Profile Config Sub-Agent"
 purpose: "Define the delegated worker-role prompt for configuring environment profiles and appsettings-based setup."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
+adapter_metadata: {}
 source_of_truth: "canonical"
 role_kind: "infrastructure-sub-agent"
 triggers:

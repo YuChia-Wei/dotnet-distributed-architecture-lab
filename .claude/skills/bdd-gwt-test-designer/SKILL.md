@@ -1,6 +1,6 @@
 ---
 name: bdd-gwt-test-designer
-description: Design Given-When-Then tests for this repository. Use when Codex needs to turn requirements, specs, acceptance criteria, or existing behavior into BDD/Gherkin-style test scenarios, scenario matrices, assertion points, or test design notes without directly implementing the tests yet.
+description: Design Given-When-Then tests for this repository. Use when Claude needs to turn requirements, specs, acceptance criteria, or existing behavior into BDD/Gherkin-style test scenarios, scenario matrices, assertion points, or test design notes without directly implementing the tests yet.
 ---
 
 # BDD GWT Test Designer

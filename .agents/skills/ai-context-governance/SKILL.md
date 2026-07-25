@@ -1,6 +1,6 @@
 ---
 name: ai-context-governance
-description: Govern AI collaboration context boundaries, documentation quality, skill routing, runtime wrapper sync, migrations, and the audit-to-remediation lifecycle. Use when Codex needs to organize `.ai`, `.dev`, `.agents`, or `.claude`, remediate AI context audit findings, coordinate a post-remediation audit, close an AI context maintenance workflow, or keep this work out of product-development skills.
+description: Govern AI collaboration context boundaries, semantic customization records, skill routing, runtime wrapper sync, migrations, and assessment-to-remediation lifecycles. Use when Codex needs to organize `.ai`, `.dev`, `.agents`, or `.claude`, record or reconcile target capability/rule/contract customizations, coordinate remediation and verification assessments, or close AI context maintenance.
 ---
 
 # AI Context Governance
@@ -10,6 +10,8 @@ This is a thin current-runtime wrapper.
 ## Canonical Source
 
 - Registry: `.ai/assets/skills/README.MD`
+- Assessment Policy: `.dev/standards/ASSESSMENT-ARTIFACT-POLICY.md`
+- Handoff Policy: `.dev/standards/WORKFLOW-HANDOFF-POLICY.md`
 - Spec: `.ai/assets/skills/ai-context-governance/skill.yaml`
 - Human Guide: `.dev/guides/ai-collaboration-guides/AI-CONTEXT-GOVERNANCE-SKILL-GUIDE.md`
 - References:
@@ -18,10 +20,13 @@ This is a thin current-runtime wrapper.
   - `.ai/assets/skills/ai-context-governance/references/workflow-and-commit-playbook.md`
   - `.ai/assets/skills/ai-context-governance/references/output-contract.md`
   - `.ai/assets/skills/ai-context-governance/references/audit-remediation-lifecycle.md`
+  - `.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`
+  - `.ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml`
 - Templates:
   - `.ai/assets/skills/ai-context-governance/templates/workflow-locator-template.yaml`
   - `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
   - `.ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json`
+  - `.ai/assets/skills/ai-context-governance/templates/workflow-handoff-checkpoint-template.yaml`
   - `.ai/assets/skills/ai-context-governance/templates/ai-context-remediation-report-template.md`
 
 ## Wrapper Rules

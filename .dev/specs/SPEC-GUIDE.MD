@@ -20,7 +20,8 @@ Production/domain specs are target-repository outputs created by `repo-structure
 - `command` / `query`
   - the request model for that use case
 - `handler`
-  - the application executor in code
+  - an optional inbound adapter for a real dispatch/message entry; it maps the
+    delivery contract and invokes one use case
 
 Specs should primarily describe:
 
@@ -35,7 +36,7 @@ They should not begin with implementation types such as:
 In other words:
 
 - `use case` is the subject of the spec
-- `command`/`query` and `handler` are implementation mappings and do not need to become the primary spec filename
+- `command`/`query` and an optional `handler` are implementation mappings and do not need to become the primary spec filename
 
 See the complete terminology rules in [`../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD).
 

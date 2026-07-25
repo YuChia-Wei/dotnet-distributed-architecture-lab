@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Example.Plans.Domain;
 
 namespace Example.Plans.UseCases.Port;
 
@@ -49,7 +50,7 @@ public sealed class TaskDto
         IsDone = false;
         Status = TaskStatus.Todo;
         Priority = TaskPriority.Medium;
-        CreatedDate = DateOnly.FromDateTime(DateTime.UtcNow);
+        CreatedDate = DateOnly.FromDateTime(DateProvider.Now().UtcDateTime);
     }
 
     public TaskDto SetId(string id)
@@ -87,7 +88,7 @@ public sealed class TaskDto
         IsDone = done;
         if (done && CompletedDate == null)
         {
-            CompletedDate = DateOnly.FromDateTime(DateTime.UtcNow);
+            CompletedDate = DateOnly.FromDateTime(DateProvider.Now().UtcDateTime);
         }
         return this;
     }
@@ -178,7 +179,7 @@ public sealed class TaskDto
 
     public bool IsOverdue()
     {
-        return Deadline.HasValue && DateOnly.FromDateTime(DateTime.UtcNow) > Deadline.Value && !IsDone;
+        return Deadline.HasValue && DateOnly.FromDateTime(DateProvider.Now().UtcDateTime) > Deadline.Value && !IsDone;
     }
 
     public bool HasDescription() => !string.IsNullOrWhiteSpace(Description);
