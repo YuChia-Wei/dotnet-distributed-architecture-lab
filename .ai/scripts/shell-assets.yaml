@@ -104,15 +104,26 @@ check_all_required_commands:
   - python .ai/scripts/tests/test_git_commit_policy.py -v
   - python .ai/scripts/tests/test_workflow_handoff.py -v
   - python .ai/scripts/validate-workflow-handoff.py --all
+  - python .ai/scripts/tests/test_software_development_orchestrator_capability_contract.py -v
+  - python .ai/scripts/tests/test_software_development_orchestrator_acceptance.py -v
+  - python .ai/scripts/tests/test_semantic_customization_lifecycle.py -v
+  - python .ai/scripts/tests/test_semantic_customization_skill_contract.py -v
+  - python .ai/scripts/validate-repository-config-contract.py
+  - python .ai/scripts/tests/test_repository_config_contract.py -v
+  - python .ai/scripts/validate-skill-transition.py
+  - python .ai/scripts/tests/test_skill_transition_contract.py -v
   - python .ai/scripts/validate-ai-context.py
   - python .ai/scripts/tests/test_ai_context_wrapper_metadata.py -v
   - python .ai/scripts/tests/test_ai_context_language_policy.py -v
   - python .ai/scripts/validate-ai-context-versions.py
+  - python .ai/scripts/validate-ai-context-target.py
   - python .ai/scripts/tests/test_ai_context_version_governance.py -v
   - python .ai/scripts/tests/test_ai_context_packaging.py -v
   - python .ai/scripts/tests/test_ai_context_release_state.py -v
   - python .ai/scripts/tests/test_prepare_ai_context_release.py -v
   - python .ai/scripts/tests/test_release_notes_renderer.py -v
+  - python .ai/scripts/tests/test_ai_behavior_evaluation.py -v
+  - python .ai/scripts/tests/test_ai_context_load_measurement.py -v
   - python .ai/scripts/tests/test_ai_context_package_apply.py -v
   - python .ai/scripts/validate-dependency-versions.py
   - python .ai/scripts/tests/test_dependency_version_consistency.py -v
@@ -120,6 +131,7 @@ check_all_required_commands:
   - python .ai/scripts/tests/test_file_disposition_manifest.py -v
   - python .ai/scripts/validate-source-governance.py
   - python .ai/scripts/tests/test_governance_workflow_contract.py -v
+  - python .ai/scripts/tests/test_github_workflow_contract.py -v
   - python .ai/scripts/tests/test_fail_closed_validation.py -v
   - python .ai/scripts/tests/test_coding_standards_integrity_contract.py -v
   - python .ai/scripts/tests/test_profile_projection_contract.py -v

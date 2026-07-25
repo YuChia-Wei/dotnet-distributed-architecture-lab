@@ -31,16 +31,16 @@
 - 需要正式 development review 時使用 `review-report.md`。
 - 使用 `tasks/<task-id>.json`。
 - 新 workflow ID 使用 `YYYY-MM-DD-<topic>[-NN]`。
-- artifact 預設存放於 `.dev/workflows/<workflow-id>/`，也可由 `dev-workflow` template 宣告其他 repository-relative root；locator 始終保留於 `.dev/workflows/`。
-- locator 與 task 的共通欄位遵循 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`；development artifact body 使用 `dev-workflow` 自有 templates。
+- artifact 預設存放於 `.dev/workflows/<workflow-id>/`，也可由 `software-development-orchestrator` template 宣告其他 repository-relative root；locator 始終保留於 `.dev/workflows/`。
+- locator 與 task 的共通欄位遵循 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`；development artifact body 使用 `software-development-orchestrator` 自有 templates。
 - Workflow branch 預設以 `--no-ff` 合併；未完成時的 merge/push 保留 active/pending，並分別記錄 pushed branch 或 merge 後的 continuation branch。
 
 ## Artifact 與 Skill 對應
 
 | Artifact | Owner Skill | 主要用途 |
 | :--- | :--- | :--- |
-| `workflow.yaml` | `dev-workflow` | 固定 locator；保存 workflow ID、owner、status、artifact root、entrypoint 與時間 |
-| `workflow-plan.md` | `dev-workflow` 建立；`ddd-ca-hex-architect` 可更新 architecture sections | 保存 development objective、目標方向、stages、非目標與風險 |
+| `workflow.yaml` | `software-development-orchestrator` | 固定 locator；保存 workflow ID、owner、status、artifact root、entrypoint 與時間 |
+| `workflow-plan.md` | `software-development-orchestrator` 建立；`ddd-ca-hex-architect` 可更新 architecture sections | 保存 development objective、目標方向、stages、非目標與風險 |
 | `review-report.md` | `code-reviewer` 或對應 development reviewer | 保存 architecture、implementation、test 或 development workflow review findings |
 | `tasks/<task-id>.json` | `slice-implementer` / `local-change-implementer` | 保存單一 development task 的 scope、限制、驗證與結果 |
 
@@ -206,6 +206,6 @@ implementer 至少要知道：
 - `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
 - `../workflows/README.MD`
-- `../../../.ai/assets/skills/dev-workflow/templates/development-workflow-plan-template.md`
-- `../../../.ai/assets/skills/dev-workflow/templates/development-review-report-template.md`
-- `../../../.ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json`
+- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
+- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-review-report-template.md`
+- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json`

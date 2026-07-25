@@ -2,7 +2,7 @@ asset_id: "ai-context-governance"
 schema_version: "1.0"
 asset_type: "skill-spec"
 title: "AI Context Governance"
-purpose: "Govern AI collaboration context boundaries, documentation quality, skill routing, runtime wrapper sync, AI context migration, and the audit-to-remediation lifecycle without performing product feature implementation or BDD scenario design."
+purpose: "Govern AI collaboration context boundaries, semantic customization records, skill routing, runtime wrapper sync, AI context migration, and audit-to-remediation lifecycles without performing product feature implementation."
 portability: "portable"
 audience: "agent-facing"
 source_of_truth: "canonical"
@@ -18,6 +18,8 @@ triggers:
   - "post-remediation AI context audit"
   - "assessment finding remediation"
   - "verification assessment coordination"
+  - "record semantic customization"
+  - "reconcile target customization"
 inputs:
   - "AI context files under .ai, .agents, .claude, and .dev"
   - "workflow plan or task JSON for context cleanup"
@@ -34,6 +36,7 @@ outputs:
   - "remediation report under the owning workflow artifact root"
   - "assessment relationships linking baseline, workflow, and independent verification"
   - "machine-readable receiving checkpoint for cross-model, runtime, host, machine, or fresh-session handoff"
+  - "owner-approved semantic customization ledger entries"
 constraints:
   - "Do not use this skill for BDD scenario design"
   - "Do not use this skill for production code implementation"
@@ -47,13 +50,14 @@ constraints:
   - "Treat pre-completion merge or push as a checkpoint and preserve active/pending state; use --no-ff for merges unless another strategy is explicitly requested"
   - "Treat optional indexes, code graphs, MCP servers, IDE indexes, and semantic search only as discovery accelerators; verify material context decisions with repository-native evidence under AICTX-EVIDENCE-001."
   - "Require WORKFLOW-HANDOFF-POLICY for cross-model, runtime, host, machine, or fresh-session continuation; never normalize provider-native Git attribution without real provider fixtures."
+  - "Own `.dev/ai-context/customizations.yaml`; identify capability, rule, or contract before supporting paths and follow the shared semantic customization lifecycle."
 workflow:
   - step: 1
     description: "Classify context by audience, scope, language, and action, or intake an ai-context-auditor baseline assessment; when workflow mode applies, create or switch to the dedicated branch before artifacts or material edits"
   - step: 2
     description: "Check context placement against boundary and language policies, then triage findings into remediation tasks"
   - step: 3
-    description: "Plan or execute the smallest safe policy, routing, wrapper, or move batch and record finding-level resolution evidence"
+    description: "Plan or execute the smallest safe policy, routing, wrapper, or move batch; record semantic customizations and explicit owner reconciliation without inferring intent from paths"
   - step: 4
     description: "Update indexes and task results, then validate references and request a read-only post-remediation verification assessment"
   - step: 5
@@ -66,6 +70,8 @@ references:
   - ".ai/assets/skills/ai-context-governance/references/workflow-and-commit-playbook.md"
   - ".ai/assets/skills/ai-context-governance/references/output-contract.md"
   - ".ai/assets/skills/ai-context-governance/references/audit-remediation-lifecycle.md"
+  - ".ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md"
+  - ".ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml"
 examples:
   - ".dev/guides/ai-collaboration-guides/AI-CONTEXT-GOVERNANCE-SKILL-GUIDE.md"
 human_guide: ".dev/guides/ai-collaboration-guides/AI-CONTEXT-GOVERNANCE-SKILL-GUIDE.md"

@@ -24,6 +24,28 @@ POLICY = VALIDATOR.load_policy()
 EMPTY_SHA = hashlib.sha256(b"").hexdigest()
 COMMIT = "a" * 40
 DIGEST = "b" * 64
+RELEASE_VERSION = "v0.5.0"
+
+
+def release_contract(version: str = RELEASE_VERSION) -> dict:
+    base = (
+        "python .ai/scripts/validate-ai-context-release-state.py "
+        f"--phase {{phase}} --version {version}"
+    )
+    return {
+        "schema_version": "1.0",
+        "release": version,
+        "phases": {
+            "candidate": {"command": base.format(phase="candidate")},
+            "tag": {"command": base.format(phase="tag")},
+            "publication": {
+                "command": base.format(phase="publication") + " --hosted"
+            },
+            "finalization": {
+                "command": base.format(phase="finalization") + " --hosted"
+            },
+        },
+    }
 
 
 def valid_checkpoint() -> dict:
@@ -128,8 +150,12 @@ def valid_checkpoint() -> dict:
 
 
 class WorkflowHandoffTests(unittest.TestCase):
-    def validate(self, data: dict) -> list[str]:
-        return VALIDATOR.validate_checkpoint_data(data, POLICY)
+    def validate(
+        self,
+        data: dict,
+        contract: dict | None = None,
+    ) -> list[str]:
+        return VALIDATOR.validate_checkpoint_data(data, POLICY, contract)
 
     def test_gwt_001_given_complete_checkpoint_when_validated_then_passes(self) -> None:
         self.assertEqual([], self.validate(valid_checkpoint()))
@@ -182,12 +208,83 @@ class WorkflowHandoffTests(unittest.TestCase):
         data["release_handoff"] = True
         data["release_phase_check"] = copy.deepcopy(data["critical_gate"])
         data["release_phase_check"]["phase"] = "candidate"
+        data["release_phase_check"]["version"] = RELEASE_VERSION
         data["release_phase_check"]["command"] = (
             "python .ai/scripts/validate-ai-context-release-state.py "
             "--release v0.5.0 --phase candidate"
         )
         errors = self.validate(data)
         self.assertTrue(any("REL-owned release phase contract is unavailable" in error for error in errors))
+
+    def test_gwt_016_given_v050_release_contract_when_validated_then_historical_handoff_passes(self) -> None:
+        data = valid_checkpoint()
+        data["release_handoff"] = True
+        data["release_phase_check"] = copy.deepcopy(data["critical_gate"])
+        data["release_phase_check"].update(
+            version=RELEASE_VERSION,
+            phase="candidate",
+            command=release_contract()["phases"]["candidate"]["command"],
+        )
+
+        self.assertEqual([], self.validate(data, release_contract()))
+
+    def test_gwt_017_given_v060_release_contract_when_validated_then_handoff_passes(self) -> None:
+        version = "v0.6.0"
+        contract = release_contract(version)
+        data = valid_checkpoint()
+        data["release_handoff"] = True
+        data["release_phase_check"] = copy.deepcopy(data["critical_gate"])
+        data["release_phase_check"].update(
+            version=version,
+            phase="publication",
+            command=contract["phases"]["publication"]["command"],
+        )
+
+        self.assertEqual([], self.validate(data, contract))
+
+    def test_gwt_018_given_release_version_missing_when_validated_then_fails_closed(self) -> None:
+        data = valid_checkpoint()
+        data["release_handoff"] = True
+        data["release_phase_check"] = copy.deepcopy(data["critical_gate"])
+        data["release_phase_check"].update(
+            phase="candidate",
+            command=release_contract()["phases"]["candidate"]["command"],
+        )
+
+        errors = self.validate(data, release_contract())
+
+        self.assertTrue(any("release_phase_check.version" in error for error in errors))
+
+    def test_gwt_019_given_unsafe_release_version_when_loaded_then_contract_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            errors: list[str] = []
+
+            contract = VALIDATOR.load_release_contract(
+                Path(temp),
+                POLICY,
+                "../v0.6.0",
+                errors,
+            )
+
+            self.assertIsNone(contract)
+            self.assertTrue(any("stable vMAJOR.MINOR.PATCH" in error for error in errors))
+
+    def test_gwt_020_given_contract_release_drift_when_validated_then_fails_closed(self) -> None:
+        data = valid_checkpoint()
+        data["release_handoff"] = True
+        data["release_phase_check"] = copy.deepcopy(data["critical_gate"])
+        data["release_phase_check"].update(
+            version=RELEASE_VERSION,
+            phase="candidate",
+            command=release_contract()["phases"]["candidate"]["command"],
+        )
+        contract = release_contract("v0.6.0")
+
+        errors = self.validate(data, contract)
+
+        self.assertTrue(
+            any("contract.release" in error for error in errors)
+        )
 
     def test_gwt_009_given_blocked_fixture_without_reason_when_validated_then_fails(self) -> None:
         data = valid_checkpoint()

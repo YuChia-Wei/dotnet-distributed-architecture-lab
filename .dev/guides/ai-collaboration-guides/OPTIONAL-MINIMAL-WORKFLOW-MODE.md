@@ -65,11 +65,11 @@
 
 ### `workflow.yaml`
 
-由 `dev-workflow` 建立並維護 locator metadata。即使 development artifact root 改到其他 repository-relative 位置，locator 仍留在 `.dev/workflows/<workflow-id>/`。
+由 `software-development-orchestrator` 建立並維護 locator metadata。即使 development artifact root 改到其他 repository-relative 位置，locator 仍留在 `.dev/workflows/<workflow-id>/`。
 
 ### `workflow-plan.md`
 
-由 `dev-workflow` 使用自有 template 建立；`ddd-ca-hex-architect` 可更新已授權的 architecture sections。
+由 `software-development-orchestrator` 使用自有 template 建立；`ddd-ca-hex-architect` 可更新已授權的 architecture sections。
 
 用途：
 
@@ -103,7 +103,7 @@
 ## 建議工作流
 
 ```text
-1. dev-workflow
+1. software-development-orchestrator
    建立 workflow.yaml、workflow-plan.md 與初始 task
 
 2. ddd-ca-hex-architect
@@ -147,8 +147,8 @@
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
 - `../workflows/README.MD`
-- `../../../.ai/assets/skills/dev-workflow/templates/development-workflow-plan-template.md`
-- `../../../.ai/assets/skills/dev-workflow/templates/development-review-report-template.md`
-- `../../../.ai/assets/skills/dev-workflow/templates/development-workflow-task-template.json`
+- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
+- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-review-report-template.md`
+- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json`
 
 

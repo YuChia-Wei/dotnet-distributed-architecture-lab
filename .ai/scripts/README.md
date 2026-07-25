@@ -80,6 +80,7 @@ Shell or PowerShell scripts should be retired or replaced when they:
 - `validate-ai-context.py`
 - `validate-assessment-artifacts.py`
 - `validate-ai-context-versions.py`
+- `validate-ai-context-target.py`
 - `validate-ai-context-release-state.py`
 - `prepare-ai-context-release.py`
 - `validate-file-disposition-manifest.py`
@@ -89,6 +90,8 @@ Shell or PowerShell scripts should be retired or replaced when they:
 - `validate-ai-context-package.py`
 - `plan-ai-context-package-apply.py`
 - `render-ai-context-release-notes.py`
+- `validate-ai-behavior-evaluation.py`
+- `measure-ai-context-load.py`
 
 These scripts inspect AI context, markdown, prompt portability, or repository hygiene. They are not substitutes for dotnet C# validation.
 
@@ -102,18 +105,27 @@ Git revision metadata, branch and timestamp contracts, lifecycle sections,
 resume safety, and assessment relationship integrity. It does not evaluate
 report prose or replace the producing skill's evidence review.
 
-`validate-ai-context-versions.py` validates governed release identity, SemVer,
-immutable published tag-to-commit mappings, compatibility declarations, and an
-optional target `.dev/AI-CONTEXT-SOURCE.yaml`. It automatically uses source mode
-when release records exist and target mode when only the installed provenance
-manifest exists. `compare-ai-context-versions.py`
+`validate-ai-context-versions.py` is the source-side release-registry validator:
+it validates governed release identity, SemVer, immutable published
+tag-to-commit mappings, and compatibility declarations. It delegates
+component-aware target provenance and semantic customization checks to the
+shared downstream library.
+
+`validate-ai-context-target.py` validates only downstream
+`.dev/ai-context/provenance.yaml` and `customizations.yaml`. It requires stable
+semantic identities, safe paths, base and decision evidence, owner
+reconciliation, active-context baseline audit, post-upgrade audit, and
+fail-closed finalization without requiring source release records, Git tags, or
+publication workflows. `compare-ai-context-versions.py`
 is a read-only Git-tree comparison helper; it proposes an automatic candidate
 only when a supplied target file is byte-identical to the recorded base. Target
 truth, deletions, absent evidence, and source history remain reconciliation or
 exclusion items.
 
-`validate-ai-context-release-state.py` applies the REL-owned, version-specific
-phase contract to one governed release. Candidate validation rejects unresolved
+`validate-ai-context-release-state.py` applies the REL-owned
+`.dev/releases/<version>/release-phase-checks.yaml` contract to one governed
+release. The requested stable version selects the contract and each sanctioned
+command embeds that same literal version. Candidate validation rejects unresolved
 placeholders, copied lifecycle fields, impossible timestamps, unrelated or open
 backlog references, dirty worktrees, package identity drift, and generated
 provenance in authored notes while allowing prior versions in compatibility and
@@ -182,17 +194,31 @@ unsafe paths, output collisions, unsupported Git entry types, and existing
 output files. These source-side packaging tools are excluded from the installed
 target payload.
 
+The distribution profile assigns every projected path to exactly one component.
+Broad entries may use non-overlapping `component_overrides` to classify
+AI-context lifecycle skills, wrappers, target validators, and human guides
+without duplicating package paths. Multiple matching overrides fail closed.
+
 `plan-ai-context-package-apply.py` is the dry-run-first target-side package
 entrypoint. It runs from the extracted envelope's `payload/.ai/scripts/`
 directory, requires a clean committed target, and binds the package manifest,
-target HEAD, and observed path hashes and modes into the plan. Existing target
+target HEAD, effective component selection, selection authority evidence, and
+observed path hashes and modes into the plan. Clean installation uses the
+package default and accepts an explicit `--enable-provider repo-backlog`;
+upgrades preserve component-aware provenance or derive the legacy backlog
+provider only from a schema-1 previous inventory. Schema-2 previous inventory
+without component-aware provenance and dual provenance authorities fail
+closed. Incoming, previous, and operation sets are filtered together so a
+disabled provider never generates removal work. Existing target
 templates and locally changed managed files become reconciliation items.
 Acknowledging such an item skips it; acknowledgement never grants overwrite or
 delete permission. `--apply` rechecks the complete binding, applies only safe
 operations transactionally, and writes
 `.dev/AI-CONTEXT-APPLY-PENDING.yaml`. It never updates validated source
-provenance; `repo-structure-sync` or `ai-context-upgrader` owns validation and
-provenance finalization.
+provenance; the receipt records the resolved/default selection, authority
+evidence, and applied/skipped counts by component. Apply revalidates that
+authority before mutation. `ai-context-init` or `ai-context-upgrader` owns
+validation and provenance finalization.
 
 `render-ai-context-release-notes.py` validates a governed release candidate and
 renders the GitHub Release body from its canonical release notes, migration
@@ -200,6 +226,18 @@ guide, tag, and exact commit. Candidate mode can discover exactly one active
 governed candidate; publish mode fails unless the tagged-tree record is
 `validated`. The tag-triggered Action owns tag selection and Release mutation;
 the renderer never creates or changes Git refs or remote releases.
+
+`measure-ai-context-load.py` is the source-only deterministic measurement
+interface for representative repository-backed context traces. It requires a
+clean repository at the full declared `HEAD`, exactly the `runtime`,
+`skill-routing`, `release`, `handoff`, and `development` trace families, safe
+unique repository-relative paths within each family, and exact Git blob, byte,
+and whitespace-word evidence for every `runtime` or `full-file` load event. Its
+normalized result keeps the tracked UTF-8 `repository_corpus` separate from
+the actual `repository_loaded` events. A provider may report
+`total_prompt_tokens`; otherwise that value is null. The deterministic
+bytes-divided-by-four value is marked as a repository-loaded heuristic and is
+never treated as total prompt usage.
 
 Fail-closed validation and packaging regression tests use Given-When-Then
 naming and comments and run entirely in disposable Git repositories:
@@ -216,9 +254,6 @@ python .ai/scripts/tests/test_git_commit_policy.py -v
 python .ai/scripts/tests/test_ai_context_version_governance.py -v
 python .ai/scripts/tests/test_ai_context_package_apply.py -v
 python .ai/scripts/tests/test_ai_context_packaging.py -v
-python .ai/scripts/tests/test_ai_context_release_state.py -v
-python .ai/scripts/tests/test_prepare_ai_context_release.py -v
-python .ai/scripts/tests/test_release_notes_renderer.py -v
 python .ai/scripts/tests/test_dependency_version_consistency.py -v
 python .ai/scripts/tests/test_file_disposition_manifest.py -v
 python .ai/scripts/tests/test_governance_workflow_contract.py -v
@@ -226,6 +261,12 @@ python .ai/scripts/tests/test_governance_workflow_contract.py -v
 
 `test_ai_context_version_governance.py` and
 `test_ai_context_packaging.py` are source-repository release/build tests.
+`test_ai_behavior_evaluation.py` is the source-release deterministic behavior
+gate. It consumes only preclassified fixtures, performs no model or network
+calls, and compares exact normalized output with the checked-in baseline.
+`test_ai_context_load_measurement.py` proves the source-only context-load
+measurement contract in disposable synthetic Git repositories; it creates no
+official trace or release evidence.
 `test_governance_workflow_contract.py` and the concrete v0.5.0 disposition
 manifest validation are source-repository governance checks.
 `validate-source-governance.py` discovers those manifests through the stable

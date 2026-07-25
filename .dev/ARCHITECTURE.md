@@ -22,7 +22,7 @@ The repository is a distributed commerce lab composed of Products, Orders, and I
 | Orders | `src/Order/` | `SaleOrders.Domains` | `Order` | `SaleOrders.WebApi`, `SaleOrders.Consumer` |
 | Inventory | `src/Inventory/` | `InventoryControl.Domains` | `InventoryItem` | `InventoryControl.WebApi`, `InventoryControl.Consumer` |
 
-Shared boundaries：
+Shared boundaries:
 
 - `src/BC-Contracts/` owns cross-context request/reply contracts and integration events.
 - `src/BuildingBlocks/` owns business-neutral domain, application, and integration abstractions.

@@ -40,6 +40,13 @@ def main() -> int:
         ),
     )
     parser.add_argument("--acknowledge", action="append", default=[])
+    parser.add_argument(
+        "--enable-provider",
+        action="append",
+        default=[],
+        choices=["repo-backlog"],
+        help="Enable an optional provider for a clean installation.",
+    )
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--plan-output", type=Path)
     args = parser.parse_args()
@@ -57,6 +64,7 @@ def main() -> int:
             args.target_root,
             args.previous_files,
             args.previous_version,
+            args.enable_provider,
         )
         content = yaml.safe_dump(plan, sort_keys=False, allow_unicode=True)
         if args.plan_output:

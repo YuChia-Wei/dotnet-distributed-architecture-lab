@@ -21,6 +21,7 @@ GIT_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 CHECKPOINT_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 PLACEHOLDER_RE = re.compile(r"^<[^<>]+>$")
 SIGNATURE_STATUS = {"verified", "unverified", "unsigned", "unavailable"}
+VERSION_RE = re.compile(r"^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$")
 
 
 def load_mapping(path: Path, label: str, errors: list[str]) -> dict[str, Any] | None:
@@ -427,17 +428,30 @@ def validate_checkpoint_data(
         errors.append("release_handoff: must be a boolean")
     phase_check = data.get("release_phase_check")
     if release_handoff is True:
-        phase = mapping(phase_check, "release_phase_check", errors).get("phase")
+        phase_mapping = mapping(phase_check, "release_phase_check", errors)
+        version = non_empty_string(
+            phase_mapping.get("version"),
+            "release_phase_check.version",
+            errors,
+        )
+        if version and not VERSION_RE.fullmatch(version):
+            errors.append(
+                "release_phase_check.version: must use stable vMAJOR.MINOR.PATCH form"
+            )
+        phase = phase_mapping.get("phase")
         if phase not in set(policy.get("release_phases", [])):
             errors.append("release_phase_check.phase: unsupported release phase")
-        phase_command = mapping(phase_check, "release_phase_check", errors).get(
-            "command"
-        )
+        phase_command = phase_mapping.get("command")
         if release_contract is None:
             errors.append(
                 "release_phase_check: REL-owned release phase contract is unavailable"
             )
         else:
+            if release_contract.get("release") != version:
+                errors.append(
+                    "release phase contract.release: must equal "
+                    "release_phase_check.version"
+                )
             phases = mapping(
                 release_contract.get("phases"),
                 "release phase contract.phases",
@@ -594,11 +608,35 @@ def verify_repository(
 def load_release_contract(
     root: Path,
     policy: dict[str, Any],
+    version: Any,
     errors: list[str],
 ) -> dict[str, Any] | None:
-    relative = policy.get("release_phase_contract_path")
-    if not isinstance(relative, str) or not relative:
-        errors.append("policy.release_phase_contract_path: must be a non-empty string")
+    if not isinstance(version, str) or not VERSION_RE.fullmatch(version):
+        errors.append(
+            "release_phase_check.version: must use stable vMAJOR.MINOR.PATCH form"
+        )
+        return None
+    template = policy.get("release_phase_contract_path_template")
+    if not isinstance(template, str) or not template:
+        errors.append(
+            "policy.release_phase_contract_path_template: "
+            "must be a non-empty string"
+        )
+        return None
+    try:
+        relative = template.format(version=version)
+    except (KeyError, ValueError) as exc:
+        errors.append(
+            "policy.release_phase_contract_path_template: "
+            f"must support the version placeholder: {exc}"
+        )
+        return None
+    expected = f".dev/releases/{version}/release-phase-checks.yaml"
+    if relative != expected:
+        errors.append(
+            "policy.release_phase_contract_path_template: must resolve to "
+            ".dev/releases/<version>/release-phase-checks.yaml"
+        )
         return None
     path = root / relative
     if not path.is_file():
@@ -606,6 +644,8 @@ def load_release_contract(
     contract = load_mapping(path, relative, errors)
     if contract is not None and contract.get("schema_version") != "1.0":
         errors.append(f"{relative}: schema_version must be 1.0")
+    if contract is not None and contract.get("release") != version:
+        errors.append(f"{relative}: release must equal {version}")
     return contract
 
 
@@ -638,7 +678,6 @@ def validate_registered_checkpoints(
         return 0, errors, True
     if len(values) != len(set(values)):
         errors.append(f"{relative}: checkpoints must not contain duplicates")
-    release_contract = load_release_contract(root, policy, errors)
     checked = 0
     for value in values:
         path = (root / value).resolve()
@@ -651,6 +690,17 @@ def validate_registered_checkpoints(
         if checkpoint is None:
             continue
         checked += 1
+        phase_check = checkpoint.get("release_phase_check")
+        version = (
+            phase_check.get("version")
+            if isinstance(phase_check, dict)
+            else None
+        )
+        release_contract = (
+            load_release_contract(root, policy, version, errors)
+            if checkpoint.get("release_handoff") is True
+            else None
+        )
         errors.extend(
             f"{value}: {error}"
             for error in validate_checkpoint_data(
@@ -704,8 +754,18 @@ def main() -> int:
     )
     errors: list[str] = []
     data = load_mapping(checkpoint_path, str(args.checkpoint), errors)
-    release_contract = load_release_contract(root, policy, errors)
     if data is not None:
+        phase_check = data.get("release_phase_check")
+        version = (
+            phase_check.get("version")
+            if isinstance(phase_check, dict)
+            else None
+        )
+        release_contract = (
+            load_release_contract(root, policy, version, errors)
+            if data.get("release_handoff") is True
+            else None
+        )
         errors.extend(validate_checkpoint_data(data, policy, release_contract))
         if args.verify_repository:
             errors.extend(verify_repository(root, checkpoint_path, data, policy))

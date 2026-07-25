@@ -62,8 +62,14 @@ class PackageApplyFixture:
         git(self.target, "commit", "-qm", message)
 
     @staticmethod
-    def record(path: str, content: bytes, ownership: str = "framework-managed", mode: str = "0644") -> dict:
-        return {
+    def record(
+        path: str,
+        content: bytes,
+        ownership: str = "framework-managed",
+        mode: str = "0644",
+        component_id: str | None = None,
+    ) -> dict:
+        record = {
             "path": path,
             "source_path": path,
             "sha256": APPLY.sha256_bytes(content),
@@ -73,6 +79,27 @@ class PackageApplyFixture:
             "install_behavior": "seed" if ownership == "target-template" else "managed",
             "entry_id": "fixture",
         }
+        if component_id is not None:
+            record["component_id"] = component_id
+        return record
+
+    def reseal(self) -> None:
+        checksum_lines = []
+        for path in sorted(
+            (
+                item
+                for item in self.package.rglob("*")
+                if item.is_file() and item.name != "SHA256SUMS.txt"
+            ),
+            key=lambda item: item.relative_to(self.package).as_posix().encode("utf-8"),
+        ):
+            relative = path.relative_to(self.package).as_posix()
+            checksum_lines.append(
+                f"{APPLY.sha256_bytes(path.read_bytes())}  {relative}\n"
+            )
+        (self.package / "metadata/SHA256SUMS.txt").write_text(
+            "".join(checksum_lines), encoding="utf-8", newline="\n"
+        )
 
     def make_package(
         self,
@@ -128,16 +155,7 @@ class PackageApplyFixture:
         (self.package / "metadata/migration.yaml").write_text(
             yaml.safe_dump(migration, sort_keys=False), encoding="utf-8", newline="\n"
         )
-        checksum_lines = []
-        for path in sorted(
-            (item for item in self.package.rglob("*") if item.is_file()),
-            key=lambda item: item.relative_to(self.package).as_posix().encode("utf-8"),
-        ):
-            relative = path.relative_to(self.package).as_posix()
-            checksum_lines.append(f"{APPLY.sha256_bytes(path.read_bytes())}  {relative}\n")
-        (self.package / "metadata/SHA256SUMS.txt").write_text(
-            "".join(checksum_lines), encoding="utf-8", newline="\n"
-        )
+        self.reseal()
 
     def plan(self, previous_version: str | None = None) -> dict:
         return APPLY.build_plan(self.package, self.target, self.previous_path, previous_version)
@@ -165,19 +183,87 @@ class PackageApplyFixture:
         (self.package / "metadata/migration.yaml").write_text(
             yaml.safe_dump(migration, sort_keys=False), encoding="utf-8", newline="\n"
         )
-        checksum_lines = []
-        for path in sorted(
-            (item for item in self.package.rglob("*") if item.is_file() and item.name != "SHA256SUMS.txt"),
-            key=lambda item: item.relative_to(self.package).as_posix().encode("utf-8"),
-        ):
-            relative = path.relative_to(self.package).as_posix()
-            checksum_lines.append(f"{APPLY.sha256_bytes(path.read_bytes())}  {relative}\n")
-        (self.package / "metadata/SHA256SUMS.txt").write_text(
-            "".join(checksum_lines), encoding="utf-8", newline="\n"
+        self.reseal()
+
+    def make_component_package(
+        self,
+        incoming: dict[str, tuple[bytes, str, str, str]],
+        clean_operations: list[dict],
+        sources: list[dict] | None = None,
+    ) -> None:
+        records = []
+        for path in sorted(incoming, key=lambda item: item.encode("utf-8")):
+            content, ownership, mode, component_id = incoming[path]
+            payload = self.package / "payload" / path
+            payload.parent.mkdir(parents=True, exist_ok=True)
+            payload.write_bytes(content)
+            records.append(
+                self.record(path, content, ownership, mode, component_id)
+            )
+        files = {
+            "schema_version": "2.0.0",
+            "package_id": "fixture-v1.0.0",
+            "files": records,
+        }
+        files_path = self.package / "metadata/files.yaml"
+        files_path.write_text(
+            yaml.safe_dump(files, sort_keys=False), encoding="utf-8", newline="\n"
         )
+        selection = yaml.safe_load(yaml.safe_dump(APPLY.DEFAULT_COMPONENT_SELECTION))
+        package = {
+            "schema_version": "2.0.0",
+            "package_id": "fixture-v1.0.0",
+            "version": "1.0.0",
+            "selection": selection,
+        }
+        migration = {
+            "schema_version": "3.0.0",
+            "package_id": "fixture-v1.0.0",
+            "selection": selection,
+            "to": {
+                "version": "1.0.0",
+                "manifest_sha256": APPLY.sha256_bytes(files_path.read_bytes()),
+            },
+            "clean_install": {"operations": clean_operations},
+            "sources": sources or [],
+            "safety": {
+                "dry_run_default": True,
+                "clean_worktree_required": True,
+                "starting_commit_required": True,
+                "abort_on_unacknowledged_reconciliation": True,
+            },
+        }
+        (self.package / "metadata/package.yaml").write_text(
+            yaml.safe_dump(package, sort_keys=False), encoding="utf-8", newline="\n"
+        )
+        (self.package / "metadata/migration.yaml").write_text(
+            yaml.safe_dump(migration, sort_keys=False), encoding="utf-8", newline="\n"
+        )
+        self.reseal()
+
+    def write_provenance(self, enabled: bool) -> None:
+        path = self.target / ".dev/ai-context/provenance.yaml"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        selection = yaml.safe_load(yaml.safe_dump(APPLY.DEFAULT_COMPONENT_SELECTION))
+        selection["providers"]["repo-backlog"]["enabled"] = enabled
+        path.write_text(
+            yaml.safe_dump(
+                {"schema_version": "2.0", "selection": selection}, sort_keys=False
+            ),
+            encoding="utf-8",
+            newline="\n",
+        )
+        git(self.target, "add", "--", ".dev/ai-context/provenance.yaml")
 
 
-def operation(identifier: str, kind: str, path: str, ownership: str = "framework-managed", from_path: str | None = None) -> dict:
+def operation(
+    identifier: str,
+    kind: str,
+    path: str,
+    ownership: str = "framework-managed",
+    from_path: str | None = None,
+    component_id: str | None = None,
+) -> dict:
     preconditions = {
         "add": ["destination_absent"],
         "replace": ["current_sha256_equals_previous_release"],
@@ -188,10 +274,272 @@ def operation(identifier: str, kind: str, path: str, ownership: str = "framework
     value = {"id": identifier, "kind": kind, "path": path, "ownership": ownership, "preconditions": preconditions}
     if from_path is not None:
         value["from_path"] = from_path
+    if component_id is not None:
+        value["component_id"] = component_id
     return value
 
 
 class AiContextPackageApplyGwtTests(unittest.TestCase):
+    def test_gwt_000a_given_component_archive_when_clean_installed_then_default_skips_backlog_and_cli_can_enable_it(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            core = operation(
+                "001-core",
+                "add",
+                ".ai/rule.md",
+                component_id="software-development-core",
+            )
+            backlog = operation(
+                "002-backlog",
+                "add",
+                ".dev/backlog/README.MD",
+                component_id="repo-backlog",
+            )
+            fixture.make_component_package(
+                {
+                    ".ai/rule.md": (
+                        b"core\n",
+                        "framework-managed",
+                        "0644",
+                        "software-development-core",
+                    ),
+                    ".dev/backlog/README.MD": (
+                        b"provider\n",
+                        "framework-managed",
+                        "0644",
+                        "repo-backlog",
+                    ),
+                },
+                [core, backlog],
+            )
+
+            default_plan = fixture.plan()
+            self.assertFalse(
+                default_plan["selection"]["providers"]["repo-backlog"]["enabled"]
+            )
+            self.assertEqual([".ai/rule.md"], [
+                item["path"] for item in default_plan["operations"]
+            ])
+            self.assertEqual(
+                {"repo-backlog": 1},
+                default_plan["component_operation_counts"]["would_skip"],
+            )
+
+            enabled_plan = APPLY.build_plan(
+                fixture.package,
+                fixture.target,
+                enable_providers=["repo-backlog"],
+            )
+            self.assertEqual(
+                [".ai/rule.md", ".dev/backlog/README.MD"],
+                [item["path"] for item in enabled_plan["operations"]],
+            )
+            receipt = APPLY.apply_plan(enabled_plan)
+            self.assertEqual(
+                "explicit-cli-provider",
+                receipt["selection_resolution"]["source"],
+            )
+            self.assertEqual(
+                {"repo-backlog": 1, "software-development-core": 1},
+                receipt["component_operation_counts"]["applied"],
+            )
+        finally:
+            fixture.close()
+
+    def test_gwt_000b_given_component_upgrade_without_provenance_when_planned_then_it_fails_closed(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            old = b"old\n"
+            previous = {
+                "schema_version": "2.0.0",
+                "package_id": "fixture-v0.9.0",
+                "files": [
+                    fixture.record(
+                        ".ai/rule.md",
+                        old,
+                        component_id="software-development-core",
+                    )
+                ],
+            }
+            fixture.previous_path = fixture.root / "previous-files.yaml"
+            fixture.previous_path.write_text(
+                yaml.safe_dump(previous, sort_keys=False),
+                encoding="utf-8",
+                newline="\n",
+            )
+            source = {
+                "version": "0.9.0",
+                "manifest_sha256": APPLY.sha256_bytes(
+                    fixture.previous_path.read_bytes()
+                ),
+                "operations": [
+                    operation(
+                        "001-replace",
+                        "replace",
+                        ".ai/rule.md",
+                        component_id="software-development-core",
+                    )
+                ],
+            }
+            fixture.make_component_package(
+                {
+                    ".ai/rule.md": (
+                        b"new\n",
+                        "framework-managed",
+                        "0644",
+                        "software-development-core",
+                    )
+                },
+                [],
+                [source],
+            )
+            fixture.add_target(".ai/rule.md", old)
+            fixture.commit_target()
+            with self.assertRaisesRegex(
+                APPLY.ApplyError, "component-aware upgrade requires"
+            ):
+                fixture.plan("0.9.0")
+        finally:
+            fixture.close()
+
+    def test_gwt_000c_given_provenance_disables_provider_when_upgraded_then_all_provider_operations_are_filtered(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            previous_records = [
+                fixture.record(
+                    ".ai/rule.md",
+                    b"old\n",
+                    component_id="software-development-core",
+                ),
+                fixture.record(
+                    ".dev/backlog/README.MD",
+                    b"old provider\n",
+                    component_id="repo-backlog",
+                ),
+            ]
+            previous = {
+                "schema_version": "2.0.0",
+                "package_id": "fixture-v0.9.0",
+                "files": sorted(
+                    previous_records, key=lambda item: item["path"].encode("utf-8")
+                ),
+            }
+            fixture.previous_path = fixture.root / "previous-files.yaml"
+            fixture.previous_path.write_text(
+                yaml.safe_dump(previous, sort_keys=False),
+                encoding="utf-8",
+                newline="\n",
+            )
+            source = {
+                "version": "0.9.0",
+                "manifest_sha256": APPLY.sha256_bytes(
+                    fixture.previous_path.read_bytes()
+                ),
+                "operations": [
+                    operation(
+                        "001-core",
+                        "replace",
+                        ".ai/rule.md",
+                        component_id="software-development-core",
+                    ),
+                    operation(
+                        "002-provider",
+                        "replace",
+                        ".dev/backlog/README.MD",
+                        component_id="repo-backlog",
+                    ),
+                ],
+            }
+            fixture.make_component_package(
+                {
+                    ".ai/rule.md": (
+                        b"new\n",
+                        "framework-managed",
+                        "0644",
+                        "software-development-core",
+                    ),
+                    ".dev/backlog/README.MD": (
+                        b"new provider\n",
+                        "framework-managed",
+                        "0644",
+                        "repo-backlog",
+                    ),
+                },
+                [],
+                [source],
+            )
+            fixture.add_target(".ai/rule.md", b"old\n")
+            fixture.add_target(".dev/backlog/README.MD", b"old provider\n")
+            fixture.write_provenance(False)
+            fixture.commit_target()
+            plan = fixture.plan("0.9.0")
+            self.assertEqual([".ai/rule.md"], [
+                item["path"] for item in plan["operations"]
+            ])
+            self.assertEqual(
+                {"repo-backlog": 1},
+                plan["component_operation_counts"]["would_skip"],
+            )
+            APPLY.apply_plan(plan)
+            self.assertEqual(
+                b"old provider\n",
+                (fixture.target / ".dev/backlog/README.MD").read_bytes(),
+            )
+        finally:
+            fixture.close()
+
+    def test_gwt_000d_given_legacy_inventory_contains_backlog_when_upgraded_then_provider_is_preserved(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            fixture.add_target(".dev/backlog/README.MD", b"old\n")
+            fixture.commit_target()
+            fixture.make_package(
+                {
+                    ".dev/backlog/README.MD": (
+                        b"new\n",
+                        "framework-managed",
+                        "0644",
+                    )
+                },
+                [
+                    operation(
+                        "001-provider",
+                        "replace",
+                        ".dev/backlog/README.MD",
+                    )
+                ],
+                {
+                    ".dev/backlog/README.MD": (
+                        b"old\n",
+                        "framework-managed",
+                        "0644",
+                    )
+                },
+            )
+            plan = fixture.plan()
+            self.assertTrue(
+                plan["selection"]["providers"]["repo-backlog"]["enabled"]
+            )
+            self.assertEqual(
+                "legacy-schema1-inventory", plan["selection_resolution"]["source"]
+            )
+        finally:
+            fixture.close()
+
+    def test_gwt_000e_given_dual_provenance_when_planned_then_selection_fails_closed(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            fixture.make_component_package({}, [])
+            fixture.write_provenance(False)
+            legacy = fixture.target / ".dev/AI-CONTEXT-SOURCE.yaml"
+            legacy.write_text('schema_version: "1.0"\n', encoding="utf-8")
+            git(fixture.target, "add", "--", ".dev/AI-CONTEXT-SOURCE.yaml")
+            fixture.commit_target()
+            with self.assertRaisesRegex(APPLY.ApplyError, "cannot coexist"):
+                fixture.plan()
+        finally:
+            fixture.close()
+
     def test_gwt_000_given_schema_v1_upgrade_envelope_when_exact_previous_manifest_is_supplied_then_reader_compatibility_remains(self) -> None:
         fixture = PackageApplyFixture()
         try:
@@ -532,6 +880,23 @@ class AiContextPackageApplyGwtTests(unittest.TestCase):
                 fixture.plan()
         finally:
             fixture.close()
+
+    def test_gwt_011a_given_migration_targets_schema_2_context_state_when_planning_then_reserved_paths_fail_closed(self) -> None:
+        for path in (
+            ".dev/ai-context/provenance.yaml",
+            ".dev/ai-context/customizations.yaml",
+        ):
+            with self.subTest(path=path):
+                fixture = PackageApplyFixture()
+                try:
+                    fixture.make_package(
+                        {path: (b"target-owned: true\n", "framework-managed", "0644")},
+                        [operation("001-forged", "add", path)],
+                    )
+                    with self.assertRaisesRegex(APPLY.ApplyError, "cannot manage provenance"):
+                        fixture.plan()
+                finally:
+                    fixture.close()
 
     def test_gwt_012_given_previous_bytes_match_but_git_mode_differs_when_planned_then_it_reconciles(self) -> None:
         fixture = PackageApplyFixture()

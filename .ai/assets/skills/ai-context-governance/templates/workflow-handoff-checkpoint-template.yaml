@@ -34,6 +34,8 @@ continuation:
   failure_ids: []
 release_handoff: false
 release_phase_check: null
+# For release handoffs, replace null with a phase observation that includes
+# version: "<vMAJOR.MINOR.PATCH>" and matches that version-owned contract.
 execution_provenance:
   runtime: "<runtime-name>"
   model: null

@@ -2,7 +2,7 @@
 
 [繁體中文](README.md)
 
-This document is the English translation of the canonical Traditional Chinese repository README, [`README.md`](README.md).
+This document is the English translation of the canonical Traditional Chinese repository `README.md`.
 
 `dotnet-mq-arch-lab` is a distributed commerce sample project built with .NET 10. It implements and validates DDD, Clean Architecture, CQRS, event-driven integration, Outbox, Event Sourcing, and message-queue-based collaboration between bounded contexts.
 

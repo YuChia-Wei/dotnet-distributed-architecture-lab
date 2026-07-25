@@ -248,7 +248,13 @@ run_source_repository_release_checks() {
         echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Release State Fail-Closed Tests (source release context not packaged)"
         echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Release Preparation Fail-Closed Tests (source release context not packaged)"
         echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Release Renderer Fail-Closed Tests (source release context not packaged)"
-        NOT_APPLICABLE=$((NOT_APPLICABLE + 5))
+        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Behavior Deterministic Evaluation (source release context not packaged)"
+        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Load Measurement Contract (source release context not packaged)"
+        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Repository Configuration Ownership Contract (source release context not packaged)"
+        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Repository Configuration Ownership Fail-Closed Tests (source release context not packaged)"
+        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Skill Transition Compatibility Contract (source release context not packaged)"
+        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Skill Transition Compatibility Fail-Closed Tests (source release context not packaged)"
+        NOT_APPLICABLE=$((NOT_APPLICABLE + 11))
         return
     fi
 
@@ -271,6 +277,45 @@ run_source_repository_release_checks() {
     run_command_check "python .ai/scripts/tests/test_release_notes_renderer.py -v" \
         "AI Context Release Renderer Fail-Closed Tests" \
         "required" "true" "true"
+
+    run_command_check "python .ai/scripts/tests/test_ai_behavior_evaluation.py -v" \
+        "AI Behavior Deterministic Evaluation" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/tests/test_ai_context_load_measurement.py -v" \
+        "AI Context Load Measurement Contract" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/validate-repository-config-contract.py" \
+        "Repository Configuration Ownership Contract" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/tests/test_repository_config_contract.py -v" \
+        "Repository Configuration Ownership Fail-Closed Tests" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/validate-skill-transition.py" \
+        "Skill Transition Compatibility Contract" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/tests/test_skill_transition_contract.py -v" \
+        "Skill Transition Compatibility Fail-Closed Tests" \
+        "required" "true" "true"
+}
+
+run_ai_context_version_check() {
+    if source_release_context_available; then
+        run_command_check "python .ai/scripts/validate-ai-context-versions.py" \
+            "AI Context Release And Version Contracts" \
+            "required" "true" "true"
+    elif [ -f "$PROJECT_ROOT/.dev/ai-context/provenance.yaml" ]; then
+        run_command_check "python .ai/scripts/validate-ai-context-target.py" \
+            "AI Context Target Provenance And Customization Contracts" \
+            "required" "true" "true"
+    else
+        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Target Provenance And Customization Contracts (target provenance not initialized)"
+        NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+    fi
 }
 
 source_governance_context_available() {
@@ -284,7 +329,8 @@ run_source_repository_governance_checks() {
     if ! source_governance_context_available; then
         echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Source Governance Manifest Registry (source governance registry not packaged)"
         echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Governance Pull-Request Workflow Contract (source CI workflow not packaged)"
-        NOT_APPLICABLE=$((NOT_APPLICABLE + 2))
+        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: GitHub Workflow Lifecycle Contract (source CI workflows not packaged)"
+        NOT_APPLICABLE=$((NOT_APPLICABLE + 3))
         return
     fi
 
@@ -294,6 +340,10 @@ run_source_repository_governance_checks() {
 
     run_command_check "python .ai/scripts/tests/test_governance_workflow_contract.py -v" \
         "Governance Pull-Request Workflow Contract" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/tests/test_github_workflow_contract.py -v" \
+        "GitHub Workflow Lifecycle Contract" \
         "required" "true" "true"
 }
 
@@ -345,6 +395,22 @@ run_command_check "python .ai/scripts/validate-workflow-handoff.py --all" \
     "Registered Workflow Handoff Checkpoints" \
     "required" "true" "true"
 
+run_command_check "python .ai/scripts/tests/test_software_development_orchestrator_capability_contract.py -v" \
+    "Development Workflow Capability Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_software_development_orchestrator_acceptance.py -v" \
+    "Development Workflow Deterministic Acceptance" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_semantic_customization_lifecycle.py -v" \
+    "Semantic Customization Lifecycle" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_semantic_customization_skill_contract.py -v" \
+    "Semantic Customization Skill Contract" \
+    "required" "true" "true"
+
 if [ -n "${COMMIT_RANGE:-}" ]; then
     COMMIT_VALIDATION_COMMAND="python .ai/scripts/validate-git-commits.py --range '$COMMIT_RANGE'"
     if [ -n "${WORKFLOW_ID:-}" ]; then
@@ -370,9 +436,7 @@ run_command_check "python .ai/scripts/tests/test_ai_context_language_policy.py -
     "AI Context Language And Bilingual Parity Fail-Closed Tests" \
     "required" "true" "true"
 
-run_command_check "python .ai/scripts/validate-ai-context-versions.py" \
-    "AI Context Release And Version Contracts" \
-    "required" "true" "true"
+run_ai_context_version_check
 
 run_source_repository_release_checks
 

@@ -1,32 +1,22 @@
 ---
 name: repo-structure-sync
-description: Initialize a target repository after this AI context framework is copied in by scanning repo facts and refreshing repo-specific README, `.dev/`, `.ai/`, and `AGENTS.md` sections without rewriting framework-level collaboration rules.
+description: Deprecated compatibility alias for ai-context-init. Use only when an existing request or downstream repository still names repo-structure-sync; route new target-repository initialization work to ai-context-init without rewriting historical provenance.
 ---
 
-# Repo Structure Sync
+# Repo Structure Sync Compatibility Entry
 
-This is a thin Claude-compatible wrapper.
-
-## Canonical Source
+This identifier is deprecated but has no scheduled removal release.
+This identifier is a deprecated compatibility wrapper.
 
 - Registry: `.ai/assets/skills/README.MD`
-- Spec: `.ai/assets/skills/repo-structure-sync/skill.yaml`
-- Human Guide: `.dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md`
-- References:
-  - `.ai/assets/skills/repo-structure-sync/references/scan-playbook.md`
-  - `.ai/assets/skills/repo-structure-sync/references/migration-boundaries.md`
-  - `.ai/assets/skills/repo-structure-sync/references/escalation-checklist.md`
-  - `.ai/assets/skills/repo-structure-sync/references/delegation-rules.md`
-  - `.ai/assets/skills/repo-structure-sync/references/document-targets.md`
-  - `.ai/assets/skills/repo-structure-sync/references/output-contract.md`
-  - `.ai/assets/skills/repo-structure-sync/templates/project-config.template.yaml`
-  - `.ai/assets/skills/repo-structure-sync/templates/technology-selection.schema.yaml`
-  - `.ai/assets/skills/repo-structure-sync/templates/public-template-manifest.yaml`
-  - `.ai/assets/sub-agent-role-prompts/context-translator/sub-agent.yaml`
-  - `.ai/assets/skills/ai-context-upgrader/templates/ai-context-source-template.yaml`
+- Active skill: `ai-context-init`
+- Canonical spec: `.ai/assets/skills/ai-context-init/skill.yaml`
+- Compatibility contract: `.ai/assets/skills/repo-structure-sync/skill.yaml`
+- Human guide: `.dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md`
 
-## Wrapper Rules
+Route new work to `ai-context-init`. Preserve historical identifiers in
+existing workflows, tasks, assessments, releases, `initialized_by`, and
+provenance records.
 
-Use this wrapper only as a compatibility entry.
-Keep runtime-specific metadata in this wrapper directory only when the runtime requires it.
+Use this wrapper only as a deprecated compatibility entry.
 If wrapper text and canonical spec differ, follow `.ai/assets/skills/repo-structure-sync/skill.yaml`.

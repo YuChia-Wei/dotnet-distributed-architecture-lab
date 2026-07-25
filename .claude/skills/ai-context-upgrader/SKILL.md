@@ -1,6 +1,6 @@
 ---
 name: ai-context-upgrader
-description: Upgrade an already initialized target repository between published versions of this AI context framework using provenance-aware three-way comparison while preserving target-owned truth and local overrides.
+description: Upgrade an initialized target repository between published framework versions using provenance-aware three-way and semantic-customization reconciliation while preserving target-owned truth.
 ---
 
 # AI Context Upgrader
@@ -18,7 +18,12 @@ This is a thin Claude-compatible wrapper.
   - `.ai/assets/skills/ai-context-upgrader/references/three-way-merge-boundaries.md`
   - `.ai/assets/skills/ai-context-upgrader/references/provenance-contract.md`
   - `.ai/assets/skills/ai-context-upgrader/references/output-contract.md`
+  - `.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`
+  - `.ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml`
   - `.ai/assets/skills/ai-context-upgrader/templates/ai-context-source-template.yaml`
+  - `.ai/assets/skills/ai-context-upgrader/templates/provenance-template.yaml`
+  - `.ai/assets/skills/ai-context-upgrader/templates/customizations-template.yaml`
+  - `.ai/scripts/validate-ai-context-target.py`
 
 ## Wrapper Rules
 

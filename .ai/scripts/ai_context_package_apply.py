@@ -9,6 +9,7 @@ import re
 import shutil
 import stat
 import subprocess
+from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Iterable
@@ -21,6 +22,24 @@ VERSION_RE = re.compile(r"^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 
 class ApplyError(ValueError):
     """A package application safety contract violation."""
+
+
+DEFAULT_COMPONENT_SELECTION = {
+    "release_model": "single-versioned-componentized-release",
+    "mandatory_components": [
+        "software-development-core",
+        "ai-context-lifecycle-core",
+    ],
+    "profiles": ["dotnet-backend"],
+    "providers": {
+        "repo-backlog": {
+            "enabled": False,
+            "preservation": "preserve-existing-if-recorded",
+        }
+    },
+}
+LEGACY_COMPONENT_SELECTION = deepcopy(DEFAULT_COMPONENT_SELECTION)
+LEGACY_COMPONENT_SELECTION["providers"]["repo-backlog"]["enabled"] = True
 
 
 @dataclass(frozen=True)
@@ -142,6 +161,9 @@ def existing_case_map(root: Path) -> dict[str, str]:
 
 
 def inventory_records(document: dict, label: str) -> tuple[dict[str, dict], list[str]]:
+    schema_version = document.get("schema_version")
+    if schema_version not in {"1.0.0", "2.0.0"}:
+        raise ApplyError(f"{label} uses unsupported files schema: {schema_version!r}")
     records = document.get("files")
     if not isinstance(records, list):
         raise ApplyError(f"{label} files must be a list")
@@ -166,11 +188,197 @@ def inventory_records(document: dict, label: str) -> tuple[dict[str, dict], list
             raise ApplyError(f"invalid {label} sha256: {path}")
         if mode not in {"0644", "0755"}:
             raise ApplyError(f"invalid {label} mode: {path}")
+        if schema_version == "2.0.0" and (
+            not isinstance(raw.get("component_id"), str)
+            or not raw["component_id"]
+        ):
+            raise ApplyError(f"missing {label} component_id: {path}")
         output[path] = raw
         order.append(path)
     if order != sorted(order, key=lambda item: item.encode("utf-8")):
         raise ApplyError(f"{label} paths must use UTF-8 bytewise order")
     return output, order
+
+
+def validate_component_selection(selection: object, label: str) -> dict:
+    if not isinstance(selection, dict):
+        raise ApplyError(f"{label} must be a mapping")
+    if selection.get("release_model") != "single-versioned-componentized-release":
+        raise ApplyError(f"{label}.release_model is invalid")
+    mandatory = selection.get("mandatory_components")
+    if not isinstance(mandatory, list) or set(mandatory) != {
+        "software-development-core",
+        "ai-context-lifecycle-core",
+    }:
+        raise ApplyError(f"{label} must include both mandatory cores")
+    if selection.get("profiles") != ["dotnet-backend"]:
+        raise ApplyError(f"{label}.profiles must select dotnet-backend")
+    providers = selection.get("providers")
+    backlog = providers.get("repo-backlog") if isinstance(providers, dict) else None
+    if (
+        not isinstance(backlog, dict)
+        or not isinstance(backlog.get("enabled"), bool)
+        or backlog.get("preservation") != "preserve-existing-if-recorded"
+        or set(backlog) != {"enabled", "preservation"}
+    ):
+        raise ApplyError(f"{label}.repo-backlog contract is invalid")
+    return selection
+
+
+def enabled_components(selection: dict) -> set[str]:
+    selected = set(selection["mandatory_components"])
+    selected.update(selection["profiles"])
+    if selection["providers"]["repo-backlog"]["enabled"]:
+        selected.add("repo-backlog")
+    return selected
+
+
+def inferred_component(path: str, record: dict | None = None) -> str:
+    if isinstance(record, dict):
+        component = record.get("component_id")
+        if isinstance(component, str) and component:
+            return component
+        if record.get("entry_id") == "dotnet-validation-tools":
+            return "dotnet-backend"
+        if record.get("entry_id") in {
+            "ai-entry-documents",
+            "assessment-governance",
+            "public-root-and-catalog-seeds",
+        }:
+            return "ai-context-lifecycle-core"
+    if path.startswith(".dev/backlog/"):
+        return "repo-backlog"
+    return "software-development-core"
+
+
+def inventory_schema(path: Path | None) -> str | None:
+    if path is None:
+        return None
+    return str(load_yaml(path, "previous files.yaml").get("schema_version"))
+
+
+def resolve_effective_selection(
+    package: dict,
+    target: Path,
+    previous_files_path: Path | None,
+    enable_providers: Iterable[str] | None,
+) -> tuple[dict, dict]:
+    requested = sorted(set(enable_providers or []))
+    unsupported = [provider for provider in requested if provider != "repo-backlog"]
+    if unsupported:
+        raise ApplyError(f"unsupported provider selection: {unsupported}")
+
+    new_provenance = target / ".dev/ai-context/provenance.yaml"
+    legacy_provenance = target / ".dev/AI-CONTEXT-SOURCE.yaml"
+    if new_provenance.is_file() and legacy_provenance.is_file():
+        raise ApplyError(
+            "legacy and component-aware provenance authorities cannot coexist"
+        )
+
+    package_schema = package.get("schema_version")
+    default = (
+        validate_component_selection(package.get("selection"), "package selection")
+        if package_schema == "2.0.0"
+        else deepcopy(LEGACY_COMPONENT_SELECTION)
+    )
+    resolved = deepcopy(default)
+    if previous_files_path is None:
+        if "repo-backlog" in requested:
+            resolved["providers"]["repo-backlog"]["enabled"] = True
+        return resolved, {
+            "source": (
+                "explicit-cli-provider"
+                if requested
+                else (
+                    "clean-install-default"
+                    if package_schema == "2.0.0"
+                    else "legacy-package-contract"
+                )
+            ),
+            "evidence": [
+                "metadata/package.yaml#selection"
+                if package_schema == "2.0.0"
+                else "legacy-package-schema"
+            ]
+            + [f"cli:--enable-provider={provider}" for provider in requested],
+        }
+
+    if requested:
+        raise ApplyError(
+            "--enable-provider is a clean-install choice; upgrades use provenance"
+        )
+    if new_provenance.is_file():
+        content = new_provenance.read_bytes()
+        provenance = load_yaml(new_provenance, "target provenance")
+        resolved = deepcopy(
+            validate_component_selection(
+                provenance.get("selection"), "target provenance selection"
+            )
+        )
+        return resolved, {
+            "source": "target-provenance",
+            "evidence": [
+                {
+                    "path": ".dev/ai-context/provenance.yaml",
+                    "sha256": sha256_bytes(content),
+                }
+            ],
+        }
+
+    schema = inventory_schema(previous_files_path)
+    if schema == "2.0.0":
+        raise ApplyError(
+            "component-aware upgrade requires .dev/ai-context/provenance.yaml"
+        )
+    if schema != "1.0.0":
+        raise ApplyError(f"unsupported previous inventory schema: {schema!r}")
+    content = previous_files_path.read_bytes()
+    records, _ = inventory_records(
+        load_yaml(previous_files_path, "previous files.yaml"), "previous inventory"
+    )
+    backlog_paths = sorted(
+        path
+        for path in records
+        if inferred_component(path, records[path]) == "repo-backlog"
+    )
+    resolved["providers"]["repo-backlog"]["enabled"] = bool(backlog_paths)
+    return resolved, {
+        "source": "legacy-schema1-inventory",
+        "evidence": [
+            {
+                "path": str(previous_files_path.resolve()),
+                "sha256": sha256_bytes(content),
+                "repo_backlog_path_count": len(backlog_paths),
+            }
+        ],
+    }
+
+
+def filter_component_records(
+    records: dict[str, dict], selected: set[str]
+) -> dict[str, dict]:
+    return {
+        path: record
+        for path, record in records.items()
+        if inferred_component(path, record) in selected
+    }
+
+
+def operation_component(operation: dict) -> str:
+    component = operation.get("component_id")
+    if isinstance(component, str) and component:
+        return component
+    return inferred_component(
+        str(operation.get("path") or operation.get("from_path") or "")
+    )
+
+
+def count_components(operations: Iterable[dict]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for operation in operations:
+        component = operation_component(operation)
+        counts[component] = counts.get(component, 0) + 1
+    return dict(sorted(counts.items()))
 
 
 def validate_extracted_checksums(package_root: Path) -> None:
@@ -224,6 +432,17 @@ def validate_package_root(package_root: Path) -> tuple[dict, dict[str, dict], di
         raise ApplyError("package.yaml package_id is required")
     if inventory.get("package_id") != package_id or migration.get("package_id") != package_id:
         raise ApplyError("package identity mismatch")
+    package_schema = package.get("schema_version")
+    if package_schema not in {"1.0.0", "2.0.0"}:
+        raise ApplyError(f"unsupported package schema version: {package_schema!r}")
+    if package_schema == "2.0.0":
+        selection = package.get("selection")
+        if not isinstance(selection, dict):
+            raise ApplyError("package selection must be a mapping")
+        if migration.get("schema_version") == "3.0.0" and migration.get(
+            "selection"
+        ) != selection:
+            raise ApplyError("package and migration selections must match")
     records, _ = inventory_records(inventory, "incoming inventory")
     for relative, record in records.items():
         payload = package_root / "payload" / Path(*PurePosixPath(relative).parts)
@@ -361,6 +580,10 @@ def migration_selection(
         return schema_2_migration_selection(
             path, previous_version_value, migration
         )
+    if schema_version == "3.0.0":
+        return schema_2_migration_selection(
+            path, previous_version_value, migration
+        )
     raise ApplyError(f"unsupported migration schema version: {schema_version!r}")
 
 
@@ -382,6 +605,7 @@ def build_plan(
     target_root: Path,
     previous_files_path: Path | None = None,
     previous_version_value: str | None = None,
+    enable_providers: Iterable[str] | None = None,
 ) -> dict:
     target = target_root.resolve()
     head = clean_target_head(target)
@@ -391,6 +615,32 @@ def build_plan(
         previous_version_value,
         migration,
     )
+    default_selection = (
+        validate_component_selection(package.get("selection"), "package selection")
+        if package.get("schema_version") == "2.0.0"
+        else deepcopy(LEGACY_COMPONENT_SELECTION)
+    )
+    resolved_selection, selection_resolution = resolve_effective_selection(
+        package,
+        target,
+        previous_files_path,
+        enable_providers,
+    )
+    selected_components = enabled_components(resolved_selection)
+    incoming = filter_component_records(incoming, selected_components)
+    previous = filter_component_records(previous, selected_components)
+    skipped_by_selection = [
+        raw
+        for raw in operations
+        if isinstance(raw, dict)
+        and operation_component(raw) not in selected_components
+    ]
+    operations = [
+        raw
+        for raw in operations
+        if not isinstance(raw, dict)
+        or operation_component(raw) in selected_components
+    ]
     ids: set[str] = set()
     touched_paths: dict[str, str] = {}
     operation_paths: list[str] = []
@@ -400,9 +650,16 @@ def build_plan(
         if not isinstance(raw, dict):
             raise ApplyError("migration operations must be mappings")
         operation_id, kind, ownership = raw.get("id"), raw.get("kind"), raw.get("ownership")
+        component_id = raw.get("component_id")
         if not isinstance(operation_id, str) or not operation_id or operation_id in ids:
             raise ApplyError("migration operation IDs must be unique non-empty strings")
         ids.add(operation_id)
+        if migration.get("schema_version") == "3.0.0" and (
+            not isinstance(component_id, str) or not component_id
+        ):
+            raise ApplyError(
+                f"schema 3 migration operation requires component_id: {operation_id}"
+            )
         if kind not in {"add", "replace", "remove", "rename", "reconcile"}:
             raise ApplyError(f"unsupported migration operation kind: {kind}")
         required_preconditions = {
@@ -418,7 +675,12 @@ def build_plan(
         path = safe_path(raw.get("path"), "migration path")
         from_path = safe_path(raw.get("from_path"), "migration from_path") if kind == "rename" else None
         for candidate in [path, from_path]:
-            if candidate in {".dev/AI-CONTEXT-SOURCE.yaml", ".dev/AI-CONTEXT-APPLY-PENDING.yaml"}:
+            if candidate in {
+                ".dev/AI-CONTEXT-SOURCE.yaml",
+                ".dev/AI-CONTEXT-APPLY-PENDING.yaml",
+                ".dev/ai-context/provenance.yaml",
+                ".dev/ai-context/customizations.yaml",
+            }:
                 raise ApplyError(f"migration cannot manage provenance or pending receipt: {candidate}")
             if candidate is not None:
                 owner = touched_paths.get(candidate)
@@ -441,7 +703,16 @@ def build_plan(
                 existing = case_map.get(prefix.casefold())
                 if existing is not None and existing != prefix:
                     raise ApplyError(f"case-fold collision for operation path: {existing} and {prefix}")
-        normalized.append({"id": operation_id, "kind": kind, "path": path, "from_path": from_path, "ownership": ownership})
+        normalized.append(
+            {
+                "id": operation_id,
+                "kind": kind,
+                "path": path,
+                "from_path": from_path,
+                "ownership": ownership,
+                "component_id": component_id,
+            }
+        )
     if [item["id"] for item in normalized] != sorted(item["id"] for item in normalized):
         raise ApplyError("migration operations must be ordered by ID")
     destination_paths = {item["path"] for item in normalized if item["kind"] in {"add", "replace", "rename", "reconcile"}}
@@ -501,6 +772,14 @@ def build_plan(
         else:
             action, reason = "reconcile", "migration explicitly requires reconciliation"
         planned.append({**item, "action": action, "reason": reason})
+    would_apply = [
+        item
+        for item in planned
+        if item["action"] in {"add", "replace", "remove", "rename"}
+    ]
+    would_skip = [
+        item for item in planned if item["action"] in {"noop", "reconcile"}
+    ]
     return {
         "schema_version": "1.0.0",
         "package_id": package["package_id"],
@@ -514,6 +793,18 @@ def build_plan(
         "target_starting_commit": head,
         "previous_files": str(previous_files_path.resolve()) if previous_files_path else None,
         "previous_version": selected_version,
+        "selection": resolved_selection,
+        "selection_default": default_selection,
+        "selection_resolution": selection_resolution,
+        "selection_request": {
+            "enable_providers": sorted(set(enable_providers or [])),
+        },
+        "component_operation_counts": {
+            "would_apply": count_components(would_apply),
+            "would_skip": count_components(
+                [*would_skip, *skipped_by_selection]
+            ),
+        },
         "observed": observed,
         "operations": planned,
     }
@@ -545,6 +836,22 @@ def apply_plan(plan: dict, acknowledgements: set[str] | None = None) -> dict:
         raise ApplyError("migration contract changed after planning")
     if clean_target_head(target) != plan.get("target_starting_commit"):
         raise ApplyError("target HEAD changed after planning")
+    previous_files_value = plan.get("previous_files")
+    previous_files = Path(previous_files_value) if previous_files_value else None
+    resolved_selection, selection_resolution = resolve_effective_selection(
+        package,
+        target,
+        previous_files,
+        plan.get("selection_request", {}).get("enable_providers", []),
+    )
+    if (
+        resolved_selection != plan.get("selection")
+        or selection_resolution != plan.get("selection_resolution")
+    ):
+        raise ApplyError("selection authority changed after planning")
+    incoming = filter_component_records(
+        incoming, enabled_components(resolved_selection)
+    )
     current_observed = observation(plan.get("observed", {}).keys(), target)
     if current_observed != plan.get("observed"):
         raise ApplyError("target file state changed after planning")
@@ -594,6 +901,13 @@ def apply_plan(plan: dict, acknowledgements: set[str] | None = None) -> dict:
             "target_starting_commit": plan["target_starting_commit"],
             "applied_operation_ids": [item["id"] for item in active],
             "skipped_reconciliation_ids": sorted(reconciles),
+            "selection": plan["selection"],
+            "selection_default": plan["selection_default"],
+            "selection_resolution": plan["selection_resolution"],
+            "component_operation_counts": {
+                "applied": count_components(active),
+                "skipped": plan["component_operation_counts"]["would_skip"],
+            },
             "provenance_updated": False,
         }
         receipt_path.write_text(yaml.safe_dump(receipt, sort_keys=False), encoding="utf-8", newline="\n")

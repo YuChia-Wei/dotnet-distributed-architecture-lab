@@ -1,0 +1,62 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.3.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-07-24T08:10:00+08:00",
+  "workflow_id": "<YYYY-MM-DD-topic[-NN]>",
+  "task_id": "<development-task-id>",
+  "owner_skill": "<development-skill>",
+  "related_plan_id": "development-plan-<YYYY-MM-DD-topic[-NN]>",
+  "status": "pending",
+  "created_at": "<ISO-8601 timestamp with UTC offset>",
+  "updated_at": "<ISO-8601 timestamp with UTC offset>",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "workflow_locator": ".dev/workflows/<workflow-id>/workflow.yaml",
+  "scope": {
+    "goal": "",
+    "target": "",
+    "files": [],
+    "constraints": [],
+    "non_goals": []
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [],
+    "architecture_decisions": [],
+    "user_constraints": []
+  },
+  "execution": {
+    "capability_slot": "",
+    "approval_contract": {
+      "status": "not-required",
+      "required_before": "",
+      "authorization_source": [],
+      "pending_decision": ""
+    },
+    "implementation_contract": null,
+    "test_execution_contract": null,
+    "spec_compliance": {
+      "selected": false,
+      "activation_source": [],
+      "expected_outcome": "not-applicable"
+    },
+    "steps": [],
+    "validation": [],
+    "commit_checkpoint": "",
+    "deferred_items": []
+  },
+  "results": {
+    "summary": "",
+    "files_changed": [],
+    "approval_evidence": [],
+    "test_execution": [],
+    "spec_compliance": {
+      "outcome": "not-applicable",
+      "coverage_percent": null,
+      "evidence": []
+    },
+    "validation_evidence": [],
+    "commits": [],
+    "follow_up_needed": false
+  }
+}

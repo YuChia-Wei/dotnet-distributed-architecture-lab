@@ -27,7 +27,7 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`,
 - Mix command/query responsibilities.
 
 ## ALWAYS REQUIRED
-- If `repo-structure-sync` generated `.dev/project-config.yaml`, use it as a secondary summary of confirmed environment and architecture facts.
+- If `ai-context-init` generated `.dev/project-config.yaml`, use it as a secondary summary of confirmed environment and architecture facts.
 - When the target adopts the `.slnx` profile, map product projects to
   `/<workload>/DomainCore/` and `/<workload>/Presentation/` without forcing the
   same physical directory layout.
@@ -132,4 +132,3 @@ else if (env.IsEnvironment("TestOutbox"))
 ```
 
 TODO: confirm environment names from target-repository evidence and generated project context when present.
-

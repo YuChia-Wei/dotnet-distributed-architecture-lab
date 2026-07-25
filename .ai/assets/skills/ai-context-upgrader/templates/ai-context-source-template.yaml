@@ -5,6 +5,10 @@ template_metadata:
   updated_at: "2026-07-14T21:51:28+08:00"
 
 schema_version: "1.0"
+# Deprecated compatibility template for targets governed before v0.6.0.
+# New initialization writes .dev/ai-context/provenance.yaml from
+# provenance-template.yaml and .dev/ai-context/customizations.yaml from
+# customizations-template.yaml. Never create both authorities.
 source:
   repository: "<canonical-repository-identity>"
   release_id: "REL-v0.0.0"

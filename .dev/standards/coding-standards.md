@@ -123,7 +123,7 @@ It preserves the design intent of DDD, Clean Architecture, CQRS, and Event Sourc
 
 ### ⚠ Repository and Query Port Rules
 
-Portable Aggregate Repository：
+Portable Aggregate Repository:
 
 ```csharp
 public interface IAggregateRepository<TAggregate, TId>
@@ -134,7 +134,7 @@ public interface IAggregateRepository<TAggregate, TId>
 }
 ```
 
-Compatibility：
+Compatibility:
 
 ```csharp
 public interface IDomainRepository<TAggregate, TId>

@@ -1,0 +1,58 @@
+schema_version: "1.0"
+fixture_id: "DEVWF-002-fresh-session-checkpoint"
+repository:
+  branch: "codex/devwf-fresh-session-acceptance"
+  author_name: "Software Development Orchestrator Acceptance"
+  author_email: "devwf-acceptance@example.test"
+  validated_commit_subject: "test(software-development-orchestrator): create acceptance base"
+  checkpoint_commit_subject: "test(software-development-orchestrator): add receiving checkpoint"
+  observed_trailer: "Co-Authored-By: OpenAI Codex (gpt-5.6-sol, xhigh) <noreply@openai.com>"
+workflow:
+  workflow_id: "<workflow-id>"
+  task_id: "DEVWF-ACC-TEST"
+  checkpoint_path: ".dev/workflows/<workflow-id>/handoff.yaml"
+  locator_path: ".dev/workflows/<workflow-id>/workflow.yaml"
+  task_path: ".dev/workflows/<workflow-id>/tasks/DEVWF-ACC-TEST.json"
+  target_policy_path: ".dev/standards/SOFTWARE-DEVELOPMENT-ORCHESTRATOR-ACCEPTANCE-TEST-POLICY.md"
+resume:
+  last_completed_action: "Executed the target-owned unit acceptance command and recorded its result."
+  exact_next_action: "Resolve the recorded integration environment block, then run the target-owned integration command."
+critical_gate:
+  command: "bash .ai/scripts/check-all.sh --critical"
+  observed_at: "2026-07-24T08:31:00+08:00"
+  output_lines:
+    - "Required Failed: 0"
+    - "All required checks passed."
+execution_provenance:
+  runtime: "deterministic software-development-orchestrator acceptance fixture"
+  model: null
+  reasoning_effort: null
+  model_source: "unavailable"
+  evidence_ref: "fixture execution does not claim a model identity"
+test_state:
+  provider: "target-profile-commands"
+  working_directory: "."
+  selected_levels:
+    - "unit"
+    - "integration"
+  required_for_closeout:
+    - "unit"
+    - "integration"
+  commands:
+    - level: "unit"
+      command: "python -c \"print('unit acceptance passed')\""
+    - level: "integration"
+      command: "python -c \"print('integration acceptance requires target environment')\""
+  outcomes:
+    - level: "unit"
+      outcome: "passed"
+      evidence:
+        - "unit acceptance command exited 0 and printed unit acceptance passed"
+      deferral_owner: ""
+      follow_up: ""
+    - level: "integration"
+      outcome: "blocked-by-environment"
+      evidence:
+        - "fixture records the missing target integration environment"
+      deferral_owner: ""
+      follow_up: "Resolve the target integration environment before closeout."

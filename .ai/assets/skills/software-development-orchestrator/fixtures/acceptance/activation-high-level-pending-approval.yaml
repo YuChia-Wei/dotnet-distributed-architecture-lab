@@ -1,0 +1,24 @@
+schema_version: "1.0"
+fixture_id: "DEVWF-002-activation-pending-approval"
+classification:
+  intent_class: "high-level-multi-stage-software-development"
+  producer: "model-in-loop-eval"
+  deterministic_boundary: "preclassified-envelope"
+  evidence_ref: "EVAL-owned classified-intent fixture"
+request:
+  summary: "Define, design, implement, test, and review a bounded software change."
+  named_skills: []
+  stage_intents:
+    - "capture-requirements"
+    - "define-specification"
+    - "design-architecture"
+    - "implement-approved-change"
+    - "execute-default-tests"
+    - "review-implementation"
+current_artifacts: []
+repository_policy_refs:
+  - ".dev/standards/WORKFLOW-GATE-POLICY.md"
+approval:
+  transition: "requirement-design-specification-to-implementation"
+  status: "awaiting-approval"
+  pending_decision: "Owner approval of the requirement, design, and specification baseline."

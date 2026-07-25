@@ -8,7 +8,7 @@
   "owner_skill": "ai-context-governance",
   "status": "in_progress",
   "created_at": "2026-07-25T07:05:01+08:00",
-  "updated_at": "2026-07-25T07:22:30+08:00",
+  "updated_at": "2026-07-25T07:37:20+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICUP6-V060"],
   "scope": {
@@ -20,8 +20,8 @@
   "execution": {
     "steps": ["Run v0.6.0 dry plan", "Apply safe operations", "Reconcile component selection and target truth", "Migrate provenance and customizations", "Run required validation"],
     "validation": ["v0.6.0 package planner and receipt", "Target required gate", "Provenance authority validation"],
-    "last_completed_step": "Validated the immutable v0.6.0 package and persisted its 161-operation component-aware dry plan, including all 75 reconciliation IDs.",
-    "next_action": "Apply the 86 automatic operations with explicit acknowledgement of the 75 reconciliation operations, then complete path-level reconciliation and provenance migration."
+    "last_completed_step": "Applied all 86 automatic operations, reconciled framework moves and removals, aligned canonical paths, and reduced legacy overrides to three owner-level semantic decisions.",
+    "next_action": "Obtain owner approval for report 05, then write and validate the component-aware provenance and customization ledger."
   },
   "results": {
     "summary": "",

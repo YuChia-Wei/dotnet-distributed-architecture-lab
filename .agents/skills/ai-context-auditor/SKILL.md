@@ -1,6 +1,6 @@
 ---
 name: ai-context-auditor
-description: Analyze repository AI context structure, governance, routing, wrappers, indexes, prompts, workflow records, and validation surfaces. Return transient read-only findings in conversation unless the user requests a persisted report; durable audits use standalone assessment artifacts. Exclude product source and test code by default; redirect source-code review requests to the repository code-review skill.
+description: Analyze repository AI context structure, governance, routing, wrappers, semantic customization baselines, post-upgrade results, and validation surfaces. Return transient read-only findings unless persistence is requested; remain read-only and exclude product source/test code by default.
 ---
 
 # AI Context Auditor
@@ -16,6 +16,7 @@ This is a thin current-runtime wrapper.
   - `.ai/assets/skills/ai-context-auditor/references/scope-and-routing.md`
   - `.ai/assets/skills/ai-context-auditor/references/audit-playbook.md`
   - `.ai/assets/skills/ai-context-auditor/references/output-contract.md`
+  - `.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`
 - Report Template: `.ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md`
 - Assessment Policy: `.dev/standards/ASSESSMENT-ARTIFACT-POLICY.md`
 - Assessment Locator: `.dev/assessments/templates/assessment-locator-template.yaml`

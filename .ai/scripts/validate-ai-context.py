@@ -23,8 +23,19 @@ ACTIVE_SCRIPT_REFERENCE = re.compile(
 SOURCE_ONLY_SCRIPT_REFERENCES = frozenset(
     {
         Path(".ai/scripts/tests/test_ai_context_packaging.py"),
+        Path(".ai/scripts/tests/test_ai_context_release_state.py"),
         Path(".ai/scripts/tests/test_ai_context_version_governance.py"),
+        Path(".ai/scripts/tests/test_ai_behavior_evaluation.py"),
+        Path(".ai/scripts/tests/test_ai_context_load_measurement.py"),
+        Path(".ai/scripts/tests/test_github_workflow_contract.py"),
         Path(".ai/scripts/tests/test_governance_workflow_contract.py"),
+        Path(".ai/scripts/tests/test_prepare_ai_context_release.py"),
+        Path(".ai/scripts/tests/test_release_notes_renderer.py"),
+        Path(".ai/scripts/tests/test_repository_config_contract.py"),
+        Path(".ai/scripts/tests/test_skill_transition_contract.py"),
+        Path(".ai/scripts/validate-ai-context-versions.py"),
+        Path(".ai/scripts/validate-repository-config-contract.py"),
+        Path(".ai/scripts/validate-skill-transition.py"),
         Path(".ai/scripts/validate-source-governance.py"),
     }
 )
@@ -90,6 +101,12 @@ SKILL_WRAPPER_CONTRACTS = {
         "use_line": "Use this wrapper only as a compatibility entry.",
     },
 }
+DEPRECATED_WRAPPER_KIND_LINE = (
+    "This identifier is a deprecated compatibility wrapper."
+)
+DEPRECATED_WRAPPER_USE_LINE = (
+    "Use this wrapper only as a deprecated compatibility entry."
+)
 PACKAGE_PROFILE = Path(".ai/distribution/profiles/dotnet-backend.yaml")
 SUB_AGENT_ADAPTER_CONTRACTS = {
     "codex": {
@@ -109,13 +126,13 @@ SUB_AGENT_ADAPTER_CONTRACTS = {
     },
 }
 CAPABILITY_PROFILE = Path(
-    ".ai/assets/skills/dev-workflow/references/capability-profile.yaml"
+    ".ai/assets/skills/software-development-orchestrator/references/capability-profile.yaml"
 )
 PROJECT_CONFIG_TEMPLATE = Path(
-    ".ai/assets/skills/repo-structure-sync/templates/project-config.template.yaml"
+    ".ai/assets/skills/ai-context-init/templates/project-config.template.yaml"
 )
 TECHNOLOGY_SELECTION_SCHEMA = Path(
-    ".ai/assets/skills/repo-structure-sync/templates/technology-selection.schema.yaml"
+    ".ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml"
 )
 EXAMPLE_EVIDENCE_SCHEMA = Path(".dev/standards/examples/evidence-schema.yaml")
 EXAMPLE_EVIDENCE_MANIFEST = Path(".dev/standards/examples/evidence-manifest.yaml")
@@ -963,13 +980,27 @@ def canonical_wrapper_references(path: Path, data: dict) -> set[str]:
     return references
 
 
-def normalized_wrapper_projection(text: str, target: str) -> str:
+def normalized_wrapper_projection(
+    text: str, target: str, *, deprecated: bool = False
+) -> str:
     """Normalize only declared runtime identity and compatibility boilerplate."""
     contract = SKILL_WRAPPER_CONTRACTS[target]
-    normalized = text.replace(contract["kind_line"], "This is a thin <runtime> wrapper.")
-    normalized = normalized.replace(
-        contract["use_line"], "Use this wrapper only as the <runtime> entry."
-    )
+    if deprecated:
+        normalized = text.replace(
+            DEPRECATED_WRAPPER_KIND_LINE,
+            "This identifier is a deprecated compatibility wrapper.",
+        )
+        normalized = normalized.replace(
+            DEPRECATED_WRAPPER_USE_LINE,
+            "Use this wrapper only as a deprecated compatibility entry.",
+        )
+    else:
+        normalized = text.replace(
+            contract["kind_line"], "This is a thin <runtime> wrapper."
+        )
+        normalized = normalized.replace(
+            contract["use_line"], "Use this wrapper only as the <runtime> entry."
+        )
     return normalized.replace(contract["identity"], "<runtime>")
 
 
@@ -992,6 +1023,7 @@ def validate_skill_wrapper_semantics(
         return
 
     projections: dict[str, str] = {}
+    deprecated = data.get("status") == "deprecated"
     for target in sorted(set(targets) & set(SKILL_WRAPPER_CONTRACTS)):
         target_metadata = metadata.get(target)
         if not isinstance(target_metadata, dict):
@@ -1036,9 +1068,21 @@ def validate_skill_wrapper_semantics(
         )
         if authority_line not in text:
             errors.append(f"{entry}: missing exact canonical authority fallback")
-        if contract["kind_line"] not in text or contract["use_line"] not in text:
+        kind_line = (
+            DEPRECATED_WRAPPER_KIND_LINE
+            if deprecated
+            else contract["kind_line"]
+        )
+        use_line = (
+            DEPRECATED_WRAPPER_USE_LINE
+            if deprecated
+            else contract["use_line"]
+        )
+        if kind_line not in text or use_line not in text:
             errors.append(f"{entry}: missing exact {target} thin-wrapper identity")
-        projections[target] = normalized_wrapper_projection(text, target)
+        projections[target] = normalized_wrapper_projection(
+            text, target, deprecated=deprecated
+        )
 
     if set(projections) >= {"codex", "claude"} and (
         projections["claude"] != projections["codex"]
@@ -1515,8 +1559,9 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
     profile = load_yaml_mapping(CAPABILITY_PROFILE, errors)
     if profile is None:
         return 0
-    if profile.get("schema_version") != "1.0":
-        errors.append(f"{CAPABILITY_PROFILE}: schema_version must be 1.0")
+    schema_version = profile.get("schema_version")
+    if schema_version not in {"1.0", "1.1", "1.2"}:
+        errors.append(f"{CAPABILITY_PROFILE}: schema_version must be 1.0, 1.1, or 1.2")
     if not isinstance(profile.get("profile_id"), str) or not profile.get("profile_id"):
         errors.append(f"{CAPABILITY_PROFILE}: profile_id must be a non-empty string")
     if profile.get("status") != "active":
@@ -1541,6 +1586,102 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
         errors.append(f"{CAPABILITY_PROFILE}: unknown mapped slots {unknown}")
     if missing:
         errors.append(f"{CAPABILITY_PROFILE}: missing required mappings {missing}")
+    contracts = profile.get("capability_contracts", {})
+    if schema_version in {"1.1", "1.2"}:
+        if not isinstance(contracts, dict):
+            errors.append(f"{CAPABILITY_PROFILE}: capability_contracts must be a mapping")
+        else:
+            test_execution = contracts.get("test-execution")
+            expected_contract = {
+                "provider_order": [
+                    "target-profile-commands",
+                    "evaluated-external-skill",
+                    "fallback-contract",
+                ],
+                "default_levels": ["unit", "integration"],
+                "conditional_levels": [
+                    "e2e",
+                    "browser",
+                    "playwright",
+                    "environment-dependent",
+                ],
+                "outcomes": [
+                    "passed",
+                    "failed",
+                    "blocked-by-environment",
+                    "not-applicable",
+                    "deferred-with-owner",
+                ],
+            }
+            if not isinstance(test_execution, dict):
+                errors.append(f"{CAPABILITY_PROFILE}: test-execution contract is required")
+            else:
+                for field, expected_values in expected_contract.items():
+                    if test_execution.get(field) != expected_values:
+                        errors.append(
+                            f"{CAPABILITY_PROFILE}: test-execution.{field} must equal {expected_values}"
+                        )
+            if "test-execution" not in allowed:
+                errors.append(f"{CAPABILITY_PROFILE}: test-execution must be an allowed slot")
+            if "test-execution" in required:
+                errors.append(f"{CAPABILITY_PROFILE}: test-execution must remain optional")
+            if "test-execution" in mappings:
+                errors.append(f"{CAPABILITY_PROFILE}: test-execution must not map to an unevaluated skill")
+    if schema_version == "1.2":
+        expected_orchestration = {
+            "activation": {
+                "intent_class": "high-level-multi-stage-software-development",
+                "skill_name_required": False,
+                "routing_basis": [
+                    "requested-outcome",
+                    "current-artifacts",
+                    "repository-policy",
+                    "approval-state",
+                ],
+            },
+            "approval": {
+                "gated_transition": "requirement-design-specification-to-implementation",
+                "pending_outcome": "pause-before-implementation",
+                "authorization_source_required": True,
+            },
+            "spec_compliance": {
+                "default_selected": False,
+                "unselected_outcome": "not-applicable",
+                "selected_gate": "100-percent-fail-closed-with-evidence",
+            },
+            "commit": {
+                "checkpoint_unit": "validated-durable-stage-or-coherent-bounded-batch",
+                "per_skill_invocation_commits": "prohibited",
+                "history_compression": "unshared-unpushed-only",
+                "preserve": ["approval", "evidence", "review", "checkpoint", "handoff"],
+            },
+            "fresh_session": {
+                "evidence_sources": [
+                    "git",
+                    "workflow-locator",
+                    "current-task",
+                    "target-policy",
+                    "registered-handoff-checkpoint",
+                ],
+                "hidden_context_required": False,
+            },
+            "closeout_evidence": [
+                "approved-requirements-and-specifications",
+                "implementation",
+                "required-tests",
+                "selected-compliance",
+                "review",
+                "validation",
+                "task-state",
+                "commits",
+                "branch-and-handoff",
+            ],
+        }
+        if profile.get("orchestration_contract") != expected_orchestration:
+            errors.append(
+                f"{CAPABILITY_PROFILE}: orchestration_contract must match the "
+                "v1.2 deterministic acceptance contract"
+            )
     for slot, skill_id in mappings.items():
         if not isinstance(skill_id, str) or skill_id not in skill_assets:
             errors.append(f"{CAPABILITY_PROFILE}: {slot} maps missing skill {skill_id!r}")
@@ -1553,8 +1694,8 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
             errors.append(f"{CAPABILITY_PROFILE}: {skill_id} does not declare slot {slot}")
     expected = {str(slot): str(skill) for slot, skill in mappings.items()}
     for markdown_path, heading in (
-        (Path(".ai/assets/skills/dev-workflow/references/capability-profile.md"), "## Capability Mapping"),
-        (Path(".ai/assets/skills/dev-workflow/references/routing-playbook.md"), "## Local Profile Resolution"),
+        (Path(".ai/assets/skills/software-development-orchestrator/references/capability-profile.md"), "## Capability Mapping"),
+        (Path(".ai/assets/skills/software-development-orchestrator/references/routing-playbook.md"), "## Local Profile Resolution"),
     ):
         text = (ROOT / markdown_path).read_text(encoding="utf-8")
         section = text.split(heading, 1)[1].split("\n## ", 1)[0] if heading in text else ""

@@ -108,6 +108,33 @@ If wrapper text and canonical spec differ, follow `{canonical}`.
         )
         return data
 
+    def write_deprecated_pair(self) -> None:
+        canonical = self.path.as_posix()
+        shared = f"""# Example Compatibility Entry
+
+- Registry: `.ai/assets/skills/README.MD`
+- Active skill: `example-active`
+- Canonical spec: `.ai/assets/skills/example-active/skill.yaml`
+- Compatibility contract: `{canonical}`
+
+This identifier is a deprecated compatibility wrapper.
+Use this wrapper only as a deprecated compatibility entry.
+If wrapper text and canonical spec differ, follow `{canonical}`.
+"""
+        for path in (
+            self.root / ".agents/skills/example/SKILL.md",
+            self.root / ".claude/skills/example/SKILL.md",
+        ):
+            path.write_text(
+                "---\n"
+                "name: example\n"
+                "description: Deprecated compatibility alias for example-active.\n"
+                "---\n\n"
+                f"{shared}",
+                encoding="utf-8",
+                newline="\n",
+            )
+
 
 class WrapperMetadataValidationTests(unittest.TestCase):
     def test_gwt_001_given_matching_existing_wrapper_paths_when_validated_then_passes(self) -> None:
@@ -358,6 +385,19 @@ class WrapperSemanticValidationTests(unittest.TestCase):
             # When validation runs, then the exact runtime root fails closed.
             errors = fixture.validate_semantics(data)
             self.assertTrue(any("exact codex skill directory" in error for error in errors))
+        finally:
+            fixture.close()
+
+    def test_gwt_016_given_deprecated_compatibility_pair_when_validated_then_passes(self) -> None:
+        fixture = WrapperMetadataFixture()
+        try:
+            fixture.write_deprecated_pair()
+            data = fixture.valid_semantic_data()
+            data["status"] = "deprecated"
+            data["references"] = [
+                ".ai/assets/skills/example-active/skill.yaml"
+            ]
+            self.assertEqual([], fixture.validate_semantics(data))
         finally:
             fixture.close()
 

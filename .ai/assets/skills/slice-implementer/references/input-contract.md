@@ -22,4 +22,4 @@ When an informal defect is reported without a formal finding, use `bug-fix` or
 refactor, and cleanup intents do not require findings. Do not manufacture a
 finding identifier.
 
-If the slice boundary, aggregate boundary, dependency direction, or domain language is unclear, stop and hand off to `ddd-ca-hex-architect` or `dev-workflow`.
+If the slice boundary, aggregate boundary, dependency direction, or domain language is unclear, stop and hand off to `ddd-ca-hex-architect` or `software-development-orchestrator`.

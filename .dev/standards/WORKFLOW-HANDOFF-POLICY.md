@@ -93,10 +93,13 @@ continuation exception.
 HANDOFF owns this interface. REL owns the allowed phase vocabulary, the
 sanctioned command, and its release-state semantics.
 
-Until the REL-owned contract declared by
-`WORKFLOW-HANDOFF-POLICY.yaml:release_phase_contract_path` exists, every
-`release_handoff: true` checkpoint fails closed. An arbitrary command string or
-synthetic successful result is not a release phase contract.
+Every `release_handoff: true` checkpoint records
+`release_phase_check.version`. The validator resolves that stable version
+through
+`WORKFLOW-HANDOFF-POLICY.yaml:release_phase_contract_path_template`; the
+resolved contract must identify the same release and sanction the exact phase
+command. A missing version, missing version-owned contract, arbitrary command
+string, or synthetic successful result fails closed.
 
 ## Validation Evidence
 
