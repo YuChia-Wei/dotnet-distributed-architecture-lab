@@ -6,9 +6,9 @@
   "task_id": "AICUP6-003",
   "workflow_id": "2026-07-25-ai-context-v0-6-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-07-25T07:05:01+08:00",
-  "updated_at": "2026-07-25T07:37:20+08:00",
+  "updated_at": "2026-07-25T08:31:36+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICUP6-V060"],
   "scope": {
@@ -20,15 +20,15 @@
   "execution": {
     "steps": ["Run v0.6.0 dry plan", "Apply safe operations", "Reconcile component selection and target truth", "Migrate provenance and customizations", "Run required validation"],
     "validation": ["v0.6.0 package planner and receipt", "Target required gate", "Provenance authority validation"],
-    "last_completed_step": "Applied all 86 automatic operations, reconciled framework moves and removals, aligned canonical paths, and reduced legacy overrides to three owner-level semantic decisions.",
-    "next_action": "Obtain owner approval for report 05, then write and validate the component-aware provenance and customization ledger."
+    "last_completed_step": "Applied 86 automatic operations, reconciled 75 acknowledged paths, recorded owner-approved semantic decisions, and finalized component-aware v0.6.0 provenance.",
+    "next_action": "No further AICUP6-003 action; proceed through completed closeout evidence."
   },
   "results": {
-    "summary": "",
-    "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
-    "residual_risk": "v0.6.0 introduces breaking component and provenance contracts.",
-    "follow_up_needed": true
+    "summary": "The governed v0.5.0-to-v0.6.0 migration is complete. Provenance selects both mandatory components, dotnet-backend, and repo-backlog; all semantic customizations have owner approval and independent verification.",
+    "files_changed": [".ai/**", ".agents/**", ".claude/**", ".dev/ai-context/**", ".gitattributes", "global.json", ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/06-v0.6.0-remediation-report.md"],
+    "tests_run": ["validate-ai-context-target.py", "validate-ai-context.py", "validate-shell-assets.py", "check-all.sh --quick: 30/30 passed", "framework unit suite: 251 passed, 1 skipped", "dotnet build MQArchLab.slnx --no-restore"],
+    "finding_status": "addressed",
+    "residual_risk": "No unresolved AI-context reconciliation remains.",
+    "follow_up_needed": false
   }
 }

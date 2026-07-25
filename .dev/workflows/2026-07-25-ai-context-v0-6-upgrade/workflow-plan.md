@@ -16,11 +16,11 @@
 - `branch`: `codex/2026-07-25-ai-context-v0-6-upgrade`
 - `base_branch`: `main`
 - `branch_segment`: `1`
-- `status`: `in_progress`
-- `current_phase`: `remediation-planning`
+- `status`: `completed`
+- `current_phase`: `completed`
 - `artifact_root`: `.dev/workflows/2026-07-25-ai-context-v0-6-upgrade`
 - `created_at`: `2026-07-25T07:05:01+08:00`
-- `updated_at`: `2026-07-25T07:05:01+08:00`
+- `updated_at`: `2026-07-25T08:31:36+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 
@@ -51,23 +51,25 @@
 
 | Task | Purpose | Status |
 | --- | --- | --- |
-| `AICUP6-001` | Validate releases, build immutable packages, classify v0.4.0-to-v0.5.0 changes, and persist the apply plan. | `in_progress` |
-| `AICUP6-002` | Apply and reconcile v0.5.0, validate, update provenance, and commit the intermediate checkpoint. | `pending` |
-| `AICUP6-003` | Plan, apply, and reconcile v0.6.0 including component selection, new provenance authority, and semantic customization ledger. | `pending` |
-| `AICUP6-004` | Run final repository validation, reconcile workflow evidence, commit closeout, and report remaining overrides. | `pending` |
+| `AICUP6-001` | Validate releases, build immutable packages, classify v0.4.0-to-v0.5.0 changes, and persist the apply plan. | `completed` |
+| `AICUP6-002` | Apply and reconcile v0.5.0, validate, update provenance, and commit the intermediate checkpoint. | `completed` |
+| `AICUP6-003` | Plan, apply, and reconcile v0.6.0 including component selection, new provenance authority, and semantic customization ledger. | `completed` |
+| `AICUP6-004` | Run final repository validation, reconcile workflow evidence, commit closeout, and report remaining overrides. | `completed` |
 
 ## Resume Checkpoint
 
-- Last completed action: verified target v0.4.0 provenance and immutable source release identities; confirmed the required v0.4.0-to-v0.5.0-to-v0.6.0 route; read every intervening migration guide.
-- Current task: `AICUP6-001`.
-- Exact next action: build v0.4.0 and v0.5.0 package envelopes from immutable tags, validate them, run the v0.5.0 planner against the clean target, and persist the full classification.
-- Validation already completed: target worktree clean and synchronized with origin; source main clean; tag peeled commits match the published release registry; read-only Git three-way discovery found 81 automatic candidates, 63 reconciliation paths, and 171 source-only exclusions for v0.4.0-to-v0.5.0.
-- Git state: workflow branch created from `main@2eeddf392ca79deb4407c47d13ad53178015ba90`; no framework path has been applied.
-- Branch history and checkpoint handoffs: segment 1 started locally; no push or merge requested.
-- Blockers or unresolved decisions: none. The user authorized the requested upgrade; target-owned reconciliation defaults to preservation.
+- Last completed action: `ASM-20260725-002` independently verified the finalized v0.6.0 target, SDK `10.0.302`, LF shell portability, and 30-of-30 required quick gate.
+- Current task: none; all workflow tasks are completed.
+- Exact next action: keep the completed branch local unless the user separately requests merge or push.
+- Validation already completed: immutable package validation for v0.5.0 and v0.6.0; framework unit suite 251 passed and 1 skipped; target, AI-context, workflow, assessment, shell, and dependency validators; quick gate 30/30; solution build 0 errors with 6 pre-existing nullable warnings.
+- Git state: v0.5.0 checkpoint `1519b3d`, v0.6.0 candidate `4e35a24`, validation alignment `4e079a0`, first assessment `6079210`, compatibility finalization `ec0bfed`, and final assessment `085e165` are committed; closeout metadata awaits this final workflow commit.
+- Branch history and checkpoint handoffs: segment 1 remains local; no push or merge requested.
+- Blockers or unresolved decisions: none.
 
 ## Branch Lifecycle
 
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `codex/2026-07-25-ai-context-v0-6-upgrade` | `main@2eeddf392ca79deb4407c47d13ad53178015ba90` | started | pending | local | `2026-07-25T07:05:01+08:00` | Execute the authorized progressive upgrade with explicit stage checkpoints. | Continue `AICUP6-001`. |
+| 1 | `codex/2026-07-25-ai-context-v0-6-upgrade` | `main@2eeddf392ca79deb4407c47d13ad53178015ba90` | v0.6.0 finalized candidate | `ec0bfed` | local | `2026-07-25T08:29:02+08:00` | Record SDK, LF, provenance, and 30-of-30 gate evidence. | Run final independent assessment. |
+| 1 | `codex/2026-07-25-ai-context-v0-6-upgrade` | `main@2eeddf392ca79deb4407c47d13ad53178015ba90` | independent assessment | `085e165` | local | `2026-07-25T08:31:36+08:00` | Record healthy final verification with no actionable findings. | Close workflow locally. |

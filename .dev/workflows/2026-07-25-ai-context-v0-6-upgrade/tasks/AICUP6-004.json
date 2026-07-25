@@ -6,9 +6,9 @@
   "task_id": "AICUP6-004",
   "workflow_id": "2026-07-25-ai-context-v0-6-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "pending",
+  "status": "completed",
   "created_at": "2026-07-25T07:05:01+08:00",
-  "updated_at": "2026-07-25T07:05:01+08:00",
+  "updated_at": "2026-07-25T08:31:36+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "finding_ids": ["AICUP6-CLOSEOUT"],
   "scope": {
@@ -20,15 +20,15 @@
   "execution": {
     "steps": ["Run final gates", "Reconcile overrides and receipts", "Finalize report and task states", "Validate commit range", "Commit closeout"],
     "validation": ["Full required gate", "Workflow and Git commit validators", "git diff --check", "Clean worktree"],
-    "last_completed_step": "",
-    "next_action": "Begin after AICUP6-003 completes."
+    "last_completed_step": "Completed finalized validation, committed independent assessment ASM-20260725-002, reconciled workflow evidence, and prepared the local closeout commit.",
+    "next_action": "Keep the completed branch local unless the user separately requests merge or push."
   },
   "results": {
-    "summary": "",
-    "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
-    "residual_risk": "Upgrade closeout has not started.",
-    "follow_up_needed": true
+    "summary": "The complete v0.6.0 target gate passed and independent assessment ASM-20260725-002 found no actionable findings.",
+    "files_changed": [".dev/assessments/ASM-20260725-002/**", ".dev/ai-context/customizations.yaml", ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/**", ".dev/workflows/INDEX.MD"],
+    "tests_run": ["check-all.sh --quick: 30 required checks passed", "validate-assessment-artifacts.py", "validate-workflow-artifacts.py", "git diff --check"],
+    "finding_status": "addressed",
+    "residual_risk": "Six pre-existing nullable compiler warnings remain outside AI-context scope.",
+    "follow_up_needed": false
   }
 }
