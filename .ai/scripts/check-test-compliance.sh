@@ -14,11 +14,11 @@
 set -e
 
 # Colors for output
-RED=''
-GREEN=''
-YELLOW=''
-BLUE=''
-NC='' # No Color
+RED='[0;31m'
+GREEN='[0;32m'
+YELLOW='[1;33m'
+BLUE='[0;34m'
+NC='[0m' # No Color
 
 # Directories
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
