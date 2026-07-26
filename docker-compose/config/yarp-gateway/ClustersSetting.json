@@ -1,0 +1,27 @@
+{
+  "ReverseProxy": {
+    "Clusters": {
+      "orders-api": {
+        "Destinations": {
+          "orders-api": {
+            "Address": "http://orders-api:8080/"
+          }
+        }
+      },
+      "product-api": {
+        "Destinations": {
+          "product-api": {
+            "Address": "http://product-api:8080/"
+          }
+        }
+      },
+      "inventory-api": {
+        "Destinations": {
+          "inventory-api": {
+            "Address": "http://inventory-api:8080/"
+          }
+        }
+      }
+    }
+  }
+}

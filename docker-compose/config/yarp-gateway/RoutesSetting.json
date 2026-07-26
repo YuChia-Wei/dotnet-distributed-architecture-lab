@@ -1,0 +1,27 @@
+{
+  "ReverseProxy": {
+    "Routes": {
+      "orders-api": {
+        "ClusterId": "orders-api",
+        "CorsPolicy": "CorsPolicy",
+        "Match": {
+          "Path": "/api/orders/{**catch-all}"
+        }
+      },
+      "product-api": {
+        "ClusterId": "product-api",
+        "CorsPolicy": "CorsPolicy",
+        "Match": {
+          "Path": "/api/products/{**catch-all}"
+        }
+      },
+      "inventory-api": {
+        "ClusterId": "inventory-api",
+        "CorsPolicy": "CorsPolicy",
+        "Match": {
+          "Path": "/api/inventory/{**catch-all}"
+        }
+      }
+    }
+  }
+}

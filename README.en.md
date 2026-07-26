@@ -65,10 +65,11 @@ Start the complete environment:
 docker compose -f ./docker-compose/docker-compose.yml up -d --build
 ```
 
-The current Compose topology starts three API/Consumer pairs, three PostgreSQL databases, Kafka/Kafdrop, and the OpenTelemetry/Grafana observability stack.
+The current Compose topology starts three API/Consumer pairs, an authentication-free YARP Gateway, three PostgreSQL databases, Kafka/Kafdrop, and the OpenTelemetry/Grafana observability stack.
 
 Default API entry points:
 
+- YARP Gateway (authentication-free): `http://localhost:8888` (`/api/orders`, `/api/products`, and `/api/inventory`)
 - Orders API: `http://localhost:8080`
 - Products API: `http://localhost:8090`
 - Inventory API: `http://localhost:8100`

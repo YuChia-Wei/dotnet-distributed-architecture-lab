@@ -65,10 +65,11 @@ Solution 入口為 `MQArchLab.slnx`。產品 project 採 `DomainCore` 與 `Prese
 docker compose -f ./docker-compose/docker-compose.yml up -d --build
 ```
 
-目前 Compose 會啟動三組 API/Consumer、三個 PostgreSQL databases、Kafka/Kafdrop，以及 OpenTelemetry/Grafana observability stack。
+目前 Compose 會啟動三組 API/Consumer、無身分認證的 YARP Gateway、三個 PostgreSQL databases、Kafka/Kafdrop，以及 OpenTelemetry/Grafana observability stack。
 
 API 預設入口：
 
+- YARP Gateway（無身分認證）：`http://localhost:8888`（`/api/orders`、`/api/products`、`/api/inventory`）
 - Orders API: `http://localhost:8080`
 - Products API: `http://localhost:8090`
 - Inventory API: `http://localhost:8100`

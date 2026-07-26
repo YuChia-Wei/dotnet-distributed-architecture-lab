@@ -68,6 +68,24 @@ services:
       - tempo
       - loki
 
+  yarp-gateway:
+    image: ghcr.io/yuchia-wei/yarp-gateway:v0.0.2
+    container_name: yarp-gateway
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
+      - OTEL_SERVICE_NAME=yarp-gateway
+    volumes:
+      - ./config/yarp-gateway/AuthSetting.json:/app/Configuration/Authentication/AuthSetting.json:ro
+      - ./config/yarp-gateway/ClustersSetting.json:/app/Configuration/ReverseProxy/ClustersSetting.json:ro
+      - ./config/yarp-gateway/RoutesSetting.json:/app/Configuration/ReverseProxy/RoutesSetting.json:ro
+    ports:
+      - "8888:8080"
+    depends_on:
+      - otel-collector-contrib
+      - orders-api
+      - product-api
+      - inventory-api
+
 #  rabbitmq:
 #    image: rabbitmq:4.1.2-management
 #    container_name: rabbitmq
