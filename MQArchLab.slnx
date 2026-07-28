@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Analyzers/">
+    <Project Path="tools/DotnetBackendAnalyzers/DotnetBackendAnalyzers.csproj" />
+    <Project Path="tools/DotnetBackendValidation/DotnetBackendValidation.csproj" />
+  </Folder>
   <Folder Name="/BC-Contracts/">
     <Project Path="src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj" />
     <Project Path="src/BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj" />
