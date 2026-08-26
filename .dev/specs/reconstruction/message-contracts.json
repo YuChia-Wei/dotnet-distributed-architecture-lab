@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0",
+  "requirements": ["INT-001", "INT-002", "INT-003", "INT-004", "INT-005", "INT-006"],
+  "delivery": { "guarantee": "at-least-once", "consumerRule": "deduplicate or make reactions idempotent", "ordering": "partition-key ordering only where the selected broker and route prove it", "unknownPhysicalDlqNames": true },
+  "contracts": [
+    { "name": "ReserveInventoryRequestContract", "kind": "request", "owner": "Inventory Published Language", "caller": "Orders", "handler": "Inventory", "fields": [{"name":"OperationId","type":"Guid","required":true},{"name":"ProductId","type":"Guid","required":true},{"name":"Quantity","type":"int","constraint":"> 0"}], "channel": "inventory.requests", "idempotencyKey": "OperationId" },
+    { "name": "ReserveInventoryResponseContract", "kind": "response", "owner": "Inventory Published Language", "fields": [{"name":"OperationId","type":"Guid"},{"name":"Result","type":"bool"},{"name":"FailureReason","type":"string?"}], "replyChannel": "orders.outbound.replies or Wolverine request-envelope reply endpoint" },
+    { "name": "OrderPlaced", "kind": "integration-event", "owner": "Orders", "fields": [{"name":"OrderId","type":"Guid"},{"name":"ProductId","type":"Guid"},{"name":"ProductName","type":"string"},{"name":"Quantity","type":"int"},{"name":"OccurredOn","type":"DateTime"}], "channel": "orders.integration.events", "sourceOutbox": true },
+    { "name": "OrderShipped", "kind": "integration-event", "owner": "Orders", "fields": [{"name":"OrderId","type":"Guid"},{"name":"Reason","type":"string nonblank"},{"name":"OccurredOn","type":"DateTime"}], "channel": "orders.integration.events", "sourceOutbox": true },
+    { "name": "OrderDelivered", "kind": "integration-event", "owner": "Orders", "fields": [{"name":"OrderId","type":"Guid"},{"name":"Reason","type":"string nonblank"},{"name":"OccurredOn","type":"DateTime"}], "channel": "orders.integration.events", "sourceOutbox": true },
+    { "name": "OrderCancelled", "kind": "integration-event", "owner": "Orders", "fields": [{"name":"OrderId","type":"Guid"},{"name":"Reason","type":"string nonblank"},{"name":"OccurredOn","type":"DateTime"}], "channel": "orders.integration.events", "sourceOutbox": true },
+    { "name": "ProductStockDecreasedIntegrationEvent", "kind": "integration-event", "owner": "Inventory", "fields": [{"name":"InventoryItemId","type":"Guid"},{"name":"ProductId","type":"Guid"},{"name":"DecreasedQuantity","type":"int > 0"},{"name":"CurrentStock","type":"int >= 0"},{"name":"OccurredOn","type":"DateTime"}], "channel": "inventory.integration.events" },
+    { "name": "ProductStockIncreasedIntegrationEvent", "kind": "integration-event", "owner": "Inventory", "fields": [{"name":"InventoryItemId","type":"Guid"},{"name":"ProductId","type":"Guid"},{"name":"DecreasedQuantity","type":"int > 0","compatibilityRisk":"name means increased quantity"},{"name":"CurrentStock","type":"int >= 0"},{"name":"OccurredOn","type":"DateTime"}], "channel": "inventory.integration.events" },
+    { "name": "ProductStockReturnedIntegrationEvent", "kind": "integration-event", "owner": "Inventory", "fields": [{"name":"InventoryItemId","type":"Guid"},{"name":"ProductId","type":"Guid"},{"name":"DecreasedQuantity","type":"int > 0","compatibilityRisk":"name means returned quantity"},{"name":"CurrentStock","type":"int >= 0"},{"name":"OccurredOn","type":"DateTime"}], "channel": "inventory.integration.events" }
+  ],
+  "routes": [
+    { "logicalName": "orders.integration.events", "kafka": "topic", "rabbitMq": "queue", "producers": ["SaleOrders.WebApi source-outbox relay"], "consumers": ["SaleProducts.Consumer", "InventoryControl.Consumer"], "consumerBusinessOwnership": "gap" },
+    { "logicalName": "inventory.requests", "kafka": "topic", "rabbitMq": "queue", "producers": ["SaleOrders.WebApi"], "consumers": ["InventoryControl.WebApi"] },
+    { "logicalName": "orders.outbound.replies", "kafka": "reply topic", "rabbitMq": "reply queue", "producers": ["InventoryControl.WebApi reply handling"], "consumers": ["SaleOrders.WebApi"] },
+    { "logicalName": "inventory.integration.events", "kafka": "topic", "rabbitMq": "queue", "producers": ["InventoryControl.WebApi"], "consumers": ["external/unspecified"] },
+    { "logicalName": "products.integration.events", "kafka": "topic", "rabbitMq": "queue", "producers": [], "consumers": ["SaleOrders.Consumer"], "status": "configured-compatibility-route-no-confirmed-producer" }
+  ],
+  "stableIdentity": { "ordersRelay": { "messageId": "OrderIntegrationOutbox.Id", "partitionKey": "AggregateId", "header": "lab-message-id" }, "inventoryReservationPublication": { "messageId": "OperationId", "partitionKey": "ProductId formatted N" } },
+  "failurePolicy": { "inventoryReservationTransient": { "delays": ["100ms", "500ms", "2s"], "terminal": "Wolverine error queue" }, "ordersSourceOutbox": { "maxAttempts": 5, "then": "park row for manual inspection/replay", "privacy": "LastError must not contain unrestricted sensitive payload data" } },
+  "deferredContracts": ["ProductStockDeducted", "ProductStockDeductionFailed", "future Product integration events"],
+  "breakingChangeRules": ["Producer owns schema meaning.", "Do not silently rename DecreasedQuantity on increase/return events.", "Additive fields require tolerant consumers and versioning evidence; removals/renames require owner approval."]
+}

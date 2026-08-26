@@ -3,7 +3,7 @@
   "behavior": "Decrease available stock for a product and publish an inventory integration event when successful.",
   "input": [
     { "name": "productId", "type": "Guid" },
-    { "name": "quantity", "type": "int" }
+    { "name": "quantity", "type": "int", "constraint": "> 0" }
   ],
   "aggregate": "InventoryItem",
   "aggregateId": "Guid",
@@ -22,6 +22,8 @@
   ],
   "constructorPostconditions": [
     "Current stock is reduced when enough stock is available.",
-    "A ProductStockDecreasedIntegrationEvent is published after persistence."
-  ]
+    "A ProductStockDecreasedIntegrationEvent is published after persistence.",
+    "Invalid, missing-item, or insufficient-stock outcomes do not persist or publish."
+  ],
+  "requirements": ["INV-003", "INV-004"]
 }

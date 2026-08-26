@@ -1,0 +1,70 @@
+scenarios:
+  - id: SC1
+    title: "Reserve sufficient stock once"
+    given:
+      - "A valid operation identifies a product with sufficient stock."
+    when:
+      - "IReserveInventoryUseCase.ExecuteAsync is invoked."
+    then:
+      - "Stock is decremented by the requested quantity exactly once."
+      - "A durable successful outcome records remaining stock."
+      - "ProductStockDecreasedIntegrationEvent is published with stable message and partition identities."
+    traces_to: { requirements: ["INV-005", "INV-006", "INT-003"], frame_concerns: ["FC1", "FC2", "FC3", "FC4"] }
+    tests_anchor: ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md#scenario-1-reserve-once-and-publish"
+  - id: SC2
+    title: "Replay matching successful operation"
+    given:
+      - "The operation already completed successfully for the same product and quantity."
+    when:
+      - "The same request is replayed."
+    then:
+      - "The stored success is returned with WasAlreadyProcessed true."
+      - "Stock is not decremented again."
+      - "Republished delivery identity remains stable."
+    traces_to: { requirements: ["INV-006", "INT-003"], frame_concerns: ["FC2", "FC4"] }
+    tests_anchor: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs#given_a_completed_operation_when_it_is_replayed_then_stock_is_decremented_once"
+  - id: SC3
+    title: "Reject conflicting payload for operation identity"
+    given:
+      - "The operation id is already bound to another product or quantity."
+    when:
+      - "The conflicting request is processed."
+    then:
+      - "OperationIdentityConflict is returned with WasAlreadyProcessed true."
+      - "Stock is unchanged."
+      - "No successful reservation event is published."
+    traces_to: { requirements: ["INV-006"], frame_concerns: ["FC2", "FC5"] }
+    tests_anchor: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs#given_an_operation_identity_when_payload_changes_then_the_conflict_is_terminal"
+  - id: SC4
+    title: "Preserve terminal business failure"
+    given:
+      - "The operation completed with InventoryItemNotFound or InventoryIsNotEnough."
+    when:
+      - "Stock later changes and the request is replayed."
+    then:
+      - "The original failure is returned with WasAlreadyProcessed true."
+      - "Stock is not re-evaluated or decremented."
+    traces_to: { requirements: ["INV-006", "INV-007"], frame_concerns: ["FC2", "FC5"] }
+    tests_anchor: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs#given_a_terminal_failure_when_stock_changes_then_replay_preserves_the_original_outcome"
+  - id: SC5
+    title: "Reject invalid request before durable work"
+    given:
+      - "OperationId or ProductId is empty, or Quantity is not positive."
+    when:
+      - "The use case is invoked."
+    then:
+      - "The corresponding validation failure is returned."
+      - "Repository and publisher are not called."
+    traces_to: { requirements: ["INV-005"], frame_concerns: ["FC1", "FC6"] }
+    tests_anchor: ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md#scenario-5-reject-invalid-input"
+  - id: SC6
+    title: "Cancel without mutation"
+    given:
+      - "Cancellation is requested before reservation work begins."
+    when:
+      - "Reservation is attempted."
+    then:
+      - "OperationCanceledException propagates."
+      - "Stock and operation history remain unchanged."
+    traces_to: { requirements: ["NFR-005"], frame_concerns: ["FC3", "FC6"] }
+    tests_anchor: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs#given_cancellation_before_reservation_when_executed_then_state_is_not_mutated"

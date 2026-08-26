@@ -1,0 +1,40 @@
+name: "ReserveInventory"
+execution:
+  method: "use-case"
+  interface: "IReserveInventoryUseCase"
+  operation: "ExecuteAsync"
+  input_type: "ReserveInventoryInput"
+
+input:
+  - { name: "operationId", type: "Guid", required: true, constraint: "not Guid.Empty" }
+  - { name: "productId", type: "Guid", required: true, constraint: "not Guid.Empty" }
+  - { name: "quantity", type: "int", required: true, constraint: "> 0" }
+
+preconditions:
+  - { id: PRE1, description: "OperationId is non-empty." }
+  - { id: PRE2, description: "ProductId is non-empty." }
+  - { id: PRE3, description: "Quantity is positive." }
+
+postconditions:
+  - { id: POST1, description: "A successful new reservation decrements stock by quantity exactly once and returns the remaining stock." }
+  - { id: POST2, description: "The operation outcome is stable across matching replays." }
+  - { id: POST3, description: "A successful outcome publishes ProductStockDecreasedIntegrationEvent with MessageId equal to OperationId and partition key equal to ProductId in N format." }
+  - { id: POST4, description: "A business failure does not decrement stock or publish a success event." }
+
+output:
+  type: "ReserveInventoryOutput"
+  fields:
+    - { name: "OperationId", type: "Guid" }
+    - { name: "IsSuccess", type: "bool" }
+    - { name: "RemainingStock", type: "int?" }
+    - { name: "FailureReason", type: "string?" }
+    - { name: "WasAlreadyProcessed", type: "bool" }
+  failures:
+    - "OperationIdRequired"
+    - "ProductIdRequired"
+    - "QuantityMustBePositive"
+    - "InventoryItemNotFound"
+    - "InventoryIsNotEnough"
+    - "OperationIdentityConflict"
+
+tests_anchor: ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md"

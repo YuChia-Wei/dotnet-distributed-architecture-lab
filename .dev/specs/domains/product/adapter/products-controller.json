@@ -1,0 +1,19 @@
+{
+  "useCase": "ProductsController",
+  "behavior": "Expose Product command and query use cases over HTTP without business logic.",
+  "requirements": ["API-001", "API-002", "API-003", "PRD-005"],
+  "spec": {
+    "basePath": "/api/Products",
+    "endpoints": [
+      { "method": "POST", "path": "", "useCasePort": "ICreateProductUseCase", "input": "CreateProductInput", "requestDto": "CreateProductRequest", "responseDto": "ProductResponse", "successStatus": 200 },
+      { "method": "GET", "path": "", "useCasePort": "IGetAllProductsUseCase", "input": "GetAllProductsInput", "responseDto": "ProductResponse[]", "successStatus": 200 },
+      { "method": "GET", "path": "/{id:guid}", "useCasePort": "IGetProductByIdUseCase", "input": "GetProductByIdInput", "responseDto": "ProductDto", "successStatus": 200, "notFoundStatus": 404 },
+      { "method": "PUT", "path": "/{id:guid}", "useCasePort": "IUpdateProductUseCase", "input": "UpdateProductInput", "requestDto": "UpdateProductRequest", "successStatus": 200, "notFoundStatus": 404, "concurrencyStatus": 409 },
+      { "method": "DELETE", "path": "/{id:guid}", "useCasePort": "IDeleteProductUseCase", "input": "DeleteProductInput", "successStatus": 200, "notFoundStatus": 404, "concurrencyStatus": 409 }
+    ],
+    "errorMapping": { "invalidProductData": 400, "KeyNotFoundException": 404, "DBConcurrencyException": 409, "unexpected": 500 }
+  },
+  "contracts": { "dtos": ["CreateProductRequest(Name,Description,Price)", "UpdateProductRequest(Name,Description,Price)", "ProductResponse(Id,Name,Description,Price)"] },
+  "policies": { "validation": "Domain/use-case rules plus adapter problem mapping", "idempotency": "No idempotency key is currently specified for create/update/delete", "observability": "Do not record unrestricted request bodies" },
+  "evidence": ["src/Product/Presentation/SaleProducts.WebApi/Controllers/ProductsController.cs"]
+}

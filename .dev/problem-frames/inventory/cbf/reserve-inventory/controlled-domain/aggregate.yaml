@@ -1,0 +1,37 @@
+aggregate: "InventoryItem"
+
+contracts:
+  preconditions:
+    - { id: PRE1, rule: "The reservation operation id and product id are non-empty." }
+    - { id: PRE2, rule: "The requested quantity is greater than zero." }
+  postconditions:
+    - { id: POST1, rule: "Successful new reservation reduces Stock by Quantity and records RemainingStock." }
+    - { id: POST2, rule: "Matching replay returns the recorded outcome with WasAlreadyProcessed true and no second decrement." }
+    - { id: POST3, rule: "Mismatched replay returns OperationIdentityConflict and no mutation." }
+  invariants:
+    - { id: INV1, rule: "Stock is never negative." }
+    - { id: INV2, rule: "One OperationId is bound to exactly one ProductId and Quantity payload." }
+    - { id: INV3, rule: "A completed operation outcome is immutable." }
+
+behavior:
+  signature: "IInventoryReservationRepository.ReserveAsync(Guid operationId, Guid productId, int quantity, CancellationToken)"
+  persistence_boundary: "PostgresInventoryReservationRepository owns the atomic stock-and-operation transaction; InventoryItem's general repository is not used by this flow."
+
+domain_events:
+  - name: "Lab.BoundedContextContracts.Inventory.IntegrationEvents.ProductStockDecreasedIntegrationEvent"
+    attributes:
+      - "InventoryItemId"
+      - "ProductId"
+      - "DecreasedQuantity"
+      - "RemainingStock"
+    delivery:
+      message_id: "OperationId"
+      partition_key: "ProductId.ToString(\"N\")"
+
+semantic_tags:
+  - { field: "OperationId", semantics: [idempotency_key, delivery_identity] }
+  - { field: "ProductId", semantics: [aggregate_lookup, partition_key] }
+  - { field: "Quantity", semantics: [positive_business_quantity] }
+
+observed_source_gap:
+  - "The integration contract property is named DecreasedQuantity; preserve wire compatibility during reconstruction even if a future rename is considered."

@@ -1,0 +1,15 @@
+{
+  "useCase": "GetAvailableQuantity",
+  "behavior": "Return available stock for a product from the Inventory read model.",
+  "input": [{ "name": "productId", "type": "Guid" }],
+  "aggregate": "InventoryItemReadModel",
+  "aggregateId": "Guid",
+  "method": "IInventoryItemQueryRepository.FindByProductIdAsync",
+  "domainEvent": null,
+  "repository": "IInventoryItemQueryRepository",
+  "inputType": "GetInventoryItemAvailableQuantityInput",
+  "output": "GetInventoryItemAvailableQuantityOutput",
+  "requirements": ["INV-008", "API-003"],
+  "postconditions": ["Existing item returns ProductId and AvailableStock.", "Missing item maps to a stable not-found outcome and HTTP 404.", "No aggregate is mutated."],
+  "evidence": ["src/Inventory/DomainCore/InventoryControl.Applications/Queries/GetOrderByIdQuery.cs"]
+}

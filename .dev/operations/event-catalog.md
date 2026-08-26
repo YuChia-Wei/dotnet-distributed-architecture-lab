@@ -27,14 +27,15 @@ This catalog tracks integration events and request/reply contracts visible in `s
 - Business meaning:
   - `Orders` asks `Inventory` to reserve or deduct stock before an order is confirmed.
 - Payload summary:
+  - `OperationId`
   - `ProductId`
   - `Quantity`
 - Producer responsibility:
   - send only for a valid order-placement attempt
 - Consumer expectations:
-  - `Inventory` handles it by invoking `IDecreaseStockUseCase.ExecuteAsync` with `DecreaseStockInput`
+  - `Inventory` maps it through `ReserveInventoryRequestContractHandler` to `IReserveInventoryUseCase.ExecuteAsync` with `ReserveInventoryInput`
 - Idempotency expectation:
-  - not yet explicitly documented; should be treated as duplicate-sensitive
+  - `OperationId` is the durable identity; same-payload replay returns the stored outcome and mismatched payload returns `OperationIdentityConflict`
 - Ordering expectation:
   - per-product duplicate or re-ordered requests may produce incorrect stock changes if not handled upstream
 - Failure handling notes:
@@ -45,7 +46,9 @@ This catalog tracks integration events and request/reply contracts visible in `s
 - Business meaning:
   - reports whether stock reservation succeeded
 - Payload summary:
+  - `OperationId`
   - `Result`
+  - `FailureReason`
 - Producer responsibility:
   - return success only after inventory command succeeds
 - Consumer expectations:
@@ -143,4 +146,4 @@ This catalog tracks integration events and request/reply contracts visible in `s
 
 - `products.integration.events` is configured and has a listener, but current Product use cases do not confirm publication of a product integration event.
 - Legacy or unclear product stock deduction contracts need later review to decide whether they are active, deprecated, or obsolete.
-- Correlation IDs, versioning policy, and replay rules still need explicit runtime documentation.
+- Contract versioning and consumer replay procedures still need explicit runtime documentation; reservation correlation/replay is defined by `OperationId`.

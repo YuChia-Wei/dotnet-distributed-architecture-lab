@@ -1,0 +1,15 @@
+{
+  "useCase": "GetOrderDetails",
+  "behavior": "Return the Orders read-model projection as an order-details response.",
+  "input": [{ "name": "orderId", "type": "Guid" }],
+  "aggregate": "OrderReadModel",
+  "aggregateId": "Guid",
+  "method": "IOrderQueryRepository.FindByIdAsync",
+  "domainEvent": null,
+  "repository": "IOrderQueryRepository",
+  "inputType": "GetOrderDetailsInput",
+  "output": "OrderDetailsResponse?",
+  "requirements": ["ORD-007"],
+  "postconditions": ["Existing order returns OrderId and one line item containing ProductId and Quantity.", "Missing order returns null to the adapter, which maps it to HTTP 404.", "The event stream is not replayed for this query."],
+  "evidence": ["src/Order/DomainCore/SaleOrders.Applications/Queries/GetOrderDetails.cs", "src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderQueryRepository.cs"]
+}

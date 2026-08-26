@@ -16,7 +16,7 @@ technologyProfiles:
   - distributed-messaging
   - containerized-observability
 dotnet:
-  sdkVersion: 10.0.0
+  sdkVersion: 10.0.302
   targetFrameworks:
     - net10.0
     - netstandard2.0
@@ -267,9 +267,9 @@ evidence:
 unresolved:
   facts:
     - Exact business ownership of every Consumer subscription is not fully documented.
-    - RabbitMQ inventory request/reply is incomplete because Inventory does not configure an inventory.requests listener for that broker.
+    - RabbitMQ logical inventory request/reply routes exist, but real broker connectivity and physical exchange/binding/reply/DLQ behavior are not verified.
     - products.integration.events is configured, but no current Product use case is confirmed to publish a product integration event.
-    - Retry, dead-letter, replay, and idempotency policy is incomplete.
+    - Orders source-outbox and Inventory reservation retry/idempotency policies are documented, while consumer-wide replay and broker-specific dead-letter procedures remain incomplete.
     - Inventory has no checked-in test project.
   decisions:
     - Decide whether RabbitMQ remains a maintained runtime profile or only compatibility guidance.

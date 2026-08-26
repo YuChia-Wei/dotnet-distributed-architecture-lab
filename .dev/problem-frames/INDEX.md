@@ -40,5 +40,6 @@ Create target-repository problem frames from confirmed requirements, specs, code
 | Path | Description |
 | --- | --- |
 | `orders/cbf/place-order/` | Commanded behavior frame for the current Orders place-order and Inventory reservation flow. |
+| `inventory/cbf/reserve-inventory/` | Commanded behavior frame for durable, idempotent Inventory reservation and stable event publication. |
 
 The previously copied Payments frame is not retained because no Payments bounded context exists in the current solution.

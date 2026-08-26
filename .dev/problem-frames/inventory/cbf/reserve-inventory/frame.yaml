@@ -1,0 +1,52 @@
+frame_type: CommandedBehaviorFrame
+domain: "inventory"
+use_case: "reserve-inventory"
+summary: "Reserve positive inventory exactly once for a stable operation identity and publish a duplicate-safe stock-decreased event on success."
+
+controlled_domain:
+  aggregate_spec: controlled-domain/aggregate.yaml
+
+frame_concerns:
+  - id: FC1
+    title: Inventory authority
+    description: Inventory is the sole authority for stock availability and reservation outcome.
+  - id: FC2
+    title: Durable idempotency
+    description: A stable operation id binds one product and quantity to one durable outcome.
+  - id: FC3
+    title: Atomic stock and outcome
+    description: Operation claim, stock lock/decrement, and outcome persistence occur in one local PostgreSQL transaction.
+  - id: FC4
+    title: Duplicate-safe publication
+    description: Successful first delivery or replay uses the operation id as message id and product id as partition key.
+  - id: FC5
+    title: Failure preservation
+    description: Item-not-found and insufficient-stock outcomes are terminal for the same operation identity even if stock later changes.
+  - id: FC6
+    title: Cancellation and transient failure
+    description: Cancellation or durable-store failure must not be converted into a business rejection or an unproven success.
+
+problem_world_facts:
+  - id: PWF1
+    fact: "Orders and Inventory communicate through Published Language contracts over MQ, never by sharing internal domain models."
+  - id: PWF2
+    fact: "PostgreSQL is the durable authority for inventory balance and reservation operation history."
+  - id: PWF3
+    fact: "At-least-once delivery can replay requests and successful publication."
+  - id: PWF4
+    fact: "The same operation id with a different product or quantity is an identity conflict, not a new reservation."
+
+commanded_behavior:
+  actor: "Orders inventory gateway or another authorized upstream application"
+  command: "ReserveInventory"
+  desired_outcome: "Return one stable reservation outcome, decrement stock at most once, and publish a stable-identity stock-decreased event only for success."
+
+source_refs:
+  - ".dev/requirement/reconstructable-system-baseline.md#inventory-bounded-context"
+  - ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json"
+  - ".dev/specs/reconstruction/message-contracts.json"
+  - ".dev/specs/reconstruction/persistence-contracts.json"
+
+inferred_items: []
+open_questions:
+  - "Whether the reconstructed system should add a transactional message outbox for Inventory publication is deferred; the current source publishes after its reservation transaction."

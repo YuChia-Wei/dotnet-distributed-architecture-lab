@@ -2,6 +2,7 @@
   "useCase": "PlaceOrder",
   "behavior": "Place a new order after confirming inventory reservation succeeds.",
   "input": [
+    { "name": "operationId", "type": "Guid" },
     { "name": "orderDate", "type": "DateTime" },
     { "name": "totalAmount", "type": "decimal" },
     { "name": "productId", "type": "Guid" },
@@ -17,7 +18,8 @@
   "output": "Result<PlaceOrderOutput>",
   "domainModelNotes": [
     "The order aggregate is created first in the application flow.",
-    "Inventory must confirm reservation before the order is saved and the integration event is published."
+    "Inventory must confirm reservation before the order is saved and the integration event is staged.",
+    "OperationId is the stable idempotency identity passed to Inventory."
   ],
   "domainEvents": [
     "SaleOrders.Domains.DomainEvents.OrderPlacedDomainEvent",
@@ -29,6 +31,8 @@
   ],
   "constructorPostconditions": [
     "A new Order aggregate exists with status Placed if inventory reservation succeeds.",
-    "An OrderPlaced integration event is published after persistence."
-  ]
+    "The OrderPlaced integration event is inserted into the source outbox in the same transaction as the Order stream and read model.",
+    "A failed reservation leaves the Order stream, projection, and outbox unchanged."
+  ],
+  "requirements": ["ORD-004", "ORD-005", "INV-005", "INT-003"]
 }

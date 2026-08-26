@@ -45,11 +45,13 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | `requirement/REQUIREMENT-GUIDE.MD` | Requirement authoring guide. |
 | `requirement/TECH-STACK-REQUIREMENTS.MD` | Current repository technology requirements and version ownership. |
 | `requirement/distributed-commerce-bounded-context-overview.md` | Products, Orders, and Inventory requirement baseline. |
+| `requirement/reconstructable-system-baseline.md` | Source-independent reconstruction requirements, quality uplifts, and acceptance criteria. |
 | `specs/` | Target-repository domain/test specs plus reusable authoring guidance. |
 | `specs/README.MD` | Purpose and usage of `.dev/specs/`. |
 | `specs/INDEX.MD` | File and directory catalog for specs. |
 | `specs/SPEC-GUIDE.MD` | Spec authoring guide. |
 | `specs/SPEC-ORGANIZATION-GUIDE.MD` | Spec organization guide. |
+| `specs/reconstruction/` | Durable source-independent reconstruction entrypoint, blueprint, machine-readable manifests, and readiness matrix. |
 | `specs/tests/` | Test-spec storage guidance and examples. |
 
 ## Domain Language And Problem Frames

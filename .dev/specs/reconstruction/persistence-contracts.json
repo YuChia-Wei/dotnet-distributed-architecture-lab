@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "provider": { "database": "PostgreSQL 16", "driver": "Npgsql 10.0.2", "access": "Dapper 2.1.72", "sql": "parameterized" },
+  "databases": [
+    {
+      "name": "Products",
+      "tables": [{ "name": "Products", "columns": { "Id": "UUID PK", "Name": "VARCHAR(255) NOT NULL", "Description": "TEXT", "Price": "NUMERIC(18,2) NOT NULL", "IsDeleted": "BOOLEAN NOT NULL DEFAULT FALSE", "Version": "INT NOT NULL DEFAULT 1" } }],
+      "writeRules": ["insert starts at version 1", "update and soft-delete match Id + Version + IsDeleted=false", "zero affected rows is concurrency conflict", "normal reads exclude deleted rows"],
+      "transaction": "one local transaction per SaveAsync"
+    },
+    {
+      "name": "Orders",
+      "tables": [
+        { "name": "OrderEvents", "columns": { "EventId": "BIGSERIAL PK", "StreamId": "UUID NOT NULL", "Version": "INT NOT NULL", "EventType": "VARCHAR(255) NOT NULL", "Data": "JSONB NOT NULL", "Timestamp": "TIMESTAMPTZ NOT NULL" }, "constraints": ["UNIQUE(StreamId, Version)"] },
+        { "name": "Orders", "columns": { "Id": "UUID PK", "OrderDate": "TIMESTAMPTZ NOT NULL", "TotalAmount": "NUMERIC(18,2) NOT NULL", "ProductId": "UUID NOT NULL", "ProductName": "VARCHAR(255) NOT NULL", "Quantity": "INT NOT NULL" }, "purpose": "query projection" },
+        { "name": "OrderIntegrationOutbox", "columns": { "Id": "UUID PK", "AggregateId": "UUID NOT NULL", "MessageType": "VARCHAR(255) NOT NULL", "Data": "JSONB NOT NULL", "OccurredOn": "TIMESTAMPTZ NOT NULL", "CreatedOn": "TIMESTAMPTZ NOT NULL DEFAULT NOW", "LockId": "UUID NULL", "LockedUntil": "TIMESTAMPTZ NULL", "Attempts": "INT NOT NULL DEFAULT 0", "NextAttemptAt": "TIMESTAMPTZ NOT NULL DEFAULT NOW", "LastError": "TEXT NULL", "ParkedAt": "TIMESTAMPTZ NULL" }, "indexes": ["claim index on NextAttemptAt, CreatedOn, Id where ParkedAt is null"] }
+      ],
+      "eventTypeMap": ["OrderPlacedDomainEvent", "OrderShippedDomainEvent", "OrderDeliveredDomainEvent", "OrderCancelledDomainEvent"],
+      "atomicCommit": ["verify aggregate Version equals database MAX(Version) or zero", "append every pending event with contiguous versions", "insert every outgoing integration event", "upsert current Orders projection", "commit once", "acknowledge aggregate pending events", "dispatch local domain events"],
+      "rollback": "Any failure before transaction commit rolls back stream, projection, and outbox together.",
+      "relay": ["lease eligible rows with owner token", "publish using stable outbox Id and AggregateId partition key", "delete only after successful publish", "back off per row", "park after five failures"]
+    },
+    {
+      "name": "Inventory",
+      "tables": [
+        { "name": "InventoryItems", "columns": { "Id": "UUID PK", "ProductId": "UUID NOT NULL UNIQUE", "Stock": "INT NOT NULL" }, "targetConstraints": ["Stock >= 0"] },
+        { "name": "InventoryReservationOperations", "columns": { "OperationId": "UUID PK", "ProductId": "UUID NOT NULL", "Quantity": "INT NOT NULL CHECK Quantity > 0", "InventoryItemId": "UUID NULL", "IsSuccess": "BOOLEAN NULL", "RemainingStock": "INT NULL", "FailureReason": "TEXT NULL", "CompletedAt": "TIMESTAMPTZ NULL" }, "indexes": ["ProductId"] }
+      ],
+      "normalAggregateRules": ["find by product through read port, reload aggregate by identity before mutation", "upsert inventory state", "acknowledge/dispatch domain events only after durable save", "publish integration fact only after successful persistence"],
+      "reservationTransaction": ["insert OperationId claim with ON CONFLICT DO NOTHING", "if already claimed read stored outcome and compare ProductId+Quantity", "lock InventoryItems row FOR UPDATE", "calculate terminal outcome", "decrement stock only on success", "store outcome", "commit once"],
+      "replayRules": ["same identity and payload returns stored outcome with WasAlreadyProcessed=true", "same identity and different payload returns OperationIdentityConflict without stock mutation", "terminal failures remain terminal on replay even if later stock changes"]
+    }
+  ],
+  "migrationSources": ["docker-compose/sql-script/create_products_table.sql", "docker-compose/sql-script/create_orders_table.sql", "docker-compose/sql-script/create_inventoryitems_table.sql", "docker-compose/sql-script/migrations/orders/20260714_0001_add_order_integration_outbox.sql", "docker-compose/sql-script/migrations/inventory/20260714_0001_add_inventory_reservations.sql"],
+  "acceptance": ["Fresh schema creation is idempotent.", "Existing-volume migrations are idempotent.", "Concurrency and transaction failure paths are tested against PostgreSQL.", "A blocked database test is not a pass."]
+}

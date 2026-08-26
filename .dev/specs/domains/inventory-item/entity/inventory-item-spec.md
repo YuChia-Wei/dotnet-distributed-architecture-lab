@@ -26,6 +26,9 @@
 
 - Decrease operations must fail when requested quantity exceeds available stock.
 - Negative decrease quantity is invalid.
+- Target-quality reconstruction requires initial stock to be non-negative and every increase, decrease, restock, or reservation quantity to be positive.
+- A successful operation must never leave stock negative.
+- Each ProductId owns at most one InventoryItem.
 
 ## Domain Events
 
@@ -36,3 +39,4 @@
 ## Notes
 
 - The aggregate returns domain result objects for stock operations instead of using exceptions for expected business failures such as insufficient stock.
+- Current source does not fully enforce positive quantities for initialize/increase/restock; the reconstruction requirement intentionally strengthens this invariant.

@@ -1,0 +1,27 @@
+command_processing:
+  steps:
+    - "Receive ReserveInventoryInput through IReserveInventoryUseCase.ExecuteAsync."
+    - "Reject empty operation id, empty product id, or non-positive quantity without repository or publisher calls."
+    - "Ask IInventoryReservationRepository to claim the operation and resolve one durable outcome."
+    - "For a new operation, lock the InventoryItems row, evaluate stock, decrement when sufficient, and store the outcome in one transaction."
+    - "For an existing operation, return the stored outcome when payload matches or OperationIdentityConflict when it differs."
+    - "Publish ProductStockDecreasedIntegrationEvent only when the outcome is successful, using stable delivery metadata."
+    - "Return ReserveInventoryOutput with operation id, success, remaining stock, failure reason, and replay marker."
+
+error_handling:
+  invalid_operation_id: "Return OperationIdRequired; do not access repository or publisher."
+  invalid_product_id: "Return ProductIdRequired; do not access repository or publisher."
+  invalid_quantity: "Return QuantityMustBePositive; do not access repository or publisher."
+  inventory_item_missing: "Persist and return InventoryItemNotFound for the operation."
+  insufficient_stock: "Persist and return InventoryIsNotEnough without decrement."
+  identity_conflict: "Return OperationIdentityConflict with WasAlreadyProcessed = true and no mutation."
+  cancellation: "Propagate OperationCanceledException and leave durable state uncommitted."
+  durable_store_failure: "Wrap NpgsqlException as InventoryReservationTransientException."
+  publication_failure: "Propagate the publisher failure; the reservation outcome may already be durably successful and must be replay-safe."
+
+constraint_enforcement:
+  - "Quantity must be greater than zero."
+  - "Stock must never become negative."
+  - "One operation id may identify only one product and quantity."
+  - "Successful replay never decrements stock again."
+  - "Only successful outcomes publish ProductStockDecreasedIntegrationEvent."

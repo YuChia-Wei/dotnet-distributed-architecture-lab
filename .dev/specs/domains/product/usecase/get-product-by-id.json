@@ -1,0 +1,15 @@
+{
+  "useCase": "GetProductById",
+  "behavior": "Return one non-deleted product by identifier.",
+  "input": [{ "name": "id", "type": "Guid" }],
+  "aggregate": "Product read model",
+  "aggregateId": "Guid",
+  "method": "IProductQueryService.GetByIdAsync",
+  "domainEvent": null,
+  "repository": "IProductQueryRepository through IProductQueryService",
+  "inputType": "GetProductByIdInput",
+  "output": "ProductDto",
+  "requirements": ["PRD-004", "PRD-005", "API-003"],
+  "postconditions": ["A matching non-deleted DTO is returned.", "Missing or soft-deleted product maps to a stable not-found outcome and HTTP 404.", "No aggregate is rehydrated or mutated."],
+  "evidence": ["src/Product/DomainCore/SaleProducts.Applications/UseCases/GetProductByIdUseCase.cs", "src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductQueryRepository.cs"]
+}

@@ -68,7 +68,7 @@ Current use cases include product create/update/delete/query, order place/ship/d
 
 - WolverineFx is the messaging abstraction used by APIs and consumers.
 - Kafka is enabled by the checked-in Docker Compose topology.
-- RabbitMQ packages and partial conditional runtime configuration are retained, while its Compose service is commented out and the Inventory request/reply listener path is not currently complete.
+- RabbitMQ packages and Kafka-parity logical request/reply routing are configured in the Orders and Inventory API hosts. Its Compose service remains commented out, and real broker connectivity plus physical exchange/binding/DLQ behavior still require environment verification.
 - Known logical channels include `orders.integration.events`, `products.integration.events`, `inventory.integration.events`, `inventory.requests`, and `orders.outbound.replies`.
 - Orders reserves inventory through `ReserveInventoryRequestContract` / `ReserveInventoryResponseContract` request/reply over Wolverine, not through direct domain references.
 

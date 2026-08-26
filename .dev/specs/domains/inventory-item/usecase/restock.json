@@ -3,7 +3,7 @@
   "behavior": "Return stock to inventory and publish an inventory integration event when successful.",
   "input": [
     { "name": "productId", "type": "Guid" },
-    { "name": "quantity", "type": "int" }
+    { "name": "quantity", "type": "int", "constraint": "> 0" }
   ],
   "aggregate": "InventoryItem",
   "aggregateId": "Guid",
@@ -23,5 +23,7 @@
   "constructorPostconditions": [
     "Current stock is increased by the returned quantity.",
     "A ProductStockReturnedIntegrationEvent is published after persistence."
-  ]
+  ],
+  "requirements": ["INV-003", "INV-004"],
+  "qualityUplift": "Current aggregate permits non-positive restock values; reconstruction must reject them without side effects."
 }

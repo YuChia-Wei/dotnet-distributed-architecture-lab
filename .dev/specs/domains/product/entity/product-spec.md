@@ -28,6 +28,13 @@
 - Update product
 - Delete product
 
+## Persistence Semantics
+
+- New rows start at `Version = 1`.
+- Update and delete use optimistic concurrency and fail when the expected version no longer matches.
+- Delete is a soft-delete capability represented by `ProductDeleted` and persisted as `IsDeleted = true`.
+- Normal aggregate loads and query projections exclude soft-deleted rows.
+
 ## Domain Events
 
 - `ProductCreated`
@@ -38,3 +45,4 @@
 
 - Product creation and update share the same validation rules for name, description, and price.
 - The aggregate currently raises domain events immediately when state changes.
+- A reconstructed implementation may model the deletion marker inside the aggregate or repository adapter, but must preserve the observable soft-delete and optimistic-concurrency contract.

@@ -6,11 +6,11 @@
 
 | Area | Current choice | Evidence-backed version / status |
 | --- | --- | --- |
-| SDK / Runtime | .NET / C# | SDK `10.0.0`; product target `net10.0` |
+| SDK / Runtime | .NET / C# | SDK `10.0.302` with `latestMajor` roll-forward; product target `net10.0` |
 | Web API | ASP.NET Core + OpenAPI + Scalar | ASP.NET Core packages `10.0.7`; Scalar `2.14.3` |
 | Messaging | WolverineFx | `5.32.1` |
 | Active local broker | Apache Kafka | Compose image `apache/kafka:4.0.0` |
-| Partial broker profile | RabbitMQ | Wolverine RabbitMQ `5.32.1`; Compose service disabled and Inventory request listener incomplete |
+| Environment-gated broker profile | RabbitMQ | Wolverine RabbitMQ `5.32.1`; Kafka-parity logical listeners exist, Compose service is disabled, and real broker/physical-topology verification remains pending |
 | Persistence | Dapper + Npgsql | Dapper `2.1.72`; Npgsql `10.0.2` |
 | Database | PostgreSQL | Compose image `postgres:16-alpine` |
 | Testing | xUnit + Moq + Shouldly | xUnit `2.9.3`; Moq `4.20.72`; Shouldly `4.3.0` |
@@ -37,7 +37,7 @@
 ## Messaging Requirements
 
 - Kafka is the checked-in active local profile.
-- RabbitMQ must not be described as a complete profile until the Inventory request listener and request/reply path are configured and verified.
+- RabbitMQ has code-backed logical request/reply parity with Kafka, but must not be described as runtime-verified until real connectivity plus exchange/binding/reply/DLQ behavior pass the environment gate.
 - Logical channel ownership and unresolved retry/DLQ details are documented in `.dev/operations/mq-topology.md`.
 - Contract compatibility is owned by projects under `src/BC-Contracts/`.
 

@@ -1,0 +1,34 @@
+template_metadata:
+  template_id: "software-development-orchestrator-workflow-locator"
+  template_version: "1.3.0"
+  created_at: "2026-07-10T18:25:11+08:00"
+  updated_at: "2026-07-24T08:10:00+08:00"
+
+schema_version: "1.0"
+lifecycle_contract: "1.0"
+workflow_id: "2026-08-26-reconstructable-system-specification"
+workflow_kind: "software-development"
+title: "Reconstructable system specification baseline"
+owner_skill: "software-development-orchestrator"
+status: "in_progress"
+branch: "codex/2026-08-26-reconstructable-system-specification"
+base_branch: "main"
+artifact_root: ".dev/workflows/2026-08-26-reconstructable-system-specification"
+entrypoint: "workflow-plan.md"
+work_item_bindings:
+  - provider: "github"
+    repository: "YuChia-Wei/dotnet-distributed-architecture-lab"
+    number: 2
+    url: "https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/2"
+    authorization_source: "User request in the initiating conversation on 2026-08-26"
+continuation:
+  current_task_id: "RECON-005"
+  target_policy_refs:
+    - ".dev/standards/WORKFLOW-GATE-POLICY.md"
+    - ".dev/standards/WORKFLOW-ARTIFACT-POLICY.md"
+    - ".dev/TEAM-GIT-FLOW-RULES.MD"
+  handoff_checkpoint: null
+created_at: "2026-08-26T19:03:36+08:00"
+updated_at: "2026-08-26T19:36:46+08:00"
+template_source: ".ai/assets/skills/software-development-orchestrator/templates/workflow-locator-template.yaml"
+template_version: "1.3.0"
