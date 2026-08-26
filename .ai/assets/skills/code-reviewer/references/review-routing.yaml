@@ -1,0 +1,220 @@
+asset_id: "code-reviewer-review-routing"
+schema_version: "1.0"
+asset_type: "review-routing-contract"
+title: "Code Reviewer File-Type And Finding Routing"
+source_of_truth: "canonical"
+status: "active"
+
+selection:
+  order:
+    - "explicit owner-selected review scope"
+    - "type hierarchy or implemented interface"
+    - "repository-relative path"
+    - "general-csharp fallback"
+  conflict_outcome: "report-selector-mismatch-and-use-type-hierarchy"
+  multi_file_scope: "select every matching route, de-duplicate references, and do not load unrelated routes"
+  unresolved_outcome: "stop-applicable-review"
+
+phase_references:
+  role_execution:
+    load_when: "Routes and applicable role bindings have been selected."
+    references:
+      - ".ai/assets/skills/code-reviewer/references/role-execution.md"
+  output:
+    load_when: "Findings are ready to format or persistence mode must be selected."
+    references:
+      - ".ai/assets/skills/code-reviewer/references/output-contract.md"
+
+loading_contract:
+  - "Load this routing contract before any .NET review standard."
+  - "Load only canonical_references for selected routes."
+  - "Load finding_rules references and rule_ids only when their finding_tag applies."
+  - "Load test standards only when test files or test-quality findings are in scope."
+  - "Load phase_references only at their declared phase; they are not route-selection prerequisites."
+  - "Do not load compatibility entries or broad shared summaries as a substitute for selected canonical references."
+
+semantic_guardrails:
+  - id: "event-sourcing-type-gate"
+    statement: "Apply/When-only state mutation is evaluated only when the reviewed aggregate is event-sourced by type hierarchy or an explicit target contract."
+  - id: "target-selected-contract-api"
+    statement: "Do not require a particular Contract, Guard, Objects, DateProvider, mapper, or DI helper API unless the target selected it."
+  - id: "target-specific-repository-ports"
+    statement: "Do not reject a repository interface merely because it is custom; compare its capabilities with the repository standard and target-owned selections."
+  - id: "evidence-not-semantics"
+    statement: "Analyzer and test output may support a finding but never replaces the selected canonical rule semantics."
+
+routes:
+  - route_id: "aggregate"
+    priority: 100
+    selectors:
+      path_globs: ["**/Domain/**/Aggregates/*.cs", "**/Domain/**/Aggregate*.cs"]
+      type_signals: ["IAggregateRoot<TId>", "EsAggregateRoot<TId>"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md"
+    finding_rules:
+      - finding_tag: "event-sourced-state-mutation"
+        applies_when: "The aggregate is event-sourced by type hierarchy or an explicit target contract."
+        rule_ids: ["AGGREGATE-ES-001"]
+      - finding_tag: "contract-semantics"
+        applies_when: "A precondition, invariant, or postcondition is under review."
+        rule_ids: ["CONTRACT-SEMANTICS-001"]
+      - finding_tag: "soft-delete"
+        applies_when: "The target selected the soft-delete profile for this aggregate."
+        rule_ids: ["DELETE-SOFT-001"]
+
+  - route_id: "domain-event"
+    priority: 95
+    selectors:
+      path_globs: ["**/Domain/**/Events/*.cs", "**/Domain/**/*Event.cs", "**/Domain/**/*Events.cs"]
+      type_signals: ["IDomainEvent"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md"
+    finding_rules: []
+
+  - route_id: "entity"
+    priority: 90
+    selectors:
+      path_globs: ["**/Domain/**/Entities/*.cs"]
+      type_signals: ["IEntity<TId>"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md"
+    finding_rules:
+      - finding_tag: "contract-semantics"
+        applies_when: "A precondition or invariant is under review."
+        rule_ids: ["CONTRACT-SEMANTICS-001"]
+
+  - route_id: "value-object"
+    priority: 90
+    selectors:
+      path_globs: ["**/Domain/**/ValueObjects/*.cs"]
+      type_signals: ["ValueObject", "immutable-record-value"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md"
+    finding_rules:
+      - finding_tag: "contract-semantics"
+        applies_when: "A construction constraint or invariant is under review."
+        rule_ids: ["CONTRACT-SEMANTICS-001"]
+
+  - route_id: "use-case"
+    priority: 85
+    selectors:
+      path_globs: ["**/Application/**/UseCases/**/*.cs", "**/Application/**/*UseCase.cs"]
+      type_signals: ["I*UseCase", "*UseCase"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md"
+    finding_rules:
+      - finding_tag: "unit-of-work"
+        applies_when: "The use case owns an explicitly selected transaction boundary."
+        rule_ids: ["ARCH-UOW-001"]
+
+  - route_id: "handler"
+    priority: 85
+    selectors:
+      path_globs: ["**/Application/**/*Handler.cs", "**/Api/**/*Handler.cs"]
+      type_signals: ["*CommandHandler", "*QueryHandler"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md"
+    finding_rules: []
+
+  - route_id: "repository"
+    priority: 85
+    selectors:
+      path_globs: ["**/Repositories/*.cs", "**/Repositories/**/*.cs", "**/*Repository.cs"]
+      type_signals: ["IAggregateRepository<TAggregate, TId>", "IQueryRepository"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/repository-standards.md"
+    finding_rules:
+      - finding_tag: "unit-of-work"
+        applies_when: "Transaction ownership or commit behavior is under review."
+        rule_ids: ["ARCH-UOW-001"]
+      - finding_tag: "soft-delete"
+        applies_when: "The target selected soft delete."
+        rule_ids: ["DELETE-SOFT-001"]
+      - finding_tag: "physical-purge"
+        applies_when: "A separately authorized physical purge capability is under review."
+        rule_ids: ["DELETE-PURGE-001"]
+
+  - route_id: "controller"
+    priority: 85
+    selectors:
+      path_globs: ["**/Api/**/Controllers/*.cs", "**/*Controller.cs"]
+      type_signals: ["ControllerBase", "ApiControllerAttribute"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/controller-standards.md"
+    finding_rules: []
+
+  - route_id: "mapper"
+    priority: 80
+    selectors:
+      path_globs: ["**/Mappers/*.cs", "**/*Mapper.cs"]
+      type_signals: ["*Mapper"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/mapper-standards.md"
+    finding_rules:
+      - finding_tag: "domain-event-mapping"
+        applies_when: "Domain events or event metadata are mapped or reconstructed."
+        rule_ids: ["MAP-EVENTS-001"]
+
+  - route_id: "projection"
+    priority: 80
+    selectors:
+      path_globs: ["**/Projections/*.cs", "**/*Projection.cs", "**/*ReadModel.cs"]
+      type_signals: ["IProjectionReadModel", "*Projection"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/projection-standards.md"
+    finding_rules: []
+
+  - route_id: "reactor"
+    priority: 80
+    selectors:
+      path_globs: ["**/Reactors/*.cs", "**/*Reactor.cs"]
+      type_signals: ["IReactor<T>"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/reactor-standards.md"
+    finding_rules: []
+
+  - route_id: "outbox"
+    priority: 75
+    selectors:
+      path_globs: ["**/Outbox/*.cs", "**/*OutboxData.cs"]
+      type_signals: ["OutboxData", "OutboxMessage"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/mapper-standards.md"
+    finding_rules:
+      - finding_tag: "domain-event-mapping"
+        applies_when: "Domain events or event metadata are serialized into or reconstructed from outbox data."
+        rule_ids: ["MAP-EVENTS-001"]
+
+  - route_id: "test"
+    priority: 70
+    selectors:
+      path_globs: ["**/tests/**/*.cs", "**/test/**/*.cs", "**/*Tests/*.cs", "**/*Test.cs", "**/*Tests.cs"]
+      type_signals: ["FactAttribute", "TheoryAttribute"]
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md"
+    finding_rules:
+      - finding_tag: "test-structure"
+        applies_when: "Test scenario structure or naming is under review."
+        rule_ids: ["TEST-GWT-001", "TEST-BDDFY-001"]
+      - finding_tag: "mocking-selection"
+        applies_when: "A mocking library or mock behavior is under review."
+        rule_ids: ["TEST-MOCK-001"]
+
+  - route_id: "general-csharp"
+    priority: 1
+    selectors:
+      path_globs: ["**/*.cs"]
+      type_signals: []
+    canonical_references:
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md"
+    finding_rules: []
+
+compatibility:
+  migration_window: "v0.13.x"
+  removal_review: "v0.14.0"
+  entries:
+    - ".ai/assets/tech-stacks/dotnet-backend/references/CODE-REVIEW-INDEX.MD"
+    - ".ai/assets/tech-stacks/dotnet-backend/standards/CODE-REVIEW-CHECKLIST.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md"
+    - ".ai/assets/skills/code-reviewer/references/checklist-reference.md"
+  rule: "Compatibility entries point here and must not duplicate review predicates."

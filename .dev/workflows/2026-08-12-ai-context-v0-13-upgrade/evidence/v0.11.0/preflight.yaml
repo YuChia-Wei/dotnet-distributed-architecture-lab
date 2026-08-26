@@ -1,0 +1,39 @@
+schema_version: "1.0"
+version: "v0.11.0"
+recorded_at: "2026-08-13T10:43:00+08:00"
+status: "verified"
+package:
+  release_id: "REL-v0.11.0"
+  package_schema: "2.1.0"
+  source_commit: "05199ed0a9ed509ef1696df014fce244f8e7cffa"
+  source_tree: "dc91c8073c4c07ba3579a6fb37ea644365d2eda9"
+  zip_sha256: "cd7010f65941cccfa2151ded2e0d7b3ef27f7a9d0bb3c5772a5b5c9855a0a10c"
+  payload_files: 658
+  payload_fingerprint: "a2cf804c04e21dd414a47ceff565b8ac086d36e5519b2294ef4b151385eca715"
+  files_manifest_digest: "92cc501ac728d110f120aeb085e43b398dd2fd6c2627412b03c29c93655ddfac"
+  migration_digest: "d70f91ed63948450255107490798287788f595dfe7e3cb937f4b4647b33a080e"
+  selected_input_fingerprint: "c84e768a810d60f1b352190fc8626c99483db42b9375cf330207fa84b1ddc2fb"
+  selected_input_verification: >-
+    Syntax-validated from package identity only; canonical source selection
+    inputs are intentionally absent from the downstream package and were not
+    independently recomputed.
+compatibility:
+  breaking_changes: true
+  minimum_governed_source: "v0.10.0"
+  automatic_upgrade_sources: ["v0.10.0"]
+  exact_predecessor_authority: "REL-v0.10.0"
+selection:
+  resolution_source: "target-provenance"
+  repo_backlog_enabled: true
+  provider_activation: false
+settings:
+  validation_routine_local: "manual"
+  validation_routine_ci: "unconfigured"
+  stock_profile_activation: false
+  evidence_reuse_activation: false
+decision:
+  owner_decision_required: false
+  rationale: >-
+    All four framework-managed operations are exact-predecessor safe. Existing
+    approval retains the target-owned gate and inactive profile/reuse/provider
+    boundaries; activation remains separately unauthorized.

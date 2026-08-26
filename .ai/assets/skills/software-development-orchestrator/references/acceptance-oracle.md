@@ -79,13 +79,13 @@ environment-dependent gates remains target-owned acceptance evidence.
 Run both acceptance paths:
 
 ```text
-python .ai/scripts/tests/test_software_development_orchestrator_acceptance.py -v
+python .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_acceptance.py -v
 ```
 
 Run the activation oracle directly:
 
 ```text
-python .ai/scripts/validate-software-development-orchestrator-acceptance.py activation \
+python .ai/assets/skills/software-development-orchestrator/scripts/validate-software-development-orchestrator-acceptance.py activation \
   --fixture .ai/assets/skills/software-development-orchestrator/fixtures/acceptance/activation-high-level-pending-approval.yaml \
   --expected .ai/assets/skills/software-development-orchestrator/fixtures/acceptance/activation-high-level-pending-approval.expected.yaml
 ```

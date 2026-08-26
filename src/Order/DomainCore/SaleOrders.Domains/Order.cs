@@ -8,8 +8,9 @@ public class Order : EsAggregateRoot<Guid>
     /// <summary>
     /// 事件重播用建構子
     /// </summary>
-    public Order(IEnumerable<IDomainEvent> events) : base(events)
+    public Order(IEnumerable<IDomainEvent> events)
     {
+        Replay(events);
     }
 
     /// <summary>

@@ -62,7 +62,7 @@ Current use cases include product create/update/delete/query, order place/ship/d
 - Product and Inventory persistence use Dapper + Npgsql repositories with PostgreSQL.
 - Order includes both a Dapper domain repository and `OrderEventSourcingRepository`; event sourcing is an explicit Orders capability rather than a universal default.
 - Integration publishing is coordinated through repository/infrastructure code and Wolverine durable messaging facilities.
-- Product source projects do not currently reference EF Core; EF Core packages are present only in validator test tooling.
+- Product source projects do not currently reference EF Core; the retired target validation tooling is no longer part of the active repository.
 
 ## Messaging And Integration
 
@@ -83,13 +83,12 @@ The repository defines six product hosts:
 
 `docker-compose/docker-compose.yml` also defines PostgreSQL databases per context, Kafka/Kafdrop, OpenTelemetry Collector, Prometheus, Tempo, Loki, and Grafana. Dockerfiles live in each Presentation host project.
 
-## Tests And Architecture Tooling
+## Tests And Validation Boundary
 
 - `MQArchLab.slnx` includes four xUnit test projects for Products and Orders.
 - Inventory currently has no test project in the solution.
-- `tools/DotnetBackendAnalyzers*` provides Roslyn architecture analyzers and tests.
-- `tools/DotnetBackendValidation*` provides runtime validation helpers and tests.
-- Tool projects are not currently included in `MQArchLab.slnx`.
+- The target-owned analyzer and runtime-validation projects were retired by the owner-approved v0.9 AI-context upgrade and are absent from the repository and solution.
+- v0.13 removed the former bundled mechanical-validation provider. The remaining `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/` assets are reference-only recipes; they are not selected, activated, or wired into the target solution or build.
 
 ## Truth Ownership
 

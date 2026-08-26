@@ -46,6 +46,8 @@ Each task JSON should capture:
 - inputs and user constraints;
 - execution steps, validation, and deferred items;
 - approval state, test execution records, and selected compliance state;
+- complete owner-produced `role_execution` records when a canonical role is
+  applicable, or no record when no role is selected for the task; and
 - results after completion.
 
 When `execution.capability_slot` is `implementation`, replace the template's
@@ -121,6 +123,28 @@ null `test_execution_contract` with:
 - Record commands and environment requirements, not secrets. Never invent
   credentials, bypass controls, or escalate privileges implicitly.
 - Leave `test_execution_contract` null for other capability slots.
+
+## Role Execution Records
+
+When a task's owning skill selects a canonical sub-agent role, place one or
+more complete records in `execution.role_execution_records`. Each array item
+uses the exact shared schema at
+`../../../shared/ROLE-EXECUTION-CONTRACT.md`; do not reduce it to a role name,
+adapter path, or planning note.
+
+The owning skill produces the records. `software-development-orchestrator`
+aggregates them by stage, verifies their disposition, genuine invocation
+evidence, attempts, fallback, and final integration decision, but does not
+replace their domain output or automatically take the integration-owner role.
+It may make the recorded decision only when explicitly named as that owner.
+Direct conversational work uses the same shape in
+the response without writing this task field.
+
+Use `direct` by default. A delegated attempt requires all shared safety gates,
+at least one material-value trigger, a `supports-delegation` cost/risk result,
+and genuine invocation evidence. A failed delegation becomes direct only with
+the shared inline-parity evidence; otherwise it becomes unavailable. Existing
+`loaded_rule_ids` data is only a source reference in the input envelope.
 
 Use these statuses:
 

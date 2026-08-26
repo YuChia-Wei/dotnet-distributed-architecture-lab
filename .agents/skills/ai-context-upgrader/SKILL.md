@@ -20,10 +20,14 @@ This is a thin current-runtime wrapper.
   - `.ai/assets/skills/ai-context-upgrader/references/output-contract.md`
   - `.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`
   - `.ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml`
+  - `.ai/assets/skills/ai-context-governance/templates/effective-rule-state.schema.yaml`
+  - `.ai/assets/skills/ai-context-governance/templates/effective-rule-state.template.yaml`
+  - `.ai/assets/skills/ai-context-governance/templates/effective-rule-packet.schema.yaml`
   - `.ai/assets/skills/ai-context-upgrader/templates/ai-context-source-template.yaml`
   - `.ai/assets/skills/ai-context-upgrader/templates/provenance-template.yaml`
   - `.ai/assets/skills/ai-context-upgrader/templates/customizations-template.yaml`
-  - `.ai/scripts/validate-ai-context-target.py`
+- `.ai/scripts/validate-ai-context-target.py`
+- `.ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py`
 
 ## Wrapper Rules
 

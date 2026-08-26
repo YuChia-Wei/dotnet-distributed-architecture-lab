@@ -1,0 +1,81 @@
+schema_version: "1.0"
+version: "v0.11.0"
+recorded_at: "2026-08-13T10:43:00+08:00"
+status: "finalized"
+structural_candidate_commit: "1bba9759eb51c19071d30aafc21825cbde439b25"
+target_starting_commit: "8284e97c6ae43af117f3c54687da9840b4e85e50"
+package:
+  release_id: "REL-v0.11.0"
+  commit: "05199ed0a9ed509ef1696df014fce244f8e7cffa"
+  zip_sha256: "cd7010f65941cccfa2151ded2e0d7b3ef27f7a9d0bb3c5772a5b5c9855a0a10c"
+plans:
+  dry_run_sha256: "9b0ac63af891a779cefce5aa5a296329abfeacbc9563cd6bc9b12ea5d55c2528"
+  apply_sha256: "9b0ac63af891a779cefce5aa5a296329abfeacbc9563cd6bc9b12ea5d55c2528"
+  identical: true
+operations:
+  total: 4
+  add: 1
+  replace: 3
+  reconcile: 0
+  ignored_framework_paths: 0
+receipt:
+  sha256: "cfabfcfbc7f76556f036abbbf145c3088d1ddad64b96288d084c6b3b751e9ebf"
+  status: "completed-and-working-copy-removed"
+  required_framework_paths: 643
+  applied_operation_ids: 4
+  skipped_reconciliation_ids: 0
+validation:
+  candidate_target_gate:
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 35.2
+    commit_range_count: 33
+  target_overlay_tests: "21/21 passed"
+  git_diff_check:
+    outcome: "package-native-diagnostic"
+    path: ".ai/assets/shared/PRODUCT-SOURCE-PROJECTION-CONTRACT.md"
+    diagnostic: "new blank line at EOF"
+    disposition: "Preserve receipt-bound exact package bytes and record the non-semantic diagnostic."
+package_projection:
+  status: "blocked-by-package-projection"
+  active_defect_id: "AICU-V010-PROJECTION-001"
+  carried_documentation_defect_id: "AICU-V090-DOC-001"
+  observed_through: "v0.11.0"
+validation_selection:
+  status: "blocked-by-selector-defect"
+  defect_id: "AICU-V011-SELECTION-001"
+  evidence: >-
+    Direct changed-path matches are marked selected before recursive dependency
+    expansion, causing the already-selected guard to skip dependency traversal;
+    v0.10-identical projected tests contain no new selector coverage.
+  disposition: "Keep changed-path execution and evidence reuse inactive."
+settings:
+  validation_routine_local: "manual"
+  validation_routine_ci: "unconfigured"
+  stock_profile_activation: false
+  evidence_reuse_activation: false
+  provider_activation: false
+independent_audit:
+  assessment_id: "ASM-20260813-004"
+  subject_commit: "4326f36610405ba0c5a9007f081ced8e57191de4"
+  verdict: "safe-to-finalize"
+  commit_range_count: 35
+  blockers: []
+finalization:
+  finalized_at: "2026-08-13T10:58:36+08:00"
+  provenance_version: "v0.11.0"
+  customization_entries: 4
+  rule_dispositions: 13
+  routes: 20
+  packets: 20
+  effective_rule_readiness: "ready"
+  gate_with_receipt:
+    result: "passed-outside-sandbox"
+    duration_seconds: 35.8
+    commit_range_count: 36
+  gate_after_receipt_removal:
+    result: "passed-outside-sandbox"
+    duration_seconds: 14.4
+    commit_range_count: 36
+next_action: >-
+  Begin exact-predecessor v0.12 preflight from the resulting clean
+  lifecycle-synchronization HEAD.

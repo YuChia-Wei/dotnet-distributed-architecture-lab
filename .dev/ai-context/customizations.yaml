@@ -1,189 +1,287 @@
 template_metadata:
-  template_id: "ai-context-customizations"
-  template_version: "1.0.0"
-  created_at: "2026-07-24T00:50:47+08:00"
-  updated_at: "2026-07-25T08:31:36+08:00"
-
-schema_version: "1.0"
+  template_id: ai-context-customizations
+  template_version: 1.1.0
+  created_at: '2026-07-24T00:50:47+08:00'
+  updated_at: '2026-08-13T12:59:17+08:00'
+schema_version: '1.0'
 customizations:
-  - id: "CUST-DOTNET-MQ-GOVERNANCE"
-    subject:
-      kind: "rule"
-      id: "downstream-ai-context-governance-projection"
-    relationship: "extends"
-    reason: "Retain target-specific governance, downstream package projection, workflow documentation, and repository boundary details while merging the v0.6.0 lifecycle and orchestration contracts."
-    paths:
-      - ".ai/INDEX.MD"
-      - ".ai/assets/skills/ai-context-auditor/references/audit-playbook.md"
-      - ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md"
-      - ".ai/assets/skills/ai-context-governance/references/context-boundary-playbook.md"
-      - ".ai/assets/skills/ai-context-governance/references/output-contract.md"
-      - ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-report-template.md"
-      - ".dev/guides/ai-collaboration-guides/AI-COLLABORATION-WORKFLOW-GUIDE.md"
-      - ".dev/guides/ai-collaboration-guides/README.MD"
-      - ".dev/guides/ai-collaboration-guides/REPO-STRUCTURE-SYNC-SKILL-GUIDE.md"
-      - ".dev/guides/ai-collaboration-guides/REQUIREMENT-DESIGNER-PROMPT-GUIDE.md"
-      - ".dev/guides/ai-collaboration-guides/SPEC-DESIGNER-PROMPT-GUIDE.md"
-      - ".dev/guides/learning-guides/NEW-PROJECT-GUIDE.md"
-      - ".dev/operations/README.MD"
-      - ".dev/standards/AI-CONTEXT-BOUNDARY.md"
-      - ".dev/standards/AI-CONTEXT-OWNERSHIP.yaml"
-      - ".dev/standards/README.md"
-      - ".dev/standards/coding-standards/README.md"
-    base_framework:
-      version: "v0.5.0"
-      commit: "1477181f0b43fa7ee82fcd482141758ac9e22eb6"
-      evidence:
-        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md"
-        - ".dev/assessments/ASM-20260718-001/report.md"
-    dependencies:
-      customization_ids: []
-      subject_refs:
-        - "rule:ai-context-boundary"
-        - "contract:downstream-package-projection"
-    owner_reconciliation:
-      status: "approved"
-      owner: "dotnet-mq-arch-lab maintainer"
-      decided_at: "2026-07-25T07:56:49+08:00"
-      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
-    decision_evidence:
-      requirements: []
-      adrs: []
-      workflows:
-        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
-    active_context_audit:
-      assessment_id: "ASM-20260718-001"
-      status: "verified"
-      evidence: ".dev/assessments/ASM-20260718-001/report.md"
-    incoming:
-      version: "v0.6.0"
-      status: "partial"
-      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/04-v0.6.0-package-plan.md"
-    disposition: "merge"
-    post_upgrade_audit:
-      assessment_id: "ASM-20260725-002"
-      status: "verified"
-      evidence: ".dev/assessments/ASM-20260725-002/report.md"
-    validation:
-      - "python .ai/scripts/validate-ai-context.py"
-      - "python .ai/scripts/validate-ai-context-target.py"
-      - "bash ./.ai/scripts/check-all.sh --quick"
-
-  - id: "CUST-DOTNET-MQ-VALIDATION"
-    subject:
-      kind: "contract"
-      id: "downstream-validation-runtime"
-    relationship: "deviates"
-    reason: "The historical downstream validation override is no longer required because the repository now standardizes on PowerShell 7 and the owner approved full adoption of the v0.6.0 validation behavior."
-    paths:
-      - ".ai/scripts/check-all.sh"
-      - ".ai/scripts/check-data-class-annotations.sh"
-      - ".ai/scripts/check-domain-events-compliance.sh"
-      - ".ai/scripts/check-dotnet-config.sh"
-      - ".ai/scripts/check-framework-api-compliance.sh"
-      - ".ai/scripts/check-mutation-coverage.sh"
-      - ".ai/scripts/check-prompt-portability.sh"
-      - ".ai/scripts/check-spec-compliance.sh"
-      - ".ai/scripts/check-test-compliance.sh"
-      - ".ai/scripts/check-test-di-compliance.sh"
-      - ".ai/scripts/code-review.sh"
-      - ".ai/scripts/shell-assets.yaml"
-      - ".ai/scripts/test-profile-startup.sh"
-      - ".ai/scripts/tests/test_ai_context_exact_case_paths.py"
-      - ".ai/scripts/validate-dual-profile-config.sh"
-    base_framework:
-      version: "v0.5.0"
-      commit: "1477181f0b43fa7ee82fcd482141758ac9e22eb6"
-      evidence:
-        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md"
-        - ".dev/assessments/ASM-20260718-001/report.md"
-    dependencies:
-      customization_ids: []
-      subject_refs:
-        - "contract:target-validation-gate"
-    owner_reconciliation:
-      status: "approved"
-      owner: "dotnet-mq-arch-lab maintainer"
-      decided_at: "2026-07-25T07:56:49+08:00"
-      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
-    decision_evidence:
-      requirements: []
-      adrs: []
-      workflows:
-        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
-    active_context_audit:
-      assessment_id: "ASM-20260718-001"
-      status: "verified"
-      evidence: ".dev/assessments/ASM-20260718-001/report.md"
-    incoming:
-      version: "v0.6.0"
-      status: "equivalent-candidate"
-      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/04-v0.6.0-package-plan.md"
-    disposition: "supersede"
-    post_upgrade_audit:
-      assessment_id: "ASM-20260725-002"
-      status: "verified"
-      evidence: ".dev/assessments/ASM-20260725-002/report.md"
-    validation:
-      - "python .ai/scripts/validate-shell-assets.py"
-      - "python -m unittest discover -s .ai/scripts/tests -p test_*.py"
-      - "bash ./.ai/scripts/check-all.sh --quick"
-
-  - id: "CUST-DOTNET-MQ-REPO-TRUTH"
-    subject:
-      kind: "contract"
-      id: "target-repository-truth-boundary"
-    relationship: "target-only"
-    reason: "Preserve initialized repository identity, catalogs, active workflows, backlog discovery, runtime entry contracts, SDK selection, and repository-specific configuration."
-    paths:
-      - ".dev/INDEX.md"
-      - ".dev/README.MD"
-      - ".dev/adr/INDEX.md"
-      - ".dev/backlog/INDEX.MD"
-      - ".dev/problem-frames/INDEX.md"
-      - ".dev/specs/INDEX.MD"
-      - ".dev/workflows/INDEX.MD"
-      - ".editorconfig"
-      - ".gitattributes"
-      - "AGENTS.md"
-      - "CLAUDE.md"
-      - "README.md"
-      - "global.json"
-    base_framework:
-      version: "v0.5.0"
-      commit: "1477181f0b43fa7ee82fcd482141758ac9e22eb6"
-      evidence:
-        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md"
-        - ".dev/assessments/ASM-20260718-001/report.md"
-    dependencies:
-      customization_ids: []
-      subject_refs:
-        - "contract:repository-identity"
-        - "contract:target-owned-truth"
-    owner_reconciliation:
-      status: "approved"
-      owner: "dotnet-mq-arch-lab maintainer"
-      decided_at: "2026-07-25T07:56:49+08:00"
-      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
-    decision_evidence:
-      requirements: []
-      adrs: []
-      workflows:
-        - ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/05-owner-reconciliation-decision.md"
-    active_context_audit:
-      assessment_id: "ASM-20260718-001"
-      status: "verified"
-      evidence: ".dev/assessments/ASM-20260718-001/report.md"
-    incoming:
-      version: "v0.6.0"
-      status: "conflicting"
-      evidence: ".dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/04-v0.6.0-package-plan.md"
-    disposition: "retain"
-    post_upgrade_audit:
-      assessment_id: "ASM-20260725-002"
-      status: "verified"
-      evidence: ".dev/assessments/ASM-20260725-002/report.md"
-    validation:
-      - "python .ai/scripts/validate-ai-context.py"
-      - "python .ai/scripts/validate-workflow-artifacts.py"
-      - "dotnet build MQArchLab.slnx --no-restore"
+- id: CUST-DOTNET-MQ-GOVERNANCE
+  subject:
+    kind: rule
+    id: downstream-ai-context-governance-projection
+  relationship: extends
+  reason: Merge the byte-exact v0.13 framework evolution while retaining target Issue-first
+    authorization, repository governance and skill routing, directory-scoped .codex/agents
+    tracking, the repository LF policy, and inactive profile/reuse/recipe boundaries.
+    Adopt compact code-review routing without allowing package examples to replace
+    target truth.
+  paths:
+  - .gitignore
+  - .gitattributes
+  - .github/pull_request_template.md
+  - AGENTS.md
+  - AGENTS.zh-TW.md
+  - .dev/project-config.yaml
+  - .dev/ai-context/tooling/README.md
+  base_framework:
+    version: v0.5.0
+    commit: 1477181f0b43fa7ee82fcd482141758ac9e22eb6
+    evidence:
+    - .dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md
+    - .dev/assessments/ASM-20260718-001/report.md
+  dependencies:
+    customization_ids: []
+    subject_refs:
+    - rule:ai-context-boundary
+    - contract:downstream-package-projection
+  owner_reconciliation:
+    status: approved
+    owner: 'dotnet-mq-arch-lab maintainer via GitHub Issue #1'
+    decided_at: '2026-08-13T07:56:18+08:00'
+    evidence: .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml
+  decision_evidence:
+    requirements: []
+    adrs: []
+    workflows:
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/03-v0.9.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.10.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/04-v0.10.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.11.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/05-v0.11.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.12.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/06-v0.12.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/07-v0.13.0-reconciliation.md
+  active_context_audit:
+    assessment_id: ASM-20260812-002
+    status: verified
+    evidence: .dev/assessments/ASM-20260812-002/report.md
+  incoming:
+    version: v0.13.0
+    status: partial
+    evidence: .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/07-v0.13.0-reconciliation.md
+  disposition: merge
+  post_upgrade_audit:
+    assessment_id: ASM-20260813-006
+    status: verified
+    evidence: .dev/assessments/ASM-20260813-006/report.md
+  validation:
+  - python -B .dev/ai-context/tooling/validate-target-ai-context.py --require-effective-rules
+    --commit-range main..HEAD --workflow-id 2026-08-12-ai-context-v0-13-upgrade
+  - python -B .dev/ai-context/tooling/tests/test_effective_rule_decisions.py
+- id: CUST-DOTNET-MQ-VALIDATION
+  subject:
+    kind: contract
+    id: downstream-validation-runtime
+  relationship: deviates
+  reason: AICU-V010-PROJECTION-001, AICU-V011-SELECTION-001, AICU-V012-PROFILE-REGISTRY-PROJECTION-001,
+    AICU-V012-COMMIT-CUTOVER-001, AICU-V012-COMMIT-DOC-001, AICU-V013-ROUTING-PROJECTION-001,
+    AICU-V013-COMPONENT-OWNERSHIP-001, and AICU-V013-PREACTION-PACKET-BOOTSTRAP-001
+    require the SHA-pinned downstream-applicable target gate and prospective target
+    policy. Do not claim stock profiles, changed-path execution, reuse, or source-only
+    tests passed.
+  paths:
+  - .dev/ai-context/tooling/README.md
+  - .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py
+  - .dev/ai-context/tooling/target-gate-manifest.yaml
+  - .dev/ai-context/tooling/target-validation-policy.yaml
+  - .dev/ai-context/tooling/tests/test_downstream_package_projection.py
+  - .dev/ai-context/tooling/tests/test_effective_rule_decisions.py
+  - .dev/ai-context/tooling/tests/test_target_git_commit_policy.py
+  - .dev/ai-context/tooling/validate-target-ai-context.py
+  - .dev/ai-context/tooling/tests/test_target_gate_candidate_diagnostics.py
+  - .dev/ai-context/tooling/tests/test_code_reviewer_routing_projection.py
+  base_framework:
+    version: v0.5.0
+    commit: 1477181f0b43fa7ee82fcd482141758ac9e22eb6
+    evidence:
+    - .dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md
+    - .dev/assessments/ASM-20260718-001/report.md
+  dependencies:
+    customization_ids: []
+    subject_refs:
+    - contract:target-validation-gate
+  owner_reconciliation:
+    status: approved
+    owner: 'dotnet-mq-arch-lab maintainer via GitHub Issue #1'
+    decided_at: '2026-08-13T07:56:18+08:00'
+    evidence: .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml
+  decision_evidence:
+    requirements: []
+    adrs: []
+    workflows:
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/03-v0.9.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-2.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.10.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/04-v0.10.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.11.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/05-v0.11.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.12.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/06-v0.12.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/07-v0.13.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/preaction-packet-analysis.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/aggregate-es-001-remediation.yaml
+  active_context_audit:
+    assessment_id: ASM-20260812-002
+    status: verified
+    evidence: .dev/assessments/ASM-20260812-002/report.md
+  incoming:
+    version: v0.13.0
+    status: conflicting
+    evidence: .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/07-v0.13.0-reconciliation.md
+  disposition: merge
+  post_upgrade_audit:
+    assessment_id: ASM-20260813-006
+    status: verified
+    evidence: .dev/assessments/ASM-20260813-006/report.md
+  validation:
+  - python -B .dev/ai-context/tooling/validate-target-ai-context.py --require-effective-rules
+    --commit-range main..HEAD --workflow-id 2026-08-12-ai-context-v0-13-upgrade
+  - python -B -m unittest discover -s .dev/ai-context/tooling/tests -p 'test_*.py'
+    -v
+- id: CUST-DOTNET-MQ-REPO-TRUTH
+  subject:
+    kind: contract
+    id: target-repository-truth-boundary
+  relationship: target-only
+  reason: Preserve repository identity, .NET SDK and product truth, target catalogs
+    and workflow authorities, complete analyzer/tools retirement, and inactive recipe
+    boundaries while adopting v0.13 exact framework paths and removal of the bundled
+    provider payload.
+  paths:
+  - .dev/ARCHITECTURE.md
+  - .dev/INDEX.md
+  - .dev/README.MD
+  - .dev/adr/INDEX.md
+  - .dev/backlog/INDEX.MD
+  - .dev/problem-frames/INDEX.md
+  - .dev/project-config.yaml
+  - .dev/specs/INDEX.MD
+  - .dev/workflows/INDEX.MD
+  - .editorconfig
+  - .gitattributes
+  - .gitignore
+  - AGENTS.md
+  - AGENTS.zh-TW.md
+  - CLAUDE.md
+  - README.md
+  - README.en.md
+  - global.json
+  - MQArchLab.slnx
+  base_framework:
+    version: v0.5.0
+    commit: 1477181f0b43fa7ee82fcd482141758ac9e22eb6
+    evidence:
+    - .dev/workflows/2026-07-25-ai-context-v0-6-upgrade/reports/03-v0.5.0-checkpoint.md
+    - .dev/assessments/ASM-20260718-001/report.md
+  dependencies:
+    customization_ids: []
+    subject_refs:
+    - contract:repository-identity
+    - contract:target-owned-truth
+  owner_reconciliation:
+    status: approved
+    owner: 'dotnet-mq-arch-lab maintainer via GitHub Issue #1'
+    decided_at: '2026-08-13T07:56:18+08:00'
+    evidence: .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml
+  decision_evidence:
+    requirements: []
+    adrs: []
+    workflows:
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/03-v0.9.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-2.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.10.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/04-v0.10.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.11.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/05-v0.11.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.12.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/06-v0.12.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/07-v0.13.0-reconciliation.md
+  active_context_audit:
+    assessment_id: ASM-20260812-002
+    status: verified
+    evidence: .dev/assessments/ASM-20260812-002/report.md
+  incoming:
+    version: v0.13.0
+    status: conflicting
+    evidence: .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/07-v0.13.0-reconciliation.md
+  disposition: retain
+  post_upgrade_audit:
+    assessment_id: ASM-20260813-006
+    status: verified
+    evidence: .dev/assessments/ASM-20260813-006/report.md
+  validation:
+  - python -B .dev/ai-context/tooling/validate-target-ai-context.py --require-effective-rules
+    --commit-range main..HEAD --workflow-id 2026-08-12-ai-context-v0-13-upgrade
+  - dotnet build MQArchLab.slnx --no-restore --disable-build-servers -m:1
+- id: CUST-DOTNET-MQ-EXECUTION-PROVENANCE-ADOPTION
+  subject:
+    kind: rule
+    id: target-execution-provenance-adoption-boundary
+  relationship: deviates
+  reason: Adopt AI execution provenance prospectively from 2026-08-12T22:08:09+08:00
+    and commit-subject grammar from 2026-08-13T11:05:12+08:00 without history rewrite.
+    Preserve only the exact ad194beb3fb61a18b6870093b704264746c1516b / ASM-20260812-002
+    / missing-matching-trailer waiver in the target-owned fail-closed overlay while
+    canonical v0.13 framework bytes remain exact.
+  paths:
+  - .dev/ai-context/tooling/README.md
+  - .dev/ai-context/tooling/target-validation-policy.yaml
+  - .dev/ai-context/tooling/validate-target-ai-context.py
+  - .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py
+  - .dev/ai-context/tooling/tests/test_target_git_commit_policy.py
+  - AGENTS.md
+  - AGENTS.zh-TW.md
+  base_framework:
+    version: v0.7.0
+    commit: 49723a943f744820f4bdb2c22de7930693a7106d
+    evidence:
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/01-v0.7.0-reconciliation.md
+  dependencies:
+    customization_ids:
+    - CUST-DOTNET-MQ-GOVERNANCE
+    subject_refs:
+    - rule:ai-execution-provenance
+    - contract:no-history-rewrite
+  owner_reconciliation:
+    status: approved
+    owner: 'dotnet-mq-arch-lab maintainer via GitHub Issue #1'
+    decided_at: '2026-08-13T07:56:18+08:00'
+    evidence: .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml
+  decision_evidence:
+    requirements: []
+    adrs: []
+    workflows:
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/02-v0.8.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/03-v0.9.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.10.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/04-v0.10.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.11.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/05-v0.11.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.12.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/06-v0.12.0-reconciliation.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/preflight.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/07-v0.13.0-reconciliation.md
+  active_context_audit:
+    assessment_id: ASM-20260812-002
+    status: verified
+    evidence: .dev/assessments/ASM-20260812-002/report.md
+  incoming:
+    version: v0.13.0
+    status: conflicting
+    evidence: .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/07-v0.13.0-reconciliation.md
+  disposition: merge
+  post_upgrade_audit:
+    assessment_id: ASM-20260813-006
+    status: verified
+    evidence: .dev/assessments/ASM-20260813-006/report.md
+  validation:
+  - python -B .dev/ai-context/tooling/validate-target-ai-context.py --require-effective-rules
+    --commit-range main..HEAD --workflow-id 2026-08-12-ai-context-v0-13-upgrade
+  - python -B .dev/ai-context/tooling/tests/test_target_git_commit_policy.py

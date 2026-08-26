@@ -15,7 +15,7 @@ triggers:
   - "delegated code review"
 inputs:
   - "reviewed files or bounded scope"
-  - "repo standards and checklist rules"
+  - "selected review route IDs and their canonical references"
   - "optional test results or validation output"
 outputs:
   - "review findings with file and line references"
@@ -25,9 +25,10 @@ constraints:
   - "Do not redefine target architecture"
   - "Do not silently approve code without checklist comparison"
   - "Always separate findings from summary"
+  - "Do not load unselected file-type standards or broad shared review summaries"
 workflow:
   - step: 1
-    description: "Classify the reviewed scope and load the matching review checklist sections"
+    description: "Use review-routing.yaml to classify the scope and load only selected canonical references"
   - step: 2
     description: "Check structural, behavioral, and testing compliance against repository rules"
   - step: 3
@@ -35,13 +36,14 @@ workflow:
 references:
   - ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-playbook.md"
   - ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-prompt.md"
-  - ".ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md"
-  - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
-  - ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"
+  - ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
   - ".ai/assets/skills/code-reviewer/skill.yaml"
+routing:
+  contract_path: ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
+  reference_loading: "selected-route-only"
+  supported_route_ids: ["aggregate", "domain-event", "entity", "value-object", "use-case", "handler", "repository", "controller", "mapper", "projection", "reactor", "outbox", "test", "general-csharp"]
 examples:
   - ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-playbook.md"
   - ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-prompt.md"
 human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
 status: "active"
-

@@ -1,0 +1,57 @@
+schema_version: "1.0"
+version: "v0.13.0"
+status: "finalized"
+finalized_at: "2026-08-13T12:59:17+08:00"
+assessment_id: "ASM-20260813-006"
+source:
+  release_id: "REL-v0.13.0"
+  commit: "8584337b47295da1af914180baf2b3f815b9dcc7"
+receipt:
+  retained_through_finalization: true
+  sha256: "094840edc10744c12397a905e1783f8200a498081a492d5fae0f13f41b979ec0"
+  evidence: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/apply-receipt.yaml"
+  working_copy_removed_after_success: true
+authorities:
+  customization_entries: 4
+  rule_dispositions: 13
+  routes: 20
+  packets: 20
+  effective_rule_readiness: "ready"
+packet_postcheck:
+  target_state_digest: "ec489634d9af8e62468d5f61aff1eef8924fde9ad00111642ab3904eea31bb30"
+  loaded_rule_count: 13
+  aggregate_es_001_disposition: "baseline-effective"
+  production:
+    route_id: "ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C"
+    packet_id: "PACKET-50E12D0F35E10298E7F3C65196070C3AC00B09F2E2595C795AC9B5F375707042"
+    packet_digest: "3284502d917e08ed5aa6adb95db730055ebfbeef81a90e4c701d8c7dcc0aef50"
+    freshness: "verified"
+  test:
+    route_id: "ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7"
+    packet_id: "PACKET-8AEC71BA1FD2404AE98044DA024EF41844393D580D411D06F07D90D77B8429C1"
+    packet_digest: "071b26bc727ebc1f71daae29eb9212a4b6d1b8fc36c9e46f0ba11f0f347ece4b"
+    freshness: "verified"
+validation:
+  with_working_receipt:
+    result: "passed-outside-sandbox"
+    duration_seconds: 37.0
+    commit_range_count: 52
+  after_working_receipt_removal:
+    result: "passed-outside-sandbox"
+    duration_seconds: 16.8
+    commit_range_count: 52
+  target_owned_overlay_tests: "41/41 passed"
+  effective_rule_tests: "18 passed; 2 Windows symlink cases platform-skipped"
+settings:
+  validation_routine_local: "manual"
+  validation_routine_ci: "unconfigured"
+  stock_profile_activation: false
+  changed_path_activation: false
+  evidence_reuse_activation: false
+  provider_activation: false
+  on_demand_recipe_selection: false
+checkpoint_commit: "a074e4e00fac3a012c0c6190a1036a67ff5f948c"
+next_action: >-
+  Independently audit the resulting clean lifecycle-synchronization HEAD, then
+  begin the post-upgrade developer-impact, rule-change, scoring, discussion
+  branch comparison, and upstream-feedback analyses.

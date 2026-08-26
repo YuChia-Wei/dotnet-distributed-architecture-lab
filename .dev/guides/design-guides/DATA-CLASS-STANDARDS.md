@@ -1,7 +1,11 @@
 # Data Class Standards Guide (Dotnet)
 
 ## Overview
-Data classes in the ezDDD framework serve as DTOs for persisting aggregate state in the Outbox pattern. In .NET, they are EF Core entities that represent the database schema and the outbox payload shape.
+When a target selects an Outbox persistence profile, data classes may serve as
+DTOs for persisted aggregate state and pending-event metadata. In an EF Core
+adapter they represent the database schema and the selected outbox payload
+shape; neither EF Core nor a shared data-class base type is a universal
+requirement.
 
 ## Critical Rules
 
@@ -35,7 +39,7 @@ var state = Enum.Parse<ProductLifecycleState>(data.State);
 ### Basic Template
 ```csharp
 [Table("products")]
-public class ProductData : OutboxData<string>
+public class ProductData
 {
     [NotMapped]
     public List<DomainEventData> DomainEventDatas { get; set; } = new();
@@ -60,8 +64,6 @@ public class ProductData : OutboxData<string>
     [Column("version")]
     public long Version { get; set; }
 
-    public string GetId() => ProductId;
-    public void SetId(string id) => ProductId = id;
 }
 ```
 
@@ -144,7 +146,7 @@ Before committing a data class:
 - [ ] All persistent fields mapped with explicit column names
 - [ ] Outbox-only fields marked [NotMapped]
 - [ ] Concurrency/version field present
-- [ ] Implements OutboxData<string> (TODO: define .NET interface)
+- [ ] Uses only target-selected, project-owned persistence contracts; no shared base class is assumed
 - [ ] Table and key mapping defined
 - [ ] Column names use snake_case
 
@@ -155,4 +157,4 @@ TODO: replace `.ai/scripts/check-data-class-annotations.sh` with a Roslyn analyz
 ## Related Documents
 - `FRAMEWORK-API-INTEGRATION-GUIDE.md`
 - `.ai/assets/tech-stacks/dotnet-backend/shared/dto-conventions.md`
-- `.dev/standards/examples/dto/README.md`
+- `.ai/assets/tech-stacks/dotnet-backend/examples/dto/README.md`

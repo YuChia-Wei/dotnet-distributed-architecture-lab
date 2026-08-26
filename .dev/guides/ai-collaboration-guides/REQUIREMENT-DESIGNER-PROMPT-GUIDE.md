@@ -2,7 +2,7 @@
 
 本文件說明如何用 prompt 讓 AI 協助整理 requirement 文件。
 
-目前它不是正式 skill，而是 human-facing prompt guide，目標是讓你能快速把模糊想法整理成符合 `.dev/requirement/` 規範的 markdown 文件。
+這是正式 `requirement-author` skill 的 human-facing companion guide，目標是讓你能快速把模糊想法整理成符合 `.dev/requirement/` 規範的 markdown 文件。執行環境支援 skill routing 時應優先使用 `requirement-author`；無法直接呼叫 skill 時，可使用本文件的 prompt 範例維持相同的輸入與輸出方向。
 
 ## 適合用在什麼情況
 

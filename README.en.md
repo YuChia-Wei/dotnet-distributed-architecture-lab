@@ -42,7 +42,6 @@ src/
   Order/              Orders bounded context
   Inventory/          Inventory bounded context
 tests/                 Product and domain tests
-tools/                 Roslyn analyzers and runtime validators
 docker-compose/        Local services and observability topology
 sql-script/            PostgreSQL initialization scripts
 .dev/                  Project knowledge, requirements, specs, operations, and workflows
@@ -80,7 +79,7 @@ Run the solution tests:
 dotnet test MQArchLab.slnx
 ```
 
-Analyzer and validator tests are located under `tools/`. They are not currently included in `MQArchLab.slnx` and must be run through their individual test projects.
+This repository currently has no active target-owned analyzer or runtime-validator projects. They were retired during the governed v0.9 AI-context upgrade, and v0.13 also removed the former bundled mechanical-validation provider. Only reference-only recipes remain under `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/`; they are not selected, included in `MQArchLab.slnx`, wired into the build, or activated.
 
 ## Project Knowledge Entry Points
 

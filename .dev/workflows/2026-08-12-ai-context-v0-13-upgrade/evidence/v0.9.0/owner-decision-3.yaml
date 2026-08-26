@@ -1,0 +1,62 @@
+schema_version: "1.0"
+decision_id: "owner-decision-v0.9-3"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+issue: 1
+recorded_at: "2026-08-13T07:56:18+08:00"
+status: "approved"
+authorization_sources:
+  - "Owner approved continuing the enumerated v0.9 reconciliation operations."
+  - >-
+    Owner authorized framework-required additions, renames, and removals to be
+    applied first with explicit records for later review.
+decisions:
+  - subject: "framework-required unchanged paths omitted by the migration plan"
+    disposition: "restore-exact-package-bytes-and-record"
+    detail: >-
+      Preserve the schema-1.1 pending receipt unchanged. Reconcile every
+      receipt-required mismatch from the trusted v0.9 payload, including
+      unchanged-package EOL drift and semantic target drift, and record prior,
+      expected, and resulting hashes per path.
+  - subject: "repository line-ending policy"
+    disposition: "adopt-v0.9-downstream-seed"
+    detail: >-
+      Adopt `* text=auto eol=lf` with explicit CRLF exceptions for .bat and
+      .cmd so Windows checkout behavior cannot silently invalidate published
+      framework bytes or recreate false three-way conflicts.
+  - subject: "target execution-provenance adoption boundary and assessment exception"
+    disposition: "rehome-target-owned-overlay"
+    detail: >-
+      Keep framework-managed policy, validators, and tests byte-exact. Compose
+      the target adoption timestamp and the one exact-SHA assessment exception
+      from .dev/ai-context/tooling, with negative tests proving that no other
+      commit, assessment, or error is waived.
+  - subject: "published v0.9 source-only validation references"
+    disposition: "record-package-defect-and-use-downstream-gate"
+    detail: >-
+      Do not patch checksum-governed package files. Record source-only tests and
+      absent distribution inputs as upstream defects, and run the target-owned
+      downstream-applicable gate without claiming that package check-all passed.
+  - subject: "historical target edits at other framework-managed paths"
+    disposition: "adopt-incoming-and-record-retirement"
+    detail: >-
+      Land exact v0.9 bytes. Retain only behavior still supported by current
+      target evidence in target-owned AGENTS, project configuration,
+      customization ledger, effective-rule state, and rule packets.
+authorization_boundary:
+  authorized:
+    - "create target-owned validation overlay under .dev/ai-context/tooling"
+    - "replace every receipt-required framework path with exact v0.9 bytes"
+    - "record all post-apply reconciliations and package-native defects"
+    - "project target choices into effective-rule state and packets"
+  not_authorized:
+    - "edit the pending receipt"
+    - "activate the bundled mechanical-validation provider"
+    - "merge"
+    - "push"
+    - "close Issue #1"
+    - "mutate GitHub Project state"
+    - "submit feedback upstream"
+rollback_source: >-
+  Pending receipt target_starting_commit plus version-bound package and workflow
+  evidence. The target-owned overlay is independently removable after owner
+  review without modifying published framework paths.

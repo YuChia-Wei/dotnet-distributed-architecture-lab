@@ -20,9 +20,16 @@ This is a thin current-runtime wrapper.
   - `.ai/assets/skills/software-development-orchestrator/references/capability-profile.yaml`
   - `.ai/assets/skills/software-development-orchestrator/references/fallback-playbooks.md`
   - `.ai/assets/skills/software-development-orchestrator/references/runtime-coordination.md`
+  - `.ai/assets/skills/software-development-orchestrator/references/role-execution-playbook.md`
   - `.ai/assets/skills/software-development-orchestrator/references/workflow-artifact-playbook.md`
   - `.ai/assets/skills/software-development-orchestrator/references/output-contract.md`
+  - `.ai/assets/skills/software-development-orchestrator/references/validation-activation-policy.md`
   - `.ai/assets/skills/software-development-orchestrator/references/acceptance-oracle.md`
+  - `.ai/assets/skills/software-development-orchestrator/templates/external-task-delegation.schema.yaml`
+  - `.ai/assets/skills/software-development-orchestrator/templates/external-task-dispatch.template.yaml`
+  - `.ai/assets/skills/software-development-orchestrator/templates/external-task-completion.template.yaml`
+  - `.ai/assets/skills/software-development-orchestrator/scripts/validate-external-task-delegation.py`
+  - `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`
 - Templates:
   - `.ai/assets/skills/software-development-orchestrator/templates/workflow-locator-template.yaml`
   - `.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`

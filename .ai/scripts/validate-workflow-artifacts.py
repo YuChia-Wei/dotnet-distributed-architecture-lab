@@ -10,6 +10,13 @@ import sys
 from datetime import date, datetime
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.dont_write_bytecode = True
+
+from python_prerequisites import guard_direct_entrypoint
+
+guard_direct_entrypoint(".ai/scripts/validate-workflow-artifacts.py")
+
 import yaml
 
 
@@ -18,6 +25,9 @@ BRANCH_POLICY_DATE = date(2026, 7, 11)
 IMPLEMENTATION_CONTRACT_DATE = date(2026, 7, 14)
 DEVELOPMENT_ACCEPTANCE_CONTRACT_AT = datetime.fromisoformat(
     "2026-07-24T08:10:00+08:00"
+)
+TASK_EXECUTION_PROVENANCE_AT = datetime.fromisoformat(
+    "2026-07-27T09:52:09+08:00"
 )
 DEV_TASK_TEMPLATE = ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json"
 DEV_LOCATOR_TEMPLATE = ".ai/assets/skills/software-development-orchestrator/templates/workflow-locator-template.yaml"
@@ -463,6 +473,30 @@ def non_empty_string_list(value: object) -> bool:
         and bool(value)
         and all(isinstance(item, str) and item.strip() for item in value)
     )
+
+
+def validate_task_execution_provenance(
+    task: dict,
+    label: str,
+    errors: list[str],
+    task_created: datetime | None,
+    task_updated: datetime | None,
+) -> None:
+    created_under_contract = (
+        task_created is not None and task_created >= TASK_EXECUTION_PROVENANCE_AT
+    )
+    historical_unfinished_task_updated = (
+        task.get("status") not in TERMINAL_TASK_STATUSES
+        and task_updated is not None
+        and task_updated >= TASK_EXECUTION_PROVENANCE_AT
+    )
+    if not created_under_contract and not historical_unfinished_task_updated:
+        return
+
+    for field in ("model", "reasoning_effort"):
+        value = task.get(field)
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"{label}: {field} must be a non-empty string")
 
 
 def development_acceptance_applies(
@@ -953,7 +987,13 @@ def main() -> int:
         if not locator_path.is_file():
             errors.append(f"{directory.relative_to(repo)}: missing workflow.yaml")
             continue
-        locator = parse_flat_yaml(locator_path)
+        locator = parse_yaml_mapping(
+            locator_path,
+            str(locator_path.relative_to(repo)),
+            errors,
+        )
+        if locator is None:
+            continue
         missing = sorted(REQUIRED_LOCATOR - locator.keys())
         if missing:
             errors.append(f"{locator_path.relative_to(repo)}: missing fields {', '.join(missing)}")
@@ -1029,6 +1069,13 @@ def main() -> int:
                 task_updated = timestamp(task["updated_at"], f"{task_path.relative_to(repo)} updated_at", errors)
                 if task_created and task_updated and task_updated < task_created:
                     errors.append(f"{task_path.relative_to(repo)}: updated_at is earlier than created_at")
+                validate_task_execution_provenance(
+                    task,
+                    str(task_path.relative_to(repo)),
+                    errors,
+                    task_created,
+                    task_updated,
+                )
                 validate_implementation_contract(task, str(task_path.relative_to(repo)), errors, task_created)
                 validate_development_approval_contract(
                     task, str(task_path.relative_to(repo)), errors, task_created

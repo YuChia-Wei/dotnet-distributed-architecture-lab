@@ -21,23 +21,23 @@ In the source framework repository it enforces:
   `requirements.txt`, rather than repeating package versions inline;
 - all `actions/setup-python` steps declare the same exact Python version and
   satisfy the repository minimum of Python 3.11;
-- direct `PackageReference` declarations in framework-managed
-  `tools/**/*.csproj` use exact versions, and a repeated package ID resolves to
-  one version across those projects;
-- `global.json` declares an exact SDK version whose major version can build the
-  highest concrete `netN.0` target used by the managed tools.
+- the framework-owned tree contains no managed .NET project and therefore
+  selects no framework `global.json`.
 
-`netstandard` targets do not require SDK-major equality. A newer SDK may build a
-lower `netN.0` target; the gate fails only when the selected SDK is too old for
-a managed tool.
+If a target explicitly creates target-owned `tools/**/*.csproj`, the validator
+conditionally requires exact direct `PackageReference` versions, one version
+per repeated package ID, and an exact target `global.json` whose SDK can build
+the highest concrete `netN.0` target. `netstandard` targets do not require
+SDK-major equality. A newer SDK may build a lower `netN.0` target; the gate
+fails only when a selected SDK is too old for a selected managed tool.
 
 ## Installed-Repository Applicability
 
 Source distribution controls and release workflows are not installed target
 truth. Their checks apply only when the source requirements template is
-present. An initialized target still executes the validator and checks any
-framework-managed `tools/**/*.csproj` plus its selected `global.json`, without
-requiring source-only workflows or distribution templates.
+present. An initialized target still executes the validator, but .NET checks
+become applicable only after that target creates a managed `tools/**/*.csproj`;
+only then must the target also select `global.json`.
 
 The validator deliberately does not inspect target product package selections
 outside `tools/`. Product dependency policy, central package management, and
@@ -58,9 +58,10 @@ format. `shell-assets.yaml` owns the set of required child scripts and commands,
 and `validate-shell-assets.py` fails closed when the runner and manifest differ.
 Formatting-contract fixtures must change with any future runner syntax change.
 
-The v0.5.0 portability claim requires the same `--quick` gate set to pass on
-Windows Git Bash and hosted Ubuntu. macOS remains unverified until separately
-executed; passing Unix-like hosts must not be generalized into a macOS claim.
+The current framework portability baseline requires the same required profile
+to pass without `dotnet` on Windows Git Bash and hosted Ubuntu. macOS remains
+unverified until separately executed; passing Unix-like hosts must not be
+generalized into a macOS claim.
 
 ## Change Procedure
 

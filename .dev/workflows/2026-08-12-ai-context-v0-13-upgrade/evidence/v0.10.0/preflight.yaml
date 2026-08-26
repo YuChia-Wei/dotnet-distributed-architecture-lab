@@ -1,0 +1,55 @@
+schema_version: "1.0"
+version: "v0.10.0"
+recorded_at: "2026-08-13T10:00:01+08:00"
+status: "ready-to-plan"
+target:
+  starting_commit: "62289aa5639f9da895f83b11a60a1fb866857491"
+  source_version: "v0.9.0"
+  source_commit: "c14a3260cba7d0a9e2b67b73df9e221280d2d2ef"
+  worktree_clean: true
+package:
+  release_id: "REL-v0.10.0"
+  commit: "5878f213b50bdbb4b3123a60525cdc206fd5be04"
+  tree: "17537b5eba7546684a7d69815d783fd68f575303"
+  schema_version: "2.1.0"
+  zip_sha256: "e45f88917d6a8d0db798600db414436634ba140a89590acd70a1f26bd5c1e489"
+  payload_file_count: 657
+  selected_input_fingerprint: "8746414d1cf7b645dee6d9448b339b967d20966c9ce8b4665af216aba541dfe6"
+  payload_fingerprint: "97eced72f9414a6fae15f450303fb4560644e6e2d35aaaff2e8723c4f16d84e1"
+  files_manifest_digest: "28573c0f97e7dbcafa4aee8d8f729b66921b7b64f9db33e67079f105bdd1b070"
+  migration_digest: "01b597741dbdbed11327fcdae066236c4e7ef32d3f435f7ff6f63b68a6ca8e87"
+compatibility:
+  breaking_changes: true
+  automatic_upgrade_sources:
+    - "v0.9.0"
+selection:
+  mandatory_components:
+    - "software-development-core"
+    - "ai-context-lifecycle-core"
+  profiles:
+    - "dotnet-backend"
+  providers:
+    repo-backlog:
+      enabled: true
+      source: "preserved-target-provenance"
+settings:
+  validation_routine:
+    local: "manual"
+    ci: "unconfigured"
+  activate_stock_profiles: false
+  activate_evidence_reuse: false
+  activate_bundled_mechanical_validation_provider: false
+decision:
+  owner_decision_required: false
+  rationale: >-
+    Adopt the exact v0.10 migration paths while retaining the target-owned
+    downstream gate and inactive-provider boundary. Any v0.9 workaround is
+    removed only if the live v0.10 package and tests prove the same conflict
+    resolved; unresolved package-projection defects remain version-pinned.
+authorization_boundary:
+  merge: false
+  push: false
+  issue_close: false
+  project_mutation: false
+  provider_activation: false
+  upstream_submission: false

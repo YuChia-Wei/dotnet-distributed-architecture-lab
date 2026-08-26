@@ -1,294 +1,222 @@
-# Framework API Integration Guide (Dotnet)
+# Persistence And Messaging Integration Guide (.NET)
 
-## Key Problem Summary
-1. Message store client creation is wrong
-2. Outbox pattern implementation does not follow the rules
-3. Import paths and annotations are misused
-4. Event delivery architecture is confused (InMemory vs Outbox)
+## Scope And Selection Boundary
 
-## InMemory vs Outbox Event Delivery Architecture
+This guide explains how project-owned persistence and event-publication ports
+can use either in-memory adapters or a durable Outbox profile. It does not
+define a required package API. EF Core, Dapper, Wolverine/WolverineFx,
+PostgreSQL, and a broker are conditional .NET providers selected by the target
+repository.
 
-### InMemory Profile Event Flow
+Code identifiers below are illustrative unless the target repository already
+defines them. Do not generate a base class, interface, package reference, or
+configuration call solely because it appears in this guide.
+
+## Stable Capability Contracts
+
+Across profiles, the Application layer depends on project-owned ports:
+
+- an aggregate persistence port;
+- an outbound event-publication port;
+- optional query/projection ports;
+- a target-owned unit-of-work boundary when atomic persistence is required.
+
+The Infrastructure layer selects the concrete adapters. A Use Case must not
+depend directly on an ORM, broker client, or Wolverine `IMessageBus`.
+
+## In-Memory And Durable-Outbox Profiles
+
+### In-Memory Flow
+
+```text
+Use Case -> Repository port -> In-memory store
+         -> Event publisher port -> In-memory dispatcher -> Reactors
 ```
-Repository.Save() -> InMemoryMessageStore -> InMemoryMessageBus -> Reactors
+
+- No database, durable outbox, or external broker is required.
+- Repository and publisher semantics remain compatible with the application
+  ports used by the durable profile.
+- Delivery and persistence are process-local and are not crash durable.
+
+### Durable-Outbox Flow
+
+```text
+Use Case -> Repository transaction -> Aggregate state + Outbox records
+         -> Durable dispatcher -> Message broker -> Consumers / Reactors
 ```
-- Required: in-memory repository, in-memory message store, in-memory message bus
-- Not required: PostgreSQL, outbox relay, durable broker
-- Characteristics: synchronous, in-memory delivery, no external DB
-- TODO: align exact class names when .NET ez tools are implemented
 
-### Outbox Profile Event Flow
-```
-Repository.Save() -> PostgreSQL (Outbox) -> Wolverine Durable Outbox -> Message Broker -> Reactors
-```
-- Required: EF Core DbContext, PostgreSQL, Wolverine durable outbox, message broker
-- Not required: in-memory message store
-- Characteristics: async, durable, guaranteed delivery
+- Aggregate state and Outbox records must commit atomically.
+- A selected provider such as Wolverine may supply durable dispatch and retry
+  behavior.
+- EF Core, Dapper, or direct SQL may implement persistence according to the
+  target's technology selection.
+- Broker and transport choices remain target-owned.
 
-### Key Configuration Differences
-| Component | InMemory Profile | Outbox Profile |
-|-----------|------------------|----------------|
-| In-memory repository | Required | Not required |
-| In-memory message store | Required | Not required |
-| EF Core DbContext | Not required | Required |
-| PostgreSQL | Not required | Required |
-| Wolverine durable outbox | Not required | Required |
-| Message broker | Not required | Required |
-| Outbox relay/processor | Not required | Required |
+### Selection Matrix
 
-## Problem 1: Message Store Client Creation
+| Capability | In-Memory Profile | Durable-Outbox Profile |
+| --- | --- | --- |
+| Aggregate persistence | In-memory adapter | Target-selected durable adapter |
+| Event publication | In-process adapter | Durable Outbox dispatcher |
+| Database / ORM | Not required | Conditional target selection |
+| External broker | Not required | Conditional target selection |
+| Crash durability | No | Required by the selected Outbox contract |
+| Application-facing ports | Project-owned | The same project-owned contracts |
 
-### Wrong (runtime failures)
+## Composition Root
+
+Keep provider selection in explicit `IServiceCollection` composition modules.
+Do not use Service Locator, DI attributes, or implicit assembly-scanning magic
+as a substitute for target-owned registration.
+
+### Illustrative In-Memory Registration
+
 ```csharp
-// Do not directly instantiate a message store client
-var client = new MessageStoreClient(connectionString);
-```
-
-### Correct (DI + EF Core + Wolverine)
-```csharp
-// Program.cs
-services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(configuration.GetConnectionString("Outbox")));
-
-services.AddWolverine(opts =>
+public static IServiceCollection AddInMemoryProfile(
+    this IServiceCollection services)
 {
-    // TODO: confirm exact Wolverine outbox configuration for PostgreSQL
-    opts.PersistMessagesWithPostgresql(configuration.GetConnectionString("Outbox"));
-    opts.UseDurableOutbox();
-});
-```
-
-### Why this is required
-1. DI-managed lifecycle ensures correct scoping and disposal
-2. Outbox needs the same transaction boundary as EF Core
-3. Infrastructure needs framework-provided interceptors
-4. Mapping and serialization need consistent configuration
-
-## Problem 2: Outbox Pattern Implementation Rules
-
-### 1. OutboxMapper must be a nested class
-
-#### Wrong: standalone class
-```csharp
-public class ProductOutboxMapper : IOutboxMapper<Product, ProductData>
-{
-    // Standalone mapper breaks the ezDDD intent
+    services.AddSingleton<IAggregateRepository<Product, ProductId>,
+        InMemoryProductRepository>();
+    services.AddSingleton<IEventPublisher, InMemoryEventPublisher>();
+    services.AddSingleton<IProductsProjection, InMemoryProductsProjection>();
+    return services;
 }
 ```
 
-#### Correct: nested class
+### Illustrative EF Core And Wolverine Registration
+
 ```csharp
-public static class ProductMapper
+public static IServiceCollection AddDurableOutboxProfile(
+    this IServiceCollection services,
+    IConfiguration configuration)
 {
-    private static readonly IOutboxMapper<Product, ProductData> MapperInstance =
-        new Mapper();
+    var connectionString =
+        configuration.GetConnectionString("Outbox")
+        ?? throw new InvalidOperationException("Missing Outbox connection string.");
 
-    public static IOutboxMapper<Product, ProductData> NewMapper() => MapperInstance;
+    services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(connectionString));
 
-    private sealed class Mapper : IOutboxMapper<Product, ProductData>
+    services.AddWolverine(options =>
     {
-        public Product ToDomain(ProductData data) => ProductMapper.ToDomain(data);
-        public ProductData ToData(Product aggregate) => ProductMapper.ToData(aggregate);
-    }
+        // Confirm the exact API against the target-selected Wolverine version.
+        options.PersistMessagesWithPostgresql(connectionString);
+        options.UseDurableOutbox();
+    });
+
+    services.AddScoped<IAggregateRepository<Product, ProductId>,
+        EfProductRepository>();
+    return services;
 }
 ```
 
-### 2. Use EF Core mapping only
+The example demonstrates the composition boundary, not a guaranteed API for
+every Wolverine version. A Dapper/direct-SQL adapter may satisfy the same ports
+without adopting EF Core.
 
-#### Wrong: non-.NET ORM annotations in .NET
-Do not copy non-.NET ORM annotations or imports into .NET code. Use EF Core attributes or fluent mapping instead.
+## Persistence Data And Mapping
 
-#### Correct: EF Core mapping
+Persistence DTOs may be plain classes. No shared data base class or mapper
+interface is required unless the target has explicitly selected one.
+
 ```csharp
 [Table("products")]
-public class ProductData
+public sealed class ProductData
 {
     [Key]
+    [Column("product_id")]
     public string ProductId { get; set; } = string.Empty;
 
-    [ConcurrencyCheck]
-    public long Version { get; set; }
-}
-```
-
-### 3. Mark outbox-only fields as NotMapped
-
-#### Wrong: missing NotMapped
-```csharp
-public class ProductData
-{
-    public List<DomainEventData> DomainEventDatas { get; set; } = new();
-    public string StreamName { get; set; } = string.Empty;
-}
-```
-
-#### Correct: NotMapped for non-persistent fields
-```csharp
-public class ProductData
-{
-    [NotMapped]
-    public List<DomainEventData> DomainEventDatas { get; set; } = new();
-
-    [NotMapped]
-    public string StreamName { get; set; } = string.Empty;
-}
-```
-
-## Protection Checklist
-
-### When creating the message store client
-- [ ] Use DI registration (no manual instantiation)
-- [ ] Use EF Core DbContext with a single connection string
-- [ ] Ensure Wolverine durable outbox is enabled
-- [ ] Never call `new MessageStoreClient()` directly
-
-### When implementing OutboxMapper
-- [ ] Mapper is nested in the aggregate mapper class
-- [ ] Provide a static `NewMapper()` method
-- [ ] Implement `ToDomain()` and `ToData()`
-- [ ] Do not create a standalone mapper class
-
-### When implementing OutboxData
-- [ ] Use EF Core mapping (attributes or fluent API)
-- [ ] `DomainEventDatas` is `[NotMapped]`
-- [ ] `StreamName` is `[NotMapped]`
-- [ ] Include concurrency/version field
-- [ ] Implement `OutboxData<TId>` (TODO: define .NET interface)
-
-## Full Example: Correct Outbox Setup
-
-### Step 1: Data class
-```csharp
-[Table("products")]
-public class ProductData : OutboxData<string>
-{
-    [NotMapped]
-    public List<DomainEventData> DomainEventDatas { get; set; } = new();
-
-    [NotMapped]
-    public string StreamName { get; set; } = string.Empty;
-
-    [Key]
-    public string ProductId { get; set; } = string.Empty;
-
+    [Column("name")]
     public string Name { get; set; } = string.Empty;
 
     [ConcurrencyCheck]
+    [Column("version")]
     public long Version { get; set; }
 
-    public bool IsDeleted { get; set; }
-
-    public string GetId() => ProductId;
-    public void SetId(string id) => ProductId = id;
+    [NotMapped]
+    public List<DomainEventData> PendingEvents { get; set; } = new();
 }
 ```
 
-### Step 2: Mapper class (nested mapper)
+Follow the canonical mapper standard: use explicit, symmetric conversion and
+keep provider concerns outside the Domain model.
+
 ```csharp
 public static class ProductMapper
 {
-    private static readonly IOutboxMapper<Product, ProductData> MapperInstance =
-        new Mapper();
-
-    public static IOutboxMapper<Product, ProductData> NewMapper() => MapperInstance;
-
-    public static ProductData ToData(Product product)
+    public static ProductData ToData(Product aggregate) => new()
     {
-        var data = new ProductData
-        {
-            ProductId = product.Id.Value,
-            Name = product.Name.Value,
-            Version = product.Version,
-            IsDeleted = product.IsDeleted
-        };
-
-        data.StreamName = product.StreamName;
-        data.DomainEventDatas = product.DomainEvents
+        ProductId = aggregate.Id.Value,
+        Name = aggregate.Name.Value,
+        Version = aggregate.Version,
+        PendingEvents = aggregate.DomainEvents
             .Select(DomainEventMapper.ToData)
-            .ToList();
-
-        return data;
-    }
+            .ToList()
+    };
 
     public static Product ToDomain(ProductData data)
     {
-        // TODO: rebuild domain object from data
-        throw new NotImplementedException();
-    }
-
-    private sealed class Mapper : IOutboxMapper<Product, ProductData>
-    {
-        public Product ToDomain(ProductData data) => ProductMapper.ToDomain(data);
-        public ProductData ToData(Product aggregate) => ProductMapper.ToData(aggregate);
+        ArgumentNullException.ThrowIfNull(data);
+        return Product.Rehydrate(
+            new ProductId(data.ProductId),
+            data.Name,
+            data.Version);
     }
 }
 ```
 
-### Step 3: Infrastructure configuration
-```csharp
-// Program.cs
-if (env.IsEnvironment("Outbox") || env.IsEnvironment("TestOutbox"))
-{
-    services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(configuration.GetConnectionString("Outbox")));
+`Product.Rehydrate` and `DomainEventData` are project-owned examples. Use the
+target's actual reconstruction and event-envelope contracts.
 
-    services.AddWolverine(opts =>
-    {
-        // TODO: confirm exact Wolverine outbox + transport config
-        opts.PersistMessagesWithPostgresql(configuration.GetConnectionString("Outbox"));
-        opts.UseDurableOutbox();
-    });
-}
-```
+## Outbox Consistency Rules
 
-## Common Error Diagnosis
+- Persist aggregate state and Outbox records in one atomic transaction.
+- Do not clear pending Domain Events until the selected repository contract
+  confirms durable acceptance.
+- Keep dispatch retry and poison-message behavior in Infrastructure.
+- Make consumers idempotent according to the target's delivery guarantees.
+- Do not publish directly to the broker from the Domain or Use Case layer.
+- Do not execute durable adapters in the in-memory profile.
 
-### Error 1: No service for type 'IMessageStore'
-Cause: message store client created manually or not registered
-Fix: register Wolverine outbox via DI and configure persistence
+## Diagnosis
 
-### Error 2: Outbox mapper not found
-Cause: mapper implemented as standalone class
-Fix: move mapper into the aggregate mapper as a nested class
+### A Use Case Resolves A Runtime Bus Directly
 
-### Error 3: DomainEventDatas column not found
-Cause: missing [NotMapped]
-Fix: mark DomainEventDatas and StreamName with [NotMapped]
+Move the runtime dependency to an Infrastructure adapter and inject the
+project-owned event-publication port into the Use Case.
 
-### Error 4: Outbox executed in InMemory profile
-Cause: profile/environment not separated
-Fix: ensure outbox registrations only in outbox environments
+### In-Memory Startup Opens A Database Connection
+
+EF Core or another durable adapter was registered unconditionally. Guard the
+composition module with the selected profile and test each profile separately.
+
+### Outbox Records Are Written Separately From Aggregate State
+
+The transaction boundary is incomplete. Make the repository adapter own both
+writes or use a provider integration that proves atomicity.
+
+### Rehydration Produces New Pending Events
+
+Use a side-effect-free reconstruction path, or clear events only when the
+aggregate contract explicitly requires that cleanup after replay.
 
 ## Validation Matrix
 
-| Component | Check | Correct Approach |
-|----------|-------|------------------|
-| Message store client | Creation | DI + Wolverine outbox
-| OutboxMapper | Class structure | Nested class
-| OutboxData | Mapping | EF Core mapping
-| OutboxData | Non-persistent fields | [NotMapped]
-| Configuration | Environment | `Outbox` / `TestOutbox` only
+| Surface | In-Memory Check | Durable-Outbox Check |
+| --- | --- | --- |
+| Composition | No ORM/broker registration | Only selected durable providers registered |
+| Persistence | State round trip through in-memory adapter | Aggregate and Outbox commit atomically |
+| Publication | In-process delivery reaches reactors | Durable dispatch, retry, and broker delivery verified |
+| Reconstruction | No new pending events | No duplicate pending events after reload |
+| Architecture | Application depends only on project ports | Runtime APIs remain in Infrastructure |
 
 ## Related Resources
-- `.dev/standards/coding-standards.md`
-- `.dev/standards/coding-standards/mapper-standards.md`
-- Outbox Sub-agent Canonical Asset (.ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml)
-- Wolverine outbox examples (`.dev/standards/examples/outbox/README.md`, `.dev/standards/examples/aspnet-core/Program.cs`)
 
-## Quick Checklist
-
-```bash
-# 1. Message store client instantiation
-rg "new .*MessageStore" src/ && echo "Found direct instantiation"
-
-# 2. Standalone outbox mapper
-rg "class .*OutboxMapper" src/ && echo "Found standalone mapper"
-
-# 3. NotMapped for outbox fields
-rg "DomainEventDatas" src/ | rg -v "NotMapped" && echo "Missing NotMapped"
-
-# 4. Ensure outbox config only in outbox environments
-rg "UseDurableOutbox" src/ | rg -v "outbox" && echo "Check environment gating"
-```
-
-
+- `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md`
+- `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/mapper-standards.md`
+- `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/repository-standards.md`
+- `.ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`
+- `.ai/assets/tech-stacks/dotnet-backend/examples/outbox/README.md`
+- `.ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/Program.cs`
+- `.ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml`

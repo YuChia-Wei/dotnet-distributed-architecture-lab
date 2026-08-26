@@ -1,0 +1,36 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.1.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-27T09:52:09+08:00",
+  "task_id": "AICU-007-upstream-feedback",
+  "workflow_id": "2026-08-12-ai-context-v0-13-upgrade",
+  "owner_skill": "ai-context-auditor",
+  "status": "completed",
+  "created_at": "2026-08-12T22:08:09+08:00",
+  "updated_at": "2026-08-13T14:08:36+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "max",
+  "finding_ids": [],
+  "scope": {
+    "target": "Evidence-backed feedback brief for ai-collaboration-framework maintainers",
+    "files": ["upgrade report", "package and planner evidence", "post-upgrade audit and developer-impact analysis"],
+    "constraints": ["Sol MAX analysis", "separate observed facts from recommendations", "include reproducible evidence"],
+    "non_goals": ["opening an upstream issue or PR", "publishing without separate authorization"]
+  },
+  "execution": {
+    "steps": ["classify strengths and friction", "identify reproducible defects", "propose prioritized upstream improvements"],
+    "validation": ["cross-check every claim against retained evidence"],
+    "last_completed_step": "Corrected checkpoint b3199b36 records exact package-versus-target source-only counts, broader package-closure acceptance, archive identity limits, and provider correction/acceptance; independent re-audit returned SAFE-TO-PROCEED.",
+    "next_action": "Return the accepted, unsubmitted brief to AICU-005 closeout."
+  },
+  "results": {
+    "summary": "The maintainer-facing feedback brief is complete, independently accepted, and remains unsubmitted.",
+    "files_changed": [".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/upstream-feedback-brief.md"],
+    "tests_run": ["cross-check against all seven reconciliation reports", "v0.13 target gate and defect-manifest read-back", "Sol MAX independent synthesis", "independent corrected-brief re-audit SAFE-TO-PROCEED"],
+    "finding_status": "completed-and-independently-accepted-not-submitted",
+    "residual_risk": "Upstream state remains unchanged and submission needs separate authorization.",
+    "follow_up_needed": false
+  }
+}

@@ -7,7 +7,7 @@ This policy defines the repository-wide discovery and metadata contract for dura
 - Every skill that can create a workflow owns the templates and domain-specific layout it creates.
 - A skill may define its workflow topic, task IDs, report set, and artifact root.
 - The repository owns only the minimum discovery, identity, time, relationship, and lifecycle contract in this document.
-- `dev-workflow` owns software-development workflow templates. It does not own templates for AI context maintenance, repository initialization, or every other workflow kind.
+- `software-development-orchestrator` owns software-development workflow templates. It does not own templates for AI context maintenance, repository initialization, or every other workflow kind.
 
 ## Workflow Discovery Locator
 
@@ -106,6 +106,20 @@ Every durable task must include:
 - `template_source`;
 - `template_version`.
 
+For tasks created on or after `2026-07-27T09:52:09+08:00`, also require:
+
+- `model` for the primary executing AI model;
+- `reasoning_effort` for the primary executor's reasoning setting.
+
+An unfinished task created earlier must add these two fields the next time it
+is materially updated on or after the effective timestamp. Do not backfill a
+completed historical task. Resolve values from the active session when
+available; otherwise use the effective configured default after the client's
+documented precedence, then its documented built-in default. Preserve the
+reported or configured strings without cross-provider normalization. Additional
+sub-agent contributors belong in marked Git trailers under
+`GIT-COMMIT-POLICY.md`, not in extra task fields.
+
 Task IDs are immutable, path-safe, and unique within the workflow. Use `<workflow-id>#<task-id>` for cross-workflow references. A skill may define its own task ID prefix and task body.
 
 Use these shared lifecycle states when they apply:
@@ -123,6 +137,15 @@ Locators generated from template version `1.2.0` or later opt into
 - a `completed` workflow has no unfinished task and uses `completed` or `closed` as `current_phase`;
 - a completed task has a non-empty result summary and an addressed finding status;
 - legacy locators without the field remain compatible and are not silently reinterpreted.
+
+## Workflow Completion
+
+`status: completed` means workflow completion only: every workflow-owned task
+is terminal and the selected lifecycle contract is satisfied. The contextual
+alias `workflow closeout` may be used inside this section, but it does not mean
+repository integration, assessment finality, release-source validation,
+hosted publication, or publication finalization. Evidence for any of those
+separate events remains with its own owner.
 
 ## Final and Derived Artifacts
 

@@ -25,7 +25,7 @@ This repository exists to:
 
 - demonstrate a distributed commerce system built with .NET 10, DDD, Clean Architecture, CQRS, PostgreSQL, WolverineFx, and message-oriented integration;
 - maintain the active `Products`, `Orders`, and `Inventory` bounded contexts under `src/`;
-- maintain architecture analyzers and validation tooling under `tools/`;
+- keep the retired target-owned analyzer and runtime-validation projects absent unless a later owner-approved workflow explicitly reintroduces them;
 - carry reusable AI Agent context, skills, sub-agent prompts, and workflow rules without allowing their source-repository facts to replace this repository's product truth;
 - separate reusable context under `.ai/` from target-repository truth under source, deployment configuration, and `.dev/`.
 
@@ -65,9 +65,15 @@ Workflow artifact rules:
 ### Git Commit Policy
 
 1. Follow `.dev/standards/GIT-COMMIT-POLICY.md`.
-2. Use `<type>(#<issue-number>|<scope>): <summary>` when an issue number exists.
-3. Use `<type>(<scope>): <summary>` when no issue number exists.
+2. Use issue-bound `<type>(#<issue-number>): <summary>` (or comma-separated issue references) when an issue number exists.
+3. Use scope-bound `<type>(<scope>): <summary>` when no issue number exists. A literal `|` is not part of the prospective grammar.
 4. For workflow-stage commits, include `Why`, `What`, `Validation`, and `Workflow` body sections.
+5. For repository-history or workflow-range validation, run
+   `.dev/ai-context/tooling/validate-target-ai-context.py`; it composes the
+   byte-exact framework policy with this repository's prospective AI-signature
+   and subject-grammar adoption boundaries plus exact historical attestation.
+   Do not bypass that target-owned
+   overlay by treating the package validator alone as the full historical gate.
 
 ### AI Context Governance
 
@@ -121,12 +127,13 @@ Use `code-reviewer` only when reviewing .NET backend code or dotnet-backend impl
 
 When code review applies:
 
-1. Read `.ai/assets/tech-stacks/dotnet-backend/references/CODE-REVIEW-INDEX.MD`.
-2. Read `.ai/assets/skills/code-reviewer/references/checklist-reference.md`.
-3. Identify file type and read the matching checklist under `.dev/standards/`.
-4. Build a checklist comparison table.
-5. Categorize issues as `CRITICAL`, `MUST FIX`, or `SHOULD FIX`.
-6. If tests apply in the target repo, run the narrowest meaningful test command.
+1. Complete the applicable effective-rule preflight before loading review guidance.
+2. Load `.ai/assets/skills/code-reviewer/references/review-routing.yaml` first.
+3. Select every matching route in this order: explicit scope, type hierarchy or interface, path, then the general C# fallback.
+4. Load only the canonical references and applicable finding rule IDs selected by those routes. Do not treat `CODE-REVIEW-INDEX.MD`, `CODE-REVIEW-CHECKLIST.md`, shared checklists, or `checklist-reference.md` as a second semantic authority.
+5. After route selection, evaluate role bindings and load `role-execution.md` only when needed. Direct execution is the default; delegation requires bounded eligibility and evidence.
+6. Build a scoped checklist comparison table and categorize issues as `CRITICAL`, `MUST FIX`, or `SHOULD FIX`.
+7. If tests apply in the target repo, run the narrowest meaningful test command.
 
 ### Spec Compliance
 
@@ -183,7 +190,7 @@ Use these boundaries:
 | `.ai/assets/` | Canonical reusable AI assets |
 | `.ai/assets/shared/` | Universal shared AI context |
 | `.ai/assets/tech-stacks/dotnet-backend/` | .NET backend-specific context |
-| `.ai/assets/tech-stacks/dotnet-backend/references/CODE-REVIEW-INDEX.MD` | .NET backend code review entry |
+| `.ai/assets/skills/code-reviewer/references/review-routing.yaml` | Canonical .NET backend code review routing contract |
 | `.ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD` | .NET backend building block reference |
 | `.ai/assets/skills/` | Canonical skill specs |
 | `.ai/assets/sub-agent-role-prompts/` | Canonical sub-agent role prompts |
@@ -222,7 +229,6 @@ Use these boundaries:
 | `MQArchLab.slnx` | Product solution containing bounded-context and product test projects |
 | `src/` | Products, Orders, Inventory, shared contracts, building blocks, and an empty Shared Kernel placeholder project |
 | `tests/` | Products and Orders product/domain tests |
-| `tools/` | Roslyn architecture analyzers and runtime validation tooling |
 | `docker-compose/` | Local product, database, broker, and observability topology |
 
 ## Language Rules

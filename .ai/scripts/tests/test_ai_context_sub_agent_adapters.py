@@ -126,6 +126,85 @@ class SubAgentAdapterFixture:
         }
 
 
+class RoleBindingFixture:
+    """Build one canonical role and an owning skill's static binding."""
+
+    role_id = "example-role"
+    role_path = ".ai/assets/sub-agent-role-prompts/example-role/sub-agent.yaml"
+
+    @classmethod
+    def role_assets(cls, *, status: str = "active") -> dict[str, dict]:
+        return {
+            cls.role_path: {
+                "asset_id": cls.role_id,
+                "status": status,
+            }
+        }
+
+    @classmethod
+    def valid_binding(cls) -> dict:
+        return {
+            "role_path": cls.role_path,
+            "role_asset_id": cls.role_id,
+            "expected_role_status": "active",
+            "binding_kind": "primary",
+            "applicability": "The owning skill selects the example role.",
+            "load_obligation": "mandatory-when-applicable",
+        }
+
+    @classmethod
+    def valid_owner(cls, *, status: str = "active") -> dict:
+        return {
+            "asset_id": "example-owner",
+            "status": status,
+            "role_bindings": [cls.valid_binding()],
+        }
+
+    @classmethod
+    def validate(
+        cls, data: dict, *, role_assets: dict[str, dict] | None = None
+    ) -> tuple[list[str], list[str]]:
+        errors: list[str] = []
+        role_ids = VALIDATOR.validate_skill_role_bindings(
+            Path(".ai/assets/skills/example-owner/skill.yaml"),
+            data,
+            role_assets or cls.role_assets(),
+            errors,
+        )
+        return errors, role_ids
+
+    @staticmethod
+    def projection_text(rows: list[tuple[str, str, str, str]]) -> str:
+        body = "\n".join(
+            f"| `{role_id}` | `{owner}` | `{binding_kind}` | {applicability} |"
+            for role_id, owner, binding_kind, applicability in rows
+        )
+        return (
+            "# Derived table fixture\n\n"
+            "## SAG-001 Derived Role-Binding Projection\n\n"
+            "| Role Asset ID | Derived Owning Skill | Binding Kind | Canonical Applicability (Projection) |\n"
+            "| --- | --- | --- | --- |\n"
+            f"{body}\n"
+        )
+
+    @classmethod
+    def validate_projection(
+        cls,
+        rows: list[tuple[str, str, str, str]],
+        canonical_rows: set[tuple[str, str, str, str]],
+    ) -> list[str]:
+        with tempfile.TemporaryDirectory(
+            prefix="sar94-role-binding-projection-"
+        ) as directory:
+            projection_path = Path(directory) / "SUB-AGENT-SYSTEM.MD"
+            projection_path.write_text(cls.projection_text(rows), encoding="utf-8")
+            errors: list[str] = []
+            VALIDATOR.validate_derived_role_binding_projection(
+                projection_path, canonical_rows, errors
+            )
+            return errors
+
+
 class SubAgentAdapterMetadataValidationTests(unittest.TestCase):
     def assert_error(self, errors: list[str], fragment: str) -> None:
         self.assertTrue(any(fragment in error for error in errors), errors)
@@ -333,6 +412,201 @@ class SubAgentAdapterMetadataValidationTests(unittest.TestCase):
             set(promoted["context-translator"]["targets"]),
             set(promoted["context-translator"]["metadata"]),
         )
+
+
+    def test_gwt_019_given_exact_active_role_binding_when_validated_then_static_reachability_passes(self) -> None:
+        errors, role_ids = RoleBindingFixture.validate(RoleBindingFixture.valid_owner())
+
+        self.assertEqual([], errors)
+        self.assertEqual([RoleBindingFixture.role_id], role_ids)
+
+    def test_gwt_020_given_declared_empty_role_bindings_when_validated_then_mandatory_binding_fails(self) -> None:
+        data = RoleBindingFixture.valid_owner()
+        data["role_bindings"] = []
+
+        errors, role_ids = RoleBindingFixture.validate(data)
+
+        self.assert_error(errors, "must be non-empty when declared")
+        self.assertEqual([], role_ids)
+
+    def test_gwt_021_given_noncanonical_or_dangling_role_path_when_validated_then_exact_linkage_fails(self) -> None:
+        data = RoleBindingFixture.valid_owner()
+        data["role_bindings"][0]["role_path"] = (
+            ".ai/assets/sub-agent-role-prompts/missing-role/sub-agent.yaml"
+        )
+
+        errors, role_ids = RoleBindingFixture.validate(data)
+
+        self.assert_error(errors, "must be the exact canonical role path")
+        self.assert_error(errors, "role_path is dangling")
+        self.assertEqual([], role_ids)
+
+    def test_gwt_022_given_mismatched_target_role_identity_when_validated_then_identity_fails(self) -> None:
+        data = RoleBindingFixture.valid_owner()
+        other_path = ".ai/assets/sub-agent-role-prompts/other-role/sub-agent.yaml"
+        data["role_bindings"][0]["role_path"] = other_path
+        roles = RoleBindingFixture.role_assets()
+        roles[other_path] = {"asset_id": "other-role", "status": "active"}
+
+        errors, role_ids = RoleBindingFixture.validate(data, role_assets=roles)
+
+        self.assert_error(errors, "must exactly match target role asset_id")
+        self.assertEqual([], role_ids)
+
+    def test_gwt_023_given_inactive_target_role_when_validated_then_active_status_fails(self) -> None:
+        errors, role_ids = RoleBindingFixture.validate(
+            RoleBindingFixture.valid_owner(),
+            role_assets=RoleBindingFixture.role_assets(status="deprecated"),
+        )
+
+        self.assert_error(errors, "target role status must be 'active'")
+        self.assertEqual([], role_ids)
+
+    def test_gwt_024_given_invalid_binding_fields_when_validated_then_static_contract_fails(self) -> None:
+        data = RoleBindingFixture.valid_owner()
+        binding = data["role_bindings"][0]
+        binding["expected_role_status"] = "not-applicable"
+        binding["binding_kind"] = "not-applicable"
+        binding["applicability"] = " "
+        binding["load_obligation"] = "not-applicable"
+
+        errors, role_ids = RoleBindingFixture.validate(data)
+
+        self.assert_error(errors, "expected_role_status must be 'active'")
+        self.assert_error(errors, "binding_kind must be one of")
+        self.assert_error(errors, "applicability must be a non-empty declarative string")
+        self.assert_error(errors, "load_obligation must be 'mandatory-when-applicable'")
+        self.assertEqual([], role_ids)
+
+    def test_gwt_025_given_duplicate_role_binding_when_validated_then_duplicate_fails(self) -> None:
+        data = RoleBindingFixture.valid_owner()
+        data["role_bindings"].append(RoleBindingFixture.valid_binding())
+
+        errors, role_ids = RoleBindingFixture.validate(data)
+
+        self.assert_error(errors, "duplicate role binding")
+        self.assert_error(errors, "duplicate role_path")
+        self.assertEqual([], role_ids)
+
+    def test_gwt_026_given_unowned_active_role_when_coverage_is_checked_then_central_only_fails(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_active_role_binding_coverage(
+            RoleBindingFixture.role_assets(), {}, errors
+        )
+
+        self.assert_error(errors, "central-only and ownerless")
+
+    def test_gwt_027_given_multiple_explicit_active_owners_when_coverage_is_checked_then_passes(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_active_role_binding_coverage(
+            RoleBindingFixture.role_assets(),
+            {
+                RoleBindingFixture.role_id: [
+                    Path(".ai/assets/skills/owner-one/skill.yaml"),
+                    Path(".ai/assets/skills/owner-two/skill.yaml"),
+                ]
+            },
+            errors,
+        )
+
+        self.assertEqual([], errors)
+
+    def test_gwt_028_given_live_role_bindings_when_inspected_then_all_active_roles_have_exact_owners(self) -> None:
+        import yaml
+
+        owners: dict[str, dict[str, str]] = {}
+        for manifest in sorted((REPO_ROOT / ".ai/assets/skills").glob("*/skill.yaml")):
+            data = yaml.safe_load(manifest.read_text(encoding="utf-8"))
+            bindings = data.get("role_bindings", [])
+            owners[data["asset_id"]] = {
+                binding["role_asset_id"]: binding["binding_kind"]
+                for binding in bindings
+            }
+
+        self.assertEqual(
+            {
+                "slice-implementer": {
+                    "command-sub-agent": "primary",
+                    "query-sub-agent": "primary",
+                    "reactor-sub-agent": "primary",
+                    "aggregate-sub-agent": "conditional",
+                    "controller-sub-agent": "conditional",
+                    "outbox-sub-agent": "conditional",
+                    "profile-config-sub-agent": "conditional",
+                    "usecase-test-sub-agent": "conditional",
+                    "aggregate-test-sub-agent": "conditional",
+                    "controller-test-sub-agent": "conditional",
+                    "reactor-test-sub-agent": "conditional",
+                    "mutation-testing-sub-agent": "conditional",
+                },
+                "code-reviewer": {
+                    "code-review-sub-agent": "primary",
+                    "aggregate-code-review-sub-agent": "conditional",
+                    "controller-code-review-sub-agent": "conditional",
+                    "reactor-code-review-sub-agent": "conditional",
+                },
+                "problem-frame-author": {"problem-frame-sub-agent": "primary"},
+                "ai-context-init": {"context-translator": "conditional"},
+            },
+            {owner: bindings for owner, bindings in owners.items() if bindings},
+        )
+
+    def test_gwt_029_given_matching_multi_owner_derived_projection_when_validated_then_parity_passes(self) -> None:
+        primary_row = (
+            RoleBindingFixture.role_id,
+            "example-owner",
+            "primary",
+            "The owning skill selects the example role.",
+        )
+        conditional_row = (
+            RoleBindingFixture.role_id,
+            "alternate-owner",
+            "conditional",
+            "The alternate owning skill needs the example role.",
+        )
+
+        errors = RoleBindingFixture.validate_projection(
+            [primary_row, conditional_row], {primary_row, conditional_row}
+        )
+
+        self.assertEqual([], errors)
+
+    def test_gwt_030_given_stale_bdd_owner_projection_when_validated_then_conflicting_parity_fails(self) -> None:
+        canonical_row = (
+            RoleBindingFixture.role_id,
+            "example-owner",
+            "primary",
+            "The owning skill selects the example role.",
+        )
+        stale_row = (
+            RoleBindingFixture.role_id,
+            "bdd-gwt-test-designer",
+            "primary",
+            "The owning skill selects the example role.",
+        )
+
+        errors = RoleBindingFixture.validate_projection([stale_row], {canonical_row})
+
+        self.assert_error(errors, "ambiguous or conflicting row")
+
+    def test_gwt_031_given_central_only_or_missing_projection_rows_when_validated_then_parity_fails(self) -> None:
+        canonical_row = (
+            RoleBindingFixture.role_id,
+            "example-owner",
+            "primary",
+            "The owning skill selects the example role.",
+        )
+        central_only_row = (
+            "central-only-role",
+            "example-owner",
+            "conditional",
+            "A row exists only in the derived projection.",
+        )
+
+        errors = RoleBindingFixture.validate_projection([central_only_row], {canonical_row})
+
+        self.assert_error(errors, "stale or central-only role row")
+        self.assert_error(errors, "missing canonical role row")
 
 
 if __name__ == "__main__":

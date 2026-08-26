@@ -1,0 +1,134 @@
+schema_version: "1.1"
+contract_id: "external-task-delegation"
+purpose: "Provider-neutral dispatch and terminal-report envelopes for bounded work executed in a separate runtime task."
+prompt_transport:
+  begin_marker: "BEGIN_EXTERNAL_TASK_DELEGATION"
+  end_marker: "END_EXTERNAL_TASK_DELEGATION"
+  dispatch_records_per_prompt: 1
+  context_outside_envelope: allowed
+completion_transport:
+  begin_marker: "BEGIN_EXTERNAL_TASK_COMPLETION"
+  end_marker: "END_EXTERNAL_TASK_COMPLETION"
+  completion_records_per_message: 1
+  context_outside_envelope: allowed
+record_types:
+  dispatch: "external-task-dispatch"
+  completion: "external-task-completion"
+dispatch:
+  required:
+    - schema_version
+    - record_type
+    - delegation_id
+    - task_kind
+    - source
+    - objective
+    - subject
+    - execution
+    - permissions
+    - completion_delivery
+    - stop_conditions
+  source:
+    required: [task_id_source, final_integration_owner]
+    task_id_sources: [explicit, runtime-injected]
+    explicit_requires: [task_id]
+  objective:
+    required: [goal, non_goals]
+  subject:
+    required: [repository_root, commit_sha, clean_worktree_required]
+    commit_sha: "full 40- or 64-character hexadecimal Git object ID"
+    clean_worktree_required: true
+  execution:
+    required: [working_directory, argv, timeout_seconds]
+    argv: "non-empty argument vector; do not rely on an implicit shell wrapper"
+    timeout_seconds: "positive integer covering command execution, not parent wait transport"
+  permissions:
+    required: [read_scope, write_scope, repair_allowed, external_mutations, secret_values]
+    allowed_write_scope: [ignored-validation-artifacts]
+    repair_allowed: false
+    external_mutations: []
+    secret_values: prohibited
+  completion_delivery:
+    required: [primary, fallback, destination, progress_updates, max_terminal_reports, report_schema, pre_send_validation]
+    primary_modes: [source-task-callback, parent-event-wait]
+    fallback_modes: [parent-event-wait, single-terminal-readback, none]
+    destination: source-task
+    progress_updates: terminal-only
+    max_terminal_reports: 1
+    report_schema: "same-contract#completion"
+    pre_send_validation:
+      required: [required, validator_argv, dispatch_ref, completion_ref, failure_action, payload_binding]
+      required_value: true
+      validator_argv: "canonical delegation validator with completion_ref as record and --dispatch dispatch_ref"
+      failure_action: do-not-deliver-terminal-report
+      payload_binding: exact-validated-completion-record
+  stop_conditions:
+    minimum: 1
+completion:
+  required:
+    - schema_version
+    - record_type
+    - delegation_id
+    - source_task_id
+    - delegated_task_id
+    - subject
+    - preflight
+    - execution
+    - timing
+    - result
+    - evidence
+    - final_state
+    - delivery
+  subject:
+    required: [expected_commit_sha, observed_commit_sha]
+  preflight:
+    required: [commit_matches, clean_worktree]
+  execution:
+    required: [working_directory, argv]
+  timing:
+    required: [started_at, completed_at, duration_seconds]
+    timestamps: "ISO 8601 with an explicit UTC offset"
+  result:
+    required: [outcome, exit_code, counts]
+    outcomes: [passed, failed, blocked-by-environment, timed-out, interrupted]
+    counts: "null when the runner exposes no counts; otherwise a mapping of non-negative integers"
+  evidence:
+    required: [refs, bounded_output]
+    minimum: "at least one non-empty ref or bounded_output"
+  final_state:
+    required: [clean_worktree, tracked_changes]
+  delivery:
+    required: [mode, destination, terminal_report_number, schema_validation]
+    modes: [source-task-callback, parent-event-wait, single-terminal-readback]
+    destination: source-task
+    terminal_report_number: 1
+    schema_validation:
+      required: [outcome, exit_code, validator_argv, dispatch_ref, completion_ref, payload_binding]
+      outcome: passed
+      exit_code: 0
+      payload_binding: exact-validated-completion-record
+  delegated_task_id: "runtime task ID when exposed; otherwise the stable delegation_id"
+cross_record:
+  required_equal:
+    - delegation_id
+    - subject.commit_sha=subject.expected_commit_sha
+    - execution.working_directory
+    - execution.argv
+  passed_requires:
+    - expected and observed commit SHA match
+    - preflight commit_matches and clean_worktree are true
+    - exit_code is zero
+    - final worktree is clean with no tracked changes
+transport_semantics:
+  parent_wait_timeout: pending-awaiting-completion
+  callback_failure_with_retrievable_terminal_report: recoverable-by-one-terminal-readback
+  terminal_task_without_valid_completion_report: non-passing
+  repeated_status_polling: prohibited
+  source_task_progress_delivery: terminal-only
+  runtime_local_progress: runtime-policy-owned-and-not-source-delivery
+  pre_send_completion_validation: required
+  post_validation_record_mutation: prohibited
+  callback_payload: exact-validated-completion-record
+security:
+  secret_values_in_envelope: prohibited
+  issue_project_merge_release_or_publication_mutation: separately-authorized-only
+  delegated_repair: prohibited-by-default

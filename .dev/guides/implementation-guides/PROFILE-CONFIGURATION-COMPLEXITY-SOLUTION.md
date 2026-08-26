@@ -49,7 +49,7 @@ public static class InMemoryConfiguration
 {
     public static IServiceCollection AddInMemoryProfile(this IServiceCollection services)
     {
-        // TODO: replace with .NET ez in-memory store classes when available
+        // Project-owned in-memory adapters implement the same application-facing ports.
         services.AddSingleton<IMessageStore, InMemoryMessageStore>();
         services.AddSingleton<IMessageBus, InMemoryMessageBus>();
         services.AddSingleton<IAggregateRepository<Product, ProductId>, InMemoryProductRepository>();
@@ -157,7 +157,7 @@ Create a `.sh` script to scan for environment gating and check that:
 - Outbox profile has EF Core + Wolverine outbox registration
 - Repositories are registered per profile
 
-## Profile Decision Matrix (ezapp 2.0.0 intent)
+## Profile Decision Matrix
 
 | Profile | DbContext | EF Core | Repository Type | Message Bus | Projection Type |
 |---------|-----------|---------|-----------------|-------------|-----------------|
@@ -166,7 +166,9 @@ Create a `.sh` script to scan for environment gating and check that:
 | TestInMemory | ❌ | ❌ | InMemoryRepository | InMemoryMessageBus | InMemoryProjection |
 | TestOutbox | ✅ | ✅ | OutboxRepository | DurableMessageBus | EfProjection |
 
-> ezapp 2.0.0 intent: InMemory and Outbox profiles both use OutboxRepository semantics; they differ in the storage and message transport implementations.
+> InMemory and Outbox profiles preserve the same application-facing repository
+> and event-publication contracts. They differ in target-selected storage and
+> message-transport implementations.
 
 ## Best Practices
 

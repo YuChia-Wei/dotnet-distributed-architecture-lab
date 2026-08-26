@@ -31,7 +31,8 @@ class CodingStandardsIntegrityContractTests(unittest.TestCase):
     def test_gwt_003_given_focused_standard_catalog_when_required_files_are_inspected_then_omitted_profiles_are_covered(self) -> None:
         self.assertIn('"reactor-standards.md"', self.source)
         self.assertIn('"profile-configuration-standards.md"', self.source)
-        self.assertIn("Missing exact catalog route in INDEX.MD", self.source)
+        self.assertIn('grep -Fq "./coding-standards/$file" "$INDEX_FILE"', self.source)
+        self.assertIn("Missing exact catalog route in coding-standards.md", self.source)
 
 
 if __name__ == "__main__":

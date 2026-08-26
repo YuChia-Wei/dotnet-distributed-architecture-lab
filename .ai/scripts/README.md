@@ -2,7 +2,16 @@
 
 This directory contains transitional AI workflow scripts, context governance checks, and local tool orchestration helpers.
 
-It is no longer the long-term home for authoritative C# semantic validation. Rules that inspect C# syntax, symbols, type dependencies, attributes, or framework API usage should move to dotnet-native validation mechanisms such as Roslyn analyzers, `.editorconfig`, `dotnet format`, architecture tests, integration tests, or dotnet tools.
+Python implementations and contract tests owned by exactly one canonical skill
+belong under `.ai/assets/skills/<skill-id>/scripts/`. This directory retains
+shared, multi-skill, provider, release, package, workflow, and source-wide
+automation plus explicit compatibility entrypoints for already published
+commands.
+
+It is not the home for authoritative C# semantic validation. A target may
+explicitly select its own Roslyn analyzers, `.editorconfig`, `dotnet format`,
+architecture tests, integration tests, or tools; those choices are not
+framework release prerequisites.
 
 ## Source Tooling Prerequisites
 
@@ -13,10 +22,8 @@ checksum-stable dependency declared in the root `requirements.txt`:
 PyYAML==6.0.3
 ```
 
-The repository's .NET validation tools require an SDK that satisfies
-`global.json`; for v0.5.0 source work, install .NET SDK 10.0.300 or newer.
-An older 10.0 feature band such as 10.0.203 does not satisfy the declared
-10.0.300 baseline.
+The source framework has no .NET SDK prerequisite. A target that explicitly
+creates a managed project owns its SDK and package prerequisites.
 
 Create and activate a virtual environment using the conventions for the host,
 then install the source dependency from the repository root:
@@ -43,6 +50,38 @@ supported.
 The extracted release package has its own checksum-governed envelope
 `requirements.txt`; follow the package `INSTALL.md` rather than using this
 source-repository bootstrap.
+
+## Governed Python Entrypoints
+
+The supported Python-command registry is
+`.ai/scripts/python-entrypoints.json`. Use a registered CLI directly when the
+selected interpreter is already ready, or use a launcher when the invoking
+shell needs deterministic interpreter discovery:
+
+```text
+python .ai/scripts/validate-ai-context.py --help
+sh .ai/scripts/run-python-entrypoint.sh .ai/scripts/validate-ai-context.py --help
+pwsh -File .ai/scripts/run-python-entrypoint.ps1 .ai/scripts/validate-ai-context.py --help
+```
+
+Direct CLIs and both launchers accept `--diagnostic-format=json`; without it,
+blocked prerequisites are emitted as a human-readable stderr diagnostic. A
+blocked diagnostic reports `blocked-by-environment`, the required Python floor,
+the selected candidate when available, missing requirements, and a recovery
+command. The recovery command is advice only: the preflight never installs
+Python, packages, or other dependencies.
+
+`.dev/validation.local.conf` is an ignored target-local selection file, never a
+package member. When a target enables it, it must contain exactly one line,
+`validation.routine.local=<approved-mode>`; it may only strengthen the checked
+in selection and is never an environment-variable override. See the human
+guide at
+`.dev/guides/ai-collaboration-guides/PYTHON-PREREQUISITE-DIAGNOSTICS-GUIDE.zh-TW.md`
+for the approved modes and recovery process.
+
+Source-only registered CLIs remain source-framework tooling. Their presence or
+absence in an extracted target is not a prerequisite failure, and release
+publication is outside this diagnostic contract.
 
 ## Current Boundary
 
@@ -79,25 +118,39 @@ Shell or PowerShell scripts should be retired or replaced when they:
 - `check-coding-standards.sh`
 - `validate-ai-context.py`
 - `validate-assessment-artifacts.py`
-- `validate-ai-context-versions.py`
 - `validate-ai-context-target.py`
-- `validate-ai-context-release-state.py`
-- `prepare-ai-context-release.py`
+- `resolve-effective-rule-packet.py`
+- `validate-source-dispositions.py`
 - `validate-file-disposition-manifest.py`
 - `validate-git-commits.py`
 - `validate-workflow-handoff.py`
-- `build-ai-context-package.py`
-- `validate-ai-context-package.py`
 - `plan-ai-context-package-apply.py`
-- `render-ai-context-release-notes.py`
-- `validate-ai-behavior-evaluation.py`
-- `measure-ai-context-load.py`
 
 These scripts inspect AI context, markdown, prompt portability, or repository hygiene. They are not substitutes for dotnet C# validation.
 
-`validate-ai-context.py` checks objective repository facts: active index paths, literal table corruption, declared runtime-root status, canonical/Agents/Claude skill inventory parity, case-safe `AGENTS.md` and thin `CLAUDE.md` root entries, canonical wrapper-metadata target/path integrity, sub-agent dynamic/native dispositions, exact adapter target/path/schema/canonical-link/package-profile parity, policy-scoped agent-facing language, root bilingual entry ownership/link/structural markers, rule ownership registry structure, canonical skill/sub-agent schema compliance, canonical template-family hygiene, and deterministic development capability routing. It scans both tracked and untracked non-ignored files so a new context file cannot bypass the gate before staging, while filtering tracked paths that are deleted in the working tree. Language lint uses exact path-and-line exceptions for deliberate routing triggers; other Han prose and selected non-ASCII punctuation fail with a file and line number. Script source, generated/example/archive/migration material, workflows, product `src`/`test` trees, and human-facing `.dev` documentation are outside that language scan; Markdown documentation under `.ai/scripts` remains in scope. Root bilingual validation checks reciprocal ownership links, headings, links, fences, inline-code identifiers, tables, lists, and ordered backtick table paths. These are structural drift guards, not proof of semantic equivalence; retained semantic review remains required when a bilingual entry changes materially.
+Source-maintainer release validation, tag handoff, hosted publication,
+provider reconciliation, release rendering, package building, immutable source
+history, and source load/evaluation entrypoints are intentionally excluded from
+target packages. Their names and commands belong to upstream source policy and
+runbooks; this portable instruction path does not make them target actions.
 
-`validate-workflow-artifacts.py` validates post-adoption workflow locator/task metadata, complete `.dev/workflows/INDEX.MD` directory coverage, locator-backed title/owner/status/timestamp/entrypoint parity, explicit legacy/no-locator rows, durable `.dev/backlog/items/*.yaml` identity/lifecycle/reference integrity, and fail-closed development implementation contracts for intent, execution mode, overlays, layered sources, subject revision, and acceptance criteria. Locators that opt into `lifecycle_contract: "1.0"` also enforce active-task cardinality, completed-workflow closure, and completed-task result semantics. Historical tasks and locators before their respective contract adoption remain compatible.
+`resolve-effective-rule-packet.py` is the shared, read-only action-time resolver for one exact
+`capability` / `execution_mode` / `technology_profile` / `file_type` tuple. It consumes only the
+two engineering-rule catalogs, the pinned `.dev/ai-context/provenance.yaml` and
+`customizations.yaml` authorities for complete contract and freshness checks, and the target's
+freshness-validated `.dev/ai-context/effective-rules.yaml` plus selected packet. It never scans
+target Markdown, ADRs, or directories for nearby semantics and never silently falls back to
+framework defaults. A missing, malformed, stale, ambiguous, or digest-mismatched authority,
+catalog, state, route, or packet is unresolved and stops the action. `--emit-candidate` is an
+explicit reconciliation aid only: it prints a packet candidate with complete effective normative
+statements but neither writes nor activates it. Reconciliation publication stages all packets
+first and the state index last, with rollback for in-process exceptions. It does not claim
+cross-file crash atomicity; a crash-mixed candidate remains unusable because freshness and digest
+validation fails closed.
+
+`validate-ai-context.py` checks objective repository facts: active index paths, literal table corruption, declared runtime-root status, canonical/Agents/Claude skill inventory parity, case-safe `AGENTS.md` and thin `CLAUDE.md` root entries, canonical wrapper-metadata target/path integrity, sub-agent dynamic/native dispositions, exact adapter target/path/schema/canonical-link/package-profile parity, policy-scoped agent-facing language, root bilingual entry ownership/link/structural markers, rule ownership registry structure, qualified governance-term namespace/owner/shorthand/machine-binding routes, canonical skill/sub-agent schema compliance, canonical template-family hygiene, and deterministic development capability routing. It scans both tracked and untracked non-ignored files so a new context file cannot bypass the gate before staging, while filtering tracked paths that are deleted in the working tree. Language lint uses exact path-and-line exceptions for deliberate routing triggers; other Han prose and selected non-ASCII punctuation fail with a file and line number. Script source, generated/example/archive/migration material, workflows, product `src`/`test` trees, and human-facing `.dev` documentation are outside that language scan; Markdown documentation under `.ai/scripts` remains in scope. Root bilingual validation checks reciprocal ownership links, headings, links, fences, inline-code identifiers, tables, lists, and ordered backtick table paths. These are structural drift guards, not proof of semantic equivalence; retained semantic review remains required when a bilingual entry changes materially.
+
+`validate-workflow-artifacts.py` validates post-adoption workflow locator/task metadata, complete `.dev/workflows/INDEX.MD` directory coverage, locator-backed title/owner/status/timestamp/entrypoint parity, explicit legacy/no-locator rows, durable `.dev/backlog/items/*.yaml` identity/lifecycle/reference integrity, and fail-closed development implementation contracts for intent, execution mode, overlays, layered sources, subject revision, and acceptance criteria. Locators that opt into `lifecycle_contract: "1.0"` also enforce active-task cardinality, completed-workflow closure, and completed-task result semantics. Historical tasks and locators before their respective contract adoption remain compatible. The development implementation-contract and orchestrator acceptance tests live with `software-development-orchestrator`; the old `.ai/scripts/tests/` paths are thin compatibility entrypoints only.
 
 `validate-assessment-artifacts.py` validates `.dev/assessments/` locator and
 index coverage, `ASM-YYYYMMDD-NNN` identity, template and report paths, assessed
@@ -105,53 +158,29 @@ Git revision metadata, branch and timestamp contracts, lifecycle sections,
 resume safety, and assessment relationship integrity. It does not evaluate
 report prose or replace the producing skill's evidence review.
 
-`validate-ai-context-versions.py` is the source-side release-registry validator:
-it validates governed release identity, SemVer, immutable published
-tag-to-commit mappings, and compatibility declarations. It delegates
-component-aware target provenance and semantic customization checks to the
-shared downstream library.
-
 `validate-ai-context-target.py` validates only downstream
 `.dev/ai-context/provenance.yaml` and `customizations.yaml`. It requires stable
 semantic identities, safe paths, base and decision evidence, owner
 reconciliation, active-context baseline audit, post-upgrade audit, and
 fail-closed finalization without requiring source release records, Git tags, or
-publication workflows. `compare-ai-context-versions.py`
+publication workflows.
+`.ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py`
 is a read-only Git-tree comparison helper; it proposes an automatic candidate
 only when a supplied target file is byte-identical to the recorded base. Target
 truth, deletions, absent evidence, and source history remain reconciliation or
 exclusion items.
 
-`validate-ai-context-release-state.py` applies the REL-owned
-`.dev/releases/<version>/release-phase-checks.yaml` contract to one governed
-release. The requested stable version selects the contract and each sanctioned
-command embeds that same literal version. Candidate validation rejects unresolved
-placeholders, copied lifecycle fields, impossible timestamps, unrelated or open
-backlog references, dirty worktrees, package identity drift, and generated
-provenance in authored notes while allowing prior versions in compatibility and
-migration guidance. Tag validation requires an existing annotated tag and a
-validated registry skeleton in the tagged tree. Hosted publication and
-finalization use GET-only GitHub API calls to verify the successful
-tag-triggered workflow, stable Release body, title, tag, and exact asset names.
-
-`prepare-ai-context-release.py` is the pre-tag interface. It requires the merged
-`main` candidate, reruns the candidate and critical gates, verifies the
-worktree remains clean, reads exact AI provenance from the latest registered
-handoff checkpoint, and prints a complete annotated-tag command for the
-repository owner. It never executes the printed command or pushes a ref. The
-printed command is valid only for the current `main` HEAD; any later merge to
-`main`, including lifecycle-only closeout, requires rerunning preparation and
-discarding every older printed command.
-
 `validate-dependency-versions.py` is a deterministic offline gate. In the source
 framework repository it enforces byte-identical pinned Python requirement
 mirrors, requirements-file use and one Python version across GitHub workflows,
-exact and consistent direct package versions in framework-managed
-`tools/**/*.csproj`, and an exact `global.json` SDK new enough for those tools.
-In initialized targets, source-only workflow and distribution checks become not
-applicable while managed-tool checks remain active. It does not query package
-registries or advisory databases and therefore makes no package-currency or
-vulnerability claim. The normative boundary is
+and the Python entrypoint registry. The framework contains no managed .NET
+project and selects no `global.json`. If an initialized target explicitly adds
+target-owned `tools/**/*.csproj`, the same validator conditionally requires
+exact and consistent direct package versions plus a target `global.json` whose
+SDK can build the selected target frameworks. It does not scan unrelated
+`.ai/` assets or require an SDK when no managed project exists. It does not
+query package registries or advisory databases and therefore makes no
+package-currency or vulnerability claim. The normative boundary is
 `.dev/standards/DEPENDENCY-VERSION-CONSISTENCY-POLICY.md`.
 
 `validate-file-disposition-manifest.py` validates a supplied remediation
@@ -220,12 +249,18 @@ evidence, and applied/skipped counts by component. Apply revalidates that
 authority before mutation. `ai-context-init` or `ai-context-upgrader` owns
 validation and provenance finalization.
 
-`render-ai-context-release-notes.py` validates a governed release candidate and
-renders the GitHub Release body from its canonical release notes, migration
-guide, tag, and exact commit. Candidate mode can discover exactly one active
-governed candidate; publish mode fails unless the tagged-tree record is
-`validated`. The tag-triggered Action owns tag selection and Release mutation;
-the renderer never creates or changes Git refs or remote releases.
+For every selected framework-managed path, dry run also records an exact target
+Git ignore match (`source`, line, and pattern). An ignored path is an explicit
+unresolved item with its path, component, ownership, and the only permitted
+owner dispositions: preserve the target rule, add a narrow exception, disable
+the component, or keep a pending owner decision. The planner never rewrites
+target-owned ignore configuration and apply refuses unresolved ignored paths
+before any target byte or pending receipt is written. A successful receipt
+binds every selected framework-managed path to its component, ownership, and
+expected bytes; target validation and provenance finalization reject the same
+missing, changed, or ignored path. This keeps plan preflight, post-install
+validation, and the target critical gate on one identity without treating a
+skipped path as a pass.
 
 `measure-ai-context-load.py` is the source-only deterministic measurement
 interface for representative repository-backed context traces. It requires a
@@ -247,38 +282,41 @@ python .ai/scripts/tests/test_fail_closed_validation.py -v
 python .ai/scripts/tests/test_ai_context_wrapper_metadata.py -v
 python .ai/scripts/tests/test_ai_context_root_entries.py -v
 python .ai/scripts/tests/test_ai_context_language_policy.py -v
-python .ai/scripts/tests/test_workflow_implementation_contract.py -v
+python .ai/assets/skills/software-development-orchestrator/scripts/tests/test_workflow_implementation_contract.py -v
+python .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_capability_contract.py -v
+python .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_acceptance.py -v
 python .ai/scripts/tests/test_workflow_lifecycle_contract.py -v
 python .ai/scripts/tests/test_assessment_artifacts.py -v
 python .ai/scripts/tests/test_git_commit_policy.py -v
-python .ai/scripts/tests/test_ai_context_version_governance.py -v
 python .ai/scripts/tests/test_ai_context_package_apply.py -v
-python .ai/scripts/tests/test_ai_context_packaging.py -v
 python .ai/scripts/tests/test_dependency_version_consistency.py -v
 python .ai/scripts/tests/test_file_disposition_manifest.py -v
-python .ai/scripts/tests/test_governance_workflow_contract.py -v
 ```
 
-`test_ai_context_version_governance.py` and
-`test_ai_context_packaging.py` are source-repository release/build tests.
-`test_ai_behavior_evaluation.py` is the source-release deterministic behavior
-gate. It consumes only preclassified fixtures, performs no model or network
-calls, and compares exact normalized output with the checked-in baseline.
+Additional source-repository governance and release-history tests are intentionally
+excluded from the portable payload and therefore are not advertised here as runnable
+downstream commands.
+
 `test_ai_context_load_measurement.py` proves the source-only context-load
 measurement contract in disposable synthetic Git repositories; it creates no
 official trace or release evidence.
-`test_governance_workflow_contract.py` and the concrete v0.5.0 disposition
-manifest validation are source-repository governance checks.
-`validate-source-governance.py` discovers those manifests through the stable
-source-only `.ai/distribution/governance-checks.yaml` registry so portable
-scripts do not depend on dated workflow history. They remain required when
+`test_governance_workflow_contract.py`, the concrete v0.5.0 disposition
+manifest validation, the exhaustive source-disposition coverage gate, and the repository identity drift gate are
+source-repository governance checks. `validate-source-governance.py` discovers
+the manifest, `.ai/distribution/repository-identity-policy.yaml`, and
+`.ai/distribution/source-dispositions.yaml` through the
+stable source-only `.ai/distribution/governance-checks.yaml` registry so
+portable scripts do not depend on dated workflow history. The identity
+validator scans Git-tracked plus untracked non-ignored files and fails on
+unclassified retired names, overlapping rules, stale rules, or any attempted
+`current-operational` exception. These checks remain required when
 `check-all.sh` detects their exact source context, but the source-only
-validators, test, registry, and workflow evidence are intentionally excluded
+validators, tests, registry, and workflow evidence are intentionally excluded
 from public target packages. `test_ai_context_package_apply.py` and the
 synthetic file-disposition fixture suite are downstream-supported and remain
-packaged and required. A packaged `check-all.sh` reports the four source-only
-checks as not applicable instead of requiring unavailable release history, Git
-tags, builder modules, workflow evidence, or source CI configuration.
+packaged and required. A packaged `check-all.sh` reports source-only checks as
+not applicable instead of requiring unavailable release history, Git tags,
+builder modules, workflow evidence, or source CI configuration.
 
 The shell fixture suite snapshots the real checkout before and after execution.
 The wrapper-metadata fixture invokes only the bounded validator function against
@@ -309,14 +347,43 @@ validator and its negative parity fixture in the same change.
 ### Active Orchestration And Context Validation
 
 - `check-all.sh`
+- `validation-profile-registry.sh`
 - `check-coding-standards.sh`
 - `check-prompt-portability.sh`
 
-`check-all.sh` orchestrates repository gates. The two context validators inspect
-repository structure or prompt portability; neither claims C# semantic
-compliance. `check-coding-standards.sh` checks required files, headings, catalog
-routes, executable modes, and shell syntax, and explicitly excludes architecture
-completeness, example correctness, and target technology adoption.
+`check-all.sh` executes the canonical profile membership declared in
+`validation-profile-registry.sh`; CI never maintains a second copied check
+list. The registry declares each stable check ID, owner, tags, profile
+membership, input paths, dependencies, environment capability, timeout,
+resource class, cache policy, source/downstream disposition, and callable. The
+two context validators inspect repository structure or prompt portability;
+neither claims C# semantic compliance. `check-coding-standards.sh` checks
+required files, headings, catalog routes, executable modes, and shell syntax,
+and explicitly excludes architecture completeness, example correctness, and
+target technology adoption.
+
+Use `--profile fast`, `pr`, `release`, `closeout`, or `nightly-full`. The
+legacy `--quick`, `--critical`, and `--full` flags remain explicit compatibility
+aliases for `pr`, `release`, and `nightly-full`. Successful runs print one line
+per selected check plus a concise summary; full stdout/stderr is retained under
+the ignored `artifacts/validation/` path. `--verbose` additionally prints the
+retained child output and slowest-check list.
+
+Each selected check also receives a retained `evidence.jsonl` record with its
+stable validator ID/version, profile, selected-input fingerprint, environment
+class, timing, output counts, log reference, outcome, and execution
+disposition. The record stores hashes and counts rather than output content,
+prompts, host identity, or provider token data. A prior eligible `executed`
+pass with the same validator/profile/input/environment identity may be reported
+as `reused`; that remains distinct from a new execution in both the compact
+summary and evidence record.
+
+For the source-only immutable-history checks, `fast` and `pr` may also report
+`reused` from the tracked full-validation receipt. This path does not consume a
+host-local cache and does not rescan unchanged historical blobs. A release,
+scheduled full run, protected-path change, validator/schema change, unknown
+diff path, or invalid receipt forces fresh native execution. Downstream runs do
+not load this source receipt.
 
 `check-all.sh` uses four enforcement classes:
 
@@ -329,25 +396,16 @@ completeness, example correctness, and target technology adoption.
 - `deferred`: known future work is counted separately and is never described as
   a selected required check.
 
-Mode-based omission is distinct from a selected required check being skipped.
-Invalid modes or extra arguments return exit code `2`. A successful aggregate
+Profile non-selection is distinct from a selected required check being skipped.
+Invalid profiles or extra arguments return exit code `2`. A successful aggregate
 result may contain explicit advisory warnings, deferred work, or not-applicable
 conditional checks, but it cannot contain an unexecuted selected required check.
 
-Future `check-all.sh` shape:
-
-```bash
-dotnet restore
-dotnet build
-dotnet test
-dotnet format --verify-no-changes
-dotnet tool run repo-context-lint
-```
-
-Current behavior:
-
-- runs `dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj`;
-- does not invoke the retired repository grep checks.
+Current source-framework behavior is SDK-free: required profiles use Python and
+shell contracts and do not install or invoke `dotnet`. A target may separately
+select its own `dotnet restore`, build, test, format, analyzer, or architecture
+test commands; those commands and prerequisites remain target evidence and are
+not framework release gates. Retired repository grep checks remain retired.
 
 ### Compatibility And Manual Entry Points
 
@@ -380,7 +438,7 @@ their selected testing stack, analyzers, and executable test architecture
 checks. Removal or relocation requires a later governed disposition with
 downstream evidence.
 
-Completed replacement:
+Retained target-enforcement mapping:
 
 - repository rules: `DBA1001` enforces canonical/compatibility inheritance,
   Aggregate Root constraints, aggregate method surface, query-port read-only
@@ -390,12 +448,15 @@ Completed replacement:
 - mapper rules: `DBA1007` and `DBA1008`; the mapper grep scripts have been removed.
 - aggregate rules: `DBA1003` and `DBA1009`; the aggregate grep scripts have been removed while invariant completeness remains test and AI review work.
 - use case rules: `DBA1002` and `DBA1010` through `DBA1012`; the use case grep scripts have been removed while transaction and error-handling design remain AI review work.
-- projection rules: `DBA1013` covers EF write operations and `DotnetBackendValidation` verifies marker-based EF model registration; the projection grep/config scripts have been removed.
+- projection rules: `DBA1013` maps EF write-operation checks, while a target-owned configuration-test recipe covers marker-based EF model registration; the projection grep/config scripts have been removed.
 
-Analyzer source template:
+Reference-only creation guidance is available at:
 
-- `tools/DotnetBackendAnalyzers/`
-- `tools/DotnetBackendAnalyzers.Tests/`
+- `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/`
+
+The framework supplies no analyzer project or test project. A target that
+selects a mapping owns implementation, SDK/package versions, wiring, severity,
+tests, CI, compatibility, and fresh evidence.
 
 ### Retired Generated Regex Checks
 

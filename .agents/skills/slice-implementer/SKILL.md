@@ -15,6 +15,7 @@ This is a thin current-runtime wrapper.
 - References:
   - `.ai/assets/skills/slice-implementer/references/input-contract.md`
   - `.ai/assets/skills/slice-implementer/references/execution-playbook.md`
+  - `.ai/assets/skills/slice-implementer/references/role-execution.md`
   - `.ai/assets/skills/slice-implementer/references/handoff-rules.md`
   - `.ai/assets/skills/slice-implementer/references/modes/command-use-case.md`
   - `.ai/assets/skills/slice-implementer/references/modes/query-use-case.md`

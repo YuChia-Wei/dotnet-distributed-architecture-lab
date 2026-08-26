@@ -75,8 +75,8 @@ flowchart LR
 ## References
 ```
 
-## 5) Existing References
-可參考下列文件整理需求內容：
-- `requirement.md`（需求範例）
-- `README-UML.md`（UML/圖表說明）
-- `scrum-domain-model.md` / `scrum-context-map.puml` 等領域模型文件
+## 5) Existing Examples
+
+上方的「Copy & Fill」區塊是 portable payload 維護的唯一通用需求範本。
+來源庫的實際需求紀錄屬於 source project truth，刻意不隨套件提供；下游應從
+自己的可驗證需求建立 instance，不得依賴或猜測那些被排除的來源紀錄。

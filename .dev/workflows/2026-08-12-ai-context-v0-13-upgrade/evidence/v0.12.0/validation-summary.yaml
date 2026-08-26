@@ -1,0 +1,100 @@
+schema_version: "1.0"
+version: "v0.12.0"
+recorded_at: "2026-08-13T11:33:19+08:00"
+status: "finalized"
+target_starting_commit: "ca17969c539836ea6b42de2de361367041d57d84"
+structural_candidate_commit: "8fb457d6b8bb8086baadc1662bf138714550e102"
+package:
+  release_id: "REL-v0.12.0"
+  commit: "a4fd14f0f08ad53859df1c860db0eb9643cdb2de"
+  zip_sha256: "29af751de3ab1fe7e0ac3ce838eee327bb35f53542dae8a74e09feb8a4390cf5"
+plans:
+  dry_run_sha256: "623d79040aacfa0dabaa63498b6e03058367ec052fe4a4863a7c1700c50e5f14"
+  apply_sha256: "623d79040aacfa0dabaa63498b6e03058367ec052fe4a4863a7c1700c50e5f14"
+  identical: true
+operations:
+  total: 80
+  replace: 73
+  remove: 5
+  add: 2
+  reconcile: 0
+  ignored_framework_paths: 0
+receipt:
+  sha256: "bd4d6dea53520c7c91b84a770c105a1d53c889faeb07ba8306c3925d7b3bfda9"
+  status: "pending-validation"
+  required_framework_paths: 640
+  applied_operation_ids: 80
+  skipped_reconciliation_ids: 0
+  provenance_updated: false
+commit_policy:
+  package_schema: "1.2"
+  target_subject_effective_at: "2026-08-13T11:05:12+08:00"
+  last_legacy_commit: "ca17969c539836ea6b42de2de361367041d57d84"
+  history_rewrite: false
+  target_tests: "16/16 passed"
+  canonical_tests: "19/19 passed"
+target_projection:
+  downstream_tests: "9/9 passed"
+  candidate_diagnostic_tests: "3/3 passed"
+  exact_unfinalized_diagnostic:
+    - "effective state catalogs[0] is stale"
+  action_readiness: "fail-closed-until-authority-regeneration"
+validation:
+  candidate_target_gate:
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 33.9
+    commit_range_count: 40
+  target_owned_tests: "31/31 passed"
+  lessons_tests:
+    sandbox: "6/6 environment-blocked by Windows Temp ACL"
+    outside_sandbox: "6/6 passed"
+  git_diff_check:
+    outcome: "passed"
+independent_audits:
+  - id: "independent-audit-1"
+    outcome: "blocked"
+    auditor: "gpt-5.6-sol / max"
+    subject_commit: "41a3a1dc984d84f6ebd8e0cae7f53b5a820fd984"
+    technical_gate: "passed-outside-sandbox in 33.8 seconds over 41 commits"
+    findings:
+      - "durable evidence named nonexistent structural candidate 8fb457d972fdb3af10d2b7e5bcd000696ad35b00 instead of actual 8fb457d6b8bb8086baadc1662bf138714550e102"
+      - "resume surfaces still instructed the next agent to commit the candidate-identity synchronization already committed at the audit subject"
+    disposition: >-
+      Correct the structural identity and resume truth together, commit only
+      metadata, validate the resulting clean HEAD, and request a fresh
+      independent fixed-HEAD audit before authority finalization.
+  - id: "independent-audit-2"
+    outcome: "passed"
+    auditor: "gpt-5.6-sol / max"
+    subject_commit: "8437e178db96237edd7457bb48c531afb3bdae79"
+    technical_gate: "passed-outside-sandbox in 34.1 seconds over 42 commits"
+    findings: []
+    disposition: "safe-to-finalize; persisted as ASM-20260813-005"
+defects:
+  active:
+    - "AICU-V010-PROJECTION-001"
+    - "AICU-V090-DOC-001"
+    - "AICU-V011-SELECTION-001"
+    - "AICU-V012-PROFILE-REGISTRY-PROJECTION-001"
+    - "AICU-V012-COMMIT-CUTOVER-001"
+    - "AICU-V012-COMMIT-DOC-001"
+settings:
+  validation_routine_local: "manual"
+  validation_routine_ci: "unconfigured"
+  stock_profile_activation: false
+  changed_path_activation: false
+  evidence_reuse_activation: false
+  provider_activation: false
+finalization:
+  finalized_at: "2026-08-13T11:36:39+08:00"
+  assessment_id: "ASM-20260813-005"
+  checkpoint_commit: "e561b5c5f68629523fab616c39f226971399d429"
+  packets: 20
+  action_readiness: "ready"
+  working_receipt_removed: true
+  with_receipt_gate_seconds: 36.5
+  after_receipt_removal_gate_seconds: 15.6
+  post_commit_policy_count: 44
+next_action: >-
+  Begin v0.13 exact-predecessor preflight from the resulting clean
+  lifecycle-synchronization HEAD.

@@ -1,10 +1,10 @@
-# Reactor Code Review Prompt (Dotnet)
+# Reactor Code Review Sub-Agent Prompt (.NET)
 
-Review reactor implementations for correctness.
+Review the bounded reactor scope using only routes selected by
+`review-routing.yaml`. Verify event handling, collaboration boundaries,
+redelivery/idempotency, and registration when target evidence makes them
+applicable. Do not turn generic exception, DI, or cross-aggregate statements
+into unconditional failures.
 
-## Rules
-- See `../assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml` for the canonical delegated review role.
-- Must handle correct event types
-- Must not throw unhandled exceptions
-- Must be registered via DI
-- Must not use direct repository cross-aggregate queries
+Return severity-ranked findings with path, line, selected reference, evidence,
+and concise remediation direction. Do not implement fixes.

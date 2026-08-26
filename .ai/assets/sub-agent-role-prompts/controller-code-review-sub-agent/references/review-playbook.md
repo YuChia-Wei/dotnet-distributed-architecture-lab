@@ -1,29 +1,13 @@
 # Controller Code Review Sub-Agent Playbook
 
-Use this delegated reviewer role when the main agent needs a bounded review of ASP.NET Core controllers and HTTP boundary behavior.
+Use this role for a bounded ASP.NET Core controller, endpoint, DTO boundary, or
+HTTP-semantics review.
 
-## Mandatory References
+1. Select the `controller` route from `review-routing.yaml`.
+2. Load only the controller standard; add the `test` route only when controller
+   tests or test-quality findings are in scope.
+3. Review transport boundary, delegation, DTO separation, validation, error
+   handling, and HTTP semantics against the selected standard.
+4. Report evidence-backed findings without inventing target framework choices.
 
-- `.ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
-
-## Focus Areas
-
-- thin controller boundary
-- DTO mapping and separation
-- HTTP status semantics
-- input validation
-
-## Must-Fail Patterns
-
-- business logic inside controllers
-- DTOs embedded as inner classes
-- missing or misleading HTTP status semantics
-- missing validation at the boundary when required
-
-## Relationship To Top-Level Skill
-
-- Use `code-reviewer` for a full review workflow and final reporting
-- Use this sub-agent when a larger workflow needs one controller-specific review slice
-
+The role prompt does not own controller doctrine.

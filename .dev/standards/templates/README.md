@@ -1,7 +1,5 @@
-# Templates (.NET)
+# Templates Compatibility Entry
 
-Reusable configuration templates for .NET projects.
+Use the canonical [dotnet-backend profile templates](../../../.ai/assets/tech-stacks/dotnet-backend/templates/). Target-owned project configuration templates used by repository initialization remain under `.ai/assets/skills/ai-context-init/templates/`.
 
-Use [INDEX.MD](INDEX.MD) for the current template catalog. Target-owned project
-configuration templates used by repository initialization are maintained under
-`.ai/assets/skills/repo-structure-sync/templates/`.
+This source path provides compatibility navigation only.

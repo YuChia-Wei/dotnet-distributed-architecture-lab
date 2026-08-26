@@ -1,11 +1,18 @@
 template_metadata:
   template_id: "ai-context-customizations"
-  template_version: "1.0.0"
+  template_version: "1.1.0"
   created_at: "2026-07-24T00:50:47+08:00"
-  updated_at: "2026-07-24T00:50:47+08:00"
+  updated_at: "2026-08-05T03:06:55+08:00"
 
 schema_version: "1.0"
 customizations: []
+
+# Effective adopted rule and constraint state belongs in the adjacent
+# .dev/ai-context/effective-rules.yaml authority. This ledger records only
+# target semantic customizations and their reconciliation evidence; do not
+# duplicate baseline defaults, routing, or task packet contents here. A complete
+# final effective statement for an adopted rule delta is projected into the
+# adjacent effective-rule state during finalized reconciliation.
 
 # Entry shape:
 # - id: "CUST-<stable-target-id>"

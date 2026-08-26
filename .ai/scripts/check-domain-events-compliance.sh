@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Domain Events Compliance Check Script (.NET)
-# Ensures domain events follow .NET ezDDD conventions (metadata, event markers)
+# Ensures domain events follow the repository's .NET event conventions (metadata, event markers)
 
 # Colors for output
 RED='\033[0;31m'

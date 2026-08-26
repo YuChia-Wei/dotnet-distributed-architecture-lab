@@ -1,0 +1,20 @@
+schema_version: "1.0"
+record_type: "target-work-item-binding-selection"
+object_path: ".dev/project-config.yaml#workManagement.workItemBinding"
+required_fields:
+  - "mode"
+  - "purposes"
+  - "mergeGate"
+fixed_purposes:
+  - "traceability"
+  - "work-authorization"
+allowed_modes:
+  - "required"
+  - "optional"
+  - "disabled"
+allowed_merge_gates:
+  - "required"
+  - "optional"
+  - "disabled"
+selection_source: "explicit-target-decision"
+template_unresolved_value: null

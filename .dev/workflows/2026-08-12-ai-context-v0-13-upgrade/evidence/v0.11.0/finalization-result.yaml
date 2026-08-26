@@ -1,0 +1,38 @@
+schema_version: "1.0"
+version: "v0.11.0"
+status: "finalized"
+finalized_at: "2026-08-13T10:58:36+08:00"
+assessment_id: "ASM-20260813-004"
+source:
+  release_id: "REL-v0.11.0"
+  commit: "05199ed0a9ed509ef1696df014fce244f8e7cffa"
+receipt:
+  retained_through_finalization: true
+  sha256: "cfabfcfbc7f76556f036abbbf145c3088d1ddad64b96288d084c6b3b751e9ebf"
+  evidence: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.11.0/apply-receipt.yaml"
+  working_copy_removed_after_success: true
+authorities:
+  customization_entries: 4
+  rule_dispositions: 13
+  routes: 20
+  packets: 20
+  effective_rule_readiness: "ready"
+validation:
+  with_working_receipt:
+    result: "passed"
+    duration_seconds: 35.8
+    commit_range_count: 36
+  after_working_receipt_removal:
+    result: "passed"
+    duration_seconds: 14.4
+    commit_range_count: 36
+settings:
+  validation_routine_local: "manual"
+  validation_routine_ci: "unconfigured"
+  stock_profile_activation: false
+  changed_path_activation: false
+  evidence_reuse_activation: false
+  provider_activation: false
+checkpoint_commit: "197857e07c24e8d4fb8673ed959804e02b87d83a"
+post_commit_policy_count: 37
+next_action: "Begin v0.12 exact-predecessor preflight from the resulting clean lifecycle-synchronization HEAD."

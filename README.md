@@ -42,7 +42,6 @@ src/
   Order/              Orders bounded context
   Inventory/          Inventory bounded context
 tests/                 產品與 domain tests
-tools/                 Roslyn analyzers 與 runtime validators
 docker-compose/        本機服務與 observability topology
 sql-script/            PostgreSQL 初始化腳本
 .dev/                  專案知識、requirements、specs、operations 與 workflows
@@ -80,7 +79,7 @@ API 預設入口：
 dotnet test MQArchLab.slnx
 ```
 
-Analyzer 與 validator tests 位於 `tools/`，目前不屬於 `MQArchLab.slnx`，需要個別執行其 test projects。
+本 repository 目前沒有 active target-owned analyzer 或 runtime-validator projects。它們已在受治理的 v0.9 AI context 升級中退役，v0.13 framework 也已移除先前的 bundled mechanical-validation provider。現在僅保留 `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/` 下的 reference-only recipes；它們未被選用、未加入 `MQArchLab.slnx`、未接入 build，也未啟用。
 
 ## 專案知識入口
 

@@ -1,11 +1,419 @@
 schema_version: "1.0"
-updated_at: "2026-07-11T19:30:00+08:00"
+updated_at: "2026-08-11T21:08:19+08:00"
+identity_model:
+  version: "1.0"
+  registry_owner: .dev/standards/AI-CONTEXT-OWNERSHIP.yaml
+  portable_baseline_roots:
+    universal: .ai/assets/shared/
+    profile: .ai/assets/tech-stacks/<profile>/
+  rule_catalogs:
+    shared:
+      role: canonical-portable-baseline
+      path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+      selection: "rules[rule_id=<existing-active-universal-rule-id>]"
+    profile:
+      role: resolver-ready-exact-projection
+      path: .ai/assets/tech-stacks/<profile>/engineering-rule-catalog.yaml
+      selection: "rules[rule_id=<existing-active-profile-rule-id>]"
+      semantic_owner: the profile Markdown path and anchor recorded by each rule
+  source_governance_root: .dev/standards/
+  target_effective_root: .dev/ai-context/
+  ownership_resolution:
+    canonical_semantic_owner: exactly-one-classified-baseline-record
+    source_governance_and_registry: .dev/standards/
+    target_effective_owner: .dev/ai-context/
+    legacy_canonical_path:
+      classification: transitional-unmigrated
+      applies_to: rules[].canonical_path under .dev/standards/
+      exit_condition: migration matrix assigns one classified portable baseline path
+    ambiguity: fail-closed
+  contracts:
+    - contract_id: ENG-IDENTITY-001
+      kind: portable-universal-baseline
+      canonical_path: .ai/assets/shared/governance/ENGINEERING-IDENTITY-CONTRACT.md
+      canonical_anchor: "# Engineering Identity Contract"
+      registry_governance_path: .dev/standards/AI-CONTEXT-OWNERSHIP.md
+      profile_binding_contract: .ai/assets/tech-stacks/dotnet-backend/references/ENGINEERING-IDENTITY-BINDINGS.MD
+  kinds:
+    engineering-concept:
+      id_field: concept_id
+      id_pattern: "^CONCEPT-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+      semantic_subject: true
+      canonical_owner: cross-technology baseline record under .ai/assets/shared/
+    normative-rule:
+      id_field: rule_id
+      id_pattern: "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+$"
+      legacy_ids: retained
+      semantic_subject: true
+      canonical_owner: classified baseline record under shared or profile root
+    observable-constraint:
+      id_field: constraint_id
+      id_pattern: "^CONSTRAINT-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+      semantic_subject: true
+      canonical_owner: classified baseline record under shared or profile root
+    abstract-enforcement-capability:
+      id_field: capability_id
+      id_pattern: "^CAPABILITY-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+      semantic_subject: false
+      canonical_owner: cross-technology capability record under .ai/assets/shared/
+    technology-binding:
+      id_field: binding_id
+      id_pattern: "^BINDING-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+      semantic_subject: false
+      canonical_owner: selected profile record under .ai/assets/tech-stacks/<profile>/
+  relationships:
+    - concept-supports-rule
+    - rule-yields-constraint
+    - constraint-enforced-by-capability
+    - binding-realizes-constraint-through-capability
+  referential_integrity:
+    reference_shape: kind-and-id
+    resolution: exactly-one-record-of-declared-kind
+    unresolved: fail-closed
+    disallowed_identity_substitutes:
+      - path
+      - diagnostic-id
+      - package-name
+      - command-name
+      - provider-name
+  compatibility:
+    identity_stability: retain-id-when-semantic-meaning-is-unchanged
+    semantic_change: explicit-owner-approved-supersedes-relationship
+    alternate_temporary_ids: forbidden
+governance_term_routing:
+  schema_version: "1.0"
+  registry_role: owner-route-index-not-definition-authority
+  consumer_contract:
+    qualified_first_use: required
+    bare_alias_scope: same-clearly-qualified-section-only
+    cross_owner_authority_inference: forbidden
+    machine_literal_change: explicit-versioned-migration-required
+    historical_rewrite: forbidden
+  terms:
+    - term_id: source-release.framework-version-candidate
+      namespace: source-release
+      qualified_term: framework version candidate
+      canonical_owner:
+        path: .dev/standards/AI-CONTEXT-SOURCE-RELEASE-POLICY.md
+        anchor: "## Source Release State And Authority"
+      distribution: source-only
+      portable_disposition: upstream-only-non-actionable
+      machine_bindings:
+        - contract: .dev/releases/<version>/release.yaml
+          field: status
+          literals:
+            - planned
+            - validated
+      contextual_shorthand:
+        aliases:
+          - candidate
+        allowed_scope: same-qualified-source-release-section-only
+        forbidden_authority_claims:
+          - candidate does not mean package archive, hosted publication, or tag authority
+    - term_id: distribution.package-candidate
+      namespace: distribution
+      qualified_term: package candidate
+      canonical_owner:
+        path: .ai/distribution/README.md
+        anchor: "## Package Candidate"
+      distribution: source-only
+      portable_disposition: upstream-only-non-actionable
+      machine_bindings: []
+      contextual_shorthand:
+        aliases:
+          - candidate
+        allowed_scope: same-qualified-distribution-section-only
+        forbidden_authority_claims:
+          - package candidate does not mean framework version candidate or hosted publication
+    - term_id: target-upgrade.automatic-candidate
+      namespace: target-upgrade
+      qualified_term: target upgrade automatic-candidate
+      canonical_owner:
+        path: .ai/assets/skills/ai-context-upgrader/references/upgrade-playbook.md
+        anchor: "## Planning"
+      distribution: portable
+      portable_disposition: available
+      machine_bindings:
+        - contract: .ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py
+          field: classification
+          literals:
+            - automatic-candidate
+            - reconcile
+            - exclude
+      contextual_shorthand:
+        aliases:
+          - automatic-candidate
+        allowed_scope: target-upgrade-classification-only
+        forbidden_authority_claims:
+          - automatic-candidate is not write authorization or a release state
+    - term_id: source-release.release-source-status-validated
+      namespace: source-release
+      qualified_term: release-source status validated
+      canonical_owner:
+        path: .dev/standards/AI-CONTEXT-SOURCE-RELEASE-POLICY.md
+        anchor: "## Source Release State And Authority"
+      distribution: source-only
+      portable_disposition: upstream-only-non-actionable
+      machine_bindings:
+        - contract: .dev/releases/<version>/release.yaml
+          field: status
+          literals:
+            - planned
+            - validated
+            - published
+            - superseded
+      contextual_shorthand:
+        aliases:
+          - validated
+        allowed_scope: release-source-status-field-only
+        forbidden_authority_claims:
+          - validated source status does not mean hosted publication or provider published state
+    - term_id: git.repository-integration
+      namespace: git
+      qualified_term: repository integration
+      canonical_owner:
+        path: .dev/TEAM-GIT-FLOW-RULES.MD
+        anchor: "## Integration Gate And Merge Topology"
+      distribution: portable
+      portable_disposition: available
+      machine_bindings: []
+      contextual_shorthand:
+        aliases:
+          - integration
+          - integrated
+        allowed_scope: configured-repository-branch-event-only
+        forbidden_authority_claims:
+          - repository integration does not prove workflow completion or publication
+    - term_id: workflow.workflow-completion
+      namespace: workflow
+      qualified_term: workflow completion
+      canonical_owner:
+        path: .dev/standards/WORKFLOW-ARTIFACT-POLICY.md
+        anchor: "## Workflow Completion"
+      distribution: portable
+      portable_disposition: available
+      machine_bindings:
+        - contract: .dev/workflows/<workflow-id>/workflow.yaml
+          field: status
+          literals:
+            - in_progress
+            - completed
+      contextual_shorthand:
+        aliases:
+          - completed
+          - closeout
+        allowed_scope: workflow-artifact-section-only
+        forbidden_authority_claims:
+          - workflow completion does not prove repository integration, assessment finality, or publication
+    - term_id: assessment.assessment-final
+      namespace: assessment
+      qualified_term: assessment final
+      canonical_owner:
+        path: .dev/standards/ASSESSMENT-ARTIFACT-POLICY.md
+        anchor: "## Assessment Lifecycle"
+      distribution: portable
+      portable_disposition: available
+      machine_bindings:
+        - contract: .dev/assessments/<assessment-id>/assessment.yaml
+          field: status
+          literals:
+            - draft
+            - final
+            - superseded
+            - withdrawn
+      contextual_shorthand:
+        aliases:
+          - final
+        allowed_scope: assessment-lifecycle-section-only
+        forbidden_authority_claims:
+          - assessment final does not mean release finalization or workflow completion
+    - term_id: hosted-release.hosted-publication
+      namespace: hosted-release
+      qualified_term: hosted publication
+      canonical_owner:
+        path: .dev/standards/AI-CONTEXT-SOURCE-RELEASE-POLICY.md
+        anchor: "## Terminal Source Record And Hosted Publication"
+      distribution: source-only
+      portable_disposition: upstream-only-non-actionable
+      machine_bindings: []
+      contextual_shorthand:
+        aliases:
+          - publication
+          - published
+        allowed_scope: same-qualified-hosted-release-section-only
+        forbidden_authority_claims:
+          - hosted publication is not a later release-source status transition
+    - term_id: source-release-validation.candidate-phase
+      namespace: source-release-validation
+      qualified_term: framework candidate validation phase
+      canonical_owner:
+        path: .dev/standards/AI-CONTEXT-SOURCE-RELEASE-POLICY.md
+        anchor: "## Source Release Validation Phases"
+      distribution: source-only
+      portable_disposition: upstream-only-non-actionable
+      machine_bindings:
+        - contract: .dev/releases/<version>/release-phase-checks.yaml
+          field: phases
+          literals:
+            - candidate
+      contextual_shorthand:
+        aliases:
+          - candidate phase
+        allowed_scope: source-release-validation-only
+        forbidden_authority_claims:
+          - candidate phase is a validation selector and not a release state
+    - term_id: source-release-validation.tag-phase
+      namespace: source-release-validation
+      qualified_term: tag validation phase
+      canonical_owner:
+        path: .dev/standards/AI-CONTEXT-SOURCE-RELEASE-POLICY.md
+        anchor: "## Source Release Validation Phases"
+      distribution: source-only
+      portable_disposition: upstream-only-non-actionable
+      machine_bindings:
+        - contract: .dev/releases/<version>/release-phase-checks.yaml
+          field: phases
+          literals:
+            - tag
+      contextual_shorthand:
+        aliases:
+          - tag phase
+        allowed_scope: source-release-validation-only
+        forbidden_authority_claims:
+          - tag phase validates owner-created tag evidence and cannot create or move a tag
+    - term_id: source-release-validation.publication-phase
+      namespace: source-release-validation
+      qualified_term: publication validation phase
+      canonical_owner:
+        path: .dev/standards/AI-CONTEXT-SOURCE-RELEASE-POLICY.md
+        anchor: "## Source Release Validation Phases"
+      distribution: source-only
+      portable_disposition: upstream-only-non-actionable
+      machine_bindings:
+        - contract: .dev/releases/<version>/release-phase-checks.yaml
+          field: phases
+          literals:
+            - publication
+      contextual_shorthand:
+        aliases:
+          - publication phase
+        allowed_scope: source-release-validation-only
+        forbidden_authority_claims:
+          - publication phase is a read-only validation selector and not mutation authority
+    - term_id: source-release-validation.finalization-phase
+      namespace: source-release-validation
+      qualified_term: hosted finalization validation
+      canonical_owner:
+        path: .dev/standards/AI-CONTEXT-SOURCE-RELEASE-POLICY.md
+        anchor: "## Source Release Validation Phases"
+      distribution: source-only
+      portable_disposition: upstream-only-non-actionable
+      machine_bindings:
+        - contract: .dev/releases/<version>/release-phase-checks.yaml
+          field: phases
+          literals:
+            - finalization
+      contextual_shorthand:
+        aliases:
+          - finalization phase
+        allowed_scope: source-release-validation-only
+        forbidden_authority_claims:
+          - finalization phase is not workflow completion or a source closeout stage
+    - term_id: source-release.historical-exception-closeout
+      namespace: source-release
+      qualified_term: historical/exception release closeout
+      canonical_owner:
+        path: .ai/assets/skills/ai-context-release-closeout/skill.yaml
+        anchor: 'asset_id: "ai-context-release-closeout"'
+      distribution: source-only
+      portable_disposition: upstream-only-non-actionable
+      machine_bindings: []
+      contextual_shorthand:
+        aliases:
+          - release closeout
+        allowed_scope: historical-or-explicit-source-exception-only
+        forbidden_authority_claims:
+          - release closeout is not a normal v0.12-or-later source release stage
+    - term_id: governance.subject-lifecycle
+      namespace: governance
+      qualified_term: governed subject lifecycle
+      canonical_owner:
+        path: .dev/standards/AI-CONTEXT-OWNERSHIP.md
+        anchor: "## Governance Term Routing"
+      distribution: portable
+      portable_disposition: available
+      machine_bindings: []
+      contextual_shorthand:
+        aliases:
+          - lifecycle
+        allowed_scope: same-explicitly-named-governed-subject-only
+        forbidden_authority_claims:
+          - bare lifecycle resolves no workflow, assessment, release, migration, customization, or provider state machine
+    - term_id: capability-selection.subject-candidate
+      namespace: capability-selection
+      qualified_term: subject-qualified capability candidate
+      canonical_owner:
+        path: .dev/standards/AI-CONTEXT-OWNERSHIP.md
+        anchor: "## Governance Term Routing"
+      distribution: portable
+      portable_disposition: available
+      machine_bindings: []
+      contextual_shorthand:
+        aliases:
+          - candidate
+        allowed_scope: same-explicitly-named-skill-provider-or-capability-only
+        forbidden_authority_claims:
+          - a skill or provider candidate has no shared release or migration meaning
 rules:
+  - rule_id: ASSESSMENT-ARTIFACT-001
+    domain: durable-assessment
+    strength: invariant
+    canonical_path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+    canonical_anchor: "rules[rule_id=ASSESSMENT-ARTIFACT-001]"
+    catalog_selector:
+      rule_id: ASSESSMENT-ARTIFACT-001
+    source_governance_provenance:
+      path: .dev/standards/ASSESSMENT-ARTIFACT-POLICY.md
+      anchor: "## Assessment Versus Workflow"
+    scope: universal
+    applicability: an audit, large code review, architecture assessment, or technical-debt inventory is persisted
+    override_policy: forbidden
+    decision_evidence: null
+    derived_consumers:
+      - .ai/assets/skills/ai-context-auditor/references/output-contract.md
+      - .ai/assets/skills/ai-context-governance/references/audit-remediation-lifecycle.md
+      - .ai/assets/skills/code-reviewer/references/output-contract.md
+    status: active
+  - rule_id: AICTX-EVIDENCE-001
+    domain: ai-context-evidence
+    strength: invariant
+    canonical_path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+    canonical_anchor: "rules[rule_id=AICTX-EVIDENCE-001]"
+    catalog_selector:
+      rule_id: AICTX-EVIDENCE-001
+    source_governance_provenance:
+      path: .dev/standards/AI-CONTEXT-BOUNDARY.md
+      anchor: "## Tool-Neutral Evidence Boundary"
+    scope: universal
+    applicability: AI context or repository facts are discovered with optional external tooling
+    override_policy: forbidden
+    decision_evidence: null
+    derived_consumers:
+      - .ai/assets/skills/ai-context-auditor/references/audit-playbook.md
+      - .ai/assets/skills/ai-context-governance/references/context-boundary-playbook.md
+      - .ai/assets/skills/ai-context-init/references/scan-playbook.md
+    status: active
   - rule_id: TEST-GWT-001
     domain: testing
     strength: invariant
-    canonical_path: .dev/standards/coding-standards/test-standards.md
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md
     canonical_anchor: "### 3. Use GWT; Default to BDDfy"
+    catalog_selector:
+      rule_id: TEST-GWT-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: TEST-GWT-001
     scope: dotnet-backend
     applicability: always
     override_policy: forbidden
@@ -13,12 +421,19 @@ rules:
     derived_consumers:
       - .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
       - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+      - .ai/assets/skills/code-reviewer/references/review-routing.yaml
     status: active
   - rule_id: TEST-BDDFY-001
     domain: testing
     strength: profile-default
-    canonical_path: .dev/standards/coding-standards/test-standards.md
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md
     canonical_anchor: "### 3. Use GWT; Default to BDDfy"
+    catalog_selector:
+      rule_id: TEST-BDDFY-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: TEST-BDDFY-001
     scope: dotnet-backend
     applicability: dotnet-backend profile is adopted
     override_policy: explicit-target-decision
@@ -28,12 +443,60 @@ rules:
     derived_consumers:
       - .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
       - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+      - .ai/assets/skills/code-reviewer/references/review-routing.yaml
+    status: active
+  - rule_id: TECH-SELECT-001
+    domain: technology-selection
+    strength: invariant
+    canonical_path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+    canonical_anchor: "rules[rule_id=TECH-SELECT-001]"
+    catalog_selector:
+      rule_id: TECH-SELECT-001
+    source_governance_provenance:
+      path: .dev/standards/TECHNOLOGY-SELECTION-POLICY.md
+      anchor: "## Selection Record"
+    scope: universal
+    applicability: a target records or overrides a framework technology choice
+    override_policy: forbidden
+    decision_evidence: null
+    derived_consumers:
+      - .ai/assets/skills/ai-context-init/references/scan-playbook.md
+      - .ai/assets/skills/ai-context-init/references/document-targets.md
+    status: active
+  - rule_id: TEST-MOCK-001
+    domain: testing
+    strength: profile-default
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md
+    canonical_anchor: "### 6. Mocking Library Selection"
+    catalog_selector:
+      rule_id: TEST-MOCK-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: TEST-MOCK-001
+    scope: dotnet-backend
+    applicability: dotnet-backend profile is adopted and tests require a mocking library
+    override_policy: explicit-target-decision
+    decision_evidence:
+      - .dev/project-config.yaml technologySelections slot testing.mocking
+      - target repository test packages and configuration
+      - target repository collaboration or technology requirements
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
+      - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+      - .ai/assets/skills/code-reviewer/references/review-routing.yaml
     status: active
   - rule_id: ARCH-UOW-001
     domain: aggregate-transaction-boundary
     strength: profile-default
-    canonical_path: .dev/standards/coding-standards/usecase-standards.md
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md
     canonical_anchor: "### 7. Strong Consistency MUST Be Explicit"
+    catalog_selector:
+      rule_id: ARCH-UOW-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: ARCH-UOW-001
     scope: dotnet-backend
     applicability: command use case coordinates aggregate persistence
     override_policy: explicit-target-decision
@@ -42,37 +505,120 @@ rules:
       - documented same-bounded-context consistency decision
     derived_consumers:
       - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+      - .ai/assets/skills/code-reviewer/references/review-routing.yaml
     status: active
   - rule_id: MAP-EVENTS-001
     domain: mapper-event-lifecycle
     strength: invariant
-    canonical_path: .dev/standards/coding-standards/mapper-standards.md
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/mapper-standards.md
     canonical_anchor: "### Pending Domain Events After Reconstruction"
+    catalog_selector:
+      rule_id: MAP-EVENTS-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: MAP-EVENTS-001
     scope: dotnet-backend
     applicability: a mapper reconstructs an aggregate from persisted state
     override_policy: forbidden
     decision_evidence: null
     derived_consumers:
       - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+      - .ai/assets/skills/code-reviewer/references/review-routing.yaml
+    status: active
+  - rule_id: AGGREGATE-ES-001
+    domain: event-sourced-aggregate
+    strength: conditional
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md
+    canonical_anchor: "## Optional `EsAggregateRoot<TId>` Behavior Contract"
+    catalog_selector:
+      rule_id: AGGREGATE-ES-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: AGGREGATE-ES-001
+    scope: dotnet-backend
+    applicability: target Aggregate selects Event Sourcing
+    override_policy: not-applicable
+    decision_evidence:
+      - target Aggregate architecture or persistence profile
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md
+      - .ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD
+      - .ai/assets/skills/code-reviewer/references/review-routing.yaml
+    status: active
+  - rule_id: CONTRACT-SEMANTICS-001
+    domain: design-by-contract
+    strength: invariant
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/DESIGN-BY-CONTRACT.md
+    canonical_anchor: "## Contract Categories"
+    catalog_selector:
+      rule_id: CONTRACT-SEMANTICS-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: CONTRACT-SEMANTICS-001
+    scope: dotnet-backend
+    applicability: Domain or Application behavior declares preconditions, postconditions, or invariants
+    override_policy: forbidden
+    decision_evidence: null
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md
+      - .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md
+      - .ai/assets/skills/code-reviewer/references/review-routing.yaml
+    status: active
+  - rule_id: PROJECT-GRAMMAR-001
+    domain: solution-navigation
+    strength: profile-default
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/project-structure.md
+    canonical_anchor: "### Workload Mapping"
+    catalog_selector:
+      rule_id: PROJECT-GRAMMAR-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: PROJECT-GRAMMAR-001
+    scope: dotnet-backend
+    applicability: target adopts the conditional .slnx project-structure profile
+    override_policy: explicit-target-decision
+    decision_evidence:
+      - target repository project configuration or architecture decision
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md
+      - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
     status: active
   - rule_id: DELETE-SOFT-001
     domain: deletion
-    strength: conditional
-    canonical_path: .dev/standards/coding-standards/aggregate-standards.md
+    strength: profile-default
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md
     canonical_anchor: "### 0. Soft-Delete Default Profile"
+    catalog_selector:
+      rule_id: DELETE-SOFT-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: DELETE-SOFT-001
     scope: dotnet-backend
-    applicability: target repository explicitly adopts aggregate soft deletion
-    override_policy: not-applicable
+    applicability: dotnet-backend Aggregate Repository profile is adopted unless the target explicitly opts out
+    override_policy: explicit-target-decision
     decision_evidence:
+      - .dev/project-config.yaml architecture capability selection
       - target repository requirements or architecture decision
     derived_consumers:
       - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+      - .ai/assets/skills/code-reviewer/references/review-routing.yaml
     status: active
   - rule_id: DELETE-PURGE-001
     domain: deletion
     strength: conditional
-    canonical_path: .dev/standards/coding-standards/archive-standards.md
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/archive-standards.md
     canonical_anchor: "## 📌 Core Concept"
+    catalog_selector:
+      rule_id: DELETE-PURGE-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: DELETE-PURGE-001
     scope: dotnet-backend
     applicability: target repository adopts archive or physical-purge capability
     override_policy: not-applicable
@@ -80,4 +626,5 @@ rules:
       - authorization, retention, legal, audit, and cleanup policy
     derived_consumers:
       - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+      - .ai/assets/skills/code-reviewer/references/review-routing.yaml
     status: active

@@ -1,0 +1,99 @@
+schema_version: "1.0"
+version: "v0.10.0"
+recorded_at: "2026-08-13T10:11:44+08:00"
+status: "finalized"
+structural_candidate_commit: "d5a80b12a3e877fc3fc27dd814f6a9f1204e2380"
+target_starting_commit: "c9cc01790b9692d22c6f7dc8238a13828cbd703d"
+package:
+  release_id: "REL-v0.10.0"
+  commit: "5878f213b50bdbb4b3123a60525cdc206fd5be04"
+  zip_sha256: "e45f88917d6a8d0db798600db414436634ba140a89590acd70a1f26bd5c1e489"
+plans:
+  dry_run_sha256: "e567b74e11f4a7434e86944106e6b4f894d0c736c79f9da4f1d6f915650b20f0"
+  apply_sha256: "e567b74e11f4a7434e86944106e6b4f894d0c736c79f9da4f1d6f915650b20f0"
+  identical: true
+operations:
+  total: 21
+  replace: 16
+  add: 5
+  reconcile: 0
+  ignored_framework_paths: 0
+receipt:
+  sha256: "8056ef55523c20f91228e2c02351b18761f8173e0a2366e8c7bbb133e06b29d0"
+  status: "pending-validation"
+  required_framework_paths: 642
+  applied_operation_ids: 21
+  skipped_reconciliation_ids: 0
+  working_copy_removed_after_finalization: true
+attempts:
+  - id: "sandbox-stock-apply-1"
+    outcome: "failed-and-rolled-back"
+    reason: "Sandbox ACL denied the first write to .agents/skills/README.md."
+    readback: "HEAD unchanged; worktree clean; no receipt; dry/apply plans identical."
+  - id: "outside-sandbox-stock-apply-2"
+    outcome: "passed"
+    result: "All 21 safe operations applied and the 642-path receipt was created."
+  - id: "new-tests-sandbox-1"
+    outcome: "environment-failed"
+    reason: >-
+      Validation-evidence tests could not create nested Windows Temp directories
+      and Git Bash could not create its signal pipe in the sandbox.
+  - id: "new-tests-outside-sandbox-2"
+    outcome: "passed"
+    result: "Validation evidence 5/5 and profile registry 4/4 passed."
+  - id: "candidate-target-gate-1"
+    outcome: "failed"
+    reason: >-
+      The new validation-profile-registry.sh was not yet staged, so shell asset
+      validation could not observe its required Git mode 100755.
+    disposition: "Stage the package-required executable mode and rerun."
+  - id: "candidate-target-gate-2"
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 34.7
+    result: >-
+      Receipt validation, target readiness, workflow/dependency/assessment/shell
+      validators, 14 prerequisite tests, 5 evidence tests, 4 profile tests,
+      18 effective-rule tests with two Windows privilege skips, 3 action-skill
+      tests, 20 target overlay tests, and the complete 27-commit policy range passed.
+  - id: "post-candidate-commit-policy-1"
+    outcome: "passed"
+    result: >-
+      The target Git commit policy passed all 28 main..HEAD commits after the
+      structural candidate was committed as d5a80b12a3e877fc3fc27dd814f6a9f1204e2380.
+package_projection:
+  status: "blocked-by-package-projection"
+  active_defect_id: "AICU-V010-PROJECTION-001"
+  carried_documentation_defect_id: "AICU-V090-DOC-001"
+  evidence:
+    - >-
+      test_ai_context_package_smoke.py imports absent source-only
+      test_ai_context_packaging.py and fails before running tests.
+    - >-
+      Stock validator and source-entrypoint/colocation/semantic tests continue
+      to require omitted source context.
+    - >-
+      Registry now declares 13 portable and 14 source-only entrypoints; only the
+      retained compare helper exists in the target, leaving 13 source-only paths absent.
+    - >-
+      The closeout profile and guide index reference absent source-only closeout
+      test, CLI, and human guide assets.
+  disposition: >-
+    Preserve exact framework bytes, keep the version-pinned target-applicable
+    gate, and do not claim a stock profile or stock check-all pass.
+settings:
+  validation_routine_local: "manual"
+  validation_routine_ci: "unconfigured"
+  stock_profile_activation: false
+  evidence_reuse_activation: false
+  provider_activation: false
+independent_audit:
+  assessment_id: "ASM-20260813-003"
+  subject_commit: "3388f25e1ac6cf31f69b39afdd8a762d9ef397f2"
+  verdict: "safe-to-finalize"
+  target_gate_duration_seconds: 36.3
+  commit_range_count: 30
+  blockers: []
+next_action: >-
+  Begin v0.11 exact-predecessor planning from the resulting clean
+  lifecycle-synchronization HEAD; v0.10 authority is finalized at checkpoint
+  d8cff8214121128f43d3daec75836c1147bb642a.

@@ -83,6 +83,17 @@ When no explicit profile exists, or when the profile does not cover a capability
 - For `test-execution`, use target-owned commands, working directory,
   prerequisites, and policy. Record one exact supported outcome per selected
   level; never count `blocked-by-environment` as passed.
+- For a `release`, `nightly-full`, full-matrix, or at-least-120-second
+  validation, finish local mutations and focused checks, pin a clean immutable
+  commit, then dispatch the exact command to the least expensive capable
+  external runtime task. Build the prompt and terminal report from the canonical
+  external-task delegation schema and templates. Select a source-task callback
+  or one parent event wait; do not poll from the primary conversation. A
+  terminal callback failure may use one schema-valid terminal read-back, while
+  a parent wait timeout remains pending rather than passed or failed. Before
+  delivery, the delegated task persists the dispatch and completed report in
+  ignored artifacts, validates that exact pair with the canonical validator,
+  and sends the validated completion record without modifying it.
 - Treat spec compliance as unselected and `not-applicable` unless a target
   profile, problem-frame workflow, requirement, or owner decision selects it.
   Once selected, incomplete configuration or coverage below 100% fails closed.
@@ -109,3 +120,29 @@ When handing a stage to another skill or sub-agent, include:
    test execution is selected;
 7. validation expected before returning;
 8. approval state and the decision that would pause or resume execution.
+
+For a separate runtime task, also include the single marked dispatch envelope
+defined by `../templates/external-task-delegation.schema.yaml`. Do not rely on
+free-form prose to identify the source task or terminal delivery route. Bind
+the ignored dispatch/completion artifact references and canonical pre-send
+validator argument vector in that envelope.
+
+## Role Execution Handoff and Aggregation
+
+When a selected stage has an applicable canonical sub-agent role, the owning
+skill—not this orchestrator—loads the role manifest and mandatory references,
+then produces the complete provider-neutral `role_execution` record defined in
+`../../../shared/ROLE-EXECUTION-CONTRACT.md`.
+
+Include the role record or its durable task reference in the handoff. The
+orchestrator aggregates records by `stage_id`, checks disposition, genuine
+delegation evidence, attempts, fallback, and final integration decision, then
+keeps the owning skill's domain output intact. It must not infer a role result
+from routing metadata or a runtime adapter.
+
+Use `direct` by default. Delegation requires every shared safety gate, one or
+more material-value triggers, a `supports-delegation` risk result, and a real
+child invocation. If that route is unavailable but the parent can apply the
+same role contract inline, select `direct`; otherwise select `unavailable`.
+The existing `loaded_rule_ids` packet may be cited as an input source, without
+changing its semantics.

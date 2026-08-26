@@ -1,5 +1,5 @@
-schema_version: "1.2"
-profile_id: "ai-collaboration-prompts-dotnet-backend"
+schema_version: "1.4"
+profile_id: "ai-collaboration-framework"
 status: "active"
 allowed_slots: [workflow-orchestration, requirements, specification, problem-framing, architecture, test-design, implementation, local-change, test-execution, review, compliance-validation]
 required_slots: [workflow-orchestration, requirements, specification, problem-framing, architecture, test-design, implementation, local-change, review, compliance-validation]
@@ -20,6 +20,31 @@ capability_contracts:
     default_levels: [unit, integration]
     conditional_levels: [e2e, browser, playwright, environment-dependent]
     outcomes: [passed, failed, blocked-by-environment, not-applicable, deferred-with-owner]
+    long_running:
+      threshold_seconds: 120
+      always_external_profiles: [release, nightly-full]
+      always_external_scopes: [full-matrix]
+      dispatch_preconditions: [tracked-mutations-complete, focused-validation-complete, clean-immutable-commit, exact-command-bounded]
+      execution_surface: separate-external-runtime-task
+      executor_cost_policy: least-expensive-capable
+      primary_conversation_wait_policy: no-repeated-polling
+      completion_signal: one-final-report
+      allowed_write_scope: [ignored-validation-artifacts]
+      non_passing: [timeout, interrupted, missing-completion-evidence, blocked]
+      delegation_contract:
+        schema: .ai/assets/skills/software-development-orchestrator/templates/external-task-delegation.schema.yaml
+        dispatch_template: .ai/assets/skills/software-development-orchestrator/templates/external-task-dispatch.template.yaml
+        completion_template: .ai/assets/skills/software-development-orchestrator/templates/external-task-completion.template.yaml
+        validator: .ai/assets/skills/software-development-orchestrator/scripts/validate-external-task-delegation.py
+        prompt_envelope: [BEGIN_EXTERNAL_TASK_DELEGATION, END_EXTERNAL_TASK_DELEGATION]
+        completion_envelope: [BEGIN_EXTERNAL_TASK_COMPLETION, END_EXTERNAL_TASK_COMPLETION]
+        source_task_identity: explicit-or-runtime-injected
+        primary_delivery_modes: [source-task-callback, parent-event-wait]
+        fallback_delivery_modes: [parent-event-wait, single-terminal-readback]
+        parent_wait_timeout_state: pending-awaiting-completion
+        pre_send_completion_validation: required
+        callback_payload: exact-validated-completion-record
+      parallelization_requires: [dependency-dag, artifact-isolation, bounded-concurrency, deterministic-evidence, fail-closed-cancellation]
 orchestration_contract:
   activation:
     intent_class: high-level-multi-stage-software-development
@@ -33,6 +58,20 @@ orchestration_contract:
     default_selected: false
     unselected_outcome: not-applicable
     selected_gate: 100-percent-fail-closed-with-evidence
+  routine_validation:
+    authority: .dev/project-config.yaml#validation.routine
+    local_default: manual
+    local_modes: [manual, auto-if-ready, required]
+    local_opt_in: .dev/validation.local.conf
+    local_opt_in_rule: strict-one-line-validation.routine.local
+    local_opt_in_can_only_strengthen: true
+    environment_override: prohibited
+    implicit_local_write: prohibited
+    ci_default: unconfigured
+    ci_modes: [unconfigured, advisory, required]
+    unselected_projection: { outcome: not-applicable, selection_reason: not-run-by-policy }
+    attempt_budget: { unselected: 0, selected_preflight: 1, initial_execution: 1, retry_after_material_change: 1, ci_observations: 2 }
+    unaffected: [explicit-cli, install, apply, init, upgrade, provenance, governance, release, publication]
   commit:
     checkpoint_unit: validated-durable-stage-or-coherent-bounded-batch
     per_skill_invocation_commits: prohibited
@@ -51,3 +90,11 @@ orchestration_contract:
     - task-state
     - commits
     - branch-and-handoff
+  role_execution:
+    contract: .ai/assets/shared/ROLE-EXECUTION-CONTRACT.md
+    producer: owning-skill
+    aggregator: software-development-orchestrator
+    direct_default: true
+    dispositions: [direct, delegated, unavailable, not-applicable]
+    delegated_requires: [all-safety-gates, material-value-trigger, supports-delegation-risk-result, genuine-invocation-evidence]
+    no_delegation_runtime: direct-when-inline-parity-satisfiable

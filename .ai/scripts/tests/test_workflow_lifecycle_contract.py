@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 import unittest
+from datetime import datetime
 from pathlib import Path
 
 
@@ -63,6 +64,66 @@ class WorkflowLifecycleContractTests(unittest.TestCase):
             errors,
         )
         self.assertEqual([], errors)
+
+    def test_gwt_007_given_new_task_without_model_when_validated_then_fails(self) -> None:
+        errors: list[str] = []
+        value = {"status": "pending"}
+        observed = datetime.fromisoformat("2026-07-27T10:00:00+08:00")
+        VALIDATOR.validate_task_execution_provenance(
+            value, "task.json", errors, observed, observed
+        )
+        self.assertTrue(any("model must be a non-empty string" in error for error in errors))
+        self.assertTrue(any("reasoning_effort must be a non-empty string" in error for error in errors))
+
+    def test_gwt_008_given_historical_active_task_updated_after_policy_when_missing_provenance_then_fails(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_task_execution_provenance(
+            {"status": "in_progress"},
+            "task.json",
+            errors,
+            datetime.fromisoformat("2026-07-20T10:00:00+08:00"),
+            datetime.fromisoformat("2026-07-27T10:00:00+08:00"),
+        )
+        self.assertTrue(errors)
+
+    def test_gwt_009_given_completed_historical_task_when_updated_after_policy_then_no_backfill_is_required(self) -> None:
+        errors: list[str] = []
+        VALIDATOR.validate_task_execution_provenance(
+            {"status": "completed"},
+            "task.json",
+            errors,
+            datetime.fromisoformat("2026-07-20T10:00:00+08:00"),
+            datetime.fromisoformat("2026-07-27T10:00:00+08:00"),
+        )
+        self.assertEqual([], errors)
+
+    def test_gwt_010_given_provider_original_values_when_validated_then_passes(self) -> None:
+        errors: list[str] = []
+        observed = datetime.fromisoformat("2026-07-27T10:00:00+08:00")
+        VALIDATOR.validate_task_execution_provenance(
+            {
+                "status": "in_progress",
+                "model": "claude-sonnet-5",
+                "reasoning_effort": "extended thinking",
+            },
+            "task.json",
+            errors,
+            observed,
+            observed,
+        )
+        self.assertEqual([], errors)
+
+    def test_gwt_011_given_nested_development_locator_when_parsed_then_continuation_is_a_mapping(self) -> None:
+        path = (
+            REPO_ROOT
+            / ".ai/assets/skills/software-development-orchestrator/templates/workflow-locator-template.yaml"
+        )
+        errors: list[str] = []
+        locator = VALIDATOR.parse_yaml_mapping(path, "workflow-locator-template.yaml", errors)
+
+        self.assertEqual([], errors)
+        self.assertIsInstance(locator, dict)
+        self.assertEqual("<current-task-id>", locator["continuation"]["current_task_id"])
 
 
 if __name__ == "__main__":

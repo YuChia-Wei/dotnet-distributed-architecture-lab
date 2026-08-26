@@ -16,8 +16,16 @@ from typing import Iterable
 
 import yaml
 
+from ai_context_target_provenance import (
+    TargetValidationError,
+    framework_managed_ignore_message,
+    git_ignore_rule,
+)
+
 
 VERSION_RE = re.compile(r"^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
+COMPONENT_PACKAGE_SCHEMAS = {"2.0.0", "2.1.0", "2.2.0"}
+IDENTITY_PACKAGE_SCHEMAS = {"1.1.0", "2.1.0", "2.2.0"}
 
 
 class ApplyError(ValueError):
@@ -40,6 +48,8 @@ DEFAULT_COMPONENT_SELECTION = {
 }
 LEGACY_COMPONENT_SELECTION = deepcopy(DEFAULT_COMPONENT_SELECTION)
 LEGACY_COMPONENT_SELECTION["providers"]["repo-backlog"]["enabled"] = True
+TARGET_EFFECTIVE_STATE_PATH = ".dev/ai-context/effective-rules.yaml"
+TARGET_EFFECTIVE_PACKET_DIRECTORY = ".dev/ai-context/effective-rule-packets"
 
 
 @dataclass(frozen=True)
@@ -69,6 +79,14 @@ def safe_path(value: object, label: str) -> str:
     if path.is_absolute() or any(part in {"", ".", ".."} for part in path.parts):
         raise ApplyError(f"unsafe {label}: {value!r}")
     return path.as_posix()
+
+
+def is_target_effective_rule_path(path: str) -> bool:
+    """Keep target-effective state and packets outside framework package control."""
+    return (
+        path in {TARGET_EFFECTIVE_STATE_PATH, TARGET_EFFECTIVE_PACKET_DIRECTORY}
+        or path.startswith(f"{TARGET_EFFECTIVE_PACKET_DIRECTORY}/")
+    )
 
 
 def load_yaml(path: Path, label: str) -> dict:
@@ -278,7 +296,7 @@ def resolve_effective_selection(
     package_schema = package.get("schema_version")
     default = (
         validate_component_selection(package.get("selection"), "package selection")
-        if package_schema == "2.0.0"
+        if package_schema in COMPONENT_PACKAGE_SCHEMAS
         else deepcopy(LEGACY_COMPONENT_SELECTION)
     )
     resolved = deepcopy(default)
@@ -291,13 +309,13 @@ def resolve_effective_selection(
                 if requested
                 else (
                     "clean-install-default"
-                    if package_schema == "2.0.0"
+                    if package_schema in COMPONENT_PACKAGE_SCHEMAS
                     else "legacy-package-contract"
                 )
             ),
             "evidence": [
                 "metadata/package.yaml#selection"
-                if package_schema == "2.0.0"
+                if package_schema in COMPONENT_PACKAGE_SCHEMAS
                 else "legacy-package-schema"
             ]
             + [f"cli:--enable-provider={provider}" for provider in requested],
@@ -425,6 +443,7 @@ def validate_package_root(package_root: Path) -> tuple[dict, dict[str, dict], di
             raise ApplyError(f"missing extracted package metadata: {path.name}")
     package = load_yaml(package_path, "package.yaml")
     files_bytes = files_path.read_bytes()
+    migration_bytes = migration_path.read_bytes()
     inventory = load_yaml(files_path, "files.yaml")
     migration = load_yaml(migration_path, "migration.yaml")
     package_id = package.get("package_id")
@@ -433,9 +452,9 @@ def validate_package_root(package_root: Path) -> tuple[dict, dict[str, dict], di
     if inventory.get("package_id") != package_id or migration.get("package_id") != package_id:
         raise ApplyError("package identity mismatch")
     package_schema = package.get("schema_version")
-    if package_schema not in {"1.0.0", "2.0.0"}:
+    if package_schema not in {"1.0.0", "1.1.0", *COMPONENT_PACKAGE_SCHEMAS}:
         raise ApplyError(f"unsupported package schema version: {package_schema!r}")
-    if package_schema == "2.0.0":
+    if package_schema in COMPONENT_PACKAGE_SCHEMAS:
         selection = package.get("selection")
         if not isinstance(selection, dict):
             raise ApplyError("package selection must be a mapping")
@@ -456,6 +475,39 @@ def validate_package_root(package_root: Path) -> tuple[dict, dict[str, dict], di
     to_data = migration.get("to")
     if not isinstance(to_data, dict) or to_data.get("manifest_sha256") != manifest_sha:
         raise ApplyError("migration target manifest SHA does not match files.yaml")
+    if package_schema in IDENTITY_PACKAGE_SCHEMAS:
+        source = package.get("source")
+        identity = package.get("identity")
+        if not isinstance(source, dict) or not all(
+            isinstance(source.get(key), str)
+            and len(source[key]) == 40
+            and all(char in "0123456789abcdef" for char in source[key])
+            for key in ("commit", "tree")
+        ):
+            raise ApplyError("package source identity requires commit and tree SHA")
+        if not isinstance(identity, dict) or identity.get("schema_version") != "1.0.0":
+            raise ApplyError("package identity schema is missing or unsupported")
+        payload_fingerprint = sha256_bytes(
+            "".join(
+                f"{record['sha256']}  {relative}\n"
+                for relative, record in sorted(
+                    records.items(), key=lambda item: item[0].encode("utf-8")
+                )
+            ).encode("utf-8")
+        )
+        expected_identity = {
+            "payload_fingerprint": payload_fingerprint,
+            "files_manifest_digest": manifest_sha,
+            "migration_digest": sha256_bytes(migration_bytes),
+        }
+        for key, value in expected_identity.items():
+            if identity.get(key) != value:
+                raise ApplyError(f"package identity {key} does not match package bytes")
+        selected = identity.get("selected_input_fingerprint")
+        if not isinstance(selected, str) or len(selected) != 64 or any(
+            char not in "0123456789abcdef" for char in selected
+        ):
+            raise ApplyError("package identity selected_input_fingerprint is invalid")
     return package, records, migration, manifest_sha
 
 
@@ -587,8 +639,19 @@ def migration_selection(
     raise ApplyError(f"unsupported migration schema version: {schema_version!r}")
 
 
-def state_matches(state: FileState, record: dict) -> bool:
-    return state.exists and state.sha256 == record.get("sha256") and state.mode == record.get("mode")
+def state_matches(root: Path, state: FileState, record: dict) -> bool:
+    if not state.exists or state.sha256 != record.get("sha256"):
+        return False
+    if state.mode == record.get("mode"):
+        return True
+    filemode = run_git(root, "config", "--bool", "core.filemode")
+    if filemode.returncode != 0 or filemode.stdout.strip() not in {"true", "false"}:
+        raise ApplyError("cannot determine target Git core.filemode")
+    return (
+        filemode.stdout.strip() == "false"
+        and state.mode == "0644"
+        and record.get("mode") == "0755"
+    )
 
 
 def observation(paths: Iterable[str], target: Path) -> dict[str, dict]:
@@ -598,6 +661,56 @@ def observation(paths: Iterable[str], target: Path) -> dict[str, dict]:
         state = file_state(target, path)
         result[path] = {"exists": state.exists, "sha256": state.sha256, "mode": state.mode}
     return result
+
+
+def required_framework_paths(incoming: dict[str, dict]) -> list[dict]:
+    """Bind selected framework-managed package bytes to the pending receipt."""
+    required: list[dict] = []
+    for path in sorted(incoming, key=lambda item: item.encode("utf-8")):
+        record = incoming[path]
+        if record.get("ownership") != "framework-managed":
+            continue
+        component_id = record.get("component_id")
+        if not isinstance(component_id, str) or not component_id:
+            continue
+        required.append(
+            {
+                "path": path,
+                "component_id": component_id,
+                "ownership": "framework-managed",
+                "sha256": record["sha256"],
+            }
+        )
+    return required
+
+
+def ignored_framework_paths(target: Path, required: list[dict]) -> list[dict]:
+    """Expose target-owned Git ignores without choosing an owner disposition."""
+    unresolved: list[dict] = []
+    for item in required:
+        path = item["path"]
+        component_id = item["component_id"]
+        try:
+            rule = git_ignore_rule(target, path)
+        except TargetValidationError as exc:
+            raise ApplyError(str(exc)) from exc
+        if rule is None:
+            continue
+        unresolved.append(
+            {
+                "path": path,
+                "component_id": component_id,
+                "ownership": "framework-managed",
+                "ignore_rule": rule,
+                "owner_dispositions": [
+                    "preserve-target-rule",
+                    "add-narrow-exception",
+                    "disable-component",
+                    "pending-owner-decision",
+                ],
+            }
+        )
+    return unresolved
 
 
 def build_plan(
@@ -617,7 +730,7 @@ def build_plan(
     )
     default_selection = (
         validate_component_selection(package.get("selection"), "package selection")
-        if package.get("schema_version") == "2.0.0"
+        if package.get("schema_version") in COMPONENT_PACKAGE_SCHEMAS
         else deepcopy(LEGACY_COMPONENT_SELECTION)
     )
     resolved_selection, selection_resolution = resolve_effective_selection(
@@ -629,6 +742,9 @@ def build_plan(
     selected_components = enabled_components(resolved_selection)
     incoming = filter_component_records(incoming, selected_components)
     previous = filter_component_records(previous, selected_components)
+    required_paths = required_framework_paths(incoming)
+    ignored_paths = ignored_framework_paths(target, required_paths)
+    ignored_by_path = {item["path"]: item for item in ignored_paths}
     skipped_by_selection = [
         raw
         for raw in operations
@@ -680,8 +796,10 @@ def build_plan(
                 ".dev/AI-CONTEXT-APPLY-PENDING.yaml",
                 ".dev/ai-context/provenance.yaml",
                 ".dev/ai-context/customizations.yaml",
-            }:
-                raise ApplyError(f"migration cannot manage provenance or pending receipt: {candidate}")
+            } or (candidate is not None and is_target_effective_rule_path(candidate)):
+                raise ApplyError(
+                    f"migration cannot manage provenance, pending receipt, or target effective state: {candidate}"
+                )
             if candidate is not None:
                 owner = touched_paths.get(candidate)
                 if owner is not None:
@@ -748,7 +866,7 @@ def build_plan(
                 raise ApplyError(f"replace requires managed incoming and previous records: {path}")
             if incoming[path].get("ownership") != "framework-managed" or previous[path].get("ownership") != "framework-managed":
                 raise ApplyError(f"replace inventory ownership must be framework-managed: {path}")
-            if not state_matches(current, previous[path]):
+            if not state_matches(target, current, previous[path]):
                 action, reason = "reconcile", "current hash or mode differs from previous release"
         elif kind == "remove":
             if item["ownership"] != "framework-managed" or path not in previous:
@@ -757,7 +875,7 @@ def build_plan(
                 raise ApplyError(f"remove previous ownership must be framework-managed: {path}")
             if not current.exists:
                 action, reason = "noop", "path is already absent"
-            elif not state_matches(current, previous[path]):
+            elif not state_matches(target, current, previous[path]):
                 action, reason = "reconcile", "current hash or mode differs from previous release"
         elif kind == "rename":
             if item["ownership"] != "framework-managed" or source not in previous or path not in incoming:
@@ -765,12 +883,18 @@ def build_plan(
             if previous[source].get("ownership") != "framework-managed" or incoming[path].get("ownership") != "framework-managed":
                 raise ApplyError(f"rename inventory ownership must be framework-managed: {operation_id}")
             source_state = FileState(**observed[source])
-            if not state_matches(source_state, previous[source]):
+            if not state_matches(target, source_state, previous[source]):
                 action, reason = "reconcile", "rename source hash or mode differs from previous release"
             elif current.exists:
                 action, reason = "reconcile", "rename destination already exists"
         else:
             action, reason = "reconcile", "migration explicitly requires reconciliation"
+        ignored = ignored_by_path.get(path)
+        if ignored is not None:
+            action = "unresolved"
+            reason = framework_managed_ignore_message(
+                path, ignored["component_id"], ignored["ignore_rule"]
+            )
         planned.append({**item, "action": action, "reason": reason})
     would_apply = [
         item
@@ -778,10 +902,12 @@ def build_plan(
         if item["action"] in {"add", "replace", "remove", "rename"}
     ]
     would_skip = [
-        item for item in planned if item["action"] in {"noop", "reconcile"}
+        item
+        for item in planned
+        if item["action"] in {"noop", "reconcile", "unresolved"}
     ]
     return {
-        "schema_version": "1.0.0",
+        "schema_version": "1.1.0",
         "package_id": package["package_id"],
         "package_version": package.get("version"),
         "package_manifest_sha256": manifest_sha,
@@ -805,6 +931,8 @@ def build_plan(
                 [*would_skip, *skipped_by_selection]
             ),
         },
+        "required_framework_paths": required_paths,
+        "ignored_framework_paths": ignored_paths,
         "observed": observed,
         "operations": planned,
     }
@@ -852,6 +980,18 @@ def apply_plan(plan: dict, acknowledgements: set[str] | None = None) -> dict:
     incoming = filter_component_records(
         incoming, enabled_components(resolved_selection)
     )
+    required_paths = required_framework_paths(incoming)
+    if required_paths != plan.get("required_framework_paths"):
+        raise ApplyError("required framework-managed path identity changed after planning")
+    current_ignored = ignored_framework_paths(target, required_paths)
+    if current_ignored != plan.get("ignored_framework_paths"):
+        raise ApplyError("target Git ignore rules changed after planning")
+    if current_ignored:
+        paths = [item["path"] for item in current_ignored]
+        raise ApplyError(
+            "unresolved target Git ignore rules for selected framework-managed paths: "
+            f"{paths}; owner must choose a recorded disposition before apply"
+        )
     current_observed = observation(plan.get("observed", {}).keys(), target)
     if current_observed != plan.get("observed"):
         raise ApplyError("target file state changed after planning")
@@ -893,7 +1033,7 @@ def apply_plan(plan: dict, acknowledgements: set[str] | None = None) -> dict:
                 write_payload(package_root, target, path, incoming[path])
         receipt_path.parent.mkdir(parents=True, exist_ok=True)
         receipt = {
-            "schema_version": "1.0.0",
+            "schema_version": "1.1.0",
             "status": "pending-validation",
             "package_id": package["package_id"],
             "package_version": package.get("version"),
@@ -908,6 +1048,7 @@ def apply_plan(plan: dict, acknowledgements: set[str] | None = None) -> dict:
                 "applied": count_components(active),
                 "skipped": plan["component_operation_counts"]["would_skip"],
             },
+            "required_framework_paths": required_paths,
             "provenance_updated": False,
         }
         receipt_path.write_text(yaml.safe_dump(receipt, sort_keys=False), encoding="utf-8", newline="\n")

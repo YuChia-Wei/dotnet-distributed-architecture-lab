@@ -46,6 +46,28 @@ workflow directories, ignored paths, generated output, or external caches.
 Evidence files must remain bounded to the assessment and must not duplicate
 large repository content.
 
+### External Evidence Byte Preservation
+
+Ordinary assessment evidence is repository text: keep it normalized, diffable,
+and reviewable. External origin alone does not authorize binary treatment.
+
+When exact source bytes are material evidence, store the unchanged original
+under:
+
+```text
+.dev/assessments/<assessment-id>/evidence/external/original/<source-id>/<file>
+```
+
+The source root `.gitattributes` centrally classifies that convention as
+`binary`, so Git preserves the committed bytes without line-ending
+normalization. Record the origin and SHA-256 in the assessment report or
+evidence catalog, and place any normalized, excerpted, or annotated derivative
+outside `external/original/` so it remains text-diffable.
+
+Do not add per-assessment `.gitattributes` files or new path-specific root
+exceptions. The exact legacy WorkService report retained by ADR-001 is the only
+compatibility exception; new immutable originals must use the convention.
+
 ## Assessment Identity
 
 Use:
@@ -92,7 +114,7 @@ The assessment commit SHA is not required inside the initial locator because it
 does not exist until after the locator is committed. Find artifact commits by
 the stable assessment ID in Git history.
 
-## Lifecycle
+## Assessment Lifecycle
 
 Use these states:
 
@@ -111,6 +133,10 @@ draft -> final -> superseded
 - Updating only locator lifecycle relationships does not rewrite the final
   report. Do not silently edit final report conclusions.
 - Use `<assessment-id>#<finding-id>` for durable finding references.
+
+`status: final` means assessment final: the report conclusions and finding IDs
+are frozen. It does not mean workflow completion, release finalization, hosted
+publication, or authority to remediate a finding.
 
 ## Branch Contract
 
@@ -141,7 +167,7 @@ Add this trailer before any required `Co-Authored-By` trailers:
 
 ```text
 Assessment-Id: ASM-20260713-001
-Co-Authored-By: <AI runtime/model> <noreply@provider-domain>
+Co-Authored-By: <AI runtime> (<model>, <reasoning_effort>) <noreply@provider-domain>
 ```
 
 Downstream workflow, backlog, ADR, remediation, or verification commits may
@@ -165,6 +191,37 @@ when the commit message and assessment artifact are preserved.
   and workflow. It does not overwrite the baseline.
 - An adopted decision may reference an assessment from an ADR or standard, but
   the assessment remains evidence rather than normative truth.
+
+## External Review Intake
+
+External reviewers may use their own structure, language, methodology, and
+finding identifiers. Do not require a reviewer on another host or runtime to
+instantiate this repository's locator or report templates before giving an
+independent opinion.
+
+Before external claims become durable backlog, workflow, policy, or release
+evidence, the receiving agent must:
+
+1. create a repo-native assessment on the applicable assessment or active
+   governance workflow branch;
+2. preserve a raw external package without rewriting it under
+   `.dev/assessments/<assessment-id>/evidence/external/original/<source-id>/`
+   when exact bytes are material evidence; otherwise retain bounded, attributed
+   ordinary evidence as text;
+3. pin the repository subject commit and reproduce every material claim with
+   repository-native evidence;
+4. record confirmed, added, downgraded, and overturned claims in `report.md`;
+5. assign stable `<assessment-id>#<finding-id>` identifiers;
+6. reference only those stable identifiers from backlog and remediation
+   artifacts; and
+7. catalog the raw source and normalized assessment in
+   `.dev/assessments/INDEX.MD`.
+
+The raw package is attributed evidence, not a second assessment locator,
+normative truth, or write authorization. If a claim cannot be reproduced,
+retain it as external context with its uncertainty; do not silently promote it
+to a repository finding. The receiving agent owns normalization, so external
+reviewers remain free to optimize for a genuinely different point of view.
 
 ## Template And Time Metadata
 

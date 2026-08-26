@@ -14,6 +14,7 @@ This is a thin Claude-compatible wrapper.
 - Human Guide: `.dev/guides/ai-collaboration-guides/PROBLEM-FRAME-AUTHORING-GUIDE.md`
 - References:
   - `.ai/assets/skills/problem-frame-author/references/authoring-playbook.md`
+  - `.ai/assets/skills/problem-frame-author/references/role-execution.md`
   - `.ai/assets/skills/problem-frame-author/references/source-mapping.md`
   - `.ai/assets/skills/problem-frame-author/references/output-contract.md`
 

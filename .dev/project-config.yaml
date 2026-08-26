@@ -77,22 +77,11 @@ dotnet:
       kind: test
     - path: tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj
       kind: test
-    - path: tools/DotnetBackendAnalyzers/DotnetBackendAnalyzers.csproj
-      kind: analyzer-library
-    - path: tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj
-      kind: test
-    - path: tools/DotnetBackendValidation/DotnetBackendValidation.csproj
-      kind: validation-library
-    - path: tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj
-      kind: test
 sourceLayout:
   sourceRoots:
     - src
-    - tools
   testRoots:
     - tests
-    - tools/DotnetBackendAnalyzers.Tests
-    - tools/DotnetBackendValidation.Tests
   executableProjects:
     - src/Product/Presentation/SaleProducts.WebApi
     - src/Product/Presentation/SaleProducts.Consumer
@@ -107,8 +96,6 @@ sourceLayout:
     - src/Product/DomainCore
     - src/Order/DomainCore
     - src/Inventory/DomainCore
-    - tools/DotnetBackendAnalyzers
-    - tools/DotnetBackendValidation
 runtimeHosts:
   - name: SaleProducts.WebApi
     type: aspnet-core-web-api
@@ -128,6 +115,20 @@ runtimeHosts:
   - name: InventoryControl.Consumer
     type: dotnet-generic-host-consumer
     boundedContext: Inventory
+workManagement:
+  provider: github
+  workItemBinding:
+    mode: required
+    purposes:
+      - traceability
+      - work-authorization
+    mergeGate: required
+validation:
+  routine:
+    local:
+      mode: manual
+    ci:
+      mode: unconfigured
 architecture:
   styles:
     - Domain-Driven Design
@@ -184,19 +185,25 @@ technologySelections:
       - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
     reason: Existing bounded-context test projects use different established mocking libraries.
   - slot: testing.bdd-runner
-    value: unresolved
-    status: unresolved
-    source: repository-evidence
+    value: plain xUnit with Given-When-Then semantics
+    status: selected
+    source: explicit-target-decision
     evidence:
-      - tests
-    reason: No dedicated BDD runner package is selected by current test project files.
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+      - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
+      - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
+      - tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj
+      - tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj
+    reason: >-
+      The target explicitly opts out of BDDfy and retains plain xUnit while
+      preserving mandatory Given-When-Then semantics and recognizable step names.
   - slot: persistence.orm
     value: Dapper
     status: selected
     source: repository-evidence
     evidence:
       - src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj
-    reason: Product persistence uses Dapper; EF Core is limited to validation tooling.
+    reason: Product persistence uses Dapper; no active target project uses EF Core.
   - slot: persistence.database
     value: PostgreSQL
     status: selected
@@ -248,7 +255,6 @@ evidence:
     - MQArchLab.slnx
     - src/**/**.csproj
     - tests/**/**.csproj
-    - tools/**/**.csproj
     - src/BC-Contracts
     - src/Product
     - src/Order
@@ -256,6 +262,8 @@ evidence:
     - docker-compose/docker-compose.yml
   confirmedByUser:
     - AI context was refreshed and may have replaced repository-specific truth.
+    - The active target analyzer and runtime-validation projects were fully retired during the owner-approved v0.9 AI-context upgrade.
+    - v0.13 removed the bundled mechanical-validation provider; the remaining on-demand mechanical-validation assets are reference-only recipes that are not selected, activated, or wired into the target solution or build.
 unresolved:
   facts:
     - Exact business ownership of every Consumer subscription is not fully documented.
@@ -263,7 +271,5 @@ unresolved:
     - products.integration.events is configured, but no current Product use case is confirmed to publish a product integration event.
     - Retry, dead-letter, replay, and idempotency policy is incomplete.
     - Inventory has no checked-in test project.
-    - Tool test projects are not included in MQArchLab.slnx.
   decisions:
     - Decide whether RabbitMQ remains a maintained runtime profile or only compatibility guidance.
-    - Decide whether analyzer and validation projects should join the main solution.

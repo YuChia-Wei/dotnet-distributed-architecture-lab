@@ -5,7 +5,7 @@ It is not a catalog of a complete package or a promise that every historical
 class should be recreated.
 
 Read the
-[BuildingBlocks Reconstruction Contract](../../../../../.dev/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md)
+[BuildingBlocks Reconstruction Contract](../standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md)
 before selecting a type. Target implementations and namespaces remain
 target-owned.
 
@@ -18,7 +18,7 @@ Rule ID: `AGGREGATE-ES-001`.
 | `IDomainEntity<TId>` | interface | optional when reusable identity marking is useful | [source include](../source-includes/domain/IDomainEntity.cs) |
 | `IAggregateRoot<TId>` | interface | canonical Aggregate marker | [source include](../source-includes/domain/IAggregateRoot.cs) |
 | `IDomainEvent` | interface | canonical event marker | [source include](../source-includes/domain/IDomainEvent.cs) |
-| `EsAggregateRoot<TId>` | optional abstract class | only approved default-profile base class | [source include](../source-includes/domain/EsAggregateRoot.cs) and [behavior contract](../../../../../.dev/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md#optional-esaggregateroottid-behavior-contract) |
+| `EsAggregateRoot<TId>` | optional abstract class | only approved default-profile base class | [source include](../source-includes/domain/EsAggregateRoot.cs) and [behavior contract](../standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md#optional-esaggregateroottid-behavior-contract) |
 
 Normal Aggregates implement `IAggregateRoot<TId>` directly. Entities may express
 identity directly or implement `IDomainEntity<TId>`. Value Objects prefer
@@ -64,12 +64,12 @@ Kafka, RabbitMQ, or an observability library must come from target evidence.
 ## Historical Names
 
 Names such as `Input`, `ExitCode`, `CqrsOutput`, `MessageProducer`,
-`OutboxRepositoryPeer`, `InMemoryOrmDb`, `MessageDbClient`, BDDfy, and uContract
-originated in Java/EzDDD or lab-specific designs. They may still be useful
-concepts, but they are not active canonical type requirements.
+`OutboxRepositoryPeer`, `InMemoryOrmDb`, and `MessageDbClient` originated in
+historical or lab-specific designs. They may still be useful concepts, but they
+are not active canonical type requirements.
 
 Use the provenance matrix in the
-[reconstruction contract](../../../../../.dev/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md#provenance-and-concept-disposition)
+[reconstruction contract](../standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md#provenance-and-concept-disposition)
 when deciding whether to retain, rename, or replace one in a target.
 
 ## Usage

@@ -1,29 +1,19 @@
 # Aggregate Code Review Sub-Agent Playbook
 
-Use this delegated reviewer role when the main agent needs an aggregate-focused review instead of a general review pass.
+Use this role only when the selected scope includes an aggregate, domain event,
+entity, value object, or their tests.
 
-## Mandatory References
+## Review Flow
 
-- `.ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
+1. Select `aggregate`, `domain-event`, `entity`, `value-object`, and/or `test`
+   routes from `review-routing.yaml`.
+2. Load the aggregate standard once for the selected domain routes. Load the
+   test standard only when tests or test-quality findings are in scope.
+3. Apply `AGGREGATE-ES-001` only when type hierarchy or an explicit target
+   contract proves the aggregate is event-sourced.
+4. Apply contract, delete, and helper rules only under their declared target or
+   finding preconditions.
+5. Report bounded findings; leave target architecture and implementation to the
+   owning workflow.
 
-## Focus Areas
-
-- aggregate boundary and invariant correctness
-- event sourcing state mutation rules
-- domain event metadata and serialization expectations
-- aggregate-level test discipline
-
-## Must-Fail Patterns
-
-- direct state mutation in constructors
-- missing event metadata or broken event immutability
-- contract misuse across aggregate/entity/value-object boundaries
-- aggregate tests that violate pure unit-test expectations
-
-## Relationship To Top-Level Skill
-
-- Use `code-reviewer` for a full review workflow and final reporting
-- Use this sub-agent when a larger workflow wants one specialized aggregate review slice
-
+Role text is execution guidance, not a second aggregate checklist.

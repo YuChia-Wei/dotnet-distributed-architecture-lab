@@ -12,7 +12,7 @@ This guide explains how to configure dual profiles in a .NET application to supp
 
 ### Sub-agent misunderstanding of "inmemory"
 - Generating SQLite/H2 style code
-- ezapp 2.0.0 intent: use OutboxRepository semantics with InMemory store + InMemory message DB
+- Losing the same repository and event-publication capability boundaries when switching to in-memory adapters
 
 ## Correct Configuration Structure
 
@@ -77,7 +77,7 @@ Note: set the environment via `ASPNETCORE_ENVIRONMENT` (or launchSettings). Do n
 
 ## Profile-specific DI registration
 
-### InMemory profile (ezapp 2.0.0 intent)
+### InMemory profile
 ```csharp
 if (env.IsEnvironment("InMemory") || env.IsEnvironment("TestInMemory"))
 {
@@ -156,8 +156,8 @@ Fix: keep registrations separated and use consistent service types
 
 When using command-sub-agent or other workflows:
 1. Be explicit about profile meaning:
-   - inmemory = OutboxRepository semantics + InMemory store + InMemory message DB
-   - outbox = OutboxRepository + PostgreSQL + Wolverine durable outbox
+   - inmemory = project-owned repository and event-publication ports backed by in-memory adapters
+   - outbox = the same application-facing ports backed by selected durable persistence and messaging adapters, such as PostgreSQL + Wolverine durable outbox
 2. Reject SQLite/H2 code for inmemory
 3. Tests must not set environment inside test classes
 

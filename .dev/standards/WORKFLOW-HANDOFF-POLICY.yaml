@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 checkpoint_schema_version: "1.0"
 checkpoint_registry_path: ".dev/workflows/handoff-checkpoints.yaml"
 release_phase_contract_path_template: ".dev/releases/{version}/release-phase-checks.yaml"
@@ -7,6 +7,8 @@ model_sources:
   - runtime-reported
   - provider-reported
   - user-declared
+  - configured-default
+  - provider-default
   - unavailable
 attribution_kinds:
   - repository-created-local-ai-trailer
@@ -29,6 +31,13 @@ release_phases:
   - tag
   - publication
   - finalization
+release_phase_semantics:
+  namespace: source-release-validation
+  kind: validation-phase
+  not_authority_for:
+    - release-source-status-transition
+    - tag-mutation
+    - hosted-publication-mutation
 output:
   normalization: utf8-lf
   max_tail_lines: 40

@@ -36,7 +36,9 @@ When the user requests merge or push before the AI-context workflow is complete:
 
 - follow `.dev/standards/WORKFLOW-HANDOFF-POLICY.md`;
 - commit a coherent validated checkpoint;
-- use `git merge --no-ff` when merge is requested;
+- select linear or merge-commit topology under `.dev/TEAM-GIT-FLOW-RULES.MD`;
+- normally retain a merge commit when a checkpoint branch boundary carries
+  durable resume or handoff evidence;
 - keep the workflow and unfinished remediation tasks active;
 - record the checkpoint type, commit, remote/target, last completed work, and exact next action;
 - resume a push-only handoff from the pushed branch;
@@ -51,17 +53,21 @@ When the user requests merge or push before the AI-context workflow is complete:
 
 Check `.dev/standards/GIT-COMMIT-POLICY.md`.
 
-For workflow-stage commits, use:
+For workflow-stage commits, use exactly one of these alternatives:
 
 ```text
 <type>(<scope>): <summary>
 ```
 
-or with issue number:
+or:
 
 ```text
-<type>(#<issue-number>|<scope>): <summary>
+<type>(#<issue-number>): <summary>
 ```
+
+The `|` character in historical examples was meta-notation for “or”, not a
+literal part of a commit title. Follow the prospective and legacy-compatibility
+boundary in `.dev/standards/GIT-COMMIT-POLICY.md`.
 
 Include body sections:
 

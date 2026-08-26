@@ -1,0 +1,45 @@
+schema_version: "1.0"
+recorded_at: "2026-08-13T14:23:59+08:00"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+subject_commit: "d770885ccb44899f8318e36a1804e4b26332c988"
+auditor:
+  model: "gpt-5.6-sol"
+  reasoning_effort: "max"
+  mode: "independent-read-only-fail-closed"
+outcome: "SAFE-TO-CLOSEOUT"
+verified:
+  git_state: "fixed clean workflow branch with no upstream or remote-tracking branch"
+  target_gate: "passed outside sandbox; 60 first-parent commits; readiness ready"
+  authority: "REL-v0.13.0; 4 CUST records; 13 dispositions; 20 routes; 20 packets"
+  assessment: "ASM-20260813-008 fully implements report template 2.1 and pins accepted subject d97d8e8488bb8a87116f7d9f9b9089e1c2ed9010"
+  supersession: "ASM-20260813-007 report remained byte-immutable; reciprocal locator links and index placement are correct"
+  developer_score: "7.83 rounded to 7.8/10"
+  discussion_comparison: "16 criteria; 3 achieved, 9 partial, 3 not achieved, 1 contradicted; 46.875 percent rounded to 47 percent"
+  upstream_feedback: "17 findings; P0=6, P1=6, P2=5; prepared but not submitted"
+  authorization: "no push, merge, Issue closure, Project mutation, provider activation, or upstream submission"
+  stock_validation: "blocked by the documented 36-error package projection and not relabeled as passed"
+github_issue_readback:
+  repository: "YuChia-Wei/dotnet-distributed-architecture-lab"
+  number: 1
+  state: "open"
+  labels: ["create-by: codex"]
+  comments: 0
+  assignees: []
+  milestone: null
+  read_only: true
+environment_notes:
+  - "Two Windows symlink-boundary cases were privilege-skipped; all other target checks passed."
+  - "The auditor's sandbox-only gate attempt left five out-of-repository Temp directories unmodified."
+  - "The exact empty repository-local ignored fixture shadow-x7e25hae created by that attempt was verified and removed by the workflow owner before completion synchronization."
+next_action: "Synchronize the completed workflow state, run the post-commit target gate, and independently read back the resulting clean completion HEAD."
+completion_readback_1:
+  subject_commit: "b17059807b5fbbed90cb4549e5131870d090430d"
+  outcome: "BLOCKED-BY-METADATA-DRIFT"
+  passed:
+    - "Post-commit target gate passed for 61 first-parent commits."
+    - "All seven tasks, workflow locator, and workflow index were completed and consistent."
+    - "The branch was clean, local-only, and had no merge commits or remote-tracking ref."
+    - "ASM-008 and all finalized authorities remained byte-identical to the audited checkpoint."
+  blocker: "workflow-plan.md workflow metadata still declared in_progress/post-upgrade-analysis with stale updated_at while its active resume and locator were completed."
+  correction: "Synchronize only the canonical workflow-plan status, phase, and updated_at; retain the failed readback as evidence."
+  next_action: "Validate and independently read back the resulting clean metadata-correction HEAD without rerunning residue-producing tests."

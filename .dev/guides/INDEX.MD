@@ -27,4 +27,4 @@ This index owns the file and directory catalog for `.dev/guides/`.
 | `implementation-guides/PERSISTENCE-CONFIGURATION-GUIDE.md` | Persistence placement, conditional EF Core registration, and validation guidance. |
 | `implementation-guides/PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md` | Profile configuration complexity guidance. |
 | `learning-guides/LEARNING-PATH.md` | Profile-specific .NET backend learning reference; conditional, not target-project truth. |
-| `learning-guides/NEW-PROJECT-GUIDE.md` | Retired ExampleApp onboarding example; current target initialization uses `repo-structure-sync`. |
+| `learning-guides/NEW-PROJECT-GUIDE.md` | Retired ExampleApp onboarding example; current target initialization uses `ai-context-init`. |

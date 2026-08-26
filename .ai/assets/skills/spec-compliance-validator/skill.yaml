@@ -45,5 +45,39 @@ wrapper_metadata:
   codex:
     wrapper_path: ".agents/skills/spec-compliance-validator/"
 status: "active"
-
-
+effective_rule_consumption:
+  applies_when:
+    - "The skill validates a selected CBF or SWF problem frame against its required code and test specifications."
+  excludes:
+    - "Problem-frame drafting, implementation remediation, or status reporting that does not validate selected compliance."
+  resolver: ".ai/scripts/resolve-effective-rule-packet.py"
+  selectors:
+    - "capability"
+    - "execution_mode"
+    - "technology_profile"
+    - "file_type"
+  unresolved_outcome: "stop-applicable-action"
+  consumption_order: "Consume a freshness-verified task-scoped packet before reading profile references needed for the applicable action."
+  evidence:
+    required:
+      - "resolver_outcome"
+      - "loaded_rule_ids"
+      - "baseline.framework_version"
+      - "target_state.digest"
+      - "request.capability"
+      - "request.execution_mode"
+      - "request.technology_profile"
+      - "request.file_type"
+  semantic_consistency:
+    identity: "rule_id"
+    statement_bytes: "exact UTF-8 rules[].normative_statement bytes"
+    statement_digest: "rules[].normative_statement_digest"
+    cross_consumer_requirement: "the same rule_id must resolve to byte-equivalent effective semantics across consumers"
+    default_mismatch_outcome: "warning"
+    stricter_policy_owner: "target-owned"
+  prohibitions:
+    - "Do not scan broad target or framework documents to discover rule semantics."
+    - "Do not fall back to framework defaults."
+    - "Do not select an alternate route when the exact request route is unresolved."
+    - "Do not compare analyzer output as effective-rule semantics."
+    - "Keep analyzer severity and warnings-as-errors separate and target-owned."

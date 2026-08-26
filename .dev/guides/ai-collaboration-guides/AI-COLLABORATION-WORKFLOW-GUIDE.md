@@ -9,7 +9,7 @@
 - 何時需要 workflow mode
 - 何時適合引入 subagent
 
-若任務本身是「規劃並驅動多階段 software/product development」，使用 `dev-workflow`。它負責 development direct/workflow mode、開發 skill routing、validation 與 commit checkpoint。其他多階段作業由其 domain owner skill 建立並管理 workflow；例如 AI context lifecycle 使用 `ai-context-governance`，不再經由 `dev-workflow` 統籌。
+若任務本身是「規劃並驅動多階段 software/product development」，使用 `software-development-orchestrator`。它負責 development direct/workflow mode、開發 skill routing、validation 與 commit checkpoint。其他多階段作業由其 domain owner skill 建立並管理 workflow；例如 AI context lifecycle 使用 `ai-context-governance`，不再經由 `software-development-orchestrator` 統籌。
 
 ## 核心原則
 
@@ -252,14 +252,14 @@
 
 - `.dev/workflows/<YYYY-MM-DD-topic[-NN]>/workflow.yaml`
 
-建立 locator 前，先從預定 base branch 建立獨立 workflow branch；Codex 預設為 `codex/<workflow-id>`。Locator 必須記錄 `branch`、`base_branch`。Workflow merge 預設使用 `--no-ff`。
+建立 locator 前，先從預定 base branch 建立獨立 workflow branch；Codex 預設為 `codex/<workflow-id>`。Locator 必須記錄 `branch`、`base_branch`。線性整合與 merge commit 依 `.dev/TEAM-GIT-FLOW-RULES.MD` 選擇，不由 workflow mode 自動決定。
 
 Locator 固定記錄 owner skill、status、artifact root、entrypoint、`created_at` 與 `updated_at`。真正 artifact layout 與 template 由建立該類 workflow 的 skill 管理：
 
-- software/product development lifecycle → `dev-workflow`
+- software/product development lifecycle → `software-development-orchestrator`
 - AI context 自檢 → `ai-context-auditor`
 - AI context 文件治理、整改與複檢結案 → `ai-context-governance`
-- framework 複製後的 repo 初始化 → `repo-structure-sync`
+- framework 複製後的 repo 初始化 → `ai-context-init`
 
 artifact 預設放在 locator 同目錄；owner skill 也可宣告其他 repository-relative `artifact_root`。不要假設所有 workflow 都具有下列同名檔案。Development workflow 通常使用：
 
@@ -282,7 +282,9 @@ artifact 預設放在 locator 同目錄；owner skill 也可宣告其他 reposit
 
 - 如果這件事只是一次分析或一次小修，留在 direct mode
 - 如果這件事需要「盤點 -> 分類 -> 補標準 -> 清理遺留」，就應進 workflow mode
-- 如果你已經開始問「這件事要不要分 stage」，通常答案就是要進 workflow mode
+- 如果 stages 具有獨立 approval、handoff、resume 或 rollback 狀態，才進 workflow mode
+- 如果預計少於三個實質 tasks，先指出 workflow 額外保存的獨特狀態；不要用 validation 與 closeout 補 task 數
+- 多個 Issues 若共用 outcome、branch、validation、review、release gate 與 rollback，使用同一個 delivery，而不是一個 Issue 一個 workflow
 
 ## Subagent 介入原則
 
@@ -337,10 +339,9 @@ subagent 不應：
 ## 相關文件
 
 - `REQUIREMENT-AND-SPEC-DESIGNER-STRATEGY.md`
-- `DEV-WORKFLOW-SKILL-GUIDE.md`
+- `SOFTWARE-DEVELOPMENT-ORCHESTRATOR-SKILL-GUIDE.md`
 - `BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md`
 - `BDD-GWT-TEST-DESIGNER-PAIR-GUIDE.md`
 - `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
 - `../workflows/README.MD`
-

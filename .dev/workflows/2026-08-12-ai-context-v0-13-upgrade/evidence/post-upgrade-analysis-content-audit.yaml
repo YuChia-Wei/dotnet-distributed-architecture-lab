@@ -1,0 +1,59 @@
+schema_version: "1.0"
+recorded_at: "2026-08-13T14:08:36+08:00"
+status: "accepted-successor-created-pending-closeout-audit"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+subject_commit: "d27c6c9afccc43f8a69f568edb0b27dab5ca01c1"
+audits:
+  developer_impact:
+    model: "gpt-5.6-sol"
+    reasoning_effort: "max"
+    outcome: "BLOCKED"
+    technical_gate: "passed outside sandbox; 41/41 target tests and 57 commits"
+    blockers:
+      - "ASM-20260813-007 report did not satisfy its declared v2.1 semantic output contract."
+      - "ASM-20260813-007 scope named report artifacts not present in its pinned subject commit."
+      - "Stock validation was misclassified as inapplicable rather than blocked-by-package-projection."
+      - "Upgrade report overstated archive and sidecar byte retention."
+      - "Work-item execution gate and merge integration gate were conflated."
+      - "The 7.8 score lacked explicit qualitative scoring anchors."
+  discussion_comparison:
+    model: "gpt-5.6-sol"
+    reasoning_effort: "max"
+    outcome: "BLOCKED"
+    blockers:
+      - "Acceptance item 5 is partial because constraints are empty and eleven baseline documents remain unpacketized."
+      - "Correct coverage is 3 achieved, 9 partial, 3 not achieved, 1 contradicted: 7.5/16 = 46.875%, rounded to 47%."
+      - "DEC supersession history required narrower, exact relationships; DEC-003 remains active."
+  upstream_feedback:
+    model: "gpt-5.6-sol"
+    reasoning_effort: "max"
+    outcome: "BLOCKED"
+    blockers:
+      - "The extracted package omits all eighteen source-only entrypoints, while the installed target omits seventeen because the compare helper is retained."
+      - "Archive/sidecar identities and verification are retained, but their bytes are not stored in the workflow root."
+      - "Provider truth was corrected at d985e0e and independently accepted at 46928f4; those states must remain distinct."
+corrections:
+  - "Add explicit qualitative score anchors and separate execution versus integration authorization gates."
+  - "Recalculate the discussion matrix to 47% and correct exact DEC supersession relationships."
+  - "Correct package/target source-only counts and expand downstream package-closure acceptance criteria."
+  - "Correct archive retention and provider remediation/acceptance wording."
+  - "Retain final ASM-20260813-007 unchanged until a complete successor assessment can supersede it."
+corrected_checkpoint_review:
+  subject_commit: "b3199b36f5f13f29b125d9e4c663a6238f093224"
+  discussion_comparison: "SAFE-TO-PROCEED"
+  upstream_feedback: "SAFE-TO-PROCEED"
+  developer_impact: "BLOCKED-BY-LIFECYCLE-SYNC"
+  remaining_corrections:
+    - "Record ASM-20260813-007 as content-audit blocked and pending ASM-20260813-008 without editing its final report."
+    - "Replace already-completed staged/commit instructions with the committed corrected-checkpoint state."
+    - "Describe migration-0132 and migration-0133 as two acknowledged reconciliations, not two target templates."
+final_review:
+  subject_commit: "d97d8e8488bb8a87116f7d9f9b9089e1c2ed9010"
+  developer_impact: "SAFE-TO-PROCEED"
+  discussion_comparison: "SAFE-TO-PROCEED"
+  upstream_feedback: "SAFE-TO-PROCEED"
+  technical_gate: "passed outside sandbox; 41/41 target tests and 59 commits"
+  successor_assessment: "ASM-20260813-008"
+next_action: >-
+  Independently audit the resulting clean successor-assessment HEAD before
+  synchronizing final workflow completion.

@@ -1,0 +1,111 @@
+schema_version: 1.0.0
+status: pending-validation
+package_id: ai-context-dotnet-backend-v0.8.0
+package_version: 0.8.0
+package_manifest_sha256: 62708640213f7ab3d0cddc19fd15221cf1a11d1b02c6f5512a1b9b3b57d1ffbb
+target_starting_commit: 9586f862f30f6ba38c824e3d53899804ba56a9a0
+applied_operation_ids:
+- migration-0006
+- migration-0011
+- migration-0018
+- migration-0019
+- migration-0020
+- migration-0021
+- migration-0022
+- migration-0023
+- migration-0026
+- migration-0028
+- migration-0029
+- migration-0030
+- migration-0031
+- migration-0036
+- migration-0037
+- migration-0038
+- migration-0039
+- migration-0040
+- migration-0042
+- migration-0045
+- migration-0052
+- migration-0056
+- migration-0060
+- migration-0065
+skipped_reconciliation_ids:
+- migration-0001
+- migration-0002
+- migration-0003
+- migration-0004
+- migration-0005
+- migration-0007
+- migration-0008
+- migration-0009
+- migration-0010
+- migration-0012
+- migration-0013
+- migration-0014
+- migration-0015
+- migration-0016
+- migration-0017
+- migration-0024
+- migration-0025
+- migration-0027
+- migration-0032
+- migration-0033
+- migration-0034
+- migration-0035
+- migration-0041
+- migration-0043
+- migration-0044
+- migration-0046
+- migration-0047
+- migration-0048
+- migration-0049
+- migration-0050
+- migration-0051
+- migration-0053
+- migration-0054
+- migration-0055
+- migration-0057
+- migration-0058
+- migration-0059
+- migration-0061
+- migration-0062
+- migration-0063
+- migration-0064
+- migration-0066
+- migration-0067
+selection:
+  release_model: single-versioned-componentized-release
+  mandatory_components:
+  - software-development-core
+  - ai-context-lifecycle-core
+  profiles:
+  - dotnet-backend
+  providers:
+    repo-backlog:
+      enabled: true
+      preservation: preserve-existing-if-recorded
+selection_default:
+  release_model: single-versioned-componentized-release
+  mandatory_components:
+  - software-development-core
+  - ai-context-lifecycle-core
+  profiles:
+  - dotnet-backend
+  providers:
+    repo-backlog:
+      enabled: false
+      preservation: preserve-existing-if-recorded
+selection_resolution:
+  source: target-provenance
+  evidence:
+  - path: .dev/ai-context/provenance.yaml
+    sha256: 84b6d663d872b461a044a2a15e00665695026117836e49b24aba9dc9f406ac09
+component_operation_counts:
+  applied:
+    ai-context-lifecycle-core: 1
+    software-development-core: 23
+  skipped:
+    ai-context-lifecycle-core: 20
+    repo-backlog: 1
+    software-development-core: 22
+provenance_updated: false

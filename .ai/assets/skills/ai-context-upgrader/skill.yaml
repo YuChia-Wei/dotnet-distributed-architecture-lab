@@ -24,6 +24,7 @@ outputs:
   - "migration-guide checklist for the selected version path"
   - "applied changes only when explicitly authorized"
   - "updated target provenance after successful validation"
+  - "preserved target-owned routine-validation policy with reconciliation evidence"
   - "semantic reconciliation table keyed by customization ID and subject"
 constraints:
   - "Use `ai-context-init` instead when the target has not been initialized"
@@ -33,6 +34,7 @@ constraints:
   - "Treat MCP graphs, IDE indexes, semantic search, and other external tools only as discovery accelerators; verify every decision with Git or repository files"
   - "Remain read-only during discovery and planning; require explicit authorization before applying an upgrade"
   - "Do not update provenance until the selected changes and required validation succeed"
+  - "Preserve validation.routine without weakening target selections; never read, package, or overwrite ignored `.dev/validation.local.conf`."
   - "Use the shared semantic customization lifecycle; never infer semantic equivalence from paths or finalize before owner reconciliation and independent post-upgrade verification."
 workflow:
   - step: 1
@@ -55,10 +57,14 @@ references:
   - ".ai/assets/skills/ai-context-upgrader/references/output-contract.md"
   - ".ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md"
   - ".ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml"
+  - ".ai/assets/skills/ai-context-governance/templates/effective-rule-state.schema.yaml"
+  - ".ai/assets/skills/ai-context-governance/templates/effective-rule-state.template.yaml"
+  - ".ai/assets/skills/ai-context-governance/templates/effective-rule-packet.schema.yaml"
   - ".ai/assets/skills/ai-context-upgrader/templates/ai-context-source-template.yaml"
   - ".ai/assets/skills/ai-context-upgrader/templates/provenance-template.yaml"
   - ".ai/assets/skills/ai-context-upgrader/templates/customizations-template.yaml"
   - ".ai/scripts/validate-ai-context-target.py"
+  - ".ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py"
 examples:
   - ".dev/guides/ai-collaboration-guides/AI-CONTEXT-UPGRADER-SKILL-GUIDE.md"
 human_guide: ".dev/guides/ai-collaboration-guides/AI-CONTEXT-UPGRADER-SKILL-GUIDE.md"

@@ -30,6 +30,17 @@ Use other workflows when:
 
 Recommended handoffs:
 
-- test code implementation: existing test generation prompt/workflow
+- test code implementation: `slice-implementer` with a separately authorized,
+  bounded test-implementation slice. A test-only slice selects `generic` as
+  its primary mode and evaluates the applicable concrete test bindings.
 - architecture ambiguity: `ddd-ca-hex-architect`
 - concrete code defects: `code-reviewer`
+
+## Design Does Not Authorize Implementation Or Execution
+
+This skill has no `role_bindings` and does not produce a `role_execution`
+record. Its scenario, assertion, and test-level recommendations are evidence
+for a later authorization decision, not an instruction to change test or
+production code. The receiving `slice-implementer` owns concrete test
+implementation; target-owned commands or the selected test-execution contract
+own execution and result evidence. Keep those handoffs distinct.

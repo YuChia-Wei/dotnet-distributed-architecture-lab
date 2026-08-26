@@ -1,28 +1,24 @@
 # Code Review Sub-Agent Playbook
 
-Use this delegated reviewer role when the main agent needs a bounded code review pass instead of a top-level standalone review workflow.
-
-## Mandatory References
-
-- `.ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
+Use this role for one bounded general .NET review slice. The top-level
+`code-reviewer` skill owns severity, final findings, and any durable assessment.
 
 ## Review Flow
 
-1. Identify the reviewed file type or bounded scope
-2. Load the matching checklist sections
-3. Verify code structure, testing rules, and DDD/CA/CQRS compliance
-4. Report findings with file paths and line numbers
+1. Read `.ai/assets/skills/code-reviewer/references/review-routing.yaml`.
+2. Select routes by explicit scope, then type hierarchy, then path; use the
+   fallback only when no specific route matches.
+3. Load only the selected routes' canonical references and applicable finding
+   rules. De-duplicate references across multi-file scopes.
+4. Compare the code with those rules and report evidence-backed findings with
+   file and line references.
+5. Keep analyzer/test output as supporting evidence, not semantic ownership.
 
-## Output Contract
+Do not load the legacy index, monolithic checklist, or shared review summaries
+as additional rule sources.
 
-- findings ordered by severity
-- explicit `must fix` / `should fix` split
-- concise summary only after findings
+## Output
 
-## Relationship To Top-Level Skill
-
-- Use `code-reviewer` when the user or main agent wants a full review workflow
-- Use this sub-agent when a larger workflow wants to delegate one bounded review slice
-
+- findings ordered as `CRITICAL`, `MUST FIX`, then `SHOULD FIX`;
+- architecture-level and code-level findings separated;
+- positive evidence and skipped/blocked validation stated after findings.

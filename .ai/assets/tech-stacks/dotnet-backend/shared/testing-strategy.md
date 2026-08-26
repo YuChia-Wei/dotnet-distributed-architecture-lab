@@ -1,6 +1,6 @@
 # Testing Strategy (Dotnet)
 
-Agent-loading projection of the canonical [Test Coding Standards](../../../../../.dev/standards/coding-standards/test-standards.md).
+Agent-loading projection of the canonical [Test Coding Standards](../standards/coding-standards/test-standards.md).
 
 Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`.
 
@@ -9,6 +9,7 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`.
 - **BDD profile**: BDDfy is the default profile, but a target team may explicitly decline the package.
 - **Minimum test style**: All unit, use-case, and integration tests use Given-When-Then structure and naming. Arrange-Act-Assert (3A) is not an alternative.
 - **Feature assets**: `.feature` files are planned/optional, not required by default. Support them when supplied or explicitly requested, or when the target profile selects a feature runner; do not select a runner or package without project evidence.
+- **GWT provider disposition**: BDDfy remains the default. Reqnroll is an optional Gherkin runner mode when the target selects it. LightBDD is an owner-named candidate only; it is not selected by this profile.
 - **No BaseTestClass**: Tests must not inherit from shared base classes
 - **Mocking**: Use the target `testing.mocking` selection; default to NSubstitute
 
@@ -42,7 +43,7 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`.
 - Do not mix mocking libraries without a documented migration decision.
 
 
-## ezSpec -> GWT Test Mapping Rules (Dotnet)
+## GWT Test Mapping Rules (Dotnet)
 
 ### Coverage Rules (Must Keep)
 - Each Acceptance Criteria (AC) becomes at least one Scenario.
@@ -50,13 +51,12 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`.
 - Maintain a checklist mapping: AC -> Scenario -> Then/And assertions (100% required).
 
 ### DSL Mapping Table
-| ezSpec Concept | Default BDDfy / GWT Equivalent | Notes |
+| GWT concept | Default BDDfy / GWT equivalent | Notes |
 | --- | --- | --- |
-| Feature / EzFeature | Story/test class + `[Story]` (optional) | One class per use case. |
-| Scenario / EzScenario | Test method + Gherkin-style name | One scenario per AC or error case. |
+| Feature / Story | Story/test class + `[Story]` (optional) | One class per use case. |
+| Scenario | Test method + Gherkin-style name | One scenario per AC or error case. |
 | Given/When/Then/And blocks | BDDfy step methods or fluent chain | Step text mirrors spec wording. |
-| ScenarioEnvironment `env.put` | Typed test context | TODO: finalize standard context pattern. |
-| `env.gets(key)` / `env.get(key, Type)` | Context get with type | Prefer typed context fields over casting. |
+| Scenario state | Typed test context | Prefer typed context fields over casting. |
 | `.Execute()` | `this.BDDfy()` by default, or explicit GWT orchestration after opt-out | Scenario executed in the test method. |
 | Event verification (await) | Async helper in Then/And step | TODO: define `IEventProbe` + `ShouldEventuallyContain<T>()` helper. |
 

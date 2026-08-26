@@ -1,0 +1,361 @@
+schema_version: 1.0.0
+package_id: ai-context-dotnet-backend-v0.7.0
+package_version: 0.7.0
+package_manifest_sha256: 6c4a22889e525509521398439e3cdf9ca362b99f1f52ff434fe691fa4c213b64
+migration_sha256: 9007e03abea33a9756c0fd407eab1235d0467f20942aa5f38054a617d7f04f70
+package_root: C:\Users\h4227\AppData\Local\Temp\codex-ai-context-v013-019ff62e\v0.7.0\ai-context-dotnet-backend-v0.7.0
+target_root: C:\Github\YuChia\dotnet-mq-arch-lab
+target_starting_commit: 70a5ae5094d65d6a46b6735903b21425a2ffc0f4
+previous_files: C:\Users\h4227\AppData\Local\Temp\codex-ai-context-v013-019ff62e\v0.6.0\ai-context-dotnet-backend-v0.6.0\metadata\files.yaml
+previous_version: 0.6.0
+selection:
+  release_model: single-versioned-componentized-release
+  mandatory_components:
+  - software-development-core
+  - ai-context-lifecycle-core
+  profiles:
+  - dotnet-backend
+  providers:
+    repo-backlog:
+      enabled: true
+      preservation: preserve-existing-if-recorded
+selection_default:
+  release_model: single-versioned-componentized-release
+  mandatory_components:
+  - software-development-core
+  - ai-context-lifecycle-core
+  profiles:
+  - dotnet-backend
+  providers:
+    repo-backlog:
+      enabled: false
+      preservation: preserve-existing-if-recorded
+selection_resolution:
+  source: target-provenance
+  evidence:
+  - path: .dev/ai-context/provenance.yaml
+    sha256: ff652faf41bb9205d6edf674891397215cb44fef2cb00947f60b4589c2b872f3
+selection_request:
+  enable_providers: []
+component_operation_counts:
+  would_apply:
+    ai-context-lifecycle-core: 1
+    software-development-core: 5
+  would_skip:
+    ai-context-lifecycle-core: 3
+    repo-backlog: 1
+    software-development-core: 16
+observed:
+  .ai/assets/shared/governance/GIT-COMMIT-POLICY.md:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/assets/shared/governance/TEAM-GIT-FLOW-RULES.MD:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/assets/shared/governance/WORKFLOW-GATE-POLICY.md:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/assets/shared/governance/portable-policy-manifest.yaml:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json:
+    exists: true
+    sha256: c9cadcc43b14c8482787d01be4d78805bad76301d49e58822300e7fb7f2a6b52
+    mode: '0644'
+  .ai/assets/skills/ai-context-governance/templates/workflow-handoff-checkpoint-template.yaml:
+    exists: true
+    sha256: 5620f24e7f483d10253a34d3ee5f2b8a09afc17b73c2c7b3d18390bd55153356
+    mode: '0644'
+  .ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json:
+    exists: true
+    sha256: b11b66e5e75e58669565f3c4052dabc0b96c997caa88b5db4fed30564035d9da
+    mode: '0644'
+  .ai/scripts/tests/test_git_commit_policy.py:
+    exists: true
+    sha256: 93e6216ba0584ff22dfc2f7b0dbd86d82d1eb18be04cc5551b513a55f70a1574
+    mode: '0644'
+  .ai/scripts/tests/test_workflow_handoff.py:
+    exists: true
+    sha256: 3a4940f884aba04c4e1cef0a92dee5909e836bbbd09799bcaf03ffa06ada5601
+    mode: '0644'
+  .ai/scripts/tests/test_workflow_lifecycle_contract.py:
+    exists: true
+    sha256: 7dca19fd5386107582d359dfb04f6e7a089b7f1eede01eeebe3663adecbe0733
+    mode: '0644'
+  .ai/scripts/validate-git-commits.py:
+    exists: true
+    sha256: 7dec9a1d1332e9fbf5b163ed0566f698a74b9119047a0115ea2615f9cbb823db
+    mode: '0644'
+  .ai/scripts/validate-workflow-artifacts.py:
+    exists: true
+    sha256: 87bacd77ecaa36ae9509c1044f0863b685f3283718fdb45469c2a8df250088ec
+    mode: '0644'
+  .ai/scripts/validate-workflow-handoff.py:
+    exists: true
+    sha256: fcff3643bbc6b0bfb87b42594da829ef9b8cb7493ed442d56ff76a4525f3af69
+    mode: '0644'
+  .dev/TEAM-GIT-FLOW-RULES.MD:
+    exists: true
+    sha256: 6365a79ca767b54d447923e7d2ae3a81ecba1f80341553a96a22c3d23d8c4bd0
+    mode: '0644'
+  .dev/backlog/README.MD:
+    exists: true
+    sha256: af0255706028ed8b389e2cdc0f71971b1547bf3b8bc7208a31e2d25ec5fa393f
+    mode: '0644'
+  .dev/guides/ai-collaboration-guides/AI-EXECUTION-PROVENANCE-AND-ATTRIBUTION-GUIDE.md:
+    exists: false
+    sha256: null
+    mode: null
+  .dev/guides/ai-collaboration-guides/INDEX.MD:
+    exists: true
+    sha256: f6488c67a9b2b3a9566d60435f4d9dbc54549f5b87507ccd21f38558711e93fc
+    mode: '0644'
+  .dev/standards/AI-CONTEXT-VERSION-POLICY.md:
+    exists: true
+    sha256: cf60fd46070f08731674ae79e88ae20e38eeea61555c57d58a182265294a7f56
+    mode: '0644'
+  .dev/standards/ASSESSMENT-ARTIFACT-POLICY.md:
+    exists: true
+    sha256: 434880f12b5d7957ed099ea9f84214a8f52bfb5bd436545da1e2fd7cae2c0604
+    mode: '0644'
+  .dev/standards/GIT-COMMIT-POLICY.md:
+    exists: true
+    sha256: 33b3eeaf3964651f05f5ff8fe9afdc8bd9e5a10756f331f5118531868ed3d629
+    mode: '0644'
+  .dev/standards/GIT-COMMIT-POLICY.yaml:
+    exists: true
+    sha256: 12ee3fdb2521adbfe9677f1dc2bab5cf9cb9194a31c7a6ef57b6cd8a653752af
+    mode: '0644'
+  .dev/standards/INDEX.MD:
+    exists: true
+    sha256: e6c01fe8b5e63c252fe4022188a287e6604f84835a195c3438bd27ac91568ad0
+    mode: '0644'
+  .dev/standards/WORKFLOW-ARTIFACT-POLICY.md:
+    exists: true
+    sha256: 38c59e648e7129878b2cc98e1530cee98d6ae4f0b8b2bf239f9b7c718d2f978d
+    mode: '0644'
+  .dev/standards/WORKFLOW-GATE-POLICY.md:
+    exists: true
+    sha256: aeb61bbebc6c3a93ccfa7eb9b46742a7975437bdb619103cf216fdc394bb36c2
+    mode: '0644'
+  .dev/standards/WORKFLOW-HANDOFF-POLICY.md:
+    exists: true
+    sha256: cedc02707cd6540edd1a1b06ac46b839c62e64c611b4728565042d682441f4c2
+    mode: '0644'
+  .dev/standards/WORKFLOW-HANDOFF-POLICY.yaml:
+    exists: true
+    sha256: 2be7e3f91a1727792e623f54c51e7cfce44e535b924a469004fdbbc68ce3cb23
+    mode: '0644'
+operations:
+- id: migration-0001
+  kind: add
+  path: .ai/assets/shared/governance/GIT-COMMIT-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0002
+  kind: add
+  path: .ai/assets/shared/governance/TEAM-GIT-FLOW-RULES.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0003
+  kind: add
+  path: .ai/assets/shared/governance/WORKFLOW-GATE-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0004
+  kind: add
+  path: .ai/assets/shared/governance/portable-policy-manifest.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0005
+  kind: replace
+  path: .ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: replace
+  reason: all safety preconditions match
+- id: migration-0006
+  kind: replace
+  path: .ai/assets/skills/ai-context-governance/templates/workflow-handoff-checkpoint-template.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0007
+  kind: replace
+  path: .ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0008
+  kind: replace
+  path: .ai/scripts/tests/test_git_commit_policy.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0009
+  kind: replace
+  path: .ai/scripts/tests/test_workflow_handoff.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0010
+  kind: replace
+  path: .ai/scripts/tests/test_workflow_lifecycle_contract.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0011
+  kind: replace
+  path: .ai/scripts/validate-git-commits.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0012
+  kind: replace
+  path: .ai/scripts/validate-workflow-artifacts.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0013
+  kind: replace
+  path: .ai/scripts/validate-workflow-handoff.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0014
+  kind: replace
+  path: .dev/TEAM-GIT-FLOW-RULES.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0015
+  kind: replace
+  path: .dev/backlog/README.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: repo-backlog
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0016
+  kind: add
+  path: .dev/guides/ai-collaboration-guides/AI-EXECUTION-PROVENANCE-AND-ATTRIBUTION-GUIDE.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0017
+  kind: replace
+  path: .dev/guides/ai-collaboration-guides/INDEX.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0018
+  kind: replace
+  path: .dev/standards/AI-CONTEXT-VERSION-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0019
+  kind: replace
+  path: .dev/standards/ASSESSMENT-ARTIFACT-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0020
+  kind: replace
+  path: .dev/standards/GIT-COMMIT-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0021
+  kind: replace
+  path: .dev/standards/GIT-COMMIT-POLICY.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0022
+  kind: replace
+  path: .dev/standards/INDEX.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0023
+  kind: replace
+  path: .dev/standards/WORKFLOW-ARTIFACT-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0024
+  kind: replace
+  path: .dev/standards/WORKFLOW-GATE-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0025
+  kind: replace
+  path: .dev/standards/WORKFLOW-HANDOFF-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0026
+  kind: replace
+  path: .dev/standards/WORKFLOW-HANDOFF-POLICY.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release

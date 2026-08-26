@@ -4,11 +4,11 @@
 
 `ai-context-upgrader` 用於已經匯入並初始化這套 AI context 的目標 repo。它會比對舊 framework 版本、新 framework 版本與目標 repo 現況，先產生分類與衝突清單，再依授權套用變更。
 
-第一次把 framework 複製到專案時，請使用 `repo-structure-sync`；不要把 upgrader 當成初始化工具。
+第一次把 framework 複製到專案時，請使用 `ai-context-init`；不要把 upgrader 當成初始化工具。
 
 ## 何時使用
 
-- 目標 repo 已記錄 `.dev/AI-CONTEXT-SOURCE.yaml`，要從一個發布版本升級到另一個版本。
+- 目標 repo 已記錄 `.dev/ai-context/provenance.yaml` 與 customization ledger，要從一個發布版本升級到另一個版本；legacy manifest 僅作 read compatibility。
 - 想先比較兩個 tag，評估 upgrade 影響但暫時不修改檔案。
 - 目標 repo 有本地化的 `AGENTS.md`、requirements、ADRs 或 skill wrapper，需要避免被 framework 更新覆蓋。
 
@@ -16,12 +16,16 @@
 
 ## 核心流程
 
-1. 驗證來源 manifest、舊 tag、新 tag 與 release record。
+1. 使用 target validator 驗證 provenance、ledger 與 package 所攜帶的 immutable source identity，不要求下游擁有 source release registry 或 Git tags。
 2. 以 base、incoming、target 做三方比對。
-3. 將路徑分成 `automatic-candidate`、`reconcile`、`exclude`。
+3. 將檔案分成 `automatic-candidate`、`reconcile`、`exclude`，並依 customization ID 產生 semantic reconciliation table。
 4. 先交付 migration plan；未獲授權前維持唯讀。
 5. 套用使用者接受的路徑並執行目標 repo 的驗證。
-6. 只有驗證成功後才更新 provenance manifest。
+6. 只有 owner reconciliation、獨立 post-upgrade audit 與 target validation 全部成功後，才 finalize ledger 與 provenance；失敗時保留舊 provenance。
+
+共同生命週期以
+`.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`
+為準。
 
 `automatic-candidate` 代表技術上可安全提出自動替換，不代表已獲得寫入授權。目標專案的協作規則、requirements、specs、ADRs、architecture、operations 與 project config 預設都需要 reconciliation。
 
@@ -31,6 +35,15 @@
 - `.git/`、工具 cache、暫存報告與環境檔案
 - 產品 `src/` 與 `tests/`
 
+## Python 與本機 validation 邊界
+
+升級時保留 target 的 Python 前置條件恢復決定；diagnostic 僅提出建議命令，
+不會安裝依賴。本機 `.dev/validation.local.conf` 是 ignored、unpackaged 的
+單行選擇檔，僅能強化 checked-in `validation.routine.local` policy，不能由
+環境變數覆寫。source-only CLI 與 framework release publication 不屬於
+downstream prerequisite contract。細節見
+`PYTHON-PREREQUISITE-DIAGNOSTICS-GUIDE.zh-TW.md`。
+
 codebase-memory-mcp、Code Graph、IDE index 等工具只能加速探索；最後的版本、檔案與內容判斷仍以 Git 和 repo 檔案為準。
 
 ## Prompt 範本
@@ -38,7 +51,8 @@ codebase-memory-mcp、Code Graph、IDE index 等工具只能加速探索；最�
 ```text
 使用 ai-context-upgrader，先以唯讀方式評估此 repo 從 v0.1.0 升級到 v0.3.0。
 保留所有 target-owned context 與 local overrides，列出 automatic-candidate、reconcile、exclude、migration steps、validation 與 rollback boundary。
-在我核准前不要套用變更，也不要更新 .dev/AI-CONTEXT-SOURCE.yaml。
+在我核准前不要套用變更，也不要 finalize
+.dev/ai-context/provenance.yaml 或 customizations.yaml。
 ```
 
 ## 完成條件

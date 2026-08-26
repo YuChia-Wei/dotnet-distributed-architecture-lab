@@ -1,0 +1,19 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "AICU-004-analysis-and-comparison",
+  "workflow_id": "2026-08-12-ai-context-v0-13-upgrade",
+  "owner_skill": "ai-context-auditor",
+  "status": "completed",
+  "created_at": "2026-08-12T21:43:41+08:00",
+  "updated_at": "2026-08-13T14:08:36+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "max",
+  "finding_ids": [],
+  "scope": {"target": "Developer-impact scoring, operating-rule and execution-detail change inventory, and discussion-branch expectation comparison", "files": ["post-upgrade AI context", "v0.6.0 through v0.13.0 release and migration evidence", "codex/2026-07-30-ai-context-architecture-kit-standards-discussion"], "constraints": ["Sol MAX analysis", "start only after upgrade completion", "cover authorization and stop boundaries, workflow, validation, skill routing, package, provider, sub-agent and external-task behavior, and target-owned settings"], "non_goals": ["product code review"]},
+  "execution": {"steps": ["inventory developer-impact improvements, attention points, and friction", "enumerate changed operating rules and execution details", "score six weighted dimensions", "compare the issue draft's sixteen acceptance criteria"], "validation": ["Sol MAX independent analysis", "fixed-HEAD target gate read-back", "discussion branch decision and acceptance-criteria cross-check", "independent content re-audit"], "last_completed_step": "Three independent Sol MAX content re-audits accepted clean checkpoint d97d8e84; complete successor assessment ASM-20260813-008 preserves the 7.8 score and 47% discussion result.", "next_action": "Return completed analysis to AICU-005 closeout."},
+  "results": {"summary": "The accepted developer-impact score is 7.8/10. Discussion-branch repository-local expectation coverage is 47%: three achieved, nine partial, three not achieved, and one contradicted.", "files_changed": [".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/08-developer-impact-and-score.md", ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/09-discussion-branch-comparison.md", ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/post-upgrade-analysis-content-audit.yaml", ".dev/assessments/ASM-20260813-008/**"], "tests_run": ["complete target gate over 59 commits", "12/12 downstream projection tests", "7/7 code-review routing tests", "discussion branch b29ef357 decision and acceptance-criteria read-back", "three independent final content re-audits SAFE-TO-PROCEED"], "finding_status": "completed-and-independently-accepted", "residual_risk": "Architecture Kit direction and upstream defect remediation remain separate future decisions.", "follow_up_needed": false}
+}

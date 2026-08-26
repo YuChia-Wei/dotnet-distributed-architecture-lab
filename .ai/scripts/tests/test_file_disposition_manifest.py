@@ -15,6 +15,13 @@ SPEC = importlib.util.spec_from_file_location("file_disposition_validator", VALI
 assert SPEC and SPEC.loader
 VALIDATOR = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(VALIDATOR)
+SOURCE_GOVERNANCE_PATH = ROOT / ".ai/scripts/validate-source-governance.py"
+SOURCE_GOVERNANCE_SPEC = importlib.util.spec_from_file_location(
+    "source_governance_validator", SOURCE_GOVERNANCE_PATH
+)
+assert SOURCE_GOVERNANCE_SPEC and SOURCE_GOVERNANCE_SPEC.loader
+SOURCE_GOVERNANCE = importlib.util.module_from_spec(SOURCE_GOVERNANCE_SPEC)
+SOURCE_GOVERNANCE_SPEC.loader.exec_module(SOURCE_GOVERNANCE)
 
 
 def valid_manifest() -> dict:
@@ -163,6 +170,7 @@ class FileDispositionManifestV2Tests(unittest.TestCase):
         published_identical_paths: set[str] | None = None,
         published_evolved_paths: set[str] | None = None,
         latest_published_match_paths: set[str] | None = None,
+        current_byte_authorization_paths: set[str] | None = None,
     ) -> list[str]:
         current = current_paths or self.candidates | self.supporting
         published = published_paths or {
@@ -185,6 +193,7 @@ class FileDispositionManifestV2Tests(unittest.TestCase):
             base_matches_latest_published=True,
             actual_profile_id="dotnet-backend",
             actual_lifecycles={".ai/deprecated.sh": "deprecated"},
+            current_byte_authorization_paths=current_byte_authorization_paths or set(),
         )
 
     def test_gwt_005_given_complete_v2_manifest_when_validated_then_passes(self) -> None:
@@ -383,6 +392,209 @@ class FileDispositionManifestV2Tests(unittest.TestCase):
             {".ai/scripts/top.sh"},
             VALIDATOR.profile_packaged_paths(profile, paths),
         )
+
+    def test_gwt_021_given_current_drift_without_authorization_when_validated_then_it_fails(self) -> None:
+        # Given a retained candidate drifts from the immutable subject.
+        # When no current-byte authorization is supplied, then the default gate fails closed.
+        errors = self.validate(
+            valid_v2_manifest(), subject_match_paths={".ai/deprecated.sh"}
+        )
+        self.assertTrue(any("differs from the pinned subject_commit" in error for error in errors))
+
+    def test_gwt_022_given_verified_exact_current_byte_authorization_when_validated_then_it_passes(self) -> None:
+        # Given source governance has verified one exact candidate authorization.
+        # When the disposition validator receives that exact path, then only its byte check is bypassed.
+        self.assertEqual(
+            [],
+            self.validate(
+                valid_v2_manifest(),
+                subject_match_paths={".ai/deprecated.sh"},
+                current_byte_authorization_paths={".ai/kept.md"},
+            ),
+        )
+
+    def test_gwt_023_given_authorized_current_drift_when_package_or_lifecycle_is_invalid_then_it_still_fails(self) -> None:
+        # Given the byte exception is valid but other immutable checks are not.
+        # When package and lifecycle validation runs, then authorization does not bypass either rule.
+        package_errors = self.validate(
+            valid_v2_manifest(),
+            subject_match_paths={".ai/deprecated.sh"},
+            current_byte_authorization_paths={".ai/kept.md"},
+            packaged_paths={".ai/deprecated.sh"},
+        )
+        self.assertTrue(any("retain must remain packaged" in error for error in package_errors))
+        lifecycle_errors = VALIDATOR.validate_manifest_data(
+            valid_v2_manifest(),
+            current_paths=self.candidates | self.supporting,
+            subject_paths=set(self.candidates),
+            published_paths={version: set(self.candidates) for version in self.versions},
+            packaged_paths=set(self.candidates),
+            subject_match_paths={".ai/deprecated.sh"},
+            published_identical_paths=set(self.candidates),
+            published_evolved_paths=set(),
+            latest_published_match_paths=set(),
+            base_matches_latest_published=True,
+            actual_profile_id="dotnet-backend",
+            actual_lifecycles={".ai/deprecated.sh": "transitional"},
+            current_byte_authorization_paths={".ai/kept.md"},
+        )
+        self.assertTrue(any("differs from registry truth" in error for error in lifecycle_errors))
+
+
+class CurrentByteAuthorizationTests(unittest.TestCase):
+    manifest_id = "v050-published-path-disposition"
+    manifest_path = ".dev/workflows/v050/evidence/disposition.yaml"
+    manifest_blob = "a" * 40
+    subject_commit = "b" * 40
+    path = ".ai/scripts/check-mutation-coverage.sh"
+    subject_blob = "c" * 40
+    current_blob = "d" * 40
+
+    def authorization(self) -> dict:
+        return {
+            "schema_version": "1.0",
+            "authorization_id": "v050-current-byte-authorization-issue-178",
+            "base_manifest": {
+                "id": self.manifest_id,
+                "path": self.manifest_path,
+                "blob": self.manifest_blob,
+                "subject_commit": self.subject_commit,
+            },
+            "authority": "repository-owner",
+            "issue": 178,
+            "authorized_at": SOURCE_GOVERNANCE.ISSUE_178_AUTHORIZED_AT,
+            "authorization_ref": SOURCE_GOVERNANCE.ISSUE_178_AUTHORIZATION_REF,
+            "workflow_ref": ".dev/workflows/current/workflow.yaml",
+            "task_ref": ".dev/workflows/current/tasks/CTX007-001.json",
+            "entries": [
+                {
+                    "path": self.path,
+                    "subject_blob": self.subject_blob,
+                    "authorized_blob": self.current_blob,
+                    "reason": "The owner authorized this exact current byte change.",
+                }
+            ],
+        }
+
+    def validate(self, data: object) -> list[str]:
+        return SOURCE_GOVERNANCE.authorization_validation_errors(
+            data,
+            manifest_id=self.manifest_id,
+            manifest_path=self.manifest_path,
+            manifest_blob=self.manifest_blob,
+            subject_commit=self.subject_commit,
+            candidates={self.path},
+            subject_blobs={self.path: self.subject_blob},
+            current_blobs={self.path: self.current_blob},
+        )
+
+    def test_gwt_024_given_complete_exact_current_byte_authorization_when_validated_then_it_passes(self) -> None:
+        self.assertEqual([], self.validate(self.authorization()))
+
+    def test_gwt_025_given_stale_current_or_subject_or_manifest_blob_when_validated_then_it_fails(self) -> None:
+        for field, value, expected in (
+            ("authorized_blob", "e" * 40, "authorized_blob differs from current bytes"),
+            ("subject_blob", "e" * 40, "subject_blob differs from manifest subject bytes"),
+            ("manifest_blob", "e" * 40, "base_manifest.blob does not bind"),
+        ):
+            with self.subTest(field=field):
+                data = self.authorization()
+                if field == "manifest_blob":
+                    data["base_manifest"]["blob"] = value
+                else:
+                    data["entries"][0][field] = value
+                self.assertTrue(any(expected in error for error in self.validate(data)))
+
+    def test_gwt_026_given_glob_non_candidate_or_duplicate_entry_when_validated_then_it_fails(self) -> None:
+        for mutation, expected in (
+            (lambda data: data["entries"][0].update({"path": ".ai/scripts/*.sh"}), "exact repository-relative file"),
+            (lambda data: data["entries"][0].update({"path": ".ai/scripts/other.sh"}), "not a registered manifest candidate"),
+            (lambda data: data["entries"].append(data["entries"][0].copy()), "duplicates"),
+        ):
+            with self.subTest(expected=expected):
+                data = self.authorization()
+                mutation(data)
+                self.assertTrue(any(expected in error for error in self.validate(data)))
+
+    def test_gwt_027_given_wrong_manifest_binding_or_empty_authorization_when_validated_then_it_fails(self) -> None:
+        wrong_manifest = self.authorization()
+        wrong_manifest["base_manifest"]["id"] = "other-manifest"
+        self.assertTrue(any("does not bind to the registered manifest" in error for error in self.validate(wrong_manifest)))
+        empty_entries = self.authorization()
+        empty_entries["entries"] = []
+        self.assertTrue(any("entries must be a non-empty list" in error for error in self.validate(empty_entries)))
+
+    def test_gwt_028_given_unknown_authorization_field_when_validated_then_it_fails_closed(self) -> None:
+        data = self.authorization()
+        data["unapproved_field"] = "must not silently expand the schema"
+        self.assertTrue(any("has unknown fields" in error for error in self.validate(data)))
+
+    def test_gwt_029_given_wrong_owner_comment_timestamp_when_validated_then_it_fails_closed(self) -> None:
+        data = self.authorization()
+        data["authorized_at"] = "2026-08-09T16:37:39Z"
+        self.assertTrue(any("authorized_at must bind" in error for error in self.validate(data)))
+
+    def test_gwt_030_given_manifest_without_current_byte_authorizations_when_registry_loads_then_it_is_valid(self) -> None:
+        registry = {
+            "schema_version": "1.3",
+            "manifests": [
+                {
+                    "id": "future-no-drift",
+                    "path": ".dev/workflows/2026-07-21-v0-5-0-development/evidence/v050-published-path-disposition.yaml",
+                }
+            ],
+            "repository_identity_policies": [
+                {
+                    "id": "repository-rename-retired-identity",
+                    "path": ".ai/distribution/repository-identity-policy.yaml",
+                }
+            ],
+            "source_disposition_contracts": [
+                {
+                    "id": "dotnet-backend-source-dispositions",
+                    "path": ".ai/distribution/source-dispositions.yaml",
+                }
+            ],
+        }
+        with mock.patch.object(SOURCE_GOVERNANCE.yaml, "safe_load", return_value=registry):
+            manifests, _, _ = SOURCE_GOVERNANCE.load_registry_paths()
+        self.assertEqual(
+            [
+                (
+                    "future-no-drift",
+                    ".dev/workflows/2026-07-21-v0-5-0-development/evidence/v050-published-path-disposition.yaml",
+                    [],
+                )
+            ],
+            manifests,
+        )
+
+    def test_gwt_031_given_empty_current_byte_authorizations_when_registry_loads_then_it_fails(self) -> None:
+        registry = {
+            "schema_version": "1.3",
+            "manifests": [
+                {
+                    "id": "empty-authorizations",
+                    "path": ".dev/workflows/2026-07-21-v0-5-0-development/evidence/v050-published-path-disposition.yaml",
+                    "current_byte_authorizations": [],
+                }
+            ],
+            "repository_identity_policies": [
+                {
+                    "id": "repository-rename-retired-identity",
+                    "path": ".ai/distribution/repository-identity-policy.yaml",
+                }
+            ],
+            "source_disposition_contracts": [
+                {
+                    "id": "dotnet-backend-source-dispositions",
+                    "path": ".ai/distribution/source-dispositions.yaml",
+                }
+            ],
+        }
+        with mock.patch.object(SOURCE_GOVERNANCE.yaml, "safe_load", return_value=registry):
+            with self.assertRaisesRegex(RuntimeError, "must be a non-empty list"):
+                SOURCE_GOVERNANCE.load_registry_paths()
 
 
 if __name__ == "__main__":

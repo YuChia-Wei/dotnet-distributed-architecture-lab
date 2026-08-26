@@ -3,9 +3,9 @@
 ## Template Metadata
 
 - `template_id`: `software-development-orchestrator/development-workflow-plan`
-- `template_version`: `1.3.0`
+- `template_version`: `1.4.0`
 - `template_created_at`: `2026-07-10T18:25:11+08:00`
-- `template_updated_at`: `2026-07-24T08:10:00+08:00`
+- `template_updated_at`: `2026-08-05T02:12:00+08:00`
 
 ## Workflow Metadata
 
@@ -19,7 +19,7 @@
 - `created_at`: `<ISO-8601 timestamp with UTC offset>`
 - `updated_at`: `<ISO-8601 timestamp with UTC offset>`
 - `template_source`: `.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
-- `template_version`: `1.3.0`
+- `template_version`: `1.4.0`
 - `workflow_locator`: `.dev/workflows/<workflow-id>/workflow.yaml`
 - `artifact_root`: `<repository-relative artifact root; default .dev/workflows/<workflow-id>/>`
 
@@ -50,6 +50,25 @@
 - Dependencies:
 - Validation:
 - Commit checkpoint:
+
+## Role Execution Coordination
+
+The owning skill produces complete `role_execution` records under its task
+when an active canonical role applies. The orchestrator aggregates records by
+stage and coordinates integration; it does not become the role's domain owner.
+It retains or surfaces the named final integration-owner decision and may make
+that decision only when explicitly named as that owner.
+Direct conversational use applies the same record semantics without requiring
+this workflow artifact.
+
+| Stage | Role / Canonical Path | Owning Skill | Final/Current Disposition | Attempt Summary | Final Integration Owner / Decision | Record or Task Reference |
+| --- | --- | --- | --- | --- | --- | --- |
+|  |  |  | `direct | delegated | unavailable | not-applicable` |  |  |  |
+
+For a delegated attempt, retain genuine invocation evidence in the record. A
+failed delegation selects direct only with the shared inline-parity evidence;
+otherwise it is unavailable. Existing rule packets are opaque input source
+references only.
 
 ## Approval Gates
 

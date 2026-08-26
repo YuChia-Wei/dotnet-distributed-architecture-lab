@@ -52,6 +52,11 @@ Expected Output:
 Validation:
 - <checks required before return>
 
+Routine Validation Policy:
+- Source / resolved mode: <tracked policy and permitted local strengthening>
+- Selection / outcome / selection reason: <including not-run-by-policy>
+- Command fingerprint / prerequisite result / attempts / retry justification: <evidence>
+
 Test Execution:
 - Level: <unit | integration | e2e | browser | playwright | environment-dependent>
 - Provider: <target-profile-commands | evaluated-external-skill | fallback-contract>
@@ -98,3 +103,29 @@ Do not collapse closeout into one generic success flag. Verify approved
 requirements and specs, implementation completion, each required test outcome,
 selected compliance gates, review disposition, validation evidence, workflow
 task state, commit evidence, and branch or handoff state separately.
+
+## Role Execution Output
+
+For each applicable canonical role, return the complete owner-produced
+`role_execution` record from
+`../../../shared/ROLE-EXECUTION-CONTRACT.md`, or a durable task reference to
+that record. Include its exact role path, applicability, disposition, bounded
+input/output/permissions/stop conditions, executor, invocation evidence,
+attempts, fallback, and final integration-owner decision.
+
+The orchestrator additionally reports:
+
+```text
+Role Execution Aggregation:
+- Stage: <stage id>
+- Owning skill: <skill>
+- Role / path: <role asset id> / <canonical role path>
+- Disposition: <direct | delegated | unavailable | not-applicable>
+- Invocation evidence: <genuine child evidence or null>
+- Attempts / fallback: <ordered result and direct-or-unavailable fallback>
+- Integration decision: <pending | accepted | rejected | reconciled>
+```
+
+Do not label a direct result as delegated, create child evidence from an
+adapter or plan, or use an unavailable delegation path to skip inline work that
+can meet the same contract.

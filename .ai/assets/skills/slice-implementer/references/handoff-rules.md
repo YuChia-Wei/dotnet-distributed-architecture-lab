@@ -25,6 +25,12 @@ Use `bdd-gwt-test-designer` when:
 
 - behavior examples, Given-When-Then scenarios, or assertion points are missing.
 
+Its scenario and assertion output does not authorize implementation. To
+implement concrete tests, retain or obtain the bounded slice authorization,
+select `generic` for a test-only slice, load the applicable use-case,
+aggregate, controller, or reactor test binding, and keep test execution as a
+separate capability.
+
 ## Hand Off To Review Or Compliance
 
 Use `code-reviewer` for .NET backend review findings.

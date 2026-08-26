@@ -3,9 +3,9 @@
 ## Template Metadata
 
 - `template_id`: `ai-context-governance-remediation-report`
-- `template_version`: `1.0.0`
+- `template_version`: `2.0.0`
 - `created_at`: `2026-07-10T18:22:49+08:00`
-- `updated_at`: `2026-07-10T18:22:49+08:00`
+- `updated_at`: `2026-07-13T23:11:56+08:00`
 
 ## Report Metadata
 
@@ -16,9 +16,9 @@
 - `created_at`: `<ISO-8601-with-offset>`
 - `updated_at`: `<ISO-8601-with-offset>`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-remediation-report-template.md`
-- `template_version`: `1.0.0`
-- `baseline_report`: `<artifact-root>/reports/01-audit-report.md`
-- `post_remediation_report`: `<artifact-root>/reports/03-post-remediation-audit-report.md`
+- `template_version`: `2.0.0`
+- `baseline_assessment`: `<ASM-YYYYMMDD-NNN>`
+- `verification_assessment`: `<ASM-YYYYMMDD-NNN>`
 
 ## Remediation Summary
 
@@ -29,20 +29,20 @@
 
 ## Finding Resolution Matrix
 
-| Finding | Before Severity | Status | Changed Files | Validation | Commit | Residual Risk |
+| Assessment Finding | Before Severity | Status | Changed Files | Validation | Commit | Residual Risk |
 | --- | --- | --- | --- | --- | --- | --- |
 |  |  | `resolved | partially-resolved | deferred | not-addressed | regressed` |  |  |  |  |
 
 ## Changes And Evidence
 
-### `<finding-id>`
+### `<assessment-id>#<finding-id>`
 
 - Changes:
 - Evidence:
 - Validation:
 - Remaining risk:
 
-## Post-Remediation Audit Reconciliation
+## Verification Assessment Reconciliation
 
 - Independent auditor:
 - Confirmed resolved:

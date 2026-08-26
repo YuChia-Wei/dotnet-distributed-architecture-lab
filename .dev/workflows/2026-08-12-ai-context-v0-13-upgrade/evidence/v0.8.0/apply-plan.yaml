@@ -1,0 +1,853 @@
+schema_version: 1.0.0
+package_id: ai-context-dotnet-backend-v0.8.0
+package_version: 0.8.0
+package_manifest_sha256: 62708640213f7ab3d0cddc19fd15221cf1a11d1b02c6f5512a1b9b3b57d1ffbb
+migration_sha256: 9fa4c3e357ad24012313c0894748c30fef09b5c5f3a0796f48938c3b561063a9
+package_root: C:\Users\h4227\AppData\Local\Temp\codex-ai-context-v013-019ff62e\v0.8.0\ai-context-dotnet-backend-v0.8.0
+target_root: C:\Github\YuChia\dotnet-mq-arch-lab
+target_starting_commit: 9586f862f30f6ba38c824e3d53899804ba56a9a0
+previous_files: C:\Users\h4227\AppData\Local\Temp\codex-ai-context-v013-019ff62e\v0.7.0\ai-context-dotnet-backend-v0.7.0\metadata\files.yaml
+previous_version: 0.7.0
+selection:
+  release_model: single-versioned-componentized-release
+  mandatory_components:
+  - software-development-core
+  - ai-context-lifecycle-core
+  profiles:
+  - dotnet-backend
+  providers:
+    repo-backlog:
+      enabled: true
+      preservation: preserve-existing-if-recorded
+selection_default:
+  release_model: single-versioned-componentized-release
+  mandatory_components:
+  - software-development-core
+  - ai-context-lifecycle-core
+  profiles:
+  - dotnet-backend
+  providers:
+    repo-backlog:
+      enabled: false
+      preservation: preserve-existing-if-recorded
+selection_resolution:
+  source: target-provenance
+  evidence:
+  - path: .dev/ai-context/provenance.yaml
+    sha256: 84b6d663d872b461a044a2a15e00665695026117836e49b24aba9dc9f406ac09
+selection_request:
+  enable_providers: []
+component_operation_counts:
+  would_apply:
+    ai-context-lifecycle-core: 1
+    software-development-core: 23
+  would_skip:
+    ai-context-lifecycle-core: 20
+    repo-backlog: 1
+    software-development-core: 22
+observed:
+  .agents/skills/ai-context-init/SKILL.md:
+    exists: true
+    sha256: e5bbf0b133c13f969876481172b31021a2da9376b79e2fe0feb47b55155103be
+    mode: '0644'
+  .agents/skills/ai-context-upgrader/SKILL.md:
+    exists: true
+    sha256: faf65368f52fbd3c01af2e1be1d96a1bd2cab4b540615eefc455a8c309dc1472
+    mode: '0644'
+  .agents/skills/software-development-orchestrator/SKILL.md:
+    exists: true
+    sha256: bc28aeada277962afec2f906023d35b56fe94fdc70d11791723ce2dc49d737e0
+    mode: '0644'
+  .ai/INDEX.MD:
+    exists: true
+    sha256: 9dbb2e76e3e08a4b1f271091518c5fcb0ef8dc3cfebeb9dd557ae8db5ed03d20
+    mode: '0644'
+  .ai/README.MD:
+    exists: true
+    sha256: b8c7bde2fb9faaf45ae90be8464e1c8010916f396d4a0703fc012d5f39366d06
+    mode: '0644'
+  .ai/assets/shared/governance/WORKFLOW-GATE-POLICY.md:
+    exists: true
+    sha256: e75171d98d613a79ef6a09ff9f6001efe245dd3b2d32b5e21865d4683fa184cd
+    mode: '0644'
+  .ai/assets/skills/README.MD:
+    exists: true
+    sha256: 7734010b21bd747412280130afa3f0362b5479ffc1d92174f28cfe638ae40bb1
+    mode: '0644'
+  .ai/assets/skills/ai-context-init/references/scan-playbook.md:
+    exists: true
+    sha256: e5aa2d91f28ff60dcea5dd65ec202b5c6f3f5b2032d533f0eb8e937deec65b28
+    mode: '0644'
+  .ai/assets/skills/ai-context-init/skill.yaml:
+    exists: true
+    sha256: 79d4defa0f6c606e56ba5dcc5e92489977b7cf66f4eac6479c79e875b442da58
+    mode: '0644'
+  .ai/assets/skills/ai-context-init/templates/project-config.template.yaml:
+    exists: true
+    sha256: 2aaa27486d677e5928b9dac76b1b03ae7cc95ef33331c1dafee8d5ce32502b8f
+    mode: '0644'
+  .ai/assets/skills/ai-context-init/templates/work-item-binding.schema.yaml:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/assets/skills/ai-context-upgrader/references/upgrade-playbook.md:
+    exists: true
+    sha256: 8f5096346b63e0b3b7ae26a3225518142e1fb247f94280d56ce78596ab2cb110
+    mode: '0644'
+  .ai/assets/skills/ai-context-upgrader/skill.yaml:
+    exists: true
+    sha256: 63266a1ad7e7da8fe09c035e0713db90f8d8e365f4687e7c63995d55b44385f9
+    mode: '0644'
+  .ai/assets/skills/software-development-orchestrator/references/acceptance-oracle.md:
+    exists: true
+    sha256: 5c06a854ebe59a556550c138b758a12af2c2992a6819420291028581cb852a97
+    mode: '0644'
+  .ai/assets/skills/software-development-orchestrator/references/capability-profile.md:
+    exists: true
+    sha256: fdef59939f465c62621772741a165d265aefc4efed1c46abf957334e8fa350a2
+    mode: '0644'
+  .ai/assets/skills/software-development-orchestrator/references/capability-profile.yaml:
+    exists: true
+    sha256: be2d404bb1b1a631741dfb5d5e9fcdd21b39a6c2a5b1879a5aad217fb2f39f35
+    mode: '0644'
+  .ai/assets/skills/software-development-orchestrator/references/output-contract.md:
+    exists: true
+    sha256: b33d4213625fdcdec48b41487038cbdab6bac16df27e991cdc6d895f47938959
+    mode: '0644'
+  .ai/assets/skills/software-development-orchestrator/references/validation-activation-policy.md:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_acceptance.py:
+    exists: false
+    sha256: null
+    mode: null
+  ? .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_capability_contract.py
+  : exists: false
+    sha256: null
+    mode: null
+  .ai/assets/skills/software-development-orchestrator/scripts/tests/test_validation_activation_policy.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/assets/skills/software-development-orchestrator/scripts/tests/test_workflow_implementation_contract.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/assets/skills/software-development-orchestrator/scripts/validate-software-development-orchestrator-acceptance.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/assets/skills/software-development-orchestrator/skill.yaml:
+    exists: true
+    sha256: e2b05241c80e8625c745cd240c62a6606749c980cb4618ba37477e893fdafcb9
+    mode: '0644'
+  .ai/scripts/README.md:
+    exists: true
+    sha256: 03a956c0860474f95d9af4ec80be17c6183e4f1cf7c7911b3436628290621e96
+    mode: '0644'
+  .ai/scripts/check-all.sh:
+    exists: true
+    sha256: 7fa34f8b2614d70c6fb56fba997df8028702a1a6ca47dbc760627a579179bf12
+    mode: '0755'
+  .ai/scripts/plan-ai-context-package-apply.py:
+    exists: true
+    sha256: c55950e54236f1346e42c843d7409f3e20c134c2c883dbd2fd38dcd3cb12b13b
+    mode: '0644'
+  .ai/scripts/python-entrypoints.json:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/python_prerequisites.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/run-python-entrypoint.ps1:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/run-python-entrypoint.sh:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/shell-assets.yaml:
+    exists: true
+    sha256: 5abf995026fc5234f35ada5c7443d7e368bb3416d4d955aa323bf5a99d8a6646
+    mode: '0644'
+  .ai/scripts/tests/test_ai_context_package_apply.py:
+    exists: true
+    sha256: 8713dd3dcd41c893682509691598852effa97444062e61775134777230810af7
+    mode: '0644'
+  .ai/scripts/tests/test_dependency_version_consistency.py:
+    exists: true
+    sha256: 6f73bb9dba0f70fc3d97c3a82e6e63f5926810fa2d41ebddbe853af8a333a48b
+    mode: '0644'
+  .ai/scripts/tests/test_fail_closed_validation.py:
+    exists: true
+    sha256: 56a17a8758c809b8a595fee7dcd00f9f514cd4d40aa2d9917bbf4b9135efc6f9
+    mode: '0644'
+  .ai/scripts/tests/test_python_entrypoints_contract.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/tests/test_python_prerequisites.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/tests/test_python_source_entrypoints.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/tests/test_run_python_entrypoint_ps1.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/tests/test_run_python_entrypoint_sh.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/tests/test_semantic_customization_skill_contract.py:
+    exists: true
+    sha256: 2ba2a609468f4d143c8eb59f90f1feed46b5f295b9dc7d001502d7a81e433e8a
+    mode: '0644'
+  .ai/scripts/tests/test_skill_script_colocation.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/tests/test_software_development_orchestrator_acceptance.py:
+    exists: true
+    sha256: b2d20cc57030e190ca1310b3ef866cca0a9d43828a3d84db5eb7cc6667d451d3
+    mode: '0644'
+  .ai/scripts/tests/test_software_development_orchestrator_capability_contract.py:
+    exists: true
+    sha256: dc7f10a7c5f967451054d42940f879bf967fb0e1bde6ac2fce31871fd565dfc1
+    mode: '0644'
+  .ai/scripts/tests/test_work_item_binding_contract.py:
+    exists: false
+    sha256: null
+    mode: null
+  .ai/scripts/tests/test_workflow_implementation_contract.py:
+    exists: true
+    sha256: 10a83213dc02d73334d7e011d61dce03bdc6ada2897379f383aa6b24ebabb135
+    mode: '0644'
+  .ai/scripts/validate-ai-context-target.py:
+    exists: true
+    sha256: f98f218467a6c7eab978f2f06cc12ee5f89c14121faabdec2ac45aa894a554b7
+    mode: '0644'
+  .ai/scripts/validate-ai-context.py:
+    exists: true
+    sha256: 0dd4919ec2b0fa232fdb8e0532a7c00d72c30defe0a3188c2a5d0c43545ed5d2
+    mode: '0644'
+  .ai/scripts/validate-assessment-artifacts.py:
+    exists: true
+    sha256: 9c19c577c52d042574e2ff49b5da4581b45af9552c1a381ce7d5aa25016bce4a
+    mode: '0644'
+  .ai/scripts/validate-dependency-versions.py:
+    exists: true
+    sha256: c0f16dc9a873a440ed21be9fb34a7d08379e26ff7b149cfc4582f3e7a13b5c88
+    mode: '0644'
+  .ai/scripts/validate-file-disposition-manifest.py:
+    exists: true
+    sha256: ede7adabc784a792cab4ba51778e0409b962042c423167fe5cd2f5c41089edea
+    mode: '0644'
+  .ai/scripts/validate-git-commits.py:
+    exists: true
+    sha256: f6c162b2cc236877061d669840bbf54ce1f5b19a398c4772c00e90a723ed65bc
+    mode: '0644'
+  .ai/scripts/validate-shell-assets.py:
+    exists: true
+    sha256: 0f6641dd7832b6ccbe6b23d142557f810de5a3a10d8daa99e96844e8daaf498a
+    mode: '0644'
+  .ai/scripts/validate-software-development-orchestrator-acceptance.py:
+    exists: true
+    sha256: 6f7b83f350017502d6935582b679728a42d16306055d61ac30fde02795ecda1d
+    mode: '0644'
+  .ai/scripts/validate-workflow-artifacts.py:
+    exists: true
+    sha256: 704f3307bfc2dba4a2dc4d75b92bed4173e38245ae3ee2d3cff4b95eef5ce76b
+    mode: '0644'
+  .ai/scripts/validate-workflow-handoff.py:
+    exists: true
+    sha256: 53c3d76346641aaccd323450739a045ffca8578d2f7921613825c147bc6b8086
+    mode: '0644'
+  .claude/skills/ai-context-init/SKILL.md:
+    exists: true
+    sha256: 662bb0b529741a0466adef2a48fae5006b9ba8aba4447c43f7b5b88985016430
+    mode: '0644'
+  .claude/skills/ai-context-upgrader/SKILL.md:
+    exists: true
+    sha256: e7ea16dbafb98164a547b082487033aba994489f0ff42603c9e553cd0256a40a
+    mode: '0644'
+  .claude/skills/software-development-orchestrator/SKILL.md:
+    exists: true
+    sha256: 0dc8cce287bd880446746a1255eaac9700fb7b75537efb16e69a809661c08d38
+    mode: '0644'
+  .codex/agents/context-translator.toml:
+    exists: true
+    sha256: 840602f4e7ff59fb41e678bca8505db2036fc3915d4df58599478f853f23a988
+    mode: '0644'
+  .dev/backlog/README.MD:
+    exists: true
+    sha256: af0255706028ed8b389e2cdc0f71971b1547bf3b8bc7208a31e2d25ec5fa393f
+    mode: '0644'
+  .dev/guides/ai-collaboration-guides/AI-CONTEXT-INIT-SKILL-GUIDE.md:
+    exists: true
+    sha256: 9d2ae3a6d52e0e0b041e1a3753ee9a36a1e45b428899242b9738eed098b999f5
+    mode: '0644'
+  .dev/guides/ai-collaboration-guides/AI-CONTEXT-UPGRADER-SKILL-GUIDE.md:
+    exists: true
+    sha256: 7afd5ead0a8b61a38c6059fe30342539b12804851023135d4c9b90de25e5d0df
+    mode: '0644'
+  .dev/guides/ai-collaboration-guides/INDEX.MD:
+    exists: true
+    sha256: 3fd9339dc8798f871e89a59cf18476a44ed92e37f8519c892b86f9498041a5b2
+    mode: '0644'
+  .dev/guides/ai-collaboration-guides/PYTHON-PREREQUISITE-DIAGNOSTICS-GUIDE.zh-TW.md:
+    exists: false
+    sha256: null
+    mode: null
+  .dev/standards/WORKFLOW-GATE-POLICY.md:
+    exists: true
+    sha256: 8a49f9778290c4b8d7cee3d1ad11fd99614788e7c24a669bd20086b72ee5e088
+    mode: '0644'
+  .github/pull_request_template.md:
+    exists: true
+    sha256: 1e82e43919739bacad3e6f49c38bd1aaec95df5a94ff3533ce49ebbfe0596694
+    mode: '0644'
+operations:
+- id: migration-0001
+  kind: replace
+  path: .agents/skills/ai-context-init/SKILL.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0002
+  kind: replace
+  path: .agents/skills/ai-context-upgrader/SKILL.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0003
+  kind: replace
+  path: .agents/skills/software-development-orchestrator/SKILL.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0004
+  kind: replace
+  path: .ai/INDEX.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0005
+  kind: replace
+  path: .ai/README.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0006
+  kind: replace
+  path: .ai/assets/shared/governance/WORKFLOW-GATE-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: replace
+  reason: all safety preconditions match
+- id: migration-0007
+  kind: replace
+  path: .ai/assets/skills/README.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0008
+  kind: replace
+  path: .ai/assets/skills/ai-context-init/references/scan-playbook.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0009
+  kind: replace
+  path: .ai/assets/skills/ai-context-init/skill.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0010
+  kind: replace
+  path: .ai/assets/skills/ai-context-init/templates/project-config.template.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0011
+  kind: add
+  path: .ai/assets/skills/ai-context-init/templates/work-item-binding.schema.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0012
+  kind: replace
+  path: .ai/assets/skills/ai-context-upgrader/references/upgrade-playbook.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0013
+  kind: replace
+  path: .ai/assets/skills/ai-context-upgrader/skill.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0014
+  kind: replace
+  path: .ai/assets/skills/software-development-orchestrator/references/acceptance-oracle.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0015
+  kind: replace
+  path: .ai/assets/skills/software-development-orchestrator/references/capability-profile.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0016
+  kind: replace
+  path: .ai/assets/skills/software-development-orchestrator/references/capability-profile.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0017
+  kind: replace
+  path: .ai/assets/skills/software-development-orchestrator/references/output-contract.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0018
+  kind: add
+  path: .ai/assets/skills/software-development-orchestrator/references/validation-activation-policy.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0019
+  kind: add
+  path: .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_acceptance.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0020
+  kind: add
+  path: .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_capability_contract.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0021
+  kind: add
+  path: .ai/assets/skills/software-development-orchestrator/scripts/tests/test_validation_activation_policy.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0022
+  kind: add
+  path: .ai/assets/skills/software-development-orchestrator/scripts/tests/test_workflow_implementation_contract.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0023
+  kind: add
+  path: .ai/assets/skills/software-development-orchestrator/scripts/validate-software-development-orchestrator-acceptance.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0024
+  kind: replace
+  path: .ai/assets/skills/software-development-orchestrator/skill.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0025
+  kind: replace
+  path: .ai/scripts/README.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0026
+  kind: replace
+  path: .ai/scripts/check-all.sh
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: replace
+  reason: all safety preconditions match
+- id: migration-0027
+  kind: replace
+  path: .ai/scripts/plan-ai-context-package-apply.py
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0028
+  kind: add
+  path: .ai/scripts/python-entrypoints.json
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0029
+  kind: add
+  path: .ai/scripts/python_prerequisites.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0030
+  kind: add
+  path: .ai/scripts/run-python-entrypoint.ps1
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0031
+  kind: add
+  path: .ai/scripts/run-python-entrypoint.sh
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0032
+  kind: replace
+  path: .ai/scripts/shell-assets.yaml
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0033
+  kind: replace
+  path: .ai/scripts/tests/test_ai_context_package_apply.py
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0034
+  kind: replace
+  path: .ai/scripts/tests/test_dependency_version_consistency.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0035
+  kind: replace
+  path: .ai/scripts/tests/test_fail_closed_validation.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0036
+  kind: add
+  path: .ai/scripts/tests/test_python_entrypoints_contract.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0037
+  kind: add
+  path: .ai/scripts/tests/test_python_prerequisites.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0038
+  kind: add
+  path: .ai/scripts/tests/test_python_source_entrypoints.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0039
+  kind: add
+  path: .ai/scripts/tests/test_run_python_entrypoint_ps1.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0040
+  kind: add
+  path: .ai/scripts/tests/test_run_python_entrypoint_sh.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0041
+  kind: replace
+  path: .ai/scripts/tests/test_semantic_customization_skill_contract.py
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0042
+  kind: add
+  path: .ai/scripts/tests/test_skill_script_colocation.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0043
+  kind: replace
+  path: .ai/scripts/tests/test_software_development_orchestrator_acceptance.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0044
+  kind: replace
+  path: .ai/scripts/tests/test_software_development_orchestrator_capability_contract.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0045
+  kind: add
+  path: .ai/scripts/tests/test_work_item_binding_contract.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0046
+  kind: replace
+  path: .ai/scripts/tests/test_workflow_implementation_contract.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0047
+  kind: replace
+  path: .ai/scripts/validate-ai-context-target.py
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0048
+  kind: replace
+  path: .ai/scripts/validate-ai-context.py
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0049
+  kind: replace
+  path: .ai/scripts/validate-assessment-artifacts.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0050
+  kind: replace
+  path: .ai/scripts/validate-dependency-versions.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0051
+  kind: replace
+  path: .ai/scripts/validate-file-disposition-manifest.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0052
+  kind: replace
+  path: .ai/scripts/validate-git-commits.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: replace
+  reason: all safety preconditions match
+- id: migration-0053
+  kind: replace
+  path: .ai/scripts/validate-shell-assets.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0054
+  kind: replace
+  path: .ai/scripts/validate-software-development-orchestrator-acceptance.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0055
+  kind: replace
+  path: .ai/scripts/validate-workflow-artifacts.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0056
+  kind: replace
+  path: .ai/scripts/validate-workflow-handoff.py
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: replace
+  reason: all safety preconditions match
+- id: migration-0057
+  kind: replace
+  path: .claude/skills/ai-context-init/SKILL.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0058
+  kind: replace
+  path: .claude/skills/ai-context-upgrader/SKILL.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0059
+  kind: replace
+  path: .claude/skills/software-development-orchestrator/SKILL.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0060
+  kind: replace
+  path: .codex/agents/context-translator.toml
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: replace
+  reason: all safety preconditions match
+- id: migration-0061
+  kind: replace
+  path: .dev/backlog/README.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: repo-backlog
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0062
+  kind: replace
+  path: .dev/guides/ai-collaboration-guides/AI-CONTEXT-INIT-SKILL-GUIDE.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0063
+  kind: replace
+  path: .dev/guides/ai-collaboration-guides/AI-CONTEXT-UPGRADER-SKILL-GUIDE.md
+  from_path: null
+  ownership: framework-managed
+  component_id: ai-context-lifecycle-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0064
+  kind: replace
+  path: .dev/guides/ai-collaboration-guides/INDEX.MD
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0065
+  kind: add
+  path: .dev/guides/ai-collaboration-guides/PYTHON-PREREQUISITE-DIAGNOSTICS-GUIDE.zh-TW.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: add
+  reason: all safety preconditions match
+- id: migration-0066
+  kind: replace
+  path: .dev/standards/WORKFLOW-GATE-POLICY.md
+  from_path: null
+  ownership: framework-managed
+  component_id: software-development-core
+  action: reconcile
+  reason: current hash or mode differs from previous release
+- id: migration-0067
+  kind: reconcile
+  path: .github/pull_request_template.md
+  from_path: null
+  ownership: target-template
+  component_id: software-development-core
+  action: reconcile
+  reason: migration explicitly requires reconciliation

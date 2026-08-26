@@ -151,5 +151,5 @@ public void Rule_Create_product_successfully()
 
 1. Use `.ai/assets/` prompts
 2. Follow `.ai/assets/tech-stacks/dotnet-backend/references/CODE-TEMPLATES.MD`
-3. Read `.dev/standards/coding-standards.md`
+3. Read `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md`
 4. Run `.ai/scripts/check-all.sh`

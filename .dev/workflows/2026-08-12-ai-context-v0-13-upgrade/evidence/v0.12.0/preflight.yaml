@@ -1,0 +1,88 @@
+schema_version: "1.0"
+version: "v0.12.0"
+recorded_at: "2026-08-13T11:04:05+08:00"
+status: "verified-ready-to-plan"
+package:
+  release_id: "REL-v0.12.0"
+  package_schema: "2.1.0"
+  source_commit: "a4fd14f0f08ad53859df1c860db0eb9643cdb2de"
+  source_tree: "e0273aa83e72c7f83899dd92e3a2eb57aa96a95c"
+  zip_sha256: "29af751de3ab1fe7e0ac3ce838eee327bb35f53542dae8a74e09feb8a4390cf5"
+  payload_files: 655
+  payload_fingerprint: "6ffbb9176ee44f32be989dbd3cf4f6657d56cbaf4319f4c53207bb381c13a98b"
+  files_manifest_digest: "2ff3a5d83912084f7c20554cb06dd7174a719938aa572ed249ee984a172286f9"
+  migration_digest: "7a6952c2b96d8890e96dd00aa231cb54152c7359dc363936b4416f82f707226f"
+  selected_input_fingerprint: "d063a001591b5e8f99ccd3f7cc9fd3a78e18bb71759c5eb17c734f28ac69c7ad"
+  selected_input_verification: >-
+    Syntax-validated from package identity only; canonical source selection
+    inputs are intentionally absent from the downstream package and were not
+    independently recomputed.
+  checksum_entries: 660
+  checksum_mismatches: 0
+compatibility:
+  breaking_changes: true
+  minimum_governed_source: "v0.11.0"
+  automatic_upgrade_sources: ["v0.11.0"]
+  exact_predecessor_authority: "REL-v0.11.0"
+operations:
+  total: 80
+  replace: 73
+  remove: 5
+  add: 2
+  reconcile: 0
+  exact_predecessor_safe: 80
+  target_divergence: 0
+  ignored_paths: 0
+selection:
+  resolution_source: "target-provenance"
+  repo_backlog_enabled: true
+  provider_activation: false
+settings:
+  validation_routine_local: "manual"
+  validation_routine_ci: "unconfigured"
+  stock_profile_activation: false
+  changed_path_activation: false
+  evidence_reuse_activation: false
+commit_policy_transition:
+  package_schema_version: "1.2"
+  package_policy_sha256: "65c564c415bad6f7f547bea9103416db5ea43faf9173a1053b91b3723d178a2d"
+  package_validator_sha256: "4d82b8913d13cf05a1e222c566165de2c8b480401056b2b7cf18bd6e97006642"
+  legacy_history_rewrite: false
+  legacy_checkpoint: "ca17969c539836ea6b42de2de361367041d57d84"
+  transition: >-
+    Record a timezone-aware target subject-pattern adoption boundary after the
+    last legacy-format preflight commit and before the first v0.12 commit. From
+    that boundary accept issue-only or scope-only subjects and reject pipe form.
+  target_reconciliation:
+    - ".dev/ai-context/tooling/target-validation-policy.yaml"
+    - ".dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py"
+    - ".dev/ai-context/tooling/tests/test_target_git_commit_policy.py"
+    - "AGENTS.md"
+    - "AGENTS.zh-TW.md"
+defects:
+  active:
+    - "AICU-V010-PROJECTION-001"
+    - "AICU-V090-DOC-001"
+    - "AICU-V011-SELECTION-001"
+    - "AICU-V012-PROFILE-REGISTRY-PROJECTION-001"
+    - "AICU-V012-COMMIT-CUTOVER-001"
+    - "AICU-V012-COMMIT-DOC-001"
+  disposition: >-
+    Keep the target-owned applicable gate authoritative, remove the now
+    source-context-only profile registry test from that gate, preserve exact
+    package bytes, and keep stock profiles/reuse inactive.
+effective_rules:
+  dispositions: 13
+  routes: 20
+  semantic_decision_change: false
+  regeneration_required: true
+decision:
+  owner_decision_required: false
+  rationale: >-
+    All eighty package operations are exact-predecessor safe. The only commit
+    transition compatible with target history is prospective adoption without
+    history rewrite, which is already authorized by the target governance and
+    prior execution-provenance decisions.
+authorization_evidence:
+  - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml"
+  - ".dev/assessments/ASM-20260813-004/report.md"

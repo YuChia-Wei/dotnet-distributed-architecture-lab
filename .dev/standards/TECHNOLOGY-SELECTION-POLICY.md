@@ -21,7 +21,7 @@ Architecture invariants and technology selections are different:
 
 Target selections belong in generated `.dev/project-config.yaml` under
 `technologySelections`. Every record uses the schema in
-`.ai/assets/skills/repo-structure-sync/templates/technology-selection.schema.yaml`.
+`.ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml`.
 
 ```yaml
 technologySelections:
@@ -65,7 +65,7 @@ New slots must reuse this record shape.
 Resolve one slot in this order:
 
 1. explicit target decision recorded in `technologySelections`;
-2. repository evidence recorded by `repo-structure-sync`;
+2. repository evidence recorded by `ai-context-init`;
 3. the applicable framework profile default;
 4. unresolved, when no default exists.
 
@@ -93,7 +93,7 @@ target changes the mocking library.
 
 ## Ownership And Upgrade
 
-- `repo-structure-sync` creates or refreshes target selection records from
+- `ai-context-init` creates or refreshes target selection records from
   file-backed evidence and explicit user decisions.
 - `ai-context-upgrader` treats `.dev/project-config.yaml` as target-owned truth
   and reconciles incoming defaults without overwriting selections.

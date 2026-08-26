@@ -1,0 +1,289 @@
+schema_version: "1.0"
+version: "v0.9.0"
+candidate_starting_commit: "82f318f1ef8cc9ccc0500d7b52e6423ae1f131c0"
+recorded_at: "2026-08-13T09:55:48+08:00"
+status: "finalized"
+candidate_commit: "4bf79fa6458b9f0c8eff05d08763432c1c270f91"
+remediation_commit: "5aeb00e85b9947b2b6b4305c707a37a8f2d4ed40"
+provider_path_correction_commit: "5a07a422ffb37723e45021f75197a0b7d154d823"
+audit_subject_commit: "3d261f3b351bc6b656528d722de37779f1829016"
+audit_assessment_id: "ASM-20260813-002"
+attempts:
+  - id: "apply-command-1"
+    outcome: "failed-before-write"
+    reason: "PowerShell-to-Python separator/newline quoting produced an invalid command invocation."
+    receipt_created: false
+    disposition: "Correct invocation quoting; retain as operator-experience feedback."
+  - id: "stock-apply-2"
+    outcome: "passed"
+    result: >-
+      Stock v0.9 applier applied 218 safe operations, skipped 143 acknowledged
+      reconciliations, and created the unchanged schema-1.1 pending receipt.
+  - id: "operation-reconciliation-1"
+    outcome: "passed"
+    result: >-
+      All 143 skipped operations were dispositioned: 142 framework-managed
+      destinations received exact incoming bytes and migration-0345 retained
+      the target pull-request template.
+  - id: "required-path-validation-1"
+    outcome: "failed"
+    reason: >-
+      Receipt validation found 159 selected framework paths whose v0.8 and
+      v0.9 package bytes were identical and therefore had no migration
+      operation: 127 EOL-only, 2 whitespace-only, and 30 semantic target deltas.
+    disposition: >-
+      Obtain explicit owner approval, rehome active target behavior, and copy
+      exact trusted v0.9 payload bytes using the receipt allowlist.
+  - id: "required-path-reconciliation-2"
+    outcome: "passed"
+    authorization: "explicit owner approval in current task"
+    result: "159/159 resulting SHA-256 values equal the receipt; receipt bytes unchanged."
+    evidence: "post-apply-required-path-reconciliation.yaml"
+  - id: "stock-ai-context-validator-1"
+    outcome: "blocked-by-package-projection"
+    reason: >-
+      Published downstream payload omits source-only distribution, evaluation,
+      release, and repository tooling while exact v0.9 registries, README
+      references, and source tests still require them. It also references the
+      owner-retired DotnetBackendBuildingBlocks test project.
+    disposition: >-
+      Preserve exact package bytes, record AICU-V090-PROJECTION-001, and use the
+      version-pinned target-applicable gate without claiming stock check-all or
+      validate-ai-context passed.
+  - id: "sandbox-target-gate-1"
+    outcome: "blocked-by-environment"
+    reason: "Windows sandbox Temp ACL denied effective-rule test fixture creation."
+    disposition: "Rerun the identical non-mutating gate outside the sandbox."
+  - id: "host-target-gate-2"
+    outcome: "passed"
+    duration_seconds: 29.4
+    result: >-
+      Target provenance, workflow, dependency, assessment, shell, Python
+      prerequisite, effective-rule, action-skill, downstream projection,
+      historical exception, and 15-commit range checks passed.
+  - id: "effective-route-oracle-1"
+    outcome: "failed-test-oracle"
+    reason: >-
+      The new target decision test initially omitted the required terminal LF
+      from canonical selector JSON and therefore rejected all twenty correct
+      framework-derived route IDs.
+    disposition: >-
+      Correct only the target-owned test oracle, verify every ID with the v0.9
+      framework resolver, and retain the failed attempt as upgrade feedback.
+  - id: "effective-route-oracle-2"
+    outcome: "passed"
+    result: >-
+      All twenty route IDs match v0.9 canonical_json_bytes and all nineteen
+      target overlay and effective-decision tests pass.
+  - id: "post-candidate-target-gate-3"
+    outcome: "passed"
+    duration_seconds: 28.1
+    commit: "4bf79fa6458b9f0c8eff05d08763432c1c270f91"
+    result: >-
+      The complete target-applicable gate passed after the candidate commit,
+      including all sixteen workflow-branch commits.
+  - id: "independent-audit-1"
+    outcome: "passed-but-superseded"
+    auditor: "gpt-5.6-sol / max"
+    result: >-
+      The first read-only audit accepted commit 1636f0a, but a separate stricter
+      audit found target-truth and working-tree blockers that control closeout.
+  - id: "independent-audit-2"
+    outcome: "blocked"
+    auditor: "gpt-5.6-sol / max"
+    findings:
+      - "Root target truth still claimed retired tools/analyzer projects existed or awaited solution inclusion."
+      - "Ignored analyzer/validator bin and obj artifacts remained under tools/."
+      - "The exact v0.9 persistence guide contains a dead command for the retired validation test project."
+      - "An inaccessible Python prerequisite fixture and staged premature assessment artifacts made the requested HEAD unclean."
+    disposition: >-
+      Remove only verified generated remnants, synchronize target-owned truth,
+      record the receipt-bound documentation defect without changing package
+      bytes, discard the premature assessment draft, validate a new clean
+      remediation checkpoint, and request another independent audit.
+  - id: "audit-remediation-1"
+    outcome: "pending-validation"
+    result: >-
+      Removed the verified Python fixture and retired bin/obj remnants, updated
+      target-owned English and Traditional Chinese repository truth, removed
+      retired tooling from project-config, and added AICU-V090-DOC-001 plus a
+      fail-closed target test while preserving the exact package document.
+  - id: "audit-remediation-target-gate-1"
+    outcome: "failed"
+    reason: >-
+      workflow.yaml advanced to 2026-08-13T08:55:34+08:00 while the workflow
+      index still recorded 2026-08-13T08:33:12+08:00.
+    disposition: >-
+      Synchronize the target-owned workflow index, retain this failed attempt,
+      and rerun the complete aggregate gate. The solution build in the same
+      host invocation passed with zero errors and six existing warnings but
+      does not relabel the aggregate gate as passed.
+  - id: "audit-remediation-target-gate-2"
+    outcome: "failed"
+    reason: >-
+      The withdrawn premature ASM-20260813-001 draft left an empty directory,
+      which the fail-closed assessment validator correctly treated as an
+      incomplete assessment.
+    disposition: >-
+      Verify the directory is empty, remove only that self-created draft
+      directory, retain this failed attempt, and rerun the complete gate.
+  - id: "audit-remediation-target-gate-3"
+    outcome: "passed"
+    duration_seconds: 29.2
+    result: >-
+      Receipt-bound target validation, workflow, dependency, assessment,
+      shell, 14 Python-prerequisite, 18 effective-rule with two privilege
+      skips, 3 action-skill, 20 target-overlay, and 17-commit policy checks all
+      passed outside the sandbox.
+  - id: "post-remediation-target-gate-4"
+    outcome: "passed"
+    commit: "5aeb00e85b9947b2b6b4305c707a37a8f2d4ed40"
+    duration_seconds: 28.6
+    result: >-
+      The same complete target-applicable gate passed against the clean
+      remediation commit, including all 18 workflow-branch commits.
+  - id: "independent-audit-3"
+    outcome: "blocked"
+    commit: "288e9992c00111594599f470d651653b8f329530"
+    auditor: "gpt-5.6-sol / max"
+    finding: >-
+      README.md, README.en.md, and .dev/ARCHITECTURE.md named the nonexistent
+      providers/bundled-mechanical-validation root instead of the installed
+      tooling/bundled-mechanical-validation canonical root.
+    disposition: >-
+      Correct only the three target-owned truth files, verify the canonical
+      provider manifest exists, preserve provider inactivity, and re-audit a
+      new clean fixed HEAD.
+  - id: "post-provider-path-target-gate-5"
+    outcome: "passed"
+    commit: "5a07a422ffb37723e45021f75197a0b7d154d823"
+    duration_seconds: 30.4
+    result: >-
+      Canonical provider path verification and the complete target-applicable
+      gate passed, including all 20 workflow-branch commits.
+  - id: "independent-audit-4"
+    outcome: "blocked"
+    commit: "a012237908278f8008abb140aa1fb83117b79cb9"
+    auditor: "gpt-5.6-sol / max"
+    finding: >-
+      The upgrade-report checkpoint table still said audit remediation was
+      pending validation even though all remediation and provider-correction
+      gates had passed and only a new independent fixed-HEAD audit remained.
+    disposition: >-
+      Synchronize the table without changing the technical candidate, retain
+      this blocked verdict, and request another audit of a new clean HEAD.
+  - id: "independent-audit-5"
+    outcome: "blocked"
+    commit: "3bcb98401e887de86445da81e751e8bbc37c7d64"
+    auditor: "gpt-5.6-sol / max"
+    finding: >-
+      Workflow and task resume text still instructed the operator to commit the
+      checkpoint-table correction even though 3bcb984 was already HEAD.
+    disposition: >-
+      Record 3bcb984 as completed, make fixed-HEAD read-only audit the only
+      next action, and use current-HEAD wording that remains true after this
+      metadata checkpoint is committed.
+  - id: "independent-audit-6"
+    outcome: "passed"
+    commit: "3d261f3b351bc6b656528d722de37779f1829016"
+    auditor: "gpt-5.6-sol / max"
+    assessment_id: "ASM-20260813-002"
+    result: >-
+      Exact clean fixed-HEAD audit returned SAFE-TO-FINALIZE after independently
+      rechecking the receipt, operations, 159 required-path reconciliations,
+      target gate, inactive provider, target truth, and effective-rule decision.
+  - id: "staged-finalization-1"
+    outcome: "passed"
+    finalized_at: "2026-08-13T09:50:24+08:00"
+    result: >-
+      The framework finalization API validated the unchanged pending receipt,
+      wrote the finalized ledger and REL-v0.9.0 provenance, derived thirteen
+      dispositions and twenty exact route packets, and published ready state last.
+  - id: "finalized-target-gate-with-receipt"
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 31.0
+    result: >-
+      Finalized target readiness, all applicable validators and tests, and the
+      complete 24-commit target policy range passed while the receipt remained.
+  - id: "finalized-target-gate-after-receipt-removal"
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 11.0
+    result: >-
+      The same finalized target gate passed after only the working pending
+      receipt was removed; the byte-identical workflow evidence copy remains.
+  - id: "post-finalization-checkpoint-gate"
+    outcome: "passed-outside-sandbox"
+    commit: "8b02af138efe4fa3b02dbebabf9d1b67f7c1b68e"
+    duration_seconds: 11.1
+    result: >-
+      Finalized readiness and all target-applicable checks passed with the
+      finalization checkpoint itself included in the complete 25-commit range.
+checks:
+  - command: >-
+      python -B -c "validate_pending_apply_receipt(...)"
+    outcome: "passed"
+    result: "637/637 required framework paths match; receipt SHA-256 b5a87952fc3e6f59714b20f0df74cbf283072ba83652a799c672b8902d2039df"
+  - command: "python -B .ai/scripts/validate-ai-context-target.py --allow-unfinalized"
+    outcome: "passed"
+    result: "Structural target valid; action readiness intentionally unresolved until effective state is finalized."
+  - command: "python -B .ai/scripts/validate-workflow-artifacts.py"
+    outcome: "passed"
+    result: "6 post-adoption workflows, 8 indexed workflow directories, 1 backlog item"
+  - command: "python -B .ai/scripts/validate-dependency-versions.py"
+    outcome: "passed"
+  - command: "python -B .ai/scripts/validate-assessment-artifacts.py"
+    outcome: "passed"
+    result: "5 assessments"
+  - command: "python -B .ai/scripts/validate-shell-assets.py"
+    outcome: "passed"
+    result: "15 tracked assets"
+  - command: "python -B .ai/scripts/tests/test_python_prerequisites.py -v"
+    outcome: "passed-outside-sandbox"
+    result: "14/14"
+  - command: "python -B .ai/scripts/tests/test_ai_context_effective_rules.py -v"
+    outcome: "passed-outside-sandbox"
+    result: "18 passed; 2 Windows symlink privilege cases skipped"
+  - command: "python -B .ai/scripts/tests/test_effective_rule_action_skill_contract.py -v"
+    outcome: "passed"
+    result: "3/3"
+  - command: "python -B -m unittest discover -s .dev/ai-context/tooling/tests -p test_*.py -v"
+    outcome: "passed"
+    result: "19/19 including effective-rule decision tests"
+  - command: >-
+      python -B .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py
+      --range main..HEAD --workflow-id 2026-08-12-ai-context-v0-13-upgrade
+    outcome: "passed"
+    result: "20 commits after provider-path correction; target cutoff and exact assessment waiver preserved"
+  - command: "dotnet build MQArchLab.slnx --no-restore --disable-build-servers -m:1"
+    outcome: "passed-outside-sandbox"
+    result: "0 errors; 6 pre-existing nullable warnings after analyzer integration removal"
+  - command: >-
+      python -B .dev/ai-context/tooling/validate-target-ai-context.py
+      --require-effective-rules --commit-range main..HEAD
+      --workflow-id 2026-08-12-ai-context-v0-13-upgrade
+    outcome: "passed-outside-sandbox-before-and-after-working-receipt-removal"
+    result: "ready; 13 dispositions; 20 routes; 20 packets; 24 commits"
+known_package_native_failures:
+  - command: "python -B .ai/scripts/validate-ai-context.py"
+    classification: "blocked-by-package-projection"
+  - command: "python -B .ai/scripts/tests/test_python_source_entrypoints.py -v"
+    classification: "blocked-by-package-projection; 12 absent source CLIs plus sandbox temp noise"
+  - command: "python -B .ai/scripts/tests/test_skill_script_colocation.py -v"
+    classification: "blocked-by-package-projection; missing distribution profile"
+  - command: "python -B .ai/scripts/tests/test_semantic_customization_skill_contract.py -v"
+    classification: "blocked-by-package-projection; missing distribution profile"
+  - command: "git diff --check"
+    classification: >-
+      Published exact bytes add a blank line at EOF in common-rules.md and
+      .claude/skills/README.md; record rather than mutate receipt-bound bytes.
+  - command: "dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj"
+    classification: >-
+      blocked-by-package-projection; the exact v0.9 persistence guide names an
+      owner-retired target project and is preserved byte-for-byte as
+      AICU-V090-DOC-001.
+environment_notes:
+  - "No machine-local .dev/validation.local.conf was read or created."
+  - "The bundled mechanical-validation provider remains source-available and inactive."
+  - "Two sandbox-created ACL fixture directories were removed after exact path verification."
+  - "Verified ignored bin/obj remnants under the retired tools root were removed, followed by their empty parent directories."
+  - "No worktree, push, merge, Issue closure, Project mutation, or upstream submission occurred."

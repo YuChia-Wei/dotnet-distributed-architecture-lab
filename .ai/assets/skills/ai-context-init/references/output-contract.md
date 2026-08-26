@@ -1,11 +1,21 @@
 # Output Contract
 
 When credible import evidence identifies the framework repository, release ID,
-version, tag, full commit, component selection, and import time, atomically
-create `.dev/ai-context/provenance.yaml` and
-`.dev/ai-context/customizations.yaml` from the canonical templates after target
-validation succeeds. If the copied source cannot be proven, report unresolved
-provenance and write neither authority. Never retain
+version, tag, full commit, component selection, and import time, publish
+`.dev/ai-context/provenance.yaml` and
+`.dev/ai-context/customizations.yaml` from the canonical templates after
+target validation succeeds using fail-closed staging with rollback on
+in-process failure. When explicit target adoption/applicability evidence,
+current verified catalog `catalog_digest.value` records, and deterministic
+route selections are supplied, publish required packets first and the completed
+`.dev/ai-context/effective-rules.yaml` last. A process crash is not cross-file
+atomic; stale or mixed candidates fail digest/freshness verification. Otherwise
+report derived action readiness as `action_ready: false`, `status: unresolved`,
+and reason `effective-rule-state-missing`; create no empty effective state or
+packet, and report the owner reconciliation required before routine action
+work. This readiness result is not a provenance field. If the copied source
+cannot be proven, report unresolved provenance and write none of those
+provenance, ledger, state, or packet files. Never retain
 `.dev/AI-CONTEXT-SOURCE.yaml` beside schema-2 provenance.
 
 ## Phase 1 Output

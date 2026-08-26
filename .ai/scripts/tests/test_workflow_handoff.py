@@ -197,6 +197,27 @@ class WorkflowHandoffTests(unittest.TestCase):
         errors = self.validate(data)
         self.assertTrue(any("execution_provenance.model" in error for error in errors))
 
+    def test_gwt_021_given_configured_defaults_when_validated_then_passes(self) -> None:
+        data = valid_checkpoint()
+        data["execution_provenance"].update(
+            model="gpt-5.6-sol",
+            reasoning_effort="medium",
+            model_source="configured-default",
+            evidence_ref="effective Codex configuration",
+        )
+        self.assertEqual([], self.validate(data))
+
+    def test_gwt_022_given_provider_defaults_when_evidence_missing_then_fails(self) -> None:
+        data = valid_checkpoint()
+        data["execution_provenance"].update(
+            model="provider-default-model",
+            reasoning_effort="provider-default-effort",
+            model_source="provider-default",
+            evidence_ref="",
+        )
+        errors = self.validate(data)
+        self.assertTrue(any("require evidence" in error for error in errors))
+
     def test_gwt_007_given_release_handoff_without_phase_check_when_validated_then_fails(self) -> None:
         data = valid_checkpoint()
         data["release_handoff"] = True

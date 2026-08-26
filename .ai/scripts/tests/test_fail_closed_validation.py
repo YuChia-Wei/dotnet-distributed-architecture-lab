@@ -22,6 +22,8 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[3]
 VALIDATOR_SOURCE = REPO_ROOT / ".ai/scripts/validate-shell-assets.py"
 RUNNER_SOURCE = REPO_ROOT / ".ai/scripts/check-all.sh"
+PROFILE_REGISTRY_SOURCE = REPO_ROOT / ".ai/scripts/validation-profile-registry.sh"
+EVIDENCE_SOURCE = REPO_ROOT / ".ai/scripts/validation-evidence.py"
 TEST_COMPLIANCE_SOURCE = REPO_ROOT / ".ai/scripts/check-test-compliance.sh"
 
 
@@ -67,6 +69,15 @@ class SyntheticShellAssetRepo:
         self.scripts = self.root / ".ai/scripts"
         self.scripts.mkdir(parents=True)
         shutil.copy2(VALIDATOR_SOURCE, self.scripts / VALIDATOR_SOURCE.name)
+        shutil.copy2(
+            REPO_ROOT / ".ai/scripts/python_prerequisites.py",
+            self.scripts / "python_prerequisites.py",
+        )
+        shutil.copy2(
+            REPO_ROOT / ".ai/scripts/python-entrypoints.json",
+            self.scripts / "python-entrypoints.json",
+        )
+        shutil.copy2(REPO_ROOT / "requirements.txt", self.root / "requirements.txt")
         initialized = run(["git", "init", "--quiet"], self.root)
         if initialized.returncode != 0:
             self.close()
@@ -190,8 +201,14 @@ class SyntheticRunnerRepo:
         self.scripts.mkdir(parents=True)
         self.bin.mkdir()
         shutil.copy2(RUNNER_SOURCE, self.scripts / RUNNER_SOURCE.name)
+        shutil.copy2(PROFILE_REGISTRY_SOURCE, self.scripts / PROFILE_REGISTRY_SOURCE.name)
+        shutil.copy2(EVIDENCE_SOURCE, self.scripts / EVIDENCE_SOURCE.name)
         self.add_python_stub("python")
-        self._write_stub(self.bin / "dotnet", 'printf "dotnet %s\\n" "$*" >> .aic-sentinel\nexit "${DOTNET_STUB_EXIT:-0}"')
+        self._write_stub(
+            self.bin / "dotnet",
+            'if [ -n "${DOTNET_STUB_OUTPUT:-}" ]; then printf "%s\\n" "$DOTNET_STUB_OUTPUT"; fi\n'
+            'printf "dotnet %s\\n" "$*" >> .aic-sentinel\nexit "${DOTNET_STUB_EXIT:-0}"',
+        )
         self._write_child("check-coding-standards.sh", "CODING_STUB_EXIT")
         self._write_child("check-spec-compliance.sh", "SPEC_STUB_EXIT")
 
@@ -201,11 +218,31 @@ class SyntheticRunnerRepo:
     def remove_child(self, name: str) -> None:
         (self.scripts / name).unlink()
 
-    def add_python_stub(self, name: str) -> None:
+    def add_python_stub(self, name: str, exit_variable: str = "PYTHON_STUB_EXIT") -> Path:
+        path = self.bin / name
         self._write_stub(
-            self.bin / name,
-            f'printf "{name} %s\\n" "$*" >> .aic-sentinel\nexit "${{PYTHON_STUB_EXIT:-0}}"',
+            path,
+            'if [ "$1" = ".ai/scripts/validation-evidence.py" ] && [ "$2" = "prepare" ]; then\n'
+            '  while [ "$#" -gt 0 ]; do\n'
+            '    if [ "$1" = "--selection" ]; then selection=$2; break; fi\n'
+            '    shift\n'
+            '  done\n'
+            '  while IFS="$(printf \'\\t\')" read -r validator_id _; do\n'
+            '    [ -n "$validator_id" ] && printf "%s\\tfixture-%s\\t%s\\t\\n" "$validator_id" "$validator_id" "${EVIDENCE_STUB_REUSE:-false}"\n'
+            '  done < "$selection"\n'
+            '  exit 0\n'
+            'fi\n'
+            'if [ "$1" = ".ai/scripts/validate-immutable-history.py" ] && [ "$2" = "verify" ]; then\n'
+            f'  printf "{name} %s\\n" "$*" >> .aic-sentinel\n'
+            '  case "${IMMUTABLE_HISTORY_STUB_MODE:-error}" in\n'
+            '    reusable) printf "routine-reusable\\treceipt-verified\\t1111111111111111111111111111111111111111\\t2222222222222222222222222222222222222222\\t3333333333333333333333333333333333333333\\tworkflow-artifacts,assessment-artifacts,source-ai-context-version\\n"; exit 0 ;;\n'
+            '    full) printf "full-required\\timmutable-history-change\\t1111111111111111111111111111111111111111\\t2222222222222222222222222222222222222222\\t3333333333333333333333333333333333333333\\tworkflow-artifacts,assessment-artifacts,source-ai-context-version\\n"; exit 10 ;;\n'
+            '    *) printf "configuration-error\\tfixture-error\\t\\t\\t\\t\\n"; exit 2 ;;\n'
+            '  esac\n'
+            'fi\n'
+            f'printf "{name} %s\\n" "$*" >> .aic-sentinel\nexit "${{{exit_variable}:-0}}"',
         )
+        return path
 
     def enable_source_release_context(self) -> None:
         (self.root / ".dev/releases").mkdir(parents=True)
@@ -215,6 +252,21 @@ class SyntheticRunnerRepo:
             encoding="utf-8",
             newline="\n",
         )
+
+    def enable_immutable_history_context(self) -> None:
+        for path in (
+            self.root / ".dev/workflows",
+            self.root / ".dev/assessments",
+            self.root / ".dev/releases",
+            self.root / ".ai/distribution/validation",
+        ):
+            path.mkdir(parents=True, exist_ok=True)
+        for path in (
+            self.scripts / "validate-immutable-history.py",
+            self.root / ".ai/distribution/validation/immutable-history-validation.yaml",
+            self.root / ".ai/distribution/validation/immutable-history-receipt.yaml",
+        ):
+            path.write_text("# immutable history fixture marker\n", encoding="utf-8")
 
     def enable_source_governance_context(self) -> None:
         workflow = self.root / ".github/workflows/governance.yml"
@@ -234,13 +286,16 @@ class SyntheticRunnerRepo:
         bash = bash_executable()
         if not bash:
             raise unittest.SkipTest("Bash is required for check-all.sh fixture tests")
-        merged_environment = dict(os.environ)
+        merged_environment = {
+            key: value for key, value in os.environ.items() if not key.startswith("BASH_FUNC_")
+        }
         merged_environment["PATH"] = str(self.bin) + os.pathsep + merged_environment["PATH"]
         merged_environment.pop("SPEC_FILE", None)
         merged_environment.pop("TASK_NAME", None)
         merged_environment.pop("COMMIT_RANGE", None)
         merged_environment.pop("WORKFLOW_ID", None)
         merged_environment.pop("AI_CONTEXT_PYTHON", None)
+        merged_environment.pop("VIRTUAL_ENV", None)
         if environment:
             merged_environment.update(environment)
         return subprocess.run(
@@ -261,6 +316,7 @@ class SyntheticRunnerRepo:
     def _write_child(self, name: str, exit_variable: str) -> None:
         self._write_stub(
             self.scripts / name,
+            f'if [ -n "${{{exit_variable}_OUTPUT:-}}" ]; then printf "%s\\n" "${{{exit_variable}_OUTPUT}}"; fi\n'
             f'printf "{name} %s\\n" "$*" >> .aic-sentinel\nexit "${{{exit_variable}:-0}}"',
         )
 
@@ -313,17 +369,50 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
         finally:
             fixture.close()
 
-    def test_gwt_004_given_required_command_unavailable_when_selected_then_gate_fails(self) -> None:
+    def test_gwt_004_given_source_context_without_dotnet_when_selected_then_no_sdk_command_runs(self) -> None:
         fixture = SyntheticRunnerRepo()
         try:
-            # Given deterministic dotnet command stubs return command-not-found semantics.
-            # When critical mode executes all required dotnet checks.
-            result = fixture.execute("--critical", environment={"DOTNET_STUB_EXIT": "127"})
+            # Given source-only checks are selected and any accidental dotnet
+            # invocation would fail with command-not-found semantics.
+            fixture.enable_source_release_context()
+            result = fixture.execute(
+                "--critical",
+                environment={
+                    "DOTNET_STUB_EXIT": "127",
+                    "DOTNET_STUB_OUTPUT": "bash: dotnet: command not found",
+                },
+            )
 
-            # Then all three selected command checks fail without workstation dependency.
-            self.assertEqual(1, result.returncode)
-            self.assertRegex(result.stdout, r"Required Failed: .*3")
-            self.assertEqual(3, sum(line.startswith("dotnet ") for line in fixture.sentinel()))
+            # Then the source framework passes without selecting the dotnet
+            # stub, while the SDK-free Python contract is selected.
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            sentinel = fixture.sentinel()
+            self.assertFalse(any(line.startswith("dotnet ") for line in sentinel))
+            self.assertTrue(
+                any("test_sdk_free_framework_contract.py" in line for line in sentinel),
+                sentinel,
+            )
+        finally:
+            fixture.close()
+
+    def test_gwt_004c_given_read_only_child_when_critical_runs_then_gate_is_blocked(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            # Given a required child reports a read-only filesystem.
+            # When critical mode runs.
+            result = fixture.execute(
+                "--critical",
+                environment={
+                    "CODING_STUB_EXIT": "1",
+                    "CODING_STUB_EXIT_OUTPUT": "Read-only file system",
+                },
+            )
+
+            # Then it remains non-passing and reports an environment block.
+            self.assertEqual(3, result.returncode, result.stdout + result.stderr)
+            self.assertIn("read-only-filesystem", result.stdout)
+            self.assertRegex(result.stdout, r"Required Failed: .*0")
+            self.assertRegex(result.stdout, r"Required Blocked: .*1")
         finally:
             fixture.close()
 
@@ -342,7 +431,13 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             for result in results:
                 self.assertEqual(0, result.returncode, result.stdout + result.stderr)
                 self.assertNotIn("Test Standards Compliance", result.stdout)
-                self.assertRegex(result.stdout, r"Advisory Warnings: .*0")
+                self.assertIn("reused=0", result.stdout)
+                self.assertIn("full-log:", result.stdout)
+                self.assertNotIn("Elapsed By Check (slowest first)", result.stdout)
+                self.assertRegex(
+                    result.stdout,
+                    r"AI_CONTEXT_CHECK_TIMING total_seconds=\d+ profile=\S+ checks=\d+ executed=\d+ reused=0 failed=0 blocked=0",
+                )
         finally:
             fixture.close()
 
@@ -355,17 +450,17 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
 
             # Then target-inapplicable checks and optional inputs record N/A without failing.
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("source release context not packaged", result.stdout)
-            self.assertIn("source package builder not packaged", result.stdout)
             self.assertIn("source governance registry not packaged", result.stdout)
             self.assertIn("source CI workflow not packaged", result.stdout)
-            self.assertRegex(result.stdout, r"Not Applicable: .*6")
+            self.assertIn("Spec Implementation Compliance", result.stdout)
+            self.assertRegex(result.stdout, r"not-applicable=\d+")
             self.assertRegex(result.stdout, r"Required Failed: .*0")
             self.assertFalse(
                 any(
                     "test_ai_context_version_governance.py" in line
                     or "test_ai_context_packaging.py" in line
                     or "validate-source-governance.py" in line
+                    or "test_repository_identity.py" in line
                     or "test_governance_workflow_contract.py" in line
                     for line in fixture.sentinel()
                 )
@@ -406,7 +501,31 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             self.assertFalse(
                 any(
                     "validate-source-governance.py" in line
+                    or "test_repository_identity.py" in line
                     or "test_governance_workflow_contract.py" in line
+                    for line in fixture.sentinel()
+                )
+            )
+        finally:
+            fixture.close()
+
+    def test_gwt_007b_given_pending_target_apply_receipt_without_provenance_when_critical_runs_then_target_validation_is_required(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            # Given a downstream pending receipt but no finalized target provenance.
+            receipt = fixture.root / ".dev/AI-CONTEXT-APPLY-PENDING.yaml"
+            receipt.parent.mkdir(parents=True)
+            receipt.write_text("schema_version: '1.1.0'\n", encoding="utf-8")
+
+            # When the critical gate is selected.
+            result = fixture.execute("--critical")
+
+            # Then the target validator is selected as a required check, not N/A.
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertIn("target-ai-context-version", result.stdout)
+            self.assertTrue(
+                any(
+                    "validate-ai-context-target.py" in line
                     for line in fixture.sentinel()
                 )
             )
@@ -438,15 +557,15 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             # Then both commands execute and no dependency deferral remains.
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
             self.assertNotIn("DEFERRED: Dependencies and Versions", result.stdout)
-            self.assertIn("Offline Dependency And Version Consistency", result.stdout)
-            self.assertIn("Dependency And Version Consistency Fail-Closed Tests", result.stdout)
+            self.assertIn("dependency-versions", result.stdout)
+            self.assertIn("dependency-versions-tests", result.stdout)
             self.assertTrue(
                 any("validate-dependency-versions.py" in line for line in fixture.sentinel())
             )
             self.assertTrue(
                 any("test_dependency_version_consistency.py" in line for line in fixture.sentinel())
             )
-            self.assertRegex(result.stdout, r"Deferred: .*0")
+            self.assertIn("deferred=0", result.stdout)
             self.assertRegex(result.stdout, r"Required Failed: .*0")
         finally:
             fixture.close()
@@ -460,10 +579,7 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
 
             # Then the language suite executes and remains fail closed.
             self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn(
-                "AI Context Language And Bilingual Parity Fail-Closed Tests",
-                result.stdout,
-            )
+            self.assertIn("ai-context-language-policy", result.stdout)
             self.assertTrue(
                 any(
                     "test_ai_context_language_policy.py -v" in line
@@ -486,13 +602,13 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             # Then all pass, mode labels are truthful, and default selects full behavior.
             for result in (critical, quick, full, default):
                 self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            self.assertIn("Mode: ", critical.stdout)
-            self.assertIn("critical", critical.stdout)
-            self.assertIn("quick", quick.stdout)
-            self.assertIn("full", full.stdout)
+            self.assertIn("Profile: ", critical.stdout)
+            self.assertIn("release", critical.stdout)
+            self.assertIn("pr", quick.stdout)
+            self.assertIn("nightly-full", full.stdout)
             self.assertEqual(
-                [line for line in full.stdout.splitlines() if "Running:" in line],
-                [line for line in default.stdout.splitlines() if "Running:" in line],
+                [line.split()[0] for line in full.stdout.splitlines() if line.rstrip().endswith("executed")],
+                [line.split()[0] for line in default.stdout.splitlines() if line.rstrip().endswith("executed")],
             )
             self.assertNotIn("Test Standards Compliance", critical.stdout)
             self.assertNotIn("Test Standards Compliance", quick.stdout)
@@ -515,7 +631,46 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             self.assertIn("Usage:", unknown.stderr)
             self.assertIn("Usage:", extra.stderr)
             self.assertIn("Usage:", help_result.stdout)
+            self.assertIn("--quick       --profile pr", help_result.stdout)
+            self.assertIn("--critical    --profile release", help_result.stdout)
             self.assertEqual([], fixture.sentinel())
+        finally:
+            fixture.close()
+
+    def test_gwt_011a_given_profile_selection_when_runner_starts_then_membership_is_registry_driven(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            # Given the canonical registry supplies five named profiles and
+            # source-only checks can execute when their profile selects them.
+            fixture.enable_source_release_context()
+            fast = fixture.execute("--profile", "fast")
+            pr = fixture.execute("--profile", "pr")
+            release = fixture.execute("--profile", "release")
+
+            # When each profile is selected directly, then its declared
+            # membership is visible and progressively stronger without the
+            # legacy aliases hiding the selected profile.
+            for result, profile in ((fast, "fast"), (pr, "pr"), (release, "release")):
+                self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+                self.assertIn(f"profile={profile}", result.stdout)
+                self.assertIn("full-log:", result.stdout)
+
+            def executed_check_ids(output: str) -> set[str]:
+                return {
+                    fields[0]
+                    for line in output.splitlines()
+                    if (fields := line.split()) and fields[-1] == "executed"
+                }
+
+            self.assertNotIn("package-full-matrix", executed_check_ids(fast.stdout))
+            self.assertNotIn("package-full-matrix", executed_check_ids(pr.stdout))
+            self.assertIn("package-full-matrix", executed_check_ids(release.stdout))
+            self.assertTrue(
+                any("test_ai_context_package_apply.py -v" in line for line in fixture.sentinel())
+            )
+            self.assertTrue(
+                any("test_ai_context_packaging.py -v" in line for line in fixture.sentinel())
+            )
         finally:
             fixture.close()
 
@@ -540,6 +695,9 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
                 any("validate-source-governance.py" in line for line in commands)
             )
             self.assertTrue(
+                any("test_repository_identity.py -v" in line for line in commands)
+            )
+            self.assertTrue(
                 any("test_governance_workflow_contract.py -v" in line for line in commands)
             )
             self.assertTrue(
@@ -547,6 +705,142 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             )
             self.assertNotIn("source release context not packaged", result.stdout)
             self.assertNotIn("source governance registry not packaged", result.stdout)
+        finally:
+            fixture.close()
+
+    def test_gwt_012a_given_valid_history_receipt_when_fast_runs_then_native_history_validators_are_reused(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            fixture.enable_source_release_context()
+            fixture.enable_immutable_history_context()
+
+            result = fixture.execute(
+                "--profile",
+                "fast",
+                environment={"IMMUTABLE_HISTORY_STUB_MODE": "reusable"},
+            )
+
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            lines = {line.split()[0]: line for line in result.stdout.splitlines() if line.split()}
+            self.assertTrue(lines["workflow-artifacts"].rstrip().endswith("reused"))
+            self.assertTrue(lines["assessment-artifacts"].rstrip().endswith("reused"))
+            self.assertTrue(lines["source-ai-context-version"].rstrip().endswith("reused"))
+            commands = fixture.sentinel()
+            self.assertTrue(
+                any("validate-immutable-history.py verify" in line for line in commands)
+            )
+            self.assertFalse(
+                any("validate-workflow-artifacts.py" in line for line in commands)
+            )
+            self.assertFalse(
+                any("validate-assessment-artifacts.py" in line for line in commands)
+            )
+            self.assertFalse(
+                any("validate-ai-context-versions.py" in line for line in commands)
+            )
+        finally:
+            fixture.close()
+
+    def test_gwt_012b_given_history_change_when_fast_runs_then_all_native_history_validators_execute(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            fixture.enable_source_release_context()
+            fixture.enable_immutable_history_context()
+
+            result = fixture.execute(
+                "--profile",
+                "fast",
+                environment={"IMMUTABLE_HISTORY_STUB_MODE": "full"},
+            )
+
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            commands = fixture.sentinel()
+            self.assertTrue(any("validate-workflow-artifacts.py" in line for line in commands))
+            self.assertTrue(any("validate-assessment-artifacts.py" in line for line in commands))
+            self.assertTrue(any("validate-ai-context-versions.py" in line for line in commands))
+            self.assertIn("reused=0", result.stdout)
+        finally:
+            fixture.close()
+
+    def test_gwt_012c_given_release_gate_when_local_cache_is_eligible_then_history_validators_still_execute(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            fixture.enable_source_release_context()
+            fixture.enable_immutable_history_context()
+
+            result = fixture.execute(
+                "--profile",
+                "release",
+                environment={
+                    "IMMUTABLE_HISTORY_STUB_MODE": "reusable",
+                    "EVIDENCE_STUB_REUSE": "true",
+                },
+            )
+
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            commands = fixture.sentinel()
+            self.assertFalse(
+                any("validate-immutable-history.py verify" in line for line in commands)
+            )
+            self.assertTrue(any("validate-workflow-artifacts.py" in line for line in commands))
+            self.assertTrue(any("validate-assessment-artifacts.py" in line for line in commands))
+            self.assertTrue(any("validate-ai-context-versions.py" in line for line in commands))
+        finally:
+            fixture.close()
+
+    def test_gwt_012d_given_history_receipt_is_missing_when_fast_runs_then_native_history_validators_execute(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            fixture.enable_source_release_context()
+            fixture.enable_immutable_history_context()
+            (
+                fixture.root
+                / ".ai/distribution/validation/immutable-history-receipt.yaml"
+            ).unlink()
+
+            result = fixture.execute("--profile", "fast")
+
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            commands = fixture.sentinel()
+            self.assertFalse(
+                any("validate-immutable-history.py verify" in line for line in commands)
+            )
+            self.assertTrue(any("validate-workflow-artifacts.py" in line for line in commands))
+            self.assertTrue(any("validate-assessment-artifacts.py" in line for line in commands))
+            self.assertTrue(any("validate-ai-context-versions.py" in line for line in commands))
+        finally:
+            fixture.close()
+
+    def test_gwt_012e_given_history_verifier_has_configuration_error_when_fast_runs_then_runner_stops_before_checks(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            fixture.enable_source_release_context()
+            fixture.enable_immutable_history_context()
+
+            result = fixture.execute(
+                "--profile",
+                "fast",
+                environment={"IMMUTABLE_HISTORY_STUB_MODE": "error"},
+            )
+
+            self.assertEqual(2, result.returncode, result.stdout + result.stderr)
+            self.assertIn(
+                "Immutable history validation preparation failed",
+                result.stderr,
+            )
+            commands = fixture.sentinel()
+            self.assertTrue(
+                any("validate-immutable-history.py verify" in line for line in commands)
+            )
+            self.assertFalse(
+                any("validate-workflow-artifacts.py" in line for line in commands)
+            )
+            self.assertFalse(
+                any("validate-assessment-artifacts.py" in line for line in commands)
+            )
+            self.assertFalse(
+                any("validate-ai-context-versions.py" in line for line in commands)
+            )
         finally:
             fixture.close()
 
@@ -570,7 +864,7 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
         finally:
             fixture.close()
 
-    def test_gwt_014_given_explicit_python_missing_when_gate_starts_then_it_fails_closed(self) -> None:
+    def test_gwt_014_given_explicit_python_missing_when_gate_starts_then_it_is_blocked(self) -> None:
         fixture = SyntheticRunnerRepo()
         try:
             # Given an explicit interpreter selection cannot be resolved.
@@ -580,8 +874,9 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
                 environment={"AI_CONTEXT_PYTHON": "missing-aic-python"},
             )
 
-            # Then the runner fails before launching any required check.
-            self.assertEqual(1, result.returncode)
+            # Then the runner remains non-passing before launching any required check.
+            self.assertEqual(3, result.returncode)
+            self.assertIn("BLOCKED-BY-ENVIRONMENT", result.stderr)
             self.assertIn("Python 3.11 or newer is required", result.stderr)
             self.assertEqual([], fixture.sentinel())
         finally:
@@ -603,6 +898,102 @@ class CheckAllRunnerGwtTests(unittest.TestCase):
             self.assertTrue(
                 any(line.startswith("python ") for line in fixture.sentinel())
             )
+        finally:
+            fixture.close()
+
+    def test_gwt_016_given_active_environment_when_gate_starts_then_it_precedes_path_python(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            active = fixture.root / "active"
+            active_python = active / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+            active_python.parent.mkdir(parents=True)
+            fixture._write_stub(
+                active_python,
+                'printf "active-python %s\\n" "$*" >> .aic-sentinel\n'
+                'if [ "$1" = ".ai/scripts/validation-evidence.py" ] && [ "$2" = "prepare" ]; then\n'
+                '  while [ "$1" != "--selection" ] && [ "$#" -gt 0 ]; do shift; done\n'
+                '  shift\n'
+                "  while IFS=$'\\t' read -r validator_id _; do\n"
+                '    [ -n "$validator_id" ] && printf "%s\\tfixture-%s\\tfalse\\t\\n" "$validator_id" "$validator_id"\n'
+                '  done < "$1"\n'
+                'fi\n'
+                'exit 0',
+            )
+            result = fixture.execute(
+                "--critical", environment={"VIRTUAL_ENV": str(active)}
+            )
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            commands = fixture.sentinel()
+            self.assertTrue(any(line.startswith("active-python ") for line in commands))
+            self.assertFalse(any(line.startswith("python ") for line in commands))
+        finally:
+            fixture.close()
+
+    def test_gwt_017_given_only_versioned_path_python_when_gate_starts_then_it_is_selected(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            fixture.add_python_stub("python", "GENERIC_PYTHON_STUB_EXIT")
+            fixture.add_python_stub("python3", "GENERIC_PYTHON_STUB_EXIT")
+            fixture.add_python_stub("python3.13", "VERSIONED_PYTHON_STUB_EXIT")
+            result = fixture.execute(
+                "--critical",
+                environment={"GENERIC_PYTHON_STUB_EXIT": "1"},
+            )
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertTrue(
+                any(line.startswith("python3.13 ") for line in fixture.sentinel())
+            )
+        finally:
+            fixture.close()
+
+    def test_gwt_018_given_only_offline_uv_python_when_gate_starts_then_uv_is_queried_once(self) -> None:
+        fixture = SyntheticRunnerRepo()
+        try:
+            fixture._write_stub(
+                fixture.bin / "dirname",
+                'value=${1%/}\ncase "$value" in */*) printf "%s\\n" "${value%/*}" ;; *) printf ".\\n" ;; esac',
+            )
+            fixture._write_stub(
+                fixture.bin / "date",
+                'printf "2026-01-01 00:00:00\\n"',
+            )
+            for command in (
+                "awk",
+                "cat",
+                "grep",
+                "head",
+                "mkdir",
+                "sed",
+                "sha256sum",
+                "sort",
+            ):
+                fixture._write_stub(
+                    fixture.bin / command,
+                    f'PATH=/usr/bin:/bin exec {command} "$@"',
+                )
+            fixture.add_python_stub("python", "GENERIC_PYTHON_STUB_EXIT")
+            fixture.add_python_stub("python3", "GENERIC_PYTHON_STUB_EXIT")
+            managed = fixture.add_python_stub("managed-python", "MANAGED_PYTHON_STUB_EXIT")
+            fixture._write_stub(
+                fixture.bin / "uv",
+                f'printf "uv %s\\n" "$*" >> .aic-sentinel\nprintf "%s\\n" "{managed.as_posix()}"',
+            )
+            result = fixture.execute(
+                "--critical",
+                environment={
+                    "GENERIC_PYTHON_STUB_EXIT": "1",
+                    "PATH": str(fixture.bin),
+                },
+            )
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            commands = fixture.sentinel()
+            uv_commands = [line for line in commands if line.startswith("uv ")]
+            self.assertEqual(1, len(uv_commands))
+            self.assertIn(
+                "python find --managed-python --no-python-downloads --offline --no-config --no-project >=3.11",
+                uv_commands[0],
+            )
+            self.assertTrue(any(line.startswith("managed-python ") for line in commands))
         finally:
             fixture.close()
 

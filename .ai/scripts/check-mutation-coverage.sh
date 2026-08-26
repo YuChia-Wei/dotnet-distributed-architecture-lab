@@ -63,7 +63,7 @@ if [ ! -f "stryker-config.json" ]; then
 }
 EOF
   echo ""
-  print_message "$YELLOW" "TODO: refine exclusions for uContract/Contract namespaces."
+  print_message "$YELLOW" "TODO: refine exclusions for target-selected contract helpers and generated code."
   exit 1
 fi
 

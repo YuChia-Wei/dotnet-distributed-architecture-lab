@@ -1,5 +1,7 @@
 # Context Boundary Playbook
 
+Rule IDs: `AICTX-EVIDENCE-001`
+
 Use this playbook when classifying, moving, or cleaning AI collaboration context.
 
 ## Evidence Order
@@ -9,6 +11,13 @@ Use this playbook when classifying, moving, or cleaning AI collaboration context
 3. Existing folder placement
 4. Canonical registries and wrapper indexes
 5. File content
+
+Optional indexes, code graphs, IDE indexes, MCP servers, and semantic search may
+accelerate discovery within this order, but they do not become an evidence tier
+or normative dependency. Reopen material source files and apply the quick
+fallback checks in
+`.dev/standards/AI-CONTEXT-BOUNDARY.md#tool-neutral-evidence-boundary` before a
+placement, ownership, absence, or relationship decision is treated as true.
 
 ## Classification Columns
 
