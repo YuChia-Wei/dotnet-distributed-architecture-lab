@@ -17,7 +17,7 @@
 - `branch_segment`: `1`
 - `status`: `active`
 - `created_at`: `2026-08-26T19:03:36+08:00`
-- `updated_at`: `2026-08-26T20:21:48+08:00`
+- `updated_at`: `2026-08-26T20:25:13+08:00`
 - `template_source`: `.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
 - `template_version`: `1.4.0`
 - `workflow_locator`: `.dev/workflows/2026-08-26-reconstructable-system-specification/workflow.yaml`
@@ -164,7 +164,7 @@
 
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `codex/2026-08-26-reconstructable-system-specification` | `main` | active | | local only | `2026-08-26T19:03:36+08:00` | Authorized specification workflow | Continue RECON-001 |
+| 1 | `codex/2026-08-26-reconstructable-system-specification` | `main` | active | `a4b0f09f06bdfca9d8ea4e3e7e57ad68102fb15e` | local only | `2026-08-26T20:25:13+08:00` | Inventory test/compliance checkpoint; workflow remains open | Run opted-in PostgreSQL evidence, then resume RECON-005/RECON-006 |
 
 ## Completion Summary
 
@@ -177,6 +177,6 @@
 - Review disposition: Conditional; do not delete source yet. See `reports/06-reconstruction-readiness-audit.md`.
 - Validation evidence: JSON/YAML parse, Markdown links, workflow validator, targeted builds, and broker-free tests passed; the external PostgreSQL gate is blocked-by-environment. See `reports/07-validation-summary.md`.
 - Workflow task state: RECON-001 through RECON-004 completed; RECON-005 blocked on the 100% gate; RECON-007 in progress pending opted-in PostgreSQL evidence; RECON-006 pending.
-- Commits: None.
+- Commits: `3a5fbb3bb9bd5e4643af87ddfcbd6883373eb1fb`, `a4b0f09f06bdfca9d8ea4e3e7e57ad68102fb15e`.
 - Branch / checkpoint / handoff evidence: Local branch created; no push, PR, merge, or handoff.
 - Residual risks: Existing implementation may contain accidental behavior; selected compliance and the destructive-copy LUNA acceptance exercise remain non-passing.
