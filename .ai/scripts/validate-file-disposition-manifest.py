@@ -9,6 +9,13 @@ import subprocess
 import sys
 from pathlib import Path, PurePosixPath
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.dont_write_bytecode = True
+
+from python_prerequisites import guard_direct_entrypoint
+
+guard_direct_entrypoint(".ai/scripts/validate-file-disposition-manifest.py")
+
 import yaml
 
 
@@ -54,6 +61,13 @@ def valid_repo_path(value: object, *, allow_directory: bool = True) -> bool:
     normalized = value[:-1] if is_directory else value
     path = PurePosixPath(normalized)
     return normalized not in {"", "."} and ".." not in path.parts
+
+
+def valid_exact_repo_file(value: object) -> bool:
+    """Return whether ``value`` is one literal repository-relative file path."""
+    return valid_repo_path(value, allow_directory=False) and not any(
+        marker in value for marker in ("*", "?", "[", "]", "{", "}")
+    )
 
 
 def path_exists(path: str, candidates: set[str]) -> bool:
@@ -197,6 +211,7 @@ def validate_v2_manifest_data(
     base_matches_latest_published: bool,
     actual_profile_id: str | None,
     actual_lifecycles: dict[str, str],
+    current_byte_authorization_paths: set[str],
 ) -> list[str]:
     """Validate the evidence-rich v2 release path disposition contract."""
     errors: list[str] = []
@@ -373,7 +388,10 @@ def validate_v2_manifest_data(
                 errors.append(
                     f"{label}.latest published version differs from subject_commit"
                 )
-        if path not in subject_match_paths:
+        if (
+            path not in subject_match_paths
+            and path not in current_byte_authorization_paths
+        ):
             errors.append(f"{label}.path differs from the pinned subject_commit")
 
         replacement = entry.get("replacement")
@@ -459,6 +477,7 @@ def validate_manifest_data(
     base_matches_latest_published: bool = False,
     actual_profile_id: str | None = None,
     actual_lifecycles: dict[str, str] | None = None,
+    current_byte_authorization_paths: set[str] | None = None,
 ) -> list[str]:
     """Dispatch legacy v1 and evidence-rich v2 manifest validation."""
     if isinstance(data, dict) and data.get("schema_version") == "2.0":
@@ -475,6 +494,7 @@ def validate_manifest_data(
             base_matches_latest_published=base_matches_latest_published,
             actual_profile_id=actual_profile_id,
             actual_lifecycles=actual_lifecycles or {},
+            current_byte_authorization_paths=current_byte_authorization_paths or set(),
         )
     return validate_v1_manifest_data(
         data,
@@ -544,7 +564,12 @@ def profile_packaged_paths(
     return packaged
 
 
-def collect_v2_git_facts(root: Path, data: dict) -> dict[str, object]:
+def collect_v2_git_facts(
+    root: Path,
+    data: dict,
+    *,
+    current_byte_authorization_paths: set[str] | None = None,
+) -> dict[str, object]:
     """Collect exact current, subject, published, and package-profile evidence."""
     current_paths = set(
         run_git(root, "ls-files", "--cached", "--others", "--exclude-standard")
@@ -667,10 +692,16 @@ def collect_v2_git_facts(root: Path, data: dict) -> dict[str, object]:
         "base_matches_latest_published": base_matches_latest_published,
         "actual_profile_id": actual_profile_id,
         "actual_lifecycles": actual_lifecycles,
+        "current_byte_authorization_paths": current_byte_authorization_paths or set(),
     }
 
 
-def validate(root: Path, manifest: Path) -> list[str]:
+def validate(
+    root: Path,
+    manifest: Path,
+    *,
+    current_byte_authorizations: tuple[str, ...] = (),
+) -> list[str]:
     manifest_path = manifest if manifest.is_absolute() else root / manifest
     try:
         data = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
@@ -680,7 +711,31 @@ def validate(root: Path, manifest: Path) -> list[str]:
         return [f"{manifest}: root must be a mapping"]
     try:
         if data.get("schema_version") == "2.0":
-            facts = collect_v2_git_facts(root, data)
+            coverage = data.get("coverage")
+            candidates = (
+                coverage.get("candidate_paths", [])
+                if isinstance(coverage, dict)
+                else []
+            )
+            authorized_paths = set(current_byte_authorizations)
+            if len(authorized_paths) != len(current_byte_authorizations):
+                return ["current byte authorizations must not contain duplicate paths"]
+            for path in authorized_paths:
+                if not valid_exact_repo_file(path):
+                    return [
+                        "current byte authorization must be an exact "
+                        f"repository-relative file: {path!r}"
+                    ]
+                if path not in candidates:
+                    return [
+                        "current byte authorization is not a manifest candidate: "
+                        f"{path}"
+                    ]
+            facts = collect_v2_git_facts(
+                root,
+                data,
+                current_byte_authorization_paths=authorized_paths,
+            )
             return validate_manifest_data(data, **facts)
         current_paths, base_paths, changed_paths = collect_v1_git_facts(root, data)
     except RuntimeError as exc:
@@ -697,9 +752,23 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument(
+        "--current-byte-authorization",
+        action="append",
+        default=[],
+        metavar="PATH",
+        help=(
+            "Allow one source-governance-verified exact candidate path to differ "
+            "from its subject commit."
+        ),
+    )
     args = parser.parse_args()
 
-    errors = validate(args.root.resolve(), args.manifest)
+    errors = validate(
+        args.root.resolve(),
+        args.manifest,
+        current_byte_authorizations=tuple(args.current_byte_authorization),
+    )
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)

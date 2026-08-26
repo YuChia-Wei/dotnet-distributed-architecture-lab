@@ -1,0 +1,19 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "AICU-005-closeout",
+  "workflow_id": "2026-08-12-ai-context-v0-13-upgrade",
+  "owner_skill": "ai-context-governance",
+  "status": "completed",
+  "created_at": "2026-08-12T21:43:41+08:00",
+  "updated_at": "2026-08-13T14:20:03+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-5",
+  "reasoning_effort": "provider-default",
+  "finding_ids": [],
+  "scope": {"target": "Workflow evidence, reports, commits, and handoff", "files": [".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/**"], "constraints": ["no merge or push without separate authorization"], "non_goals": ["Issue closure", "Project mutation"]},
+  "execution": {"steps": ["validate corrected report artifacts", "commit the corrected report checkpoint", "independently re-audit all report surfaces", "create a complete successor assessment", "independently audit the clean closeout HEAD", "synchronize completed workflow state"], "validation": ["assessment validator", "workflow validator", "target AI-context gate", "Git commit policy", "three independent content audits", "independent clean fixed-HEAD closeout audit"], "last_completed_step": "Independent Sol MAX closeout audit accepted clean fixed checkpoint d770885 with the 60-commit target gate, complete ASM-008, reciprocal ASM-007 supersession, and unchanged authorization boundaries.", "next_action": "Keep the completed branch local unless the user separately authorizes push, merge, Issue closure, Project mutation, or upstream submission."},
+  "results": {"summary": "The exact v0.6.0-to-v0.13.0 upgrade, configuration, analysis, reports, successor assessment, and local closeout are complete.", "files_changed": [".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/**", ".dev/assessments/ASM-20260813-007/assessment.yaml", ".dev/assessments/ASM-20260813-008/**", ".dev/assessments/INDEX.MD"], "tests_run": ["complete target gate over 60 commits", "three Sol MAX content re-audits SAFE-TO-PROCEED", "independent Sol MAX fixed-HEAD audit SAFE-TO-CLOSEOUT", "assessment/workflow/target validators", "GitHub Issue #1 read-only state readback"], "finding_status": "completed-and-independently-verified", "residual_risk": "Documented upstream package defects and deferred Architecture Kit/activation decisions remain outside this completed workflow.", "follow_up_needed": false}
+}

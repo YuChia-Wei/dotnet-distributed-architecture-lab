@@ -1,14 +1,22 @@
 # Sub-Agent Role Prompts
 
-This directory contains canonical delegated sub-agent role definitions.
+This directory contains canonical owning-skill bounded role contracts.
 
 ## Purpose
 
-Use `.ai/assets/sub-agent-role-prompts/` for worker-role prompts and delegation templates that a main agent can use when assigning bounded work to sub-agents.
+Use `.ai/assets/sub-agent-role-prompts/` for worker-role prompts and optional
+delegation templates that an owning skill can use for bounded work.
 
 ## Usage
 
 Each sub-agent role should keep its canonical entry in `sub-agent.yaml`, with optional supporting material under `references/`.
+
+The owning skill loads the canonical role contract. It may apply that contract
+direct inline or, when eligible, use genuine delegated execution. Directory
+category and loading a prompt do not prove a worker invocation; the optional
+delegation template is not delegation evidence. Record execution disposition
+and evidence through
+`.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`.
 
 Dynamic loading through the canonical `sub-agent.yaml` is the default. A role is
 promoted only for a concrete runtime-specific need, and its exact adapter paths

@@ -7,10 +7,17 @@ import posixpath
 import re
 import subprocess
 import sys
-import tomllib
 from collections import Counter
 from pathlib import Path, PurePosixPath
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.dont_write_bytecode = True
+
+from python_prerequisites import guard_direct_entrypoint
+
+guard_direct_entrypoint(".ai/scripts/validate-ai-context.py")
+
+import tomllib
 import yaml
 
 
@@ -23,19 +30,8 @@ ACTIVE_SCRIPT_REFERENCE = re.compile(
 SOURCE_ONLY_SCRIPT_REFERENCES = frozenset(
     {
         Path(".ai/scripts/tests/test_ai_context_packaging.py"),
-        Path(".ai/scripts/tests/test_ai_context_release_state.py"),
         Path(".ai/scripts/tests/test_ai_context_version_governance.py"),
-        Path(".ai/scripts/tests/test_ai_behavior_evaluation.py"),
-        Path(".ai/scripts/tests/test_ai_context_load_measurement.py"),
-        Path(".ai/scripts/tests/test_github_workflow_contract.py"),
         Path(".ai/scripts/tests/test_governance_workflow_contract.py"),
-        Path(".ai/scripts/tests/test_prepare_ai_context_release.py"),
-        Path(".ai/scripts/tests/test_release_notes_renderer.py"),
-        Path(".ai/scripts/tests/test_repository_config_contract.py"),
-        Path(".ai/scripts/tests/test_skill_transition_contract.py"),
-        Path(".ai/scripts/validate-ai-context-versions.py"),
-        Path(".ai/scripts/validate-repository-config-contract.py"),
-        Path(".ai/scripts/validate-skill-transition.py"),
         Path(".ai/scripts/validate-source-governance.py"),
     }
 )
@@ -75,6 +71,12 @@ LANGUAGE_ALLOWLIST: dict[Path, frozenset[str]] = {
 OWNERSHIP_REGISTRY = Path(".dev/standards/AI-CONTEXT-OWNERSHIP.yaml")
 RULE_STRENGTHS = {"invariant", "profile-default", "conditional", "example", "historical"}
 RULE_STATUSES = {"active", "deprecated", "historical"}
+GOVERNANCE_TERM_ID = re.compile(r"^[a-z0-9]+(?:[.-][a-z0-9]+)*$")
+GOVERNANCE_TERM_DISTRIBUTIONS = {"portable", "source-only"}
+GOVERNANCE_TERM_PORTABLE_DISPOSITIONS = {
+    "available",
+    "upstream-only-non-actionable",
+}
 ASSET_SCHEMA_VERSIONS = {
     "skill.yaml": "1.0",
     "sub-agent.yaml": "1.1",
@@ -125,6 +127,26 @@ SUB_AGENT_ADAPTER_CONTRACTS = {
         "suffixes": (".md", ".agent.md"),
     },
 }
+ROLE_BINDING_ROOT = PurePosixPath(".ai/assets/sub-agent-role-prompts")
+ROLE_BINDING_REQUIRED_FIELDS = {
+    "role_path",
+    "role_asset_id",
+    "expected_role_status",
+    "binding_kind",
+    "applicability",
+    "load_obligation",
+}
+ROLE_BINDING_KINDS = {"primary", "conditional"}
+ROLE_BINDING_EXPECTED_STATUS = "active"
+ROLE_BINDING_LOAD_OBLIGATION = "mandatory-when-applicable"
+SUB_AGENT_SYSTEM = Path(".ai/SUB-AGENT-SYSTEM.MD")
+ROLE_BINDING_PROJECTION_HEADING = "## SAG-001 Derived Role-Binding Projection"
+ROLE_BINDING_PROJECTION_HEADERS = (
+    "Role Asset ID",
+    "Derived Owning Skill",
+    "Binding Kind",
+    "Canonical Applicability (Projection)",
+)
 CAPABILITY_PROFILE = Path(
     ".ai/assets/skills/software-development-orchestrator/references/capability-profile.yaml"
 )
@@ -134,13 +156,55 @@ PROJECT_CONFIG_TEMPLATE = Path(
 TECHNOLOGY_SELECTION_SCHEMA = Path(
     ".ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml"
 )
-EXAMPLE_EVIDENCE_SCHEMA = Path(".dev/standards/examples/evidence-schema.yaml")
-EXAMPLE_EVIDENCE_MANIFEST = Path(".dev/standards/examples/evidence-manifest.yaml")
+WORK_ITEM_BINDING_SCHEMA = Path(
+    ".ai/assets/skills/ai-context-init/templates/work-item-binding.schema.yaml"
+)
+EXAMPLE_EVIDENCE_SCHEMA = Path(
+    ".ai/assets/tech-stacks/dotnet-backend/examples/evidence-schema.yaml"
+)
+EXAMPLE_EVIDENCE_MANIFEST = Path(
+    ".ai/assets/tech-stacks/dotnet-backend/examples/evidence-manifest.yaml"
+)
 EXAMPLE_PLACEHOLDER_DISPOSITION = Path(
-    ".dev/standards/examples/placeholder-disposition.yaml"
+    ".ai/assets/tech-stacks/dotnet-backend/examples/placeholder-disposition.yaml"
 )
 SOURCE_INCLUDE_EVIDENCE_MANIFEST = Path(
     ".ai/assets/tech-stacks/dotnet-backend/source-includes/evidence-manifest.yaml"
+)
+SOURCE_GOVERNANCE_REGISTRY = Path(".ai/distribution/governance-checks.yaml")
+LESSON_ROOT = Path(".dev/lessons")
+LESSON_INDEX = LESSON_ROOT / "INDEX.MD"
+LESSON_REQUIRED_PATHS = (
+    LESSON_ROOT / "README.MD",
+    LESSON_INDEX,
+    LESSON_ROOT / "templates/lesson-template.md",
+    LESSON_ROOT / "environment/INDEX.MD",
+)
+LESSON_README_HEADINGS = (
+    "## Responsibility",
+    "## Boundary",
+    "## Identity And Lifecycle",
+    "## Required Lesson Packet",
+    "## Promotion And Supersession",
+    "## Distribution Boundary",
+)
+LESSON_REQUIRED_SECTIONS = (
+    "## Origin Evidence",
+    "## Context And Symptom",
+    "## Confirmed Conditions And Root Cause",
+    "## Reusable Conclusion",
+    "## Non-Applicable Cases",
+    "## Remediation Example",
+    "## Verification",
+    "## Promotion And Supersession",
+    "## Security And Portability Boundary",
+)
+LESSON_CATALOG_ROW = re.compile(
+    r"^\|\s*`(?P<path>[^`]+)`\s*\|\s*"
+    r"`(?P<lesson_id>LESSON-[A-Z0-9]+-\d{3})`\s*\|\s*"
+    r"\[[^\]]+\]\((?P<link_path>[^)]+)\)\s*\|\s*"
+    r"`(?P<category>[a-z0-9]+(?:-[a-z0-9]+)*)`\s*\|\s*"
+    r"`(?P<lifecycle>active|promoted|superseded)`\s*\|"
 )
 CLAUDE_ENTRY_TEMPLATE = """# Claude Code Project Instructions
 
@@ -199,6 +263,179 @@ def validate_index(index: Path, errors: list[str]) -> None:
             continue
         if not target.exists():
             errors.append(f"{index}:{line_number}: missing catalog path: {match.group(1)}")
+
+
+def lesson_table_field(text: str, label: str) -> str | None:
+    match = re.search(
+        rf"^\|\s*{re.escape(label)}\s*\|\s*(.*?)\s*\|\s*$",
+        text,
+        flags=re.MULTILINE,
+    )
+    return match.group(1).strip() if match else None
+
+
+def validate_lesson_contract(
+    files: list[Path], errors: list[str], root: Path = ROOT
+) -> int:
+    """Validate the source repository's non-normative lesson catalog."""
+    file_set = set(files)
+    for required in LESSON_REQUIRED_PATHS:
+        if required not in file_set or not (root / required).is_file():
+            errors.append(f"{required}: missing required lesson contract path")
+
+    required_entry_paths = (
+        LESSON_ROOT / "README.MD",
+        LESSON_INDEX,
+        LESSON_ROOT / "templates/lesson-template.md",
+    )
+    if any(not (root / path).is_file() for path in required_entry_paths):
+        return 0
+
+    readme_text = (root / LESSON_ROOT / "README.MD").read_text(encoding="utf-8")
+    readme_headings = {line.strip() for line in readme_text.splitlines()}
+    for heading in LESSON_README_HEADINGS:
+        if heading not in readme_headings:
+            errors.append(f"{LESSON_ROOT / 'README.MD'}: missing heading {heading}")
+
+    template_path = LESSON_ROOT / "templates/lesson-template.md"
+    template_text = (root / template_path).read_text(encoding="utf-8")
+    template_lines = {line.strip() for line in template_text.splitlines()}
+    for heading in LESSON_REQUIRED_SECTIONS:
+        if heading not in template_lines:
+            errors.append(f"{template_path}: missing lesson section {heading}")
+    for field in (
+        "Lesson ID",
+        "Category",
+        "Lifecycle",
+        "Normative Authority",
+        "Origin Evidence",
+        "Promotion Target",
+        "Supersedes",
+        "Superseded By",
+    ):
+        if f"| {field} |" not in template_text:
+            errors.append(f"{template_path}: missing lesson field {field}")
+
+    dev_index_path = Path(".dev/INDEX.md")
+    if not (root / dev_index_path).is_file():
+        errors.append(f"{dev_index_path}: missing .dev lesson navigation owner")
+    else:
+        dev_index_text = (root / dev_index_path).read_text(encoding="utf-8")
+        for reference in (
+            "lessons/README.MD",
+            "lessons/INDEX.MD",
+            "lessons/environment/",
+        ):
+            if f"`{reference}`" not in dev_index_text:
+                errors.append(f"{dev_index_path}: missing lesson navigation {reference}")
+
+    index_text = (root / LESSON_INDEX).read_text(encoding="utf-8")
+    catalog: dict[str, tuple[Path, str, str]] = {}
+    indexed_paths: set[Path] = set()
+    for line_number, line in enumerate(index_text.splitlines(), 1):
+        if re.match(r"^\|\s*`[^`]+`\s*\|\s*`LESSON-", line) is None:
+            continue
+        match = LESSON_CATALOG_ROW.match(line)
+        if match is None:
+            errors.append(f"{LESSON_INDEX}:{line_number}: invalid lesson catalog row")
+            continue
+
+        lesson_id = match.group("lesson_id")
+        category = match.group("category")
+        lifecycle = match.group("lifecycle")
+        path_text = match.group("path")
+        link_path_text = match.group("link_path")
+        posix_path = PurePosixPath(path_text)
+        if (
+            posix_path.is_absolute()
+            or "\\" in path_text
+            or ".." in posix_path.parts
+            or len(posix_path.parts) != 2
+            or posix_path.parts[0] != category
+            or link_path_text != path_text
+            or not posix_path.name.startswith(f"{lesson_id}-")
+            or posix_path.suffix != ".md"
+        ):
+            errors.append(
+                f"{LESSON_INDEX}:{line_number}: lesson path must be "
+                f"<category>/{lesson_id}-<slug>.md and match category {category}"
+            )
+            continue
+
+        lesson_path = LESSON_ROOT.joinpath(*posix_path.parts)
+        if lesson_id in catalog:
+            errors.append(f"{LESSON_INDEX}:{line_number}: duplicate lesson ID {lesson_id}")
+            continue
+        if lesson_path in indexed_paths:
+            errors.append(f"{LESSON_INDEX}:{line_number}: duplicate lesson path {lesson_path}")
+            continue
+        catalog[lesson_id] = (lesson_path, category, lifecycle)
+        indexed_paths.add(lesson_path)
+
+        if lesson_path not in file_set or not (root / lesson_path).is_file():
+            errors.append(f"{LESSON_INDEX}:{line_number}: missing lesson path {lesson_path}")
+            continue
+
+        lesson_text = (root / lesson_path).read_text(encoding="utf-8")
+        lesson_lines = {item.strip() for item in lesson_text.splitlines()}
+        if not lesson_text.startswith(f"# {lesson_id}: "):
+            errors.append(f"{lesson_path}: H1 must begin with '# {lesson_id}: '")
+        expected_fields = {
+            "Lesson ID": f"`{lesson_id}`",
+            "Category": f"`{category}`",
+            "Lifecycle": f"`{lifecycle}`",
+            "Normative Authority": "`none`",
+        }
+        for field, expected in expected_fields.items():
+            actual = lesson_table_field(lesson_text, field)
+            if actual != expected:
+                errors.append(
+                    f"{lesson_path}: {field} must be {expected}; actual={actual!r}"
+                )
+        for field in ("Origin Evidence", "Promotion Target", "Supersedes", "Superseded By"):
+            if lesson_table_field(lesson_text, field) is None:
+                errors.append(f"{lesson_path}: missing lesson field {field}")
+        for heading in LESSON_REQUIRED_SECTIONS:
+            if heading not in lesson_lines:
+                errors.append(f"{lesson_path}: missing lesson section {heading}")
+
+        none_values = {"none", "`none`"}
+        promotion_target = lesson_table_field(lesson_text, "Promotion Target")
+        superseded_by = lesson_table_field(lesson_text, "Superseded By")
+        if lifecycle == "promoted" and promotion_target in none_values:
+            errors.append(f"{lesson_path}: promoted lesson requires Promotion Target")
+        if lifecycle == "superseded" and superseded_by in none_values:
+            errors.append(f"{lesson_path}: superseded lesson requires Superseded By")
+
+        category_index = LESSON_ROOT / category / "INDEX.MD"
+        if category_index not in file_set or not (root / category_index).is_file():
+            errors.append(f"{lesson_path}: missing category index {category_index}")
+            continue
+        category_text = (root / category_index).read_text(encoding="utf-8")
+        category_row = re.compile(
+            rf"^\|\s*`{re.escape(posix_path.name)}`\s*\|\s*"
+            rf"`{re.escape(lesson_id)}`\s*\|\s*"
+            rf"\[[^\]]+\]\({re.escape(posix_path.name)}\)\s*\|\s*"
+            rf"`{re.escape(lifecycle)}`\s*\|",
+            flags=re.MULTILINE,
+        )
+        if category_row.search(category_text) is None:
+            errors.append(
+                f"{category_index}: missing {lesson_id} with lifecycle {lifecycle} "
+                f"and path {posix_path.name}"
+            )
+
+    discovered_lessons = {
+        path
+        for path in files
+        if len(path.parts) == 4
+        and path.parts[0:2] == (".dev", "lessons")
+        and re.fullmatch(r"LESSON-[A-Z0-9]+-\d{3}-.+\.md", path.name)
+    }
+    for path in sorted(discovered_lessons - indexed_paths):
+        errors.append(f"{path}: lesson document is missing from {LESSON_INDEX}")
+
+    return len(catalog)
 
 
 def validate_exact_case_references(
@@ -338,6 +575,70 @@ def validate_technology_selection_contract(
             errors.append(f"{schema_path}: invalid slot_pattern: {exc}")
 
 
+def validate_work_item_binding_contract(
+    errors: list[str],
+    root: Path = ROOT,
+    template_path: Path = PROJECT_CONFIG_TEMPLATE,
+    schema_path: Path = WORK_ITEM_BINDING_SCHEMA,
+) -> None:
+    """Validate the target-owned work-item binding selection contract."""
+    try:
+        template = yaml.safe_load((root / template_path).read_text(encoding="utf-8"))
+        schema = yaml.safe_load((root / schema_path).read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        errors.append(f"work-item binding contract cannot be loaded: {exc}")
+        return
+
+    if not isinstance(template, dict):
+        errors.append(f"{template_path}: root must be a mapping")
+        return
+    if not isinstance(schema, dict):
+        errors.append(f"{schema_path}: root must be a mapping")
+        return
+
+    work_management = template.get("workManagement")
+    binding = (
+        work_management.get("workItemBinding")
+        if isinstance(work_management, dict)
+        else None
+    )
+    expected_binding = {
+        "mode": None,
+        "purposes": ["traceability", "work-authorization"],
+        "mergeGate": None,
+    }
+    if binding != expected_binding:
+        errors.append(
+            f"{template_path}: workManagement.workItemBinding must preserve the unresolved target-selection shape"
+        )
+
+    expected_fields = {"mode", "purposes", "mergeGate"}
+    required_fields = schema.get("required_fields")
+    if not isinstance(required_fields, list) or set(required_fields) != expected_fields:
+        errors.append(
+            f"{schema_path}: required_fields must equal {sorted(expected_fields)}"
+        )
+
+    fixed_purposes = schema.get("fixed_purposes")
+    if fixed_purposes != ["traceability", "work-authorization"]:
+        errors.append(
+            f"{schema_path}: fixed_purposes must preserve traceability and work-authorization"
+        )
+
+    allowed = {"required", "optional", "disabled"}
+    for key in ("allowed_modes", "allowed_merge_gates"):
+        values = schema.get(key)
+        if not isinstance(values, list) or set(values) != allowed:
+            errors.append(f"{schema_path}: {key} must equal {sorted(allowed)}")
+
+    if schema.get("selection_source") != "explicit-target-decision":
+        errors.append(
+            f"{schema_path}: selection_source must be explicit-target-decision"
+        )
+    if schema.get("template_unresolved_value", "missing") is not None:
+        errors.append(f"{schema_path}: template_unresolved_value must be null")
+
+
 def validate_example_evidence_contract(
     errors: list[str],
     root: Path = ROOT,
@@ -456,7 +757,7 @@ def validate_source_include_evidence(
     root: Path = ROOT,
     manifest_path: Path = SOURCE_INCLUDE_EVIDENCE_MANIFEST,
 ) -> None:
-    """Validate executable-tested claims for source-includable framework assets."""
+    """Validate reference-only claims for source-includable framework assets."""
     try:
         manifest = yaml.safe_load((root / manifest_path).read_text(encoding="utf-8"))
     except (OSError, yaml.YAMLError) as exc:
@@ -484,17 +785,34 @@ def validate_source_include_evidence(
         ):
             errors.append(f"{label}: source-include path must be an existing local directory")
 
-        if entry.get("tier") != "executable-tested":
-            errors.append(f"{label}: source includes must declare executable-tested tier")
+        if entry.get("tier") != "reference-only":
+            errors.append(f"{label}: SDK-free source includes must declare reference-only tier")
 
+        for field in ("claim", "reason"):
+            value = entry.get(field)
+            if not isinstance(value, str) or not value.strip():
+                errors.append(f"{label}: reference-only tier requires non-empty {field}")
+
+        validators = entry.get("validators")
+        if not isinstance(validators, list):
+            errors.append(f"{label}: validators must be a list")
         for field in ("build_commands", "test_commands"):
             value = entry.get(field)
-            if not isinstance(value, list) or not value:
-                errors.append(f"{label}: executable-tested tier requires non-empty {field}")
+            if not isinstance(value, list) or value:
+                errors.append(f"{label}: SDK-free reference-only tier requires empty {field}")
 
-        test_project = entry.get("test_project")
-        if not isinstance(test_project, str) or not (root / test_project).is_file():
-            errors.append(f"{label}: declared test_project does not exist: {test_project}")
+        if "test_project" in entry:
+            errors.append(f"{label}: SDK-free reference-only tier must not declare test_project")
+
+        target_validation = entry.get("target_validation")
+        if not isinstance(target_validation, dict):
+            errors.append(f"{label}: target_validation must be a mapping")
+        else:
+            if target_validation.get("required") is not True:
+                errors.append(f"{label}: target_validation.required must be true")
+            responsibility = target_validation.get("responsibility")
+            if not isinstance(responsibility, str) or not responsibility.strip():
+                errors.append(f"{label}: target_validation.responsibility must be non-empty")
 
 
 def validate_example_placeholder_disposition(
@@ -805,6 +1123,100 @@ def validate_rule_ownership(errors: list[str]) -> int:
         errors.append(f"{OWNERSHIP_REGISTRY}: rules must be a list")
         return 0
 
+    identity_model = data.get("identity_model")
+    declared_canonical_roots: list[Path] = []
+
+    def add_declared_canonical_root(value: object, label: str) -> None:
+        if not isinstance(value, str) or not value:
+            errors.append(f"{label} must be a non-empty string")
+            return
+        pure_root = PurePosixPath(value)
+        if (
+            Path(value).is_absolute()
+            or pure_root.is_absolute()
+            or "\\" in value
+            or any(part in {".", ".."} for part in pure_root.parts)
+        ):
+            errors.append(f"{label} must be a safe repository-relative root")
+            return
+        root_parts = pure_root.parts
+        if "<profile>" in root_parts:
+            if root_parts.count("<profile>") != 1 or root_parts[-1] != "<profile>":
+                errors.append(f"{label} has an invalid <profile> placeholder")
+                return
+            root_parts = root_parts[: root_parts.index("<profile>")]
+        if not root_parts:
+            errors.append(f"{label} must resolve to a non-empty root")
+            return
+        declared_canonical_roots.append(Path(*root_parts))
+
+    def validate_catalog_selector(
+        catalog_file: Path,
+        catalog_selector: object,
+        expected_rule_id: str,
+        label: str,
+        *,
+        projected_record: bool = False,
+    ) -> None:
+        if catalog_selector != {"rule_id": expected_rule_id}:
+            errors.append(
+                f"{label}: catalog_selector must be exactly rule_id {expected_rule_id}"
+            )
+        if catalog_file.suffix not in {".yaml", ".yml"}:
+            errors.append(f"{label}: catalog selector requires a YAML catalog")
+            return
+        try:
+            catalog_data = yaml.safe_load(catalog_file.read_text(encoding="utf-8"))
+        except yaml.YAMLError as exc:
+            errors.append(f"{label}: invalid canonical catalog YAML: {exc}")
+            return
+        catalog_rules = (
+            catalog_data.get("rules", []) if isinstance(catalog_data, dict) else []
+        )
+        matches = [
+            item
+            for item in catalog_rules
+            if isinstance(item, dict) and item.get("rule_id") == expected_rule_id
+        ]
+        if len(matches) != 1:
+            errors.append(
+                f"{label}: catalog selector must resolve exactly one rule_id in {catalog_file.relative_to(ROOT)}"
+            )
+        elif projected_record:
+            record_projection = matches[0].get("catalog_projection")
+            expected_projection = {
+                "path": catalog_file.relative_to(ROOT).as_posix(),
+                "selector": {"rule_id": expected_rule_id},
+            }
+            if record_projection != expected_projection:
+                errors.append(
+                    f"{label}: projected catalog record must bind the same path and rule_id"
+                )
+        elif matches[0].get("catalog_selector") != {"rule_id": expected_rule_id}:
+            errors.append(
+                f"{label}: catalog record selector must be exactly rule_id {expected_rule_id}"
+            )
+
+    if not isinstance(identity_model, dict):
+        errors.append(f"{OWNERSHIP_REGISTRY}: identity_model must be a mapping")
+    else:
+        source_governance_root = identity_model.get("source_governance_root")
+        portable_baseline_roots = identity_model.get("portable_baseline_roots")
+        add_declared_canonical_root(
+            source_governance_root,
+            f"{OWNERSHIP_REGISTRY}: identity_model.source_governance_root",
+        )
+        if not isinstance(portable_baseline_roots, dict):
+            errors.append(
+                f"{OWNERSHIP_REGISTRY}: identity_model.portable_baseline_roots must be a mapping"
+            )
+        else:
+            for root_name, root_value in portable_baseline_roots.items():
+                add_declared_canonical_root(
+                    root_value,
+                    f"{OWNERSHIP_REGISTRY}: portable baseline root {root_name!r}",
+                )
+
     seen: set[str] = set()
     for index, rule in enumerate(rules, 1):
         label = f"{OWNERSHIP_REGISTRY}:rules[{index}]"
@@ -841,17 +1253,82 @@ def validate_rule_ownership(errors: list[str]) -> int:
         if not isinstance(canonical_value, str):
             errors.append(f"{label}: missing canonical_path")
             continue
-        canonical = Path(canonical_value)
-        if Path(".dev/standards") not in canonical.parents:
-            errors.append(f"{label}: canonical_path must be under .dev/standards")
+        canonical_pure = PurePosixPath(canonical_value)
+        if (
+            not canonical_value
+            or Path(canonical_value).is_absolute()
+            or canonical_pure.is_absolute()
+            or "\\" in canonical_value
+            or any(part in {".", ".."} for part in canonical_pure.parts)
+        ):
+            errors.append(f"{label}: canonical_path must be repository-relative and safe")
+            continue
+        canonical = Path(*canonical_pure.parts)
+        if not any(
+            canonical_root == canonical or canonical_root in canonical.parents
+            for canonical_root in declared_canonical_roots
+        ):
+            errors.append(
+                f"{label}: canonical_path must be under a declared source-governance or portable baseline root"
+            )
+            continue
         canonical_file = ROOT / canonical
         if not canonical_file.is_file():
             errors.append(f"{label}: missing canonical_path {canonical}")
             continue
         anchor = rule.get("canonical_anchor")
         canonical_text = canonical_file.read_text(encoding="utf-8")
-        if not isinstance(anchor, str) or anchor not in canonical_text:
+        selector = (
+            re.fullmatch(r"rules\[rule_id=([^\]]+)\]", anchor)
+            if isinstance(anchor, str)
+            else None
+        )
+        if selector is not None:
+            if selector.group(1) != rule_id:
+                errors.append(
+                    f"{label}: canonical_anchor selector must match rule_id {rule_id}"
+                )
+            else:
+                validate_catalog_selector(
+                    canonical_file, rule.get("catalog_selector"), rule_id, label
+                )
+        elif not isinstance(anchor, str) or anchor not in canonical_text:
             errors.append(f"{label}: canonical_anchor not found in {canonical}")
+
+        if "catalog_projection" in rule:
+            projection = rule.get("catalog_projection")
+            projection_label = f"{label}: catalog_projection"
+            if not isinstance(projection, dict):
+                errors.append(f"{projection_label} must be a mapping")
+            else:
+                projection_path_value = projection.get("path")
+                if (
+                    not isinstance(projection_path_value, str)
+                    or not projection_path_value
+                    or Path(projection_path_value).is_absolute()
+                    or "\\" in projection_path_value
+                    or any(
+                        part in {".", ".."}
+                        for part in PurePosixPath(projection_path_value).parts
+                    )
+                ):
+                    errors.append(
+                        f"{projection_label}.path must be a safe repository-relative path"
+                    )
+                else:
+                    projection_file = ROOT / projection_path_value
+                    if not projection_file.is_file():
+                        errors.append(
+                            f"{projection_label}.path does not exist: {projection_path_value}"
+                        )
+                    else:
+                        validate_catalog_selector(
+                            projection_file,
+                            projection.get("selector"),
+                            rule_id,
+                            projection_label,
+                            projected_record=True,
+                        )
 
         consumers = rule.get("derived_consumers", [])
         if not isinstance(consumers, list):
@@ -865,6 +1342,199 @@ def validate_rule_ownership(errors: list[str]) -> int:
             elif rule_id not in consumer_file.read_text(encoding="utf-8"):
                 errors.append(f"{label}: derived consumer {consumer} does not cite {rule_id}")
     return len(rules)
+
+
+def validate_governance_term_routing_data(
+    data: object,
+    errors: list[str],
+    *,
+    root: Path = ROOT,
+    source_context: bool | None = None,
+) -> int:
+    """Validate qualified governance-term routes without redefining their owners."""
+    if not isinstance(data, dict):
+        errors.append(f"{OWNERSHIP_REGISTRY}: root must be a mapping")
+        return 0
+
+    routing = data.get("governance_term_routing")
+    if not isinstance(routing, dict):
+        errors.append(
+            f"{OWNERSHIP_REGISTRY}: governance_term_routing must be a mapping"
+        )
+        return 0
+    if routing.get("schema_version") != "1.0":
+        errors.append(
+            f"{OWNERSHIP_REGISTRY}: governance_term_routing.schema_version must be 1.0"
+        )
+    if routing.get("registry_role") != "owner-route-index-not-definition-authority":
+        errors.append(
+            f"{OWNERSHIP_REGISTRY}: governance_term_routing.registry_role must remain an owner route index"
+        )
+
+    expected_contract = {
+        "qualified_first_use": "required",
+        "bare_alias_scope": "same-clearly-qualified-section-only",
+        "cross_owner_authority_inference": "forbidden",
+        "machine_literal_change": "explicit-versioned-migration-required",
+        "historical_rewrite": "forbidden",
+    }
+    if routing.get("consumer_contract") != expected_contract:
+        errors.append(
+            f"{OWNERSHIP_REGISTRY}: governance_term_routing.consumer_contract must preserve the qualified fail-closed contract"
+        )
+
+    terms = routing.get("terms")
+    if not isinstance(terms, list) or not terms:
+        errors.append(
+            f"{OWNERSHIP_REGISTRY}: governance_term_routing.terms must be a non-empty list"
+        )
+        return 0
+
+    if source_context is None:
+        source_context = (
+            root / ".ai/distribution/profiles/dotnet-backend.yaml"
+        ).is_file()
+
+    seen_ids: set[str] = set()
+    seen_qualified_terms: set[str] = set()
+    for index, term in enumerate(terms):
+        label = f"{OWNERSHIP_REGISTRY}:governance_term_routing.terms[{index}]"
+        if not isinstance(term, dict):
+            errors.append(f"{label}: term must be a mapping")
+            continue
+
+        term_id = term.get("term_id")
+        namespace = term.get("namespace")
+        qualified_term = term.get("qualified_term")
+        if not isinstance(term_id, str) or not GOVERNANCE_TERM_ID.fullmatch(term_id):
+            errors.append(f"{label}: term_id must be a stable qualified identifier")
+        elif term_id in seen_ids:
+            errors.append(f"{label}: duplicate term_id {term_id}")
+        else:
+            seen_ids.add(term_id)
+        if not isinstance(namespace, str) or not namespace:
+            errors.append(f"{label}: namespace must be a non-empty string")
+        elif isinstance(term_id, str) and not term_id.startswith(f"{namespace}."):
+            errors.append(f"{label}: term_id must begin with namespace {namespace}.")
+        if not isinstance(qualified_term, str) or not qualified_term.strip():
+            errors.append(f"{label}: qualified_term must be a non-empty string")
+        elif qualified_term in seen_qualified_terms:
+            errors.append(f"{label}: duplicate qualified_term {qualified_term!r}")
+        else:
+            seen_qualified_terms.add(qualified_term)
+
+        distribution = term.get("distribution")
+        portable_disposition = term.get("portable_disposition")
+        if distribution not in GOVERNANCE_TERM_DISTRIBUTIONS:
+            errors.append(f"{label}: invalid distribution {distribution!r}")
+        if portable_disposition not in GOVERNANCE_TERM_PORTABLE_DISPOSITIONS:
+            errors.append(
+                f"{label}: invalid portable_disposition {portable_disposition!r}"
+            )
+        expected_disposition = (
+            "available" if distribution == "portable" else "upstream-only-non-actionable"
+        )
+        if distribution in GOVERNANCE_TERM_DISTRIBUTIONS and portable_disposition != expected_disposition:
+            errors.append(
+                f"{label}: {distribution} requires portable_disposition {expected_disposition}"
+            )
+
+        owner = term.get("canonical_owner")
+        if not isinstance(owner, dict):
+            errors.append(f"{label}: canonical_owner must be a mapping")
+        else:
+            owner_value = owner.get("path")
+            anchor = owner.get("anchor")
+            owner_path: Path | None = None
+            if not isinstance(owner_value, str) or not owner_value:
+                errors.append(f"{label}: canonical_owner.path must be non-empty")
+            else:
+                owner_pure = PurePosixPath(owner_value)
+                if (
+                    Path(owner_value).is_absolute()
+                    or owner_pure.is_absolute()
+                    or "\\" in owner_value
+                    or any(part in {".", ".."} for part in owner_pure.parts)
+                ):
+                    errors.append(
+                        f"{label}: canonical_owner.path must be safe and repository-relative"
+                    )
+                else:
+                    owner_path = root / Path(*owner_pure.parts)
+            if not isinstance(anchor, str) or not anchor:
+                errors.append(f"{label}: canonical_owner.anchor must be non-empty")
+            elif owner_path is not None:
+                owner_required = distribution == "portable" or source_context
+                if not owner_path.is_file():
+                    if owner_required:
+                        errors.append(
+                            f"{label}: canonical owner is unavailable: {owner_value}"
+                        )
+                elif anchor not in owner_path.read_text(encoding="utf-8"):
+                    errors.append(
+                        f"{label}: canonical_owner.anchor not found in {owner_value}"
+                    )
+
+        bindings = term.get("machine_bindings")
+        if not isinstance(bindings, list):
+            errors.append(f"{label}: machine_bindings must be a list")
+        else:
+            for binding_index, binding in enumerate(bindings):
+                binding_label = f"{label}:machine_bindings[{binding_index}]"
+                if not isinstance(binding, dict):
+                    errors.append(f"{binding_label}: binding must be a mapping")
+                    continue
+                for field in ("contract", "field"):
+                    value = binding.get(field)
+                    if not isinstance(value, str) or not value:
+                        errors.append(f"{binding_label}: {field} must be non-empty")
+                literals = binding.get("literals")
+                if (
+                    not isinstance(literals, list)
+                    or not literals
+                    or not all(isinstance(value, str) and value for value in literals)
+                    or len(literals) != len(set(literals))
+                ):
+                    errors.append(
+                        f"{binding_label}: literals must be a non-empty unique string list"
+                    )
+
+        shorthand = term.get("contextual_shorthand")
+        if not isinstance(shorthand, dict):
+            errors.append(f"{label}: contextual_shorthand must be a mapping")
+        else:
+            aliases = shorthand.get("aliases")
+            forbidden = shorthand.get("forbidden_authority_claims")
+            allowed_scope = shorthand.get("allowed_scope")
+            if (
+                not isinstance(aliases, list)
+                or not aliases
+                or not all(isinstance(value, str) and value for value in aliases)
+            ):
+                errors.append(f"{label}: aliases must be a non-empty string list")
+            if not isinstance(allowed_scope, str) or not allowed_scope:
+                errors.append(f"{label}: allowed_scope must be non-empty")
+            if (
+                not isinstance(forbidden, list)
+                or not forbidden
+                or not all(isinstance(value, str) and value for value in forbidden)
+            ):
+                errors.append(
+                    f"{label}: forbidden_authority_claims must be a non-empty string list"
+                )
+
+    return len(terms)
+
+
+def validate_governance_term_routing(errors: list[str]) -> int:
+    """Load and validate the governance-term section of the ownership registry."""
+    registry_path = ROOT / OWNERSHIP_REGISTRY
+    try:
+        data = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        errors.append(f"{OWNERSHIP_REGISTRY}: governance term routing cannot be loaded: {exc}")
+        return 0
+    return validate_governance_term_routing_data(data, errors)
 
 
 def load_yaml_mapping(path: Path, errors: list[str]) -> dict | None:
@@ -1436,6 +2106,319 @@ def validate_sub_agent_adapter_metadata(
         errors.append(f"{path}: adapter paths must be unique across runtime targets")
 
 
+def expected_role_binding_path(role_asset_id: str) -> str:
+    """Return the one canonical role-manifest path for a role asset ID."""
+    return (ROLE_BINDING_ROOT / role_asset_id / "sub-agent.yaml").as_posix()
+
+
+def validate_skill_role_bindings(
+    path: Path,
+    data: dict,
+    role_assets_by_path: dict[str, dict],
+    errors: list[str],
+) -> list[str]:
+    """Validate static role reachability declared by one owning skill only.
+
+    A valid result proves that the canonical role is statically reachable from
+    the owning skill. It intentionally does not claim that a runtime read,
+    application, delegation, or invocation occurred.
+    """
+    bindings = data.get("role_bindings")
+    if bindings is None:
+        return []
+    if not isinstance(bindings, list):
+        errors.append(f"{path}: role_bindings must be a list")
+        return []
+    if not bindings:
+        errors.append(f"{path}: role_bindings must be non-empty when declared")
+        return []
+
+    valid_role_ids: list[str] = []
+    declared_role_ids: set[str] = set()
+    duplicate_role_ids: set[str] = set()
+    declared_role_paths: set[str] = set()
+    for index, binding in enumerate(bindings):
+        label = f"{path}: role_bindings[{index}]"
+        if not isinstance(binding, dict):
+            errors.append(f"{label} must be a mapping")
+            continue
+
+        missing = sorted(ROLE_BINDING_REQUIRED_FIELDS - binding.keys())
+        if missing:
+            errors.append(f"{label}: missing required fields {missing}")
+        extra = sorted(
+            repr(key) for key in binding if key not in ROLE_BINDING_REQUIRED_FIELDS
+        )
+        if extra:
+            errors.append(f"{label}: unsupported keys {extra}")
+
+        role_path = binding.get("role_path")
+        role_asset_id = binding.get("role_asset_id")
+        expected_status = binding.get("expected_role_status")
+        binding_kind = binding.get("binding_kind")
+        applicability = binding.get("applicability")
+        load_obligation = binding.get("load_obligation")
+        valid = not missing and not extra
+
+        if not isinstance(role_asset_id, str) or not role_asset_id:
+            errors.append(f"{label}.role_asset_id must be a non-empty string")
+            valid = False
+        if not isinstance(role_path, str) or not role_path:
+            errors.append(f"{label}.role_path must be a non-empty string")
+            valid = False
+        elif isinstance(role_asset_id, str) and role_asset_id:
+            expected_path = expected_role_binding_path(role_asset_id)
+            if role_path != expected_path:
+                errors.append(
+                    f"{label}.role_path must be the exact canonical role path "
+                    f"{expected_path}"
+                )
+                valid = False
+            if (
+                Path(role_path).is_absolute()
+                or "\\" in role_path
+                or ".." in PurePosixPath(role_path).parts
+                or any(character in role_path for character in "<>*?[]{}")
+            ):
+                errors.append(
+                    f"{label}.role_path must be repository-relative without "
+                    "placeholders, globs, or escapes"
+                )
+                valid = False
+
+        if expected_status != ROLE_BINDING_EXPECTED_STATUS:
+            errors.append(
+                f"{label}.expected_role_status must be "
+                f"{ROLE_BINDING_EXPECTED_STATUS!r}"
+            )
+            valid = False
+        if (
+            not isinstance(binding_kind, str)
+            or binding_kind not in ROLE_BINDING_KINDS
+        ):
+            errors.append(
+                f"{label}.binding_kind must be one of "
+                f"{sorted(ROLE_BINDING_KINDS)}"
+            )
+            valid = False
+        if not isinstance(applicability, str) or not applicability.strip():
+            errors.append(
+                f"{label}.applicability must be a non-empty declarative string"
+            )
+            valid = False
+        if load_obligation != ROLE_BINDING_LOAD_OBLIGATION:
+            errors.append(
+                f"{label}.load_obligation must be "
+                f"{ROLE_BINDING_LOAD_OBLIGATION!r}"
+            )
+            valid = False
+
+        if isinstance(role_asset_id, str) and role_asset_id:
+            if role_asset_id in declared_role_ids:
+                errors.append(
+                    f"{label}: duplicate role binding for {role_asset_id} "
+                    f"in owning skill {data.get('asset_id')!r}"
+                )
+                duplicate_role_ids.add(role_asset_id)
+                valid = False
+            declared_role_ids.add(role_asset_id)
+        if isinstance(role_path, str) and role_path:
+            if role_path in declared_role_paths:
+                errors.append(f"{label}: duplicate role_path {role_path}")
+                valid = False
+            declared_role_paths.add(role_path)
+
+        role_data = (
+            role_assets_by_path.get(role_path)
+            if isinstance(role_path, str)
+            else None
+        )
+        if role_data is None:
+            errors.append(f"{label}.role_path is dangling: {role_path!r}")
+            valid = False
+        else:
+            if role_data.get("asset_id") != role_asset_id:
+                errors.append(
+                    f"{label}.role_asset_id must exactly match target role asset_id "
+                    f"{role_data.get('asset_id')!r}"
+                )
+                valid = False
+            if role_data.get("status") != ROLE_BINDING_EXPECTED_STATUS:
+                errors.append(
+                    f"{label}: target role status must be "
+                    f"{ROLE_BINDING_EXPECTED_STATUS!r}"
+                )
+                valid = False
+
+        if valid and isinstance(role_asset_id, str):
+            valid_role_ids.append(role_asset_id)
+
+    return [
+        role_asset_id
+        for role_asset_id in valid_role_ids
+        if role_asset_id not in duplicate_role_ids
+    ]
+
+
+def validate_active_role_binding_coverage(
+    role_assets_by_path: dict[str, dict],
+    active_owners_by_role: dict[str, list[Path]],
+    errors: list[str],
+) -> None:
+    """Require at least one active owning skill for every active role."""
+    active_roles = sorted(
+        (
+            (role_data.get("asset_id"), role_path)
+            for role_path, role_data in role_assets_by_path.items()
+            if role_data.get("status") == ROLE_BINDING_EXPECTED_STATUS
+            and isinstance(role_data.get("asset_id"), str)
+        ),
+        key=lambda item: item[0],
+    )
+    for role_asset_id, role_path in active_roles:
+        owners = active_owners_by_role.get(role_asset_id, [])
+        if not owners:
+            errors.append(
+                f"{role_path}: active role is central-only and ownerless; "
+                "declare at least one active owning skill role binding"
+            )
+
+
+def projection_cell_value(value: str) -> str | None:
+    """Parse one exact inline-code cell from the derived binding table."""
+    match = re.fullmatch(r"`([^`]+)`", value.strip())
+    return match.group(1) if match else None
+
+
+def parse_role_binding_projection(
+    projection_path: Path, errors: list[str]
+) -> set[tuple[str, str, str, str]] | None:
+    """Parse the narrow, derived SAG-001 table without granting it authority."""
+    try:
+        lines = projection_path.read_text(encoding="utf-8").splitlines()
+    except OSError as exc:
+        errors.append(f"{projection_path}: cannot read SAG-001 projection: {exc}")
+        return None
+
+    headings = [
+        index
+        for index, line in enumerate(lines)
+        if line == ROLE_BINDING_PROJECTION_HEADING
+    ]
+    if len(headings) != 1:
+        errors.append(
+            f"{projection_path}: must contain exactly one "
+            f"{ROLE_BINDING_PROJECTION_HEADING!r} heading"
+        )
+        return None
+    index = headings[0] + 1
+    while index < len(lines) and not lines[index].strip():
+        index += 1
+    if index + 1 >= len(lines):
+        errors.append(f"{projection_path}: SAG-001 projection table is incomplete")
+        return None
+
+    def table_cells(line: str) -> list[str] | None:
+        stripped = line.strip()
+        if not stripped.startswith("|") or not stripped.endswith("|"):
+            return None
+        return [cell.strip() for cell in stripped[1:-1].split("|")]
+
+    headers = table_cells(lines[index])
+    separator = table_cells(lines[index + 1])
+    if headers != list(ROLE_BINDING_PROJECTION_HEADERS):
+        errors.append(
+            f"{projection_path}: SAG-001 projection headers must be "
+            f"{list(ROLE_BINDING_PROJECTION_HEADERS)}"
+        )
+        return None
+    if (
+        separator is None
+        or len(separator) != len(ROLE_BINDING_PROJECTION_HEADERS)
+        or any(not re.fullmatch(r":?-{3,}:?", cell) for cell in separator)
+    ):
+        errors.append(f"{projection_path}: SAG-001 projection separator is invalid")
+        return None
+
+    rows: set[tuple[str, str, str, str]] = set()
+    index += 2
+    row_index = 0
+    while index < len(lines):
+        cells = table_cells(lines[index])
+        if cells is None:
+            break
+        label = f"{projection_path}: SAG-001 projection row {row_index + 1}"
+        if len(cells) != len(ROLE_BINDING_PROJECTION_HEADERS):
+            errors.append(f"{label} must contain four cells")
+            index += 1
+            row_index += 1
+            continue
+        role_asset_id = projection_cell_value(cells[0])
+        owning_skill = projection_cell_value(cells[1])
+        binding_kind = projection_cell_value(cells[2])
+        applicability = cells[3]
+        if not role_asset_id or not owning_skill or not binding_kind or not applicability:
+            errors.append(
+                f"{label} must use non-empty inline-code role, owner, and kind cells "
+                "plus a non-empty applicability cell"
+            )
+            index += 1
+            row_index += 1
+            continue
+        row = (role_asset_id, owning_skill, binding_kind, applicability)
+        if row in rows:
+            errors.append(f"{label} duplicates a derived role-binding row")
+        rows.add(row)
+        index += 1
+        row_index += 1
+
+    if not rows:
+        errors.append(f"{projection_path}: SAG-001 projection must contain rows")
+    return rows
+
+
+def validate_derived_role_binding_projection(
+    projection_path: Path,
+    canonical_rows: set[tuple[str, str, str, str]],
+    errors: list[str],
+) -> None:
+    """Require the central SAG-001 table to be a projection of canonical bindings."""
+    derived_rows = parse_role_binding_projection(projection_path, errors)
+    if derived_rows is None:
+        return
+
+    canonical_by_role: dict[str, set[tuple[str, str, str]]] = {}
+    for role_asset_id, owning_skill, binding_kind, applicability in canonical_rows:
+        canonical_by_role.setdefault(role_asset_id, set()).add(
+            (owning_skill, binding_kind, applicability)
+        )
+    derived_by_role: dict[str, set[tuple[str, str, str]]] = {}
+    for role_asset_id, owning_skill, binding_kind, applicability in derived_rows:
+        derived_by_role.setdefault(role_asset_id, set()).add(
+            (owning_skill, binding_kind, applicability)
+        )
+
+    for role_asset_id in sorted(set(canonical_by_role) | set(derived_by_role)):
+        canonical = canonical_by_role.get(role_asset_id, set())
+        derived = derived_by_role.get(role_asset_id, set())
+        if not canonical:
+            errors.append(
+                f"{projection_path}: SAG-001 projection has stale or central-only "
+                f"role row {role_asset_id!r}"
+            )
+        elif not derived:
+            errors.append(
+                f"{projection_path}: SAG-001 projection is missing canonical "
+                f"role row {role_asset_id!r}"
+            )
+        elif canonical != derived:
+            errors.append(
+                f"{projection_path}: SAG-001 projection has ambiguous or "
+                f"conflicting row(s) for {role_asset_id!r}; canonical={sorted(canonical)!r}, "
+                f"derived={sorted(derived)!r}"
+            )
+
+
 def validate_canonical_assets(errors: list[str]) -> tuple[int, dict[str, dict]]:
     """Validate versioned skill and sub-agent manifests against the canonical contract."""
     manifests = sorted(Path(".ai/assets/skills").glob("*/skill.yaml")) + sorted(
@@ -1452,6 +2435,8 @@ def validate_canonical_assets(errors: list[str]) -> tuple[int, dict[str, dict]]:
     }
     seen: set[str] = set()
     skill_assets: dict[str, dict] = {}
+    skill_manifests: list[tuple[Path, dict]] = []
+    role_assets_by_path: dict[str, dict] = {}
     for path in manifests:
         data = load_yaml_mapping(path, errors)
         if data is None:
@@ -1505,9 +2490,11 @@ def validate_canonical_assets(errors: list[str]) -> tuple[int, dict[str, dict]]:
                         errors.append(f"{path}: missing {key} path {value}")
         if path.name == "skill.yaml":
             skill_assets[asset_id] = data
+            skill_manifests.append((path, data))
             validate_wrapper_metadata(path, data, errors)
             validate_skill_wrapper_semantics(path, data, errors)
         else:
+            role_assets_by_path[path.as_posix()] = data
             validate_sub_agent_adapter_metadata(path, data, errors)
         for key in ("triggers", "workflow"):
             if key not in data:
@@ -1541,6 +2528,41 @@ def validate_canonical_assets(errors: list[str]) -> tuple[int, dict[str, dict]]:
             if step_ids != list(range(1, len(step_ids) + 1)):
                 errors.append(f"{path}: workflow steps must be unique and sequential from 1")
 
+    active_owners_by_role: dict[str, list[Path]] = {}
+    canonical_projection_rows: set[tuple[str, str, str, str]] = set()
+    for path, data in skill_manifests:
+        role_ids = validate_skill_role_bindings(
+            path, data, role_assets_by_path, errors
+        )
+        if data.get("status") != ROLE_BINDING_EXPECTED_STATUS:
+            continue
+        for role_asset_id in role_ids:
+            active_owners_by_role.setdefault(role_asset_id, []).append(path)
+        unprojected_role_ids = set(role_ids)
+        bindings = data.get("role_bindings")
+        if isinstance(bindings, list):
+            for binding in bindings:
+                if not isinstance(binding, dict):
+                    continue
+                role_asset_id = binding.get("role_asset_id")
+                if role_asset_id not in unprojected_role_ids:
+                    continue
+                canonical_projection_rows.add(
+                    (
+                        role_asset_id,
+                        data["asset_id"],
+                        binding["binding_kind"],
+                        binding["applicability"],
+                    )
+                )
+                unprojected_role_ids.remove(role_asset_id)
+    validate_active_role_binding_coverage(
+        role_assets_by_path, active_owners_by_role, errors
+    )
+    validate_derived_role_binding_projection(
+        ROOT / SUB_AGENT_SYSTEM, canonical_projection_rows, errors
+    )
+
     templates = ROOT / ".ai/assets/templates"
     legacy = sorted(path.name for path in templates.glob("*.template.yaml"))
     if legacy:
@@ -1560,8 +2582,10 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
     if profile is None:
         return 0
     schema_version = profile.get("schema_version")
-    if schema_version not in {"1.0", "1.1", "1.2"}:
-        errors.append(f"{CAPABILITY_PROFILE}: schema_version must be 1.0, 1.1, or 1.2")
+    if schema_version not in {"1.0", "1.1", "1.2", "1.3", "1.4"}:
+        errors.append(
+            f"{CAPABILITY_PROFILE}: schema_version must be 1.0, 1.1, 1.2, 1.3, or 1.4"
+        )
     if not isinstance(profile.get("profile_id"), str) or not profile.get("profile_id"):
         errors.append(f"{CAPABILITY_PROFILE}: profile_id must be a non-empty string")
     if profile.get("status") != "active":
@@ -1587,7 +2611,7 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
     if missing:
         errors.append(f"{CAPABILITY_PROFILE}: missing required mappings {missing}")
     contracts = profile.get("capability_contracts", {})
-    if schema_version in {"1.1", "1.2"}:
+    if schema_version in {"1.1", "1.2", "1.3", "1.4"}:
         if not isinstance(contracts, dict):
             errors.append(f"{CAPABILITY_PROFILE}: capability_contracts must be a mapping")
         else:
@@ -1627,7 +2651,68 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
                 errors.append(f"{CAPABILITY_PROFILE}: test-execution must remain optional")
             if "test-execution" in mappings:
                 errors.append(f"{CAPABILITY_PROFILE}: test-execution must not map to an unevaluated skill")
-    if schema_version == "1.2":
+            if schema_version == "1.4":
+                expected_long_running = {
+                    "threshold_seconds": 120,
+                    "always_external_profiles": ["release", "nightly-full"],
+                    "always_external_scopes": ["full-matrix"],
+                    "dispatch_preconditions": [
+                        "tracked-mutations-complete",
+                        "focused-validation-complete",
+                        "clean-immutable-commit",
+                        "exact-command-bounded",
+                    ],
+                    "execution_surface": "separate-external-runtime-task",
+                    "executor_cost_policy": "least-expensive-capable",
+                    "primary_conversation_wait_policy": "no-repeated-polling",
+                    "completion_signal": "one-final-report",
+                    "allowed_write_scope": ["ignored-validation-artifacts"],
+                    "non_passing": [
+                        "timeout",
+                        "interrupted",
+                        "missing-completion-evidence",
+                        "blocked",
+                    ],
+                    "delegation_contract": {
+                        "schema": ".ai/assets/skills/software-development-orchestrator/templates/external-task-delegation.schema.yaml",
+                        "dispatch_template": ".ai/assets/skills/software-development-orchestrator/templates/external-task-dispatch.template.yaml",
+                        "completion_template": ".ai/assets/skills/software-development-orchestrator/templates/external-task-completion.template.yaml",
+                        "validator": ".ai/assets/skills/software-development-orchestrator/scripts/validate-external-task-delegation.py",
+                        "prompt_envelope": [
+                            "BEGIN_EXTERNAL_TASK_DELEGATION",
+                            "END_EXTERNAL_TASK_DELEGATION",
+                        ],
+                        "completion_envelope": [
+                            "BEGIN_EXTERNAL_TASK_COMPLETION",
+                            "END_EXTERNAL_TASK_COMPLETION",
+                        ],
+                        "source_task_identity": "explicit-or-runtime-injected",
+                        "primary_delivery_modes": [
+                            "source-task-callback",
+                            "parent-event-wait",
+                        ],
+                        "fallback_delivery_modes": [
+                            "parent-event-wait",
+                            "single-terminal-readback",
+                        ],
+                        "parent_wait_timeout_state": "pending-awaiting-completion",
+                        "pre_send_completion_validation": "required",
+                        "callback_payload": "exact-validated-completion-record",
+                    },
+                    "parallelization_requires": [
+                        "dependency-dag",
+                        "artifact-isolation",
+                        "bounded-concurrency",
+                        "deterministic-evidence",
+                        "fail-closed-cancellation",
+                    ],
+                }
+                if test_execution.get("long_running") != expected_long_running:
+                    errors.append(
+                        f"{CAPABILITY_PROFILE}: test-execution.long_running must match "
+                        "the v1.4 external-task delegation contract"
+                    )
+    if schema_version in {"1.2", "1.3", "1.4"}:
         expected_orchestration = {
             "activation": {
                 "intent_class": "high-level-multi-stage-software-development",
@@ -1677,10 +2762,64 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
                 "branch-and-handoff",
             ],
         }
+        if schema_version in {"1.3", "1.4"}:
+            expected_orchestration["routine_validation"] = {
+                "authority": ".dev/project-config.yaml#validation.routine",
+                "local_default": "manual",
+                "local_modes": ["manual", "auto-if-ready", "required"],
+                "local_opt_in": ".dev/validation.local.conf",
+                "local_opt_in_rule": "strict-one-line-validation.routine.local",
+                "local_opt_in_can_only_strengthen": True,
+                "environment_override": "prohibited",
+                "implicit_local_write": "prohibited",
+                "ci_default": "unconfigured",
+                "ci_modes": ["unconfigured", "advisory", "required"],
+                "unselected_projection": {
+                    "outcome": "not-applicable",
+                    "selection_reason": "not-run-by-policy",
+                },
+                "attempt_budget": {
+                    "unselected": 0,
+                    "selected_preflight": 1,
+                    "initial_execution": 1,
+                    "retry_after_material_change": 1,
+                    "ci_observations": 2,
+                },
+                "unaffected": [
+                    "explicit-cli",
+                    "install",
+                    "apply",
+                    "init",
+                    "upgrade",
+                    "provenance",
+                    "governance",
+                    "release",
+                    "publication",
+                ],
+            }
+            expected_orchestration["role_execution"] = {
+                "contract": ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md",
+                "producer": "owning-skill",
+                "aggregator": "software-development-orchestrator",
+                "direct_default": True,
+                "dispositions": [
+                    "direct",
+                    "delegated",
+                    "unavailable",
+                    "not-applicable",
+                ],
+                "delegated_requires": [
+                    "all-safety-gates",
+                    "material-value-trigger",
+                    "supports-delegation-risk-result",
+                    "genuine-invocation-evidence",
+                ],
+                "no_delegation_runtime": "direct-when-inline-parity-satisfiable",
+            }
         if profile.get("orchestration_contract") != expected_orchestration:
             errors.append(
                 f"{CAPABILITY_PROFILE}: orchestration_contract must match the "
-                "v1.2 deterministic acceptance contract"
+                f"v{schema_version} deterministic acceptance contract"
             )
     for slot, skill_id in mappings.items():
         if not isinstance(skill_id, str) or skill_id not in skill_assets:
@@ -1720,9 +2859,13 @@ def main() -> int:
     validate_exact_case_references(files, errors)
     validate_active_script_references(files, errors)
     validate_technology_selection_contract(errors)
+    validate_work_item_binding_contract(errors)
     validate_example_evidence_contract(errors)
     validate_example_placeholder_disposition(errors)
     validate_source_include_evidence(errors)
+    lesson_count = 0
+    if (ROOT / SOURCE_GOVERNANCE_REGISTRY).is_file():
+        lesson_count = validate_lesson_contract(files, errors)
 
     for index in indexes:
         validate_index(index, errors)
@@ -1735,6 +2878,7 @@ def main() -> int:
     validate_bilingual_entries(errors)
     validate_runtime_entries(files, errors)
     ownership_rules = validate_rule_ownership(errors)
+    governance_terms = validate_governance_term_routing(errors)
     canonical_assets, skill_assets = validate_canonical_assets(errors)
     capability_mappings = validate_capability_profile(skill_assets, errors)
 
@@ -1768,7 +2912,9 @@ def main() -> int:
         f"AI context validation passed: {len(indexes)} active indexes, "
         f"{len(canonical)} canonical skills, {len(ACTIVE_RUNTIME_ROOTS)} current runtime roots, "
         f"{len(language_files)} language-policy files, {ownership_rules} owned rules, "
-        f"{canonical_assets} canonical manifests, and {capability_mappings} capability mappings."
+        f"{governance_terms} qualified governance terms, {canonical_assets} canonical manifests, "
+        f"{capability_mappings} capability mappings, "
+        f"and {lesson_count} governed lessons."
     )
     print(
         "Root bilingual entry ownership, links, and structural parity passed "

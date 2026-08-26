@@ -3,15 +3,26 @@
 
 from __future__ import annotations
 
+import hashlib
 import os
 import re
 import shutil
+import subprocess
 import tempfile
 from datetime import datetime
 from pathlib import Path, PurePosixPath
 from typing import Iterable
 
 import yaml
+
+from ai_context_effective_rules import (
+    EFFECTIVE_STATE_PATH,
+    PROVENANCE_EFFECTIVE_RULES_LINKAGE,
+    build_effective_state_and_packets,
+    is_profile_slug,
+    validate_effective_rule_state,
+    write_effective_state_and_packets,
+)
 
 
 VERSION_RE = re.compile(r"^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
@@ -22,6 +33,7 @@ SUBJECT_KINDS = {"capability", "rule", "contract"}
 RELATIONSHIPS = {"extends", "replaces", "deviates", "target-only"}
 EQUIVALENCE = {"absent", "partial", "equivalent-candidate", "conflicting"}
 DISPOSITIONS = {"retain", "merge", "supersede", "retire", "unresolved"}
+PENDING_APPLY_RECEIPT = ".dev/AI-CONTEXT-APPLY-PENDING.yaml"
 
 
 class TargetValidationError(ValueError):
@@ -63,6 +75,139 @@ def safe_repo_reference(value: object) -> bool:
         and not path.is_absolute()
         and all(part not in {"", ".", ".."} for part in path.parts)
     )
+
+
+def safe_target_path(value: object) -> bool:
+    if not isinstance(value, str) or not value or "\\" in value:
+        return False
+    path = PurePosixPath(value)
+    return not path.is_absolute() and all(
+        part not in {"", ".", ".."} for part in path.parts
+    )
+
+
+def git_ignore_rule(root: Path, path: str) -> dict[str, object] | None:
+    """Return the exact target Git ignore rule for one untracked path."""
+    if not safe_target_path(path):
+        raise TargetValidationError(f"unsafe target path for Git ignore check: {path!r}")
+    try:
+        result = subprocess.run(
+            ["git", "check-ignore", "-z", "-v", "--stdin"],
+            cwd=root,
+            check=False,
+            capture_output=True,
+            input=f"{path}\0".encode("utf-8"),
+        )
+    except OSError as exc:
+        raise TargetValidationError(f"cannot inspect target Git ignore rules: {exc}") from exc
+    if result.returncode == 1:
+        return None
+    if result.returncode != 0:
+        detail = result.stderr.decode("utf-8", errors="replace").strip()
+        raise TargetValidationError(
+            f"cannot inspect target Git ignore rules for {path}: {detail or result.returncode}"
+        )
+    values = result.stdout.split(b"\0")
+    if values and values[-1] == b"":
+        values.pop()
+    if len(values) != 4:
+        raise TargetValidationError(
+            f"cannot parse target Git ignore rule for {path}"
+        )
+    source, line, pattern, matched_path = (
+        value.decode("utf-8", errors="surrogateescape") for value in values
+    )
+    if matched_path != path or not line.isdecimal() or not source or not pattern:
+        raise TargetValidationError(
+            f"cannot parse target Git ignore rule for {path}"
+        )
+    return {"source": source, "line": int(line), "pattern": pattern}
+
+
+def framework_managed_ignore_message(
+    path: str, component_id: str, rule: dict[str, object]
+) -> str:
+    return (
+        f"target Git ignore rule excludes framework-managed path {path} "
+        f"(component {component_id}; ownership framework-managed): "
+        f"{rule['source']}:{rule['line']}:{rule['pattern']}"
+    )
+
+
+def validate_pending_apply_receipt(root: Path, errors: list[str]) -> None:
+    """Validate selected managed bytes and ignore state carried by a new receipt."""
+    receipt_path = root / PENDING_APPLY_RECEIPT
+    if receipt_path.is_symlink():
+        errors.append(f"{receipt_path}: pending apply receipt must not be a symlink")
+        return
+    if not receipt_path.is_file():
+        return
+    receipt = load_mapping(receipt_path, errors)
+    if receipt is None:
+        return
+    if receipt.get("schema_version") not in {"1.0.0", "1.1.0"}:
+        errors.append(f"{receipt_path}: unsupported pending apply receipt schema")
+        return
+    required = receipt.get("required_framework_paths")
+    if required is None:
+        if receipt.get("schema_version") == "1.1.0":
+            errors.append(
+                f"{receipt_path}: schema 1.1.0 requires required_framework_paths"
+            )
+        return
+    if not isinstance(required, list):
+        errors.append(f"{receipt_path}: required_framework_paths must be a list")
+        return
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for index, item in enumerate(required):
+        label = f"{receipt_path}: required_framework_paths[{index}]"
+        if not isinstance(item, dict):
+            errors.append(f"{label} must be a mapping")
+            continue
+        path = item.get("path")
+        component_id = item.get("component_id")
+        expected_sha = item.get("sha256")
+        if not safe_target_path(path):
+            errors.append(f"{label}.path must be a safe POSIX target path")
+            continue
+        if path in seen:
+            errors.append(f"{receipt_path}: required framework paths must be unique")
+            continue
+        seen.add(path)
+        ordered.append(path)
+        if not isinstance(component_id, str) or not component_id:
+            errors.append(f"{label}.component_id must be non-empty")
+        if item.get("ownership") != "framework-managed":
+            errors.append(f"{label}.ownership must be framework-managed")
+        if not isinstance(expected_sha, str) or not re.fullmatch(
+            r"[0-9a-f]{64}", expected_sha
+        ):
+            errors.append(f"{label}.sha256 must be a lowercase SHA-256")
+        candidate = root / Path(*PurePosixPath(path).parts)
+        if candidate.is_symlink() or not candidate.is_file():
+            errors.append(f"required framework-managed path is absent: {path}")
+            continue
+        if isinstance(expected_sha, str) and re.fullmatch(r"[0-9a-f]{64}", expected_sha):
+            actual_sha = hashlib.sha256(candidate.read_bytes()).hexdigest()
+            if actual_sha != expected_sha:
+                errors.append(
+                    f"required framework-managed path bytes differ: {path}"
+                )
+        if isinstance(component_id, str) and component_id:
+            try:
+                rule = git_ignore_rule(root, path)
+            except TargetValidationError as exc:
+                errors.append(str(exc))
+            else:
+                if rule is not None:
+                    errors.append(
+                        framework_managed_ignore_message(path, component_id, rule)
+                    )
+    if ordered != sorted(ordered, key=lambda value: value.encode("utf-8")):
+        errors.append(
+            f"{receipt_path}: required framework paths must use UTF-8 bytewise order"
+        )
 
 
 def validate_string_references(
@@ -117,9 +262,11 @@ def validate_selection(selection: object, label: str, errors: list[str]) -> None
         not isinstance(profiles, list)
         or not profiles
         or len(profiles) != len(set(profiles))
-        or not all(isinstance(item, str) and item for item in profiles)
+        or not all(is_profile_slug(item) for item in profiles)
     ):
-        errors.append(f"{label}: selection.profiles must be a unique non-empty list")
+        errors.append(
+            f"{label}: selection.profiles must be unique lowercase single-segment slugs"
+        )
     providers = selection.get("providers")
     backlog = providers.get("repo-backlog") if isinstance(providers, dict) else None
     if (
@@ -185,6 +332,9 @@ def validate_manifest(path: Path, errors: list[str]) -> None:
         or customizations.get("schema_version") != "1.0"
     ):
         errors.append(f"{path}: customizations ledger contract is invalid")
+    effective_rules = data.get("effective_rules")
+    if effective_rules is not None and effective_rules != PROVENANCE_EFFECTIVE_RULES_LINKAGE:
+        errors.append(f"{path}: effective_rules linkage is invalid")
     reconciliation = data.get("reconciliation")
     if not isinstance(reconciliation, dict):
         errors.append(f"{path}: reconciliation must be a mapping")
@@ -445,9 +595,11 @@ def validate_target(
     root: Path,
     manifest: Path | None = None,
     require_finalized: bool = True,
+    require_effective_rules: bool = False,
 ) -> list[str]:
     root = root.resolve()
     errors: list[str] = []
+    validate_pending_apply_receipt(root, errors)
     provenance = root / ".dev/ai-context/provenance.yaml"
     legacy = root / ".dev/AI-CONTEXT-SOURCE.yaml"
     if provenance.is_file() and legacy.is_file():
@@ -464,7 +616,49 @@ def validate_target(
         errors.append(f"{root}: provenance schema 2 requires customizations.yaml")
     else:
         validate_customizations(ledger, errors, require_finalized)
+    effective_state = root / EFFECTIVE_STATE_PATH
+    if effective_state.is_file() and not effective_state.is_symlink():
+        errors.extend(validate_effective_rule_state(root, require_packets=True))
+    elif effective_state.is_symlink() or effective_state.exists():
+        errors.append(
+            f"{root}: target effective state path exists but is not a regular file"
+        )
+    elif require_effective_rules:
+        errors.append(f"{root}: action-ready target requires {EFFECTIVE_STATE_PATH}")
     return errors
+
+
+def effective_rule_readiness(root: Path) -> dict[str, object]:
+    """Report whether routine actions may consume target-effective rule packets.
+
+    Structural provenance initialization deliberately does not fabricate an empty
+    effective state.  This derived result makes that unresolved state visible
+    without turning a valid legacy/provenance-only target into a false success
+    for an action skill.
+    """
+    root = root.resolve()
+    state = root / EFFECTIVE_STATE_PATH
+    if state.is_symlink() or not state.is_file():
+        return {
+            "action_ready": False,
+            "status": "unresolved",
+            "reason": "effective-rule-state-missing",
+            "path": EFFECTIVE_STATE_PATH,
+        }
+    errors = validate_effective_rule_state(root, require_packets=True)
+    if errors:
+        return {
+            "action_ready": False,
+            "status": "stale",
+            "reason": "effective-rule-state-invalid",
+            "path": EFFECTIVE_STATE_PATH,
+            "errors": errors,
+        }
+    return {
+        "action_ready": True,
+        "status": "ready",
+        "path": EFFECTIVE_STATE_PATH,
+    }
 
 
 def credible_source(source: object) -> bool:
@@ -498,6 +692,7 @@ def build_initialization_documents(
             "ledger": ".dev/ai-context/customizations.yaml",
             "schema_version": "1.0",
         },
+        "effective_rules": dict(PROVENANCE_EFFECTIVE_RULES_LINKAGE),
         "previous_source": None,
         "reconciliation": {"unresolved": []},
         "last_migration": {
@@ -517,7 +712,9 @@ def finalize_context(
     ledger: dict,
     require_finalized: bool = True,
     allow_existing: bool = True,
-) -> None:
+    effective_state_candidate: dict | None = None,
+    effective_resolver_evidence: list[str] | None = None,
+) -> dict:
     root = root.resolve()
     context = root / ".dev/ai-context"
     legacy = root / ".dev/AI-CONTEXT-SOURCE.yaml"
@@ -527,6 +724,31 @@ def finalize_context(
         raise TargetValidationError("legacy provenance must be reconciled before finalization")
     if provenance_path.exists() and not allow_existing:
         raise TargetValidationError("component-aware provenance already exists")
+    if (effective_state_candidate is None) != (effective_resolver_evidence is None):
+        raise TargetValidationError(
+            "effective state candidate and resolver evidence must be supplied together"
+        )
+    existing_effective_state = root / EFFECTIVE_STATE_PATH
+    if existing_effective_state.exists() or existing_effective_state.is_symlink():
+        if effective_state_candidate is None:
+            raise TargetValidationError(
+                "finalization with existing effective state requires regeneration candidate and resolver evidence"
+            )
+    if effective_state_candidate is not None:
+        existing_linkage = provenance.get("effective_rules")
+        if (
+            existing_linkage is not None
+            and existing_linkage != PROVENANCE_EFFECTIVE_RULES_LINKAGE
+        ):
+            raise TargetValidationError("effective_rules linkage is invalid")
+        provenance = {
+            **provenance,
+            "effective_rules": dict(PROVENANCE_EFFECTIVE_RULES_LINKAGE),
+        }
+    pending_errors: list[str] = []
+    validate_pending_apply_receipt(root, pending_errors)
+    if pending_errors:
+        raise TargetValidationError("; ".join(pending_errors))
     context.mkdir(parents=True, exist_ok=True)
     temporary_paths: list[Path] = []
     try:
@@ -556,6 +778,13 @@ def finalize_context(
         try:
             os.replace(temporary_paths[1], ledger_path)
             os.replace(temporary_paths[0], provenance_path)
+            if effective_state_candidate is not None:
+                state, packets = build_effective_state_and_packets(
+                    root,
+                    effective_state_candidate,
+                    resolver_evidence=effective_resolver_evidence or [],
+                )
+                write_effective_state_and_packets(root, state, packets)
         except Exception:
             for path, content in previous.items():
                 if content is None:
@@ -568,6 +797,10 @@ def finalize_context(
         for path in temporary_paths:
             if path.exists():
                 path.unlink()
+    return {
+        "status": "finalized",
+        "effective_rule_readiness": effective_rule_readiness(root),
+    }
 
 
 def initialize_context(
@@ -575,17 +808,43 @@ def initialize_context(
     source: object,
     selection: dict,
     imported_at: str,
+    effective_state_candidate: dict | None = None,
+    effective_resolver_evidence: list[str] | None = None,
 ) -> dict:
     if not credible_source(source):
         return {
             "status": "unresolved",
             "reason": "credible-source-evidence-required",
             "written": [],
+            "effective_rule_readiness": {
+                "action_ready": False,
+                "status": "unresolved",
+                "reason": "effective-rule-state-missing",
+                "path": EFFECTIVE_STATE_PATH,
+            },
+        }
+    root = root.resolve()
+    if (effective_state_candidate is None) != (effective_resolver_evidence is None):
+        raise TargetValidationError(
+            "effective state candidate and resolver evidence must be supplied together"
+        )
+    pending_errors: list[str] = []
+    validate_pending_apply_receipt(root, pending_errors)
+    if pending_errors:
+        return {
+            "status": "unresolved",
+            "reason": "required-framework-managed-path-validation-failed",
+            "written": [],
+            "effective_rule_readiness": {
+                "action_ready": False,
+                "status": "unresolved",
+                "reason": "effective-rule-state-missing",
+                "path": EFFECTIVE_STATE_PATH,
+            },
         }
     provenance, ledger = build_initialization_documents(
         dict(source), selection, imported_at
     )
-    root = root.resolve()
     dev_root = root / ".dev"
     context = dev_root / "ai-context"
     legacy = dev_root / "AI-CONTEXT-SOURCE.yaml"
@@ -616,13 +875,36 @@ def initialize_context(
         if errors:
             raise TargetValidationError("; ".join(errors))
         os.replace(candidate, context)
+        if effective_state_candidate is not None:
+            try:
+                state, packets = build_effective_state_and_packets(
+                    root,
+                    effective_state_candidate,
+                    resolver_evidence=effective_resolver_evidence or [],
+                )
+                write_effective_state_and_packets(root, state, packets)
+            except Exception:
+                # Context did not exist at initialization entry, so this removes only
+                # this failed in-process initialization attempt and no unrelated target truth.
+                shutil.rmtree(context)
+                raise
     finally:
         if candidate.exists():
             shutil.rmtree(candidate)
+    written = [
+        ".dev/ai-context/provenance.yaml",
+        ".dev/ai-context/customizations.yaml",
+    ]
+    if effective_state_candidate is not None:
+        written.append(EFFECTIVE_STATE_PATH)
+        written.extend(
+            sorted(
+                f".dev/ai-context/effective-rule-packets/{route['route_id']}.yaml"
+                for route in state["routing"]
+            )
+        )
     return {
         "status": "initialized",
-        "written": [
-            ".dev/ai-context/provenance.yaml",
-            ".dev/ai-context/customizations.yaml",
-        ],
+        "written": written,
+        "effective_rule_readiness": effective_rule_readiness(root),
     }

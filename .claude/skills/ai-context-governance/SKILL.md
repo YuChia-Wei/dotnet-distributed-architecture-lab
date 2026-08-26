@@ -15,6 +15,8 @@ This is a thin Claude-compatible wrapper.
 - Spec: `.ai/assets/skills/ai-context-governance/skill.yaml`
 - Human Guide: `.dev/guides/ai-collaboration-guides/AI-CONTEXT-GOVERNANCE-SKILL-GUIDE.md`
 - References:
+  - `.dev/standards/AI-CONTEXT-OWNERSHIP.md`
+  - `.dev/standards/AI-CONTEXT-OWNERSHIP.yaml`
   - `.ai/assets/skills/ai-context-governance/references/context-boundary-playbook.md`
   - `.ai/assets/skills/ai-context-governance/references/language-policy-playbook.md`
   - `.ai/assets/skills/ai-context-governance/references/workflow-and-commit-playbook.md`
@@ -22,6 +24,9 @@ This is a thin Claude-compatible wrapper.
   - `.ai/assets/skills/ai-context-governance/references/audit-remediation-lifecycle.md`
   - `.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`
   - `.ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml`
+  - `.ai/assets/skills/ai-context-governance/templates/effective-rule-state.schema.yaml`
+  - `.ai/assets/skills/ai-context-governance/templates/effective-rule-state.template.yaml`
+  - `.ai/assets/skills/ai-context-governance/templates/effective-rule-packet.schema.yaml`
 - Templates:
   - `.ai/assets/skills/ai-context-governance/templates/workflow-locator-template.yaml`
   - `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`

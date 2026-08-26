@@ -38,10 +38,10 @@ release_phase_check: null
 # version: "<vMAJOR.MINOR.PATCH>" and matches that version-owned contract.
 execution_provenance:
   runtime: "<runtime-name>"
-  model: null
-  reasoning_effort: null
-  model_source: "unavailable"
-  evidence_ref: "<why-runtime-metadata-is-unavailable>"
+  model: "<effective-model-label>"
+  reasoning_effort: "<effective-reasoning-label>"
+  model_source: "configured-default"
+  evidence_ref: "<runtime-status-or-effective-default-source>"
 attribution:
   preservation_required: true
   evidence_union_version: "1.0"

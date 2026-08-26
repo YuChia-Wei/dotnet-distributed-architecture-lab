@@ -1,8 +1,9 @@
-###############################################################################
-# Set default behavior to automatically normalize line endings.
-###############################################################################
-* text=auto
+# Downstream seed: target-owned after initialization. Keep framework-managed
+# receipt bytes stable on Windows while preserving native command-file endings.
+* text=auto eol=lf
 *.sh text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
 
 ###############################################################################
 # Set default behavior for command prompt diff.

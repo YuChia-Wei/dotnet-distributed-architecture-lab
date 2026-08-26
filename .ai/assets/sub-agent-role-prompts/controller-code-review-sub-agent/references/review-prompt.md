@@ -1,10 +1,8 @@
-# Controller Code Review Prompt (Dotnet)
+# Controller Code Review Sub-Agent Prompt (.NET)
 
-Review controllers for thinness, correct DTO mapping, and HTTP semantics.
+Review the bounded controller/endpoint scope using the canonical `controller`
+route. Apply target-selected framework details only when repository evidence
+selects them. Load test rules only for an explicit test scope or test finding.
 
-## Rules
-- See `../assets/sub-agent-role-prompts/controller-code-review-sub-agent/sub-agent.yaml` for the canonical delegated review role.
-- No business logic in controllers
-- DTOs are separate files
-- Input validation applied
-- Tests must pass
+Return severity-ranked findings with path, line, selected canonical reference,
+evidence, and concise remediation direction. Do not implement fixes.

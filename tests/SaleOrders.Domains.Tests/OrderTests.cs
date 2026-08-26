@@ -62,9 +62,10 @@ public class OrderTests
     {
         var orderId = Guid.CreateVersion7();
         var productId = Guid.CreateVersion7();
+        var orderDate = DateTime.UtcNow;
         var events = new Lab.BuildingBlocks.Domains.IDomainEvent[]
         {
-            new OrderPlacedDomainEvent(orderId, DateTime.UtcNow, 100m, productId, "Product", 1, DateTime.UtcNow),
+            new OrderPlacedDomainEvent(orderId, orderDate, 100m, productId, "Product", 1, DateTime.UtcNow),
             new OrderCancelledDomainEvent(orderId, "customer request", DateTime.UtcNow),
             new OrderShippedDomainEvent(orderId, "manual override", DateTime.UtcNow)
         };
@@ -72,6 +73,11 @@ public class OrderTests
         var order = new Order(events);
 
         order.Id.ShouldBe(orderId);
+        order.OrderDate.ShouldBe(orderDate);
+        order.TotalAmount.ShouldBe(100m);
+        order.ProductId.ShouldBe(productId);
+        order.ProductName.ShouldBe("Product");
+        order.Quantity.ShouldBe(1);
         order.Status.ShouldBe(OrderStatus.Shipped);
         order.Version.ShouldBe(events.Length);
         order.DomainEvents.ShouldBeEmpty();

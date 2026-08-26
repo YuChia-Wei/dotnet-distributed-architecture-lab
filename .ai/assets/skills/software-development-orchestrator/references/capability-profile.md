@@ -10,7 +10,7 @@ The core `software-development-orchestrator` skill should stay publishable. Repo
 
 ## Profile Identity
 
-- Profile name: `ai-collaboration-prompts-dotnet-backend`
+- Profile name: `ai-collaboration-framework`
 - Repository role: AI collaboration knowledge base and .NET backend context framework
 - Workflow artifact root: `.dev/workflows/<workflow-id>/`
 - Commit policy: `.dev/standards/GIT-COMMIT-POLICY.md`
@@ -68,6 +68,52 @@ Each task records `required_for_closeout` as a subset of `selected_levels`.
 Unit and integration remain the default selected levels; every conditional
 level needs a recorded selection source.
 
+Long-running validation uses a separate execution surface without changing the
+selected checks or their result semantics. Classify `release`, `nightly-full`,
+full-matrix, and any command with expected or observed wall time of at least 120
+seconds as long-running. Finish tracked mutations and focused checks first, then
+bind the exact command to a clean immutable commit.
+
+Dispatch the command to a separate external runtime task using the least
+expensive capable execution profile. Every prompt contains exactly one marked
+dispatch envelope conforming to
+`../templates/external-task-delegation.schema.yaml`; use the companion dispatch
+and completion templates and validate retained envelopes with
+`../scripts/validate-external-task-delegation.py`.
+
+The dispatch names the source-task identity as explicit or runtime-injected and
+selects either a source-task callback or one parent event wait. A callback must
+target the source task; an event wait subscribes once to the delegated task and
+does not repeatedly poll. The external task is read-only except for ignored
+validation artifacts, performs no repair, and emits exactly one terminal report
+with the commit, command, duration, outcome counts when available, evidence, and
+final worktree state.
+The terminal message similarly contains exactly one
+`BEGIN_EXTERNAL_TASK_COMPLETION` / `END_EXTERNAL_TASK_COMPLETION` envelope so
+the source task can validate it before accepting the outcome.
+
+Before callback or terminal read-back delivery, the delegated task persists
+the dispatch and completed report in its ignored-artifact scope, validates that
+exact pair with the canonical validator, and records the successful validator
+argument vector and artifact references in the completion. It sends that
+validated record without post-validation edits; missing, failed, or drifting
+pre-send validation is non-passing.
+
+An execution timeout, interruption, invalid subject, missing terminal report,
+or blocked execution remains non-passing. A parent event-wait timeout is only a
+pending transport state. If callback delivery fails after the delegated task
+has terminated, the parent may perform one terminal read-back and accept the
+report only when it satisfies the completion schema. This recovery does not
+authorize progress polling or relabel an execution failure. `progress_updates`
+governs messages delivered to the source task; runtime-required commentary that
+stays inside the delegated task is runtime-local and is not a source progress
+callback.
+
+Parallel aggregate execution is a separate implementation decision. It needs
+independent contract coverage for the dependency DAG, artifact isolation,
+bounded concurrency, deterministic evidence, and fail-closed cancellation
+before it may replace sequential aggregate execution.
+
 ## Selectable Spec Compliance
 
 Spec compliance is unselected by default and reports `not-applicable`. A target
@@ -90,9 +136,14 @@ spec-compliance gate itself remains selectable.
 
 ## Profile Update Rules
 
-Schema `1.2` also records deterministic orchestration invariants for
-intent-class activation, approval pauses, selectable compliance, coherent
-commit batches, fresh-session evidence, and separate closeout evidence.
+Schema `1.2` records deterministic orchestration invariants for intent-class
+activation, approval pauses, selectable compliance, coherent commit batches,
+fresh-session evidence, and separate closeout evidence. Schema `1.3` adds the
+repository-owned routine-validation activation policy without changing the
+explicit command and lifecycle-command contracts. Schema `1.4` adds the
+long-running validation delegation, schema-bound dispatch/completion envelopes,
+event-driven completion delivery, no-repeated-polling rule, and safe
+parallelization prerequisites.
 
 Deterministic activation acceptance starts from the preclassified envelope
 defined in `acceptance-oracle.md`. Natural-language classification remains a
@@ -106,3 +157,35 @@ continuation mapping.
 - Keep `test-execution` optional and unmapped until a dedicated provider has
   been separately evaluated and deliberately adopted.
 - If a downstream skill is renamed, update this profile and run reference searches.
+
+## Routine Validation Activation
+
+Routine automatic validation is target policy, not a Python runtime. The tracked
+default is `validation.routine.local.mode: manual`, which performs zero routine
+probes, executions, and retries. The only persistent opt-in is ignored
+`.dev/validation.local.conf`, exactly one data line
+`validation.routine.local=<approved-mode>`; it may strengthen but never weaken
+the tracked mode. Agents never source or write it, and no environment override
+exists. CI modes are `unconfigured`, `advisory`, and `required`; required needs
+tracked workflow, exact command/profile, provisioned prerequisites, durable
+evidence, and separately verified merge settings when claimed.
+
+An applicable but unselected routine check records `outcome: not-applicable`
+and `selection_reason: not-run-by-policy`; it is not passed. Explicit commands
+and lifecycle gates are outside this switch.
+
+## Role Execution Coordination
+
+The capability profile maps stages to owning skills; it does not grant a
+runtime child invocation. When an owning skill selects an applicable canonical
+role, that skill produces a provider-neutral `role_execution` record according
+to `../../../shared/ROLE-EXECUTION-CONTRACT.md`. The orchestrator aggregates
+those records by stage without claiming the downstream domain result.
+
+`direct` is the default, including a no-child runtime when inline parity is
+available. `delegated` requires all shared safety gates, at least one material
+value trigger, a `supports-delegation` cost/failure/retry-risk result, and
+genuine child evidence. Records retain bounded envelope and permission data
+without secrets, attempts and fallback, and a final integration decision.
+`loaded_rule_ids` can be an opaque source reference only; its existing owner
+retains resolver and effective-state semantics.

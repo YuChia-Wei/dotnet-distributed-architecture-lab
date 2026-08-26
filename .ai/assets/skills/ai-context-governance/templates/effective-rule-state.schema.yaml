@@ -1,0 +1,141 @@
+schema_version: "1.0"
+document: ".dev/ai-context/effective-rules.yaml"
+purpose: "Target-owned, complete effective semantic rule state used to select freshness-validated task packets."
+source_repository_rule: "This schema and its template are framework assets. The framework source repository must not create a live .dev/ai-context/effective-rules.yaml instance."
+required:
+  - schema_version
+  - framework
+  - catalogs
+  - target_authorities
+  - target_state_digest
+  - rule_dispositions
+  - routing
+ordering:
+  catalogs: "catalog_id ascending: selected-profile, shared"
+  rule_dispositions: "rule_id ascending"
+  routing: "route_id ascending"
+digest:
+  algorithm: "sha256"
+  canonicalization: "UTF-8 compact JSON with Unicode preserved, object keys sorted by Unicode code point, array order retained, and exactly one terminal LF; reject floats and any value outside strings, booleans, null, integers, maps, and lists; omit target_state_digest, generated_at, and each routing[*].packet.digest before hashing"
+  input: "The complete semantic effective state excluding target_state_digest, generated_at, and derived packet digest metadata. Arrays retain this schema's required order."
+  mismatch: "fail-closed"
+framework:
+  required: [version, commit, selected_technology_profile]
+  version: "SemVer tag"
+  commit: "40-character lowercase Git SHA"
+  selected_technology_profile:
+    type: "strict single-segment lowercase slug"
+    pattern: "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    forbidden: ["/", "\\", ".."]
+    constraints:
+      - "must not contain path separators, traversal segments, uppercase characters, empty segments, or leading, trailing, or consecutive separators"
+      - "must not create Windows trailing-dot or segment ambiguity"
+      - "routing selectors must use this exact value"
+catalogs:
+  type: "exactly-two-records"
+  record:
+    required: [catalog_id, path, digest]
+    catalog_id: [shared, selected-profile]
+    path:
+      shared: ".ai/assets/shared/governance/engineering-rule-catalog.yaml"
+      selected-profile: ".ai/assets/tech-stacks/<framework.selected_technology_profile>/engineering-rule-catalog.yaml"
+    digest: "must equal the verified catalog_digest.value declared by that catalog under its own canonicalization contract"
+  constraints:
+    - "The two catalog IDs are unique and their paths must be the fixed paths above."
+    - "A missing catalog, path mismatch, or digest mismatch is stale and fails closed."
+target_authorities:
+  required: [provenance, customizations]
+  provenance:
+    required: [path, digest]
+    path: ".dev/ai-context/provenance.yaml"
+    digest: "sha256 hex digest of current target authority bytes"
+  customizations:
+    required: [path, digest]
+    path: ".dev/ai-context/customizations.yaml"
+    digest: "sha256 hex digest of current target authority bytes"
+  constraints:
+    - "Both digests are inputs to target_state_digest."
+    - "A missing, changed, or ambiguous authority invalidates every packet until explicit reconciliation regenerates this state."
+rule_dispositions:
+  type: "non-empty-list"
+  record:
+    required: [rule_id, effective_disposition, applicability, evidence]
+    rule_id: "stable registered rule or constraint ID; unique across this list"
+    effective_disposition:
+      values: [baseline-effective, target-semantic-delta, enforcement-tuning, tooling-waiver, not-applicable]
+    applicability: "non-empty target-specific applicability statement or predicate reference"
+    evidence: "non-empty unique repository-relative evidence list"
+    baseline_acceptance:
+      required_when: "effective_disposition is baseline-effective"
+      required: [explicit, verification]
+      explicit: true
+      verification:
+        required: [status, evidence]
+        status: [verified]
+        evidence: "non-empty unique repository-relative evidence list"
+    semantic_delta:
+      required_when: "effective_disposition is target-semantic-delta"
+      required: [customization_id, reconciliation_ref, effective_normative_statement, effective_normative_statement_digest]
+      customization_id: "existing unique CUST-* ID whose subject.id equals this record's rule_id, owner_reconciliation.status is approved, disposition is retain or merge, active_context_audit.status and post_upgrade_audit.status are verified, and the customization schema finalization gate is satisfied"
+      reconciliation_ref: "repository-relative approved and finalized retain/merge reconciliation evidence; must exactly equal the selected customization's owner_reconciliation.evidence"
+      effective_normative_statement: "complete final target-effective normative statement, LF-normalized with exactly one terminal LF; patches, diffs, partial text, and temporary LLM summaries are forbidden"
+      effective_normative_statement_digest: "full lowercase SHA-256 hex digest of the UTF-8 effective_normative_statement bytes"
+    waiver:
+      required_when: "effective_disposition is enforcement-tuning or tooling-waiver"
+      required: [kind, constraint_ref, reconciliation_ref, reconsideration_trigger]
+      kind: [enforcement-tuning, tooling-waiver]
+      constraint_ref: "explicit stable constraint ID; never a Diagnostic ID alone"
+      reconciliation_ref: "repository-relative owner decision, waiver, or reconciliation evidence"
+      reconsideration_trigger: "non-empty target-owned trigger"
+    not_applicable:
+      required_when: "effective_disposition is not-applicable"
+      required: [predicate, verification]
+      predicate: "declared applicability predicate that evaluated false"
+      verification: "repository-relative evidence that the predicate was evaluated"
+  constraints:
+    - "baseline-effective is valid only with an explicit, verified acceptance; inferred or remembered framework defaults are invalid."
+    - "A target semantic delta is valid only when its customization names the same rule_id, has approved owner reconciliation, has retain or merge disposition, has verified active-context and post-upgrade audits, and satisfies the customization finalization gate; unresolved, rejected, retired, or superseded customizations fail closed."
+    - "A semantic delta or waiver must name a stable semantic identity and must not use a provider, Diagnostic ID, package, command, or configuration path as the sole identity."
+    - "An invariant conflict is unresolved: it is not a valid disposition and must fail closed pending owner reconciliation."
+routing:
+  type: "non-empty-list"
+  record:
+    required: [route_id, selector, required_rule_ids, reported_not_applicable_rule_ids, packet]
+    route_id: "ROUTE- + SHA256(canonical_json(selector)).hexdigest().upper(); full 64-character uppercase hexadecimal hash with no truncation"
+    selector:
+      required: [capability, execution_mode, technology_profile, file_type]
+      capability: "non-empty opaque capability ID"
+      execution_mode: "non-empty opaque execution-mode ID; this schema does not redefine runtime role semantics"
+      technology_profile: "must equal framework.selected_technology_profile"
+      file_type: "non-empty explicit file-type ID; wildcard selectors are forbidden"
+    required_rule_ids: "non-empty, unique, ascending stable rule/constraint ID list"
+    reported_not_applicable_rule_ids: "possibly empty, unique, ascending list exactly equal to the required_rule_ids whose matching rule_dispositions record has effective_disposition not-applicable"
+    packet:
+      required: [path, digest]
+      path: ".dev/ai-context/effective-rule-packets/<route_id>.yaml"
+      digest: "sha256 hex digest of the exact packet canonical bytes"
+  constraints:
+    - "The selector tuple is unique. canonical_json(selector) uses this schema's compact JSON canonicalization with no omitted selector fields; partial matches, wildcard matches, and skill-local discovery are forbidden."
+    - "required_rule_ids are the complete exact set for the route and must resolve to valid explicit disposition and catalog records, including any rules reported not applicable."
+    - "reported_not_applicable_rule_ids must equal the exact not-applicable subset of required_rule_ids; omissions, additions, duplicates, or reordering fail closed."
+    - "The packet path and digest must resolve to a fresh packet whose request dimensions, loaded_rule_ids, target_state_digest, and catalog digests exactly match this record."
+    - "packet.digest is verified derived packet metadata and is deliberately excluded from target_state_digest input. This breaks the digest dependency cycle: a packet may include target_state_digest while the state records that packet's digest."
+filesystem_safety:
+  read_surfaces:
+    - ".dev/ai-context/effective-rules.yaml"
+    - ".dev/ai-context/provenance.yaml"
+    - ".dev/ai-context/customizations.yaml"
+    - "each resolved shared or selected-profile catalog path"
+    - "each resolved route packet path"
+  requirements:
+    leaf: "must exist as a regular non-symlink file before it is read"
+    ancestors: "every existing ancestor must be a regular non-symlink directory"
+    traversal: "resolve only the fixed repository-relative paths and strict profile slug declared by this state; never follow a symlink or traversal segment"
+fail_closed:
+  conditions:
+    - "missing effective state, catalog, authority, routing record, packet, or evidence"
+    - "stale or mismatched state, catalog, authority, packet, or digest"
+    - "unknown, duplicate, ambiguous, type-invalid, or unpacketized identity"
+    - "unverified baseline acceptance, unresolved reconciliation, or invariant conflict"
+    - "a state, provenance, customization, catalog, or packet read has a missing/non-regular/symlink leaf or a non-directory/symlink existing ancestor"
+  behavior: "Report stale or unresolved state and stop. Never scan all target documents and never silently substitute framework defaults."

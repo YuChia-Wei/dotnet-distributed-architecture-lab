@@ -1,0 +1,196 @@
+schema_version: "1.0"
+framework_version: "v0.13.0"
+framework_commit: "8584337b47295da1af914180baf2b3f815b9dcc7"
+unfinalized_target_diagnostics:
+  - "effective state catalogs[0] is stale"
+checks:
+  - id: "target-provenance"
+    path: ".ai/scripts/validate-ai-context-target.py"
+    sha256: "1a94082385ad2586fb9a5994625b816144d1ab9af7cc772753bad3d7a41d9d4f"
+    args: []
+  - id: "workflow-artifacts"
+    path: ".ai/scripts/validate-workflow-artifacts.py"
+    sha256: "473dd614048c3bad7b2833454b1b0042466ea0885cb48f9b03a4f1362241a2c3"
+    args: []
+  - id: "dependency-versions"
+    path: ".ai/scripts/validate-dependency-versions.py"
+    sha256: "0d4c8d797d4a8ab842c5858e1a1b7c326d89c2a78ba2c3e56f3a0b9b6759a42e"
+    args: []
+  - id: "assessment-artifacts"
+    path: ".ai/scripts/validate-assessment-artifacts.py"
+    sha256: "a24fe8d300ce016a2c30b0b1b92eb451d7289b0bf0c38ec16b005751c8d7b401"
+    args: []
+  - id: "shell-assets"
+    path: ".ai/scripts/validate-shell-assets.py"
+    sha256: "709dd677b862212b2273f83239b5648a7eef496a9a5cb034cedd6e149fd46e3b"
+    args: []
+  - id: "python-prerequisites-tests"
+    path: ".ai/scripts/tests/test_python_prerequisites.py"
+    sha256: "187c4c482bcaaa73cce6345d95ab8592c10c411ade3f4a73ca67bc7fbbb8c494"
+    args: ["-v"]
+  - id: "validation-evidence-tests"
+    path: ".ai/scripts/tests/test_validation_evidence.py"
+    sha256: "488e6e24d80bdfa9e61859e41414ccf7ad74ae9b8ffedc8b490f818d5c147483"
+    args: ["-v"]
+  - id: "effective-rules-tests"
+    path: ".ai/scripts/tests/test_ai_context_effective_rules.py"
+    sha256: "8c2e2c39744808e473d1be687ef3a9e4b1b62e3826bd738783c6a658d30216d0"
+    args: ["-v"]
+  - id: "effective-rule-action-skill-tests"
+    path: ".ai/scripts/tests/test_effective_rule_action_skill_contract.py"
+    sha256: "8fda1a2f82d90bde01336770bab1343b283b39f52f388c39be9a162444b0f2de"
+    args: ["-v"]
+  - id: "ai-context-lessons-tests"
+    path: ".ai/scripts/tests/test_ai_context_lessons.py"
+    sha256: "c8f5a87eb768b65d02b8b2304fa87605a168223ce4e270c2d4e2429f9d59f67e"
+    args: ["-v"]
+  - id: "canonical-commit-policy-tests"
+    path: ".ai/scripts/tests/test_git_commit_policy.py"
+    sha256: "cfafe8c024f390ad1960a34ade3cd6c851145c76393de05b37d31379179be105"
+    args: ["-v"]
+package_projection_defects:
+  - id: "AICU-V010-PROJECTION-001"
+    status: "blocked-by-package-projection"
+    observed_through: "v0.13.0"
+    validator:
+      path: ".ai/scripts/validate-ai-context.py"
+      sha256: "a86a68b73d637b5adc90a75c11616500196e0011c90f69044a88146f5e4b83da"
+    canonical_tests:
+      - path: ".ai/scripts/tests/test_python_source_entrypoints.py"
+        sha256: "1b3b45cdb73b42e788b5ed93587cc5a59727453b9fa8a8bed8e01baab1333b8a"
+      - path: ".ai/scripts/tests/test_python_entrypoints_contract.py"
+        sha256: "2e14614d998cf17cdbfdc30e41bc99a048e5f15554c59efc61aca5c2d377d40e"
+      - path: ".ai/scripts/tests/test_skill_script_colocation.py"
+        sha256: "7000e94004f87d0b4495ce46def2498fbf733b31947f725f2e72e9692d0caf1f"
+      - path: ".ai/scripts/tests/test_semantic_customization_skill_contract.py"
+        sha256: "435394d174a6af604268ccf63752fdc161cc9238361e0b4e34f85319fb0899ee"
+      - path: ".ai/scripts/tests/test_ai_context_package_smoke.py"
+        sha256: "602cb98c751965b1f727473c47730cd4fb1e97105a7748dfc5eb85c3171a1b83"
+    registry:
+      path: ".ai/scripts/python-entrypoints.json"
+      sha256: "4984c6d6cb08b8f65222d633a5029927719c786690cccda4faf92b9c22b182db"
+      portable_count: 13
+      source_only_count: 18
+      missing_source_only_count: 17
+      target_available_source_only_paths:
+        - ".ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py"
+    unavailable_source_context:
+      - ".ai/distribution/profiles/dotnet-backend.yaml"
+      - ".ai/distribution/"
+      - ".ai/evaluation/"
+      - ".ai/scripts/tests/test_ai_context_packaging.py"
+      - ".ai/scripts/tests/test_ai_context_release_closeout.py"
+      - ".dev/guides/ai-collaboration-guides/AI-CONTEXT-RELEASE-CLOSEOUT-SKILL-GUIDE.md"
+    disposition: >-
+      Do not execute or report these source-repository checks as passed in the
+      downstream package. Verify exact published bytes, assert the declared
+      projection boundary, and execute the target-owned downstream tests.
+  - id: "AICU-V090-DOC-001"
+    status: "resolved-by-v0.13.0"
+    observed_through: "v0.12.0"
+    resolved_in: "v0.13.0"
+    document:
+      path: ".dev/guides/implementation-guides/PERSISTENCE-CONFIGURATION-GUIDE.md"
+      sha256: "70fecf2e8e20ccbd63a180b8e6b7ec42a20f0f2a3b030a6baed127ab8381248a"
+    dead_command: "dotnet test tools/DotnetBackendValidation.Tests/DotnetBackendValidation.Tests.csproj"
+    replacement_recipe: ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md"
+    reason: >-
+      v0.13 removes the dead target-tool command and replaces it with a
+      reference-only, target-owned projection-validation recipe.
+    disposition: >-
+      Adopt the exact v0.13 document, keep the on-demand recipe not-selected,
+      and record this carried conflict as resolved without re-requesting owner
+      approval.
+  - id: "AICU-V012-PROFILE-REGISTRY-PROJECTION-001"
+    status: "blocked-by-package-projection"
+    observed_through: "v0.13.0"
+    canonical_test:
+      path: ".ai/scripts/tests/test_validation_profile_registry.py"
+      sha256: "5785287f175ba4f1c612df3b6ef980d7d24b4ded627f45af4051c794e1a3e133"
+    unavailable_dependency: ".ai/distribution/profiles/dotnet-backend.yaml"
+    reason: >-
+      The canonical test now unconditionally reads a source-only distribution
+      profile that is not present in the published downstream package.
+    disposition: >-
+      Exclude this stock test from the target gate, pin its exact package bytes,
+      and validate the downstream applicability boundary in target-owned tests.
+  - id: "AICU-V013-ROUTING-PROJECTION-001"
+    status: "blocked-by-package-projection"
+    observed_through: "v0.13.0"
+    canonical_test:
+      path: ".ai/scripts/tests/test_code_reviewer_routing_contract.py"
+      sha256: "6ea4387ba2f3a5651447a575d0a16ab2f57427620000d630b4233505f5415acb"
+    unavailable_dependency: ".ai/scripts/ai_context_package.py"
+    source_release_only_case: "GWT8"
+    downstream_test: ".dev/ai-context/tooling/tests/test_code_reviewer_routing_projection.py"
+    reason: >-
+      The registry marks this test portable, but module loading imports the
+      omitted source-only package module before any of its eight tests run.
+    disposition: >-
+      Pin the exact stock failure, run the target-owned GWT1-GWT7 projection,
+      and keep GWT8 not-applicable because it validates source release payload
+      construction rather than the installed downstream context.
+validation_selection_defects:
+  - id: "AICU-V011-SELECTION-001"
+    status: "blocked-by-selector-defect"
+    selector:
+      path: ".ai/scripts/check-all.sh"
+      sha256: "b862cf8a5c9068e25f8d6b94fd4a39dff20f83c107676157dc383acb25a0719e"
+    evidence_helper:
+      path: ".ai/scripts/validation-evidence.py"
+      sha256: "01cb263e0148dffcb0498c8cd4ece30f5f03745d42eb14ecb16c7221f76a4938"
+    product_source_contract:
+      path: ".ai/assets/shared/PRODUCT-SOURCE-PROJECTION-CONTRACT.md"
+      sha256: "70286a75c2feadb9c1b5a833a208b7fbec78bdc8dd3447fb06e1cd26cc9b0084"
+    finding: >-
+      Changed-path matching inserts direct check IDs before dependency expansion;
+      select_with_dependencies then returns immediately for an already-selected
+      ID, so declared dependencies may be omitted. The shipped v0.10-identical
+      tests do not cover the new base/head selector or dependency expansion.
+    disposition: >-
+      Keep changed-path profile execution and evidence reuse inactive. Retain
+      the target-owned full applicable gate until a later exact package proves
+      dependency expansion and regression coverage corrected.
+commit_policy_defects:
+  - id: "AICU-V012-COMMIT-CUTOVER-001"
+    status: "target-overlay-required"
+    package_effective_at: "2026-08-10T00:40:00+08:00"
+    target_effective_at: "2026-08-13T11:05:12+08:00"
+    last_legacy_commit: "ca17969c539836ea6b42de2de361367041d57d84"
+    disposition: >-
+      Compose a prospective target cutover without rewriting valid v0.11
+      history; issue-only and scope-only titles apply at and after the target
+      boundary, while literal pipe titles are historical-only.
+  - id: "AICU-V012-COMMIT-DOC-001"
+    status: "upstream-documentation-gap"
+    observed_through: "v0.13.0"
+    disposition: >-
+      Record that release/migration guidance omits the breaking grammar cutover
+      and the canonical Markdown policy does not state its historical boundary.
+package_metadata_defects:
+  - id: "AICU-V013-COMPONENT-OWNERSHIP-001"
+    status: "upstream-metadata-inconsistency"
+    observed_through: "v0.13.0"
+    path: ".ai/assets/shared/governance/AI-CONTEXT-VERSION-POLICY.md"
+    portable_policy_component: "ai-context-lifecycle-core"
+    package_inventory_component: "software-development-core"
+    evidence: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/preflight.yaml"
+    disposition: >-
+      Both components are mandatory for this target, so installation is not
+      blocked; report the inconsistent ownership upstream and do not infer a
+      component selection boundary from either declaration alone.
+resolved_framework_conflicts:
+  - id: "AICU-V090-BUNDLED-PROVIDER-001"
+    status: "resolved-by-v0.13.0"
+    previous_state: "source-available-inactive"
+    current_state: "reference-only-not-selected"
+    recipe_manifest: ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/recipe-manifest.yaml"
+    disposition: >-
+      Accept the framework removal of bundled provider and analyzer payloads;
+      retain only exact on-demand recipes without project, SDK, package,
+      solution, CI, or runtime activation.
+authorization_evidence:
+  - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/owner-decision-3.yaml"
+  - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/post-apply-required-path-reconciliation.yaml"
+  - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.12.0/preflight.yaml"
+  - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/preflight.yaml"

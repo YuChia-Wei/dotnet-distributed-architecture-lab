@@ -21,21 +21,30 @@ outputs:
   - "authoring extraction sheet"
   - "validator-ready problem-frame draft"
   - "open questions and inferred items"
+  - "one provider-neutral role_execution record for the considered problem-frame role binding, handed to the orchestrator without transferring framing ownership"
 constraints:
   - "Prefer CBF for the first draft unless SWF is clearly a better fit"
   - "Mark inferred items explicitly when the source documents do not state them"
   - "Do not claim 100% validator compliance from drafting alone"
+role_bindings:
+  - role_path: ".ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/sub-agent.yaml"
+    role_asset_id: "problem-frame-sub-agent"
+    expected_role_status: "active"
+    binding_kind: "primary"
+    applicability: "Problem-frame authoring is selected for one bounded use case or workpiece."
+    load_obligation: "mandatory-when-applicable"
 workflow:
   - step: 1
-    description: "Identify the highest-priority source of truth and the target use case"
+    description: "Identify the highest-priority source of truth and target use case, then evaluate the problem-frame role binding"
   - step: 2
-    description: "Extract inputs, preconditions, outcomes, external constraints, and scenarios"
+    description: "Load the matching role manifest and all mandatory references, then extract inputs, preconditions, outcomes, external constraints, and scenarios"
   - step: 3
     description: "Draft frame.yaml, machine/machine.yaml, machine/use-case.yaml, aggregate.yaml, and acceptance.yaml"
   - step: 4
-    description: "List open questions, inferred items, and next skill handoff"
+    description: "List open questions, inferred items, next skill handoff, and the skill-owned role_execution record for orchestrator aggregation"
 references:
   - ".ai/assets/skills/problem-frame-author/references/authoring-playbook.md"
+  - ".ai/assets/skills/problem-frame-author/references/role-execution.md"
   - ".ai/assets/skills/problem-frame-author/references/source-mapping.md"
   - ".ai/assets/skills/problem-frame-author/references/output-contract.md"
 examples:
@@ -50,3 +59,39 @@ wrapper_metadata:
   codex:
     wrapper_path: ".agents/skills/problem-frame-author/"
 status: "active"
+effective_rule_consumption:
+  applies_when:
+    - "The skill drafts or reverse-engineers a validator-ready problem frame for the selected use case."
+  excludes:
+    - "Requirement or specification intake that does not draft or reverse-engineer a problem frame."
+  resolver: ".ai/scripts/resolve-effective-rule-packet.py"
+  selectors:
+    - "capability"
+    - "execution_mode"
+    - "technology_profile"
+    - "file_type"
+  unresolved_outcome: "stop-applicable-action"
+  consumption_order: "Consume a freshness-verified task-scoped packet before reading profile references needed for the applicable action."
+  evidence:
+    required:
+      - "resolver_outcome"
+      - "loaded_rule_ids"
+      - "baseline.framework_version"
+      - "target_state.digest"
+      - "request.capability"
+      - "request.execution_mode"
+      - "request.technology_profile"
+      - "request.file_type"
+  semantic_consistency:
+    identity: "rule_id"
+    statement_bytes: "exact UTF-8 rules[].normative_statement bytes"
+    statement_digest: "rules[].normative_statement_digest"
+    cross_consumer_requirement: "the same rule_id must resolve to byte-equivalent effective semantics across consumers"
+    default_mismatch_outcome: "warning"
+    stricter_policy_owner: "target-owned"
+  prohibitions:
+    - "Do not scan broad target or framework documents to discover rule semantics."
+    - "Do not fall back to framework defaults."
+    - "Do not select an alternate route when the exact request route is unresolved."
+    - "Do not compare analyzer output as effective-rule semantics."
+    - "Keep analyzer severity and warnings-as-errors separate and target-owned."

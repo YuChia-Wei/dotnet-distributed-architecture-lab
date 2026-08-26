@@ -1,0 +1,62 @@
+schema_version: "1.0"
+fixture_id: "code-reviewer-review-routing"
+contract_path: ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
+cases:
+  - case_id: "event-sourced-aggregate-state-change"
+    path: "src/Sales/Domain/Orders/Aggregates/Order.cs"
+    type_signals: ["EsAggregateRoot<TId>"]
+    finding_tags: ["event-sourced-state-mutation"]
+    expected_route: "aggregate"
+    expected_rule_ids: ["AGGREGATE-ES-001"]
+    forbidden_rule_ids: []
+
+  - case_id: "non-event-sourced-aggregate"
+    path: "src/Sales/Domain/Orders/Aggregates/Order.cs"
+    type_signals: ["IAggregateRoot<TId>"]
+    finding_tags: []
+    expected_route: "aggregate"
+    expected_rule_ids: []
+    forbidden_rule_ids: ["AGGREGATE-ES-001"]
+
+  - case_id: "target-specific-batch-repository-port"
+    path: "src/Sales/Application/Orders/Repositories/IOrderBatchRepository.cs"
+    type_signals: []
+    finding_tags: []
+    expected_route: "repository"
+    expected_rule_ids: []
+    forbidden_inference: "all-custom-repository-interfaces-fail"
+
+  - case_id: "controller-boundary"
+    path: "src/Api/Controllers/OrdersController.cs"
+    type_signals: ["ControllerBase"]
+    finding_tags: []
+    expected_route: "controller"
+    expected_rule_ids: []
+
+  - case_id: "reactor-handler"
+    path: "src/Sales/Application/Reactors/ReserveStockReactor.cs"
+    type_signals: ["IReactor<T>"]
+    finding_tags: []
+    expected_route: "reactor"
+    expected_rule_ids: []
+
+  - case_id: "event-mapping"
+    path: "src/Sales/Infrastructure/Mappers/OrderMapper.cs"
+    type_signals: ["OrderMapper"]
+    finding_tags: ["domain-event-mapping"]
+    expected_route: "mapper"
+    expected_rule_ids: ["MAP-EVENTS-001"]
+
+  - case_id: "test-structure"
+    path: "tests/Sales/OrderUseCaseTests.cs"
+    type_signals: ["FactAttribute"]
+    finding_tags: ["test-structure"]
+    expected_route: "test"
+    expected_rule_ids: ["TEST-GWT-001", "TEST-BDDFY-001"]
+
+  - case_id: "unknown-csharp-fallback"
+    path: "src/Support/Clock.cs"
+    type_signals: []
+    finding_tags: []
+    expected_route: "general-csharp"
+    expected_rule_ids: []

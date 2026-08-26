@@ -64,7 +64,7 @@ class ProfileProjectionContractTests(unittest.TestCase):
         self.assertEqual([], violations)
 
     def test_gwt_003_given_aspnet_examples_when_checked_then_canonical_test_environment_files_exist(self) -> None:
-        example_root = ROOT / ".dev/standards/examples/aspnet-core"
+        example_root = ROOT / ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core"
         self.assertTrue((example_root / "appsettings.TestInMemory.json").is_file())
         self.assertTrue((example_root / "appsettings.TestOutbox.json").is_file())
         self.assertFalse((example_root / "appsettings.Test.InMemory.json").exists())

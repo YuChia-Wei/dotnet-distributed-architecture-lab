@@ -1,29 +1,13 @@
 # Reactor Code Review Sub-Agent Playbook
 
-Use this delegated reviewer role when the main agent needs a bounded review of reactor/event-handler behavior and integration correctness.
+Use this role for bounded reactor/event-handler and cross-aggregate integration
+review.
 
-## Mandatory References
+1. Select the `reactor` route from `review-routing.yaml`.
+2. Add `domain-event` or `test` only when those files/findings are in scope.
+3. Review event conversion, collaboration boundary, redelivery/idempotency, and
+   target-proven registration against the selected canonical standards.
+4. Report evidence-backed findings without assuming a DI, retry, bus, or
+   repository technology the target did not select.
 
-- `.ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
-
-## Focus Areas
-
-- correct event-type handling
-- DI registration and lifecycle expectations
-- unhandled exception risks
-- forbidden cross-aggregate repository access
-
-## Must-Fail Patterns
-
-- wrong or incomplete event subscriptions
-- missing DI registration
-- unhandled exceptions in event handlers
-- direct cross-aggregate repository reads that violate boundaries
-
-## Relationship To Top-Level Skill
-
-- Use `code-reviewer` for a full review workflow and final reporting
-- Use this sub-agent when a larger workflow needs one reactor-specific review slice
-
+The role prompt is execution guidance, not a semantic owner.

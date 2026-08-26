@@ -1,0 +1,82 @@
+schema_version: "1.0"
+decision_id: "owner-decision-v0.9-2"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+issue: 1
+recorded_at: "2026-08-13T07:40:46+08:00"
+status: "approved"
+supersedes:
+  decision_id: "owner-decision-v0.9-1"
+  subject: "target-owned tools/** runtime and analyzer projects"
+evidence:
+  analyzer_active: true
+  analyzer_wiring:
+    - "src/Directory.Build.props"
+    - ".editorconfig#dotnet_diagnostic.DBA1001"
+    - ".editorconfig#dotnet_diagnostic.DBA1015"
+    - ".editorconfig#dotnet_diagnostic.DBA1017"
+    - "MQArchLab.slnx#tools/DotnetBackendAnalyzers"
+  runtime_validation_active_in_product: false
+  runtime_validation_evidence: >-
+    Historical integration evidence states that the Dapper-based product does
+    not reference DotnetBackendValidation at runtime; it was only a solution and
+    tool-test project.
+decision:
+  active_analyzer_integration: "remove-completely"
+  target_tools_tree: "accept-v0.9-retirement"
+  incoming_provider_assets: "install-source-available-inactive"
+  restore_after_package_apply: false
+  historical_reports: "retain-as-historical-evidence"
+affected_package_operations:
+  moved_analyzer_and_validation_sources:
+    - "migration-0230"
+    - "migration-0231"
+    - "migration-0232"
+    - "migration-0233"
+    - "migration-0234"
+    - "migration-0235"
+    - "migration-0236"
+    - "migration-0238"
+    - "migration-0239"
+    - "migration-0240"
+    - "migration-0242"
+    - "migration-0254"
+    - "migration-0255"
+  retired_tool_tests_and_docs:
+    - "migration-0346"
+    - "migration-0347"
+    - "migration-0348"
+    - "migration-0349"
+    - "migration-0350"
+    - "migration-0351"
+    - "migration-0352"
+    - "migration-0353"
+    - "migration-0354"
+    - "migration-0355"
+    - "migration-0356"
+    - "migration-0357"
+    - "migration-0358"
+    - "migration-0359"
+    - "migration-0360"
+    - "migration-0361"
+active_integration_removal:
+  - "remove analyzer and validation projects from MQArchLab.slnx"
+  - "remove src/Directory.Build.props analyzer ProjectReference"
+  - "remove DBA diagnostic severity overrides from .editorconfig"
+  - "remove retired tools projects and roots from .dev/project-config.yaml"
+authorization_boundary:
+  authorized:
+    - "remove active analyzer integration"
+    - "accept v0.9 tools/** file retirement"
+    - "install inactive source-available provider assets under .ai"
+  not_authorized:
+    - "activate or cut over the bundled provider"
+    - "merge"
+    - "push"
+    - "close Issue #1"
+    - "mutate GitHub Project state"
+    - "submit feedback upstream"
+rollback_source: "Git commit preceding this decision and version-bound package evidence"
+validation:
+  solution_inventory: "passed; 26 product and product-test projects, no tools projects"
+  live_reference_scan: "passed; no active DotnetBackendAnalyzers, DotnetBackendValidation, DBA10*, or analyzer ProjectReference under solution/src/config"
+  solution_build: "passed outside sandbox; 0 errors and 6 pre-existing nullable warnings"

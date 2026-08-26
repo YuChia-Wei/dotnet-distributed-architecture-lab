@@ -15,6 +15,7 @@ triggers:
   - "language policy"
   - "wrapper sync"
   - "AI context audit remediation"
+  - "governance terminology ownership"
   - "post-remediation AI context audit"
   - "assessment finding remediation"
   - "verification assessment coordination"
@@ -25,6 +26,7 @@ inputs:
   - "workflow plan or task JSON for context cleanup"
   - "baseline assessment and selected stable finding references"
   - "desired universal versus tech-stack-specific boundary"
+  - "qualified governance term and canonical owner route when terminology is in scope"
   - "language and audience constraints"
 outputs:
   - "context classification"
@@ -47,15 +49,16 @@ constraints:
   - "Do not overwrite or copy the baseline assessment report during remediation"
   - "Use workflow ids in YYYY-MM-DD-topic[-NN] form and ISO 8601 timestamps with an explicit offset"
   - "Create or switch to a dedicated workflow branch before workflow artifacts or material AI-context edits; do not use main as the active workflow branch"
-  - "Treat pre-completion merge or push as a checkpoint and preserve active/pending state; use --no-ff for merges unless another strategy is explicitly requested"
+  - "Treat pre-completion integration or push as a checkpoint and preserve active/pending state; select linear or merge-commit topology under the target branch policy instead of deriving it from workflow mode"
   - "Treat optional indexes, code graphs, MCP servers, IDE indexes, and semantic search only as discovery accelerators; verify material context decisions with repository-native evidence under AICTX-EVIDENCE-001."
   - "Require WORKFLOW-HANDOFF-POLICY for cross-model, runtime, host, machine, or fresh-session continuation; never normalize provider-native Git attribution without real provider fixtures."
   - "Own `.dev/ai-context/customizations.yaml`; identify capability, rule, or contract before supporting paths and follow the shared semantic customization lifecycle."
+  - "Resolve governance terms through `.dev/standards/AI-CONTEXT-OWNERSHIP.yaml`; do not infer cross-owner authority from bare candidate, validated, integration, publication, closeout, finalization, or lifecycle wording."
 workflow:
   - step: 1
     description: "Classify context by audience, scope, language, and action, or intake an ai-context-auditor baseline assessment; when workflow mode applies, create or switch to the dedicated branch before artifacts or material edits"
   - step: 2
-    description: "Check context placement against boundary and language policies, then triage findings into remediation tasks"
+    description: "Check context placement against boundary, language, ownership, and qualified governance-term routes, then triage findings into remediation tasks"
   - step: 3
     description: "Plan or execute the smallest safe policy, routing, wrapper, or move batch; record semantic customizations and explicit owner reconciliation without inferring intent from paths"
   - step: 4
@@ -63,6 +66,8 @@ workflow:
   - step: 5
     description: "Compare the baseline and verification assessments, publish the workflow remediation report, create a receiving checkpoint when continuation crosses an execution boundary, and close or defer each finding explicitly"
 references:
+  - ".dev/standards/AI-CONTEXT-OWNERSHIP.md"
+  - ".dev/standards/AI-CONTEXT-OWNERSHIP.yaml"
   - ".dev/standards/ASSESSMENT-ARTIFACT-POLICY.md"
   - ".dev/standards/WORKFLOW-HANDOFF-POLICY.md"
   - ".ai/assets/skills/ai-context-governance/references/context-boundary-playbook.md"
@@ -72,6 +77,9 @@ references:
   - ".ai/assets/skills/ai-context-governance/references/audit-remediation-lifecycle.md"
   - ".ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md"
   - ".ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml"
+  - ".ai/assets/skills/ai-context-governance/templates/effective-rule-state.schema.yaml"
+  - ".ai/assets/skills/ai-context-governance/templates/effective-rule-state.template.yaml"
+  - ".ai/assets/skills/ai-context-governance/templates/effective-rule-packet.schema.yaml"
 examples:
   - ".dev/guides/ai-collaboration-guides/AI-CONTEXT-GOVERNANCE-SKILL-GUIDE.md"
 human_guide: ".dev/guides/ai-collaboration-guides/AI-CONTEXT-GOVERNANCE-SKILL-GUIDE.md"

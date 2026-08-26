@@ -50,3 +50,12 @@ Examples:
 - `.dev/specs/tests/<context>/use-cases/<use-case>.test-spec.md`
 - `.dev/specs/tests/<context>/integration/<integration-target>.test-spec.md`
 - `.dev/specs/tests/cross-domain/<scenario>.test-spec.md`
+
+## 6. Implementation And Execution Handoff
+
+State whether concrete test implementation is separately authorized. If it is
+not, return only the scenario/assertion design. If it is, hand the source paths,
+scenario set, assertion notes, selected test level, and open questions to
+`slice-implementer`; do not claim that this design authorizes a code change.
+Keep the later implementation result separate from target-owned test-execution
+commands and outcomes.

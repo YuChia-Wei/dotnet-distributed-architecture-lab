@@ -85,11 +85,23 @@ class SemanticCustomizationSkillContractTests(unittest.TestCase):
         )
 
     def test_gwt_005_given_downstream_projection_when_checked_then_target_validation_remains_and_source_release_tools_do_not(self) -> None:
-        scripts = ROOT / ".ai/scripts"
-        self.assertFalse((scripts / "compare-ai-context-versions.py").exists())
-        self.assertFalse((scripts / "validate-ai-context-versions.py").exists())
-        self.assertTrue((scripts / "validate-ai-context-target.py").is_file())
-        self.assertTrue((scripts / "ai_context_target_provenance.py").is_file())
+        profile = yaml.safe_load(
+            (
+                ROOT / ".ai/distribution/profiles/dotnet-backend.yaml"
+            ).read_text(encoding="utf-8")
+        )
+        excluded = {
+            pattern
+            for group in profile["exclusions"]
+            for pattern in group["patterns"]
+        }
+        self.assertIn(
+            ".ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py",
+            excluded,
+        )
+        self.assertIn(".ai/scripts/validate-ai-context-versions.py", excluded)
+        self.assertNotIn(".ai/scripts/validate-ai-context-target.py", excluded)
+        self.assertNotIn(".ai/scripts/ai_context_target_provenance.py", excluded)
 
 
 if __name__ == "__main__":

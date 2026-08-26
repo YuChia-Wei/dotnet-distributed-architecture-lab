@@ -2,12 +2,14 @@
 
 本文件說明如何用 prompt 讓 AI 協助整理 spec 文件。
 
-目前它不是正式 skill，而是 human-facing prompt guide，目標是讓你能快速把 requirement 轉成符合 `.dev/specs/` 規範的 markdown / json spec。
+這是正式 `spec-author` skill 的 human-facing companion guide，目標是讓你能快速把 requirement 轉成符合 `.dev/specs/` 規範的 markdown / JSON spec。執行環境支援 skill routing 時應優先使用 `spec-author`；無法直接呼叫 skill 時，可使用本文件的 prompt 範例維持相同的輸入與輸出方向。
 
-目前 `.dev/specs/` 已分成：
+目前 framework repository 的 `.dev/specs/` 保留：
 
-- `.dev/specs/domains/`
+- 規格撰寫與組織指南
 - `.dev/specs/tests/`
+
+Production/domain spec 是 target-repository output；只有在目標 repository 有來源 requirement 並完成邊界判定後，才依指南建立 `.dev/specs/domains/`。
 
 ## 適合用在什麼情況
 
@@ -23,7 +25,7 @@
 
 若你要的是測試 scenario、Given-When-Then 或 BDD/TDD test intent：
 
-- production spec 放 `.dev/specs/domains/`
+- target repository 的 production spec 依 bounded context 與 aggregate ownership 放入 `.dev/specs/domains/`
 - test spec 放 `.dev/specs/tests/`
 - test spec 依測試目標放到 `aggregate/`、`use-cases/`、`integration/`、`cross-domain/` 或 `e2e/`
 - scenario 設計優先交給 `bdd-gwt-test-designer`

@@ -1,0 +1,42 @@
+schema_version: "1.0"
+recipe_id: "dotnet-target-selected-on-demand-mechanical-validation"
+technology_profile: "dotnet-backend"
+delivery_state: "reference-only"
+default_selection_state: "not-selected"
+compilable_payload: false
+framework_sdk_requirement: "none"
+activation_contract: "none"
+activation_inference_from_presence: "forbidden"
+semantic_ownership:
+  canonical_catalog: "../../engineering-rule-catalog.yaml"
+  binding_only: true
+materials:
+  diagnostic_mapping:
+    path: "diagnostic-mapping.yaml"
+    evidence_tier: "reference-only"
+  analyzer_project_recipe:
+    path: "recipes/analyzer-project.md"
+    evidence_tier: "reference-only"
+  analyzer_severity_recipe:
+    path: "recipes/analyzer-severity.editorconfig.snippet"
+    evidence_tier: "reference-only"
+  projection_registration_recipe:
+    path: "recipes/projection-registration-test.md"
+    evidence_tier: "reference-only"
+target_ownership:
+  selection: "explicit target owner decision"
+  project_creation: "target-owned"
+  sdk_and_target_framework: "target-owned"
+  roslyn_and_package_versions: "target-owned"
+  implementation_and_tests: "target-owned"
+  project_wiring: "target-owned"
+  severity_and_warnings_as_errors: "target-owned"
+  invocation_and_ci: "target-owned"
+  compatibility_and_freshness_evidence: "target-owned"
+unsupported_framework_claims:
+  - "bundled executable provider"
+  - "reference-in-place activation"
+  - "materialized activation"
+  - "framework-verified analyzer compatibility"
+  - "framework-verified target configuration"
+  - "Architecture Kit availability or cutover"

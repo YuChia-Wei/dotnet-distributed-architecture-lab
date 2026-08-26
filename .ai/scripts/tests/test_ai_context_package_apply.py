@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import subprocess
 import sys
@@ -15,6 +16,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / ".ai/scripts"))
 MODULE_PATH = ROOT / ".ai/scripts/ai_context_package_apply.py"
 SPEC = importlib.util.spec_from_file_location("ai_context_package_apply", MODULE_PATH)
 if SPEC is None or SPEC.loader is None:
@@ -22,6 +24,8 @@ if SPEC is None or SPEC.loader is None:
 APPLY = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = APPLY
 SPEC.loader.exec_module(APPLY)
+
+import ai_context_target_provenance as TARGET  # noqa: E402
 
 
 def git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
@@ -280,6 +284,30 @@ def operation(
 
 
 class AiContextPackageApplyGwtTests(unittest.TestCase):
+    def test_gwt_000_given_portable_prerequisite_runtime_when_clean_installed_then_all_shared_and_registered_assets_are_selected(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            registry = json.loads((ROOT / ".ai/scripts/python-entrypoints.json").read_text(encoding="utf-8"))
+            paths = {
+                ".ai/scripts/python-entrypoints.json",
+                ".ai/scripts/python_prerequisites.py",
+                ".ai/scripts/run-python-entrypoint.sh",
+                ".ai/scripts/run-python-entrypoint.ps1",
+                *(item["path"] for item in registry["entrypoints"] if item["portable"]),
+            }
+            incoming = {
+                path: (path.encode("utf-8"), "framework-managed", "0644", "software-development-core")
+                for path in paths
+            }
+            fixture.make_component_package(
+                incoming,
+                [operation(f"{index:03d}-add", "add", path, component_id="software-development-core") for index, path in enumerate(sorted(paths), 1)],
+            )
+            plan = fixture.plan()
+            self.assertEqual(sorted(paths), [item["path"] for item in plan["operations"]])
+            self.assertEqual({"software-development-core": 17}, plan["component_operation_counts"]["would_apply"])
+        finally:
+            fixture.close()
     def test_gwt_000a_given_component_archive_when_clean_installed_then_default_skips_backlog_and_cli_can_enable_it(self) -> None:
         fixture = PackageApplyFixture()
         try:
@@ -646,6 +674,246 @@ class AiContextPackageApplyGwtTests(unittest.TestCase):
         finally:
             fixture.close()
 
+    def test_gwt_001a_given_selected_codex_adapter_ignored_by_target_gitignore_when_planned_then_evidence_is_unresolved_and_apply_preserves_target_rule(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            # Given an exact selected framework-managed adapter below a target-owned ignore rule.
+            ignore_path = fixture.target / ".gitignore"
+            ignore_bytes = b"/.codex/**\n"
+            fixture.add_target(".gitignore", ignore_bytes)
+            fixture.commit_target("target ignores Codex adapters")
+            path = ".codex/agents/context-translator.toml"
+            fixture.make_component_package(
+                {
+                    path: (
+                        b'name = "context-translator"\n',
+                        "framework-managed",
+                        "0644",
+                        "software-development-core",
+                    )
+                },
+                [
+                    operation(
+                        "001-add-translator",
+                        "add",
+                        path,
+                        component_id="software-development-core",
+                    )
+                ],
+            )
+
+            # When dry-run preflight observes the target rule.
+            plan = fixture.plan()
+
+            # Then the plan preserves exact path/component/ownership/rule evidence and no owner choice is inferred.
+            self.assertEqual("unresolved", plan["operations"][0]["action"])
+            self.assertEqual(path, plan["ignored_framework_paths"][0]["path"])
+            self.assertEqual(
+                "software-development-core",
+                plan["ignored_framework_paths"][0]["component_id"],
+            )
+            self.assertEqual(
+                "framework-managed",
+                plan["ignored_framework_paths"][0]["ownership"],
+            )
+            self.assertEqual(
+                {"source": ".gitignore", "line": 1, "pattern": "/.codex/**"},
+                plan["ignored_framework_paths"][0]["ignore_rule"],
+            )
+            self.assertEqual(
+                [
+                    "preserve-target-rule",
+                    "add-narrow-exception",
+                    "disable-component",
+                    "pending-owner-decision",
+                ],
+                plan["ignored_framework_paths"][0]["owner_dispositions"],
+            )
+            with self.assertRaisesRegex(APPLY.ApplyError, "unresolved target Git ignore rules"):
+                APPLY.apply_plan(plan)
+            self.assertFalse((fixture.target / path).exists())
+            self.assertFalse(
+                (fixture.target / ".dev/AI-CONTEXT-APPLY-PENDING.yaml").exists()
+            )
+            self.assertEqual(ignore_bytes, ignore_path.read_bytes())
+        finally:
+            fixture.close()
+
+    def test_gwt_001b_given_ignore_rule_with_different_case_when_planned_then_exact_path_is_not_false_positive_on_windows_or_posix(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            # Given a rule whose casing differs from the exact package path.
+            fixture.add_target(".gitignore", b"/.CODEX/**\n")
+            fixture.commit_target("target ignore casing fixture")
+            git(fixture.target, "config", "core.ignorecase", "false")
+            path = ".codex/agents/context-translator.toml"
+            fixture.make_component_package(
+                {
+                    path: (
+                        b'name = "context-translator"\n',
+                        "framework-managed",
+                        "0644",
+                        "software-development-core",
+                    )
+                },
+                [
+                    operation(
+                        "001-add-translator",
+                        "add",
+                        path,
+                        component_id="software-development-core",
+                    )
+                ],
+            )
+
+            # When the planner evaluates the exact POSIX package identity.
+            plan = fixture.plan()
+            receipt = APPLY.apply_plan(plan)
+
+            # Then an exact-case mismatch does not suppress the selected adapter on Windows or POSIX.
+            self.assertEqual([], plan["ignored_framework_paths"])
+            self.assertEqual("add", plan["operations"][0]["action"])
+            self.assertEqual("1.1.0", receipt["schema_version"])
+            self.assertEqual(path, receipt["required_framework_paths"][0]["path"])
+            self.assertIsNone(TARGET.git_ignore_rule(fixture.target, path))
+        finally:
+            fixture.close()
+
+    def test_gwt_001c_given_legacy_ignored_selected_path_receipt_when_target_validation_or_finalization_runs_then_both_fail_closed_and_provenance_is_preserved(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            # Given an initialized target with existing provenance bytes.
+            path = ".codex/agents/context-translator.toml"
+            source = {
+                "repository": "owner/framework",
+                "release_id": "REL-v1.0.0",
+                "version": "v1.0.0",
+                "tag": "v1.0.0",
+                "commit": "a" * 40,
+            }
+            selection = yaml.safe_load(yaml.safe_dump(APPLY.DEFAULT_COMPONENT_SELECTION))
+            TARGET.initialize_context(
+                fixture.target, source, selection, "2026-08-04T21:49:30+08:00"
+            )
+            provenance_path = fixture.target / ".dev/ai-context/provenance.yaml"
+            provenance_before = provenance_path.read_bytes()
+            provenance = TARGET.load_mapping(provenance_path, [])
+            ledger = TARGET.load_mapping(
+                fixture.target / ".dev/ai-context/customizations.yaml", []
+            )
+            assert provenance is not None
+            assert ledger is not None
+
+            # And a later pending receipt identifies the same path below .git/info/exclude.
+            exclude = fixture.target / ".git/info/exclude"
+            exclude.write_text("/.codex/**\n", encoding="utf-8")
+            managed = fixture.target / path
+            managed.parent.mkdir(parents=True, exist_ok=True)
+            managed_bytes = b'name = "context-translator"\n'
+            managed.write_bytes(managed_bytes)
+            receipt_path = fixture.target / ".dev/AI-CONTEXT-APPLY-PENDING.yaml"
+            receipt_path.parent.mkdir(parents=True, exist_ok=True)
+            receipt_path.write_text(
+                yaml.safe_dump(
+                    {
+                        "schema_version": "1.1.0",
+                        "status": "pending-validation",
+                        "required_framework_paths": [
+                            {
+                                "path": path,
+                                "component_id": "software-development-core",
+                                "ownership": "framework-managed",
+                                "sha256": APPLY.sha256_bytes(managed_bytes),
+                            }
+                        ],
+                    },
+                    sort_keys=False,
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+
+            # When standalone validation and provenance finalization inspect the receipt identity.
+            errors = TARGET.validate_target(fixture.target)
+
+            # Then both use the same Git ignore finding and finalization leaves prior provenance bytes intact.
+            self.assertTrue(
+                any(
+                    "target Git ignore rule excludes framework-managed path " + path
+                    in error
+                    for error in errors
+                ),
+                errors,
+            )
+            with self.assertRaisesRegex(
+                TARGET.TargetValidationError,
+                "target Git ignore rule excludes framework-managed path",
+            ):
+                TARGET.finalize_context(fixture.target, provenance, ledger)
+            self.assertEqual(provenance_before, provenance_path.read_bytes())
+        finally:
+            fixture.close()
+
+    def test_gwt_001d_given_ignored_required_path_receipt_when_initialization_runs_then_it_stays_unresolved_without_writing_provenance(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            # Given a selected managed adapter whose pending receipt is hidden by the target.
+            path = ".codex/agents/context-translator.toml"
+            (fixture.target / ".git/info/exclude").write_text(
+                "/.codex/**\n", encoding="utf-8"
+            )
+            managed = fixture.target / path
+            managed.parent.mkdir(parents=True, exist_ok=True)
+            managed_bytes = b'name = "context-translator"\n'
+            managed.write_bytes(managed_bytes)
+            receipt_path = fixture.target / ".dev/AI-CONTEXT-APPLY-PENDING.yaml"
+            receipt_path.parent.mkdir(parents=True, exist_ok=True)
+            receipt_path.write_text(
+                yaml.safe_dump(
+                    {
+                        "schema_version": "1.1.0",
+                        "status": "pending-validation",
+                        "required_framework_paths": [
+                            {
+                                "path": path,
+                                "component_id": "software-development-core",
+                                "ownership": "framework-managed",
+                                "sha256": APPLY.sha256_bytes(managed_bytes),
+                            }
+                        ],
+                    },
+                    sort_keys=False,
+                ),
+                encoding="utf-8",
+                newline="\n",
+            )
+
+            # When initialization checks the pending package identity.
+            result = TARGET.initialize_context(
+                fixture.target,
+                {
+                    "repository": "owner/framework",
+                    "release_id": "REL-v1.0.0",
+                    "version": "v1.0.0",
+                    "tag": "v1.0.0",
+                    "commit": "a" * 40,
+                },
+                yaml.safe_load(yaml.safe_dump(APPLY.DEFAULT_COMPONENT_SELECTION)),
+                "2026-08-04T21:49:30+08:00",
+            )
+
+            # Then initialization records no false completion or new provenance authority.
+            self.assertEqual("unresolved", result["status"])
+            self.assertEqual(
+                "required-framework-managed-path-validation-failed", result["reason"]
+            )
+            self.assertEqual([], result["written"])
+            self.assertFalse(
+                (fixture.target / ".dev/ai-context/provenance.yaml").exists()
+            )
+        finally:
+            fixture.close()
+
     def test_gwt_002_given_existing_seed_when_acknowledged_then_it_is_preserved_and_safe_add_applies(self) -> None:
         fixture = PackageApplyFixture()
         try:
@@ -885,6 +1153,8 @@ class AiContextPackageApplyGwtTests(unittest.TestCase):
         for path in (
             ".dev/ai-context/provenance.yaml",
             ".dev/ai-context/customizations.yaml",
+            ".dev/ai-context/effective-rules.yaml",
+            ".dev/ai-context/effective-rule-packets/ROUTE-EXAMPLE.yaml",
         ):
             with self.subTest(path=path):
                 fixture = PackageApplyFixture()
@@ -913,6 +1183,35 @@ class AiContextPackageApplyGwtTests(unittest.TestCase):
             plan = fixture.plan()
             self.assertEqual("reconcile", plan["operations"][0]["action"])
             self.assertIn("hash or mode", plan["operations"][0]["reason"])
+        finally:
+            fixture.close()
+
+    def test_gwt_012a_given_filemode_disabled_target_with_unrepresentable_executable_bit_when_planned_then_safe_replace_applies(self) -> None:
+        fixture = PackageApplyFixture()
+        try:
+            # Given target bytes match the executable base, but Git explicitly cannot
+            # represent the executable bit on this worktree.
+            git(fixture.target, "config", "core.filemode", "false")
+            fixture.add_target(".ai/tool.sh", b"same bytes\n")
+            fixture.commit_target()
+            fixture.make_package(
+                {".ai/tool.sh": (b"incoming\n", "framework-managed", "0755")},
+                [operation("001-replace", "replace", ".ai/tool.sh")],
+                {".ai/tool.sh": (b"same bytes\n", "framework-managed", "0755")},
+            )
+
+            # When planning and applying the governed replacement.
+            plan = fixture.plan()
+            receipt = APPLY.apply_plan(plan)
+
+            # Then platform-only mode loss does not masquerade as target-owned
+            # content drift, and the receipt binds the incoming bytes.
+            self.assertEqual("replace", plan["operations"][0]["action"])
+            self.assertEqual([], receipt["skipped_reconciliation_ids"])
+            self.assertEqual(b"incoming\n", (fixture.target / ".ai/tool.sh").read_bytes())
+            errors: list[str] = []
+            TARGET.validate_pending_apply_receipt(fixture.target, errors)
+            self.assertEqual([], errors)
         finally:
             fixture.close()
 

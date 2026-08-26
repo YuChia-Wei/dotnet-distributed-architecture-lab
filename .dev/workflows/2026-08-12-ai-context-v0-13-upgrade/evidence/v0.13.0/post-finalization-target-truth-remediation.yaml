@@ -1,0 +1,65 @@
+schema_version: "1.0"
+recorded_at: "2026-08-13T13:36:49+08:00"
+status: "independently-verified"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+trigger:
+  kind: "post-upgrade-cross-analysis"
+  audited_checkpoint: "a003618395733ff7958121e217a62a2d207de383"
+  finding_id: "AICU-V013-TARGET-PROVIDER-TRUTH-001"
+finding:
+  classification: "target-customization-evidence-sync"
+  upstream_package_defect: false
+  summary: >-
+    Four target-owned entry and inventory documents still described the removed
+    bundled mechanical-validation provider as source-available, even though the
+    exact v0.13 package removed that provider and installed only reference-only,
+    not-selected on-demand recipe assets.
+  stale_claim_paths:
+    - "README.md"
+    - "README.en.md"
+    - ".dev/ARCHITECTURE.md"
+    - ".dev/project-config.yaml"
+  old_provider_path: ".ai/assets/tech-stacks/dotnet-backend/tooling/bundled-mechanical-validation/"
+  installed_recipe_path: ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/"
+authorization:
+  basis: >-
+    The owner authorized adopting exact later-version framework resolutions and
+    recording framework-required additions/removals. This correction preserves
+    the already-finalized v0.13 provider decision and changes no product or
+    governance semantics.
+  repeated_owner_decision_required: false
+  provider_activation_authorized: false
+disposition:
+  kind: "resolved-by-v0.13-target-truth-sync"
+  changes:
+    - "Replace the four stale bundled-provider claims with the installed recipe-only state."
+    - "Assert the old path is absent and the on-demand reference-only state is present in all four target-truth files."
+  framework_managed_bytes_changed: false
+  provider_selected: false
+  provider_activated: false
+validation:
+  direct_projection_test:
+    command: "python -B .dev/ai-context/tooling/tests/test_downstream_package_projection.py -v"
+    outcome: "passed"
+    tests: "12/12"
+  full_target_gate:
+    command: "python -B .dev/ai-context/tooling/validate-target-ai-context.py --require-effective-rules --commit-range main..HEAD --workflow-id 2026-08-12-ai-context-v0-13-upgrade"
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 17.0
+    commit_range_count: 54
+  independent_audit:
+    subject_commit: "d985e0ef24d8716481ca7dc323472cf19545103f"
+    outcome: "BLOCKED"
+    technical_checks: "passed, including 12/12 focused tests and the complete target gate over 55 commits"
+    blocker: "active resume and lifecycle surfaces still instructed an already-completed commit and omitted the remediation checkpoint"
+    disposition: "preserved and corrected by the following metadata synchronization"
+  independent_reaudit:
+    subject_commit: "46928f4379f57a7bec155056aacdf6dbcf070f81"
+    outcome: "SAFE-TO-PROCEED"
+    target_gate: "passed outside sandbox in 16.7 seconds over 56 commits"
+    target_overlay_tests: "41/41 passed"
+    focused_projection_tests: "12/12 passed"
+    audit_residue: "none"
+next_action: >-
+  Use the verified remediation checkpoint as the fixed subject for bounded
+  post-upgrade analysis and report closeout.

@@ -1,0 +1,43 @@
+schema_version: "1.0"
+version: "v0.9.0"
+finalized_at: "2026-08-13T09:50:24+08:00"
+source:
+  repository: "https://github.com/YuChia-Wei/ai-collaboration-framework.git"
+  release_id: "REL-v0.9.0"
+  commit: "c14a3260cba7d0a9e2b67b73df9e221280d2d2ef"
+independent_audit:
+  assessment_id: "ASM-20260813-002"
+  subject_commit: "3d261f3b351bc6b656528d722de37779f1829016"
+  verdict: "safe-to-finalize"
+pending_receipt:
+  pre_finalization_sha256: "b5a87952fc3e6f59714b20f0df74cbf283072ba83652a799c672b8902d2039df"
+  evidence_copy: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/apply-receipt.yaml"
+  working_copy_removed_after_first_finalized_gate: true
+effective_rules:
+  readiness: "ready"
+  rule_disposition_count: 13
+  route_count: 20
+  packet_count: 20
+validation:
+  finalized_gate_with_pending_receipt:
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 31.0
+    commit_range_count: 24
+  finalized_gate_after_pending_receipt_removal:
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 11.0
+    commit_range_count: 24
+checkpoint:
+  commit: "8b02af138efe4fa3b02dbebabf9d1b67f7c1b68e"
+  committed_at: "2026-08-13T09:55:18+08:00"
+  post_commit_gate:
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 11.1
+    commit_range_count: 25
+authorization_boundary:
+  merge: false
+  push: false
+  issue_close: false
+  project_mutation: false
+  provider_activation: false
+  upstream_submission: false

@@ -1,11 +1,12 @@
-# Standards Rationale Index
+# Standards Rationale Compatibility Entry
 
-This index owns the catalog for portable standards rationales.
+The canonical .NET backend rationale records are under the profile:
 
-| Path | Supports |
-| --- | --- |
-| `generic-repository-only-rationale.MD` | Aggregate Repository boundary, compatibility naming, batch opt-in, and separate purge capability. |
-| `profile-based-testing-rationale.MD` | Runtime-selected test profiles without shared base-class environment control. |
-| `query-side-layering-rationale.MD` | Application query ports, Infrastructure adapters, and optional composition services. |
-| `rest-api-resource-path-rationale.MD` | Nested create paths and flat identity-based resource operations. |
-| `skill-sub-agent-boundary-rationale.MD` | Top-level skill versus delegated sub-agent ownership. |
+- [Aggregate Repository rationale](../../../.ai/assets/tech-stacks/dotnet-backend/references/rationale/generic-repository-only-rationale.MD)
+- [Profile-based testing rationale](../../../.ai/assets/tech-stacks/dotnet-backend/references/rationale/profile-based-testing-rationale.MD)
+- [Query-side layering rationale](../../../.ai/assets/tech-stacks/dotnet-backend/references/rationale/query-side-layering-rationale.MD)
+- [REST API resource-path rationale](../../../.ai/assets/tech-stacks/dotnet-backend/references/rationale/rest-api-resource-path-rationale.MD)
+
+[Skill and sub-agent boundary rationale](skill-sub-agent-boundary-rationale.MD)
+remains at this path under independent #94 ownership. This index is source
+governance compatibility navigation, not a second semantic owner.

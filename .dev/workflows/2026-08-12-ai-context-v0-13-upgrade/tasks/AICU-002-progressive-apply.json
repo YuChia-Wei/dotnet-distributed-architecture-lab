@@ -1,0 +1,19 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "AICU-002-progressive-apply",
+  "workflow_id": "2026-08-12-ai-context-v0-13-upgrade",
+  "owner_skill": "ai-context-upgrader",
+  "status": "completed",
+  "created_at": "2026-08-12T21:43:41+08:00",
+  "updated_at": "2026-08-13T13:06:13+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-5",
+  "reasoning_effort": "provider-default",
+  "finding_ids": [],
+  "scope": {"target": "Progressive package application, target configuration, and owner-approved analyzer integration removal", "files": [".ai/**", ".agents/**", ".claude/**", ".codex/agents/**", ".dev/**", "AGENTS.md", "MQArchLab.slnx", ".editorconfig", "src/Directory.Build.props", "tools/**"], "constraints": ["target truth precedence", "receipt-bound apply", "incoming provider remains inactive"], "non_goals": ["other src/** product behavior", "tests/** product behavior"]},
+  "execution": {"steps": ["plan each exact predecessor upgrade", "reconcile target and incoming semantics", "apply and retain receipt", "validate incoming behavior", "finalize checkpoint provenance"], "validation": ["incoming version validators", "receipt exact-byte validation", "target AI-context gate", "solution build without analyzer wiring", "independent checkpoint audit"], "last_completed_step": "Finalized v0.13 authority was committed at a074e4e00fac3a012c0c6190a1036a67ff5f948c after both fresh packets and both finalized target gates passed and the working receipt was removed.", "next_action": "Continue with AICU-003 and AICU-004 post-upgrade audit and analysis."},
+  "results": {"summary": "The exact-predecessor route from v0.6.0 through v0.13.0 is finalized and action-ready. The durable v0.13 receipt remains, while the working receipt was removed only after successful finalized validation.", "files_changed": ["131 exact v0.13 framework operations", "36 removed bundled-provider files and 6 added reference-only recipes", ".github/pull_request_template.md", "AGENTS.md", "AGENTS.zh-TW.md", ".dev/ai-context/tooling/** v0.13 target gate projection", "src/BuildingBlocks/Lab.BuildingBlocks.Domains/EsAggregateRoot.cs", "src/Order/DomainCore/SaleOrders.Domains/Order.cs", "tests/SaleOrders.Domains.Tests/OrderTests.cs", ".dev/ai-context/provenance.yaml", ".dev/ai-context/customizations.yaml", ".dev/ai-context/effective-rules.yaml", ".dev/ai-context/effective-rule-packets/**", ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/**", ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/07-v0.13.0-reconciliation.md", ".dev/assessments/ASM-20260813-006/**"], "tests_run": ["v0.13 ZIP/sidecar and 638 checksums", "v0.13 package-root validation", "byte-identical dry/apply plans", "619-path receipt validation", "fresh v0.12 production/test packets with 13 rules", "13/13 domain tests on v0.12 and v0.13", "v0.12 full solution build with 0 errors", "41/41 target overlay tests", "stock projection failures reproduced", "independent sandbox-external target gate over 51 commits in 35.2 seconds", "finalized target gate with receipt over 52 commits", "fresh v0.13 production/test packets with 13 rules", "finalized target gate after receipt removal over 52 commits in 16.8 seconds"], "finding_status": "v0.13-finalized-ready", "residual_risk": "Stock projection, selector, commit-documentation, and metadata defects remain explicitly mitigated; profiles, reuse, provider, and recipes stay inactive.", "follow_up_needed": false}
+}

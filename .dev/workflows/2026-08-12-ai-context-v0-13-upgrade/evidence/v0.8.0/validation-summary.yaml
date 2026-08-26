@@ -1,0 +1,128 @@
+schema_version: "1.0"
+version: "v0.8.0"
+candidate_starting_commit: "9586f862f30f6ba38c824e3d53899804ba56a9a0"
+recorded_at: "2026-08-13T07:12:00+08:00"
+attempts:
+  - id: sandbox-apply-1
+    outcome: failed
+    reason: "permission denied at .codex/agents/context-translator.toml after partial writes"
+    receipt_created: false
+    disposition: "exact partial writes restored; clean starting commit read back"
+  - id: host-apply-2
+    outcome: passed
+    result: "24 safe operations applied; 43 reconciliations preserved; pending-validation receipt created"
+  - id: full-gate-1
+    command: "C:/Program Files/Git/bin/bash.exe ./.ai/scripts/check-all.sh"
+    outcome: failed
+    duration_seconds: 67.7
+    reason: "12 synthetic shell fixture errors assumed absent target-root requirements.txt"
+  - id: full-gate-2
+    command: "C:/Program Files/Git/bin/bash.exe ./.ai/scripts/check-all.sh"
+    outcome: failed
+    duration_seconds: 65.5
+    reason: "source-only dependency and entrypoint tests were still unconditionally selected in the downstream target"
+  - id: full-gate-3
+    command: "C:/Program Files/Git/bin/bash.exe ./.ai/scripts/check-all.sh"
+    outcome: passed
+    duration_seconds: 70.8
+  - id: independent-audit-1
+    outcome: failed
+    auditor: "gpt-5.6-sol / max"
+    candidate_commit: "176c633898f63082cdc9d63a660604c5e627cc11"
+    findings:
+      - "reconciliation report recorded a ZIP checksum that did not match the actual archive and published sidecar"
+      - "workflow resume and branch-lifecycle state still described the obsolete v0.7 checkpoint"
+    disposition: "correct the checksum and synchronize durable resume state before re-auditing a new fixed commit"
+  - id: independent-audit-2
+    outcome: failed
+    auditor: "gpt-5.6-sol / max"
+    candidate_commit: "32d64c88fabc73588287508bc5969599d9f32219"
+    findings:
+      - "workflow plan and task still instructed the next agent to commit an evidence correction that was already committed"
+      - "branch lifecycle still stopped at the obsolete v0.7 candidate checkpoint"
+    disposition: "record committed clean state and current v0.8 lifecycle checkpoints, then re-audit the resulting clean HEAD"
+  - id: independent-audit-3
+    outcome: passed
+    auditor: "gpt-5.6-sol / max"
+    candidate_commit: "f3fa188377d4b78edbc953c1cd753a74850a0161"
+    findings: []
+    disposition: "safe to finalize; persisted as ASM-20260812-002 and finalized at cfdb662"
+  - id: commit-range-1
+    outcome: failed
+    command: "python -B .ai/scripts/validate-git-commits.py --range main..HEAD --workflow-id 2026-08-12-ai-context-v0-13-upgrade"
+    reason: "assessment commit ad194beb lacked its required Assessment-Id trailer"
+    disposition: "retain history; add a fail-closed exception bound to the exact commit SHA and assessment ID, with prospective enforcement unchanged"
+  - id: owner-decision-1
+    outcome: approved
+    recorded_at: "2026-08-13T07:01:12+08:00"
+    subject: "exact historical exception for ad194beb3fb61a18b6870093b704264746c1516b and ASM-20260812-002"
+    scope: "waive only missing-matching-trailer; preserve every other and prospective check"
+  - id: post-commit-range-gate-1
+    outcome: passed
+    candidate_commit: "f3b3c7cb18381368dc2ebaf890fdc4ff8d3d176c"
+    command: "COMMIT_RANGE=main..HEAD C:/Program Files/Git/bin/bash.exe ./.ai/scripts/check-all.sh --quick"
+    duration_seconds: 70.4
+    result: "11 commits validated; all selected quick checks passed"
+  - id: independent-audit-4
+    outcome: failed
+    auditor: "gpt-5.6-sol / max"
+    candidate_commit: "f3b3c7cb18381368dc2ebaf890fdc4ff8d3d176c"
+    findings:
+      - "durable resume, task, lifecycle, and validation summary still described the exception as awaiting commit or validation"
+      - "customization metadata and owner reconciliation still pointed only to the earlier v0.7 decision"
+    disposition: "synchronize append-only closeout state and re-audit the resulting clean commit"
+  - id: independent-audit-5
+    outcome: passed
+    auditor: "gpt-5.6-sol / max"
+    candidate_commit: "16673907d9e5ffeead87de1ec57f1355d14b0fb1"
+    findings: []
+    disposition: "safe to close out v0.8.0; continue the exact predecessor route at v0.9.0"
+checks:
+  - command: "C:/Program Files/Git/bin/bash.exe ./.ai/scripts/check-all.sh --quick"
+    outcome: passed
+    result: "owner-approved exact-exception candidate; host execution completed in the 79.4-second combined validation run"
+  - command: "python -B .ai/scripts/validate-git-commits.py --range main..HEAD --workflow-id 2026-08-12-ai-context-v0-13-upgrade"
+    outcome: passed
+    result: "pre-commit candidate validation covered 10 existing commits; post-commit validation covered 11 commits at f3b3c7c"
+  - command: "python -B .ai/scripts/tests/test_git_commit_policy.py -v"
+    outcome: passed
+    result: "22 passed; exact match, wrong SHA/ID, other errors, malformed, duplicate, and unknown waiver covered"
+  - command: "python -B .ai/scripts/validate-ai-context-target.py --allow-unfinalized"
+    outcome: passed
+  - command: "python -B .ai/scripts/validate-ai-context.py"
+    outcome: passed
+  - command: "python -B .ai/scripts/validate-workflow-artifacts.py"
+    outcome: passed
+  - command: "python -B .ai/scripts/validate-shell-assets.py"
+    outcome: passed
+  - command: "python -B .ai/scripts/tests/test_work_item_binding_contract.py -v"
+    outcome: passed
+    result: "4 passed"
+  - command: "python -B .ai/scripts/tests/test_python_prerequisites.py -v"
+    outcome: passed
+    result: "14 passed"
+  - command: "python -B .ai/scripts/tests/test_run_python_entrypoint_ps1.py -v"
+    outcome: passed
+    result: "4 passed"
+  - command: "python -B .ai/scripts/tests/test_run_python_entrypoint_sh.py -v"
+    outcome: passed
+    result: "5 passed"
+  - command: "python -B .ai/scripts/tests/test_python_entrypoints_contract.py -v"
+    outcome: passed
+    result: "4 passed"
+  - command: "python -B .ai/scripts/tests/test_skill_script_colocation.py -v"
+    outcome: passed
+    result: "4 passed"
+  - command: "python -B .ai/scripts/tests/test_dependency_version_consistency.py -v"
+    outcome: passed
+    result: "6 passed; 9 source-release cases skipped"
+  - command: "python -B .ai/scripts/tests/test_python_source_entrypoints.py -v"
+    outcome: passed
+    result: "3 source-only cases skipped"
+  - command: "python -B .ai/scripts/tests/test_fail_closed_validation.py -v"
+    outcome: passed
+    result: "30 passed"
+environment_notes:
+  - "Sandbox Windows temp ACL caused fixture permission errors; host reruns were read-only except disposable temp fixture creation."
+  - "One sandbox-created ACL fixture was removed after its exact absolute workspace path was verified."
+  - "No machine-local .dev/validation.local.conf was created."

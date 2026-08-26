@@ -56,7 +56,7 @@
 code review，使用 `.dev/assessments/<ASM-YYYYMMDD-NNN>/`，並將被審查的 Git
 revision 固定在 assessment locator。Finding 在報告內使用 `CR-NNN`，跨文件引用
 使用 `<assessment-id>#<finding-id>`。保存報告不代表已授權修正；後續 remediation
-交給 `dev-workflow`、`slice-implementer` 或 `local-change-implementer`。
+交給 `software-development-orchestrator`、`slice-implementer` 或 `local-change-implementer`。
 
 若 review 與修正已在同一個 development workflow 中獲得授權，assessment 使用該
 workflow branch 並建立關聯，不另開競爭分支。修正後的驗證應建立新的 assessment，

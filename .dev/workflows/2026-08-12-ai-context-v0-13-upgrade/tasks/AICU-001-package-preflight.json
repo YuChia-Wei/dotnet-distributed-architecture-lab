@@ -1,0 +1,36 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "AICU-001-package-preflight",
+  "workflow_id": "2026-08-12-ai-context-v0-13-upgrade",
+  "owner_skill": "ai-context-upgrader",
+  "status": "completed",
+  "created_at": "2026-08-12T21:43:41+08:00",
+  "updated_at": "2026-08-12T22:15:57+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-5",
+  "reasoning_effort": "provider-default",
+  "finding_ids": [],
+  "scope": {
+    "target": "Published v0.7.0 through v0.13.0 package identities and progressive route",
+    "files": [".dev/ai-context/provenance.yaml", ".dev/ai-context/customizations.yaml"],
+    "constraints": ["read-only preflight", "clean target worktree before package apply", "no pre-upgrade worktree"],
+    "non_goals": ["merge", "push", "publication", "Project mutation"]
+  },
+  "execution": {
+    "steps": ["verify published releases", "download packages and sidecars", "verify checksums and archives", "inspect package planner contracts"],
+    "validation": ["GitHub connector release read-back", "annotated tag peel verification", "archive checksum validation"],
+    "last_completed_step": "Verified all release identities, downloaded v0.6.0 through v0.13.0 packages and sidecars, matched every archive checksum, and inspected the package planner contracts.",
+    "next_action": "Proceed through the exact immediate-predecessor apply route."
+  },
+  "results": {
+    "summary": "Published v0.6.0 through v0.13.0 identities, archives, sidecars, manifests, migration guides, prerequisites, and immediate-predecessor constraints were verified.",
+    "files_changed": [".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/reports/upgrade-report.md"],
+    "tests_run": ["SHA-256 sidecar comparison for v0.6.0 through v0.13.0", "package prerequisite inspection"],
+    "finding_status": "addressed",
+    "residual_risk": "Each later package still requires its own plan, reconciliation, apply, and validation checkpoint.",
+    "follow_up_needed": false
+  }
+}

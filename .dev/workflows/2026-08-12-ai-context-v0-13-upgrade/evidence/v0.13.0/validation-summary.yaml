@@ -1,0 +1,155 @@
+schema_version: "1.0"
+version: "v0.13.0"
+recorded_at: "2026-08-13T13:36:49+08:00"
+status: "finalized-ready"
+target_starting_commit: "2c94085038c678a368bc94b846667dfcec5e88cc"
+structural_candidate_commit: "a8cb51d5e8ca856cbc22c87b4f4c18a26b778239"
+package:
+  release_id: "REL-v0.13.0"
+  commit: "8584337b47295da1af914180baf2b3f815b9dcc7"
+  zip_sha256: "092cd9e49de366458cafb304ca63b4c8f028b03e8cf7f718b06d8710a98efcfd"
+plans:
+  dry_run_sha256: "96d5fec2430fae24fb278cb491ff9b6c938cf68eeaff6764990f78e9d8c1d308"
+  apply_sha256: "96d5fec2430fae24fb278cb491ff9b6c938cf68eeaff6764990f78e9d8c1d308"
+  identical: true
+operations:
+  total: 133
+  replace: 80
+  remove: 36
+  add: 15
+  reconcile: 2
+  applied: 131
+  skipped_reconciliation_ids: ["migration-0132", "migration-0133"]
+  ignored_framework_paths: 0
+receipt:
+  sha256: "094840edc10744c12397a905e1783f8200a498081a492d5fae0f13f41b979ec0"
+  status: "validated-and-working-copy-removed"
+  required_framework_paths: 619
+  applied_operation_ids: 131
+  skipped_reconciliation_ids: 2
+  provenance_updated: false
+reconciliations:
+  - id: "migration-0132"
+    path: ".github/pull_request_template.md"
+    disposition: "merge"
+    result: "target Issue and authorization fields plus incoming delivery, topology, and repository-native validation prompts"
+  - id: "migration-0133"
+    path: "global.json"
+    disposition: "retain"
+    result_sha256: "1c2fa3029018c600f2d1546d1a22bfb625467d88cf1a9c42e17649777526fa40"
+target_projection:
+  target_owned_tests: "41/41 passed"
+  exact_unfinalized_diagnostic: ["effective state catalogs[0] is stale"]
+  action_readiness: "fail-closed-until-authority-regeneration"
+  stock_validator:
+    outcome: "blocked-by-package-projection"
+    exit_code: 1
+    error_count: 36
+    breakdown: {python_entrypoints: 16, shell_assets: 17, catalog_indexes: 3}
+  stock_code_review_routing_test:
+    outcome: "blocked-by-package-projection"
+    exit_code: 1
+    error: "ModuleNotFoundError: No module named 'ai_context_package'"
+  downstream_routing_projection: "GWT1-GWT7 passed; source-release-only GWT8 not-applicable"
+defects:
+  active:
+    - "AICU-V010-PROJECTION-001"
+    - "AICU-V011-SELECTION-001"
+    - "AICU-V012-PROFILE-REGISTRY-PROJECTION-001"
+    - "AICU-V012-COMMIT-CUTOVER-001"
+    - "AICU-V012-COMMIT-DOC-001"
+    - "AICU-V013-ROUTING-PROJECTION-001"
+    - "AICU-V013-COMPONENT-OWNERSHIP-001"
+    - "AICU-V013-PREACTION-PACKET-BOOTSTRAP-001"
+  resolved:
+    - "AICU-V090-DOC-001 resolved-by-v0.13.0"
+    - "bundled mechanical-validation provider conflict resolved-by-v0.13.0"
+settings:
+  validation_routine_local: "manual"
+  validation_routine_ci: "unconfigured"
+  stock_profile_activation: false
+  changed_path_activation: false
+  evidence_reuse_activation: false
+  provider_activation: false
+  on_demand_recipe_selection: false
+product_semantic_gate:
+  rule_id: "AGGREGATE-ES-001"
+  status: "resolved-and-independently-verified"
+  finding: >-
+    EsAggregateRoot(IEnumerable<IDomainEvent>) dispatches virtual When from the
+    base constructor and Order delegates replay through base(events), while the
+    verified rule requires derived-constructor Replay(history).
+  authorized_framework_application: true
+  authorized_product_mutation: true
+  authorized_rule_weakening: false
+  decision_evidence: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/owner-decision-product-fix.yaml"
+  packet_preflight_evidence: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/preaction-packet-analysis.yaml"
+  remediation_evidence: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/aggregate-es-001-remediation.yaml"
+  integrated_commit: "aff588eab513c25de88e81bea1d8d58a371c893b"
+  effective_disposition: "baseline-effective"
+validation:
+  target_owned_overlay_tests: "41/41 passed"
+  candidate_target_gate:
+    outcome: "passed-outside-sandbox"
+    duration_seconds: 35.3
+    commit_range_count: 50
+  product:
+    v0_12_packet_resolution: "production and test routes passed with 13 loaded rules"
+    v0_12_domain_tests: "13/13 passed"
+    v0_12_solution_build: "passed; 0 errors"
+    v0_13_domain_tests: "13/13 passed"
+  git_diff_check: "passed"
+  independent_audit:
+    assessment_id: "ASM-20260813-006"
+    subject_commit: "a3389994bf52f9265b7fe0a079ccd4041efc8997"
+    outcome: "SAFE-TO-FINALIZE"
+    target_gate: "passed outside sandbox in 35.2 seconds over 51 commits"
+finalization:
+  finalized_at: "2026-08-13T12:59:17+08:00"
+  provenance: "REL-v0.13.0"
+  customization_entries: 4
+  rule_dispositions: 13
+  routes: 20
+  packets: 20
+  action_readiness: "ready"
+  packet_postcheck:
+    production_packet_id: "PACKET-50E12D0F35E10298E7F3C65196070C3AC00B09F2E2595C795AC9B5F375707042"
+    test_packet_id: "PACKET-8AEC71BA1FD2404AE98044DA024EF41844393D580D411D06F07D90D77B8429C1"
+    loaded_rule_count: 13
+    aggregate_es_001_disposition: "baseline-effective"
+    freshness: "verified"
+  target_gate_with_receipt: "passed outside sandbox in 37.0 seconds over 52 commits"
+  target_gate_after_receipt_removal: "passed outside sandbox in 16.8 seconds over 52 commits"
+  durable_receipt: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/apply-receipt.yaml"
+  working_receipt_removed: true
+post_finalization_target_truth_remediation:
+  finding_id: "AICU-V013-TARGET-PROVIDER-TRUTH-001"
+  classification: "target-customization-evidence-sync"
+  status: "independently-verified"
+  audited_checkpoint: "a003618395733ff7958121e217a62a2d207de383"
+  remediation_commit: "d985e0ef24d8716481ca7dc323472cf19545103f"
+  affected_paths:
+    - "README.md"
+    - "README.en.md"
+    - ".dev/ARCHITECTURE.md"
+    - ".dev/project-config.yaml"
+  regression_test: ".dev/ai-context/tooling/tests/test_downstream_package_projection.py"
+  direct_projection_test: "12/12 passed"
+  full_target_gate: "passed outside sandbox in 17.0 seconds over 54 commits"
+  independent_audit:
+    subject_commit: "d985e0ef24d8716481ca7dc323472cf19545103f"
+    outcome: "BLOCKED"
+    technical_checks: "passed, including the complete target gate over 55 commits"
+    blocker: "stale active resume instructions and missing d985e0e lifecycle row"
+    disposition: "metadata synchronized; fresh fixed-HEAD audit required"
+  independent_reaudit:
+    subject_commit: "46928f4379f57a7bec155056aacdf6dbcf070f81"
+    outcome: "SAFE-TO-PROCEED"
+    full_target_gate: "passed outside sandbox in 16.7 seconds over 56 commits"
+    focused_projection_tests: "12/12 passed"
+    target_overlay_tests: "41/41 passed"
+    audit_residue: "none"
+  evidence: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/post-finalization-target-truth-remediation.yaml"
+next_action: >-
+  Complete the bounded analyses and report closeout from verified checkpoint
+  46928f4379f57a7bec155056aacdf6dbcf070f81.

@@ -1,0 +1,19 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.0.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-10T18:22:49+08:00",
+  "task_id": "AICU-003-post-upgrade-audit",
+  "workflow_id": "2026-08-12-ai-context-v0-13-upgrade",
+  "owner_skill": "ai-context-auditor",
+  "status": "completed",
+  "created_at": "2026-08-12T21:43:41+08:00",
+  "updated_at": "2026-08-13T13:36:49+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "max",
+  "finding_ids": [],
+  "scope": {"target": "Independent post-upgrade AI context verification", "files": ["AGENTS.md", ".ai/**", ".agents/**", ".claude/**", ".dev/**"], "constraints": ["audited context remains read-only", "exclude product code"], "non_goals": ["remediation"]},
+  "execution": {"steps": ["verify finalized provenance, customization ledger, effective state, and packets", "verify target-owned validation and unresolved defect boundaries", "bind findings to the committed finalization checkpoint"], "validation": ["target AI-context gate", "workflow and assessment validators", "independent fixed-HEAD audit"], "last_completed_step": "Fresh independent audit accepted clean checkpoint 46928f4379f57a7bec155056aacdf6dbcf070f81 after the prior d985e0e lifecycle blocker was preserved and corrected.", "next_action": "Proceed to AICU-004 bounded post-upgrade analysis."},
+  "results": {"summary": "Finalized v0.13 authority, provider truth, four CUST records, thirteen rules, twenty routes/packets, and ready state are independently verified after post-finalization target-truth remediation.", "files_changed": ["README.md", "README.en.md", ".dev/ARCHITECTURE.md", ".dev/project-config.yaml", ".dev/ai-context/tooling/tests/test_downstream_package_projection.py", ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/post-finalization-target-truth-remediation.yaml"], "tests_run": ["12/12 downstream package projection tests", "41/41 target overlay tests", "complete target gate outside sandbox over 56 commits", "independent fixed-HEAD audit at 46928f4"], "finding_status": "verified", "residual_risk": "Active upstream defects remain mitigated and recorded; no v0.13 authority blocker remains.", "follow_up_needed": false}
+}

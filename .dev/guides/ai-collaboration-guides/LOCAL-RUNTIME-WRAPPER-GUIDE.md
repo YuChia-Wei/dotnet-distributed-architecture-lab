@@ -61,7 +61,7 @@ setx CODEX_HOME ""
 
 1. 先讀 `.ai/assets/` canonical source
 2. top-level skill 優先讀 `.ai/assets/skills/README.MD` 與對應 `skill.yaml`
-3. delegated worker roles 優先讀 `.ai/assets/sub-agent-role-prompts/`
+3. owning-skill bounded worker role contracts 優先讀 `.ai/assets/sub-agent-role-prompts/`
 4. 再分辨要讀的是 canonical source 還是 runtime skill wrapper
 5. 再讀對應 agent 的 wrapper
 6. Codex / agent runtime 若需 skill wrapper，優先讀 `.agents/skills/`

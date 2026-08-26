@@ -1,0 +1,110 @@
+schema_version: "1.0"
+decision_id: "owner-decision-v0.9-1"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+issue: 1
+recorded_at: "2026-08-13T07:26:10+08:00"
+status: "approved"
+scope:
+  ignored_framework_path:
+    path: ".codex/agents/context-translator.toml"
+    component: "software-development-core"
+    matched_rule: "/.codex/*"
+  semantic_reconciliation:
+    version: "v0.9.0"
+    genuine_delta_operations:
+      - "migration-0008"
+      - "migration-0025"
+      - "migration-0192"
+      - "migration-0212"
+      - "migration-0226"
+      - "migration-0265"
+      - "migration-0271"
+      - "migration-0279"
+      - "migration-0281"
+      - "migration-0283"
+      - "migration-0284"
+      - "migration-0287"
+      - "migration-0296"
+      - "migration-0298"
+      - "migration-0299"
+      - "migration-0312"
+      - "migration-0314"
+      - "migration-0315"
+      - "migration-0317"
+      - "migration-0319"
+      - "migration-0320"
+      - "migration-0321"
+      - "migration-0324"
+      - "migration-0325"
+      - "migration-0339"
+      - "migration-0344"
+      - "migration-0345"
+decisions:
+  - subject: "framework-managed Codex sub-agent configuration"
+    disposition: "track-directory"
+    detail: >-
+      Add a narrow directory-level exception for .codex/agents/** rather than a
+      single-file exception so future framework-managed Codex sub-agent files can
+      be installed and upgraded under the same governed boundary.
+  - subject: "v0.9 framework-required file additions, renames, and removals"
+    disposition: "adopt-and-record"
+    detail: >-
+      Apply the v0.9 framework structure first, including recommended adoption of
+      stale genuine target deltas, while recording every adopt, merge, retain,
+      rename, and removal for owner review after the upgrade.
+  - subject: "target effective-rule projection"
+    disposition: "reconcile"
+    detail: >-
+      Project existing target governance, validation, repository-truth, Issue,
+      authorization, and tooling boundaries into v0.9 effective-rule state and
+      deterministic packets. This decision does not authorize merge, push,
+      Issue closure, Project mutation, or upstream submission.
+  - subject: "target-owned tools/** runtime and analyzer projects"
+    disposition: "retain-target-and-install-provider-assets"
+    operations:
+      - "migration-0230"
+      - "migration-0231"
+      - "migration-0232"
+      - "migration-0233"
+      - "migration-0234"
+      - "migration-0235"
+      - "migration-0236"
+      - "migration-0237"
+      - "migration-0238"
+      - "migration-0239"
+      - "migration-0240"
+      - "migration-0242"
+      - "migration-0254"
+      - "migration-0255"
+      - "migration-0346"
+      - "migration-0347"
+      - "migration-0348"
+      - "migration-0349"
+      - "migration-0350"
+      - "migration-0351"
+      - "migration-0352"
+      - "migration-0353"
+      - "migration-0354"
+      - "migration-0355"
+      - "migration-0356"
+      - "migration-0357"
+      - "migration-0358"
+      - "migration-0359"
+      - "migration-0360"
+      - "migration-0361"
+    detail: >-
+      Preserve target-owned tools/** because MQArchLab.slnx and project inventory
+      directly depend on those production analyzer and runtime validation
+      projects. Install the v0.9 source-available provider assets under .ai, but
+      do not activate or cut over the provider during this checkpoint. Record
+      every package rename/removal that is intentionally not destructive to the
+      target tooling tree.
+review_boundary:
+  owner_review_required_after_upgrade: true
+  rollback_source: "Git history and version-bound package plan/receipt evidence"
+  unauthorized_actions:
+    - "merge"
+    - "push"
+    - "close Issue #1"
+    - "mutate GitHub Project state"
+    - "submit feedback upstream"

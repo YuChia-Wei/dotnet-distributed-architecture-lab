@@ -1,0 +1,304 @@
+schema_version: "1.0"
+decision_id: "effective-rule-adoption-v0.9.0"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+issue: 1
+status: "approved-and-independently-verified"
+recorded_at: "2026-08-13T08:14:28+08:00"
+selection_rationale: >-
+  Both selected v0.9 catalogs declare capability, execution mode, and file type
+  unconstrained by source. The target therefore adopts all thirteen catalog
+  rules explicitly and binds them to twenty exact target-owned selector tuples;
+  no wildcard, inferred fallback, or narrower invented predicate is used.
+technology_decisions:
+  testing_bdd_runner: >-
+    Explicitly select plain xUnit with recognizable Given-When-Then semantics.
+    This is the baseline-permitted repository-wide BDDfy opt-out, not a
+    file-specific exception or target semantic delta.
+  physical_delete: >-
+    Keep DELETE-PURGE-001 baseline-effective because Inventory currently has an
+    executable SQL DELETE implementation even though no inbound caller was
+    found. Existing policy debt is reported instead of hidden as not-applicable.
+known_compliance_debt:
+  - rule_id: "TEST-GWT-001"
+    finding: "Some existing tests still use Arrange/Act/Assert wording or non-GWT names."
+  - rule_id: "DELETE-SOFT-001"
+    finding: "Product persistence uses isdeleted while aggregate-state coverage is incomplete."
+  - rule_id: "DELETE-PURGE-001"
+    finding: "Inventory hard delete lacks explicit retention, authorization, legal/audit, and cleanup policy."
+  - rule_id: "MAP-EVENTS-001"
+    finding: "Order replay has positive coverage; other Dapper reconstruction lacks one uniform mapper contract."
+state_candidate:
+  schema_version: "1.0"
+  framework:
+    version: "v0.9.0"
+    commit: "c14a3260cba7d0a9e2b67b73df9e221280d2d2ef"
+    selected_technology_profile: "dotnet-backend"
+  generated_at: "2026-08-13T08:14:28+08:00"
+  rule_dispositions:
+    - rule_id: "AGGREGATE-ES-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        Orders adopts event sourcing and reconstructs Order by replaying
+        persisted domain events through EsAggregateRoot behavior.
+      evidence: &aggregate_es_evidence
+        - "src/Order/DomainCore/SaleOrders.Domains/Order.cs"
+        - "src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs"
+        - "tests/SaleOrders.Domains.Tests/OrderTests.cs"
+        - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *aggregate_es_evidence
+    - rule_id: "AICTX-EVIDENCE-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        AI-context initialization, upgrade, audit, and development must rely on
+        repository-backed evidence and disclose optional external discovery.
+      evidence: &aictx_evidence
+        - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/apply-receipt.yaml"
+        - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/post-apply-required-path-reconciliation.yaml"
+        - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *aictx_evidence
+    - rule_id: "ARCH-UOW-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        Command use cases persist aggregates, use explicit local transactions
+        for aggregate/outbox consistency, and message across bounded contexts.
+      evidence: &arch_uow_evidence
+        - "src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs"
+        - "src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs"
+        - ".dev/ARCHITECTURE.md"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *arch_uow_evidence
+    - rule_id: "ASSESSMENT-ARTIFACT-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        AI-context audits, code reviews, and architecture assessments are
+        persisted as governed assessment artifacts.
+      evidence: &assessment_evidence
+        - ".dev/assessments/ASM-20260812-001/report.md"
+        - ".dev/assessments/ASM-20260812-002/report.md"
+        - ".dev/standards/ASSESSMENT-ARTIFACT-POLICY.md"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *assessment_evidence
+    - rule_id: "CONTRACT-SEMANTICS-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        Domain behavior declares and enforces preconditions and invariants for
+        products, orders, and inventory.
+      evidence: &contract_evidence
+        - "src/Product/DomainCore/SaleProducts.Domains/Product.cs"
+        - "src/Order/DomainCore/SaleOrders.Domains/Order.cs"
+        - "src/Inventory/DomainCore/InventoryControl.Domains/InventoryItem.cs"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *contract_evidence
+    - rule_id: "DELETE-PURGE-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        Inventory persistence contains an executable physical-delete
+        implementation, so purge/archive governance cannot be globally excluded.
+      evidence: &delete_purge_evidence
+        - "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/InventoryItemDomainRepository.cs"
+        - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *delete_purge_evidence
+    - rule_id: "DELETE-SOFT-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        Products persists an isdeleted marker and filters deleted records from
+        aggregate and query repositories.
+      evidence: &delete_soft_evidence
+        - "src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs"
+        - "src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductQueryRepository.cs"
+        - "src/Product/DomainCore/SaleProducts.Domains/Product.cs"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *delete_soft_evidence
+    - rule_id: "MAP-EVENTS-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        Order reconstruction replays persisted events without creating pending
+        events, and tests verify clean rehydration behavior.
+      evidence: &map_events_evidence
+        - "src/BuildingBlocks/Lab.BuildingBlocks.Domains/EsAggregateRoot.cs"
+        - "src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs"
+        - "tests/SaleOrders.Domains.Tests/OrderTests.cs"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *map_events_evidence
+    - rule_id: "PROJECT-GRAMMAR-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        The target adopts the conditional slnx navigation profile with bounded
+        context DomainCore and Presentation solution folders.
+      evidence: &project_grammar_evidence
+        - "MQArchLab.slnx"
+        - ".dev/project-config.yaml"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *project_grammar_evidence
+    - rule_id: "TECH-SELECT-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        Testing, persistence, messaging, and observability choices are explicit,
+        evidence-backed, and recorded in target configuration.
+      evidence: &tech_select_evidence
+        - ".dev/project-config.yaml"
+        - ".dev/standards/TECHNOLOGY-SELECTION-POLICY.md"
+        - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *tech_select_evidence
+    - rule_id: "TEST-BDDFY-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        The dotnet-backend profile applies and the target explicitly selects the
+        baseline-permitted plain-xUnit branch with mandatory GWT semantics.
+      evidence: &test_bddfy_evidence
+        - ".dev/project-config.yaml"
+        - "tests/SaleOrders.Tests/SaleOrders.Tests.csproj"
+        - "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+        - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *test_bddfy_evidence
+    - rule_id: "TEST-GWT-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        New and modified tests use recognizable Given-When-Then semantics
+        regardless of the selected runner.
+      evidence: &test_gwt_evidence
+        - "tests/SaleOrders.Domains.Tests/OrderTests.cs"
+        - "tests/SaleOrders.Tests/PlaceOrderTests.cs"
+        - ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *test_gwt_evidence
+    - rule_id: "TEST-MOCK-001"
+      effective_disposition: "baseline-effective"
+      applicability: >-
+        Test projects use the explicitly recorded per-project Moq and
+        NSubstitute selection.
+      evidence: &test_mock_evidence
+        - ".dev/project-config.yaml"
+        - "tests/SaleOrders.Tests/SaleOrders.Tests.csproj"
+        - "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+      baseline_acceptance:
+        explicit: true
+        verification:
+          status: "verified"
+          evidence: *test_mock_evidence
+  routing:
+    - route_id: "ROUTE-0060755BB97DCDEAC34944FA27E473EC92B448A74107DA66CB5D9D7E51EED46B"
+      selector: {capability: "implementation", execution_mode: "command", technology_profile: "dotnet-backend", file_type: "csharp-production"}
+      required_rule_ids: &all_rules ["AGGREGATE-ES-001", "AICTX-EVIDENCE-001", "ARCH-UOW-001", "ASSESSMENT-ARTIFACT-001", "CONTRACT-SEMANTICS-001", "DELETE-PURGE-001", "DELETE-SOFT-001", "MAP-EVENTS-001", "PROJECT-GRAMMAR-001", "TECH-SELECT-001", "TEST-BDDFY-001", "TEST-GWT-001", "TEST-MOCK-001"]
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-0CB791EB64099FC942CC9EF435809DB1E757848F558735D7D1417D83E22CAD3A"
+      selector: {capability: "specification", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "specification-markdown"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C"
+      selector: {capability: "local-change", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "csharp-production"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-3EE85C82323D6A52F24B406E8F1271F5ED88DDE38EAC1044F0BF971061FFE0C4"
+      selector: {capability: "implementation", execution_mode: "generic", technology_profile: "dotnet-backend", file_type: "csharp-production"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-44441057FC3C725F5861E2149944CFB7EFDD0C5F890831C4208291A5B2371222"
+      selector: {capability: "review", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "dotnet-mixed-review"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7"
+      selector: {capability: "local-change", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "csharp-test"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-5376A2F088F0C2FB915830EEC987D1391E96AFDDE1208E4E68B362FE4D3A612E"
+      selector: {capability: "problem-framing", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "problem-frame-yaml"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-595016B570726DB08342680D2195648944D898511253100E88AEA1B9E66957D5"
+      selector: {capability: "test-design", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "gherkin-feature"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-5FD9FBA84BFD386D5D5F3C8AC8B16EF6332DEA1D48EC5DBF6AA6B096D0828604"
+      selector: {capability: "review", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "csharp-review"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-6793F2C32C4BF62763380BCF5CD83D284C40AB2401A5BB42904823E7F28BE96C"
+      selector: {capability: "architecture", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "architecture-decision"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-69320ED2F30633AA22DD3E91C72210D14A955614F1B4269844ED8EAC0274491C"
+      selector: {capability: "local-change", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "project-file"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-7C1C8C42DEAF9D889A157FA97FA2E5390CDCD0FD5509103DA4DA1A65CB2A85BE"
+      selector: {capability: "requirements", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "requirement-markdown"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-8691EB94D951D12620A830D430E1934E0E228CE6B1342F65673ADBD57C484333"
+      selector: {capability: "test-design", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "csharp-test"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-86B49603D837372BA200420228174C1CF61333171CE8D96FCFF63ABD07BB796D"
+      selector: {capability: "compliance-validation", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "problem-frame-and-dotnet"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-88F8297799ABD7C258348FA6072DFE56306800798EACEB7529FAC1509F304A15"
+      selector: {capability: "local-change", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "sql"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-93389630E2EAEBD1C926310D5932AA0DB31893A1FC0108457AE8E9B63B44E356"
+      selector: {capability: "local-change", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "yaml-config"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-DF0E762322A527898C635F453332C4FD4607EFC0A01AE6AFFA49D799E70BAB18"
+      selector: {capability: "implementation", execution_mode: "generic", technology_profile: "dotnet-backend", file_type: "csharp-test"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-E3B4869DC90073EEDA02B8105FB8EE99866C4CF93C5E3FC852258480BEDE8566"
+      selector: {capability: "implementation", execution_mode: "reactor", technology_profile: "dotnet-backend", file_type: "csharp-production"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-EFD78BECD2CAFD2890638E78C79E0ABCA47CB5E0C70EC9B3D602EC12FF762AFE"
+      selector: {capability: "implementation", execution_mode: "query", technology_profile: "dotnet-backend", file_type: "csharp-production"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+    - route_id: "ROUTE-FAD108B11C0B4A274C0B640D117F2D7EE22FA006DDA09A442DD9BF0E2DC6C0EF"
+      selector: {capability: "specification", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "specification-json"}
+      required_rule_ids: *all_rules
+      reported_not_applicable_rule_ids: []
+validation:
+  isolated_builder_result: "initialized ready 23"
+  isolated_state_validation_errors: []
+  analysis_agent: "OpenAI Codex Sub-Agent (gpt-5.6-sol, max)"

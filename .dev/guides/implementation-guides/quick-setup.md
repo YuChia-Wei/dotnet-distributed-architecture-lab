@@ -25,12 +25,26 @@ dotnet sln MyApp.slnx add src/Order/Presentation/Order.WebApi/Order.WebApi.cspro
 dotnet sln MyApp.slnx add tests/Order.Tests/Order.Tests.csproj --solution-folder "/tests/"
 ```
 
-### 2. 複製必要檔案
+### 2. 安裝已發布的 AI Context Package
+
+不要直接從 framework repository 複製 `.ai/` 或 `.dev/`。請從對應版本的
+GitHub Release 下載 package archive 與外部 `.sha256` sidecar，先驗證
+checksum，再解壓縮至 target repository 以外的位置。
+
+從解壓縮後的 envelope root 依 `INSTALL.md` 執行：
+
 ```bash
-# 從此 repo 複製 AI 與規格資料
-cp -r /path/to/ai-plan/.ai .ai
-cp -r /path/to/ai-plan/.dev .dev
+python -m pip install -r requirements.txt
+python payload/.ai/scripts/plan-ai-context-package-apply.py \
+  --package-root . \
+  --target-root /path/to/target-repository
 ```
+
+先審查 dry-run 的新增、取代、移除、重新命名與 reconciliation 結果；只有在
+所有 reconciliation item 都已按 operation ID 處置後，才加入 `--apply`。
+乾淨安裝完成後執行 `repo-structure-sync`，版本升級則使用
+`ai-context-upgrader`。完整流程與 provenance 邊界以 package 內的
+`INSTALL.md` 為準。
 
 ### 3. 設定基礎相依
 - WolverineFx

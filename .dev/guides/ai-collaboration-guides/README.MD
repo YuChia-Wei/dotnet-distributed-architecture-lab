@@ -18,36 +18,33 @@
 - `.ai/assets/skills/`: canonical skill specs 與完整 skill registry
 - `.agents/skills/` / `.claude/skills/`: thin runtime wrappers
 
-## 目前文件
+## 導航
 
-- `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`: `ddd-ca-hex-architect`、`code-reviewer`、`slice-implementer`、`local-change-implementer` 的邊界與工作流
-- `AI-REFACTORING-SKILL-CONTRACTS.md`: 四個重構 skill 的最小 input / output contract 與 handoff 規則
-- `AI-COLLABORATION-WORKFLOW-GUIDE.md`: requirement / spec / testing / refactor / review 的整體 AI 協作流程
-- `DEV-WORKFLOW-SKILL-GUIDE.md`: `dev-workflow` 的使用說明、workflow mode 判斷、skill routing 與 commit / validation checkpoint prompt 範本
-- `AI-ASSET-LOCATION-STRATEGY.md`: 多 agent 情境下 skill / prompt / guide / workflow artifact 的收納策略
-- `AI-CONTEXT-GOVERNANCE-SKILL-GUIDE.md`: `ai-context-governance` 的使用說明與 AI context 文件治理 prompt 範本
-- `AI-CONTEXT-AUDITOR-SKILL-GUIDE.md`: `ai-context-auditor` 的定期自檢、預設排除範圍、code review 轉介與報告保存指南
-- `LOCAL-RUNTIME-WRAPPER-GUIDE.md`: repo wrapper 與本機 runtime 的使用方式
-- `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`: 可選的最小 workflow 模式與 artifact 說明
-- `DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md`: `ddd-ca-hex-architect` 的使用說明與 prompt 範本
-- `BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md`: `bdd-gwt-test-designer` 的使用說明與 Given-When-Then prompt 範本
-- `REPO-STRUCTURE-SYNC-SKILL-GUIDE.md`: template 複製到新 repo 後，掃描結構並同步架構入口文件的指南
-- `PROBLEM-FRAME-AUTHORING-GUIDE.md`: 從 requirement/spec/code 快速萃取第一版 problem frame 的指南
-- `BDD-GWT-TEST-DESIGNER-PAIR-GUIDE.md`: `bdd-gwt-test-designer` 與 test generation / review workflow 的搭配方式
-- `SLICE-IMPLEMENTER-SKILL-GUIDE.md`: `slice-implementer` 的使用說明、mode 選擇與 bounded implementation prompt 範本
-- `LOCAL-CHANGE-IMPLEMENTER-SKILL-GUIDE.md`: `local-change-implementer` 的使用說明與局部技術變更 prompt 範本
-- `REQUIREMENT-AND-SPEC-DESIGNER-STRATEGY.md`: requirement / spec 是否應該做成 prompt 或 skill 的邊界與採用策略
-- `REQUIREMENT-DESIGNER-PROMPT-GUIDE.md`: requirement markdown 草稿與補齊工作的 prompt 範本
-- `SPEC-DESIGNER-PROMPT-GUIDE.md`: use case / adapter / entity spec 整理工作的 prompt 範本
-- `AI-SKILL-GUIDE-STANDARDS.md`: 本目錄內 AI collaboration guides 的通用撰寫與分工規範
+文件目錄由 [INDEX.MD](INDEX.MD) 維護。
 
 ## Workflow Templates
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
 - Workflow templates are owned by the canonical skill that creates that workflow kind.
 - Shared discovery and metadata rules are defined by `../../standards/WORKFLOW-ARTIFACT-POLICY.md`.
-- Development templates are under `.ai/assets/skills/dev-workflow/templates/`.
+- Development templates are under `.ai/assets/skills/software-development-orchestrator/templates/`.
 - AI context maintenance and audit templates are under their respective canonical skill directories.
+
+## Feature And Use Case Requests
+
+The retired legacy standards prompt examples are not prompt sources. Use the
+current capability routes instead:
+
+- multi-stage product work: `software-development-orchestrator`;
+- bounded-context, Aggregate, port, or use-case design:
+  `ddd-ca-hex-architect`;
+- one accepted command/query/reactor/documentation slice:
+  `slice-implementer`;
+- one local symbol or call-site change: `local-change-implementer`;
+- requirement or spec drafting: `requirement-author` or `spec-author`.
+
+The corresponding guides in this directory provide copyable invocation
+examples. Canonical execution rules remain under `.ai/assets/skills/`.
 
 ## 維護規則
 

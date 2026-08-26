@@ -3,7 +3,7 @@
 > **Status: retired onboarding example — do not execute as the current setup path.**
 >
 > The commands and topology below preserve an earlier ExampleApp profile. For a
-> real target repository, copy the framework context and run `repo-structure-sync`
+> real target repository, install the framework package and run `ai-context-init`
 > first. That skill inventories file-backed facts and refreshes the target-specific
 > `AGENTS.md`, `.dev/`, and necessary `.ai/` entries. Do not create the legacy
 > directory tree or install the listed packages unless the target repository has
@@ -40,7 +40,7 @@ defaults for a new target repository.
 
 ## Step 1: Create the project skeleton
 
-> Legacy example only. Current onboarding must use `repo-structure-sync` to
+> Legacy example only. Current onboarding must use `ai-context-init` to
 > discover and adapt the target repository instead of recreating this topology.
 
 ```bash
@@ -68,7 +68,7 @@ mkdir -p .dev/specs/{use-cases,aggregates,domain-events}
 
 ## Step 3: Configure project metadata
 
-Run `repo-structure-sync` to generate `.dev/project-config.yaml` from repository evidence:
+Run `ai-context-init` to generate `.dev/project-config.yaml` from repository evidence:
 
 The YAML below is illustrative. Package versions and feature flags must come
 from target-repository evidence or explicit maintainer decisions.
@@ -133,6 +133,11 @@ dotnet add src/Infrastructure package Npgsql.EntityFrameworkCore.PostgreSQL
 ```
 
 In `src/tests`:
+
+Resolve `testing.mocking` from `.dev/project-config.yaml`. The following command
+uses the NSubstitute default profile; replace only that package command when the
+target records another selection.
+
 ```bash
 dotnet add src/tests package xunit
 dotnet add src/tests package xunit.runner.visualstudio
@@ -160,7 +165,7 @@ dotnet test
 ## Step 5: Create the first feature
 
 ### Option 1: Use spec documents (recommended)
-1. Create a use case spec in the target repository spec area defined by repo-structure-sync
+1. Create a use case spec in the target repository spec area confirmed by `ai-context-init`
 2. Implement with TDD using canonical sub-agent assets:
    - `.ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`
    - `.ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml`
@@ -185,8 +190,12 @@ Shared explanatory materials, examples, and reusable rule fragments are under `.
 
 ## FAQ
 
-### Q1: Missing ezDDD/ezSpec packages in .NET
-There are no direct .NET packages yet. Preserve the concepts and use TODOs where tooling is not available.
+### Q1: Which packages provide building-block and BDD contracts?
+Preserve the neutral DDD, BDD/GWT, and Design by Contract semantics first.
+Use only target-selected packages: BDDfy is the current profile default,
+LightBDD is an owner-named candidate, and project-owned contracts remain valid.
+Future EngineeringGuardrails Contracts adoption is a separate compatibility
+decision; do not add an unavailable package or placeholder API.
 
 ### Q2: How to register domain events
 Use Wolverine message registration and ensure events are serializable. TODO: define a shared event registration pattern.

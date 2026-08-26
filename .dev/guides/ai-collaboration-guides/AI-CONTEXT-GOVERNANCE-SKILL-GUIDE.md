@@ -13,7 +13,12 @@
 - 建立 AI 文件整理 workflow
 - 接手自檢 findings，管理 audit → remediation → post-remediation audit → closure 的完整生命週期
 - 建立 remediation tasks、修正報告、續作 checkpoint 與結案證據
+- 以 capability／rule／contract 為主體維護 `.dev/ai-context/customizations.yaml`，取得 owner reconciliation，並協調升級後驗證
 - 避免把純 AI 文件整理誤交給 BDD、code review、或 production implementer skill
+
+語意客製的共同生命週期以
+`.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`
+為準；路徑只是證據，不能取代語意識別。
 
 ## 不應該做什麼
 
@@ -62,7 +67,7 @@ Baseline assessment 不得被修正報告或 verification assessment 覆寫或�
 - `created_at`、`updated_at` 使用帶明確 offset 的 ISO 8601。
 - 所有 generated artifacts 記錄 `template_source` 與 `template_version`。
 - 暫停前更新 locator、plan 與 active task 的 checkpoint，包含最後完成動作、下一步、validation 與 Git state。
-- 未完成時若使用者要求 merge/push，視為 checkpoint handoff：維持 active/pending 並記錄 checkpoint evidence；merge 預設 `--no-ff`。Push-only 從已推送 branch 接續，checkpoint merge 後才建立新的 continuation branch。
+- 未完成時若使用者要求 integration/push，視為 checkpoint handoff：維持 active/pending 並記錄 checkpoint evidence；依 `.dev/TEAM-GIT-FLOW-RULES.MD` 選擇線性或 merge-commit topology，handoff boundary 有獨立保存價值時通常保留 merge commit。Push-only 從已推送 branch 接續，checkpoint integration 後才建立新的 continuation branch。
 
 本 skill 的 templates 位於 `.ai/assets/skills/ai-context-governance/templates/`。
 
@@ -95,7 +100,7 @@ Create finding-level remediation tasks, keep the baseline immutable, request an 
   - 只處理 BDD/Gherkin scenario 與 assertion 設計。
 - `ddd-ca-hex-architect`
   - 處理 domain / architecture design；可協助重大 context 邊界決策。
-- `repo-structure-sync`
+- `ai-context-init`
   - 用於 template 複製到 target repo 後，依 target repo facts 重建架構入口文件。
 - `slice-implementer`
   - 用於已決定的 bounded implementation slice；若是 AI context governance，應先由本 skill 定義邊界。

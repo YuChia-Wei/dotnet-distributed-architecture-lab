@@ -7,22 +7,17 @@ import argparse
 import sys
 from pathlib import Path
 
-try:
-    import yaml
-except ModuleNotFoundError as exc:
-    if exc.name != "yaml":
-        raise
-    print(
-        "AI context package apply requires PyYAML==6.0.3; from the extracted envelope run: "
-        "python -m pip install -r requirements.txt",
-        file=sys.stderr,
-    )
-    raise SystemExit(2) from exc
-
 # The planner is executed from inside the checksum-governed extracted envelope.
 # Prevent the local module import from creating an ungoverned __pycache__ member
 # before the envelope checksum set is verified.
 sys.dont_write_bytecode = True
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from python_prerequisites import guard_direct_entrypoint
+
+guard_direct_entrypoint(".ai/scripts/plan-ai-context-package-apply.py")
+
+import yaml
 
 from ai_context_package_apply import ApplyError, apply_plan, build_plan
 

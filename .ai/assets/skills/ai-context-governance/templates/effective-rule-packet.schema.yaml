@@ -1,0 +1,98 @@
+schema_version: "1.0"
+document: ".dev/ai-context/effective-rule-packets/<route_id>.yaml"
+purpose: "Freshness-validated, task-scoped resolved semantics for one exact action request."
+source_repository_rule: "The framework source repository distributes this schema only. It must not create a live target packet."
+required:
+  - schema_version
+  - packet_id
+  - resolver
+  - request
+  - baseline
+  - target_state
+  - catalogs
+  - loaded_rule_ids
+  - rules
+  - freshness
+  - packet_digest
+ordering:
+  catalogs: "catalog_id ascending: selected-profile, shared"
+  loaded_rule_ids: "ascending stable ID"
+  rules: "rule_id ascending"
+digest:
+  algorithm: "sha256"
+  canonicalization: "UTF-8 compact JSON with Unicode preserved, object keys sorted by Unicode code point, array order retained, and exactly one terminal LF; reject floats and any value outside strings, booleans, null, integers, maps, and lists; omit packet_digest itself before hashing"
+  input: "The complete packet excluding packet_digest and generated_at. Arrays retain this schema's required order."
+  mismatch: "fail-closed"
+packet_id: "PACKET- + SHA256(canonical_json({route_id: request.route_id, target_state_digest: target_state.digest})).hexdigest().upper(); full 64-character uppercase hexadecimal hash with no truncation"
+resolver:
+  required: [version, evidence]
+  version: "non-empty resolver contract version"
+  evidence: "non-empty unique repository-relative resolver execution evidence list"
+request:
+  required: [route_id, capability, execution_mode, technology_profile, file_type]
+  route_id: "must resolve to exactly one effective-rules.yaml routing record"
+  capability: "must exactly match the route selector"
+  execution_mode: "must exactly match the route selector"
+  technology_profile: "must exactly match the route selector and baseline selected profile"
+  file_type: "must exactly match the route selector"
+baseline:
+  required: [framework_version, framework_commit, selected_technology_profile]
+  framework_version: "must equal effective-rules.yaml framework.version"
+  framework_commit: "must equal effective-rules.yaml framework.commit"
+  selected_technology_profile: "must equal effective-rules.yaml framework.selected_technology_profile, which must match ^[a-z0-9]+(?:[._-][a-z0-9]+)*$ with no path/traversal segment or leading, trailing, or consecutive separator"
+target_state:
+  required: [path, digest]
+  path: ".dev/ai-context/effective-rules.yaml"
+  digest: "must equal the current effective-rules.yaml target_state_digest"
+catalogs:
+  type: "exactly-two-records"
+  record:
+    required: [catalog_id, path, digest]
+    catalog_id: [shared, selected-profile]
+    path: "must exactly match the corresponding effective-state catalog path"
+    digest: "must exactly match the corresponding effective-state verified catalog_digest.value"
+loaded_rule_ids: "non-empty, unique, ascending list exactly equal to the route required_rule_ids set"
+rules:
+  type: "non-empty-list"
+  record:
+    required: [rule_id, catalog_id, catalog_selector, catalog_normative_statement_digest, effective_disposition, normative_statement, normative_statement_digest, disposition_record]
+    rule_id: "must occur exactly once in loaded_rule_ids"
+    catalog_id: [shared, selected-profile]
+    catalog_selector: "exact stable catalog record selector for rule_id"
+    catalog_normative_statement_digest: "must equal the selected catalog record's declared baseline normative-text digest: normative_text_sha256 when present, otherwise source_governance_provenance.normative_text_sha256; it always binds the framework/profile baseline even when a target semantic delta is effective"
+    effective_disposition: [baseline-effective, target-semantic-delta, enforcement-tuning, tooling-waiver, not-applicable]
+    normative_statement: "complete effective normative statement, LF-normalized with exactly one terminal LF; patches, diffs, partial text, and temporary LLM summaries are forbidden"
+    normative_statement_digest: "full lowercase SHA-256 hex digest of the UTF-8 normative_statement bytes"
+    disposition_record: "exact complete deep projection of the matching effective-rules.yaml rule_dispositions record, preserving every key, value, and array order, including rule_id, applicability, effective_disposition, evidence, and the applicable baseline_acceptance, semantic_delta, waiver, or not_applicable details"
+  constraints:
+    - "The packet rules set equals loaded_rule_ids exactly; no extra, omitted, reordered, or substituted semantics are permitted."
+    - "An unpacketized or unknown catalog document cannot be included."
+    - "For baseline-effective, enforcement-tuning, tooling-waiver, and not-applicable dispositions, normative_statement must exactly equal the selected catalog record's normative_text and normative_statement_digest must equal catalog_normative_statement_digest."
+    - "For target-semantic-delta, normative_statement and normative_statement_digest must exactly equal disposition_record.semantic_delta.effective_normative_statement and effective_normative_statement_digest; catalog_normative_statement_digest still binds the selected catalog baseline."
+    - "effective_disposition must equal disposition_record.effective_disposition, and disposition_record must exactly equal the current target-state record rather than a selected summary."
+    - "A not-applicable rule must be present exactly when its ID occurs in the route's reported_not_applicable_rule_ids set; it cannot be omitted, added independently, or silently replaced by another rule."
+freshness:
+  required: [status, verified_inputs]
+  status: [verified]
+  verified_inputs:
+    required: [target_state_digest, catalog_digests]
+    target_state_digest: "must equal target_state.digest"
+    catalog_digests: "must exactly equal catalogs"
+packet_digest: "sha256 hex digest of this packet under digest.canonicalization; must equal its effective-state route packet.digest"
+filesystem_safety:
+  read_surfaces:
+    - "this effective-rule packet path"
+    - ".dev/ai-context/effective-rules.yaml"
+    - "each resolved shared or selected-profile catalog path"
+    - ".dev/ai-context/provenance.yaml and .dev/ai-context/customizations.yaml when validating the target state's pinned authority digests"
+  requirements:
+    leaf: "must exist as a regular non-symlink file before it is read"
+    ancestors: "every existing ancestor must be a regular non-symlink directory"
+    traversal: "resolve only fixed repository-relative paths and the effective state's strict single-segment technology-profile slug matching ^[a-z0-9]+(?:[._-][a-z0-9]+)*$; never accept Windows trailing-dot/segment ambiguity or follow a symlink or traversal segment"
+fail_closed:
+  conditions:
+    - "missing packet, route, catalog, evidence, or required full normative statement"
+    - "any packet/request/state/catalog/route digest or selector mismatch"
+    - "stale inputs, unknown or unpacketized ID, ambiguous route, unresolved reconciliation, or invariant conflict"
+    - "a packet, state, provenance, customization, or catalog read has a missing/non-regular/symlink leaf or a non-directory/symlink existing ancestor"
+  behavior: "Report stale or unresolved state and stop. Do not rescan target files, choose a different rule, or fall back to framework defaults."

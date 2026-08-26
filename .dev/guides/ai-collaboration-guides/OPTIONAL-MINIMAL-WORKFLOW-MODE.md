@@ -59,7 +59,11 @@
 
 新 workflow 使用 `YYYY-MM-DD-<topic>[-NN]`。Locator 和 task 必須記錄帶時區的 ISO 8601 `created_at`、`updated_at`；artifact body 需記錄 `template_source` 與 `template_version`。
 
-進入 workflow mode 時，先建立獨立 branch，再建立 locator。Locator/plan 記錄 `branch`、`base_branch` 與 checkpoint history；workflow merge 預設 `--no-ff`。未完成時的 merge/push 只算 checkpoint；push-only 從已推送 branch 接續，checkpoint merge 後才改由新的 continuation branch 接續。
+進入 workflow mode 時，先建立獨立 branch，再建立 locator。Locator/plan 記錄 `branch`、`base_branch` 與 checkpoint history；線性整合與 merge commit 依 `.dev/TEAM-GIT-FLOW-RULES.MD` 的正向規則選擇，不由 workflow mode 自動決定。未完成時的 integration/push 只算 checkpoint；push-only 從已推送 branch 接續，checkpoint integration 後才改由新的 continuation branch 接續。
+
+若預計只有一個 task，或少於三個實質 task，先說明 workflow 要保存哪一項 Issue、ADR、assessment、commit、PR 或 release record 無法充分保存的狀態。不要把 validation、evidence formatting、commit、PR 或 closeout 補成假 task。若無法指出獨特狀態，改用 direct mode。
+
+同時處理多個 Issue 時，先檢查 outcome、branch、validation、review/approval、release gate 與 rollback 是否相同。這些邊界一致時，應使用一個 direct delivery 或 workflow、一個 branch 與一個 PR，並在同一份紀錄綁定多個 Issue；Issue 數量不決定 workflow 數量。
 
 ## Artifact 角色
 
@@ -150,5 +154,4 @@
 - `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
 - `../../../.ai/assets/skills/software-development-orchestrator/templates/development-review-report-template.md`
 - `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json`
-
 

@@ -11,6 +11,8 @@ Use this mode when the slice is bounded but does not fit command, query, or reac
 - behavior correction
 - cleanup
 - behavior-preserving refactor
+- concrete test implementation when no command, query, or reactor behavior is
+  the slice's primary mode
 
 ## Rules
 
@@ -19,6 +21,9 @@ Use this mode when the slice is bounded but does not fit command, query, or reac
 - Do not broaden the slice when adjacent issues are discovered.
 - Prefer existing repository patterns.
 - Record deferred work instead of mixing unrelated changes.
+- A test-only slice uses this mode and loads each applicable concrete-test role
+  binding. BDD/GWT design is an input to the slice, not implementation
+  authority; target-owned test execution remains a distinct stage.
 
 ## Expected Output
 

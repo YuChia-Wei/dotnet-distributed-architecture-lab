@@ -11,6 +11,10 @@
 - 檢查 `.ai`、`.dev`、`.agents`、`.claude` 是否漂移；
 - 比較「一般知識獨立分析」與「套用 repo skill／policy 分析」的差異；
 - 追蹤前一次 audit finding 是否仍然存在。
+- 對 schema-2 customization ledger 執行唯讀 active-context baseline 與獨立 post-upgrade verification。
+
+Auditor 不修改 ledger，也不能用升級前 baseline 取代升級後驗證；共同契約見
+`.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`。
 
 ## 預設掃描邊界
 
@@ -82,6 +86,6 @@ Auditor 永遠對被稽核的 context 保持唯讀，不會直接修正 findings
 - AI context ownership、language、wrapper 或 routing → `ai-context-governance`；
 - findings 分流、多階段 AI context 整改、複檢協調與結案 → `ai-context-governance`；
 - 產品 source code → `code-reviewer`；
-- framework 複製後的 target repo truth 重建 → `repo-structure-sync`。
+- framework 複製後的 target repo truth 重建 → `ai-context-init`。
 
 Auditor 對被稽核的 context 始終保持唯讀；它只能更新自己負責的 assessment locator、report、evidence 與 assessment index，這不構成修正授權。

@@ -1,0 +1,21 @@
+schema_version: "1.1"
+package_policy:
+  path: ".dev/standards/GIT-COMMIT-POLICY.yaml"
+  expected_schema_version: "1.2"
+  sha256: "65c564c415bad6f7f547bea9103416db5ea43faf9173a1053b91b3723d178a2d"
+package_validator:
+  path: ".ai/scripts/validate-git-commits.py"
+  sha256: "4d82b8913d13cf05a1e222c566165de2c8b480401056b2b7cf18bd6e97006642"
+commit_subject:
+  effective_at_override: "2026-08-13T11:05:12+08:00"
+ai_signature:
+  effective_at_override: "2026-08-12T22:08:09+08:00"
+assessment_historical_exceptions:
+  - commit: "ad194beb3fb61a18b6870093b704264746c1516b"
+    assessment_id: "ASM-20260812-002"
+    waived_error: "missing-matching-trailer"
+    reason: >-
+      The assessment commit omitted its required trailer and repository history
+      rewrite is not authorized.
+    evidence: >-
+      .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.8.0/validation-summary.yaml

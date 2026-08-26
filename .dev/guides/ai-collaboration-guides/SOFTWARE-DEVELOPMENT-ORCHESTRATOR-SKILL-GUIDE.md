@@ -70,7 +70,11 @@ policy 啟動此協調契約；不能只從 skill 名稱反推 lifecycle。
 
 新 workflow 使用 `YYYY-MM-DD-topic`；同一天同主題的後續 workflow 使用 `-02`、`-03`。每個 workflow 仍保留 `.dev/workflows/<workflow-id>/workflow.yaml` 作為 shared locator。Generated artifacts 必須記錄 `template_source`、`template_version`、`created_at` 與 `updated_at`；`created_at` 建立後不得改寫，內容或狀態更新時必須同步更新 `updated_at`。
 
-進入 workflow mode 後，先建立 `codex/<workflow-id>` 或 runtime 對應的獨立 branch，再建立 locator 與 artifacts。Locator/plan 必須記錄 `branch` 與 `base_branch`。若 workflow 未完成就依使用者要求 merge/push，該動作只算 checkpoint；保留 active/pending 狀態並記錄 handoff，合併預設使用 `--no-ff`。Push-only 從已推送 branch 接續；checkpoint merge 後不得直接在 target branch 繼續，應從更新後的 target 建立新的 continuation branch。
+進入 workflow mode 後，先建立 `codex/<workflow-id>` 或 runtime 對應的獨立 branch，再建立 locator 與 artifacts。Locator/plan 必須記錄 `branch` 與 `base_branch`。若 workflow 未完成就依使用者要求 integration/push，該動作只算 checkpoint；保留 active/pending 狀態並記錄 handoff，線性或 merge-commit topology 依 `.dev/TEAM-GIT-FLOW-RULES.MD` 選擇。Push-only 從已推送 branch 接續；checkpoint integration 後不得直接在 target branch 繼續，應從更新後的 target 建立新的 continuation branch。
+
+若請求同時包含多個已核准 Issues，先以 outcome、branch、validation、review/approval、release horizon 與 atomic rollback 判斷 delivery cohesion。邊界相同時，一個 workflow 可綁定多個 Issue IDs，並使用同一個 branch 與 PR；不要把 Issue 數量直接轉換成 workflow 數量。只有在邊界有實質差異或 owner 選擇獨立交付時才拆分，判斷仍有重大歧義時才詢問。
+
+一個 task 或少於三個實質 tasks 是 proportionality review signal，不是禁止條件。Agent 必須說明 workflow 保存了哪些其他 artifact 無法充分保存的狀態；validation、evidence、commit、PR 與 closeout 不應被補成獨立 task。
 
 ## 三種使用模式
 
@@ -406,7 +410,7 @@ Check:
   skill 才能成為 provider。
 - 若 routing 規則改變，先更新 `.ai/assets/skills/software-development-orchestrator/skill.yaml` 與 references，再同步 wrapper 與 guide。
 - development artifact 格式由 `software-development-orchestrator` 自有 templates 管理；shared locator 與最低互通規則仍以 repository workflow policy 為準。
-- 每次 development workflow 都使用獨立 branch；checkpoint merge 與 workflow completion 必須分開判斷，workflow merge 預設 `--no-ff`。
+- 每次 development workflow 都使用獨立 branch；checkpoint integration 與 workflow completion 必須分開判斷，並依 delivery boundary 正向選擇線性或 merge-commit topology。
 - Closeout 必須保留 approved requirement/spec、implementation、test、
   compliance、review、validation、task、commit 與 handoff 的個別 evidence，
   讓 fresh session 能從 Git 與 artifacts 接續，而不依賴 hidden conversation。

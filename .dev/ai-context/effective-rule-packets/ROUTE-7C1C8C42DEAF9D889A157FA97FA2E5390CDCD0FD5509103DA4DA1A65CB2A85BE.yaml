@@ -1,0 +1,649 @@
+schema_version: '1.0'
+packet_id: PACKET-7AA7163ECD04884437623747BA3B0EC84B21C55AB07086774B5F92B6ADBEB889
+resolver:
+  version: '1.0'
+  evidence:
+  - .dev/assessments/ASM-20260813-006/report.md
+  - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/validation-summary.yaml
+  - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+request:
+  route_id: ROUTE-7C1C8C42DEAF9D889A157FA97FA2E5390CDCD0FD5509103DA4DA1A65CB2A85BE
+  capability: requirements
+  execution_mode: direct
+  technology_profile: dotnet-backend
+  file_type: requirement-markdown
+baseline:
+  framework_version: v0.13.0
+  framework_commit: 8584337b47295da1af914180baf2b3f815b9dcc7
+  selected_technology_profile: dotnet-backend
+target_state:
+  path: .dev/ai-context/effective-rules.yaml
+  digest: ec489634d9af8e62468d5f61aff1eef8924fde9ad00111642ab3904eea31bb30
+catalogs:
+- catalog_id: selected-profile
+  path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+  digest: acb85d42090f446b290bf01a79752b79ebe203919d301202984831bf4d81a9cb
+- catalog_id: shared
+  path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+  digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
+loaded_rule_ids:
+- AGGREGATE-ES-001
+- AICTX-EVIDENCE-001
+- ARCH-UOW-001
+- ASSESSMENT-ARTIFACT-001
+- CONTRACT-SEMANTICS-001
+- DELETE-PURGE-001
+- DELETE-SOFT-001
+- MAP-EVENTS-001
+- PROJECT-GRAMMAR-001
+- TECH-SELECT-001
+- TEST-BDDFY-001
+- TEST-GWT-001
+- TEST-MOCK-001
+rules:
+- rule_id: AGGREGATE-ES-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: AGGREGATE-ES-001
+  catalog_normative_statement_digest: 262144bbec5431033e252c4c128025a5563f13f2d6c5610e86d51f7c19b4e4a3
+  effective_disposition: baseline-effective
+  normative_statement: "## Optional `EsAggregateRoot<TId>` Behavior Contract\n\nRule\
+    \ ID: `AGGREGATE-ES-001` (`conditional` when Event Sourcing is selected).\n\n\
+    `EsAggregateRoot<TId>` is the only supplied optional base class. A target may\n\
+    copy the source include, reimplement this contract, or use another implementation\n\
+    that preserves the behavior.\n\n### Required behavior\n\n1. `Replay(history)`\
+    \ dispatches committed events to `When` in order.\n2. Replay increments the committed\
+    \ `Version` once per event.\n3. Replay never adds events to the pending-event\
+    \ collection.\n4. `Apply(event)` dispatches the event to `When` before recording\
+    \ it as pending.\n5. If `When` rejects an event, that event is not recorded as\
+    \ pending.\n6. `Apply` does not advance the committed `Version`.\n7. `MarkChangesAsCommitted(committedVersion)`\
+    \ accepts only\n   `Version + pending-count`.\n8. A successful commit advances\
+    \ `Version` and clears pending events exactly\n   once.\n9. A rejected commit\
+    \ confirmation preserves the committed version and pending\n   events for retry\
+    \ or diagnosis.\n10. Product state changes occur only in `When`; `When` is deterministic\
+    \ and\n    performs no external I/O.\n\n### Construction rule\n\nDo not invoke\
+    \ virtual `When` from the base constructor. In C#, a derived type's\nfield initializers\
+    \ have not completed while its base constructor executes.\nThe derived reconstruction\
+    \ constructor calls `Replay(history)` from its own\nconstructor body:\n\n```csharp\n\
+    public sealed class Order : EsAggregateRoot<OrderId>\n{\n    private readonly\
+    \ List<OrderLine> _lines = [];\n\n    public Order(IEnumerable<IDomainEvent> history)\n\
+    \    {\n        Replay(history);\n    }\n\n    protected override void When(IDomainEvent\
+    \ @event)\n    {\n        // deterministic type dispatch\n    }\n}\n```\n\nThe\
+    \ repository-owned source include is under\n[`source-includes/domain/`](../source-includes/domain/).\
+    \ It is reference-only\nframework material, not a published package or complete\
+    \ reference product. An\nadopting target owns SDK compatibility, compilation,\
+    \ behavior tests, invocation\nevidence, and upgrade reconciliation before claiming\
+    \ executable validation.\n"
+  normative_statement_digest: 262144bbec5431033e252c4c128025a5563f13f2d6c5610e86d51f7c19b4e4a3
+  disposition_record:
+    rule_id: AGGREGATE-ES-001
+    effective_disposition: baseline-effective
+    applicability: Orders adopts event sourcing and reconstructs Order by replaying
+      persisted domain events through EsAggregateRoot behavior.
+    evidence: &id001
+    - src/Order/DomainCore/SaleOrders.Domains/Order.cs
+    - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
+    - tests/SaleOrders.Domains.Tests/OrderTests.cs
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/aggregate-es-001-remediation.yaml
+    - .dev/assessments/ASM-20260813-006/report.md
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id001
+- rule_id: AICTX-EVIDENCE-001
+  catalog_id: shared
+  catalog_selector:
+    rule_id: AICTX-EVIDENCE-001
+  catalog_normative_statement_digest: 659101967c605eb6e1216fa5e49767ebc8fc7ef534af293310c708c4f09980b4
+  effective_disposition: baseline-effective
+  normative_statement: "## Tool-Neutral Evidence Boundary\n\nRule ID: `AICTX-EVIDENCE-001`\n\
+    \nOptional repository indexes, code graphs, IDE indexes, MCP servers, semantic\n\
+    search, and similar tools are discovery accelerators. They may identify candidate\n\
+    files, sections, or relationships, but their output is not authoritative project\n\
+    truth and must not be the sole evidence for an AI-context finding, absence claim,\n\
+    inventory, or relationship conclusion.\n\n- Keep AI-context skills usable when\
+    \ no optional discovery tool is installed.\n- Do not require one vendor, graph\
+    \ schema, hook, cache, or persisted index.\n- Verify material findings against\
+    \ direct repository files, Git-tracked paths,\n  structured manifests, or repository-owned\
+    \ deterministic validators.\n- Treat an empty search result as unknown until the\
+    \ declared scope is checked by\n  a tool-independent fallback.\n- Record tool\
+    \ name, index freshness, scope, exclusions, and skipped checks when\n  tool output\
+    \ materially accelerated an assessment.\n- Prefer the narrowest direct verification\
+    \ needed for a candidate finding; an\n  accelerator may choose where to look,\
+    \ but it may not decide what is true.\n\n### Quick Fallback Verification\n\nUse\
+    \ these repository-native checks before accepting a discovery-tool conclusion:\n\
+    \n| Risk | Fast verification |\n| --- | --- |\n| Hidden or skipped AI-context\
+    \ roots | Run `git ls-files -- .ai .dev .agents .claude .codex .github AGENTS.md\
+    \ CLAUDE.md AGENTS.zh-TW.md README.md README.en.md`, then inspect `git status\
+    \ --short --untracked-files=all` for untracked context. |\n| Incomplete Markdown\
+    \ inventory | Run `git ls-files -- '*.md'` and compare the relevant paths with\
+    \ the tool result. |\n| Missing Markdown relationship | Search the literal target\
+    \ or link text with `git grep -n -F -- '<target-or-link-text>' -- '*.md'`, open\
+    \ the source file, and resolve the target relative to that file. |\n| Stale index\
+    \ or snapshot | Compare the tool's recorded revision, when available, with `git\
+    \ rev-parse HEAD`; directly reopen every file used by a material finding. |\n\
+    | Tool-specific omissions | Run `python .ai/scripts/validate-ai-context.py` for\
+    \ registered context contracts and record any relationship class the validator\
+    \ does not cover. |\n\nThe 2026-07-13 Codebase Memory MCP probe is an example,\
+    \ not a permanent\nproduct contract: its full index omitted `.claude/` and exposed\
+    \ Markdown files\nand headings without Markdown link edges. Re-test current tool\
+    \ behavior when it\nmatters, and use the fallback checks above regardless of tool\
+    \ brand.\n\n### Generated Inventory Contract\n\nA generated inventory, index,\
+    \ graph export, or snapshot that is retained as a\nrepository artifact must identify\
+    \ its generator, generation time, source Git\nrevision or input digest, scope,\
+    \ and exclusions. It must also state how a user\ncan reproduce or validate it.\
+    \ If those fields are absent or its source revision\ndiffers from the subject\
+    \ revision, treat it as a discovery hint rather than\nprimary evidence.\n\n- Do\
+    \ not overwrite human-owned or file-backed truth with a generated view.\n- Do\
+    \ not infer completeness from a generated artifact merely because it is committed.\n\
+    - Prefer a repository-owned deterministic regeneration or parity check when the\
+    \ generated artifact is an active catalog.\n- When no active generated inventory\
+    \ exists, record the check as not applicable instead of creating one solely for\
+    \ convenience.\n"
+  normative_statement_digest: 659101967c605eb6e1216fa5e49767ebc8fc7ef534af293310c708c4f09980b4
+  disposition_record:
+    rule_id: AICTX-EVIDENCE-001
+    effective_disposition: baseline-effective
+    applicability: AI-context initialization, upgrade, audit, and development must
+      rely on repository-backed evidence and disclose optional external discovery.
+    evidence: &id002
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/apply-receipt.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/post-apply-required-path-reconciliation.yaml
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id002
+- rule_id: ARCH-UOW-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: ARCH-UOW-001
+  catalog_normative_statement_digest: 05eb3e1e98a560e35e0ecee16d77514544445467263cd169633a798cf7ef8be1
+  effective_disposition: baseline-effective
+  normative_statement: "### 7. Strong Consistency MUST Be Explicit\n\nOne command\
+    \ changes one Aggregate by default. Events and eventual consistency are\nthe default\
+    \ for coordination between Aggregates. A Use Case may inject\n`IUnitOfWork` for\
+    \ multiple Aggregates only as an exceptional same-bounded-context\ndecision when\
+    \ all of these conditions hold:\n\n1. The business names an all-or-nothing invariant\
+    \ involving the Aggregates.\n2. Any eventually consistent intermediate state would\
+    \ be unacceptable and cannot\n   be safely compensated.\n3. The design rechecks\
+    \ that the Aggregate boundaries are correct instead of using\n   a transaction\
+    \ to hide a misplaced invariant.\n4. The decision documents the invariant, the\
+    \ involved Aggregates, and why eventual\n   consistency or compensation is insufficient.\n\
+    \nThe following Reservation + Capacity example represents such an exceptional\n\
+    business rule; it is not a general Use Case template:\n\n```csharp\npublic sealed\
+    \ class CompleteReservationUseCase\n{\n    private readonly IUnitOfWork unitOfWork;\n\
+    \n    public async Task ExecuteAsync(CancellationToken cancellationToken)\n  \
+    \  {\n        // Exceptional case: Reservation and Capacity are in the same bounded\n\
+    \        // context and the named invariant requires both changes to succeed or\n\
+    \        // neither to succeed. An intermediate overbooked state is unacceptable\n\
+    \        // and cannot be safely compensated. Do not copy this as a general template.\n\
+    \        // Load Reservation and Capacity, invoke Domain behavior, and save through\
+    \ ports.\n        await this.unitOfWork.CommitAsync(cancellationToken);\n    }\n\
+    }\n```\n\n- MUST NOT select a multi-Aggregate transaction because of shared storage,\
+    \ ORM or\n  framework capabilities, fewer I/O round trips, implementation convenience,\
+    \ or a\n  general future need.\n- MUST NOT make `IUnitOfWork` a default Use Case\
+    \ dependency.\n- MUST NOT span bounded contexts with one transaction; cross-bounded-context\n\
+    \  coordination uses integration events and eventual consistency.\n- A Repository\
+    \ participating in a Unit of Work MUST NOT commit independently.\n- A Handler\
+    \ MUST NOT introduce a transaction or commit after the Use Case.\n- Pending Domain\
+    \ Events may be acknowledged or cleared only after a successful commit.\n"
+  normative_statement_digest: 05eb3e1e98a560e35e0ecee16d77514544445467263cd169633a798cf7ef8be1
+  disposition_record:
+    rule_id: ARCH-UOW-001
+    effective_disposition: baseline-effective
+    applicability: Command use cases persist aggregates, use explicit local transactions
+      for aggregate/outbox consistency, and message across bounded contexts.
+    evidence: &id003
+    - src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs
+    - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
+    - .dev/ARCHITECTURE.md
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id003
+- rule_id: ASSESSMENT-ARTIFACT-001
+  catalog_id: shared
+  catalog_selector:
+    rule_id: ASSESSMENT-ARTIFACT-001
+  catalog_normative_statement_digest: cb7c812fb432bc3ccf3058ed7cba810373da5ebee1834a7f878d6a08a1a81d86
+  effective_disposition: baseline-effective
+  normative_statement: '## Assessment Versus Workflow
+
+
+    | Mode | Use | Durable artifact |
+
+    | --- | --- | --- |
+
+    | Transient analysis | Read-only analysis that remains in the conversation. |
+    none |
+
+    | Standalone assessment | A persisted audit, large code review, architecture assessment,
+    or technical-debt inventory without authorized remediation. | `.dev/assessments/<assessment-id>/`
+    |
+
+    | Workflow execution | Authorized multi-stage work, remediation, or source-of-truth
+    change. | `.dev/workflows/<workflow-id>/` |
+
+
+    Persistence alone does not turn an observation into a workflow. If the user asks
+
+    to assess and remediate in one request, store the assessment under
+
+    `.dev/assessments/` and store execution state under the owning workflow. The
+
+    workflow references the assessment; it does not copy the report.
+
+    '
+  normative_statement_digest: cb7c812fb432bc3ccf3058ed7cba810373da5ebee1834a7f878d6a08a1a81d86
+  disposition_record:
+    rule_id: ASSESSMENT-ARTIFACT-001
+    effective_disposition: baseline-effective
+    applicability: AI-context audits, code reviews, and architecture assessments are
+      persisted as governed assessment artifacts.
+    evidence: &id004
+    - .dev/assessments/ASM-20260812-001/report.md
+    - .dev/assessments/ASM-20260812-002/report.md
+    - .dev/standards/ASSESSMENT-ARTIFACT-POLICY.md
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id004
+- rule_id: CONTRACT-SEMANTICS-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: CONTRACT-SEMANTICS-001
+  catalog_normative_statement_digest: 45292a7bbc1fc9e6d4e845aa660681efda68e0e2394cecf1c6c2c76ebf3814f7
+  effective_disposition: baseline-effective
+  normative_statement: "## Contract Categories\n\n- A precondition rejects invalid\
+    \ input or an invalid state before behavior runs.\n- A postcondition verifies\
+    \ the observable state/result promised by a successful\n  operation.\n- An invariant\
+    \ must hold for every externally observable valid Aggregate or\n  Entity state.\n"
+  normative_statement_digest: 45292a7bbc1fc9e6d4e845aa660681efda68e0e2394cecf1c6c2c76ebf3814f7
+  disposition_record:
+    rule_id: CONTRACT-SEMANTICS-001
+    effective_disposition: baseline-effective
+    applicability: Domain behavior declares and enforces preconditions and invariants
+      for products, orders, and inventory.
+    evidence: &id005
+    - src/Product/DomainCore/SaleProducts.Domains/Product.cs
+    - src/Order/DomainCore/SaleOrders.Domains/Order.cs
+    - src/Inventory/DomainCore/InventoryControl.Domains/InventoryItem.cs
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id005
+- rule_id: DELETE-PURGE-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: DELETE-PURGE-001
+  catalog_normative_statement_digest: 7d8e43950811aa96c6cfc12f811deb9c8d13739989d4611176e5d0e4754c165e
+  effective_disposition: baseline-effective
+  normative_statement: '## 📌 Core Concept
+
+
+    An **Archive** is a database write pattern dedicated to Query Models in a CQRS
+    architecture:
+
+
+    - Its interface resembles a Write Model Repository, but an Archive handles database
+    write requirements for a Query Model.
+
+    - A Repository is limited to writing a single Aggregate in the Command Model.
+
+    - It may write to one table or across multiple tables.
+
+    - A Reactor in the Handler layer invokes the Archive after receiving a Domain
+    Event and writes the data to the database.
+
+
+    ---
+
+    '
+  normative_statement_digest: 7d8e43950811aa96c6cfc12f811deb9c8d13739989d4611176e5d0e4754c165e
+  disposition_record:
+    rule_id: DELETE-PURGE-001
+    effective_disposition: baseline-effective
+    applicability: Inventory persistence contains an executable physical-delete implementation,
+      so purge/archive governance cannot be globally excluded.
+    evidence: &id006
+    - src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/InventoryItemDomainRepository.cs
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id006
+- rule_id: DELETE-SOFT-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: DELETE-SOFT-001
+  catalog_normative_statement_digest: 5e5370bef9fae1d46a6df8518ab380422368a25d7bb0ca00affc1af3f726cfa7
+  effective_disposition: baseline-effective
+  normative_statement: "### 0. Soft-Delete Default Profile\n\nRule ID: `DELETE-SOFT-001`\
+    \ (`profile-default`).\n\nThe dotnet-backend Aggregate Repository profile defaults\
+    \ to soft deletion.\nAffected Aggregates support the following field and event-application\
+    \ behavior,\nand deletion is persisted through `SaveAsync`.\n\nA target may explicitly\
+    \ opt out for an Aggregate or repository profile when its\nrequirements or architecture\
+    \ decision select another lifecycle. The opt-out\nmust be recorded in target evidence\
+    \ such as `.dev/project-config.yaml`\narchitecture capability selections, requirements,\
+    \ or an ADR. An opted-out\nAggregate is not required to add `IsDeleted`.\n\n####\
+    \ Adopted Aggregate Root Must Have an `IsDeleted` Field and Handling Logic\n\n\
+    ```csharp\n// ✅ Correct when soft deletion is adopted\npublic class WorkItem :\
+    \ EsAggregateRoot<WorkItemId>\n{\n    public bool IsDeleted { get; private set;\
+    \ }  // Required soft-delete marker\n\n    // Set IsDeleted = true when handling\
+    \ the deletion event\n    protected override void When(IDomainEvent @event)\n\
+    \    {\n        switch (@event)\n        {\n            case WorkItemDeleted e:\n\
+    \                IsDeleted = true;  // Mark as deleted\n                break;\n\
+    \            // Other event handling...\n        }\n    }\n}\n```\n\n---\n"
+  normative_statement_digest: 5e5370bef9fae1d46a6df8518ab380422368a25d7bb0ca00affc1af3f726cfa7
+  disposition_record:
+    rule_id: DELETE-SOFT-001
+    effective_disposition: baseline-effective
+    applicability: Products persists an isdeleted marker and filters deleted records
+      from aggregate and query repositories.
+    evidence: &id007
+    - src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs
+    - src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductQueryRepository.cs
+    - src/Product/DomainCore/SaleProducts.Domains/Product.cs
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id007
+- rule_id: MAP-EVENTS-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: MAP-EVENTS-001
+  catalog_normative_statement_digest: 1a3c010a5f2e863bcf60c7ddc333a23c7d96705e8c758bb4a89fa9cae111c01c
+  effective_disposition: baseline-effective
+  normative_statement: '### Pending Domain Events After Reconstruction
+
+
+    An aggregate returned by `ToDomain()` MUST have no pending `DomainEvents`. Rehydration
+    restores historical or persisted state; it does not represent a new business decision
+    and MUST NOT cause those events to be published or persisted again.
+
+
+    - A rehydration constructor SHOULD replay historical events through `When(...)`
+    or an equivalent state-transition path that does not enqueue them as new events.
+
+    - `ClearDomainEvents()` is not unconditionally required when the aggregate API
+    explicitly guarantees that reconstruction leaves the pending-event collection
+    empty.
+
+    - If the selected constructor or replay path emits or enqueues events, or its
+    cleanliness contract is not explicit, the mapper MUST call `ClearDomainEvents()`
+    before returning the aggregate.
+
+    - State-based fallback reconstruction follows the same rule; constructor side
+    effects must not escape as pending events.
+
+
+    ---
+
+    '
+  normative_statement_digest: 1a3c010a5f2e863bcf60c7ddc333a23c7d96705e8c758bb4a89fa9cae111c01c
+  disposition_record:
+    rule_id: MAP-EVENTS-001
+    effective_disposition: baseline-effective
+    applicability: Order reconstruction replays persisted events without creating
+      pending events, and tests verify clean rehydration behavior.
+    evidence: &id008
+    - src/BuildingBlocks/Lab.BuildingBlocks.Domains/EsAggregateRoot.cs
+    - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
+    - tests/SaleOrders.Domains.Tests/OrderTests.cs
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id008
+- rule_id: PROJECT-GRAMMAR-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: PROJECT-GRAMMAR-001
+  catalog_normative_statement_digest: 128cc7e3a4315baa4ac69fbc944e11297eaaedef745de742350ebe522130f69c
+  effective_disposition: baseline-effective
+  normative_statement: "### Workload Mapping\n\nRule ID: `PROJECT-GRAMMAR-001` (`profile-default`).\n\
+    \n`workload` is a logical solution-navigation boundary, not a universal physical\n\
+    directory name:\n\n| Repository profile | `workload` means | Typical count | Example\
+    \ logical folders |\n| --- | --- | --- | --- |\n| micro-system / mini-system mono\
+    \ repo | one Bounded Context | one or more | `/Orders/DomainCore/`, `/Orders/Presentation/`\
+    \ |\n| mono-system repository | the system represented by the repository | normally\
+    \ one | `/Commerce/DomainCore/`, `/Commerce/Presentation/` |\n\nThis mapping gives\
+    \ both profiles the same development navigation:\n\n- `DomainCore` groups Domain,\
+    \ Application, and Infrastructure projects that\n  realize the workload's business\
+    \ capability;\n- `Presentation` groups runtime inbound adapters such as Web API,\
+    \ gRPC, worker,\n  and MQ Consumer projects;\n- tests, analyzers/tooling, BuildingBlocks,\
+    \ Shared Kernel, Published Language,\n  and CrossCutting projects may remain explicit\
+    \ top-level capability groups;\n- a target may retain a flat physical `src/` layout\
+    \ while using the logical\n  `.slnx` grammar.\n\nDo not create artificial Bounded\
+    \ Context folders in a mono-system repository\nonly to imitate a micro-system\
+    \ repo. Conversely, do not collapse real Bounded\nContexts in a micro-system mono\
+    \ repo into one layer-first solution view.\n"
+  normative_statement_digest: 128cc7e3a4315baa4ac69fbc944e11297eaaedef745de742350ebe522130f69c
+  disposition_record:
+    rule_id: PROJECT-GRAMMAR-001
+    effective_disposition: baseline-effective
+    applicability: The target adopts the conditional slnx navigation profile with
+      bounded context DomainCore and Presentation solution folders.
+    evidence: &id009
+    - MQArchLab.slnx
+    - .dev/project-config.yaml
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id009
+- rule_id: TECH-SELECT-001
+  catalog_id: shared
+  catalog_selector:
+    rule_id: TECH-SELECT-001
+  catalog_normative_statement_digest: efc4cbc1e80c87926adf01295b444eec42895db9f2b0789ef18c6a9a7c2964c0
+  effective_disposition: baseline-effective
+  normative_statement: "## Selection Record\n\nTarget selections belong in generated\
+    \ `.dev/project-config.yaml` under\n`technologySelections`. Every record uses\
+    \ the schema in\n`.ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml`.\n\
+    \n```yaml\ntechnologySelections:\n  - slot: testing.mocking\n    value: Moq\n\
+    \    status: selected\n    source: explicit-target-decision\n    evidence:\n \
+    \     - .dev/requirement/TECH-STACK-REQUIREMENTS.MD\n    reason: Existing product\
+    \ test stack\n```\n\nRequired semantics:\n\n- `slot` is a stable dotted capability\
+    \ name, not a package-specific field;\n- `value` is the target selection;\n- `status`\
+    \ is `selected`, `not-applicable`, or `unresolved`;\n- `source` is `repository-evidence`\
+    \ or `explicit-target-decision`;\n- `evidence` contains repository-relative paths\
+    \ supporting the selection;\n- `reason` explains an explicit override or unresolved\
+    \ decision.\n\nAn absent slot does not invent target truth. If the framework registers\
+    \ a\nprofile default for that slot, the default applies until target evidence\
+    \ records\nanother selection. A target override changes the selected technology,\
+    \ not the\narchitecture invariants surrounding it.\n\nRecommended stable slots\
+    \ include:\n\n- `testing.mocking`\n- `testing.bdd-runner`\n- `persistence.orm`\n\
+    - `persistence.database`\n- `messaging.broker`\n- `messaging.framework`\n- `observability.runtime`\n\
+    \nNew slots must reuse this record shape.\n"
+  normative_statement_digest: efc4cbc1e80c87926adf01295b444eec42895db9f2b0789ef18c6a9a7c2964c0
+  disposition_record:
+    rule_id: TECH-SELECT-001
+    effective_disposition: baseline-effective
+    applicability: Testing, persistence, messaging, and observability choices are
+      explicit, evidence-backed, and recorded in target configuration.
+    evidence: &id010
+    - .dev/project-config.yaml
+    - .dev/standards/TECHNOLOGY-SELECTION-POLICY.md
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id010
+- rule_id: TEST-BDDFY-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: TEST-BDDFY-001
+  catalog_normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+  effective_disposition: baseline-effective
+  normative_statement: "### 3. Use GWT; Default to BDDfy\n\n**Mandatory**: All tests\
+    \ must use Given-When-Then semantics and recognizable step names. Arrange-Act-Assert\
+    \ (3A) must not replace GWT. Use Case and integration tests default to BDDfy;\
+    \ plain xUnit may implement the same GWT structure only when the target team explicitly\
+    \ opts out of that package.\n\n`.feature` files and runners are not minimum dependencies.\
+    \ When requirements directly provide a `.feature` file, its design or production\
+    \ is explicitly requested, or the target profile has adopted a runner, create\
+    \ or maintain it according to the [Gherkin Feature Storage Guide](../../../../../../.dev/specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD).\
+    \ Otherwise, express the scenario directly as a GWT-style C# test.\n\n```csharp\n\
+    // ✅ Correct: BDDfy + Gherkin style\npublic class CreateProductUseCaseTests\n\
+    {\n    private CreateProductInput _input = null!;\n    private CreateProductOutput\
+    \ _output = null!;\n    private readonly IAggregateRepository<Product, ProductId>\
+    \ _repository;\n    private readonly CreateProductUseCase _useCase;\n\n    public\
+    \ CreateProductUseCaseTests()\n    {\n        _repository = Substitute.For<IAggregateRepository<Product,\
+    \ ProductId>>();\n        var unitOfWork = Substitute.For<IUnitOfWork>();\n  \
+    \      var publisher = Substitute.For<IProductEventPublisher>();\n        _useCase\
+    \ = new CreateProductUseCase(_repository, unitOfWork, publisher);\n    }\n\n \
+    \   [Fact]\n    public void Should_create_product_successfully_when_input_is_valid()\n\
+    \    {\n        this.Given(x => x.GivenAValidProductCreationInput())\n       \
+    \     .When(x => x.WhenTheUseCaseIsExecuted())\n            .Then(x => x.ThenTheProductShouldBeCreated())\n\
+    \            .And(x => x.ThenTheOutputShouldContainTheProductId())\n         \
+    \   .BDDfy();\n    }\n\n    private void GivenAValidProductCreationInput()\n \
+    \   {\n        _input = new CreateProductInput(\n            Guid.NewGuid().ToString(),\n\
+    \            \"Test Product\",\n            \"user-123\"\n        );\n    }\n\n\
+    \    private async Task WhenTheUseCaseIsExecuted()\n    {\n        _output = await\
+    \ _useCase.ExecuteAsync(_input, CancellationToken.None);\n    }\n\n    private\
+    \ void ThenTheProductShouldBeCreated()\n    {\n        _repository.Received(1).SaveAsync(Arg.Any<Product>(),\
+    \ Arg.Any<CancellationToken>());\n    }\n\n    private void ThenTheOutputShouldContainTheProductId()\n\
+    \    {\n        _output.ProductId.Should().NotBeNull();\n    }\n}\n\n// ❌ Incorrect:\
+    \ replaces the Use Case business-flow test with a delivery Command and Handler\n\
+    [Fact]\npublic async Task TestCreateProduct()  // Incorrect name\n{\n    // Arrange\n\
+    \    var command = new CreateProductCommand(...);\n\n    // Act\n    var result\
+    \ = await _handler.Handle(command, CancellationToken.None);\n\n    // Tests only\
+    \ the adapter and does not directly protect Use Case orchestration.\n}\n```\n\n\
+    Handler adapter tests must remain separate and narrow: verify only Command-to-Input\
+    \ mapping, exactly one\nUse Case invocation, and delivery-specific failure mapping.\
+    \ A Handler test that mocks a\nRepository must not duplicate responsibility for\
+    \ business-flow testing.\n\n---\n"
+  normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+  disposition_record:
+    rule_id: TEST-BDDFY-001
+    effective_disposition: baseline-effective
+    applicability: The dotnet-backend profile applies and the target explicitly selects
+      the baseline-permitted plain-xUnit branch with mandatory GWT semantics.
+    evidence: &id011
+    - .dev/project-config.yaml
+    - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
+    - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id011
+- rule_id: TEST-GWT-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: TEST-GWT-001
+  catalog_normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+  effective_disposition: baseline-effective
+  normative_statement: "### 3. Use GWT; Default to BDDfy\n\n**Mandatory**: All tests\
+    \ must use Given-When-Then semantics and recognizable step names. Arrange-Act-Assert\
+    \ (3A) must not replace GWT. Use Case and integration tests default to BDDfy;\
+    \ plain xUnit may implement the same GWT structure only when the target team explicitly\
+    \ opts out of that package.\n\n`.feature` files and runners are not minimum dependencies.\
+    \ When requirements directly provide a `.feature` file, its design or production\
+    \ is explicitly requested, or the target profile has adopted a runner, create\
+    \ or maintain it according to the [Gherkin Feature Storage Guide](../../../../../../.dev/specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD).\
+    \ Otherwise, express the scenario directly as a GWT-style C# test.\n\n```csharp\n\
+    // ✅ Correct: BDDfy + Gherkin style\npublic class CreateProductUseCaseTests\n\
+    {\n    private CreateProductInput _input = null!;\n    private CreateProductOutput\
+    \ _output = null!;\n    private readonly IAggregateRepository<Product, ProductId>\
+    \ _repository;\n    private readonly CreateProductUseCase _useCase;\n\n    public\
+    \ CreateProductUseCaseTests()\n    {\n        _repository = Substitute.For<IAggregateRepository<Product,\
+    \ ProductId>>();\n        var unitOfWork = Substitute.For<IUnitOfWork>();\n  \
+    \      var publisher = Substitute.For<IProductEventPublisher>();\n        _useCase\
+    \ = new CreateProductUseCase(_repository, unitOfWork, publisher);\n    }\n\n \
+    \   [Fact]\n    public void Should_create_product_successfully_when_input_is_valid()\n\
+    \    {\n        this.Given(x => x.GivenAValidProductCreationInput())\n       \
+    \     .When(x => x.WhenTheUseCaseIsExecuted())\n            .Then(x => x.ThenTheProductShouldBeCreated())\n\
+    \            .And(x => x.ThenTheOutputShouldContainTheProductId())\n         \
+    \   .BDDfy();\n    }\n\n    private void GivenAValidProductCreationInput()\n \
+    \   {\n        _input = new CreateProductInput(\n            Guid.NewGuid().ToString(),\n\
+    \            \"Test Product\",\n            \"user-123\"\n        );\n    }\n\n\
+    \    private async Task WhenTheUseCaseIsExecuted()\n    {\n        _output = await\
+    \ _useCase.ExecuteAsync(_input, CancellationToken.None);\n    }\n\n    private\
+    \ void ThenTheProductShouldBeCreated()\n    {\n        _repository.Received(1).SaveAsync(Arg.Any<Product>(),\
+    \ Arg.Any<CancellationToken>());\n    }\n\n    private void ThenTheOutputShouldContainTheProductId()\n\
+    \    {\n        _output.ProductId.Should().NotBeNull();\n    }\n}\n\n// ❌ Incorrect:\
+    \ replaces the Use Case business-flow test with a delivery Command and Handler\n\
+    [Fact]\npublic async Task TestCreateProduct()  // Incorrect name\n{\n    // Arrange\n\
+    \    var command = new CreateProductCommand(...);\n\n    // Act\n    var result\
+    \ = await _handler.Handle(command, CancellationToken.None);\n\n    // Tests only\
+    \ the adapter and does not directly protect Use Case orchestration.\n}\n```\n\n\
+    Handler adapter tests must remain separate and narrow: verify only Command-to-Input\
+    \ mapping, exactly one\nUse Case invocation, and delivery-specific failure mapping.\
+    \ A Handler test that mocks a\nRepository must not duplicate responsibility for\
+    \ business-flow testing.\n\n---\n"
+  normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+  disposition_record:
+    rule_id: TEST-GWT-001
+    effective_disposition: baseline-effective
+    applicability: New and modified tests use recognizable Given-When-Then semantics
+      regardless of the selected runner.
+    evidence: &id012
+    - tests/SaleOrders.Domains.Tests/OrderTests.cs
+    - tests/SaleOrders.Tests/PlaceOrderTests.cs
+    - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id012
+- rule_id: TEST-MOCK-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: TEST-MOCK-001
+  catalog_normative_statement_digest: 8ff4679c135e2de0f7a370317da2da76ee4a5bf7ca6ef076dc85d0aaeed23503
+  effective_disposition: baseline-effective
+  normative_statement: "### 6. Mocking Library Selection\n\nNSubstitute is the `TEST-MOCK-001`\
+    \ profile default. Before generating or\nreviewing mocks, resolve `testing.mocking`\
+    \ through\n`.dev/project-config.yaml#technologySelections` and\n[Target Technology\
+    \ Selection Policy](../../../../../../.dev/standards/TECHNOLOGY-SELECTION-POLICY.md).\n\
+    \n- When no target selection exists, use NSubstitute.\n- When an evidenced target\
+    \ selection exists, use that library consistently.\n- Do not mix mocking libraries\
+    \ without an explicit migration decision.\n- Changing the library does not change\
+    \ GWT, test independence, or boundary\n  interaction rules.\n\n```csharp\n// ✅\
+    \ Correct: NSubstitute\nvar repository = Substitute.For<IAggregateRepository<Product,\
+    \ ProductId>>();\nrepository.FindByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())\n\
+    \    .Returns(Task.FromResult<Product?>(existingProduct));\n\n// Verify the call\n\
+    await repository.Received(1).SaveAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>());\n\
+    \n// Valid only when the target explicitly selects Moq\nvar repository = new Mock<IAggregateRepository<Product,\
+    \ ProductId>>();\nrepository.Setup(x => x.FindByIdAsync(...)).ReturnsAsync(existingProduct);\n\
+    repository.Verify(x => x.SaveAsync(...), Times.Once);\n```\n\n---\n"
+  normative_statement_digest: 8ff4679c135e2de0f7a370317da2da76ee4a5bf7ca6ef076dc85d0aaeed23503
+  disposition_record:
+    rule_id: TEST-MOCK-001
+    effective_disposition: baseline-effective
+    applicability: Test projects use the explicitly recorded per-project Moq and NSubstitute
+      selection.
+    evidence: &id013
+    - .dev/project-config.yaml
+    - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
+    - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id013
+freshness:
+  status: verified
+  verified_inputs:
+    target_state_digest: ec489634d9af8e62468d5f61aff1eef8924fde9ad00111642ab3904eea31bb30
+    catalog_digests:
+    - catalog_id: selected-profile
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      digest: acb85d42090f446b290bf01a79752b79ebe203919d301202984831bf4d81a9cb
+    - catalog_id: shared
+      path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+      digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
+packet_digest: 48d9aaceae1b4bbfca4cf1ef005c0feaed4f40b18f35c55e2765bb787ab67e2e

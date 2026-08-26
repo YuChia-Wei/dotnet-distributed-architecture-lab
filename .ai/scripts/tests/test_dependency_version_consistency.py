@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 import tempfile
@@ -22,12 +23,12 @@ class DependencyVersionConsistencyTests(unittest.TestCase):
         root: Path,
         *,
         source: bool = True,
-        requirements: str = "requests==2.32.3\n",
+        requirements: str = "PyYAML==6.0.3\n",
         template_requirements: str | None = None,
         workflow_python_versions: tuple[str, ...] = ("3.11",),
         workflow_steps: str | None = None,
         projects: dict[str, str] | None = None,
-        sdk_version: str = "10.0.100",
+        sdk_version: str | None = "10.0.100",
     ) -> None:
         if source:
             self.write(
@@ -36,6 +37,16 @@ class DependencyVersionConsistencyTests(unittest.TestCase):
                 "schema_version: 1.0.0\nprofile:\n  id: dotnet-backend\n",
             )
             self.write(root, "requirements.txt", requirements)
+            self.write(
+                root,
+                ".ai/scripts/python-entrypoints.json",
+                (REPO_ROOT / ".ai/scripts/python-entrypoints.json").read_text(encoding="utf-8"),
+            )
+            registry = json.loads(
+                (root / ".ai/scripts/python-entrypoints.json").read_text(encoding="utf-8")
+            )
+            for entrypoint in registry["entrypoints"]:
+                self.write(root, entrypoint["path"], "# fixture entrypoint\n")
             self.write(
                 root,
                 ".ai/distribution/templates/requirements.txt",
@@ -58,8 +69,14 @@ class DependencyVersionConsistencyTests(unittest.TestCase):
                 ),
             )
 
-        self.write(root, "global.json", '{"sdk":{"version":"' + sdk_version + '"}}\n')
-        for relative_path, content in (projects or {"tools/App/App.csproj": self.csproj()}).items():
+        if sdk_version is not None:
+            self.write(root, "global.json", '{"sdk":{"version":"' + sdk_version + '"}}\n')
+        selected_projects = (
+            projects
+            if projects is not None
+            else {"tools/App/App.csproj": self.csproj()}
+        )
+        for relative_path, content in selected_projects.items():
             self.write(root, relative_path, content)
 
     @staticmethod
@@ -111,7 +128,7 @@ class DependencyVersionConsistencyTests(unittest.TestCase):
 
     def test_gwt_002_given_source_requirements_template_drift_when_validated_then_fails(self) -> None:
         # Given source and distribution requirements that differ by exact bytes or version.
-        for template_requirements in ("requests==2.32.3\n\n", "requests==2.32.4\n"):
+        for template_requirements in ("PyYAML==6.0.3\n\n", "PyYAML==6.0.4\n"):
             with self.subTest(template_requirements=template_requirements):
                 result = self.validate_fixture(template_requirements=template_requirements)
 
@@ -120,7 +137,7 @@ class DependencyVersionConsistencyTests(unittest.TestCase):
 
     def test_gwt_003_given_unpinned_python_requirement_when_validated_then_fails(self) -> None:
         # Given a source requirement without an exact version pin.
-        result = self.validate_fixture(requirements="requests>=2.32.3\n")
+        result = self.validate_fixture(requirements="PyYAML>=6.0.3\n")
 
         # When validated, then the unpinned requirement is rejected.
         self.assert_validation_failure(result, "must use an exact name==version pin")
@@ -229,6 +246,69 @@ class DependencyVersionConsistencyTests(unittest.TestCase):
             # cannot silently downgrade to target mode.
             result = self.run_validator(root)
             self.assert_validation_failure(result, "cannot read requirements")
+
+    def test_gwt_013_given_python_entrypoint_registry_when_checked_then_governed_pyyaml_matches_requirements(self) -> None:
+        registry = json.loads(
+            (REPO_ROOT / ".ai/scripts/python-entrypoints.json").read_text(encoding="utf-8")
+        )
+        requirements = (REPO_ROOT / "requirements.txt").read_text(encoding="utf-8")
+        self.assertIn(
+            "PyYAML==" + registry["governed_requirements"]["PyYAML"]["version"],
+            requirements,
+        )
+        self.assertEqual(
+            requirements,
+            (REPO_ROOT / ".ai/distribution/templates/requirements.txt").read_text(encoding="utf-8"),
+        )
+
+    def test_gwt_014_given_source_registry_contract_drift_when_validated_then_it_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="dependency-version-consistency-") as temporary:
+            root = Path(temporary)
+            self.create_fixture(root)
+            registry_path = root / ".ai/scripts/python-entrypoints.json"
+            registry = json.loads(registry_path.read_text(encoding="utf-8"))
+            registry["governed_requirements"]["PyYAML"]["import_name"] = "not_yaml"
+            registry["entrypoints"] = registry["entrypoints"][:-1]
+            registry_path.write_text(json.dumps(registry), encoding="utf-8")
+            self.assert_validation_failure(
+                self.run_validator(root),
+                "PyYAML contract must declare",
+            )
+
+    def test_gwt_015_given_registry_exit_or_path_drift_when_validated_then_it_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="dependency-version-consistency-") as temporary:
+            root = Path(temporary)
+            self.create_fixture(root)
+            registry_path = root / ".ai/scripts/python-entrypoints.json"
+            registry = json.loads(registry_path.read_text(encoding="utf-8"))
+            registry["entrypoints"][0]["prerequisite_exit_code"] = 2
+            missing_path = root / registry["entrypoints"][1]["path"]
+            missing_path.unlink()
+            registry_path.write_text(json.dumps(registry), encoding="utf-8")
+            result = self.run_validator(root)
+            self.assert_validation_failure(result, "prerequisite_exit_code 2 is reserved for")
+            self.assertIn("path does not exist in source root", result.stdout + result.stderr)
+
+    def test_gwt_016_given_sdk_free_source_without_managed_projects_when_validated_then_it_passes(self) -> None:
+        result = self.validate_fixture(projects={}, sdk_version=None)
+
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertIn("managed_projects=0", result.stdout)
+        self.assertIn("nuget_dependencies=0", result.stdout)
+
+    def test_gwt_017_given_unrelated_ai_project_when_validated_then_it_is_not_scanned(self) -> None:
+        # Given an unrelated .ai asset declares an invalid PackageReference outside both scan roots.
+        result = self.validate_fixture(
+            projects={
+                "tools/App/App.csproj": self.csproj(),
+                ".ai/assets/unrelated/Ignore.csproj": self.csproj(
+                    references='  <ItemGroup><PackageReference Include="MediatR" /></ItemGroup>\n'
+                ),
+            }
+        )
+
+        # When dependency scanning runs, then it does not broaden into all .ai assets.
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,45 @@
+schema_version: "1.0"
+decision_id: "owner-decision-v0.13-product-fix"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+issue: 1
+recorded_at: "2026-08-13T12:30:13+08:00"
+status: "approved"
+authorization_sources:
+  - "Owner response: 同意修正"
+  - >-
+    The approval answers the explicit AGGREGATE-ES-001 choice presented in the
+    v0.13 reconciliation report and authorizes the recommended bounded product fix.
+decision:
+  subject: "AGGREGATE-ES-001 aggregate rehydration construction invariant"
+  disposition: "fix-target-product"
+  detail: >-
+    Preserve the exact v0.13 rule semantics. Remove virtual event dispatch from
+    the aggregate base constructor, provide a protected Replay(history) path,
+    invoke Replay(events) from the Order derived-constructor body, and retain
+    replay/version/pending-event behavior with narrow regression coverage.
+scope:
+  primary:
+    - "src/BuildingBlocks/Lab.BuildingBlocks.Domains/EsAggregateRoot.cs"
+    - "src/Order/DomainCore/SaleOrders.Domains/Order.cs"
+  tests:
+    - "tests/SaleOrders.Domains.Tests/OrderTests.cs"
+  dependency_radius: "EsAggregateRoot replay primitive, its direct Order caller, and direct domain tests only"
+authorization_boundary:
+  authorized:
+    - "bounded source and direct-test changes required for the stated invariant"
+    - "narrow product test and build validation"
+    - "v0.13 effective-rule regeneration and independent audit after the fix passes"
+  not_authorized:
+    - "weaken AGGREGATE-ES-001"
+    - "change public API, domain language, event names, module boundaries, or unrelated aggregates"
+    - "activate analyzer recipes, stock validation profiles, changed-path execution, or evidence reuse"
+    - "merge"
+    - "push"
+    - "close Issue #1"
+    - "submit feedback upstream"
+validation_required:
+  - "consume both freshness-verified v0.12 packets before the actual product mutation"
+  - "SaleOrders domain tests"
+  - "solution build or the narrowest equivalent compilation gate"
+  - "v0.13 target AI-context gate and independent fixed-HEAD audit"
+  - "after v0.13 finalization, resolve both exact fresh C# packets and perform a post-check"

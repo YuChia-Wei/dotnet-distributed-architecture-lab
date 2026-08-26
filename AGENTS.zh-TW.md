@@ -25,7 +25,7 @@
 
 - 展示以 .NET 10、DDD、Clean Architecture、CQRS、PostgreSQL、WolverineFx 與 message-oriented integration 建立的分散式商務系統；
 - 維護 `src/` 下目前有效的 `Products`、`Orders` 與 `Inventory` bounded contexts；
-- 維護 `tools/` 下的架構 analyzer 與 validation tooling；
+- 維持 target-owned analyzer 與 runtime-validation projects 的退役狀態，除非後續 owner-approved workflow 明確重新引入；
 - 攜帶可重用的 AI Agent context、skills、sub-agent prompts 與 workflow rules，同時避免來源 repository 真相覆蓋本 repo 的產品真相；
 - 區分 `.ai/` 的 reusable context 與 source、deployment configuration、`.dev/` 所擁有的 target-repository truth。
 
@@ -65,9 +65,14 @@ Workflow artifact 規則：
 ### Git Commit Policy
 
 1. 遵循 `.dev/standards/GIT-COMMIT-POLICY.md`。
-2. 有 issue number 時使用 `<type>(#<issue-number>|<scope>): <summary>`。
-3. 沒有 issue number 時使用 `<type>(<scope>): <summary>`。
+2. 有 issue number 時使用 issue-bound `<type>(#<issue-number>): <summary>`（多個 issue 以逗號分隔）。
+3. 沒有 issue number 時使用 scope-bound `<type>(<scope>): <summary>`；前瞻 grammar 不接受字面上的 `|`。
 4. workflow-stage commits 需包含 `Why`、`What`、`Validation` 與 `Workflow` body sections。
+5. 驗證 repository history 或 workflow commit range 時，執行
+   `.dev/ai-context/tooling/validate-target-ai-context.py`；該 target-owned
+   overlay 會組合 byte-exact framework policy、本 repository 的前瞻 AI signature
+   與 subject grammar 採用邊界，以及精確歷史佐證。不可只把 package validator
+   視為完整的歷史 gate 而略過此層。
 
 ### AI Context Governance
 
@@ -121,12 +126,13 @@ Workflow artifact 規則：
 
 適用 code review 時：
 
-1. 閱讀 `.ai/assets/tech-stacks/dotnet-backend/references/CODE-REVIEW-INDEX.MD`。
-2. 閱讀 `.ai/assets/skills/code-reviewer/references/checklist-reference.md`。
-3. 辨識檔案類型，並閱讀 `.dev/standards/` 下對應 checklist。
-4. 建立 checklist comparison table。
-5. 將問題分類為 `CRITICAL`、`MUST FIX` 或 `SHOULD FIX`。
-6. 若目標 repo 適用測試，執行最窄且有意義的 test command。
+1. 載入 review guidance 前，先完成適用的 effective-rule preflight。
+2. 第一個載入 `.ai/assets/skills/code-reviewer/references/review-routing.yaml`。
+3. 依 explicit scope、type hierarchy 或 interface、path、general C# fallback 的順序選出所有 matching routes。
+4. 只載入這些 routes 選出的 canonical references 與適用 finding rule IDs。不要把 `CODE-REVIEW-INDEX.MD`、`CODE-REVIEW-CHECKLIST.md`、shared checklists 或 `checklist-reference.md` 當作第二套語意權威。
+5. Route 選定後才評估 role bindings，且僅在需要時載入 `role-execution.md`。Direct execution 為預設；delegation 必須具備 bounded eligibility 與 evidence。
+6. 建立 scoped checklist comparison table，並將問題分類為 `CRITICAL`、`MUST FIX` 或 `SHOULD FIX`。
+7. 若目標 repo 適用測試，執行最窄且有意義的 test command。
 
 ### Spec Compliance
 
@@ -183,7 +189,7 @@ Workflow artifact 規則：
 | `.ai/assets/` | Canonical reusable AI assets |
 | `.ai/assets/shared/` | Universal shared AI context |
 | `.ai/assets/tech-stacks/dotnet-backend/` | .NET backend-specific context |
-| `.ai/assets/tech-stacks/dotnet-backend/references/CODE-REVIEW-INDEX.MD` | .NET backend code review entry |
+| `.ai/assets/skills/code-reviewer/references/review-routing.yaml` | Canonical .NET backend code review routing contract |
 | `.ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD` | .NET backend building block reference |
 | `.ai/assets/skills/` | Canonical skill specs |
 | `.ai/assets/sub-agent-role-prompts/` | Canonical sub-agent role prompts |
@@ -222,7 +228,6 @@ Workflow artifact 規則：
 | `MQArchLab.slnx` | 包含 bounded-context 與 product test projects 的 solution |
 | `src/` | Products、Orders、Inventory、shared contracts、building blocks 與空的 Shared Kernel placeholder project |
 | `tests/` | Products 與 Orders 的 product/domain tests |
-| `tools/` | Roslyn architecture analyzers 與 runtime validation tooling |
 | `docker-compose/` | 本機產品、database、broker 與 observability topology |
 
 ## 語言規則

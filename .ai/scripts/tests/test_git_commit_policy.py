@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 import unittest
+from datetime import datetime
 from pathlib import Path
 from unittest import mock
 
@@ -38,7 +39,7 @@ Validation
 Workflow
 {WORKFLOW_ID} / TASK-001
 
-Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
+Co-Authored-By: OpenAI Codex (gpt-5.6-sol, high) <noreply@openai.com>
 """
 
 
@@ -46,6 +47,23 @@ class GitCommitPolicyTests(unittest.TestCase):
     def validate(self, message: str, workflow_id: str | None = WORKFLOW_ID) -> list[str]:
         errors: list[str] = []
         VALIDATOR.validate_message("abc123", message, POLICY, errors, workflow_id)
+        return errors
+
+    def validate_at(
+        self,
+        message: str,
+        committed_at: str,
+        workflow_id: str | None = WORKFLOW_ID,
+    ) -> list[str]:
+        errors: list[str] = []
+        VALIDATOR.validate_message(
+            "abc123",
+            message,
+            POLICY,
+            errors,
+            workflow_id,
+            committed_at=datetime.fromisoformat(committed_at),
+        )
         return errors
 
     def test_gwt_001_given_valid_workflow_commit_when_validated_then_passes(self) -> None:
@@ -73,7 +91,7 @@ class GitCommitPolicyTests(unittest.TestCase):
     def test_gwt_007_given_assessment_subject_without_matching_trailer_when_validated_then_fails(self) -> None:
         message = """docs(assessment): [ASM-20260715-001] add report
 
-Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
+Co-Authored-By: OpenAI Codex (gpt-5.6-sol, high) <noreply@openai.com>
 """
         errors = self.validate(message, workflow_id=None)
         self.assertTrue(any("lacks matching Assessment-Id trailer" in error for error in errors))
@@ -82,7 +100,7 @@ Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
         message = """docs(assessment): [ASM-20260715-001] add report
 
 Assessment-Id: ASM-20260715-001
-Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
+Co-Authored-By: OpenAI Codex (gpt-5.6-sol, high) <noreply@openai.com>
 """
         self.assertEqual([], self.validate(message, workflow_id=None))
 
@@ -90,7 +108,7 @@ Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
         message = """docs(assessment): [ASM-20260715-001] add report
 
 Assessment-Id: ASM-20260715-001
-Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
+Co-Authored-By: OpenAI Codex (gpt-5.6-sol, high) <noreply@openai.com>
 """
         self.assertEqual([], self.validate(message, workflow_id=WORKFLOW_ID))
 
@@ -109,6 +127,88 @@ Co-Authored-By: OpenAI Codex (GPT-5) <noreply@openai.com>
             "--reverse",
             "base..HEAD",
             root=VALIDATOR.ROOT,
+        )
+
+    def test_gwt_011_given_signature_without_reasoning_when_validated_then_fails(self) -> None:
+        message = workflow_message().replace(
+            "OpenAI Codex (gpt-5.6-sol, high)",
+            "OpenAI Codex (gpt-5.6-sol)",
+        )
+        errors = self.validate(message)
+        self.assertTrue(any("valid Co-Authored-By" in error for error in errors))
+
+    def test_gwt_012_given_marked_subagent_contributor_when_validated_then_passes(self) -> None:
+        message = workflow_message().replace(
+            "Co-Authored-By: OpenAI Codex (gpt-5.6-sol, high) <noreply@openai.com>",
+            "Co-Authored-By: OpenAI Codex (gpt-5.6-sol, high) <noreply@openai.com>\n"
+            "Co-Authored-By: OpenAI Codex Sub-Agent (gpt-5.6-terra, medium) <noreply@openai.com>",
+        )
+        self.assertEqual([], self.validate(message))
+
+    def test_gwt_013_given_unmarked_additional_contributor_when_validated_then_fails(self) -> None:
+        message = workflow_message().replace(
+            "Co-Authored-By: OpenAI Codex (gpt-5.6-sol, high) <noreply@openai.com>",
+            "Co-Authored-By: OpenAI Codex (gpt-5.6-sol, high) <noreply@openai.com>\n"
+            "Co-Authored-By: Claude Code (claude-sonnet-5, extended) <noreply@anthropic.com>",
+        )
+        errors = self.validate(message)
+        self.assertTrue(any("must mark the runtime with Sub-Agent" in error for error in errors))
+
+    def test_gwt_014_given_provider_reasoning_label_when_validated_then_preserves_original(self) -> None:
+        message = workflow_message().replace(
+            "OpenAI Codex (gpt-5.6-sol, high)",
+            "Claude Code (claude-sonnet-5, extended thinking)",
+        ).replace("noreply@openai.com", "noreply@anthropic.com")
+        self.assertEqual([], self.validate(message))
+
+    def test_gwt_015_given_pre_policy_signature_when_validated_then_legacy_shape_passes(self) -> None:
+        message = workflow_message().replace(
+            "OpenAI Codex (gpt-5.6-sol, high)",
+            "OpenAI Codex (GPT-5)",
+        )
+        errors: list[str] = []
+        VALIDATOR.validate_message(
+            "abc123",
+            message,
+            POLICY,
+            errors,
+            WORKFLOW_ID,
+            committed_at=datetime.fromisoformat("2026-07-27T09:00:00+08:00"),
+        )
+        self.assertEqual([], errors)
+
+    def test_gwt_016_given_current_issue_form_when_validated_then_passes(self) -> None:
+        self.assertEqual(
+            [],
+            self.validate_at(
+                workflow_message("docs(#176): clarify validation contract"),
+                "2026-08-10T00:40:00+08:00",
+            ),
+        )
+
+    def test_gwt_017_given_current_multiple_issue_form_when_validated_then_passes(self) -> None:
+        self.assertEqual(
+            [],
+            self.validate_at(
+                workflow_message("docs(#175,#176): reconcile validation boundaries"),
+                "2026-08-10T00:40:00+08:00",
+            ),
+        )
+
+    def test_gwt_018_given_literal_pipe_after_cutover_when_validated_then_fails(self) -> None:
+        errors = self.validate_at(
+            workflow_message("docs(#176|validation): reject literal pipe"),
+            "2026-08-10T00:40:00+08:00",
+        )
+        self.assertTrue(any("subject does not match" in error for error in errors))
+
+    def test_gwt_019_given_literal_pipe_before_cutover_when_validated_then_passes(self) -> None:
+        self.assertEqual(
+            [],
+            self.validate_at(
+                workflow_message("docs(#176|validation): retain historical title"),
+                "2026-08-10T00:39:59+08:00",
+            ),
         )
 
 

@@ -1,6 +1,8 @@
-# Standards Templates Index
+# Standards Templates Compatibility Entry
 
-| Path | Description |
-| --- | --- |
-| `application-properties-templates.md` | Conditional `appsettings.*.json` configuration patterns. |
-| `profile-isolated-configurations.md` | Profile-isolated configuration patterns. |
+The canonical .NET backend templates are under the profile:
+
+- [Application properties templates](../../../.ai/assets/tech-stacks/dotnet-backend/templates/application-properties-templates.md)
+- [Profile-isolated configuration templates](../../../.ai/assets/tech-stacks/dotnet-backend/templates/profile-isolated-configurations.md)
+
+This retained source-governance path is navigation compatibility only.

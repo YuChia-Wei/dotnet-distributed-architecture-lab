@@ -21,12 +21,14 @@ outputs:
   - "repo init verdict"
   - "repo inventory"
   - "evidence-based `.dev/project-config.yaml` or an explicit not-initialized decision"
+  - "tracked routine-validation defaults: local `manual` and CI `unconfigured`, preserved as target-owned policy"
   - "atomic `.dev/ai-context/provenance.yaml` and `customizations.yaml` initialization when credible source evidence is available, or an unresolved no-write result"
   - "complexity verdict"
   - "safe direct update targets"
   - "source packet for escalation"
   - "updated architecture-facing docs"
   - "derived `AGENTS.zh-TW.md` when translation is requested and a low-cost translator runtime is available"
+  - "one provider-neutral role_execution record for the considered context-translator binding, handed to the orchestrator without transferring initialization ownership"
 constraints:
   - "Keep framework-level collaboration rules unless the new repo clearly invalidates them"
   - "Do not bulk rewrite specs or operations docs unless explicitly requested"
@@ -35,6 +37,14 @@ constraints:
   - "Do not guess the copied framework version or commit; create target provenance only from credible release or import evidence."
   - "Never retain dual provenance authorities; follow the shared semantic customization lifecycle and write neither schema-2 authority when source evidence is incomplete."
   - "Finalize target-specific English `AGENTS.md` before delegating `AGENTS.zh-TW.md` to the low-cost context-translator role; do not use a pretranslated root template."
+  - "Generate validation.routine defaults unless target evidence selects stronger policy; never create or write `.dev/validation.local.conf`."
+role_bindings:
+  - role_path: ".ai/assets/sub-agent-role-prompts/context-translator/sub-agent.yaml"
+    role_asset_id: "context-translator"
+    expected_role_status: "active"
+    binding_kind: "conditional"
+    applicability: "A derived Traditional Chinese translation is requested after its English source is final and a caller-verified runtime can honor the role's low-cost model precondition."
+    load_obligation: "mandatory-when-applicable"
 workflow:
   - step: 1
     description: "Identify target repository mode: empty repo, existing repo, or copied-template repo"
@@ -45,20 +55,25 @@ workflow:
   - step: 4
     description: "Generate or update `.dev/project-config.yaml`; atomically initialize provenance and the customization ledger only from credible source facts; update architecture-facing docs from confirmed facts"
   - step: 5
-    description: "If needed, pass a compact source packet to a stronger model or sub-agent"
+    description: "If needed, evaluate the context-translator binding, load the exact role manifest and mandatory references, and prepare its bounded source packet"
   - step: 6
-    description: "After English root context is final, optionally delegate the derived Traditional Chinese translation to the low-cost context-translator and validate parity"
+    description: "After English root context is final, apply the translator role directly by default or delegate only when eligible; validate parity and hand the skill-owned role_execution record to the orchestrator"
 references:
   - ".ai/assets/skills/ai-context-init/references/scan-playbook.md"
   - ".ai/assets/skills/ai-context-init/references/migration-boundaries.md"
   - ".ai/assets/skills/ai-context-init/references/escalation-checklist.md"
   - ".ai/assets/skills/ai-context-init/references/delegation-rules.md"
+  - ".ai/assets/skills/ai-context-init/references/role-execution.md"
   - ".ai/assets/skills/ai-context-init/references/document-targets.md"
   - ".ai/assets/skills/ai-context-init/references/output-contract.md"
   - ".ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md"
   - ".ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml"
+  - ".ai/assets/skills/ai-context-governance/templates/effective-rule-state.schema.yaml"
+  - ".ai/assets/skills/ai-context-governance/templates/effective-rule-state.template.yaml"
+  - ".ai/assets/skills/ai-context-governance/templates/effective-rule-packet.schema.yaml"
   - ".ai/assets/skills/ai-context-init/templates/project-config.template.yaml"
   - ".ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml"
+  - ".ai/assets/skills/ai-context-init/templates/work-item-binding.schema.yaml"
   - ".ai/assets/skills/ai-context-init/templates/public-template-manifest.yaml"
   - ".ai/assets/sub-agent-role-prompts/context-translator/sub-agent.yaml"
   - ".ai/assets/skills/ai-context-upgrader/templates/provenance-template.yaml"

@@ -31,6 +31,11 @@ Use `.ai/assets/skills/ai-context-init/templates/project-config.template.yaml` a
 - Leave an absent selection slot unresolved so the applicable framework profile
   default can be evaluated separately; record an entry only from repository
   evidence or an explicit target decision.
+- Ask the target team to select `workManagement.workItemBinding.mode` and
+  `mergeGate` as `required`, `optional`, or `disabled` using
+  `templates/work-item-binding.schema.yaml`. Leave both values `null` until an
+  explicit target decision exists; never copy the source repository's provider
+  selection into a downstream target.
 - Do not copy credentials, connection strings, local ports, database names, queue names, or product identifiers from the source framework repo.
 - For an empty repository, either omit `.dev/project-config.yaml` or create the template shape with `generationStatus: not-initialized`; do not invent stack or product facts.
 - Record supporting paths under `evidence.files`.

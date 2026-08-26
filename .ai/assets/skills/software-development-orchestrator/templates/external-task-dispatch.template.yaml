@@ -1,0 +1,50 @@
+schema_version: "1.1"
+record_type: "external-task-dispatch"
+delegation_id: "<stable-delegation-id>"
+task_kind: "long-running-validation"
+source:
+  task_id_source: "runtime-injected" # explicit | runtime-injected
+  task_id: null # required only when task_id_source is explicit
+  final_integration_owner: "source-task"
+objective:
+  goal: "<one bounded outcome>"
+  non_goals:
+    - "repair failures"
+    - "mutate Issues, Projects, branches, merges, releases, or publication"
+subject:
+  repository_root: "<exact repository root>"
+  commit_sha: "<full immutable Git SHA>"
+  clean_worktree_required: true
+execution:
+  working_directory: "<exact working directory>"
+  argv: ["<executable>", "<arg-1>"]
+  timeout_seconds: 900
+permissions:
+  read_scope: ["repository"]
+  write_scope: ["ignored-validation-artifacts"]
+  repair_allowed: false
+  external_mutations: []
+  secret_values: "prohibited"
+completion_delivery:
+  primary: "source-task-callback" # source-task-callback | parent-event-wait
+  fallback: "parent-event-wait" # parent-event-wait | single-terminal-readback | none
+  destination: "source-task"
+  progress_updates: "terminal-only"
+  max_terminal_reports: 1
+  report_schema: "same-contract#completion"
+  pre_send_validation:
+    required: true
+    validator_argv:
+      - "python"
+      - ".ai/assets/skills/software-development-orchestrator/scripts/validate-external-task-delegation.py"
+      - "<ignored-completion-record-path>"
+      - "--dispatch"
+      - "<ignored-dispatch-record-path>"
+    dispatch_ref: "<ignored-dispatch-record-path>"
+    completion_ref: "<ignored-completion-record-path>"
+    failure_action: "do-not-deliver-terminal-report"
+    payload_binding: "exact-validated-completion-record"
+stop_conditions:
+  - "preflight does not match the pinned subject"
+  - "command reaches a terminal outcome"
+  - "execution timeout or interruption occurs"

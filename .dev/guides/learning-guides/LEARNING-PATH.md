@@ -6,7 +6,7 @@
 > examples. WolverineFx, EF Core, Event Sourcing, BDDfy, package choices, and
 > sample source layouts apply only when the target repository adopts them.
 > Begin target-repository onboarding with root `AGENTS.md`, `README.md`, and
-> `repo-structure-sync`; prefer generated target context over this example.
+> `ai-context-init`; prefer generated target context over this example.
 
 ## Core Concept Levels
 
@@ -40,7 +40,7 @@
    - Handlers coordinate Domain and Infrastructure (WolverineFx)
 
 3. Testing strategy
-   - Use Case tests: must follow ezSpec intent using xUnit + BDDfy (Gherkin-style naming)
+   - Use Case tests: preserve Given-When-Then behavior mapping; BDDfy is the current default, while LightBDD is an owner-named candidate rather than a selected provider
    - Domain tests: xUnit is allowed
    - Rule: do not directly call Aggregate methods in tests
 
@@ -65,10 +65,10 @@
 5. `.ai/assets/skills/spec-compliance-validator/references/spec-compliance-rules.md` - spec compliance rules
 
 ### Phase 2: Learn by examples
-1. `.dev/standards/examples/outbox/README.md` - outbox flow
-2. `.dev/standards/examples/reference/ezspec-test-template.md` - BDD test style
-3. `.dev/standards/coding-standards/test-standards.md` - mocking pattern
-4. `.dev/standards/examples/dto/README.md` - DTO layout
+1. `.ai/assets/tech-stacks/dotnet-backend/examples/outbox/README.md` - outbox flow
+2. `.ai/assets/tech-stacks/dotnet-backend/examples/reference/bdd-gwt-test-template.md` - BDD/GWT test style
+3. `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md` - mocking pattern
+4. `.ai/assets/tech-stacks/dotnet-backend/examples/dto/README.md` - DTO layout
 
 ### Phase 3: Avoid common mistakes
 1. `.ai/assets/tech-stacks/dotnet-backend/references/COMMON-PITFALLS.MD` - cross-cutting pitfalls
@@ -118,7 +118,7 @@ public readonly record struct ProductId(string Value);
 ### Use Case and Optional Dispatch Handler
 
 Read
-[`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../../standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
+[`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../../../.ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
 before applying a runtime-specific Handler convention. The Use Case owns
 application orchestration; a Handler exists only for a real dispatch/message
 entry and maps one delivery input to one Use Case invocation.
@@ -174,7 +174,7 @@ public sealed class CreateProductUseCaseTests
 ## Quick Start Template for LLM Tasks
 
 When you need to implement a new feature:
-1. Find the closest example in `.dev/standards/examples/`
+1. Find the closest example in `.ai/assets/tech-stacks/dotnet-backend/examples/`
 2. Follow naming rules:
    - Use case: `<Operation><Aggregate>UseCase`
    - Use Case: `I<Operation><Aggregate>UseCase` and
@@ -190,7 +190,7 @@ When you need to implement a new feature:
    - Test: xUnit + BDDfy (Gherkin-style naming), no BaseTestClass
 
 ## Common Pitfalls
-1. Do not auto-generate ezDDD framework classes
+1. Do not invent framework base classes or package APIs that the target has not selected
 2. Do not use EF Core lazy-loading proxies
 3. Do not inject Wolverine `IMessageBus` into use cases
 4. Do not directly operate on other Aggregates
@@ -209,7 +209,7 @@ Please follow these references to learn the coding style:
 4. Prompts: .ai/assets/
 
 Important rules:
-- Preserve ezDDD/ezSpec concepts even if .NET tooling differs
+- Preserve neutral DDD, Specification by Example, BDD/GWT, and Design by Contract semantics while honoring target-selected .NET providers
 - Aggregate state changes only via Apply/When
 - Use case tests must be xUnit + BDDfy (no BaseTestClass)
 - No EF Core lazy loading

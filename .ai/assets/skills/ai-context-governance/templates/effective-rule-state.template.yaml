@@ -1,0 +1,61 @@
+template_metadata:
+  template_id: "ai-context-effective-rule-state"
+  template_version: "1.1.2"
+  status: "template-only-incomplete-not-effective"
+  created_at: "2026-08-05T03:06:55+08:00"
+  updated_at: "2026-08-05T03:46:07+08:00"
+
+# Copy only into a downstream target as .dev/ai-context/effective-rules.yaml.
+# This source repository intentionally ships no live target-effective instance.
+# Do not execute an action from this template or from a partially completed state.
+schema_version: "1.0"
+framework:
+  version: "v0.0.0"
+  commit: "<40-character-lowercase-git-sha>"
+  # Strict single-segment lowercase slug:
+  # ^[a-z0-9]+(?:[._-][a-z0-9]+)*$; '/', '\', '..' traversal, and leading,
+  # trailing, or consecutive separators are forbidden to avoid Windows
+  # trailing-dot and segment ambiguity.
+  selected_technology_profile: "dotnet-backend"
+catalogs:
+  - catalog_id: "selected-profile"
+    path: ".ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml"
+    digest: "<verified-selected-profile-catalog_digest.value>"
+  - catalog_id: "shared"
+    path: ".ai/assets/shared/governance/engineering-rule-catalog.yaml"
+    digest: "<verified-shared-catalog_digest.value>"
+target_authorities:
+  provenance:
+    path: ".dev/ai-context/provenance.yaml"
+    digest: "<sha256-current-provenance-bytes>"
+  customizations:
+    path: ".dev/ai-context/customizations.yaml"
+    digest: "<sha256-current-customizations-bytes>"
+
+# Hash compact canonical JSON (UTF-8, Unicode preserved, object keys sorted by
+# Unicode code point, arrays retained, exactly one terminal LF) with
+# target_state_digest, generated_at, and every routing[*].packet.digest omitted.
+# Only strings, booleans, null, integers, maps, and lists are supported; floats
+# are rejected. Packet digests are derived metadata so a packet can safely carry
+# this state digest without creating a cryptographic fixed-point requirement.
+# Rule and route arrays are sorted by their IDs before digesting.
+target_state_digest: "<sha256-completed-effective-state>"
+generated_at: "<ISO-8601-with-offset>"
+rule_dispositions: []
+routing: []
+
+# A completed record is required before routine action work. For each adopted
+# ID, record one explicit disposition with target-owned evidence. A baseline
+# entry requires baseline_acceptance.explicit: true and verified evidence;
+# semantic deltas reference an approved/finalized active retain-or-merge CUST-*
+# for the same rule and store the complete final effective normative statement
+# plus digest; enforcement tuning and tooling waivers name the affected
+# constraint and reconsideration trigger; not-applicable records the false
+# predicate and its verification.
+# Every route has an exact capability/execution_mode/technology_profile/file_type
+# selector, a non-empty exact required_rule_ids list, a possibly-empty
+# reported_not_applicable_rule_ids list equal to the exact not-applicable subset,
+# and a packet path/digest.
+# Before reading this state, provenance, customizations, either catalog, or a
+# packet, require a regular non-symlink file leaf and regular non-symlink
+# directories for every existing ancestor; otherwise fail closed.

@@ -17,12 +17,17 @@ This is a thin current-runtime wrapper.
   - `.ai/assets/skills/ai-context-init/references/migration-boundaries.md`
   - `.ai/assets/skills/ai-context-init/references/escalation-checklist.md`
   - `.ai/assets/skills/ai-context-init/references/delegation-rules.md`
+  - `.ai/assets/skills/ai-context-init/references/role-execution.md`
   - `.ai/assets/skills/ai-context-init/references/document-targets.md`
   - `.ai/assets/skills/ai-context-init/references/output-contract.md`
   - `.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`
   - `.ai/assets/skills/ai-context-governance/templates/customizations.schema.yaml`
+  - `.ai/assets/skills/ai-context-governance/templates/effective-rule-state.schema.yaml`
+  - `.ai/assets/skills/ai-context-governance/templates/effective-rule-state.template.yaml`
+  - `.ai/assets/skills/ai-context-governance/templates/effective-rule-packet.schema.yaml`
   - `.ai/assets/skills/ai-context-init/templates/project-config.template.yaml`
   - `.ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml`
+  - `.ai/assets/skills/ai-context-init/templates/work-item-binding.schema.yaml`
   - `.ai/assets/skills/ai-context-init/templates/public-template-manifest.yaml`
   - `.ai/assets/sub-agent-role-prompts/context-translator/sub-agent.yaml`
   - `.ai/assets/skills/ai-context-upgrader/templates/provenance-template.yaml`

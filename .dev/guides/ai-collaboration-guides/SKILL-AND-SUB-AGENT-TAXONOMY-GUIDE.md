@@ -13,9 +13,11 @@
 - `skill`
   - top-level capability
 - `sub-agent role`
-  - delegated worker role
+  - owning skill 所有的 bounded worker contract；可由 owning skill direct inline，或在有 genuine execution evidence 時 delegated
 - `shared / supporting material`
   - 給 skill / sub-agent 使用，但不應誤當成 runtime entry
+
+taxonomy 只分類資產，不等於某次執行的 disposition。
 
 ## 1. Skill
 
@@ -43,7 +45,9 @@ canonical source：
 
 ## 2. Sub-Agent Role
 
-`sub-agent role` 是 workflow 內委派給 bounded worker 的角色定義。
+`sub-agent role` 是 owning skill 所有的 bounded worker contract。它可由
+owning skill 直接 inline 套用，或在條件成立且保有 genuine execution
+evidence 時委派給 worker；它不是預設必定 delegated 的 runtime 宣告。
 
 特徵：
 
@@ -51,6 +55,11 @@ canonical source：
 - 任務範圍較窄、邊界較穩定
 - 輸入輸出清楚
 - 服務於生成、測試、review、integration、infrastructure 等局部工作
+
+適用的 role 必須明確記錄 `direct`、`delegated`、`unavailable` 或
+`not-applicable`。只有 genuine child invocation 才能記錄為 `delegated`；
+完整的 disposition、execution evidence、retry 與 fallback 規則見
+[Provider-Neutral Role Execution Contract](../../../.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md)。
 
 例：
 
@@ -95,7 +104,7 @@ canonical source：
 - `ai-context-governance`
   - 整理 `.ai/`、`.dev/`、`.agents/`、`.claude/` 的 AI context 邊界、語言政策、skill routing、wrapper sync 與 context migration
 - `context-translator`
-  - 英文 canonical context 定稿後，執行有明確 source/output 的 bounded 繁中衍生翻譯；它是 delegated role，不是 top-level skill
+  - 英文 canonical context 定稿後，處理有明確 source/output 的 bounded 繁中衍生翻譯 role；可 inline 或有證據 delegated，不是 top-level skill
 - 不要把純 AI 文件整理、prompt 邊界整理、README 語言策略、或 wrapper/index sync 交給 `bdd-gwt-test-designer`
 - `bdd-gwt-test-designer` 只在主要工作是測試意圖、Given-When-Then scenario、assertion plan 時使用
 
@@ -104,7 +113,7 @@ canonical source：
 - `code-reviewer`
   - top-level 正式 review
 - `code-review-sub-agent`
-  - delegated review worker
+  - bounded review role；可 inline 或有證據 delegated
 
 ## 不建議的錯誤分類
 
@@ -126,7 +135,7 @@ shared rules 沒有獨立輸入輸出 contract，不應假裝成 worker role。
 
 1. 這是人或 main agent 直接啟動的能力嗎？
    - 是：優先視為 skill
-2. 這是 workflow 中委派出去的 bounded worker 嗎？
+2. 這是 owning skill 可直接 inline 或委派的 bounded worker contract 嗎？
    - 是：優先視為 sub-agent role
 3. 這只是支援上面兩者的材料嗎？
    - 是：放 shared / supporting material
@@ -135,8 +144,9 @@ shared rules 沒有獨立輸入輸出 contract，不應假裝成 worker role。
 
 - taxonomy 與 asset 放置策略：
   - `AI-ASSET-LOCATION-STRATEGY.md`
-- delegated worker 與 implementer skill 的互動：
-  - `.ai/SUB-AGENT-SYSTEM.MD`
+- role execution 與 implementer skill 的互動：
+  - [Provider-Neutral Role Execution Contract](../../../.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md)
+  - `.ai/SUB-AGENT-SYSTEM.MD`（derived binding / routing view）
   - `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`
 - sub-agent role manifests 的 `human_guide` 應指向本文件，作為 human-facing taxonomy 參考。
 - 模式選擇理由：

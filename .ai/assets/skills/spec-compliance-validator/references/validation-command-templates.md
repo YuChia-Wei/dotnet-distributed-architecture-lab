@@ -7,11 +7,14 @@ Standardize how to run validation checks and how to report results for review an
 
 Commands are templates; adapt paths to the active aggregate/use case.
 
-Prefer dotnet-native validation when available. Shell commands under `.ai/scripts` are transitional helpers for this repository and should not be treated as final C# semantic validation once analyzer, architecture test, or dotnet tool replacements exist.
+Prefer target-owned .NET validation when the target has selected an SDK and
+executable projects. The framework source gate itself is SDK-free. Shell
+commands under `.ai/scripts` are orchestration helpers and do not establish C#
+semantic compliance without target execution evidence.
 
 ### 1) Spec Compliance Gate (Mandatory)
 
-Preferred target:
+Preferred target-owned commands when applicable:
 
 ```
 dotnet build
@@ -33,20 +36,13 @@ Target repository route:
 dotnet build <solution-or-project>
 ```
 
-Wire the source-included `DotnetBackendAnalyzers` project into the target build as
-described in `tools/DotnetBackendAnalyzers/README.md`. Repository contract
-compliance is enforced by `DBA1001` during `dotnet build`; the former grep-based
-repository script has been removed.
-
-Framework contributor verification:
-
-```
-dotnet test tools/DotnetBackendAnalyzers.Tests/DotnetBackendAnalyzers.Tests.csproj --filter FullyQualifiedName~RepositoryQueryMethodAnalyzerTests
-```
-
-The focused test command verifies the analyzer implementation in this framework.
-It does not replace running `dotnet build` in the target repository with the
-analyzer wired into the relevant projects.
+First record an authorized target-owned analyzer selection. The target may then
+create and wire its own project using the
+`.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/`
+recipe. `DBA1001` is a preserved enforcement label, not a supplied analyzer.
+Only target implementation tests plus a subsequent target `dotnet build` can
+establish executable evidence. The framework does not copy production source,
+choose package versions, or change target configuration.
 
 ### 3) Targeted Test Runs (xUnit)
 ```

@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.2"
 allowed_types:
   - docs
   - workflow
@@ -8,7 +8,13 @@ allowed_types:
   - test
   - chore
   - merge
-subject_pattern: '^(docs|workflow|feat|fix|refactor|test|chore|merge)\((?:#[0-9]+(?:,#[0-9]+)*\|)?[a-z0-9][a-z0-9-]*\): .+$'
+# Use exactly one title discriminator: one-or-more issue references or one
+# boundary scope. A literal pipe was historical documentation meta-notation for
+# "or"; it is not part of the prospective commit-title grammar.
+subject_pattern: '^(docs|workflow|feat|fix|refactor|test|chore|merge)\((?:#[0-9]+(?:,#[0-9]+)*|[a-z0-9][a-z0-9-]*)\): .+$'
+subject_pattern_effective_at: '2026-08-10T00:40:00+08:00'
+legacy_subject_pattern: '^(docs|workflow|feat|fix|refactor|test|chore|merge)\((?:#[0-9]+(?:,#[0-9]+)*\|)?[a-z0-9][a-z0-9-]*\): .+$'
+legacy_subject_pattern_status: 'deprecated-compatibility-only-before-subject_pattern_effective_at'
 workflow:
   required_sections:
     - Why
@@ -21,5 +27,9 @@ assessment:
   trailer: Assessment-Id
 ai_signature:
   trailer: Co-Authored-By
-  value_pattern: '^.+ <noreply@[^ >]+>$'
+  effective_at: '2026-07-27T09:52:09+08:00'
+  value_pattern: '^(?P<runtime>.+) \((?P<model>[^,()]+), (?P<reasoning_effort>[^()]+)\) <noreply@[^ >]+>$'
+  legacy_value_pattern: '^.+ <noreply@[^ >]+>$'
+  additional_trailer_runtime_suffix: ' Sub-Agent'
+  require_all_trailers_match: true
   final_non_empty_line: true

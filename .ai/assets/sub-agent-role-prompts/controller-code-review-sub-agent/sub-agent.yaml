@@ -25,9 +25,10 @@ constraints:
   - "Controllers must remain thin"
   - "Business logic must not live in controllers"
   - "HTTP status and input validation semantics must be explicit"
+  - "Do not load test standards unless controller tests or test-quality findings are in scope"
 workflow:
   - step: 1
-    description: "Load controller rules, DTO boundary rules, and test expectations"
+    description: "Select the controller route and any explicit test route from review-routing.yaml"
   - step: 2
     description: "Review controller thinness, DTO mapping, and HTTP semantics"
   - step: 3
@@ -35,13 +36,14 @@ workflow:
 references:
   - ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/references/review-playbook.md"
   - ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/references/review-prompt.md"
-  - ".ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md"
-  - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
-  - ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"
+  - ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
   - ".ai/assets/skills/code-reviewer/skill.yaml"
+routing:
+  contract_path: ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
+  reference_loading: "selected-route-only"
+  supported_route_ids: ["controller", "test"]
 examples:
   - ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/references/review-playbook.md"
   - ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/references/review-prompt.md"
 human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
 status: "active"
-

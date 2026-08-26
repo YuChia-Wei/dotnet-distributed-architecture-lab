@@ -8,16 +8,22 @@ Use `.ai/assets/skills/` as the source of truth for top-level skills. Runtime wr
 
 ## Usage
 
-Each skill should keep its canonical entry in `skill.yaml`, with optional `references/`, `prompts/`, and `examples/` when needed.
+Each skill should keep its canonical entry in `skill.yaml`, with optional
+`references/`, `prompts/`, `examples/`, and `scripts/` when needed. Put an
+executable or contract test under `scripts/` only when exactly one canonical
+skill owns its behavior. Keep multi-skill, provider, release, package, workflow,
+and source-repository-wide automation under `.ai/scripts/`; retain published
+legacy command paths only as explicit thin compatibility entrypoints.
 
 The canonical skill registry currently includes:
 
 - `ai-context-governance`
+- `ai-context-release-closeout` (source-repository-only historical/exception recovery; never packaged)
 - `ai-context-auditor`
 - `ai-context-init`
 - `ai-context-upgrader`
 - `bdd-gwt-test-designer`
-- `code-reviewer`
+- `code-reviewer` (`dotnet-backend` selected; unavailable in the core-only view)
 - `ddd-ca-hex-architect`
 - `local-change-implementer`
 - `problem-frame-author`

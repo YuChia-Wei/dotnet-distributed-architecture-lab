@@ -8,22 +8,23 @@ public abstract class EsAggregateRoot<TId>
     : AggregateRoot<TId> where TId : notnull
 {
     /// <summary>
-    /// 事件重播用建構子
-    /// </summary>
-    protected EsAggregateRoot(IEnumerable<IDomainEvent> events)
-    {
-        foreach (var @event in events)
-        {
-            When(@event);
-            Version++;
-        }
-    }
-
-    /// <summary>
     /// ORM / 框架用無參數建構子
     /// </summary>
     protected EsAggregateRoot()
     {
+    }
+
+    /// <summary>
+    /// 依序重播已提交的領域事件，不建立待提交事件
+    /// </summary>
+    /// <param name="history">依提交順序排列的領域事件</param>
+    protected void Replay(IEnumerable<IDomainEvent> history)
+    {
+        foreach (var @event in history)
+        {
+            When(@event);
+            Version++;
+        }
     }
 
     /// <summary>

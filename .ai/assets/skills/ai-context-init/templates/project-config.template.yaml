@@ -23,6 +23,23 @@
     "libraryProjects": []
   },
   "runtimeHosts": [],
+  "workManagement": {
+    "provider": null,
+    "workItemBinding": {
+      "mode": null,
+      "purposes": [
+        "traceability",
+        "work-authorization"
+      ],
+      "mergeGate": null
+    }
+  },
+  "validation": {
+    "routine": {
+      "local": { "mode": "manual" },
+      "ci": { "mode": "unconfigured" }
+    }
+  },
   "architecture": {
     "styles": [],
     "boundedContexts": [],

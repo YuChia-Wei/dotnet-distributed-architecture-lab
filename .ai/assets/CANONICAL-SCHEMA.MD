@@ -1,9 +1,9 @@
 # Canonical Asset Schema
 
-This document defines canonical asset metadata schema version `1.0` and the
-`sub-agent-role-prompt` version `1.1` extension. Canonical manifests use
-`asset_id` as their identifier field; the legacy `id` field is not part of this
-schema.
+This document defines canonical asset metadata schema version `1.0`, its
+owning-skill role-binding contract, and the `sub-agent-role-prompt` version
+`1.1` extension. Canonical manifests use `asset_id` as their identifier field;
+the legacy `id` field is not part of this schema.
 
 The active manifest families are currently `skill-spec` (`skill.yaml`) and
 `sub-agent-role-prompt` (`sub-agent.yaml`). `command-spec` and `prompt-package`
@@ -60,7 +60,7 @@ A `skill-spec` requires all common fields plus:
 | `triggers` | `string[]` | At least one user intent or trigger phrase |
 | `workflow` | `workflow-step[]` | Ordered execution contract |
 Optional skill fields include `handoff_rules`, `runtime_notes`,
-`capability_slots`, `human_guide`, `workflow_artifacts`,
+`capability_slots`, `role_bindings`, `human_guide`, `workflow_artifacts`,
 `workflow_templates`, and `report_template`. When present, `handoff_rules` and
 `runtime_notes` are `string[]`. Paths and wrapper metadata must not make a
 wrapper the canonical owner of the skill.
@@ -78,6 +78,44 @@ object with a required `wrapper_path` string. A wrapper path must:
 be added beside `wrapper_path`, but they do not replace it or weaken target
 parity.
 
+### Owning-skill role bindings
+
+`role_bindings` is the canonical mapping and applicability authority from an
+owning `skill-spec` to active bounded role prompts. An active skill that owns
+one or more active roles must declare them here. Every active
+`sub-agent-role-prompt` must be covered by at least one binding in an active
+owning skill. A role manifest owns its bounded worker-role contract only; it
+does not own runtime disposition, reverse-declare, select, or otherwise become
+the authority for its owning skill.
+
+Each `role_bindings` entry is an object with these required fields:
+
+| Field | Type | Rule |
+| --- | --- | --- |
+| `role_path` | `string` | Exact repository-relative path to the role's `sub-agent.yaml`, using `/` separators with no placeholder, glob, or repository escape syntax |
+| `role_asset_id` | `string` | Exactly matches the target role manifest's `asset_id` |
+| `expected_role_status` | `enum` | `active`; the target role manifest must currently have `status: active` |
+| `binding_kind` | `enum` | `primary` or `conditional` |
+| `applicability` | `string` | A non-empty declarative condition that states when the binding applies; it is not a runtime disposition and is not claimed to be fully machine-evaluable |
+| `load_obligation` | `enum` | `mandatory-when-applicable` |
+
+When a binding's applicability matches, the owning skill must read the exact
+role manifest and its mandatory references before using that role, then record
+the applicable runtime outcome as `direct`, `delegated`, or `unavailable` in
+the separately owned execution record defined by
+`.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`. The owning skill produces that
+record and the orchestrator aggregates it without taking domain ownership. A
+nonmatching applicability condition is recorded only at runtime as
+`not-applicable`; it must not be encoded as a binding kind, status expectation,
+or load obligation.
+
+`primary` identifies a role that is the selected primary behavior for the
+owning skill's declared mode or capability. `conditional` identifies an
+available role whose declared condition can supplement that primary behavior
+without replacing it. A binding never creates an implicit runtime-native
+adapter, and no adapter is required merely because a role is statically
+reachable.
+
 ## `sub-agent-role-prompt`
 
 A `sub-agent-role-prompt` requires all common fields plus:
@@ -85,8 +123,8 @@ A `sub-agent-role-prompt` requires all common fields plus:
 | Field | Type | Allowed values or rule |
 | --- | --- | --- |
 | `role_kind` | `string` | Non-empty role taxonomy identifier |
-| `triggers` | `string[]` | At least one delegation intent |
-| `workflow` | `workflow-step[]` | Ordered delegated-worker contract |
+| `triggers` | `string[]` | At least one role intent |
+| `workflow` | `workflow-step[]` | Ordered bounded-worker contract |
 | `adapter_metadata` | `object` | Keys exactly match `wrapper_targets`; empty when the role remains dynamically loaded |
 
 `handoff_rules` is an optional `string[]` of conditions returned to the
@@ -97,10 +135,12 @@ enum only after that taxonomy has its own migration decision.
 
 Version `1.1` makes dynamic canonical loading the default integration mode. An
 empty `wrapper_targets` sequence and empty `adapter_metadata` mapping declare
-that the orchestrating agent or owning skill reads the canonical role and
-delegates through a generic worker. A role receives runtime-native integration
-only when a concrete runtime-specific model, tool, permission, or invocation
-need justifies promotion.
+that the owning skill loads the canonical role. Direct inline application is
+the default; eligible genuine worker delegation is conditional under the shared
+execution contract. Empty wrapper configuration must not be used to claim a
+delegated invocation. A role receives runtime-native integration only when a
+concrete runtime-specific model, tool, permission, or invocation need justifies
+promotion.
 
 For a promoted role, each `adapter_metadata` value is an object with:
 
@@ -115,9 +155,11 @@ root, use that runtime's supported filename format, cite the canonical
 may select runtime-specific model, tool, permission, or invocation behavior,
 but it remains thin and does not become the normative role owner.
 
-The role prompt is bounded delegated behavior, not an independently routed
-user-facing skill. The orchestrating agent remains responsible for integration,
-validation, and final reporting.
+The role prompt is a bounded worker-role contract, not an independently routed
+user-facing skill. It may execute direct or delegated under
+`.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`. The owning skill retains domain
+responsibility, and the named final integration owner decides integration;
+orchestration may aggregate records without replacing either responsibility.
 
 ## `command-spec`
 
@@ -155,3 +197,28 @@ claim conformance to `1.0`.
 exact target-to-path contract. A version `1.0` sub-agent manifest must be
 migrated by recording empty adapter metadata for dynamic loading or exact
 metadata for every promoted runtime target.
+
+## Effective Rule Consumption
+
+`effective_rule_consumption` is a top-level sibling section for canonical
+action-skill specifications. It records how a routine action consumes the
+target-effective rule packet without becoming a second rule owner or defining
+the task-selected `execution_mode` vocabulary.
+
+Each section requires this shape:
+
+| Field | Type | Rule |
+| --- | --- | --- |
+| `applies_when` | `string[]` | Describes the skill-owned action that needs an effective rule packet. |
+| `excludes` | `string[]` | Describes adjacent work outside that action. |
+| `resolver` | `string` | Exactly `.ai/scripts/resolve-effective-rule-packet.py`. |
+| `selectors` | `string[]` | Exactly `capability`, `execution_mode`, `technology_profile`, and `file_type`, treated as opaque task-selected inputs. |
+| `unresolved_outcome` | `string` | Exactly `stop-applicable-action`. |
+| `consumption_order` | `string` | Requires a freshness-verified task-scoped packet before profile references needed for the action. |
+| `evidence.required` | `string[]` | Includes `resolver_outcome`, `loaded_rule_ids`, `baseline.framework_version`, `target_state.digest`, and the four request paths `request.capability`, `request.execution_mode`, `request.technology_profile`, and `request.file_type`. |
+| `semantic_consistency` | `object` | Uses `rule_id`, exact UTF-8 `rules[].normative_statement` bytes, and `rules[].normative_statement_digest`; the default mismatch outcome is a warning and any stricter outcome is target-owned. |
+| `prohibitions` | `string[]` | Prohibits broad target or framework document scans, framework-default fallback, alternate-route selection, and analyzer-output comparison as rule semantics; analyzer severity and warnings-as-errors remain separate target-owned policy. |
+
+The same `rule_id` must resolve to byte-equivalent effective semantics across
+consumers. Consumers record resolver and packet evidence; they do not compare
+analyzer output or derive rule semantics from a broad document scan.

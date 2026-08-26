@@ -1,0 +1,92 @@
+schema_version: "1.0"
+mapping_id: "dotnet-backend-diagnostic-reference-mapping"
+evidence_tier: "reference-only"
+binding_status: "implementation-not-supplied"
+semantic_owner: "canonical standards and engineering-rule-catalog.yaml"
+compatibility_claim: "none; target implementation and validation required"
+diagnostics:
+  - diagnostic_id: "DBA1001"
+    reference_severity: "error"
+    summary: "Enforce aggregate/query repository boundaries, compatibility inheritance, Aggregate Root constraints, the portable two-method aggregate contract, and no public generic writable CRUD port."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/repository-standards.md"]
+  - diagnostic_id: "DBA1002"
+    reference_severity: "error"
+    summary: "Use Cases and Handlers do not inject IServiceProvider."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/usecase-standards.md"]
+  - diagnostic_id: "DBA1003"
+    reference_severity: "warning"
+    summary: "Aggregates and Entities do not reference Infrastructure types such as DbContext."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/aggregate-standards.md"]
+  - diagnostic_id: "DBA1004"
+    reference_severity: "warning"
+    summary: "Concrete controller classes declare ApiControllerAttribute when the controller profile is selected."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/controller-standards.md"]
+  - diagnostic_id: "DBA1005"
+    reference_severity: "error"
+    summary: "Controllers do not reference DbContext or call SaveChanges."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/controller-standards.md"]
+  - diagnostic_id: "DBA1006"
+    reference_severity: "error"
+    summary: "Controllers do not directly construct Handler or Use Case types."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/controller-standards.md"]
+  - diagnostic_id: "DBA1007"
+    reference_severity: "warning"
+    summary: "Object mappers follow the selected static-only mapper policy."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/mapper-standards.md"]
+  - diagnostic_id: "DBA1008"
+    reference_severity: "warning"
+    summary: "Object mappers do not depend on repositories, Use Cases, or Handlers."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/mapper-standards.md"]
+  - diagnostic_id: "DBA1009"
+    reference_severity: "warning"
+    summary: "Event-sourced Aggregate product state mutates only inside deterministic When transitions."
+    canonical_rule_ids: ["AGGREGATE-ES-001"]
+    semantic_sources: ["../../standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md", "../../standards/coding-standards/aggregate-standards.md"]
+  - diagnostic_id: "DBA1010"
+    reference_severity: "error"
+    summary: "Use Cases do not use service location or attribute-based property injection."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/usecase-standards.md"]
+  - diagnostic_id: "DBA1011"
+    reference_severity: "error"
+    summary: "Handlers do not mix Command and Query marker responsibilities."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/usecase-standards.md"]
+  - diagnostic_id: "DBA1012"
+    reference_severity: "error"
+    summary: "Use Cases do not directly construct repositories."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/usecase-standards.md"]
+  - diagnostic_id: "DBA1013"
+    reference_severity: "warning"
+    summary: "Projection services do not call EF persistence write operations."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/projection-standards.md"]
+  - diagnostic_id: "DBA1014"
+    reference_severity: "error"
+    summary: "Controllers do not inject concrete Handlers, buses, dispatchers, write repositories, or Domain services; a pure-query exception requires target evidence."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/controller-standards.md"]
+  - diagnostic_id: "DBA1015"
+    reference_severity: "error"
+    summary: "Use Case contracts use ExecuteAsync with a required CancellationToken and transport-neutral input, and do not also expose Handle or HandleAsync."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/usecase-standards.md"]
+  - diagnostic_id: "DBA1016"
+    reference_severity: "error"
+    summary: "Use Cases do not inject IMessageBus, a mediator or dispatcher, or another Use Case."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/usecase-standards.md"]
+  - diagnostic_id: "DBA1017"
+    reference_severity: "error"
+    summary: "CommandHandler and QueryHandler adapters each delegate to exactly one Use Case and do not depend on repositories or Domain services."
+    canonical_rule_ids: []
+    semantic_sources: ["../../standards/coding-standards/usecase-standards.md"]

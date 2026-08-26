@@ -1,0 +1,66 @@
+schema_version: "1.0"
+finding_id: "AICU-V013-AGGREGATE-CONSTRUCTION-001"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+rule_id: "AGGREGATE-ES-001"
+recorded_at: "2026-08-13T12:45:06+08:00"
+status: "resolved-pending-independent-verification"
+classification: "pre-existing-target-compliance-debt"
+finding: >-
+  EsAggregateRoot(IEnumerable<IDomainEvent>) invoked virtual When from the base
+  constructor, and Order delegated rehydration through base(events), contrary
+  to the baseline construction invariant already adopted in v0.12 and retained
+  by v0.13.
+owner_decision: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/owner-decision-product-fix.yaml"
+packet_consumption:
+  checkpoint: "d3c6a032adbb690e1ecbb46db0212a319c3a93d4"
+  framework_version: "v0.12.0"
+  framework_commit: "a4fd14f0f08ad53859df1c860db0eb9643cdb2de"
+  target_state_digest: "8c85750c90ea8b268158015768b8d949421aa636f91d96e3ce98c10cc5eb128b"
+  loaded_rule_ids:
+    - "AGGREGATE-ES-001"
+    - "AICTX-EVIDENCE-001"
+    - "ARCH-UOW-001"
+    - "ASSESSMENT-ARTIFACT-001"
+    - "CONTRACT-SEMANTICS-001"
+    - "DELETE-PURGE-001"
+    - "DELETE-SOFT-001"
+    - "MAP-EVENTS-001"
+    - "PROJECT-GRAMMAR-001"
+    - "TECH-SELECT-001"
+    - "TEST-BDDFY-001"
+    - "TEST-GWT-001"
+    - "TEST-MOCK-001"
+  production:
+    resolver_outcome: "passed"
+    route_id: "ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C"
+    packet_id: "PACKET-3B5811DD44B2A9D3646FFA59903F908B151FA43961391E728E2A514F8A843EED"
+    packet_digest: "2ce8bae3d8db2daa748a7907365e62b2c59e656a4f3ad0624232d8eedbba2e0b"
+    request: {capability: "local-change", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "csharp-production"}
+  test:
+    resolver_outcome: "passed"
+    route_id: "ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7"
+    packet_id: "PACKET-143C6AF10F4ABF5CE0C4FB7AED376554BFA0F106FC2AB9A256DD0B23A16F1D70"
+    packet_digest: "f01d1a670c8fec03a3133ce6bec4b3208024c2ed97b3e1c599ebbe8f74db7c1b"
+    request: {capability: "local-change", execution_mode: "direct", technology_profile: "dotnet-backend", file_type: "csharp-test"}
+implementation:
+  source_commit: "886dcca82bcf12da847cf424552d4b6d6f5abb7d"
+  integrated_commit: "aff588eab513c25de88e81bea1d8d58a371c893b"
+  files:
+    - "src/BuildingBlocks/Lab.BuildingBlocks.Domains/EsAggregateRoot.cs"
+    - "src/Order/DomainCore/SaleOrders.Domains/Order.cs"
+    - "tests/SaleOrders.Domains.Tests/OrderTests.cs"
+  result: >-
+    Replay(history) now dispatches committed events outside the base
+    constructor; Order invokes Replay in its own constructor body; rehydration
+    assertions cover identity, order fields, final status, committed version,
+    and an empty pending-event collection.
+validation:
+  v0_12_domain_tests: "13 passed, 0 failed, 0 skipped"
+  v0_12_solution_build: "passed with 0 errors and 2 pre-existing nullable warnings"
+  v0_13_domain_tests: "13 passed, 0 failed, 0 skipped"
+  v0_13_target_gate: "passed outside sandbox in 35.3 seconds over 50 first-parent commits"
+  exact_unfinalized_diagnostic: "effective state catalogs[0] is stale"
+effective_rule_disposition: >-
+  Retain baseline-effective. The target implementation now conforms to the
+  framework baseline; no target-semantic-delta or additional CUST record is needed.
+remaining_gate: "independent fixed-HEAD verification before v0.13 authority finalization"

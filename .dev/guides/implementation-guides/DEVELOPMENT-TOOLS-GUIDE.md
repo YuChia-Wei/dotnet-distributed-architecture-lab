@@ -44,11 +44,17 @@ git add -A
 git commit -m "feat: Add new feature"
 git push -u origin codex/<workflow-id>
 git switch main
-git merge --no-ff codex/<workflow-id>
+git merge --ff-only codex/<workflow-id>   # selected linear topology
+git merge --no-ff codex/<workflow-id>    # selected grouped-boundary topology
 git push origin main
 ```
 
-When an incomplete workflow needs a cross-machine handoff, prefer pushing the workflow branch. If the user explicitly requests an interim merge, still use `--no-ff` and record it as a checkpoint; then create a new continuation branch from the updated `main` when work resumes.
+When an incomplete workflow needs a cross-machine handoff, prefer pushing the
+workflow branch. If the user explicitly requests interim integration, select
+topology under `.dev/TEAM-GIT-FLOW-RULES.MD`; a handoff normally retains a
+merge commit because its branch boundary carries resume evidence. Record the
+checkpoint, then create a new continuation branch from updated `main` when work
+resumes.
 
 ### Commit Conventions
 ```

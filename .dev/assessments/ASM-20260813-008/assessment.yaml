@@ -1,0 +1,46 @@
+template_metadata:
+  template_id: "assessment-locator"
+  template_version: "1.0.0"
+  template_created_at: "2026-07-13T23:04:10+08:00"
+  template_updated_at: "2026-07-13T23:04:10+08:00"
+
+schema_version: "1.0"
+assessment_id: "ASM-20260813-008"
+commit_search_id: "ASM-20260813-008"
+assessment_type: "ai-context-verification"
+title: "Verified v0.13.0 developer-impact and architecture-expectation assessment"
+owner_skill: "ai-context-auditor"
+status: "final"
+report: "report.md"
+artifact_branch: "codex/2026-08-12-ai-context-v0-13-upgrade"
+base_branch: "main"
+created_at: "2026-08-13T14:08:36+08:00"
+updated_at: "2026-08-13T14:08:36+08:00"
+template_source: ".dev/assessments/templates/assessment-locator-template.yaml"
+template_version: "1.0.0"
+report_template_source: ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md"
+report_template_version: "2.1.0"
+subject_ref:
+  repository: "dotnet-mq-arch-lab"
+  branch: "codex/2026-08-12-ai-context-v0-13-upgrade"
+  commit: "d97d8e8488bb8a87116f7d9f9b9089e1c2ed9010"
+scope:
+  included:
+    - "finalized REL-v0.13.0 authority, target gate, four CUST records, effective rules, routes, packets, and provider truth"
+    - "corrected developer-impact analysis, operating-rule details, weighted score, progressive upgrade report, and upstream feedback brief at d97d8e8488bb8a87116f7d9f9b9089e1c2ed9010"
+    - "comparison with codex/2026-07-30-ai-context-architecture-kit-standards-discussion and its exact sixteen acceptance criteria"
+    - "three independent gpt-5.6-sol max content re-audits of the corrected fixed commit"
+  excluded:
+    - "general product code review beyond retained AGGREGATE-ES-001 remediation evidence"
+    - "merge, push, Issue closure, Project mutation, provider activation, Architecture Kit adoption, and upstream submission"
+relations:
+  supersedes: ["ASM-20260813-007"]
+  superseded_by: []
+  related_assessments: ["ASM-20260813-006", "ASM-20260813-007"]
+  workflow_refs: ["2026-08-12-ai-context-v0-13-upgrade"]
+  backlog_refs: []
+  adr_refs: []
+resume:
+  last_completed_action: "Three independent Sol MAX content re-audits accepted clean corrected checkpoint d97d8e8488bb8a87116f7d9f9b9089e1c2ed9010; this complete successor assessment records the accepted conclusions."
+  next_action: "Return this assessment to ai-context-governance for independent audit of the resulting clean successor-assessment HEAD and workflow closeout."
+  blockers: []

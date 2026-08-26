@@ -12,8 +12,9 @@ This file defines how to implement one safe bounded implementation slice.
 6. Load applicable overlays without replacing the execution mode.
 7. Apply the smallest coherent change set.
 8. Use `local-change-implementer` for local class/object/symbol technical edits when useful.
-9. Update or add tests if the slice requires it.
-10. Validate and record deferred items.
+9. If concrete tests are in scope, make them an authorized implementation outcome of this slice; a test-only slice selects `generic` as its one primary mode and loads each applicable test-role binding.
+10. Treat a BDD/GWT scenario and assertion design as an input or handoff, not as authorization to implement tests; keep target-owned test execution as a separate capability and record it separately.
+11. Validate and record deferred items.
 
 ## Preferred Slice Types
 

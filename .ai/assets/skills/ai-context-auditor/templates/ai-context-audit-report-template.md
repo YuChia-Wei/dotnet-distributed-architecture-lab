@@ -3,26 +3,26 @@
 ## Template Metadata
 
 - `template_id`: `ai-context-auditor-report`
-- `template_version`: `1.0.0`
+- `template_version`: `2.1.0`
 - `created_at`: `2026-07-10T18:22:49+08:00`
-- `updated_at`: `2026-07-10T18:22:49+08:00`
+- `updated_at`: `2026-07-15T08:39:00+08:00`
 
 ## Metadata
 
-- `report_id`: `audit-report-<YYYY-MM-DD-topic[-NN]>`
-- `report_type`: `baseline | post-remediation`
+- `assessment_id`: `<ASM-YYYYMMDD-NNN>`
+- `assessment_type`: `ai-context-audit | ai-context-verification`
 - `owner_skill`: `ai-context-auditor`
-- `workflow_id`: `<YYYY-MM-DD-topic[-NN]>`
-- `related_plan_id`:
 - `status`: `draft | final`
 - `audit_date`:
 - `created_at`: `<ISO-8601-with-offset>`
 - `updated_at`: `<ISO-8601-with-offset>`
 - `template_source`: `.ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md`
-- `template_version`: `1.0.0`
+- `template_version`: `2.1.0`
 - `repository`:
-- `branch`:
-- `previous_report`:
+- `subject_branch`:
+- `subject_commit`:
+- `previous_assessment`:
+- `workflow_refs`:
 
 ## Executive Summary
 
@@ -70,6 +70,12 @@
 
 - Sub-agents used:
 - Assigned surfaces:
+
+### Discovery Accelerators
+
+| Tool / generated view | Source revision or input digest | Freshness / dirty state | Scope and exclusions | Unsupported relationships | File-backed fallback |
+| --- | --- | --- | --- | --- | --- |
+| None / not applicable |  |  |  |  |  |
 
 ## Repository Context Inventory
 
@@ -144,8 +150,9 @@
 
 ## Lifecycle Handoff
 
-- Baseline report path: `<artifact-root>/reports/01-audit-report.md`
+- Assessment path: `.dev/assessments/<assessment-id>/report.md`
+- Stable finding references: `<assessment-id>#<finding-id>`
 - Remediation owner: `ai-context-governance`
-- Remediation report path: `<artifact-root>/reports/02-remediation-report.md`
-- Post-remediation report path: `<artifact-root>/reports/03-post-remediation-audit-report.md`
+- Related remediation workflow:
+- Verification assessment:
 - Remediation intentionally not performed by this skill: `yes`

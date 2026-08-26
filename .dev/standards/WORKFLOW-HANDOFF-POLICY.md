@@ -27,7 +27,8 @@ Create or refresh a checkpoint before:
 - delegating continuation to a lower-cost or otherwise less-contextual
   executor;
 - pushing or merging an incomplete workflow as a transport boundary;
-- handing off release candidate, tag, publication, or finalization work.
+- handing off framework version candidate validation, tag validation,
+  publication validation, or hosted finalization validation work.
 
 The checkpoint is not workflow completion. Keep the workflow and unfinished
 task active unless their own completion contracts are satisfied.
@@ -84,10 +85,14 @@ The repair exception does not authorize unrelated work.
 
 ## Release Handoffs
 
-Set `release_handoff: true` for candidate, tag, publication, or finalization
-handoffs. In addition to the critical gate, record the REL-owned phase-specific
-state command and bounded observed result. A release phase check must pass
-before release work continues; a failed phase check has no general
+Set `release_handoff: true` for source release validation-phase handoffs. The
+exact machine literals remain `candidate`, `tag`, `publication`, and
+`finalization`. They select REL-owned validation phases; they are not
+release-source statuses, provider states, or mutation authority.
+
+In addition to the critical gate, record the REL-owned phase-specific state
+command and bounded observed result. A source release phase check must pass
+before source release work continues; a failed phase check has no general
 continuation exception.
 
 HANDOFF owns this interface. REL owns the allowed phase vocabulary, the
@@ -121,11 +126,19 @@ as exactly one of:
 - `runtime-reported`;
 - `provider-reported`;
 - `user-declared`;
+- `configured-default`;
+- `provider-default`;
 - `unavailable`.
 
-Preserve user-declared model and reasoning labels verbatim. Never describe a
-user-declared value as runtime-verified. When the source is `unavailable`, do
-not invent a model or reasoning label.
+Resolve missing session metadata in this order: active runtime or provider
+report, effective configured default, then a documented provider default. A
+missing runtime report does not block the workflow when a credible effective
+default can be recorded. Use `unavailable` only when neither an observed value
+nor a documented effective default exists.
+
+Preserve reported, declared, configured, and provider-default model and
+reasoning labels verbatim. Never describe a fallback value as runtime-verified
+or replace one provider's vocabulary with another provider's normalized label.
 
 ## Provider-Compatible Attribution
 

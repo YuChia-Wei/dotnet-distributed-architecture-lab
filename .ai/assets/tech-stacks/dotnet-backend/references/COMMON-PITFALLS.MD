@@ -122,6 +122,6 @@ public void Rule_Success_case()
 1. Use the Sub-agent Workflow.
 2. Refer to `.dev/standards/examples/`.
 3. Run `.ai/scripts/check-all.sh` as the transitional local orchestrator.
-4. Read `.ai/assets/tech-stacks/dotnet-backend/references/CODE-REVIEW-INDEX.MD`.
+4. Select the applicable route in `.ai/assets/skills/code-reviewer/references/review-routing.yaml`.
 
 Last updated: 2026-02-01

@@ -65,11 +65,23 @@ authority，不能猜測版本；後續已初始化 repo 的版本升級交給
 reconciliation 輸入，不能與 schema-2 provenance 同時存在。
 
 - canonical shape：`.ai/assets/skills/ai-context-init/templates/project-config.template.yaml`
+- work-item binding selection：`.ai/assets/skills/ai-context-init/templates/work-item-binding.schema.yaml`
 - 先完成 inventory，再填入有檔案證據或使用者確認的欄位。
 - 未知值保持 `null` 或空集合。
 - 空 repo 可不建立 project config，或使用 `generationStatus: not-initialized`。
 - 不得沿用來源 repo 的 credentials、connection strings、ports、產品名稱、bounded contexts、queue 或 deployment topology。
 - 產生後將主要證據路徑記錄在 `evidence.files`。
+
+### 本機 validation 選擇
+
+初始化時，`validation.routine.local.mode` 的預設值為 `manual`。若 target
+policy 允許本機覆寫，只能讀取忽略且不打包的
+`.dev/validation.local.conf`；內容必須嚴格為一行
+`validation.routine.local=<approved-mode>`，而且只能強化 checked-in
+selection，不能弱化，也不能由環境變數取代。未選用的 routine 應保留
+`not-applicable` 與 `selection_reason: not-run-by-policy`，而不是標示為通過。
+Python prerequisite 的人類診斷與恢復說明見
+`PYTHON-PREREQUISITE-DIAGNOSTICS-GUIDE.zh-TW.md`。
 
 ## 建議模型策略
 

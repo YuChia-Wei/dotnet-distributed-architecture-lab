@@ -61,7 +61,7 @@ Use for:
 ### Quality Gates
 - `.ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml`
 - `.ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md`
+- `.ai/assets/skills/code-reviewer/references/review-routing.yaml`
 - `.ai/assets/skills/spec-compliance-validator/references/spec-compliance-rules.md`
 - `.ai/assets/skills/spec-compliance-validator/references/test-validation-steps.md`
 - `.ai/assets/skills/spec-compliance-validator/references/validation-command-templates.md`
@@ -76,10 +76,10 @@ Use for:
 Read the canonical rules/docs for these recurring areas:
 
 - Sub-agent and prompt structure: `.ai/SUB-AGENT-SYSTEM.MD`, `SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md`
-- DI and configuration: `.dev/standards/coding-standards/usecase-standards.md`, `.dev/standards/coding-standards/profile-configuration-standards.md`, `.dev/standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md`
-- Outbox and transaction flow: `.dev/standards/coding-standards.md`, `.dev/guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md`
-- Query-side layering: `.dev/standards/coding-standards.md`, `.dev/standards/rationale/query-side-layering-rationale.MD`
-- Conditional physical project layout and shared-project profile: `.dev/standards/project-structure.md`; confirm target adoption and use canonical architecture standards for invariants
+- DI and configuration: `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md`, `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/profile-configuration-standards.md`, `.ai/assets/tech-stacks/dotnet-backend/standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md`
+- Outbox and transaction flow: `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md`, `.dev/guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md`
+- Query-side layering: `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md`, `.ai/assets/tech-stacks/dotnet-backend/references/rationale/query-side-layering-rationale.MD`
+- Conditional physical project layout and shared-project profile: `.ai/assets/tech-stacks/dotnet-backend/standards/project-structure.md`; confirm target adoption and use canonical architecture standards for invariants
 - Docker/container packaging: `.dev/guides/implementation-guides/DOCKER-RESTORE-CACHE-GUIDE.md`
 
 ## Selection Rules

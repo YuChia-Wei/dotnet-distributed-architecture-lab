@@ -9,7 +9,7 @@ Generate use case tests with mandatory Given-When-Then structure and naming. Use
 - `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
 
 ## Rules
-- Follow ezSpec -> BDDfy mapping rules in .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
+- Follow the GWT mapping rules in .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
 - No BaseTestClass
 - Resolve the target `testing.mocking` selection; use NSubstitute by default
 - Verify domain events with async-safe assertions

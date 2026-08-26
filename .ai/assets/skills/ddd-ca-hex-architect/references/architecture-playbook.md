@@ -2,8 +2,8 @@
 
 This file distills the repo's non-negotiable architecture constraints for design work.
 Detailed Aggregate transaction and exceptional Unit of Work criteria are owned by
-[Aggregate Standards](../../../../../.dev/standards/coding-standards/aggregate-standards.md)
-and [Use Case Standards](../../../../../.dev/standards/coding-standards/usecase-standards.md#7-strong-consistency-must-be-explicit).
+[Aggregate Standards](../../../tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md)
+and [Use Case Standards](../../../tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md#7-strong-consistency-must-be-explicit).
 
 ## Primary Style
 
@@ -77,7 +77,7 @@ Do not let adapters define business decisions.
 - Keep transactional consistency inside one aggregate.
 - Use events for side effects and cross-aggregate propagation.
 - Treat same-bounded-context multi-Aggregate consistency as an exception governed
-  by [Use Case Standards](../../../../../.dev/standards/coding-standards/usecase-standards.md#7-strong-consistency-must-be-explicit),
+  by [Use Case Standards](../../../tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md#7-strong-consistency-must-be-explicit),
   not as a reusable default architecture pattern.
 
 ### Command/Query

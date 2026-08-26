@@ -1,0 +1,74 @@
+schema_version: "1.0"
+workflow_id: "2026-08-12-ai-context-v0-13-upgrade"
+recorded_at: "2026-08-13T12:35:15+08:00"
+status: "last-finalized-authority-remediation-selected"
+subject: "v0.13 AGGREGATE-ES-001 bounded remediation"
+requested_routes:
+  - capability: "local-change"
+    execution_mode: "direct"
+    technology_profile: "dotnet-backend"
+    file_type: "csharp-production"
+    route_id: "ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C"
+  - capability: "local-change"
+    execution_mode: "direct"
+    technology_profile: "dotnet-backend"
+    file_type: "csharp-test"
+    route_id: "ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7"
+live_resolution:
+  outcome: "failed-closed"
+  diagnostic: "effective state catalogs[0] is stale"
+  reason: >-
+    The live target is intentionally finalized at v0.12 while the pending
+    v0.13 receipt is under reconciliation. The v0.13 selected-profile catalog
+    changed, so both live route packets are stale by construction.
+contract_analysis:
+  emit_candidate: >-
+    The resolver documents --emit-candidate as non-activating and states that
+    it never makes a missing packet available to an action skill.
+  isolated_target: >-
+    A temporary v0.13 authority would describe a synthetic target, not this
+    repository's live target authority, so it cannot satisfy task-scoped
+    consumption for a mutation here.
+  governed_publication: >-
+    finalize_context is the governed operation that advances provenance and
+    publishes packets/state, but honest v0.13 finalization is blocked until the
+    discovered product violation is remediated and independently audited.
+  last_finalized_checkpoint: >-
+    Before product mutation, the repository can temporarily switch without a
+    worktree to finalized v0.12 checkpoint
+    d3c6a032adbb690e1ecbb46db0212a319c3a93d4. Its production and test packets
+    are fresh, and its AGGREGATE-ES-001 construction rule is semantically
+    identical to the v0.13 construction requirement. The bounded remediation
+    can be committed there and cherry-picked back to the v0.13 upgrade branch.
+  conclusion: >-
+    No live or synthetic v0.13 pre-finalization packet route exists. The
+    contract-compliant route selected for this repair is the last-finalized
+    v0.12 checkpoint detour, followed by a single cherry-pick into v0.13.
+draft_reversal:
+  outcome: "fully-reverted-before-governed-product-action"
+  evidence: >-
+    An initial uncommitted draft was applied before this route was discovered.
+    The narrow test attempt failed before execution because the sandbox could
+    not write an existing obj file. All three product/test paths were then
+    restored exactly to their HEAD Git objects; no product diff remained before
+    the v0.12 packet-governed action began.
+selected_route:
+  owner_authorization: ".dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/owner-decision-product-fix.yaml"
+  checkpoint: "d3c6a032adbb690e1ecbb46db0212a319c3a93d4"
+  branch: "codex/2026-08-13-aggregate-es-001-remediation"
+  governing_lifecycle: "packet-governed local-change under the ai-context-upgrader remediation lifecycle"
+  constraints:
+    - "preserve exact AGGREGATE-ES-001 semantics"
+    - "touch only the aggregate base, its direct Order caller, and direct tests"
+    - "consume and retain both fresh v0.12 packet results before mutation"
+    - "cherry-pick only the bounded product commit back to v0.13"
+    - "run narrow product validation before independent audit"
+    - "after v0.13 finalization, resolve both fresh packets and perform a post-check"
+  result:
+    status: "consumed-before-product-mutation"
+    production_packet_digest: "2ce8bae3d8db2daa748a7907365e62b2c59e656a4f3ad0624232d8eedbba2e0b"
+    test_packet_digest: "f01d1a670c8fec03a3133ce6bec4b3208024c2ed97b3e1c599ebbe8f74db7c1b"
+    target_state_digest: "8c85750c90ea8b268158015768b8d949421aa636f91d96e3ce98c10cc5eb128b"
+    implementation_commit: "886dcca82bcf12da847cf424552d4b6d6f5abb7d"
+    integrated_commit: "aff588eab513c25de88e81bea1d8d58a371c893b"
+feedback_classification: "AICU-V013-PREACTION-PACKET-BOOTSTRAP-001"

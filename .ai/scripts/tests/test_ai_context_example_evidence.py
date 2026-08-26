@@ -33,7 +33,7 @@ class ExampleEvidenceContractTests(unittest.TestCase):
     ) -> list[str]:
         with tempfile.TemporaryDirectory(prefix="example-evidence-contract-") as temporary:
             root = Path(temporary)
-            examples = root / ".dev/standards/examples"
+            examples = root / ".ai/assets/tech-stacks/dotnet-backend/examples"
             examples.mkdir(parents=True)
             (examples / "sample").mkdir()
             (examples / "README.md").write_text(readme, encoding="utf-8")
@@ -72,8 +72,8 @@ class ExampleEvidenceContractTests(unittest.TestCase):
                     "historical": {"required_nonempty": []},
                 },
             }
-            manifest_path = Path(".dev/standards/examples/evidence-manifest.yaml")
-            schema_path = Path(".dev/standards/examples/evidence-schema.yaml")
+            manifest_path = Path(".ai/assets/tech-stacks/dotnet-backend/examples/evidence-manifest.yaml")
+            schema_path = Path(".ai/assets/tech-stacks/dotnet-backend/examples/evidence-schema.yaml")
             (root / manifest_path).write_text(
                 yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8"
             )

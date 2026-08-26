@@ -33,7 +33,7 @@
 - 新 workflow ID 使用 `YYYY-MM-DD-<topic>[-NN]`。
 - artifact 預設存放於 `.dev/workflows/<workflow-id>/`，也可由 `software-development-orchestrator` template 宣告其他 repository-relative root；locator 始終保留於 `.dev/workflows/`。
 - locator 與 task 的共通欄位遵循 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`；development artifact body 使用 `software-development-orchestrator` 自有 templates。
-- Workflow branch 預設以 `--no-ff` 合併；未完成時的 merge/push 保留 active/pending，並分別記錄 pushed branch 或 merge 後的 continuation branch。
+- Workflow branch 依 `.dev/TEAM-GIT-FLOW-RULES.MD` 正向選擇線性或 merge-commit topology；未完成時的 integration/push 保留 active/pending，並分別記錄 pushed branch 或 integration 後的 continuation branch。
 
 ## Artifact 與 Skill 對應
 
