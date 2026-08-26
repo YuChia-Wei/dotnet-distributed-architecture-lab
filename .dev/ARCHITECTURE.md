@@ -85,8 +85,8 @@ The repository defines six product hosts:
 
 ## Tests And Validation Boundary
 
-- `MQArchLab.slnx` includes four xUnit test projects for Products and Orders.
-- Inventory currently has no test project in the solution.
+- `MQArchLab.slnx` includes five xUnit test projects for Products, Orders, and Inventory.
+- `InventoryControl.Tests` owns Inventory command/reservation tests. Its real PostgreSQL checks are explicitly opt-in and skipped during ordinary test runs.
 - The target-owned analyzer and runtime-validation projects were retired by the owner-approved v0.9 AI-context upgrade and are absent from the repository and solution.
 - v0.13 removed the former bundled mechanical-validation provider. The remaining `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/` assets are reference-only recipes; they are not selected, activated, or wired into the target solution or build.
 

@@ -7,7 +7,7 @@ using Lab.BuildingBlocks.Integrations;
 using NSubstitute;
 using Shouldly;
 
-namespace SaleOrders.Tests;
+namespace InventoryControl.Tests;
 
 /// <summary>Broker-free GWT coverage for high-risk Inventory mutations.</summary>
 public sealed class InventoryStockUseCaseTests

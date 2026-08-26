@@ -22,7 +22,7 @@ scenarios:
       - "Stock is not decremented again."
       - "Republished delivery identity remains stable."
     traces_to: { requirements: ["INV-006", "INT-003"], frame_concerns: ["FC2", "FC4"] }
-    tests_anchor: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs#given_a_completed_operation_when_it_is_replayed_then_stock_is_decremented_once"
+    tests_anchor: "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs#given_a_completed_operation_when_it_is_replayed_then_stock_is_decremented_once"
   - id: SC3
     title: "Reject conflicting payload for operation identity"
     given:
@@ -34,7 +34,7 @@ scenarios:
       - "Stock is unchanged."
       - "No successful reservation event is published."
     traces_to: { requirements: ["INV-006"], frame_concerns: ["FC2", "FC5"] }
-    tests_anchor: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs#given_an_operation_identity_when_payload_changes_then_the_conflict_is_terminal"
+    tests_anchor: "tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs#given_an_operation_identity_conflict_when_reserving_then_conflict_is_not_published"
   - id: SC4
     title: "Preserve terminal business failure"
     given:
@@ -45,7 +45,7 @@ scenarios:
       - "The original failure is returned with WasAlreadyProcessed true."
       - "Stock is not re-evaluated or decremented."
     traces_to: { requirements: ["INV-006", "INV-007"], frame_concerns: ["FC2", "FC5"] }
-    tests_anchor: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs#given_a_terminal_failure_when_stock_changes_then_replay_preserves_the_original_outcome"
+    tests_anchor: "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs#given_a_terminal_failure_when_stock_changes_then_replay_preserves_the_original_outcome"
   - id: SC5
     title: "Reject invalid request before durable work"
     given:
@@ -56,7 +56,7 @@ scenarios:
       - "The corresponding validation failure is returned."
       - "Repository and publisher are not called."
     traces_to: { requirements: ["INV-005"], frame_concerns: ["FC1", "FC6"] }
-    tests_anchor: ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md#scenario-5-reject-invalid-input"
+    tests_anchor: "tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs#given_empty_operation_id_when_reserving_then_request_is_rejected_before_side_effects"
   - id: SC6
     title: "Cancel without mutation"
     given:
@@ -67,4 +67,4 @@ scenarios:
       - "OperationCanceledException propagates."
       - "Stock and operation history remain unchanged."
     traces_to: { requirements: ["NFR-005"], frame_concerns: ["FC3", "FC6"] }
-    tests_anchor: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs#given_cancellation_before_reservation_when_executed_then_state_is_not_mutated"
+    tests_anchor: "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs#given_cancellation_before_reservation_when_executed_then_state_is_not_mutated"

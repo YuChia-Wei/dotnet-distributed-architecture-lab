@@ -5,13 +5,15 @@
 - `INV-005`, `INV-006`, `INV-007`, and `INT-003` in `.dev/requirement/reconstructable-system-baseline.md`
 - `.dev/specs/domains/inventory-item/usecase/reserve-inventory.json`
 - `.dev/problem-frames/inventory/cbf/reserve-inventory/`
-- `tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs`
+- `tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs`
+- `tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs`
+- `tests/InventoryControl.Tests/PostgresInventoryReservationRepositoryTests.cs`
 
 ## Implementation Status
 
-- Status: `implemented-partial`
-- Replay, payload conflict, terminal-failure replay, stable delivery identity, cancellation, and failure-policy behavior have executable tests in the Orders test project.
-- Input validation and real PostgreSQL concurrency/transaction behavior remain uncovered; Inventory test ownership is a required quality uplift.
+- Status: `implemented-awaiting-external-execution`
+- Inventory owns its test project and has executable validation, replay, conflict, terminal/transient/publication-failure, stable delivery identity, cancellation, failure-policy, and PostgreSQL concurrency scenarios.
+- The PostgreSQL scenario is skipped by default and remains non-passing evidence until the explicit external profile runs successfully.
 
 ## Scenario Set
 
@@ -67,7 +69,7 @@
 ## Assertion Notes
 
 - Assert each failure reason, stock value, durable operation row, publish call count, message id, and partition key separately.
-- Scenario 7 requires a real PostgreSQL fixture; an in-memory double cannot establish locking semantics.
+- Scenario 7 requires a real PostgreSQL fixture; an in-memory double cannot establish locking semantics. Use the opt-in contract in `tests/README.md`.
 
 ## Recommended Test Spec Path
 

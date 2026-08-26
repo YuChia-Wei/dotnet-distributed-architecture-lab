@@ -110,8 +110,9 @@
 - `NFR-006` Observability: 六個 host 提供 OpenTelemetry logs/traces/metrics OTLP export；API hosts 加 ASP.NET Core instrumentation，message hosts 加 Wolverine/broker instrumentation。
 - `NFR-007` Containers: 每個 host 提供 Linux multi-stage Dockerfile；restore 前顯式 copy 其遞迴 project references，以保持 restore cache。
 - `NFR-008` Testing: 使用 xUnit 與 Given-When-Then semantics；遵循各 test project 已選擇的 Moq 或 NSubstitute；不得使用共享 mutable base test class。
-- `NFR-009` Coverage: Products 與 Orders 現有 oracles 必須重建；Inventory 必須新增獨立 test project 或以等價 target-owned test surface 補足目前 gap。
+- `NFR-009` Coverage: Products、Orders 與 Inventory 現有 oracles 必須重建；每個 bounded context 使用自己擁有的 test project/surface。
 - `NFR-010` Reproducibility: solution、project graph、API/message/schema/config contract 皆有 machine-readable JSON；所有 JSON 必須可 parse，所有相對連結必須解析。
+- `NFR-011` Test profiles: 一般 `dotnet test` 必須只依賴 process-local doubles/in-memory transports；需要 PostgreSQL、Kafka、RabbitMQ 或其他外部服務的測試必須明確分類並在缺少 opt-in 與連線設定時 skipped。Skipped 不得被視為該外部行為的 passing evidence。
 
 ## Constraints & Assumptions
 
@@ -137,7 +138,7 @@
 
 | ID | Acceptance |
 | --- | --- |
-| `AC-001` | 從 `.dev/specs/reconstruction/README.MD` 開始，不讀原 source，能建立與 manifest 相符的 solution、26 個 active project（22 product + 4 tests）與六個 host。 |
+| `AC-001` | 從 `.dev/specs/reconstruction/README.MD` 開始，不讀原 source，能建立與 manifest 相符的 solution、27 個 active project（22 product + 5 tests）與六個 host。 |
 | `AC-002` | 重建後所有 project dependency direction 符合 blueprint，且 Domain projects 無 broker/database/Web dependency。 |
 | `AC-003` | HTTP contract tests覆蓋所有 15 個列出的 endpoints、success/error/not-found mapping。 |
 | `AC-004` | Domain/use-case oracles覆蓋三個 aggregates、16 個列出的 use cases 與同狀態/no-side-effect、validation、not-found paths。 |

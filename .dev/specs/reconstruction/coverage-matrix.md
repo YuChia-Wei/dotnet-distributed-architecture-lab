@@ -9,7 +9,7 @@
 | Surface | Required inventory | Coverage after this workflow | Evidence / target artifact |
 | --- | ---: | --- | --- |
 | Product projects | 22 | covered | `project-manifest.json` |
-| Test projects | 4 current + Inventory uplift | partial | current four in manifest; Inventory test surface is required uplift |
+| Test projects | 5 | covered | five independently owned test projects in the manifest |
 | Bounded contexts | 3 | covered | system blueprint and domain specs |
 | Aggregates | Product, Order, InventoryItem | covered | domain entity specs |
 | Runtime hosts | 3 Web APIs + 3 Consumers | covered | `runtime-contracts.json` |
@@ -85,13 +85,13 @@ The authoritative request/response/status mapping is `http-api-contracts.json` a
 
 ## Non-Passing Gaps
 
-1. Inventory has no independently owned test project.
-2. ShipOrder and DeliverOrder lack direct use-case tests even though aggregate behavior is covered.
-3. InitProductStock and GetAvailableQuantity lack executable tests.
-4. Product create/update use-case orchestration is not directly tested.
-5. Product hosts use legacy broker configuration in current implementation; reconstruction must use the shared profile contract.
-6. Consumer subscriptions do not map to clear business handlers.
-7. PostgreSQL failure injection has not yet proven Orders source transaction rollback/recovery.
+1. ShipOrder and DeliverOrder lack direct use-case tests even though aggregate behavior is covered.
+2. InitProductStock and GetAvailableQuantity lack executable tests.
+3. Product create/update use-case orchestration is not directly tested.
+4. Product hosts use legacy broker configuration in current implementation; reconstruction must use the shared profile contract.
+5. Consumer subscriptions do not map to clear business handlers.
+6. PostgreSQL failure injection has not yet proven Orders source transaction rollback/recovery.
+7. The Inventory PostgreSQL concurrency test is checked in but remains non-passing evidence until an opted-in run succeeds.
 8. Product integration event production, RabbitMQ physical topology, and inventory event property migration need owner decisions.
 
 ## Readiness Rule

@@ -139,7 +139,7 @@ API hosts enable controllers, OpenAPI + Scalar in Development, HTTPS redirection
 5. Each bounded-context Application project.
 6. Each bounded-context Infrastructure project.
 7. Six Presentation hosts.
-8. Four compatibility test projects plus the required new Inventory test surface.
+8. Five test projects, including an independently owned Inventory test surface; external-service checks are opt-in and skipped by default.
 9. Solution grouping, Dockerfiles, Compose, SQL/migrations, and validation scripts.
 
 The exact project identities are in `project-manifest.json`.

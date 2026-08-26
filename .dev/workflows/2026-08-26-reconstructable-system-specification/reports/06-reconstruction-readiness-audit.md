@@ -4,7 +4,7 @@
 
 `CONDITIONAL — documentation baseline established; do not delete the current product source yet.`
 
-The durable artifact set is now sufficient to start a source-independent reconstruction without relying on this conversation. It is not yet proven sufficient to finish one at accepted quality because the selected compliance gate is 68%, the destructive-copy LUNA exercise has not run, and several owner/environment decisions remain open.
+The durable artifact set is now sufficient to start a source-independent reconstruction without relying on this conversation. It is not yet proven sufficient to finish one at accepted quality because the selected compliance gate is 94%, the opted-in PostgreSQL proof and destructive-copy LUNA exercise have not run, and several owner decisions remain open.
 
 ## Durable Coverage
 
@@ -35,7 +35,7 @@ The following facts still require an explicit decision or executable proof rathe
 
 ## Non-Passing Gates
 
-- ReserveInventory spec compliance: 68%, `NOT COMPLIANT`.
+- ReserveInventory spec compliance: 94%, `NOT COMPLIANT`; all broker-free tests pass, but the real PostgreSQL concurrency check is skipped until explicitly opted in.
 - Focused current test execution: interrupted during restore; not passing evidence.
 - Real PostgreSQL reservation concurrency and Orders source-transaction failure injection: not proven.
 - RabbitMQ runtime: blocked until a trusted environment run.

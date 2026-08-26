@@ -35,7 +35,7 @@ input_envelope:
     - ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json"
     - "src/Inventory/DomainCore/InventoryControl.Applications/Reservations/InventoryReservation.cs"
     - "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/PostgresInventoryReservationRepository.cs"
-    - "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs"
+    - "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs"
   mandatory_references:
     - ".ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/references/authoring-playbook.md"
     - ".ai/assets/skills/problem-frame-author/references/output-contract.md"

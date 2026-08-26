@@ -1,0 +1,111 @@
+role_execution_id: "RECON-007-usecase-test-sub-agent-01"
+role_asset_id: "usecase-test-sub-agent"
+role_path: ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml"
+owning_skill: "slice-implementer"
+stage_id: "RECON-007"
+applicability:
+  result: "applies"
+  reason: "The remediation implements concrete ReserveInventory use-case scenarios."
+selection:
+  disposition: "direct"
+  reason: "The project move, test assertions, and acceptance anchors share one mutation scope."
+  delegation_evaluation:
+    safety_gates:
+      applicable_role: true
+      current_session_runtime_support_verified: false
+      bounded_input_output_permissions_stop: true
+      approval_security_credential_boundaries_satisfied: true
+      disjoint_mutation_scope: false
+      named_parent_and_final_integration_owner: true
+    material_value_triggers: []
+    cost_failure_retry_risk:
+      result: "favors-direct"
+      reason: "Delegation would overlap the same test project and acceptance files."
+input_envelope:
+  goal: "Implement the missing ReserveInventory GWT scenarios and external integration profile."
+  scope:
+    - "tests/InventoryControl.Tests/"
+    - ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md"
+  non_goals:
+    - "Change production behavior."
+    - "Treat skipped external checks as passing."
+  source_refs:
+    - ".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md"
+    - ".dev/problem-frames/inventory/cbf/reserve-inventory/"
+    - ".dev/ai-context/effective-rule-packets/ROUTE-DF0E762322A527898C635F453332C4FD4607EFC0A01AE6AFFA49D799E70BAB18.yaml"
+  mandatory_references:
+    - ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-playbook.md"
+    - ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-generation-guidance.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
+  constraints:
+    - "Plain xUnit GWT."
+    - "NSubstitute."
+    - "No BaseTestClass."
+  stop_conditions:
+    - "Return after bounded tests, execution evidence, and acceptance anchors are integrated."
+permissions:
+  read_scope:
+    - "src/Inventory/"
+    - ".dev/problem-frames/inventory/"
+    - ".dev/specs/tests/inventory-item/"
+  write_scope:
+    - "tests/InventoryControl.Tests/"
+    - "tests/SaleOrders.Tests/"
+    - ".dev/specs/"
+    - ".dev/problem-frames/inventory/"
+  external_actions: []
+  secret_handling: "no-secret-values"
+executor:
+  kind: "parent-inline"
+  identity: "root-workflow-parent"
+  runtime_support_verified: true
+invocation_evidence: null
+output:
+  expected:
+    - "Inventory-owned tests"
+    - "External integration opt-in contract"
+    - "Execution evidence"
+  returned:
+    - "InventoryControl.Tests"
+    - "tests/README.md"
+    - "19 passed and 1 skipped default-profile result"
+  evidence_refs:
+    - "tests/InventoryControl.Tests/"
+    - "tests/README.md"
+  bounded: true
+attempts:
+  - number: 1
+    disposition: "direct"
+    executor:
+      kind: "parent-inline"
+      identity: "root-workflow-parent"
+      runtime_support_verified: true
+    invocation_evidence: null
+    outcome: "completed"
+    correctable_failure: false
+    material_state_change: "Inventory tests moved to their bounded-context project and missing scenarios implemented."
+    authorization_source:
+      - "User request on 2026-08-26"
+      - "GitHub Issue #2"
+    evidence_refs:
+      - "tests/InventoryControl.Tests/"
+fallback:
+  considered: false
+  reason: "Direct execution selected initially."
+  resulting_disposition: null
+  inline_contract_evidence:
+    same_role_path_and_mandatory_references: true
+    bounded_input_output_permissions_stop: true
+    approval_security_credential_boundaries_satisfied: true
+    disjoint_mutation_scope: false
+    named_parent_and_final_integration_owner: true
+    current_inline_support_verified: true
+    evidence_refs:
+      - "tests/InventoryControl.Tests/"
+final_integration_owner:
+  owner: "slice-implementer parent stage owner"
+  decision: "accepted"
+  evidence_refs:
+    - "tests/InventoryControl.Tests/"
+    - ".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md"

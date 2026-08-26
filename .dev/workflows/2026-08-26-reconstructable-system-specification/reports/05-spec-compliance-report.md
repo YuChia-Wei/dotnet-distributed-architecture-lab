@@ -18,53 +18,61 @@
 
 ## Compliance Matrix
 
-The overall percentage is a transparent checklist inventory, not a waiver. `45 / 66 = 68%`.
+The overall percentage is a transparent checklist inventory, not a waiver. After RECON-007 remediation, `62 / 66 = 94%`.
 
 | Category | Covered | Total | Rate | Status |
 | --- | ---: | ---: | ---: | --- |
 | Use-case input fields | 3 | 3 | 100% | pass |
-| Service preconditions | 0 | 3 | 0% | fail |
+| Service preconditions | 3 | 3 | 100% | pass |
 | Aggregate/repository behavior signature | 1 | 1 | 100% | pass |
 | Integration-event attributes | 4 | 4 | 100% | pass through shared stock-event contract test |
-| Error-handling policies | 3 | 9 | 33% | fail |
-| Constraints | 3 | 5 | 60% | fail |
-| Frame concerns FC1–FC6 | 4 | 6 | 67% | fail |
-| Acceptance scenarios | 5 | 6 | 83% | fail |
-| Then-condition assertions | 12 | 15 | 80% | fail |
-| PRE/POST/INV contract semantics | 5 | 8 | 63% | fail |
-| GWT semantic mapping | 5 | 6 | 83% | fail |
-| **Overall inventory** | **45** | **66** | **68%** | **fail** |
+| Error-handling policies | 9 | 9 | 100% | pass |
+| Constraints | 4 | 5 | 80% | fail: real store execution pending |
+| Frame concerns FC1–FC6 | 5 | 6 | 83% | fail: FC3 execution pending |
+| Acceptance scenarios | 6 | 6 | 100% | pass |
+| Then-condition assertions | 15 | 15 | 100% | pass |
+| PRE/POST/INV contract semantics | 6 | 8 | 75% | fail: PostgreSQL POST1/INV1 proof pending |
+| GWT semantic mapping | 6 | 6 | 100% | pass |
+| **Overall inventory** | **62** | **66** | **94%** | **fail** |
 
 ## Missing Items
 
-1. `PRE1`–`PRE3` / `SC5`: no executable tests prove empty operation id, empty product id, and non-positive quantity return their exact reasons without repository or publisher calls.
-2. `FC3`, `POST1`, and `INV1`: no real PostgreSQL test proves concurrent reservations serialize through `FOR UPDATE`, never produce negative stock, and atomically persist operation outcome with stock.
-3. `SC3`: the conflict test proves result and stock but does not assert that no success event is published.
-4. `FC6`: no test distinguishes `InventoryReservationTransientException` and publisher failure from business rejection, including replay after publication failure.
-5. Failure coverage does not directly exercise `InventoryIsNotEnough` through the reservation repository/use case.
-6. Inventory behavior remains hosted in `SaleOrders.Tests`; the required independent Inventory test surface does not exist.
+1. `FC3`, `POST1`, and `INV1` still require one opted-in real PostgreSQL run proving concurrent reservations serialize through `FOR UPDATE`, never produce negative stock, and atomically persist both outcomes with stock.
+2. The required test now exists and is default-skipped by policy. A skipped result is intentionally not counted as passing compliance evidence.
+
+## Closed Remediation Items
+
+- `PRE1`–`PRE3` / `SC5`: exact invalid-input reasons and zero repository/publisher interactions are covered.
+- `SC3`: operation identity conflict now asserts no success publication.
+- `FC6`: transient durable-store failure and publish-after-commit failure/replay are distinguished from business rejection.
+- `InventoryIsNotEnough` is exercised through `ReserveInventoryUseCase` with no publication.
+- Inventory behavior is owned by `tests/InventoryControl.Tests` rather than the Orders test project.
+- The external-integration contract is documented in `tests/README.md`; ordinary configuration and in-memory transport tests remain in the default profile.
 
 ## Test Execution Evidence
 
-A focused command was attempted:
+A prior focused command in the original mixed test project was interrupted. RECON-007 used single-node MSBuild/test execution to avoid the host's uncontrolled process fan-out:
 
 ```text
-dotnet test tests/SaleOrders.Tests/SaleOrders.Tests.csproj --filter "FullyQualifiedName~InventoryReservationIdempotencyTests|FullyQualifiedName~InventoryStockUseCaseTests" --nologo
+dotnet build tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false
+dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-build --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false
+dotnet test tests/SaleOrders.Tests/SaleOrders.Tests.csproj --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false
 ```
 
-The command remained in restore with no further output and spawned a large restore/build process fan-out. It was stopped after bounded observation. Outcome: `interrupted`, not passing. No product or test files were modified.
+- Inventory build: passed, 0 errors; one pre-existing nullable warning in `DomainEntity.Id`.
+- Inventory default profile: 19 passed, 1 skipped (the PostgreSQL external integration test), 0 failed.
+- Orders regression profile: 11 passed, 0 skipped, 0 failed; three pre-existing nullable warnings in `Order.ProductName`.
+- Docker Desktop was not running, so no opted-in PostgreSQL result exists.
 
 ## Remediation Contract
 
-The missing executable work belongs to a separately authorized test-implementation slice:
+The implementation slice is complete. The remaining closeout action is environment-dependent execution:
 
-- create an Inventory-owned test project;
-- implement SC5 validation and no-interaction assertions;
-- add PostgreSQL transaction/concurrency fixtures for FC3;
-- add no-publication assertions for conflict/business failures;
-- add transient store and publisher failure/replay tests;
-- rerun this same frame without relaxing categories.
+- start a compatible PostgreSQL instance with the Inventory schema;
+- set `RUN_EXTERNAL_INTEGRATION_TESTS=true` and `INVENTORY_TEST_POSTGRES_CONNECTION_STRING`;
+- run the `ExternalIntegration` category;
+- retain the result as FC3/POST1/INV1 evidence and rerun this unchanged checklist.
 
 ## Verdict
 
-`NOT COMPLIANT — 100% gate not reached.` The problem frame and test design are validator-ready, but the repository is not yet safe to treat as executable reconstruction proof.
+`NOT COMPLIANT — 94%; 100% gate not reached.` Static implementation and broker-free execution gaps are closed, but the real PostgreSQL concurrency proof is `blocked-by-environment`, not passed.

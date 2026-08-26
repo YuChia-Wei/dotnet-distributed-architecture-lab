@@ -61,6 +61,8 @@ dotnet build MQArchLab.slnx --no-restore
 dotnet test MQArchLab.slnx --no-build
 ```
 
+The ordinary command must not require PostgreSQL, Kafka, or RabbitMQ. External-service tests are categorized and skipped until explicitly opted in. For the Inventory PostgreSQL proof, follow `tests/README.md`; a skipped check is not release or reconstruction evidence.
+
 Then run the selected problem-frame compliance gate, JSON/link validators, database failure-injection tests, and broker profile gates. Record each result as passed, failed, blocked-by-environment, not-applicable, or owner-deferred. Only passed, or an explicitly policy-accepted owner deferral, can satisfy a required gate.
 
 ## Fresh-Context Review

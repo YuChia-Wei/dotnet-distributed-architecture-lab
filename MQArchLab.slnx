@@ -43,6 +43,7 @@
     <Project Path="src/Shared/Lab.SharedKernel/Lab.SharedKernel.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/InventoryControl.Tests/InventoryControl.Tests.csproj" />
     <Project Path="tests/SaleOrders.Tests/SaleOrders.Tests.csproj" />
     <Project Path="tests/SaleProducts.Tests/SaleProducts.Tests.csproj" />
     <Project Path="tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj" />

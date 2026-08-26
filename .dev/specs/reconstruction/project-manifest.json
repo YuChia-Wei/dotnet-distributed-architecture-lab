@@ -10,7 +10,7 @@
   "sdk": { "version": "10.0.302", "rollForward": "latestMajor", "allowPrerelease": true },
   "targetFramework": "net10.0",
   "solution": "MQArchLab.slnx",
-  "projectCounts": { "product": 22, "test": 4, "total": 26 },
+  "projectCounts": { "product": 22, "test": 5, "total": 27 },
   "groups": [
     { "path": "/BC-Contracts/", "purpose": "Published Language" },
     { "path": "/BuildingBlocks/", "purpose": "business-neutral architecture contracts" },
@@ -51,8 +51,9 @@
     { "path": "tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj", "targets": ["Product aggregate"] },
     { "path": "tests/SaleProducts.Tests/SaleProducts.Tests.csproj", "targets": ["Product use cases", "cross-context consumer compatibility"] },
     { "path": "tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj", "targets": ["Order event-sourced aggregate"] },
-    { "path": "tests/SaleOrders.Tests/SaleOrders.Tests.csproj", "targets": ["Order use cases", "Order API", "Orders outbox", "Inventory stock/reservation", "messaging options"] }
+    { "path": "tests/SaleOrders.Tests/SaleOrders.Tests.csproj", "targets": ["Order use cases", "Order API", "Orders outbox", "messaging options"] },
+    { "path": "tests/InventoryControl.Tests/InventoryControl.Tests.csproj", "targets": ["Inventory stock use cases", "reservation validation/idempotency/failure behavior", "opt-in PostgreSQL concurrency"] }
   ],
-  "requiredQualityUplift": { "newTestSurface": "Inventory bounded-context tests must become independently owned instead of remaining inside SaleOrders.Tests." },
+  "requiredQualityUplift": { "newTestSurface": "completed by InventoryControl.Tests", "externalIntegrationDefault": "skipped unless explicitly opted in" },
   "validation": ["dotnet restore MQArchLab.slnx", "dotnet build MQArchLab.slnx --no-restore", "dotnet test MQArchLab.slnx --no-build"]
 }

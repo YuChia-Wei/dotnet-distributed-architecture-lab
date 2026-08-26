@@ -6,7 +6,7 @@ using NSubstitute;
 using Shouldly;
 using Wolverine;
 
-namespace SaleOrders.Tests;
+namespace InventoryControl.Tests;
 
 public sealed class InventoryReservationIdempotencyTests
 {

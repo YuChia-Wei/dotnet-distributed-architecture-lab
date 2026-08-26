@@ -23,7 +23,7 @@ dotnet:
   solutions:
     - path: MQArchLab.slnx
       productProjectCount: 22
-      testProjectCount: 4
+      testProjectCount: 5
   projects:
     - path: src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj
       kind: contract-library
@@ -76,6 +76,8 @@ dotnet:
     - path: tests/SaleOrders.Tests/SaleOrders.Tests.csproj
       kind: test
     - path: tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj
+      kind: test
+    - path: tests/InventoryControl.Tests/InventoryControl.Tests.csproj
       kind: test
 sourceLayout:
   sourceRoots:
@@ -197,6 +199,16 @@ technologySelections:
     reason: >-
       The target explicitly opts out of BDDfy and retains plain xUnit while
       preserving mandatory Given-When-Then semantics and recognizable step names.
+  - slot: testing.external-integration-profile
+    value: explicit environment opt-in with skipped-by-default xUnit facts
+    status: selected
+    source: explicit-target-decision
+    evidence:
+      - tests/README.md
+      - tests/InventoryControl.Tests/ExternalIntegrationFactAttribute.cs
+    reason: >-
+      Tests that require PostgreSQL, Kafka, RabbitMQ, or another out-of-process service
+      must not add failure noise to ordinary deterministic test runs.
   - slot: persistence.orm
     value: Dapper
     status: selected
@@ -270,6 +282,5 @@ unresolved:
     - RabbitMQ logical inventory request/reply routes exist, but real broker connectivity and physical exchange/binding/reply/DLQ behavior are not verified.
     - products.integration.events is configured, but no current Product use case is confirmed to publish a product integration event.
     - Orders source-outbox and Inventory reservation retry/idempotency policies are documented, while consumer-wide replay and broker-specific dead-letter procedures remain incomplete.
-    - Inventory has no checked-in test project.
   decisions:
     - Decide whether RabbitMQ remains a maintained runtime profile or only compatibility guidance.
