@@ -12,12 +12,15 @@
 | Stable relay metadata | passed; MessageId, ProductId partition key, OccurredOn, and Wolverine metadata asserted |
 | Corrected event contracts | passed; correct property/JSON names and no erroneous compatibility aliases |
 
-## Pending Final Repository Checks
+## Final Repository Checks
 
-- Parse every changed JSON and YAML artifact.
-- Resolve local Markdown links for changed and new Markdown.
-- Run workflow-artifact validation and `git diff --check`.
-- Record the local checkpoint commit and commit-policy result.
+- JSON parse: passed, 32 files.
+- YAML parse: passed, 20 files.
+- Changed/new Markdown link resolution: passed, 49 files.
+- Workflow artifact validation: passed.
+- `git diff --cached --check`: passed before checkpoint.
+- Local implementation/specification checkpoint: `07aeea91f9692ab51a421cffa69e22c48495505c`.
+- Commit-policy validation is rerun after the workflow-evidence checkpoint and recorded in the final handoff.
 
 ## Failed Closed Or Blocked
 

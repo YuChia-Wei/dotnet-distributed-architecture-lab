@@ -17,7 +17,7 @@
 - `branch_segment`: `1`
 - `status`: `active`
 - `created_at`: `2026-08-26T19:03:36+08:00`
-- `updated_at`: `2026-08-27T08:53:12+08:00`
+- `updated_at`: `2026-08-27T08:57:38+08:00`
 - `template_source`: `.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
 - `template_version`: `1.4.0`
 - `workflow_locator`: `.dev/workflows/2026-08-26-reconstructable-system-specification/workflow.yaml`
@@ -179,6 +179,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `codex/2026-08-26-reconstructable-system-specification` | `main` | active | `a4b0f09f06bdfca9d8ea4e3e7e57ad68102fb15e` | local only | `2026-08-26T20:25:13+08:00` | Inventory test/compliance checkpoint; workflow remains open | Run opted-in PostgreSQL evidence, then resume RECON-005/RECON-006 |
 | 1 | `codex/2026-08-26-reconstructable-system-specification` | `main` | active | `e093efe78723323134111f01632a7b45cc07aa28` | local only | `2026-08-27T08:53:12+08:00` | RECON-008 implementation baseline before local checkpoint | Commit the validated source-outbox slice; no remote mutation |
+| 1 | `codex/2026-08-26-reconstructable-system-specification` | `main` | active | `07aeea91f9692ab51a421cffa69e22c48495505c` | local only | `2026-08-27T08:57:38+08:00` | Validated RECON-008 implementation/specification checkpoint | Record exact validation evidence; await external gates and owner design review |
 
 ## Completion Summary
 
@@ -191,6 +192,6 @@
 - Review disposition: Conditional; do not delete source yet. See `reports/06-reconstruction-readiness-audit.md`.
 - Validation evidence: JSON/YAML parse, Markdown links, workflow validator, targeted builds, and broker-free tests passed; the external PostgreSQL gate is blocked-by-environment. See `reports/07-validation-summary.md`.
 - Workflow task state: RECON-001 through RECON-004 completed; RECON-005 and RECON-007 blocked on external evidence; RECON-008 in progress pending owner design review, external evidence, and clean-room runs; RECON-006 pending.
-- Commits: `3a5fbb3bb9bd5e4643af87ddfcbd6883373eb1fb`, `a4b0f09f06bdfca9d8ea4e3e7e57ad68102fb15e`.
+- Commits: `3a5fbb3bb9bd5e4643af87ddfcbd6883373eb1fb`, `a4b0f09f06bdfca9d8ea4e3e7e57ad68102fb15e`, `07aeea91f9692ab51a421cffa69e22c48495505c`.
 - Branch / checkpoint / handoff evidence: Local branch created; no push, PR, merge, or handoff.
 - Residual risks: Existing implementation may contain accidental behavior; the provisional port may be revised; PostgreSQL/Kafka and two clean-room LUNA acceptance exercises remain non-passing.

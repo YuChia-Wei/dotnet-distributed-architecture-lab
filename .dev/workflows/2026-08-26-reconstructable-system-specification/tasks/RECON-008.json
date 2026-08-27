@@ -9,7 +9,7 @@
   "related_plan_id": "development-plan-2026-08-26-reconstructable-system-specification",
   "status": "in_progress",
   "created_at": "2026-08-27T08:26:59+08:00",
-  "updated_at": "2026-08-27T08:26:59+08:00",
+  "updated_at": "2026-08-27T08:57:38+08:00",
   "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
   "model": "gpt-5",
   "reasoning_effort": "unspecified",
@@ -140,14 +140,42 @@
     ]
   },
   "results": {
-    "summary": "",
-    "files_changed": [],
+    "summary": "Implemented the owner-approved provisional Kafka/producer-ownership design as an atomic ReserveInventory source outbox, corrected Inventory event names, and strengthened reconstruction gates. Broker-free validation passes; PostgreSQL/Kafka and two clean-room LUNA runs remain non-passing.",
+    "files_changed": [
+      "src/Inventory/DomainCore/InventoryControl.Applications/Reservations/InventoryReservation.cs",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/BuildingBlocks/InventoryIntegrationOutboxRelay.cs",
+      "src/BC-Contracts/Lab.BoundedContextContracts.Inventory/IntegrationEvents/",
+      "docker-compose/sql-script/migrations/inventory/20260827_0002_add_inventory_integration_outbox.sql",
+      "tests/InventoryControl.Tests/",
+      ".dev/adr/ADR-003-kafka-canonical-integration-transport.md",
+      ".dev/adr/ADR-004-inventory-reservation-source-outbox.md",
+      ".dev/requirement/",
+      ".dev/specs/",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/",
+      ".dev/workflows/2026-08-26-reconstructable-system-specification/"
+    ],
     "approval_evidence": ["User decisions on 2026-08-27 and GitHub Issue #2."],
-    "test_execution": [],
-    "role_execution_aggregation": [],
-    "spec_compliance": {"outcome": "pending", "coverage_percent": null, "evidence": []},
-    "validation_evidence": [],
-    "commits": [],
+    "test_execution": [
+      {"command": "dotnet build tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false", "outcome": "passed", "evidence": "0 warnings, 0 errors."},
+      {"command": "dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-build --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false", "outcome": "passed", "evidence": "27 passed, 1 external PostgreSQL test skipped, 0 failed."},
+      {"command": "dotnet test MQArchLab.slnx --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false", "outcome": "passed", "evidence": "63 passed, 1 external PostgreSQL test skipped, 0 failed."},
+      {"command": "Inventory ExternalIntegration and live Kafka profiles", "outcome": "blocked-by-environment", "evidence": "Docker Desktop was not running; no real PostgreSQL or Kafka result was claimed."}
+    ],
+    "role_execution_aggregation": [
+      {"stage_id": "RECON-008", "record_id": "RECON-008-outbox-sub-agent-01", "disposition": "direct", "integration_decision": "accepted-provisionally-pending-owner-design-review", "evidence": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-role-execution.yaml"},
+      {"stage_id": "RECON-008", "record_id": "RECON-008-usecase-test-sub-agent-01", "disposition": "direct", "integration_decision": "accepted", "evidence": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-test-role-execution.yaml"}
+    ],
+    "spec_compliance": {"outcome": "failed-closed", "coverage_percent": 89, "evidence": [".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md"]},
+    "validation_evidence": [
+      "32 JSON files parsed.",
+      "20 problem-frame/workflow YAML files parsed.",
+      "Workflow artifact validator passed.",
+      "Changed/new Markdown links passed for 49 files.",
+      "git diff --cached --check passed.",
+      "Effective compliance packet freshness verified."
+    ],
+    "commits": ["07aeea91f9692ab51a421cffa69e22c48495505c"],
     "follow_up_needed": true
   }
 }
