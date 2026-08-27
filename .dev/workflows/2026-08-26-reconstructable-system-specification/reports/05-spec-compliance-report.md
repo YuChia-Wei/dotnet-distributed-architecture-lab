@@ -1,9 +1,9 @@
-# RECON-005 Spec Compliance Report
+# RECON-008 Spec Compliance Report
 
 ## Selection
 
 - Problem frame: `.dev/problem-frames/inventory/cbf/reserve-inventory/`
-- Aggregate / controlled domain: `InventoryItem` reservation transaction
+- Aggregate / controlled domain: `InventoryItem` reservation transaction and source outbox
 - Effective packet: `PACKET-D30CE87BD1F49C6BF04E18E179DEFFB9152CC2FD464D0A4E1B3D6B8841928A72`
 - Route: `compliance-validation / direct / dotnet-backend / problem-frame-and-dotnet`
 - Freshness: `verified`
@@ -12,67 +12,70 @@
 ## Evidence Read
 
 - All five CBF files under the selected frame.
-- `ReserveInventoryUseCase`, `PostgresInventoryReservationRepository`, `InMemoryInventoryReservationRepository`, and the request-contract handler.
-- `InventoryReservationIdempotencyTests.cs` and reusable `InventoryStockUseCaseTests.cs` contract assertions.
-- The new ReserveInventory test specification.
+- `ReserveInventoryUseCase`, both reservation transaction adapters, `InventoryIntegrationOutboxRelay`, and the Inventory integration-event publisher.
+- Inventory use-case, idempotency, contract, relay, and opted-in PostgreSQL tests.
+- ReserveInventory production/test specifications and the Inventory outbox SQL migration.
 
 ## Compliance Matrix
 
-The overall percentage is a transparent checklist inventory, not a waiver. After RECON-007 remediation, `62 / 66 = 94%`.
+The percentage is a transparent checklist inventory, not a waiver. RECON-008 expands the contract from 66 to 82 items to cover atomic source-outbox persistence, stable relay identity, and failure behavior. Current evidence covers `73 / 82 = 89.0%`, reported as 89%.
 
 | Category | Covered | Total | Rate | Status |
 | --- | ---: | ---: | ---: | --- |
 | Use-case input fields | 3 | 3 | 100% | pass |
 | Service preconditions | 3 | 3 | 100% | pass |
-| Aggregate/repository behavior signature | 1 | 1 | 100% | pass |
-| Integration-event attributes | 4 | 4 | 100% | pass through shared stock-event contract test |
-| Error-handling policies | 9 | 9 | 100% | pass |
-| Constraints | 4 | 5 | 80% | fail: real store execution pending |
-| Frame concerns FC1–FC6 | 5 | 6 | 83% | fail: FC3 execution pending |
-| Acceptance scenarios | 6 | 6 | 100% | pass |
-| Then-condition assertions | 15 | 15 | 100% | pass |
-| PRE/POST/INV contract semantics | 6 | 8 | 75% | fail: PostgreSQL POST1/INV1 proof pending |
-| GWT semantic mapping | 6 | 6 | 100% | pass |
-| **Overall inventory** | **62** | **66** | **94%** | **fail** |
+| Aggregate/transaction behavior signature | 1 | 1 | 100% | pass |
+| Integration-event attributes | 4 | 4 | 100% | pass |
+| Error-handling policies | 10 | 10 | 100% | pass |
+| Constraints | 4 | 6 | 67% | fail: real-store non-negative stock and atomic rollback proof pending |
+| Frame concerns FC1-FC6 | 5 | 6 | 83% | fail: FC3 real-store execution pending |
+| Acceptance scenarios | 8 | 9 | 89% | fail: SC7 is default-skipped |
+| Then-condition assertions | 19 | 22 | 86% | fail: SC7 has no passing runtime evidence |
+| PRE/POST/INV contract semantics | 7 | 9 | 78% | fail: PostgreSQL POST1/INV1 proof pending |
+| GWT semantic mapping | 9 | 9 | 100% | pass |
+| **Overall inventory** | **73** | **82** | **89%** | **fail** |
 
 ## Missing Items
 
-1. `FC3`, `POST1`, and `INV1` still require one opted-in real PostgreSQL run proving concurrent reservations serialize through `FOR UPDATE`, never produce negative stock, and atomically persist both outcomes with stock.
-2. The required test now exists and is default-skipped by policy. A skipped result is intentionally not counted as passing compliance evidence.
+1. `SC7`, `FC3`, `POST1`, and `INV1` need one opted-in real PostgreSQL run proving that concurrent reservations serialize, stock never becomes negative, both outcomes persist, and exactly one successful outbox row commits.
+2. A real persistence failure-injection test is still needed to prove that failure while staging or committing rolls back stock, outcome, and outbox. The broker-free use-case test proves that `CommitAsync` is not called; it cannot prove PostgreSQL rollback semantics.
+3. The PostgreSQL test is present and default-skipped by policy. A skipped result is intentionally not passing compliance evidence.
 
 ## Closed Remediation Items
 
-- `PRE1`–`PRE3` / `SC5`: exact invalid-input reasons and zero repository/publisher interactions are covered.
-- `SC3`: operation identity conflict now asserts no success publication.
-- `FC6`: transient durable-store failure and publish-after-commit failure/replay are distinguished from business rejection.
-- `InventoryIsNotEnough` is exercised through `ReserveInventoryUseCase` with no publication.
-- Inventory behavior is owned by `tests/InventoryControl.Tests` rather than the Orders test project.
-- The external-integration contract is documented in `tests/README.md`; ordinary configuration and in-memory transport tests remain in the default profile.
+- The application now owns one explicit reservation transaction and creates the producer-owned integration event before commit.
+- PostgreSQL stages stock, terminal outcome, and the source-outbox row in one local transaction.
+- Matching replay does not decrement stock or add a second outbox row; conflicting identity does not stage a success event.
+- Relay retries preserve `MessageId`, partition key, and `OccurredOn`; successful relay retains publication evidence.
+- Five consecutive publication failures park the row and a later relay pass does not republish it.
+- Wolverine publication receives the stable message identity and normalized product partition key.
+- Invalid input, cancellation, business failure, transient store failure, and staging failure are distinguished.
+- Correct `IncreasedQuantity` and `ReturnedQuantity` JSON contracts are executable and the erroneous names are absent.
+- External-service tests remain opt-in; ordinary default tests require no Kafka, RabbitMQ, or PostgreSQL service.
 
 ## Test Execution Evidence
-
-A prior focused command in the original mixed test project was interrupted. RECON-007 used single-node MSBuild/test execution to avoid the host's uncontrolled process fan-out:
 
 ```text
 dotnet build tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false
 dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-build --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false
-dotnet test tests/SaleOrders.Tests/SaleOrders.Tests.csproj --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false
+dotnet test MQArchLab.slnx --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false
 ```
 
-- Inventory build: passed, 0 errors; one pre-existing nullable warning in `DomainEntity.Id`.
-- Inventory default profile: 19 passed, 1 skipped (the PostgreSQL external integration test), 0 failed.
-- Orders regression profile: 11 passed, 0 skipped, 0 failed; three pre-existing nullable warnings in `Order.ProductName`.
+- Inventory build: passed, 0 warnings, 0 errors.
+- Inventory default profile: 27 passed, 1 skipped, 0 failed.
+- Full solution default profile: 63 passed, 1 skipped, 0 failed.
 - Docker Desktop was not running, so no opted-in PostgreSQL result exists.
 
 ## Remediation Contract
 
-The implementation slice is complete. The remaining closeout action is environment-dependent execution:
+To reach the unchanged 100% gate:
 
-- start a compatible PostgreSQL instance with the Inventory schema;
+- start a compatible PostgreSQL instance with both Inventory migrations;
 - set `RUN_EXTERNAL_INTEGRATION_TESTS=true` and `INVENTORY_TEST_POSTGRES_CONNECTION_STRING`;
-- run the `ExternalIntegration` category;
-- retain the result as FC3/POST1/INV1 evidence and rerun this unchanged checklist.
+- run the `ExternalIntegration` category and retain SC7/FC3/POST1/INV1 evidence;
+- add a real rollback failure-injection check;
+- rerun this same 82-item checklist without treating skipped checks as passed.
 
 ## Verdict
 
-`NOT COMPLIANT — 94%; 100% gate not reached.` Static implementation and broker-free execution gaps are closed, but the real PostgreSQL concurrency proof is `blocked-by-environment`, not passed.
+`NOT COMPLIANT - 89%; 100% gate not reached.` Broker-free implementation and tests pass, but the strengthened real-store evidence is incomplete. Source deletion remains prohibited.

@@ -5,17 +5,18 @@ contracts:
     - { id: PRE1, rule: "The reservation operation id and product id are non-empty." }
     - { id: PRE2, rule: "The requested quantity is greater than zero." }
   postconditions:
-    - { id: POST1, rule: "Successful new reservation reduces Stock by Quantity and records RemainingStock." }
-    - { id: POST2, rule: "Matching replay returns the recorded outcome with WasAlreadyProcessed true and no second decrement." }
-    - { id: POST3, rule: "Mismatched replay returns OperationIdentityConflict and no mutation." }
+    - { id: POST1, rule: "Successful new reservation reduces Stock by Quantity, records RemainingStock, and stages one source-outbox event in the same transaction." }
+    - { id: POST2, rule: "Matching replay returns the recorded outcome with WasAlreadyProcessed true, no second decrement, and no second outbox row." }
+    - { id: POST3, rule: "Mismatched replay returns OperationIdentityConflict and no mutation or new outbox row." }
   invariants:
     - { id: INV1, rule: "Stock is never negative." }
     - { id: INV2, rule: "One OperationId is bound to exactly one ProductId and Quantity payload." }
     - { id: INV3, rule: "A completed operation outcome is immutable." }
+    - { id: INV4, rule: "For each successful OperationId, exactly one InventoryIntegrationOutbox row carries that same stable Id." }
 
 behavior:
-  signature: "IInventoryReservationRepository.ReserveAsync(Guid operationId, Guid productId, int quantity, CancellationToken)"
-  persistence_boundary: "PostgresInventoryReservationRepository owns the atomic stock-and-operation transaction; InventoryItem's general repository is not used by this flow."
+  signature: "IReserveInventoryUseCase.ExecuteAsync(ReserveInventoryInput, CancellationToken) through IInventoryReservationTransactionFactory"
+  persistence_boundary: "The Application use case creates the event and explicitly controls an IInventoryReservationTransaction; PostgresInventoryReservationRepository atomically persists stock, operation outcome, and outbox without owning business meaning."
 
 domain_events:
   - name: "Lab.BoundedContextContracts.Inventory.IntegrationEvents.ProductStockDecreasedIntegrationEvent"
@@ -23,7 +24,7 @@ domain_events:
       - "InventoryItemId"
       - "ProductId"
       - "DecreasedQuantity"
-      - "RemainingStock"
+      - "CurrentStock"
     delivery:
       message_id: "OperationId"
       partition_key: "ProductId.ToString(\"N\")"
@@ -33,5 +34,6 @@ semantic_tags:
   - { field: "ProductId", semantics: [aggregate_lookup, partition_key] }
   - { field: "Quantity", semantics: [positive_business_quantity] }
 
-observed_source_gap:
-  - "The integration contract property is named DecreasedQuantity; preserve wire compatibility during reconstruction even if a future rename is considered."
+owner_decisions:
+  - "Kafka is canonical and ProductId.ToString(\"N\") is the ordering partition key for this event."
+  - "The producer Inventory context owns ProductStockDecreasedIntegrationEvent meaning and schema."

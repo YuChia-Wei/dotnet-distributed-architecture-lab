@@ -166,7 +166,7 @@ public sealed class InventoryStockUseCaseTests
     {
         var increased = message as ProductStockIncreasedIntegrationEvent;
         return increased?.ProductId == productId &&
-               increased.DecreasedQuantity == quantity &&
+               increased.IncreasedQuantity == quantity &&
                increased.CurrentStock == currentStock;
     }
 
@@ -178,7 +178,7 @@ public sealed class InventoryStockUseCaseTests
     {
         var returned = message as ProductStockReturnedIntegrationEvent;
         return returned?.ProductId == productId &&
-               returned.DecreasedQuantity == quantity &&
+               returned.ReturnedQuantity == quantity &&
                returned.CurrentStock == currentStock;
     }
 }

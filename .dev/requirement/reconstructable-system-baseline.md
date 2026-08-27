@@ -2,8 +2,8 @@
 
 ## Metadata
 
-- Version: `1.0-draft`
-- Date: `2026-08-26`
+- Version: `1.1-draft`
+- Date: `2026-08-27`
 - Owner: repository owner
 - Authoring workflow: `2026-08-26-reconstructable-system-specification`
 - Work item: GitHub Issue `#2`
@@ -80,8 +80,8 @@
 - `INV-003` `quality-uplift`: 初始化 stock 必須 `>= 0`；increase、decrease、restock 與 reserve quantity 必須 `> 0`；任何成功操作後 stock 不得為負。這補強目前 aggregate 對 increase/restock/init 驗證不足的現況。
 - `INV-004` `preserve`: 一般 decrease/increase/restock 先載入 aggregate、執行 domain behavior、持久化，再發佈相對應 integration event；失敗不得持久化或發佈。
 - `INV-005` `required`: reservation 以 caller 提供的 `OperationId` 作 idempotency key。同 key 同 payload 必須重播原 outcome 且不得再次扣庫；同 key 不同 payload 必須回傳 terminal `OperationIdentityConflict`。
-- `INV-006` `required`: reservation claim、row lock、stock decrement 與 outcome 必須在單一 PostgreSQL transaction 完成；存取 durable store 的暫時性失敗必須可被 retry policy 辨識。
-- `INV-007` `required`: 成功 reservation 發佈 stock-decreased integration event 時，以 `OperationId` 作 stable delivery/deduplication ID，以 normalized product ID 作 partition key。
+- `INV-006` `required`: reservation claim、row lock、stock decrement、terminal outcome 與成功事件的 `InventoryIntegrationOutbox` row 必須在單一 PostgreSQL transaction 完成；任一 write/stage/commit 失敗時全部 rollback，且暫時性 store failure 必須可被 retry policy 辨識。
+- `INV-007` `required`: 成功 reservation 由 use case 建立 producer-owned stock-decreased integration event；source-outbox relay 以 `OperationId` 作 stable delivery/deduplication ID，以 `ProductId.ToString("N")` 作 Kafka partition key。相同 operation replay 不得建立第二個 outbox row。
 - `INV-008` `compatibility`: inventory HTTP API 提供 initialize、get available quantity、increase、decrease、restock 行為。
 
 ### INT — Cross-context integration
@@ -90,9 +90,11 @@
 - `INT-002` `required`: Published Language 位於 `BC-Contracts`；Domain projects 不得參考它。
 - `INT-003` `compatibility`: `ReserveInventoryRequestContract` 包含 `OperationId`, `ProductId`, `Quantity`；response 包含 `OperationId`, `Result`, `FailureReason`。
 - `INT-004` `required`: delivery 按 at-least-once 設計。Publisher 提供 stable message identity；consumer 對重複訊息的處理策略必須可驗證。
-- `INT-005` `compatibility`: Kafka 與 RabbitMQ logical names 維持 `orders.integration.events`, `inventory.requests`, `orders.outbound.replies`, `inventory.integration.events`, `products.integration.events`。
+- `INT-005` `required`: Kafka 是目前 canonical runtime 與事件驅動驗證路徑；logical names 維持 `orders.integration.events`, `inventory.requests`, `orders.outbound.replies`, `inventory.integration.events`, `products.integration.events`。相同 entity/aggregate 的順序需求必須使用穩定 partition key，不得宣稱跨 partition 全域順序。
 - `INT-006` `preserve`: Orders native source outbox relay 使用 outbox row ID 作 Wolverine deduplication/header identity、aggregate ID 作 partition key；失敗採 bounded backoff，五次後 park。
 - `INT-007` `quality-uplift`: 所有六個 host 使用同一個 `Messaging` configuration contract；移除 Product hosts 的 legacy `QUEUE_SERVICE`/`BrokerConnectionString` 分岔，且 InMemory/Kafka/RabbitMq profile 都必須 fail-fast 驗證。
+- `INT-008` `required`: integration event 的 business meaning、名稱、schema、相容性與版本決策由 producer bounded context 擁有；consumer 只擁有 reaction、projection、idempotency、retry 與 dead-letter policy，不得以自身模型改寫 event 語意。
+- `INT-009` `deferred`: RabbitMQ 保留為可選 compatibility profile，但目前不是 canonical verification path。未來若有廣播需求，必須先比較 Kafka 多 consumer-group 與 RabbitMQ exchange + per-consumer queue；目前共享 queue 不能被描述成廣播，broker 轉換或同步部署需另行 owner 決策。
 
 ### API — HTTP boundary
 
@@ -105,7 +107,7 @@
 - `NFR-001` Build: 以 `global.json` 選擇 .NET SDK `10.0.302` 並允許 `latestMajor` roll-forward；所有 active product/test project 以 `net10.0` 為目標。
 - `NFR-002` Architecture: Domain 無 Infrastructure/Presentation dependency；Application 擁有 inbound/outbound ports；Infrastructure 實作 adapters；Presentation 為 composition/inbound boundary。
 - `NFR-003` Persistence: 所有 SQL parameterized；command transaction 保持 aggregate consistency；query port 回傳 DTO/read model，不回傳 mutable aggregate。
-- `NFR-004` Reliability: Orders commit/outbox atomicity、reservation idempotency、optimistic concurrency 與 at-least-once duplicate tolerance 是 hard gates。
+- `NFR-004` Reliability: Orders commit/outbox atomicity、Inventory reservation outcome/outbox atomicity、reservation idempotency、optimistic concurrency 與 at-least-once duplicate tolerance 是 hard gates。
 - `NFR-005` Security/privacy: connection strings 只存在 runtime configuration；transition reason 可能含人員文字，不得預設可安全完整記錄於 logs/telemetry。
 - `NFR-006` Observability: 六個 host 提供 OpenTelemetry logs/traces/metrics OTLP export；API hosts 加 ASP.NET Core instrumentation，message hosts 加 Wolverine/broker instrumentation。
 - `NFR-007` Containers: 每個 host 提供 Linux multi-stage Dockerfile；restore 前顯式 copy 其遞迴 project references，以保持 restore cache。
@@ -116,12 +118,12 @@
 
 ## Constraints & Assumptions
 
-- Dapper + Npgsql + PostgreSQL、WolverineFx、Kafka/RabbitMQ、OpenTelemetry 為目前 target selections；更換技術需另行 owner 決策，但不得弱化架構語意。
+- Dapper + Npgsql + PostgreSQL、WolverineFx、Kafka、OpenTelemetry 為目前 canonical target selections；RabbitMQ 是 deferred compatibility profile。更換或同步部署 broker 需另行 owner 決策，且不得弱化 producer ownership、ordering key、outbox atomicity 或 at-least-once 語意。
 - Orders event sourcing 是 context-specific，不得套用到 Products/Inventory。
 - Products soft delete 與 Orders event sourcing/outbox 是重建必要能力。
 - `SharedKernel` 目前為空 placeholder；不得從 BuildingBlocks 或任一 bounded context 猜測共享 domain concepts。
 - Consumer runtime 目前訂閱 channel，但缺少清楚 business handler ownership；重建需保留 host/topology compatibility，同時將無 handler 的訂閱列為 `gap`，不得宣稱已有業務效果。
-- `ProductStockIncreasedIntegrationEvent` 與 `ProductStockReturnedIntegrationEvent` 的 quantity property 目前皆名為 `DecreasedQuantity`。這是 compatibility risk；若修正名稱需使用 versioned/binary-compatible 遷移或 owner-approved breaking change。
+- Owner 已於 2026-08-27 核准 breaking correction：`ProductStockIncreasedIntegrationEvent.IncreasedQuantity` 與 `ProductStockReturnedIntegrationEvent.ReturnedQuantity` 是 normative names；舊的錯誤 `DecreasedQuantity` 名稱不保留為相容 alias。
 
 ## Domain / Business Rules
 
@@ -143,18 +145,21 @@
 | `AC-003` | HTTP contract tests覆蓋所有 15 個列出的 endpoints、success/error/not-found mapping。 |
 | `AC-004` | Domain/use-case oracles覆蓋三個 aggregates、16 個列出的 use cases 與同狀態/no-side-effect、validation、not-found paths。 |
 | `AC-005` | Orders event-store + read-model + source-outbox 原子性、optimistic concurrency、stable relay identity 與 park policy 均通過 tests。 |
-| `AC-006` | Inventory reservation replay/conflict/terminal-failure/cancellation/stable-publication-identity scenarios 全部通過。 |
-| `AC-007` | Kafka、RabbitMQ、InMemory profile 的必要 configuration 與 logical route mapping 均由 startup/config tests 證明；blocked environment 不算 passed。 |
+| `AC-006` | Inventory reservation replay/conflict/terminal-failure/cancellation、reservation + outbox rollback、stable relay identity 與 park policy scenarios 全部通過；real PostgreSQL atomicity check 不得以 skipped 代替。 |
+| `AC-007` | Kafka 與 InMemory profile 的必要 configuration、logical routes、Kafka partition ordering 與 actual broker smoke test 均通過；RabbitMQ 僅驗證已宣告的 compatibility surface，除非未來升格為 canonical profile。Blocked environment 不算 passed。 |
 | `AC-008` | 三個 database schema 能由 checked-in SQL/migrations 重建，schema constraints 與 persistence specs 一致。 |
 | `AC-009` | JSON specs/manifest 全部 parse；problem-frame selected scope 達成 100% spec compliance；所有未決項保持 `gap`/`deferred`。 |
-| `AC-010` | Fresh-context readiness review 證明完成判斷不需要原 source、知識圖或聊天歷史。 |
+| `AC-010` | 兩次互相獨立的 LUNA-class clean-room reconstruction，在無 `src/`、`tests/`、`.git/`、`bin/`、`obj/`、code graph cache 與聊天歷史的 disposable copies 中完成；兩次皆需通過相同 gates，且不得讀取彼此輸出。 |
+| `AC-011` | 重建後 HTTP/message/schema/runtime 外部契約逐項相符；內部程式碼允許不同或更佳設計。source deletion 仍需另外明確授權，不因本 gate 通過而自動執行。 |
 
-## Open Decisions
+## Decisions And Deferred Choices
 
 - `DEC-001`: Products 是否要正式生產 product integration events；目前只保留 route compatibility。
 - `DEC-002`: 無明確 business handler 的三個 Consumer hosts 應保留為 topology lab、補 handler，或退役。
-- `DEC-003`: 修正 Inventory increase/return event 的 `DecreasedQuantity` property 是否允許 breaking change。
-- `DEC-004`: RabbitMQ exchange/binding 與 broker-specific DLQ physical names 是否要成為正式 portable contract。
+- `DEC-003` `resolved 2026-08-27`: 以 breaking correction 修正 Inventory increase/return quantity property；producer-owned normative names 分別為 `IncreasedQuantity` 與 `ReturnedQuantity`。
+- `DEC-004` `deferred`: RabbitMQ exchange/binding、每 consumer queue、broker-specific DLQ physical names，以及轉換或同步部署策略。
+- `DEC-005` `resolved provisionally 2026-08-27`: Kafka 為 canonical broker；RabbitMQ 不因「廣播」一詞自動成為較佳選擇，需以實際 consumer-group/exchange topology 再評估。
+- `DEC-006` `resolved provisionally 2026-08-27`: ReserveInventory 採 explicit application transaction port + PostgreSQL source outbox；owner 將依實際程式碼架構觀察後決定是否調整或擴大到其他 Inventory commands。
 
 ## References
 

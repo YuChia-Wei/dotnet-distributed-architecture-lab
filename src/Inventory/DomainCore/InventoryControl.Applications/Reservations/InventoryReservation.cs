@@ -22,13 +22,25 @@ public sealed record InventoryReservationOutcome(
     string? FailureReason,
     bool WasAlreadyProcessed);
 
-public interface IInventoryReservationRepository
+public interface IInventoryReservationTransactionFactory
+{
+    Task<IInventoryReservationTransaction> BeginAsync(CancellationToken cancellationToken);
+}
+
+public interface IInventoryReservationTransaction : IAsyncDisposable
 {
     Task<InventoryReservationOutcome> ReserveAsync(
         Guid operationId,
         Guid productId,
         int quantity,
         CancellationToken cancellationToken);
+
+    Task StageAsync(
+        IIntegrationEvent integrationEvent,
+        IntegrationMessageDelivery delivery,
+        CancellationToken cancellationToken);
+
+    Task CommitAsync(CancellationToken cancellationToken);
 }
 
 public interface IReserveInventoryUseCase
@@ -39,8 +51,7 @@ public interface IReserveInventoryUseCase
 }
 
 public sealed class ReserveInventoryUseCase(
-    IInventoryReservationRepository repository,
-    IIntegrationEventPublisher publisher) : IReserveInventoryUseCase
+    IInventoryReservationTransactionFactory transactionFactory) : IReserveInventoryUseCase
 {
     public async Task<ReserveInventoryOutput> ExecuteAsync(
         ReserveInventoryInput input,
@@ -61,7 +72,8 @@ public sealed class ReserveInventoryUseCase(
             return Invalid(input.OperationId, "QuantityMustBePositive");
         }
 
-        var outcome = await repository.ReserveAsync(
+        await using var transaction = await transactionFactory.BeginAsync(cancellationToken);
+        var outcome = await transaction.ReserveAsync(
             input.OperationId,
             input.ProductId,
             input.Quantity,
@@ -69,14 +81,17 @@ public sealed class ReserveInventoryUseCase(
 
         if (outcome.IsSuccess)
         {
-            await publisher.PublishAsync(
+            await transaction.StageAsync(
                 new ProductStockDecreasedIntegrationEvent(
                     outcome.InventoryItemId!.Value,
                     outcome.ProductId,
                     outcome.Quantity,
                     outcome.RemainingStock!.Value),
-                new IntegrationMessageDelivery(outcome.OperationId, outcome.ProductId.ToString("N")));
+                new IntegrationMessageDelivery(outcome.OperationId, outcome.ProductId.ToString("N")),
+                cancellationToken);
         }
+
+        await transaction.CommitAsync(cancellationToken);
 
         return new ReserveInventoryOutput(
             outcome.OperationId,

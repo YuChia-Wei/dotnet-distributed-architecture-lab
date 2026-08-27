@@ -25,10 +25,15 @@ public static class ServiceCollectionExtensions
             sp => sp.GetRequiredService<InventoryItemDomainRepository>());
         services.AddScoped<IInventoryItemQueryRepository>(
             sp => sp.GetRequiredService<InventoryItemDomainRepository>());
-        services.AddScoped<IInventoryReservationRepository>(
+        services.AddScoped<IInventoryReservationTransactionFactory>(
             _ => new PostgresInventoryReservationRepository(connectionString));
         services.AddScoped<IIntegrationEventPublisher, IntegrationEventPublisher>();
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+        if (configuration.GetValue("Messaging:OutboxRelay:Enabled", false))
+        {
+            services.AddHostedService<InventoryIntegrationOutboxRelay>();
+        }
+
         return services;
     }
 }

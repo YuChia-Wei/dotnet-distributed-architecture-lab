@@ -16,6 +16,8 @@ This directory contains ADR governance and active target-repository decisions.
 | --- | --- | --- |
 | [ADR-001](ADR-001-reasoned-order-state-transitions.md) | Accepted | Require a recorded reason for every actual Order state change while keeping same-state requests as no-ops. |
 | [ADR-002](ADR-002-pluggable-durable-messaging.md) | Accepted | Keep durable messaging behind project-owned ports with Wolverine PostgreSQL as the first adapter and broker-free default tests. |
+| [ADR-003](ADR-003-kafka-canonical-integration-transport.md) | Accepted | Use Kafka as the canonical broker, producer-selected partition keys for scoped ordering, and defer RabbitMQ promotion or broadcast topology. |
+| [ADR-004](ADR-004-inventory-reservation-source-outbox.md) | Accepted | Make `ReserveInventory` state, terminal outcome, and producer-created integration event one PostgreSQL source transaction with a stable-identity relay. |
 
 ## Status Rule
 

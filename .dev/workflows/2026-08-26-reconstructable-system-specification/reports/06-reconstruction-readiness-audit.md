@@ -2,53 +2,68 @@
 
 ## Verdict
 
-`CONDITIONAL — documentation baseline established; do not delete the current product source yet.`
+`CONDITIONAL - the specification baseline and provisional source-outbox design are implemented; do not delete product source yet.`
 
-The durable artifact set is now sufficient to start a source-independent reconstruction without relying on this conversation. It is not yet proven sufficient to finish one at accepted quality because the selected compliance gate is 94%, the opted-in PostgreSQL proof and destructive-copy LUNA exercise have not run, and several owner decisions remain open.
+The durable artifact set can start two source-independent LUNA-class reconstructions without this conversation. It is not proven sufficient to finish either run at accepted quality because the selected compliance gate is 89%, the opted-in PostgreSQL/Kafka evidence and the two clean-room reconstructions have not run, and the owner has not yet accepted the concrete transaction-port design.
 
 ## Durable Coverage
 
 | Dimension | Result | Evidence |
 | --- | --- | --- |
 | Requirement identity and status vocabulary | covered | `.dev/requirement/reconstructable-system-baseline.md` |
-| 22-product-project / 4-current-test-project topology | covered | `project-manifest.json` |
+| 22-product-project / 5-current-test-project topology | covered | `project-manifest.json` |
 | DDD / Clean Architecture / Hexagonal boundaries | covered | `system-blueprint.md` |
 | 3 bounded contexts, 3 aggregates, 16 use cases | covered | domain specs and coverage matrix |
 | 15 HTTP endpoints | covered | `http-api-contracts.json` and adapter specs |
-| Published Language and MQ routes | covered with owner/environment gaps | `message-contracts.json` |
-| Products/Orders/Inventory durability | covered as design | `persistence-contracts.json` |
+| Kafka canonical transport and partition ordering | covered as decision and adapter contract | ADR-003, `message-contracts.json`, `mq-topology.md` |
+| Producer-owned Published Language | covered as normative ownership | `context-map.md`, `message-contracts.json` |
+| Inventory reservation source outbox | covered in code, SQL, specs, and broker-free tests | ADR-004, `persistence-contracts.json`, Inventory implementation/tests |
+| RabbitMQ deferred compatibility profile | bounded, runtime parity unproven | ADR-002, ADR-003, `runtime-contracts.json` |
+| Correct Inventory increase/return event names | covered in code, JSON, and tests | event contracts and `InventoryIntegrationEventContractTests.cs` |
 | 6 hosts, profiles, containers, observability | covered as design | `runtime-contracts.json` |
-| Critical cross-context behavior oracle | covered as frame/design | PlaceOrder and ReserveInventory CBFs plus test specs |
-| Fresh-source deletion reconstruction proof | not run | `.dev/specs/tests/e2e/reconstruction-acceptance.test-spec.md` |
+| Two source-free LUNA-class reconstruction proofs | not run | `.dev/specs/tests/e2e/reconstruction-acceptance.test-spec.md` |
 
-## Source-Independence Walk
+## Concrete Provisional Architecture
 
-A future agent can discover the authority order, read sequence, project graph, build order, aggregate rules, use-case inputs/outputs, API/message/persistence/runtime contracts, and acceptance procedure from `.dev/` alone. The reconstruction documents do not require code-graph access, an archived conversation, or generated caches.
+```text
+ReserveInventoryUseCase
+  -> IInventoryReservationTransactionFactory.BeginAsync
+  -> IInventoryReservationTransaction.ReserveAsync
+  -> use case creates ProductStockDecreasedIntegrationEvent
+  -> IInventoryReservationTransaction.StageAsync
+  -> one PostgreSQL commit: stock + terminal outcome + InventoryIntegrationOutbox
+  -> InventoryIntegrationOutboxRelay
+  -> IIntegrationEventPublisher / Wolverine / Kafka
+```
 
-The following facts still require an explicit decision or executable proof rather than source reading:
+This design deliberately keeps event meaning in Application and persistence/relay mechanics in Infrastructure. The user may revise the transaction-port shape after inspecting the implementation; that review is a design gate, not evidence that the provisional implementation failed.
 
-1. RabbitMQ physical topology and trusted runtime parity.
-2. Product integration-event producer ownership.
-3. Business ownership for subscribed consumer events.
-4. Migration strategy for the misleading `DecreasedQuantity` property on increase/return contracts.
-5. Whether Inventory success publication gains a transactional outbox in the reconstructed target.
+## Resolved And Deferred Decisions
+
+- Resolved: Kafka is canonical; Inventory ordering uses normalized `ProductId` as partition key.
+- Resolved: the producer owns integration-event meaning and schema; consumers own reactions, projections, idempotency, retry, and dead-letter handling.
+- Resolved provisionally: ReserveInventory uses a transactional source outbox.
+- Resolved: increase/return quantity properties use `IncreasedQuantity` and `ReturnedQuantity` with no legacy alias.
+- Resolved provisionally: source deletion requires two independent clean-room LUNA-class reconstructions.
+- Deferred: RabbitMQ fanout/queue topology or dual deployment, outbox retention, adoption by other Inventory commands, and final owner acceptance of the transaction-port design.
 
 ## Non-Passing Gates
 
-- ReserveInventory spec compliance: 94%, `NOT COMPLIANT`; all broker-free tests pass, but the real PostgreSQL concurrency check is skipped until explicitly opted in.
-- Focused current test execution: interrupted during restore; not passing evidence.
-- Real PostgreSQL reservation concurrency and Orders source-transaction failure injection: not proven.
-- RabbitMQ runtime: blocked until a trusted environment run.
-- Fresh LUNA-class reconstruction in a disposable source-free clone: not run.
+- ReserveInventory spec compliance: 89%, `NOT COMPLIANT`; see report 05.
+- Real PostgreSQL concurrency/outbox atomicity and failure injection: blocked because Docker Desktop is not running.
+- Kafka runtime ordering and replay evidence for the new relay: not run against a live broker.
+- RabbitMQ compatibility runtime: deferred and not part of the canonical acceptance path.
+- Two independent LUNA-class reconstructions from a source-free disposable copy: not run.
 
 ## Deletion Gate
 
-Source removal is permitted only in a disposable copy after all of these are true:
+Source removal is permitted only as a separately authorized operation in disposable copies after all of these are true:
 
 1. selected problem frames reach 100% compliance;
-2. every `gap` in `coverage-matrix.md` is passed or explicitly owner-resolved;
-3. a fresh LUNA-class agent reconstructs the repository from the documented entrypoint;
-4. the reconstructed result passes restore/build/test, database durability, Kafka, and selected RabbitMQ gates;
-5. a reviewer confirms no hidden source or conversation dependency.
+2. every required `gap` in `coverage-matrix.md` is passed or explicitly owner-resolved;
+3. two independent LUNA-class agents reconstruct from documented inputs without `src/`, `tests/`, `.git/`, `bin/`, `obj/`, code graph, or conversation history;
+4. each reconstruction uses isolated output and passes restore/build/default tests plus required PostgreSQL and Kafka gates;
+5. a reviewer compares externally observable behavior and architecture constraints without requiring identical internal code;
+6. the owner separately authorizes any source deletion.
 
-Until then, retain the current source as protected comparison evidence. This audit does not authorize deletion, push, PR, merge, Issue closure, or publication.
+Until then, retain current source and tests as protected comparison evidence. This audit authorizes no deletion, push, PR, merge, Issue closure, release, or publication.

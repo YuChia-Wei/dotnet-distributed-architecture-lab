@@ -1,8 +1,6 @@
 using InventoryControl.Applications.Reservations;
 using InventoryControl.Infrastructure.Applications.Repositories;
 using InventoryControl.Infrastructure.Messaging;
-using Lab.BuildingBlocks.Integrations;
-using NSubstitute;
 using Shouldly;
 using Wolverine;
 
@@ -63,11 +61,10 @@ public sealed class InventoryReservationIdempotencyTests
     }
 
     [Fact]
-    public async Task given_a_successful_replay_when_the_event_is_republished_then_delivery_identity_is_stable()
+    public async Task given_a_successful_replay_when_the_event_is_staged_then_delivery_identity_is_stable()
     {
         var repository = new InMemoryInventoryReservationRepository();
-        var publisher = Substitute.For<IIntegrationEventPublisher>();
-        var useCase = new ReserveInventoryUseCase(repository, publisher);
+        var useCase = new ReserveInventoryUseCase(repository);
         var operationId = Guid.CreateVersion7();
         var productId = Guid.CreateVersion7();
         repository.Seed(Guid.CreateVersion7(), productId, 5);
@@ -77,10 +74,9 @@ public sealed class InventoryReservationIdempotencyTests
         await useCase.ExecuteAsync(input, CancellationToken.None);
 
         repository.GetStock(productId).ShouldBe(3);
-        await publisher.Received(2).PublishAsync(
-            Arg.Any<IIntegrationEvent>(),
-            Arg.Is<IntegrationMessageDelivery>(delivery =>
-                delivery.MessageId == operationId && delivery.PartitionKey == productId.ToString("N")));
+        var staged = repository.GetStagedMessages().ShouldHaveSingleItem();
+        staged.Delivery.MessageId.ShouldBe(operationId);
+        staged.Delivery.PartitionKey.ShouldBe(productId.ToString("N"));
     }
 
     [Fact]

@@ -65,7 +65,7 @@ The goal of this document is to provide the minimum project-specific requirement
 
 ## Constraints & Assumptions
 
-- Target stack is .NET 10, WolverineFx, PostgreSQL 16, RabbitMQ, and Kafka.
+- Target stack is .NET 10, WolverineFx, PostgreSQL 16, and canonical Kafka. RabbitMQ remains a deferred compatibility profile for later topology or dual-deployment evaluation.
 - Bounded contexts currently visible in `src/` are treated as the active project truth.
 - This document does not yet define every use case in the system; it only establishes the current bounded-context baseline.
 

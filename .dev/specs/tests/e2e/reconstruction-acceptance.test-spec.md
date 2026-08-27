@@ -13,19 +13,19 @@
 
 ## Scenario Set
 
-### Scenario 1: reconstruct without product source
+### Scenario 1: reconstruct twice without product source or hidden implementation evidence
 
 - Test level: `end-to-end`
-- Given: a disposable clone retains governance, requirements, specs, ADRs, operations docs, solution identity, and fixtures but removes `src/` and `tests/`.
-- When: a fresh LUNA-class agent follows only the reconstruction entrypoint and records every question.
-- Then: it recreates the 26-project graph, all 16 use cases, 15 HTTP endpoints, three persistence models, and the Kafka/RabbitMQ logical routes without reading original product source.
+- Given: two independent disposable copies retain only the authorized reconstruction inputs and remove `src/`, `tests/`, `.git/`, `bin/`, `obj/`, code-knowledge caches, uncommitted artifacts, and conversation history.
+- When: two fresh LUNA-class agents independently follow only the reconstruction entrypoint, record every question, and cannot read each other's prompts or outputs.
+- Then: each recreates the 27-project graph, all 16 use cases, 15 HTTP endpoints, three database models including both source outboxes, and the canonical Kafka logical routes without reading original product source.
 
 ### Scenario 2: pass deterministic validation
 
 - Test level: `end-to-end`
 - Given: reconstruction is complete.
 - When: restore, build, unit/application/integration tests, PostgreSQL migrations, and Kafka smoke tests run.
-- Then: required gates pass; RabbitMQ is either proven by a trusted run or remains explicitly blocked, never inferred from configuration.
+- Then: both attempts pass restore/build/default tests, opt-in PostgreSQL atomicity/failure-injection tests, Kafka connectivity and keyed-order smoke tests, and contract comparisons. RabbitMQ is tested only for its declared compatibility scope unless separately promoted; configuration alone never proves runtime behavior.
 
 ### Scenario 3: meet quality-uplift decisions
 
@@ -41,9 +41,17 @@
 - When: its question log is classified.
 - Then: no unanswered question changes a bounded-context boundary, aggregate invariant, public contract, transaction boundary, or deployment profile; unresolved owner choices remain listed as decisions rather than guesses.
 
+### Scenario 5: compare compatibility, not source similarity
+
+- Test level: `end-to-end`
+- Given: both reconstructions pass their own internal tests.
+- When: the acceptance harness compares them with the normative HTTP, message, persistence, runtime, and failure contracts.
+- Then: every external contract and hard reliability gate matches; internal class layout and algorithms may differ or improve.
+
 ## Assertion Notes
 
 - Compare observable contracts and acceptance behavior, not line-by-line source similarity.
+- Keep the two reconstruction workspaces isolated and archive their question logs plus validation evidence separately.
 - Preserve the original repository; delete source only in a disposable copy after explicit authorization.
 
 ## Recommended Test Spec Path
@@ -52,4 +60,4 @@
 
 ## Implementation and Execution Handoff
 
-The destructive-copy reconstruction exercise requires separate authorization and is not executed by this documentation workflow.
+The two clean-room exercises and any deletion of the original source each require separate authorization. Passing this specification never authorizes deletion by itself.

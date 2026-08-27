@@ -6,7 +6,7 @@ This index is the discovery view for workflow artifacts retained by `dotnet-mq-a
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |
 | --- | --- | --- | --- | --- | --- |
-| [`2026-08-26-reconstructable-system-specification`](2026-08-26-reconstructable-system-specification/workflow.yaml) | Reconstructable system specification baseline | `software-development-orchestrator` | `in_progress` | `2026-08-26T20:25:13+08:00` | [plan](2026-08-26-reconstructable-system-specification/workflow-plan.md) |
+| [`2026-08-26-reconstructable-system-specification`](2026-08-26-reconstructable-system-specification/workflow.yaml) | Reconstructable system specification baseline | `software-development-orchestrator` | `in_progress` | `2026-08-27T08:26:59+08:00` | [plan](2026-08-26-reconstructable-system-specification/workflow-plan.md) |
 | [`2026-08-12-ai-context-v0-13-upgrade`](2026-08-12-ai-context-v0-13-upgrade/workflow.yaml) | Upgrade installed AI context from v0.6.0 to v0.13.0 and assess target fit | `ai-context-governance` | `completed` | `2026-08-13T14:23:59+08:00` | [plan](2026-08-12-ai-context-v0-13-upgrade/workflow-plan.md) |
 | [`2026-07-25-ai-context-v0-6-upgrade`](2026-07-25-ai-context-v0-6-upgrade/workflow.yaml) | Upgrade downstream AI context from v0.4.0 to v0.6.0 | `ai-context-governance` | `completed` | `2026-07-25T08:35:56+08:00` | [plan](2026-07-25-ai-context-v0-6-upgrade/workflow-plan.md) |
 | [`2026-07-18-ai-context-v0-4-upgrade`](2026-07-18-ai-context-v0-4-upgrade/workflow.yaml) | Upgrade downstream AI context from v0.1.0 to v0.4.0 | `ai-context-governance` | `completed` | `2026-07-18T21:14:30+08:00` | [plan](2026-07-18-ai-context-v0-4-upgrade/workflow-plan.md) |

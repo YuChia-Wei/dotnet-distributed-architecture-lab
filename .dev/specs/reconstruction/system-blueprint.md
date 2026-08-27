@@ -14,12 +14,13 @@ flowchart LR
   Client --> OrdersAPI[Orders Web API]
   Client --> InventoryAPI[Inventory Web API]
   OrdersAPI -->|ReserveInventory request/reply| InventoryAPI
-  OrdersAPI -->|orders.integration.events| Bus[(Kafka or RabbitMQ)]
+  OrdersAPI -->|orders.integration.events| Bus[(Canonical Kafka)]
   InventoryAPI -->|inventory.integration.events| Bus
   ProductsAPI -. configured route only .-> Bus
   Bus --> ProductConsumer
   Bus --> OrderConsumer
   Bus --> InventoryConsumer
+  Rabbit[(Deferred RabbitMQ compatibility)] -. separately selected profile .-> Bus
   ProductsAPI --> ProductsDB[(Products PostgreSQL)]
   OrdersAPI --> OrdersDB[(Orders PostgreSQL)]
   InventoryAPI --> InventoryDB[(Inventory PostgreSQL)]
@@ -82,7 +83,7 @@ Cross-context arrows represent message contracts, never direct project/domain ca
 - Commands: Initialize, Increase, Decrease, Restock, Reserve.
 - Query: GetAvailableQuantity.
 - Normal stock commands use the aggregate repository and emit stock integration events after persistence.
-- Reserve uses a capability-specific repository because the durable operation spans the idempotency record and locked stock row in one local transaction.
+- Reserve uses `IInventoryReservationTransactionFactory` / `IInventoryReservationTransaction` because one local transaction spans the idempotency record, locked stock row, terminal outcome, and successful integration-event outbox row. The use case creates the event before commit; Infrastructure supplies SQL, serialization, leasing, and transport.
 - Expected errors are stable codes, including `InventoryItemAlreadyExists`, `InventoryItemNotFound`, `InsufficientStock`/`InventoryIsNotEnough`, `OperationIdRequired`, `ProductIdRequired`, `QuantityMustBePositive`, and `OperationIdentityConflict`.
 
 ## Use-Case Execution Contract
@@ -107,15 +108,17 @@ The source outbox relay leases eligible rows, publishes with stable row ID and a
 
 Normal aggregate persistence upserts by inventory ID. The target-quality implementation must clear/acknowledge domain events only after durable success and must make persistence plus corresponding integration publication reliable; a source outbox or equivalently proven atomic design is preferred over a publish-after-save crash window.
 
-Reservation inserts/claims `OperationId`, locks the product inventory row, calculates and stores the terminal outcome, and commits once. Existing operation with identical payload returns the stored outcome; payload mismatch returns conflict without mutation.
+Reservation inserts/claims `OperationId`, locks the product inventory row, calculates and stores the terminal outcome, and on success stages `ProductStockDecreasedIntegrationEvent` in `InventoryIntegrationOutbox` before one commit. Existing operation with identical payload returns the stored outcome and reuses the outbox row; payload mismatch returns conflict without mutation.
+
+The Inventory relay leases unpublished rows, publishes with `MessageId = OperationId` and `PartitionKey = ProductId.ToString("N")`, and sets `PublishedAt` without deleting the row. Failures back off per row and park after five attempts. Retention/archive after successful publication is deferred. A publish-before-mark crash may redeliver; at-least-once remains normative.
 
 ## Runtime Composition
 
 All hosts consume the shared `Messaging` section:
 
 - `Profile`: exactly `InMemory`, `Kafka`, or `RabbitMq`;
-- Kafka requires `Messaging:Kafka:ConnectionString`;
-- RabbitMQ requires an absolute `amqp` or `amqps` URI at `Messaging:RabbitMq:ConnectionString`;
+- Kafka is canonical and requires `Messaging:Kafka:ConnectionString`; producer-selected partition keys scope ordering, and distinct consumer groups provide independent topic delivery;
+- RabbitMQ is a deferred compatibility profile and requires an absolute `amqp` or `amqps` URI at `Messaging:RabbitMq:ConnectionString`; current shared queues are not a broadcast design;
 - external profiles require the host-specific PostgreSQL connection string when Wolverine persistence is used;
 - InMemory stubs external transports and must not require broker/database persistence solely for message delivery.
 
@@ -150,7 +153,7 @@ The exact project identities are in `project-manifest.json`.
 - Use the shared `MessagingTransportOptions` contract in Product hosts instead of legacy environment-name branching.
 - Give known not-found and validation outcomes explicit adapter mappings instead of allowing unhandled exceptions to define the HTTP contract.
 - Add Inventory domain/application/persistence/reservation tests.
-- Keep message property compatibility risks explicit; do not silently rename serialized fields.
+- Use owner-approved `IncreasedQuantity` and `ReturnedQuantity` serialized names; do not retain the prior erroneous `DecreasedQuantity` aliases.
 - Preserve every Accepted ADR behavior and add failure-injection coverage for transaction/outbox boundaries.
 
 ## Non-Goals And Deferred Decisions
@@ -159,4 +162,5 @@ The exact project identities are in `project-manifest.json`.
 - Do not invent business meaning for consumer subscriptions that have no handler map.
 - Do not introduce distributed transactions.
 - Do not place broker/database/framework types in Domain or portable use-case contracts.
-- Do not resolve RabbitMQ physical exchange/DLQ names or the `DecreasedQuantity` compatibility risk without owner authorization.
+- Do not promote, migrate to, or dual-deploy RabbitMQ, or define its exchange/per-consumer queue/DLQ topology, without a separate owner decision.
+- Do not generalize the ReserveInventory source-outbox implementation to other Inventory commands without a separate bounded slice and tests.

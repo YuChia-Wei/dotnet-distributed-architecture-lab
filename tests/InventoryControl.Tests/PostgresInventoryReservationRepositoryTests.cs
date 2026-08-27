@@ -1,4 +1,5 @@
 using InventoryControl.Infrastructure.Applications.Repositories;
+using InventoryControl.Applications.Reservations;
 using Npgsql;
 using Shouldly;
 
@@ -22,22 +23,32 @@ public sealed class PostgresInventoryReservationRepositoryTests
         try
         {
             var repository = new PostgresInventoryReservationRepository(connectionString);
+            var useCase = new ReserveInventoryUseCase(repository);
 
             // When
             var outcomes = await Task.WhenAll(
-                repository.ReserveAsync(firstOperationId, productId, 2, CancellationToken.None),
-                repository.ReserveAsync(secondOperationId, productId, 2, CancellationToken.None));
+                useCase.ExecuteAsync(
+                    new ReserveInventoryInput(firstOperationId, productId, 2),
+                    CancellationToken.None),
+                useCase.ExecuteAsync(
+                    new ReserveInventoryInput(secondOperationId, productId, 2),
+                    CancellationToken.None));
 
             // Then
             outcomes.Count(outcome => outcome.IsSuccess).ShouldBe(1);
             outcomes.Count(outcome => outcome.FailureReason == "InventoryIsNotEnough").ShouldBe(1);
             outcomes.ShouldAllBe(outcome => outcome.RemainingStock == 1);
 
-            var durable = await ReadDurableStateAsync(connectionString, productId);
+            var durable = await ReadDurableStateAsync(
+                connectionString,
+                productId,
+                firstOperationId,
+                secondOperationId);
             durable.Stock.ShouldBe(1);
             durable.MinimumStock.ShouldBeGreaterThanOrEqualTo(0);
             durable.CompletedOperationCount.ShouldBe(2);
             durable.SuccessfulOperationCount.ShouldBe(1);
+            durable.OutboxMessageCount.ShouldBe(1);
         }
         finally
         {
@@ -57,7 +68,11 @@ public sealed class PostgresInventoryReservationRepositoryTests
         await command.ExecuteNonQueryAsync();
     }
 
-    private static async Task<DurableState> ReadDurableStateAsync(string connectionString, Guid productId)
+    private static async Task<DurableState> ReadDurableStateAsync(
+        string connectionString,
+        Guid productId,
+        Guid firstOperationId,
+        Guid secondOperationId)
     {
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync();
@@ -66,16 +81,26 @@ public sealed class PostgresInventoryReservationRepositoryTests
             SELECT i.Stock,
                    LEAST(i.Stock, COALESCE(MIN(o.RemainingStock), i.Stock)) AS MinimumStock,
                    COUNT(o.OperationId) FILTER (WHERE o.CompletedAt IS NOT NULL) AS CompletedOperationCount,
-                   COUNT(o.OperationId) FILTER (WHERE o.IsSuccess = TRUE) AS SuccessfulOperationCount
+                   COUNT(o.OperationId) FILTER (WHERE o.IsSuccess = TRUE) AS SuccessfulOperationCount,
+                   (SELECT COUNT(*)
+                    FROM InventoryIntegrationOutbox x
+                    WHERE x.Id IN (@firstOperationId, @secondOperationId)) AS OutboxMessageCount
             FROM InventoryItems i
             LEFT JOIN InventoryReservationOperations o ON o.ProductId = i.ProductId
             WHERE i.ProductId = @productId
             GROUP BY i.Stock;
             """;
         command.Parameters.AddWithValue("productId", productId);
+        command.Parameters.AddWithValue("firstOperationId", firstOperationId);
+        command.Parameters.AddWithValue("secondOperationId", secondOperationId);
         await using var reader = await command.ExecuteReaderAsync();
         (await reader.ReadAsync()).ShouldBeTrue();
-        return new DurableState(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt64(2), reader.GetInt64(3));
+        return new DurableState(
+            reader.GetInt32(0),
+            reader.GetInt32(1),
+            reader.GetInt64(2),
+            reader.GetInt64(3),
+            reader.GetInt64(4));
     }
 
     private static async Task CleanupAsync(
@@ -88,6 +113,7 @@ public sealed class PostgresInventoryReservationRepositoryTests
         await connection.OpenAsync();
         await using var command = connection.CreateCommand();
         command.CommandText = """
+            DELETE FROM InventoryIntegrationOutbox WHERE Id IN (@firstOperationId, @secondOperationId);
             DELETE FROM InventoryReservationOperations WHERE OperationId IN (@firstOperationId, @secondOperationId);
             DELETE FROM InventoryItems WHERE Id = @inventoryItemId;
             """;
@@ -101,5 +127,6 @@ public sealed class PostgresInventoryReservationRepositoryTests
         int Stock,
         int MinimumStock,
         long CompletedOperationCount,
-        long SuccessfulOperationCount);
+        long SuccessfulOperationCount,
+        long OutboxMessageCount);
 }

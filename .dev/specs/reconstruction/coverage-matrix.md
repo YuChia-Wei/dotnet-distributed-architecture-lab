@@ -14,7 +14,7 @@
 | Aggregates | Product, Order, InventoryItem | covered | domain entity specs |
 | Runtime hosts | 3 Web APIs + 3 Consumers | covered | `runtime-contracts.json` |
 | Databases | Products, Orders, Inventory | covered | `persistence-contracts.json` |
-| Broker profiles | InMemory, Kafka, RabbitMq | covered with deferred physical topology | `runtime-contracts.json`, `message-contracts.json` |
+| Broker profiles | InMemory, canonical Kafka, deferred RabbitMq compatibility | covered selection; RabbitMQ physical topology deferred | `runtime-contracts.json`, `message-contracts.json` |
 | Observability | logs, traces, metrics via OTLP | covered | runtime contract |
 
 ## Use Cases
@@ -54,10 +54,11 @@ The authoritative request/response/status mapping is `http-api-contracts.json` a
 | --- | --- | --- |
 | ReserveInventory request/reply | covered | broker runtime verification remains environment-dependent |
 | Orders lifecycle events | covered | consumer business ownership not fully documented |
-| Inventory stock events | covered | increase/return quantity property naming risk |
+| Inventory stock events | covered | increase/return names corrected by owner decision; other commands still use direct publish |
 | Orders source outbox relay | covered | PostgreSQL failure-injection proof remains required |
+| Inventory reservation source outbox relay | covered | real PostgreSQL atomic rollback proof remains required |
 | Product integration route | deferred | no confirmed producer use case |
-| RabbitMQ logical topology | covered | physical exchange/binding/DLQ naming deferred |
+| RabbitMQ compatibility topology | deferred | shared queues are not broadcast; exchange/per-consumer queue/binding/DLQ and promotion decision deferred |
 
 ## Persistence
 
@@ -69,6 +70,7 @@ The authoritative request/response/status mapping is `http-api-contracts.json` a
 | Orders source outbox | atomic insert, lease/backoff/park/stable identity | covered spec; failure-injection gate open |
 | Inventory items | unique product, stock state | covered with positive-quantity quality uplift |
 | Inventory reservation operations | durable idempotency outcome | covered |
+| Inventory reservation source outbox | atomic insert with state/outcome, stable identity, retained PublishedAt, lease/backoff/park | covered spec; external rollback gate open |
 
 ## Current Executable Oracle Inventory
 
@@ -80,7 +82,8 @@ The authoritative request/response/status mapping is `http-api-contracts.json` a
 - Order query/API: get-details payload.
 - Orders relay: stable logical identity across retries and duplicate publishes.
 - Inventory commands: decrease success, insufficient/missing no side effects, increase, restock.
-- Reservation: replay, payload conflict, terminal failure replay, stable publication identity, cancellation, retry policy.
+- Reservation: validation, replay, payload conflict, terminal failure replay, atomic in-memory staging, stage-failure no-commit, stable relay retry identity/timestamp, cancellation, and retry policy.
+- Inventory event contracts: corrected increase/return quantity JSON names and outbox occurrence-time round trip.
 - Messaging options: InMemory, missing Kafka connection, invalid RabbitMQ URI, unknown profile.
 
 ## Non-Passing Gaps
@@ -92,8 +95,11 @@ The authoritative request/response/status mapping is `http-api-contracts.json` a
 5. Consumer subscriptions do not map to clear business handlers.
 6. PostgreSQL failure injection has not yet proven Orders source transaction rollback/recovery.
 7. The Inventory PostgreSQL concurrency test is checked in but remains non-passing evidence until an opted-in run succeeds.
-8. Product integration event production, RabbitMQ physical topology, and inventory event property migration need owner decisions.
+8. Product integration event production and subscribed consumer business ownership need owner decisions.
+9. RabbitMQ promotion/dual-deployment and physical broadcast/DLQ topology remain owner-deferred; they are not canonical Kafka blockers.
+10. The Inventory outbox external test proves successful-row insertion when PostgreSQL runs, but failure injection must still prove state/outcome/outbox rollback together.
+11. Two independent LUNA-class clean-room reconstructions have not run.
 
 ## Readiness Rule
 
-The specification baseline may be complete while implementation/testing gaps remain. A future reconstructed system is not accepted until every normative row is covered and every `gap` is either passed or explicitly resolved by an owner decision. `blocked-by-environment` is not passed.
+The specification baseline may be complete while implementation/testing gaps remain. A future reconstructed system is not accepted until every normative row is covered, canonical PostgreSQL/Kafka gates pass, and two isolated LUNA-class reconstructions independently pass the same external-contract comparison. `blocked-by-environment` is not passed, and acceptance never authorizes deletion of the original source.

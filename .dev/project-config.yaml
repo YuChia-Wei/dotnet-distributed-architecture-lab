@@ -185,6 +185,7 @@ technologySelections:
     evidence:
       - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
       - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
+      - tests/InventoryControl.Tests/InventoryControl.Tests.csproj
     reason: Existing bounded-context test projects use different established mocking libraries.
   - slot: testing.bdd-runner
     value: plain xUnit with Given-When-Then semantics
@@ -224,13 +225,15 @@ technologySelections:
       - docker-compose/docker-compose.yml
     reason: PostgreSQL is the active product persistence provider.
   - slot: messaging.broker
-    value: Apache Kafka and RabbitMQ profiles
+    value: Apache Kafka canonical; RabbitMQ deferred compatibility profile
     status: selected
-    source: repository-evidence
+    source: explicit-target-decision
     evidence:
       - docker-compose/docker-compose.yml
       - src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Configuration/MessagingTransportOptions.cs
-    reason: The repository implements selectable Kafka and RabbitMQ transport profiles.
+      - .dev/requirement/reconstructable-system-baseline.md
+      - .dev/operations/mq-topology.md
+    reason: Owner selected Kafka for event-driven verification and partition-key ordering on 2026-08-27; RabbitMQ remains available only for later topology evaluation or dual-deployment decision.
   - slot: messaging.framework
     value: WolverineFx
     status: selected

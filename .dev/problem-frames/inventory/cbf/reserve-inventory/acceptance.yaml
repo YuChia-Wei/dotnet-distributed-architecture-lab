@@ -8,9 +8,9 @@ scenarios:
     then:
       - "Stock is decremented by the requested quantity exactly once."
       - "A durable successful outcome records remaining stock."
-      - "ProductStockDecreasedIntegrationEvent is published with stable message and partition identities."
+      - "ProductStockDecreasedIntegrationEvent is staged in the same transaction with stable message and partition identities."
     traces_to: { requirements: ["INV-005", "INV-006", "INT-003"], frame_concerns: ["FC1", "FC2", "FC3", "FC4"] }
-    tests_anchor: ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md#scenario-1-reserve-once-and-publish"
+    tests_anchor: "tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs#given_sufficient_stock_when_reserving_then_state_and_outbox_commit_with_stable_delivery_identity"
   - id: SC2
     title: "Replay matching successful operation"
     given:
@@ -20,9 +20,9 @@ scenarios:
     then:
       - "The stored success is returned with WasAlreadyProcessed true."
       - "Stock is not decremented again."
-      - "Republished delivery identity remains stable."
+      - "No second outbox row is added and delivery identity remains stable."
     traces_to: { requirements: ["INV-006", "INT-003"], frame_concerns: ["FC2", "FC4"] }
-    tests_anchor: "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs#given_a_completed_operation_when_it_is_replayed_then_stock_is_decremented_once"
+    tests_anchor: "tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs#given_a_successful_replay_when_committed_then_stock_and_outbox_are_not_duplicated"
   - id: SC3
     title: "Reject conflicting payload for operation identity"
     given:
@@ -32,9 +32,9 @@ scenarios:
     then:
       - "OperationIdentityConflict is returned with WasAlreadyProcessed true."
       - "Stock is unchanged."
-      - "No successful reservation event is published."
+      - "No new successful reservation event is staged."
     traces_to: { requirements: ["INV-006"], frame_concerns: ["FC2", "FC5"] }
-    tests_anchor: "tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs#given_an_operation_identity_conflict_when_reserving_then_conflict_is_not_published"
+    tests_anchor: "tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs#given_an_operation_identity_conflict_when_reserving_then_only_the_original_outbox_message_remains"
   - id: SC4
     title: "Preserve terminal business failure"
     given:
@@ -54,7 +54,7 @@ scenarios:
       - "The use case is invoked."
     then:
       - "The corresponding validation failure is returned."
-      - "Repository and publisher are not called."
+      - "No transaction is opened."
     traces_to: { requirements: ["INV-005"], frame_concerns: ["FC1", "FC6"] }
     tests_anchor: "tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs#given_empty_operation_id_when_reserving_then_request_is_rejected_before_side_effects"
   - id: SC6
@@ -68,3 +68,37 @@ scenarios:
       - "Stock and operation history remain unchanged."
     traces_to: { requirements: ["NFR-005"], frame_concerns: ["FC3", "FC6"] }
     tests_anchor: "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs#given_cancellation_before_reservation_when_executed_then_state_is_not_mutated"
+  - id: SC7
+    title: "Serialize concurrent PostgreSQL reservations and outbox insertion"
+    given:
+      - "PostgreSQL stock cannot satisfy two concurrent reservation requests together."
+    when:
+      - "Two distinct operations reserve the same product concurrently."
+    then:
+      - "Exactly one operation succeeds and stock never becomes negative."
+      - "Both terminal outcomes are durable."
+      - "Exactly one InventoryIntegrationOutbox row exists for the successful operation."
+    traces_to: { requirements: ["INV-006", "INV-007"], frame_concerns: ["FC2", "FC3", "FC4"] }
+    tests_anchor: "tests/InventoryControl.Tests/PostgresInventoryReservationRepositoryTests.cs#given_stock_for_only_one_request_when_two_reservations_run_concurrently_then_stock_and_outcomes_are_atomic"
+  - id: SC8
+    title: "Roll back when source-outbox staging fails"
+    given:
+      - "Reservation calculation succeeds but source-outbox staging fails before commit."
+    when:
+      - "IReserveInventoryUseCase.ExecuteAsync is invoked."
+    then:
+      - "The transaction is not committed."
+      - "The failure propagates for retry or diagnosis."
+    traces_to: { requirements: ["INV-006", "NFR-004"], frame_concerns: ["FC3", "FC6"] }
+    tests_anchor: "tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs#given_outbox_staging_fails_when_reserving_then_the_transaction_is_not_committed"
+  - id: SC9
+    title: "Retry relay with stable delivery metadata"
+    given:
+      - "A committed Inventory outbox row fails its first transport publication."
+    when:
+      - "The relay claims and publishes the same row again."
+    then:
+      - "MessageId, partition key, and OccurredOn remain stable across attempts."
+      - "Successful relay marks the row published without creating a new logical message."
+    traces_to: { requirements: ["INV-007", "INT-004"], frame_concerns: ["FC4", "FC6"] }
+    tests_anchor: "tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs#given_the_same_claimed_row_when_publish_is_retried_then_delivery_identity_and_event_time_are_stable"

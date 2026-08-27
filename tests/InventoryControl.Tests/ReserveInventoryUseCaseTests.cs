@@ -1,5 +1,6 @@
 using InventoryControl.Applications.Reservations;
 using InventoryControl.Infrastructure.Applications.Repositories;
+using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 using Lab.BuildingBlocks.Integrations;
 using NSubstitute;
 using Shouldly;
@@ -35,14 +36,13 @@ public sealed class ReserveInventoryUseCaseTests
     }
 
     [Fact]
-    public async Task given_insufficient_stock_when_reserving_then_business_failure_is_durable_and_not_published()
+    public async Task given_insufficient_stock_when_reserving_then_failure_is_committed_without_an_outbox_message()
     {
         // Given
         var repository = new InMemoryInventoryReservationRepository();
-        var publisher = Substitute.For<IIntegrationEventPublisher>();
         var productId = Guid.CreateVersion7();
         repository.Seed(Guid.CreateVersion7(), productId, 1);
-        var useCase = new ReserveInventoryUseCase(repository, publisher);
+        var useCase = new ReserveInventoryUseCase(repository);
 
         // When
         var result = await useCase.ExecuteAsync(
@@ -54,23 +54,21 @@ public sealed class ReserveInventoryUseCaseTests
         result.FailureReason.ShouldBe("InventoryIsNotEnough");
         result.RemainingStock.ShouldBe(1);
         repository.GetStock(productId).ShouldBe(1);
-        await publisher.DidNotReceiveWithAnyArgs().PublishAsync(default!, default!);
+        repository.GetStagedMessages().ShouldBeEmpty();
     }
 
     [Fact]
-    public async Task given_an_operation_identity_conflict_when_reserving_then_conflict_is_not_published()
+    public async Task given_an_operation_identity_conflict_when_reserving_then_only_the_original_outbox_message_remains()
     {
         // Given
         var repository = new InMemoryInventoryReservationRepository();
-        var publisher = Substitute.For<IIntegrationEventPublisher>();
-        var useCase = new ReserveInventoryUseCase(repository, publisher);
+        var useCase = new ReserveInventoryUseCase(repository);
         var operationId = Guid.CreateVersion7();
         var productId = Guid.CreateVersion7();
         repository.Seed(Guid.CreateVersion7(), productId, 5);
         await useCase.ExecuteAsync(
             new ReserveInventoryInput(operationId, productId, 2),
             CancellationToken.None);
-        publisher.ClearReceivedCalls();
 
         // When
         var conflict = await useCase.ExecuteAsync(
@@ -82,25 +80,26 @@ public sealed class ReserveInventoryUseCaseTests
         conflict.WasAlreadyProcessed.ShouldBeTrue();
         conflict.FailureReason.ShouldBe("OperationIdentityConflict");
         repository.GetStock(productId).ShouldBe(3);
-        await publisher.DidNotReceiveWithAnyArgs().PublishAsync(default!, default!);
+        repository.GetStagedMessages().Count.ShouldBe(1);
     }
 
     [Fact]
-    public async Task given_a_transient_store_failure_when_reserving_then_exception_propagates_without_publication()
+    public async Task given_a_transient_store_failure_when_reserving_then_exception_propagates_without_commit()
     {
         // Given
-        var repository = Substitute.For<IInventoryReservationRepository>();
-        var publisher = Substitute.For<IIntegrationEventPublisher>();
+        var transaction = Substitute.For<IInventoryReservationTransaction>();
+        var factory = Substitute.For<IInventoryReservationTransactionFactory>();
+        factory.BeginAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult(transaction));
         var expected = new InventoryReservationTransientException(
             "store unavailable",
             new InvalidOperationException("simulated"));
-        repository.ReserveAsync(
+        transaction.ReserveAsync(
                 Arg.Any<Guid>(),
                 Arg.Any<Guid>(),
                 Arg.Any<int>(),
                 Arg.Any<CancellationToken>())
             .Returns(_ => Task.FromException<InventoryReservationOutcome>(expected));
-        var useCase = new ReserveInventoryUseCase(repository, publisher);
+        var useCase = new ReserveInventoryUseCase(factory);
 
         // When
         var actual = await Should.ThrowAsync<InventoryReservationTransientException>(() =>
@@ -110,41 +109,97 @@ public sealed class ReserveInventoryUseCaseTests
 
         // Then
         actual.ShouldBeSameAs(expected);
-        await publisher.DidNotReceiveWithAnyArgs().PublishAsync(default!, default!);
+        await transaction.DidNotReceiveWithAnyArgs().StageAsync(default!, default!, default);
+        await transaction.DidNotReceiveWithAnyArgs().CommitAsync(default);
     }
 
     [Fact]
-    public async Task given_publication_fails_after_commit_when_replayed_then_stock_is_not_decremented_twice_and_delivery_identity_is_reused()
+    public async Task given_sufficient_stock_when_reserving_then_state_and_outbox_commit_with_stable_delivery_identity()
     {
         // Given
         var repository = new InMemoryInventoryReservationRepository();
-        var publisher = new FailFirstRecordingPublisher();
-        var useCase = new ReserveInventoryUseCase(repository, publisher);
         var operationId = Guid.CreateVersion7();
         var productId = Guid.CreateVersion7();
         repository.Seed(Guid.CreateVersion7(), productId, 5);
-        var input = new ReserveInventoryInput(operationId, productId, 2);
+        var useCase = new ReserveInventoryUseCase(repository);
 
         // When
-        await Should.ThrowAsync<InvalidOperationException>(() =>
-            useCase.ExecuteAsync(input, CancellationToken.None));
+        var result = await useCase.ExecuteAsync(
+            new ReserveInventoryInput(operationId, productId, 2),
+            CancellationToken.None);
+
+        // Then
+        result.IsSuccess.ShouldBeTrue();
+        repository.GetStock(productId).ShouldBe(3);
+        var staged = repository.GetStagedMessages().ShouldHaveSingleItem();
+        staged.IntegrationEvent.ShouldBeOfType<ProductStockDecreasedIntegrationEvent>();
+        staged.Delivery.MessageId.ShouldBe(operationId);
+        staged.Delivery.PartitionKey.ShouldBe(productId.ToString("N"));
+    }
+
+    [Fact]
+    public async Task given_a_successful_replay_when_committed_then_stock_and_outbox_are_not_duplicated()
+    {
+        // Given
+        var repository = new InMemoryInventoryReservationRepository();
+        var operationId = Guid.CreateVersion7();
+        var productId = Guid.CreateVersion7();
+        repository.Seed(Guid.CreateVersion7(), productId, 5);
+        var useCase = new ReserveInventoryUseCase(repository);
+        var input = new ReserveInventoryInput(operationId, productId, 2);
+        await useCase.ExecuteAsync(input, CancellationToken.None);
+
+        // When
         var replay = await useCase.ExecuteAsync(input, CancellationToken.None);
 
         // Then
         replay.IsSuccess.ShouldBeTrue();
         replay.WasAlreadyProcessed.ShouldBeTrue();
         repository.GetStock(productId).ShouldBe(3);
-        publisher.Deliveries.Count.ShouldBe(2);
-        publisher.Deliveries.ShouldAllBe(delivery =>
-            delivery.MessageId == operationId && delivery.PartitionKey == productId.ToString("N"));
+        repository.GetStagedMessages().ShouldHaveSingleItem().Delivery.MessageId.ShouldBe(operationId);
+    }
+
+    [Fact]
+    public async Task given_outbox_staging_fails_when_reserving_then_the_transaction_is_not_committed()
+    {
+        // Given
+        var operationId = Guid.CreateVersion7();
+        var productId = Guid.CreateVersion7();
+        var transaction = Substitute.For<IInventoryReservationTransaction>();
+        var factory = Substitute.For<IInventoryReservationTransactionFactory>();
+        factory.BeginAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult(transaction));
+        transaction.ReserveAsync(operationId, productId, 2, Arg.Any<CancellationToken>())
+            .Returns(new InventoryReservationOutcome(
+                operationId,
+                productId,
+                2,
+                Guid.CreateVersion7(),
+                true,
+                3,
+                null,
+                false));
+        transaction.StageAsync(
+                Arg.Any<IIntegrationEvent>(),
+                Arg.Any<IntegrationMessageDelivery>(),
+                Arg.Any<CancellationToken>())
+            .Returns(_ => Task.FromException(new InvalidOperationException("simulated outbox failure")));
+        var useCase = new ReserveInventoryUseCase(factory);
+
+        // When
+        await Should.ThrowAsync<InvalidOperationException>(() =>
+            useCase.ExecuteAsync(
+                new ReserveInventoryInput(operationId, productId, 2),
+                CancellationToken.None));
+
+        // Then
+        await transaction.DidNotReceiveWithAnyArgs().CommitAsync(default);
     }
 
     private static async Task AssertInvalidAsync(ReserveInventoryInput input, string expectedReason)
     {
         // Given
-        var repository = Substitute.For<IInventoryReservationRepository>();
-        var publisher = Substitute.For<IIntegrationEventPublisher>();
-        var useCase = new ReserveInventoryUseCase(repository, publisher);
+        var factory = Substitute.For<IInventoryReservationTransactionFactory>();
+        var useCase = new ReserveInventoryUseCase(factory);
 
         // When
         var result = await useCase.ExecuteAsync(input, CancellationToken.None);
@@ -154,25 +209,6 @@ public sealed class ReserveInventoryUseCaseTests
         result.FailureReason.ShouldBe(expectedReason);
         result.WasAlreadyProcessed.ShouldBeFalse();
         result.RemainingStock.ShouldBeNull();
-        await repository.DidNotReceiveWithAnyArgs().ReserveAsync(default, default, default, default);
-        await publisher.DidNotReceiveWithAnyArgs().PublishAsync(default!, default!);
-    }
-
-    private sealed class FailFirstRecordingPublisher : IIntegrationEventPublisher
-    {
-        public List<IntegrationMessageDelivery> Deliveries { get; } = [];
-
-        public Task PublishAsync(IIntegrationEvent integrationEvent)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task PublishAsync(IIntegrationEvent integrationEvent, IntegrationMessageDelivery delivery)
-        {
-            this.Deliveries.Add(delivery);
-            return this.Deliveries.Count == 1
-                ? Task.FromException(new InvalidOperationException("simulated publication failure"))
-                : Task.CompletedTask;
-        }
+        await factory.DidNotReceiveWithAnyArgs().BeginAsync(default);
     }
 }

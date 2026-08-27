@@ -48,7 +48,7 @@ A reconstruction is complete only when it produces:
 
 ## Source Independence Rule
 
-Do not require `src/`, `tests/`, a code knowledge graph, generated cache, archived conversation, or workflow runtime state to understand these artifacts. Repository-native build metadata may be regenerated from `project-manifest.json` and the version selections recorded in the requirements/runtime contract.
+Do not require `src/`, `tests/`, `.git/`, `bin/`, `obj/`, a code knowledge graph, generated cache, archived conversation, uncommitted state, or workflow runtime state to understand these artifacts. Repository-native build metadata must be regenerated from `project-manifest.json` and the version selections recorded in the requirements/runtime contract.
 
 ## Validation
 
@@ -56,4 +56,4 @@ Use `reconstruction-procedure.md` and `coverage-matrix.md` as the final checklis
 
 ## Current Deletion Gate
 
-The baseline is ready to drive a reconstruction attempt, but it is not yet evidence that the attempt will pass. Do not remove the current product source except in a disposable copy until selected problem frames reach 100% compliance, non-passing gaps are resolved, and the fresh LUNA-class reconstruction scenario in `../tests/e2e/reconstruction-acceptance.test-spec.md` has passed.
+The baseline is ready to drive reconstruction attempts, but it is not yet evidence that they will pass. Do not remove product source except in isolated disposable copies until selected problem frames reach 100% compliance, required PostgreSQL and canonical Kafka gates pass, and two independent LUNA-class runs satisfy `../tests/e2e/reconstruction-acceptance.test-spec.md`. Even then, deleting the original source requires a separate explicit owner authorization.

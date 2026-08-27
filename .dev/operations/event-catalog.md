@@ -116,22 +116,25 @@ This catalog tracks integration events and request/reply contracts visible in `s
 - Business meaning:
   - stock increased due to supply or return flow
 - Payload summary:
-  - `InventoryItemId`, `ProductId`, quantity field currently named `DecreasedQuantity`, `CurrentStock`, `OccurredOn`
+  - increase: `InventoryItemId`, `ProductId`, `IncreasedQuantity`, `CurrentStock`, `OccurredOn`
+  - return: `InventoryItemId`, `ProductId`, `ReturnedQuantity`, `CurrentStock`, `OccurredOn`
 - Producer responsibility:
   - publish only after persistence
 - Consumer expectations:
-  - consumers should interpret these as stock-up facts, despite the current quantity property naming
+  - consumers must bind the producer-owned corrected quantity name for each event type
 - Idempotency expectation:
   - duplicate handling should be assumed necessary
 - Ordering expectation:
   - consumers should not assume these can never interleave with decrease events
 - Failure handling notes:
-  - property naming inconsistency is a documentation and contract risk that should be tracked
+  - the prior erroneous `DecreasedQuantity` fields were removed by owner-approved breaking correction on 2026-08-27; no compatibility alias is retained
 
 ## Delivery Semantics
 
 - Request/reply reservation flow is synchronous from the caller perspective, but still mediated by the message bus.
 - Orders lifecycle events are atomically staged in `OrderIntegrationOutbox` and relayed with a stable message identity through the PostgreSQL-persisted Orders Wolverine runtime.
+- Successful `ReserveInventory` operations atomically stage `ProductStockDecreasedIntegrationEvent` in `InventoryIntegrationOutbox`; the retained row uses `OperationId` as message identity and normalized `ProductId` as Kafka partition key.
+- Inventory relay failure never rolls back an already committed reservation. It retries with bounded backoff, parks after five attempts, and sets `PublishedAt` after success.
 - Other hosts currently configure durable endpoint flags, but persisted durability is not proven until each host configures and tests a message store.
 - Consumer handling should assume at-least-once delivery and deduplicate by stable message identity unless stronger guarantees are explicitly documented later.
 
@@ -139,8 +142,8 @@ This catalog tracks integration events and request/reply contracts visible in `s
 
 - Contract source of truth lives under `src/BC-Contracts/`.
 - Producing bounded context owns event meaning and payload compatibility.
-- Consumer-specific assumptions should not redefine the producer contract.
-- The inventory stock increase/return event quantity property naming inconsistency should be treated as a contract risk, not normalized silently in consumers.
+- Consumer-specific assumptions should not redefine the producer contract; consumers own reactions, idempotency, retry, and dead-letter handling.
+- `ProductStockIncreasedIntegrationEvent.IncreasedQuantity` and `ProductStockReturnedIntegrationEvent.ReturnedQuantity` are the only normative quantity names after the 2026-08-27 owner decision.
 
 ## Deferred Items
 

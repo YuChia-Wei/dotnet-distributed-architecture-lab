@@ -17,4 +17,6 @@ $env:INVENTORY_TEST_POSTGRES_CONNECTION_STRING = "Host=localhost;Port=5435;Datab
 dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --filter "Category=ExternalIntegration"
 ```
 
-Without both environment variables, the external test is skipped. A skipped external test is not passing evidence for PostgreSQL locking or transaction behavior; release or reconstruction gates that require this evidence remain open until an opted-in run passes.
+The target database must already contain `InventoryItems`, `InventoryReservationOperations`, and `InventoryIntegrationOutbox`; apply both Inventory migrations documented in `.dev/operations/mq-topology.md` for an existing volume.
+
+Without both environment variables, the external test is skipped. A skipped external test is not passing evidence for PostgreSQL locking, reservation/outbox atomicity, or rollback behavior; release or reconstruction gates that require this evidence remain open until an opted-in run passes.

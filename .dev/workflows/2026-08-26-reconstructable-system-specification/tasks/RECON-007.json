@@ -7,9 +7,9 @@
   "task_id": "RECON-007",
   "owner_skill": "slice-implementer",
   "related_plan_id": "development-plan-2026-08-26-reconstructable-system-specification",
-  "status": "in_progress",
+  "status": "blocked",
   "created_at": "2026-08-26T20:09:02+08:00",
-  "updated_at": "2026-08-26T20:25:13+08:00",
+  "updated_at": "2026-08-27T08:26:59+08:00",
   "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
   "model": "gpt-5",
   "reasoning_effort": "unspecified",
@@ -166,7 +166,7 @@
     "deferred_items": []
   },
   "results": {
-    "summary": "Created the Inventory-owned test surface, closed all broker-free ReserveInventory gaps, and encoded external PostgreSQL verification as explicit opt-in; the task remains active because skipped external execution leaves compliance at 94%.",
+    "summary": "Created the Inventory-owned test surface, closed all broker-free ReserveInventory gaps, and encoded external PostgreSQL verification as explicit opt-in; the task is blocked because skipped external execution leaves compliance at 94%.",
     "files_changed": ["tests/InventoryControl.Tests/", "tests/README.md", "tests/SaleOrders.Tests/", "MQArchLab.slnx", ".dev/project-config.yaml", ".dev/specs/", ".dev/problem-frames/", ".dev/workflows/2026-08-26-reconstructable-system-specification/"],
     "approval_evidence": ["User authorization on 2026-08-26 and GitHub Issue #2."],
     "test_execution": [

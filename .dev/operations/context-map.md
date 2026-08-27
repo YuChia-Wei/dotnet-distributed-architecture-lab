@@ -24,8 +24,8 @@ It is limited to relationships that can be traced back to:
 | Source Context | Target Context | Interaction Purpose | Interaction Mechanism | Ownership Rule | Failure Sensitivity |
 | --- | --- | --- | --- | --- | --- |
 | `Orders` | `Inventory` | Reserve stock before confirming order placement | request/reply via `ReserveInventoryRequestContract` and `ReserveInventoryResponseContract` | request contract is owned in `BC-Contracts.Inventory`; `Orders` is caller, `Inventory` is handler | high; failed reservation blocks order placement |
-| `Orders` | external downstream consumers | broadcast order lifecycle changes | integration events on `orders.integration.events` | `Orders` owns event semantics and schema | medium to high; downstream views may become stale if delivery fails |
-| `Inventory` | external downstream consumers | broadcast stock changes | integration events on `inventory.integration.events` | `Inventory` owns event semantics and schema | high for downstream stock-dependent behaviors |
+| `Orders` | external downstream consumers | propagate order lifecycle changes | canonical Kafka integration events on `orders.integration.events`; one consumer group per independent subscriber | `Orders` owns event semantics/schema; each consumer owns only its reaction and delivery policy | medium to high; downstream views may become stale if delivery fails |
+| `Inventory` | external downstream consumers | propagate stock changes | canonical Kafka integration events on `inventory.integration.events`; ProductId scopes partition ordering | `Inventory` owns event semantics/schema; each consumer owns only its reaction and delivery policy | high for downstream stock-dependent behaviors |
 | `Products` | external downstream consumers | configured product-change channel | `products.integration.events` route exists, but current use cases do not publish confirmed product integration events | future producer owns event semantics and schema | deferred; route configuration exists without a confirmed active producer |
 | `Product Consumer` runtime | `Orders` events | receive order lifecycle stream | consumer listens to `orders.integration.events` | actual handler intent needs clarification | medium; listener exists but business ownership is still unclear |
 | `Inventory Consumer` runtime | `Orders` events | receive order lifecycle stream | consumer listens to `orders.integration.events` | actual handler intent needs clarification | medium; part of current runtime topology but not fully documented |
@@ -36,6 +36,8 @@ It is limited to relationships that can be traced back to:
 - `Orders` must not reserve inventory through direct HTTP calls.
 - Shared contracts belong under `src/BC-Contracts/`, not inside a single bounded context.
 - Eventual consistency is expected for inter-context propagation.
+- Kafka is canonical. Multiple independent subscribers use distinct consumer groups; this is the current broadcast-style delivery mechanism.
+- RabbitMQ remains a deferred compatibility profile. Current shared queue names imply competing consumers and must not be described as fanout without an exchange plus one queue per subscriber.
 - Runtime documentation must distinguish clearly between:
   - active, code-backed routes
   - legacy or unclear routes that still exist in runtime configuration
@@ -47,6 +49,7 @@ It is limited to relationships that can be traced back to:
 - `Products` is the upstream owner of product catalog facts.
 - The request/reply reservation contract is an explicit customer-supplier relationship from `Orders` to `Inventory`.
 - Consumer runtimes that listen to a topic without clear documented business handling should be treated as review candidates, not silently assumed to be correct.
+- Event ownership does not make a producer responsible for a consumer's projection, retry, idempotency, or dead-letter policy. Conversely, those consumer concerns do not authorize changing producer-owned event meaning.
 
 ## Open Questions / Deferred Decisions
 

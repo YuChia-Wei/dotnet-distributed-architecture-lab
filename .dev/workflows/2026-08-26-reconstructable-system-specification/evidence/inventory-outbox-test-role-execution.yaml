@@ -1,0 +1,53 @@
+role_execution_id: "RECON-008-usecase-test-sub-agent-01"
+role_asset_id: "usecase-test-sub-agent"
+role_path: ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml"
+owning_skill: "slice-implementer"
+stage_id: "RECON-008"
+applicability:
+  result: "applies"
+  reason: "The transaction boundary, corrected event contract, and relay retry semantics require executable GWT oracles."
+selection:
+  disposition: "direct"
+  reason: "Tests share their mutation and integration scope with the production slice; the user did not request delegated agents."
+input_envelope:
+  goal: "Verify broker-free transaction/outbox behavior, stable relay retry identity, corrected JSON fields, and the opt-in PostgreSQL atomicity contract."
+  scope: ["tests/InventoryControl.Tests/", ".dev/problem-frames/inventory/cbf/reserve-inventory/", ".dev/specs/tests/inventory-item/"]
+  non_goals: ["Count a skipped external test as passing.", "Require Kafka, RabbitMQ, or PostgreSQL during ordinary dotnet test."]
+  source_refs: ["ReserveInventory CBF", "RECON-008 implementation", "PACKET-D30CE87B"]
+  mandatory_references:
+    - ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-playbook.md"
+    - ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-generation-guidance.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
+  constraints: ["Plain xUnit GWT.", "NSubstitute in InventoryControl.Tests.", "No BaseTestClass."]
+  stop_conditions: ["Return after default tests, external skip truth, and acceptance anchors are integrated."]
+permissions:
+  read_scope: ["src/Inventory/", "src/BC-Contracts/", ".dev/problem-frames/inventory/", ".dev/specs/tests/inventory-item/"]
+  write_scope: ["tests/InventoryControl.Tests/", ".dev/problem-frames/inventory/", ".dev/specs/tests/inventory-item/"]
+  external_actions: []
+  secret_handling: "no-secret-values"
+executor: { kind: "parent-inline", identity: "root-workflow-parent", runtime_support_verified: true }
+invocation_evidence: null
+output:
+  expected: ["use-case transaction tests", "relay retry test", "JSON contract tests", "external PostgreSQL gate"]
+  returned: ["25 passed and 1 skipped Inventory result", "61 passed and 1 skipped solution result"]
+  evidence_refs: ["tests/InventoryControl.Tests/", "tests/README.md"]
+  bounded: true
+attempts:
+  - number: 1
+    disposition: "direct"
+    executor: { kind: "parent-inline", identity: "root-workflow-parent", runtime_support_verified: true }
+    invocation_evidence: null
+    outcome: "completed-with-external-gate-blocked"
+    correctable_failure: false
+    material_state_change: "Added atomic staging, retry identity/timestamp, corrected JSON name, replay, and PostgreSQL outbox-count oracles."
+    authorization_source: ["User decisions on 2026-08-27", "GitHub Issue #2"]
+    evidence_refs: ["tests/InventoryControl.Tests/"]
+fallback:
+  considered: false
+  reason: "Direct execution was selected initially."
+  resulting_disposition: null
+final_integration_owner:
+  owner: "slice-implementer parent stage owner"
+  decision: "accepted-with-external-postgresql-gate-open"
+  evidence_refs: ["tests/InventoryControl.Tests/", ".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md"]
