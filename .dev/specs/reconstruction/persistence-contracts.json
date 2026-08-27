@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "provider": { "database": "PostgreSQL 16", "driver": "Npgsql 10.0.2", "access": "Dapper 2.1.72", "sql": "parameterized" },
+  "databases": [
+    {
+      "name": "Products",
+      "tables": [{ "name": "Products", "columns": { "Id": "UUID PK", "Name": "VARCHAR(255) NOT NULL", "Description": "TEXT", "Price": "NUMERIC(18,2) NOT NULL", "IsDeleted": "BOOLEAN NOT NULL DEFAULT FALSE", "Version": "INT NOT NULL DEFAULT 1" } }],
+      "writeRules": ["insert starts at version 1", "update and soft-delete match Id + Version + IsDeleted=false", "zero affected rows is concurrency conflict", "normal reads exclude deleted rows"],
+      "transaction": "one local transaction per SaveAsync"
+    },
+    {
+      "name": "Orders",
+      "tables": [
+        { "name": "OrderEvents", "columns": { "EventId": "BIGSERIAL PK", "StreamId": "UUID NOT NULL", "Version": "INT NOT NULL", "EventType": "VARCHAR(255) NOT NULL", "Data": "JSONB NOT NULL", "Timestamp": "TIMESTAMPTZ NOT NULL" }, "constraints": ["UNIQUE(StreamId, Version)"] },
+        { "name": "Orders", "columns": { "Id": "UUID PK", "OrderDate": "TIMESTAMPTZ NOT NULL", "TotalAmount": "NUMERIC(18,2) NOT NULL", "ProductId": "UUID NOT NULL", "ProductName": "VARCHAR(255) NOT NULL", "Quantity": "INT NOT NULL" }, "purpose": "query projection" },
+        { "name": "OrderIntegrationOutbox", "columns": { "Id": "UUID PK", "AggregateId": "UUID NOT NULL", "MessageType": "VARCHAR(255) NOT NULL", "Data": "JSONB NOT NULL", "OccurredOn": "TIMESTAMPTZ NOT NULL", "CreatedOn": "TIMESTAMPTZ NOT NULL DEFAULT NOW", "LockId": "UUID NULL", "LockedUntil": "TIMESTAMPTZ NULL", "Attempts": "INT NOT NULL DEFAULT 0", "NextAttemptAt": "TIMESTAMPTZ NOT NULL DEFAULT NOW", "LastError": "TEXT NULL", "ParkedAt": "TIMESTAMPTZ NULL" }, "indexes": ["claim index on NextAttemptAt, CreatedOn, Id where ParkedAt is null"] }
+      ],
+      "eventTypeMap": ["OrderPlacedDomainEvent", "OrderShippedDomainEvent", "OrderDeliveredDomainEvent", "OrderCancelledDomainEvent"],
+      "atomicCommit": ["verify aggregate Version equals database MAX(Version) or zero", "append every pending event with contiguous versions", "insert every outgoing integration event", "upsert current Orders projection", "commit once", "acknowledge aggregate pending events", "dispatch local domain events"],
+      "rollback": "Any failure before transaction commit rolls back stream, projection, and outbox together.",
+      "relay": ["lease eligible rows with owner token", "publish using stable outbox Id and AggregateId partition key", "delete only after successful publish", "back off per row", "park after five failures"]
+    },
+    {
+      "name": "Inventory",
+      "tables": [
+        { "name": "InventoryItems", "columns": { "Id": "UUID PK", "ProductId": "UUID NOT NULL UNIQUE", "Stock": "INT NOT NULL" }, "targetConstraints": ["Stock >= 0"] },
+        { "name": "InventoryReservationOperations", "columns": { "OperationId": "UUID PK", "ProductId": "UUID NOT NULL", "Quantity": "INT NOT NULL CHECK Quantity > 0", "InventoryItemId": "UUID NULL", "IsSuccess": "BOOLEAN NULL", "RemainingStock": "INT NULL", "FailureReason": "TEXT NULL", "CompletedAt": "TIMESTAMPTZ NULL" }, "indexes": ["ProductId"] },
+        { "name": "InventoryIntegrationOutbox", "columns": { "Id": "UUID PK; OperationId for reservation, UUID v7 for ordinary stock commands", "PartitionKey": "VARCHAR(64) NOT NULL", "MessageType": "VARCHAR(255) NOT NULL", "Data": "JSONB NOT NULL", "OccurredOn": "TIMESTAMPTZ NOT NULL", "CreatedOn": "TIMESTAMPTZ NOT NULL DEFAULT NOW", "PublishedAt": "TIMESTAMPTZ NULL", "LockId": "UUID NULL", "LockedUntil": "TIMESTAMPTZ NULL", "Attempts": "INT NOT NULL DEFAULT 0 CHECK Attempts >= 0", "NextAttemptAt": "TIMESTAMPTZ NOT NULL DEFAULT NOW", "LastError": "TEXT NULL", "ParkedAt": "TIMESTAMPTZ NULL" }, "indexes": ["claim index on NextAttemptAt, CreatedOn, Id where PublishedAt and ParkedAt are null"], "evolution": "Before Kafka plus RabbitMQ dual broadcast, add per-destination delivery state; one PublishedAt cannot represent independent broker completion." }
+      ],
+      "normalAggregateRules": ["find by product through read port and reload aggregate by identity", "capture expected pre-mutation stock", "execute aggregate behavior", "create producer-owned event plus UUID v7 message ID and ProductId N partition key", "IInventoryStockOutbox updates state only where Stock equals expected stock and inserts outbox in one local transaction", "zero updated rows is InventoryStockConcurrencyException", "dispatch and clear local domain events only after durable commit"],
+      "reservationTransaction": ["call capability-specific IInventoryReservationOutbox; no generic UoW or transaction lifecycle is exposed to Application", "insert OperationId claim with ON CONFLICT DO NOTHING", "if already claimed read stored outcome and compare ProductId+Quantity", "lock InventoryItems row FOR UPDATE", "calculate terminal outcome", "decrement stock only on success", "store terminal outcome", "on success invoke the Application-supplied message factory and stage ProductStockDecreasedIntegrationEvent with Id=OperationId and PartitionKey=ProductId formatted N", "commit state, outcome, and outbox once"],
+      "rollback": "Any reserve, outbox-stage, or commit failure rolls back stock, terminal outcome, and outbox together.",
+      "replayRules": ["same identity and payload returns stored outcome with WasAlreadyProcessed=true", "same successful identity reuses the existing outbox Id and does not add a row", "same identity and different payload returns OperationIdentityConflict without stock mutation", "terminal failures remain terminal on replay even if later stock changes"],
+      "relay": ["support ProductStockDecreasedIntegrationEvent, ProductStockIncreasedIntegrationEvent, and ProductStockReturnedIntegrationEvent", "lease unpublished and unparked rows with owner token", "publish using stable Id and stored PartitionKey", "set PublishedAt after successful publish", "back off per row", "park after five failures", "default retention is RetainAll", "PublishedForDays with a positive PublishedRetentionDays prunes only published rows"],
+      "applicationBoundary": "Outbox capability ports are Application-owned; local transaction or Unit of Work is an Infrastructure implementation detail.",
+      "dualBrokerTarget": "Current schema and relay are single-destination. Kafka plus RabbitMQ requires a child delivery ledger keyed by MessageId plus Destination with independent attempts, locks, PublishedAt, ParkedAt, and LastError."
+    }
+  ],
+  "migrationSources": ["docker-compose/sql-script/create_products_table.sql", "docker-compose/sql-script/create_orders_table.sql", "docker-compose/sql-script/create_inventoryitems_table.sql", "docker-compose/sql-script/migrations/orders/20260714_0001_add_order_integration_outbox.sql", "docker-compose/sql-script/migrations/inventory/20260714_0001_add_inventory_reservations.sql", "docker-compose/sql-script/migrations/inventory/20260827_0002_add_inventory_integration_outbox.sql"],
+  "acceptance": ["Fresh schema creation is idempotent.", "Existing-volume migrations are idempotent.", "Concurrency and transaction failure paths are tested against PostgreSQL.", "A blocked database test is not a pass."]
+}

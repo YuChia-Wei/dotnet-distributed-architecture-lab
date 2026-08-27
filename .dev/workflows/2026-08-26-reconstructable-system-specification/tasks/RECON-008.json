@@ -1,0 +1,181 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-08-26-reconstructable-system-specification",
+  "task_id": "RECON-008",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-08-26-reconstructable-system-specification",
+  "status": "deferred",
+  "created_at": "2026-08-27T08:26:59+08:00",
+  "updated_at": "2026-08-27T09:26:52+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-5",
+  "reasoning_effort": "unspecified",
+  "workflow_locator": ".dev/workflows/2026-08-26-reconstructable-system-specification/workflow.yaml",
+  "scope": {
+    "goal": "Adopt Kafka as the canonical broker, make producer ownership normative, demonstrate an atomic Inventory reservation source outbox, correct two Inventory event field names, and harden the source-independent reconstruction gate.",
+    "target": "Inventory ReserveInventory application/infrastructure slice, Inventory integration contracts, SQL/runtime configuration, focused tests, and reconstruction specifications",
+    "files": [],
+    "constraints": [
+      "Kafka is the canonical runtime path and ProductId is the Inventory ordering partition key.",
+      "The producer owns integration-event meaning and schema; consumers own only their reactions and delivery handling.",
+      "ReserveInventory stock mutation, terminal outcome, and source-outbox insert must commit or roll back together.",
+      "External-service tests remain opt-in and skipped results are never counted as passing evidence.",
+      "RabbitMQ remains a deferred compatibility profile; no fanout topology is claimed or implemented in this slice."
+    ],
+    "non_goals": [
+      "Convert IncreaseStock, DecreaseStock, or Restock to the source-outbox pattern.",
+      "Define downstream consumer business handlers.",
+      "Implement RabbitMQ exchange or per-consumer queue topology.",
+      "Delete source, push, open a pull request, merge, close Issue #2, or publish."
+    ]
+  },
+  "inputs": {
+    "requirements": ["INV-005", "INV-006", "INV-007", "INT-004", "NFR-004", "NFR-011"],
+    "specifications": [
+      ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json",
+      ".dev/specs/reconstruction/message-contracts.json",
+      ".dev/specs/reconstruction/persistence-contracts.json",
+      ".dev/specs/tests/e2e/reconstruction-acceptance.test-spec.md"
+    ],
+    "architecture_decisions": [
+      "Kafka is canonical for event-driven verification and per-product ordering.",
+      "The producing bounded context owns integration-event meaning and schema.",
+      "ReserveInventory uses an explicit application transaction port and a PostgreSQL source outbox.",
+      "ProductStockIncreasedIntegrationEvent.IncreasedQuantity and ProductStockReturnedIntegrationEvent.ReturnedQuantity are owner-approved breaking corrections."
+    ],
+    "user_constraints": [
+      "Adopt the recommendations provisionally so the owner can inspect the actual code architecture and adjust later.",
+      "Keep RabbitMQ available for future broadcast evaluation or dual deployment.",
+      "Use a strict reconstruction gate provisionally and adjust it from observed results."
+    ]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "production architecture, specification, contract, SQL, runtime configuration, and test changes",
+      "authorization_source": ["User decisions on 2026-08-27", "GitHub Issue #2"],
+      "pending_decision": ""
+    },
+    "implementation_contract": {
+      "intent": "feature",
+      "execution_mode": "generic",
+      "overlays": [],
+      "authorization_source": ["User decisions on 2026-08-27", "GitHub Issue #2"],
+      "normative_truth": [
+        ".dev/requirement/reconstructable-system-baseline.md",
+        ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json",
+        "PACKET-701FC7A9",
+        "PACKET-6AD8DBC"
+      ],
+      "finding_evidence": ["Direct publish occurs after PostgresInventoryReservationRepository commits."],
+      "subject_revision": "e093efe78723323134111f01632a7b45cc07aa28",
+      "acceptance_criteria": [
+        "ReserveInventoryUseCase creates the producer-owned integration event and supplies stable MessageId and ProductId partition key before commit.",
+        "PostgreSQL commits reservation state, terminal outcome, and source-outbox row atomically.",
+        "A bounded relay retries with stable delivery metadata, retains publication evidence, and parks after five failed attempts.",
+        "Increase and return event quantity fields use their correct names in code, tests, and reconstruction contracts.",
+        "Kafka, RabbitMQ, producer ownership, and strict reconstruction gates are documented without claiming unverified runtime behavior."
+      ]
+    },
+    "test_execution_contract": null,
+    "role_execution_records": [
+      {
+        "role_execution_id": "RECON-008-outbox-sub-agent-01",
+        "role_asset_id": "outbox-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "RECON-008",
+        "applicability": {"result": "applies", "reason": "Atomic Inventory source-outbox and relay implementation."},
+        "selection": {"disposition": "direct", "reason": "One overlapping mutation scope; delegated agents were not requested."},
+        "record_ref": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-role-execution.yaml"
+      },
+      {
+        "role_execution_id": "RECON-008-usecase-test-sub-agent-01",
+        "role_asset_id": "usecase-test-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "RECON-008",
+        "applicability": {"result": "applies", "reason": "Transaction, relay, and contract behavior require executable GWT oracles."},
+        "selection": {"disposition": "direct", "reason": "Tests overlap the same production/specification integration scope."},
+        "record_ref": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-test-role-execution.yaml"
+      },
+      {
+        "role_execution_id": "RECON-008-profile-config-sub-agent-01",
+        "role_asset_id": "profile-config-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/profile-config-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "RECON-008",
+        "applicability": {"result": "does-not-apply", "reason": "The slice enables one existing OutboxRelay flag but does not introduce a new environment/profile model."},
+        "selection": {"disposition": "not-applicable", "reason": "Existing Messaging configuration contract remains unchanged."}
+      }
+    ],
+    "spec_compliance": {
+      "selected": true,
+      "activation_source": ["ReserveInventory problem frame", "AGENTS.md mandatory 100% gate"],
+      "expected_outcome": "100-percent-pass"
+    },
+    "steps": [
+      "Record the broker, ownership, transactional-outbox, contract-correction, and reconstruction-gate decisions.",
+      "Introduce an explicit Inventory reservation transaction port owned by Application.",
+      "Implement PostgreSQL atomic reservation/outbox persistence and a stable-identity relay.",
+      "Correct Inventory increase/return quantity contract names and all call-site assertions.",
+      "Run focused build/tests, parse/spec/workflow validation, and the unchanged compliance gate."
+    ],
+    "validation": [
+      "Broker-free Inventory tests pass by default.",
+      "External PostgreSQL tests remain skipped without opt-in and prove outbox atomicity when run.",
+      "Inventory and dependent Orders tests compile and pass.",
+      "JSON/YAML/workflow/spec validators pass; unavailable external evidence remains non-passing."
+    ],
+    "commit_checkpoint": "Kafka ownership, Inventory reservation source outbox, corrected event contracts, and reconstruction gate checkpoint.",
+    "deferred_items": [
+      "RabbitMQ broadcast topology and dual-deployment decision.",
+      "Source-outbox adoption for other Inventory commands.",
+      "Outbox retention/archival policy after production observation.",
+      "Final owner acceptance of the concrete transaction-port design."
+    ]
+  },
+  "results": {
+    "summary": "Implemented the owner-approved provisional Kafka/producer-ownership design as an atomic ReserveInventory source outbox, corrected Inventory event names, and strengthened reconstruction gates. Broker-free validation passes; PostgreSQL/Kafka and two clean-room LUNA runs remain non-passing.",
+    "files_changed": [
+      "src/Inventory/DomainCore/InventoryControl.Applications/Reservations/InventoryReservation.cs",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/BuildingBlocks/InventoryIntegrationOutboxRelay.cs",
+      "src/BC-Contracts/Lab.BoundedContextContracts.Inventory/IntegrationEvents/",
+      "docker-compose/sql-script/migrations/inventory/20260827_0002_add_inventory_integration_outbox.sql",
+      "tests/InventoryControl.Tests/",
+      ".dev/adr/ADR-003-kafka-canonical-integration-transport.md",
+      ".dev/adr/ADR-004-inventory-reservation-source-outbox.md",
+      ".dev/requirement/",
+      ".dev/specs/",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/",
+      ".dev/workflows/2026-08-26-reconstructable-system-specification/"
+    ],
+    "approval_evidence": ["User decisions on 2026-08-27 and GitHub Issue #2."],
+    "test_execution": [
+      {"command": "dotnet build tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false", "outcome": "passed", "evidence": "0 warnings, 0 errors."},
+      {"command": "dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-build --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false", "outcome": "passed", "evidence": "27 passed, 1 external PostgreSQL test skipped, 0 failed."},
+      {"command": "dotnet test MQArchLab.slnx --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false", "outcome": "passed", "evidence": "63 passed, 1 external PostgreSQL test skipped, 0 failed."},
+      {"command": "Inventory ExternalIntegration and live Kafka profiles", "outcome": "blocked-by-environment", "evidence": "Docker Desktop was not running; no real PostgreSQL or Kafka result was claimed."}
+    ],
+    "role_execution_aggregation": [
+      {"stage_id": "RECON-008", "record_id": "RECON-008-outbox-sub-agent-01", "disposition": "direct", "integration_decision": "accepted-provisionally-pending-owner-design-review", "evidence": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-role-execution.yaml"},
+      {"stage_id": "RECON-008", "record_id": "RECON-008-usecase-test-sub-agent-01", "disposition": "direct", "integration_decision": "accepted", "evidence": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-test-role-execution.yaml"}
+    ],
+    "spec_compliance": {"outcome": "failed-closed", "coverage_percent": 89, "evidence": [".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md"]},
+    "validation_evidence": [
+      "32 JSON files parsed.",
+      "20 problem-frame/workflow YAML files parsed.",
+      "Workflow artifact validator passed.",
+      "Changed/new Markdown links passed for 49 files.",
+      "git diff --cached --check passed.",
+      "Effective compliance packet freshness verified."
+    ],
+    "commits": ["07aeea91f9692ab51a421cffa69e22c48495505c"],
+    "follow_up_needed": true
+  }
+}

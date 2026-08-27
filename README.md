@@ -20,11 +20,11 @@ Repository 同時維護一套可重用的 AI collaboration context；產品真�
 
 ## 技術棧
 
-- .NET SDK `10.0.0`、主要 target framework `net10.0`
+- .NET SDK `10.0.302`（`global.json` 允許 `latestMajor` roll-forward）、主要 target framework `net10.0`
 - ASP.NET Core Web API、Scalar OpenAPI UI
 - WolverineFx `5.32.1`
-- Kafka（目前 Docker Compose 啟用的 broker）
-- RabbitMQ（保留 packages 與部分 conditional configuration；Compose service 預設註解，Inventory request listener 尚未完整配置）
+- Kafka（canonical broker；目前 Docker Compose 啟用，並以 producer-selected partition key 驗證同一業務實體的順序消費）
+- RabbitMQ（deferred compatibility profile；Compose service 預設註解，目前共享 queue 不是廣播拓撲，是否轉換或同步部署需另行評估）
 - PostgreSQL 16、Dapper `2.1.72`、Npgsql `10.0.2`
 - xUnit `2.9.3`、Moq、Shouldly
 - OpenTelemetry、Prometheus、Tempo、Loki、Grafana

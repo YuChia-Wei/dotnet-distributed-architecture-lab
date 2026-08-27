@@ -16,14 +16,14 @@ technologyProfiles:
   - distributed-messaging
   - containerized-observability
 dotnet:
-  sdkVersion: 10.0.0
+  sdkVersion: 10.0.302
   targetFrameworks:
     - net10.0
     - netstandard2.0
   solutions:
     - path: MQArchLab.slnx
       productProjectCount: 22
-      testProjectCount: 4
+      testProjectCount: 5
   projects:
     - path: src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj
       kind: contract-library
@@ -76,6 +76,8 @@ dotnet:
     - path: tests/SaleOrders.Tests/SaleOrders.Tests.csproj
       kind: test
     - path: tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj
+      kind: test
+    - path: tests/InventoryControl.Tests/InventoryControl.Tests.csproj
       kind: test
 sourceLayout:
   sourceRoots:
@@ -183,6 +185,7 @@ technologySelections:
     evidence:
       - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
       - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
+      - tests/InventoryControl.Tests/InventoryControl.Tests.csproj
     reason: Existing bounded-context test projects use different established mocking libraries.
   - slot: testing.bdd-runner
     value: plain xUnit with Given-When-Then semantics
@@ -197,6 +200,16 @@ technologySelections:
     reason: >-
       The target explicitly opts out of BDDfy and retains plain xUnit while
       preserving mandatory Given-When-Then semantics and recognizable step names.
+  - slot: testing.external-integration-profile
+    value: explicit environment opt-in with skipped-by-default xUnit facts
+    status: selected
+    source: explicit-target-decision
+    evidence:
+      - tests/README.md
+      - tests/InventoryControl.Tests/ExternalIntegrationFactAttribute.cs
+    reason: >-
+      Tests that require PostgreSQL, Kafka, RabbitMQ, or another out-of-process service
+      must not add failure noise to ordinary deterministic test runs.
   - slot: persistence.orm
     value: Dapper
     status: selected
@@ -212,13 +225,15 @@ technologySelections:
       - docker-compose/docker-compose.yml
     reason: PostgreSQL is the active product persistence provider.
   - slot: messaging.broker
-    value: Apache Kafka and RabbitMQ profiles
+    value: Apache Kafka canonical; RabbitMQ compatibility profile; dual broadcast target requires destination-aware implementation
     status: selected
-    source: repository-evidence
+    source: explicit-target-decision
     evidence:
       - docker-compose/docker-compose.yml
       - src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Configuration/MessagingTransportOptions.cs
-    reason: The repository implements selectable Kafka and RabbitMQ transport profiles.
+      - .dev/requirement/reconstructable-system-baseline.md
+      - .dev/operations/mq-topology.md
+    reason: Owner selected Kafka for event-driven verification and partition-key ordering on 2026-08-27; RabbitMQ remains available only for later topology evaluation or dual-deployment decision.
   - slot: messaging.framework
     value: WolverineFx
     status: selected
@@ -267,9 +282,8 @@ evidence:
 unresolved:
   facts:
     - Exact business ownership of every Consumer subscription is not fully documented.
-    - RabbitMQ inventory request/reply is incomplete because Inventory does not configure an inventory.requests listener for that broker.
+    - RabbitMQ logical inventory request/reply routes exist, but real broker connectivity and physical exchange/binding/reply/DLQ behavior are not verified.
     - products.integration.events is configured, but no current Product use case is confirmed to publish a product integration event.
-    - Retry, dead-letter, replay, and idempotency policy is incomplete.
-    - Inventory has no checked-in test project.
+    - Orders source-outbox and Inventory reservation retry/idempotency policies are documented, while consumer-wide replay and broker-specific dead-letter procedures remain incomplete.
   decisions:
     - Decide whether RabbitMQ remains a maintained runtime profile or only compatibility guidance.

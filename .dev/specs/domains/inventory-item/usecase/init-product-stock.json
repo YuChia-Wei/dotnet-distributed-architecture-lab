@@ -1,0 +1,17 @@
+{
+  "useCase": "InitProductStock",
+  "behavior": "Create the single inventory item for a product with an initial non-negative stock.",
+  "input": [{ "name": "productId", "type": "Guid" }, { "name": "stock", "type": "int", "constraint": ">= 0" }],
+  "aggregate": "InventoryItem",
+  "aggregateId": "Guid",
+  "method": "InventoryItem constructor",
+  "domainEvent": null,
+  "repository": "IInventoryItemQueryRepository + IInventoryItemDomainRepository",
+  "inputType": "InitProductStockInput",
+  "output": "Result<InitProductStockOutput>",
+  "requirements": ["INV-002", "INV-003"],
+  "preconditions": ["ProductId is non-empty.", "Stock is non-negative."],
+  "postconditions": ["A new UUID v7 inventory item is persisted for the product.", "The output contains current stock.", "An existing product inventory returns InventoryItemAlreadyExists without mutation."],
+  "qualityUplift": "Current construction does not reject negative initial stock; reconstruction must.",
+  "evidence": ["src/Inventory/DomainCore/InventoryControl.Applications/Commands/InitProductStockRequestCommand.cs", "docker-compose/sql-script/create_inventoryitems_table.sql"]
+}

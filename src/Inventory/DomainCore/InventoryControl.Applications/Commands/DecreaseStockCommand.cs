@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using InventoryControl.Applications.Repositories;
 using InventoryControl.Applications.Queries;
+using InventoryControl.Applications.Outbox;
 using Lab.BuildingBlocks.Application;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 using Lab.BuildingBlocks.Integrations;
@@ -55,7 +56,7 @@ public interface IDecreaseStockUseCase
 public class DecreaseStockUseCase(
     IInventoryItemDomainRepository repository,
     IInventoryItemQueryRepository queries,
-    IIntegrationEventPublisher publisher) : IDecreaseStockUseCase
+    IInventoryStockOutbox outbox) : IDecreaseStockUseCase
 {
     /// <summary>
     /// 執行扣除庫存 use case。
@@ -76,6 +77,7 @@ public class DecreaseStockUseCase(
             return Result<DecreaseStockOutput>.Failure("InventoryItemNotFound");
         }
 
+        var expectedStock = inventoryItem.Stock;
         var stockResult = inventoryItem.DecreaseStock(input.Quantity);
 
         if (!stockResult.IsSuccess)
@@ -83,14 +85,17 @@ public class DecreaseStockUseCase(
             return Result<DecreaseStockOutput>.Failure(stockResult.ErrorMessage!);
         }
 
-        await repository.SaveAsync(inventoryItem, cancellationToken);
-
-        await publisher.PublishAsync(
-            new ProductStockDecreasedIntegrationEvent(
-                inventoryItem.Id,
-                input.ProductId,
-                input.Quantity,
-                inventoryItem.Stock));
+        await outbox.SaveAndStageAsync(
+            inventoryItem,
+            expectedStock,
+            new InventoryOutboxMessage(
+                new ProductStockDecreasedIntegrationEvent(
+                    inventoryItem.Id,
+                    input.ProductId,
+                    input.Quantity,
+                    inventoryItem.Stock),
+                new IntegrationMessageDelivery(Guid.CreateVersion7(), input.ProductId.ToString("N"))),
+            cancellationToken);
 
         return Result<DecreaseStockOutput>.Success(new DecreaseStockOutput(inventoryItem.Stock));
     }

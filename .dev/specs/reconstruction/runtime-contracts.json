@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "messagingConfiguration": {
+    "section": "Messaging",
+    "profileValues": ["InMemory", "Kafka", "RabbitMq"],
+    "kafkaConnection": "Messaging:Kafka:ConnectionString",
+    "rabbitMqConnection": "Messaging:RabbitMq:ConnectionString (absolute amqp/amqps URI)",
+    "canonicalBroker": "Kafka",
+    "rabbitMqStatus": "deferred compatibility profile; not a proven broadcast topology",
+    "rule": "All six reconstructed hosts use this shared contract; legacy QUEUE_SERVICE/BrokerConnectionString selection is observed-only and must not be copied."
+  },
+  "hosts": [
+    { "name": "SaleProducts.WebApi", "type": "ASP.NET Core", "context": "Products", "http": true, "database": "Products", "publishes": ["products.integration.events configured only"], "listens": [], "durability": "gap until product publication requirement and message store are selected" },
+    { "name": "SaleProducts.Consumer", "type": "Generic Host", "context": "Products", "http": false, "publishes": [], "listens": ["orders.integration.events"], "businessHandler": "gap" },
+    { "name": "SaleOrders.WebApi", "type": "ASP.NET Core", "context": "Orders", "http": true, "database": "Orders", "publishes": ["orders.integration.events", "inventory.requests"], "listens": ["orders.outbound.replies as reply endpoint"], "durability": "PostgreSQL source outbox plus Wolverine PostgreSQL message store" },
+    { "name": "SaleOrders.Consumer", "type": "Generic Host", "context": "Orders", "http": false, "publishes": [], "listens": ["products.integration.events"], "businessHandler": "gap" },
+    { "name": "InventoryControl.WebApi", "type": "ASP.NET Core", "context": "Inventory", "http": true, "database": "Inventory", "publishes": ["inventory.integration.events", "request replies"], "listens": ["inventory.requests"], "durability": "ReserveInventory PostgreSQL source outbox relay plus Wolverine PostgreSQL message store for external profiles" },
+    { "name": "InventoryControl.Consumer", "type": "Generic Host", "context": "Inventory", "http": false, "publishes": [], "listens": ["orders.integration.events"], "businessHandler": "gap" }
+  ],
+  "profileBehavior": {
+    "InMemory": ["stub external transports", "use deterministic local queues", "do not require broker connection", "disable database-polled source-outbox relays when configured for tests"],
+    "Kafka": ["canonical profile", "auto-provision configured topics for lab use", "use durable inbox/outbox where a PostgreSQL Wolverine store is configured", "inventory.requests and orders.outbound.replies process inline with listener count 3", "use stable producer-owned partition keys for per-entity ordering", "use separate consumer groups for independent subscribers"],
+    "RabbitMq": ["deferred compatibility profile", "auto-provisioned shared queue names are not a broadcast contract", "use the same logical channel names", "inventory.requests and orders.outbound.replies process inline with listener count 3", "physical exchange/per-consumer queue/binding/DLQ names remain deferred"]
+  },
+  "webHostCommon": ["controllers", "OpenAPI and Scalar in Development", "HTTPS redirection", "authorization middleware", "explicit Application and Infrastructure DI", "OpenTelemetry OTLP"],
+  "telemetry": { "logs": ["OTLP"], "traces": ["ASP.NET Core on APIs", "Wolverine", "RabbitMQ", "Kafka", "OTLP"], "metrics": ["runtime", "process", "ASP.NET Core on APIs", "Wolverine", "OTLP"], "defaultOtlpEndpoint": "http://localhost:4317", "environmentOverride": "OTEL_EXPORTER_OTLP_ENDPOINT" },
+  "containers": { "runtime": "Linux-compatible .NET 10", "dockerfiles": 6, "restoreRule": "copy entry and recursive ProjectReference project files before restore, then copy source and publish", "compose": ["three APIs", "three Consumers", "three PostgreSQL databases", "Kafka and Kafdrop", "OTel Collector", "Prometheus", "Tempo", "Loki", "Grafana"] },
+  "versions": { "dotnetSdk": "10.0.302", "postgres": "16-alpine", "kafka": "4.0.0", "wolverine": "5.32.1", "dapper": "2.1.72", "npgsql": "10.0.2", "scalar": "2.14.3" },
+  "environmentGates": ["Kafka connectivity and keyed-order smoke test", "RabbitMQ connectivity only when its compatibility or future promoted scope is claimed", "PostgreSQL failure injection", "container topology", "OTLP export"],
+  "outcomeRule": "blocked-by-environment is never passed"
+}

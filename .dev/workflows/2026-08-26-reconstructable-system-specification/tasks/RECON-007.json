@@ -1,0 +1,184 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-08-26-reconstructable-system-specification",
+  "task_id": "RECON-007",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-08-26-reconstructable-system-specification",
+  "status": "blocked",
+  "created_at": "2026-08-26T20:09:02+08:00",
+  "updated_at": "2026-08-27T08:26:59+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-5",
+  "reasoning_effort": "unspecified",
+  "workflow_locator": ".dev/workflows/2026-08-26-reconstructable-system-specification/workflow.yaml",
+  "scope": {
+    "goal": "Create an Inventory-owned executable test surface, close ReserveInventory oracle gaps, and make external-service integration tests opt-in by default.",
+    "target": "tests/InventoryControl.Tests, solution/test metadata, and reconstruction test contracts",
+    "files": [],
+    "constraints": [
+      "Do not exclude broker-free configuration or in-memory transport tests.",
+      "External PostgreSQL or broker tests must be skipped unless explicitly opted in.",
+      "Preserve the unchanged 100-percent compliance gate."
+    ],
+    "non_goals": ["Change production behavior.", "Push, PR, merge, Issue closure, or publication."]
+  },
+  "inputs": {
+    "requirements": ["INV-005", "INV-006", "INV-007", "NFR-005"],
+    "specifications": [
+      ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json",
+      ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md"
+    ],
+    "architecture_decisions": ["PostgreSQL is the selected durable Inventory store; plain xUnit GWT is selected."],
+    "user_constraints": ["Autonomously fill derivable gaps.", "External-service integration tests are ignored by default to avoid error noise."]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "test implementation",
+      "authorization_source": ["User request on 2026-08-26", "GitHub Issue #2"],
+      "pending_decision": ""
+    },
+    "implementation_contract": {
+      "intent": "validation-failure-remediation",
+      "execution_mode": "generic",
+      "overlays": ["remediation"],
+      "authorization_source": ["User request on 2026-08-26", "GitHub Issue #2"],
+      "normative_truth": [
+        ".dev/problem-frames/inventory/cbf/reserve-inventory/",
+        ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md",
+        "PACKET-6AD8DBCFF8A8CA45DA3D167A124B7C0983A6DBB9DFDA52D52AFAB744E3BA6ACE"
+      ],
+      "finding_evidence": [".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md#missing-items"],
+      "subject_revision": "3a5fbb3bb9bd5e4643af87ddfcbd6883373eb1fb",
+      "acceptance_criteria": [
+        "Inventory owns a dedicated test project.",
+        "All broker-free ReserveInventory scenarios pass.",
+        "External PostgreSQL verification is skipped without explicit opt-in and never counted as passing evidence.",
+        "The unchanged compliance gate is rerun and reported truthfully."
+      ]
+    },
+    "test_execution_contract": null,
+    "role_execution_records": [
+      {
+        "role_execution_id": "RECON-007-usecase-test-sub-agent-01",
+        "role_asset_id": "usecase-test-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "RECON-007",
+        "applicability": {"result": "applies", "reason": "The remediation implements concrete ReserveInventory use-case scenarios."},
+        "selection": {
+          "disposition": "direct",
+          "reason": "The project move, test assertions, and acceptance anchors share one mutation scope.",
+          "delegation_evaluation": {
+            "safety_gates": {
+              "applicable_role": true,
+              "current_session_runtime_support_verified": false,
+              "bounded_input_output_permissions_stop": true,
+              "approval_security_credential_boundaries_satisfied": true,
+              "disjoint_mutation_scope": false,
+              "named_parent_and_final_integration_owner": true
+            },
+            "material_value_triggers": [],
+            "cost_failure_retry_risk": {"result": "favors-direct", "reason": "Delegation would overlap the same test project and acceptance files."}
+          }
+        },
+        "input_envelope": {
+          "goal": "Implement the missing ReserveInventory GWT scenarios and external integration profile.",
+          "scope": ["tests/InventoryControl.Tests/", ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md"],
+          "non_goals": ["Change production behavior.", "Treat skipped external checks as passing."],
+          "source_refs": ["RECON-005 compliance report", "ReserveInventory CBF", "implementation effective-rule packet"],
+          "mandatory_references": [
+            ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-playbook.md",
+            ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-generation-guidance.md",
+            ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md",
+            ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
+          ],
+          "constraints": ["Plain xUnit GWT.", "NSubstitute.", "No BaseTestClass."],
+          "stop_conditions": ["Return after bounded tests, execution evidence, and acceptance anchors are integrated."]
+        },
+        "permissions": {
+          "read_scope": ["src/Inventory/", ".dev/problem-frames/inventory/", ".dev/specs/tests/inventory-item/"],
+          "write_scope": ["tests/InventoryControl.Tests/", "tests/SaleOrders.Tests/", ".dev/specs/", ".dev/problem-frames/inventory/"],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": {"kind": "parent-inline", "identity": "root-workflow-parent", "runtime_support_verified": true},
+        "invocation_evidence": null,
+        "output": {
+          "expected": ["Inventory-owned tests", "External integration opt-in contract", "Execution evidence"],
+          "returned": ["InventoryControl.Tests", "tests/README.md", "19 passed and 1 skipped default-profile result"],
+          "evidence_refs": ["tests/InventoryControl.Tests/", "tests/README.md"],
+          "bounded": true
+        },
+        "attempts": [
+          {
+            "number": 1,
+            "disposition": "direct",
+            "executor": {"kind": "parent-inline", "identity": "root-workflow-parent", "runtime_support_verified": true},
+            "invocation_evidence": null,
+            "outcome": "completed",
+            "correctable_failure": false,
+            "material_state_change": "Inventory tests moved to their bounded-context project and missing scenarios implemented.",
+            "authorization_source": ["User request on 2026-08-26", "GitHub Issue #2"],
+            "evidence_refs": ["tests/InventoryControl.Tests/"]
+          }
+        ],
+        "fallback": {
+          "considered": false,
+          "reason": "Direct execution selected initially.",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": true,
+            "bounded_input_output_permissions_stop": true,
+            "approval_security_credential_boundaries_satisfied": true,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": true,
+            "current_inline_support_verified": true,
+            "evidence_refs": ["tests/InventoryControl.Tests/"]
+          }
+        },
+        "final_integration_owner": {"owner": "slice-implementer parent stage owner", "decision": "accepted", "evidence_refs": ["tests/InventoryControl.Tests/", ".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md"]}
+      }
+    ],
+    "spec_compliance": {
+      "selected": true,
+      "activation_source": ["RECON-005 failed-closed report", "AGENTS.md mandatory 100% gate"],
+      "expected_outcome": "100-percent-pass"
+    },
+    "steps": [
+      "Create the Inventory-owned test project and relocate existing Inventory tests.",
+      "Implement validation, business-failure, transient-failure, publication-failure, and concurrency oracles.",
+      "Add an explicit opt-in external-integration test contract.",
+      "Run broker-free tests by default and external tests only when prerequisites are available.",
+      "Rerun selected compliance without relaxing any category."
+    ],
+    "validation": [
+      "Existing pure tests remain in the default profile.",
+      "External-service tests report skipped without opt-in.",
+      "Inventory-owned broker-free tests pass.",
+      "Selected compliance reaches 100% or fails closed with exact residual evidence."
+    ],
+    "commit_checkpoint": "Inventory test ownership and reconstruction compliance remediation.",
+    "deferred_items": []
+  },
+  "results": {
+    "summary": "Created the Inventory-owned test surface, closed all broker-free ReserveInventory gaps, and encoded external PostgreSQL verification as explicit opt-in; the task is blocked because skipped external execution leaves compliance at 94%.",
+    "files_changed": ["tests/InventoryControl.Tests/", "tests/README.md", "tests/SaleOrders.Tests/", "MQArchLab.slnx", ".dev/project-config.yaml", ".dev/specs/", ".dev/problem-frames/", ".dev/workflows/2026-08-26-reconstructable-system-specification/"],
+    "approval_evidence": ["User authorization on 2026-08-26 and GitHub Issue #2."],
+    "test_execution": [
+      {"command": "dotnet build tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false", "outcome": "passed", "evidence": "0 errors; one pre-existing nullable warning."},
+      {"command": "dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-build --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false", "outcome": "passed", "evidence": "19 passed, 1 external PostgreSQL test skipped, 0 failed."},
+      {"command": "dotnet test tests/SaleOrders.Tests/SaleOrders.Tests.csproj --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false", "outcome": "passed", "evidence": "11 passed, 0 skipped, 0 failed."},
+      {"command": "Inventory ExternalIntegration profile", "outcome": "blocked-by-environment", "evidence": "Docker Desktop was not running; no PostgreSQL instance was available."}
+    ],
+    "role_execution_aggregation": [{"stage_id": "RECON-007", "record_id": "RECON-007-usecase-test-sub-agent-01", "disposition": "direct", "integration_decision": "accepted", "evidence": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-test-role-execution.yaml"}],
+    "spec_compliance": {"outcome": "failed-closed", "coverage_percent": 94, "evidence": [".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md"]},
+    "validation_evidence": ["31 JSON files parsed.", "17 problem-frame/workflow YAML files parsed.", "Workflow artifact validator passed.", "Effective implementation packet freshness verified."],
+    "commits": ["a4b0f09f06bdfca9d8ea4e3e7e57ad68102fb15e"],
+    "follow_up_needed": true
+  }
+}

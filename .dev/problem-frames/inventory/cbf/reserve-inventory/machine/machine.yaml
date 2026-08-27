@@ -1,0 +1,31 @@
+command_processing:
+  steps:
+    - "Receive ReserveInventoryInput through IReserveInventoryUseCase.ExecuteAsync."
+    - "Reject empty operation id, empty product id, or non-positive quantity without opening a transaction."
+    - "Call the Application-owned IInventoryReservationOutbox with reservation identity, payload, and a successful-message factory."
+    - "For a new operation, lock the InventoryItems row, evaluate stock, decrement when sufficient, and store the outcome in one transaction."
+    - "For an existing operation, return the stored outcome when payload matches or OperationIdentityConflict when it differs."
+    - "When successful, the supplied factory creates ProductStockDecreasedIntegrationEvent with MessageId=OperationId and PartitionKey=ProductId.ToString(\"N\"); the adapter stages it before its private local transaction commits."
+    - "Commit reservation state, terminal outcome, and source-outbox row together; otherwise dispose and roll back."
+    - "A separate Infrastructure relay publishes committed rows with stable delivery metadata, bounded backoff, and parking after five failures."
+    - "Return ReserveInventoryOutput with operation id, success, remaining stock, failure reason, and replay marker."
+
+error_handling:
+  invalid_operation_id: "Return OperationIdRequired; do not open a transaction."
+  invalid_product_id: "Return ProductIdRequired; do not open a transaction."
+  invalid_quantity: "Return QuantityMustBePositive; do not open a transaction."
+  inventory_item_missing: "Persist and return InventoryItemNotFound for the operation."
+  insufficient_stock: "Persist and return InventoryIsNotEnough without decrement."
+  identity_conflict: "Return OperationIdentityConflict with WasAlreadyProcessed = true and no mutation."
+  cancellation: "Propagate OperationCanceledException and leave durable state uncommitted."
+  durable_store_failure: "Wrap NpgsqlException as InventoryReservationTransientException."
+  outbox_stage_or_commit_failure: "Propagate the failure and roll back stock, outcome, and outbox together."
+  relay_failure: "Leave the committed outbox row unpublished, back off, and park after five attempts; never reverse the already committed reservation."
+
+constraint_enforcement:
+  - "Quantity must be greater than zero."
+  - "Stock must never become negative."
+  - "One operation id may identify only one product and quantity."
+  - "Successful replay never decrements stock again."
+  - "Only successful outcomes stage ProductStockDecreasedIntegrationEvent."
+  - "Successful state and outbox insertion are atomic; relay delivery is at-least-once and independent after commit."

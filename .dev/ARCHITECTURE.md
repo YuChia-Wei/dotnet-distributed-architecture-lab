@@ -61,14 +61,17 @@ Current use cases include product create/update/delete/query, order place/ship/d
 
 - Product and Inventory persistence use Dapper + Npgsql repositories with PostgreSQL.
 - Order includes both a Dapper domain repository and `OrderEventSourcingRepository`; event sourcing is an explicit Orders capability rather than a universal default.
-- Integration publishing is coordinated through repository/infrastructure code and Wolverine durable messaging facilities.
+- Orders atomically commits domain events, read model state, and its source outbox. Inventory exposes capability-specific outbox ports rather than a generic Unit of Work: `IInventoryReservationOutbox` atomically commits reservation outcome/state/event, while `IInventoryStockOutbox` atomically commits decrease/increase/restock state and event with an expected-stock concurrency check. Database transaction/UoW mechanics remain private Infrastructure details.
+- Source-outbox relays are Infrastructure adapters: they do not decide event meaning. They publish the producer-created contract with stable delivery metadata and bounded retry/park behavior.
 - Product source projects do not currently reference EF Core; the retired target validation tooling is no longer part of the active repository.
 
 ## Messaging And Integration
 
 - WolverineFx is the messaging abstraction used by APIs and consumers.
-- Kafka is enabled by the checked-in Docker Compose topology.
-- RabbitMQ packages and partial conditional runtime configuration are retained, while its Compose service is commented out and the Inventory request/reply listener path is not currently complete.
+- Kafka is the canonical broker and event-driven verification path. Inventory reservation events use normalized `ProductId` as their Kafka partition key so events for one product can preserve partition order; no cross-partition global ordering is promised.
+- Kafka can deliver one topic to multiple independent consumer groups. A future broadcast requirement therefore triggers a topology comparison, not an automatic RabbitMQ migration.
+- RabbitMQ packages and logical request/reply routing remain as a compatibility profile. The owner selected Kafka + RabbitMQ dual broadcast as the target direction, but current shared queue names still describe competing-consumer behavior and the code still selects one broker profile. Dual delivery is therefore not implemented: it requires exchange + per-consumer queues and one independent delivery state per broker destination before runtime proof.
+- The producing bounded context owns integration-event meaning, schema, and compatibility. Consumers own only their reactions, projections, idempotency, retry, and dead-letter handling.
 - Known logical channels include `orders.integration.events`, `products.integration.events`, `inventory.integration.events`, `inventory.requests`, and `orders.outbound.replies`.
 - Orders reserves inventory through `ReserveInventoryRequestContract` / `ReserveInventoryResponseContract` request/reply over Wolverine, not through direct domain references.
 
@@ -85,8 +88,8 @@ The repository defines six product hosts:
 
 ## Tests And Validation Boundary
 
-- `MQArchLab.slnx` includes four xUnit test projects for Products and Orders.
-- Inventory currently has no test project in the solution.
+- `MQArchLab.slnx` includes five xUnit test projects for Products, Orders, and Inventory.
+- `InventoryControl.Tests` owns Inventory command/reservation tests. Its real PostgreSQL checks are explicitly opt-in and skipped during ordinary test runs.
 - The target-owned analyzer and runtime-validation projects were retired by the owner-approved v0.9 AI-context upgrade and are absent from the repository and solution.
 - v0.13 removed the former bundled mechanical-validation provider. The remaining `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/` assets are reference-only recipes; they are not selected, activated, or wired into the target solution or build.
 

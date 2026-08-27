@@ -1,0 +1,19 @@
+{
+  "useCase": "InventoryController",
+  "behavior": "Expose Inventory stock initialization, query, increase, decrease, and restock use cases over HTTP.",
+  "requirements": ["API-001", "API-002", "API-003", "INV-003", "INV-008"],
+  "spec": {
+    "basePath": "/api/Inventory",
+    "endpoints": [
+      { "method": "POST", "path": "/product/{productId:guid}", "useCasePort": "IInitProductStockUseCase", "input": "InitProductStockInput", "requestDto": "InitProductStockRequest", "responseDto": "AvailableQuantityResponse", "successStatus": 200, "businessFailureStatus": 400 },
+      { "method": "GET", "path": "/product/{productId:guid}", "useCasePort": "IGetInventoryItemAvailableQuantityUseCase", "input": "GetInventoryItemAvailableQuantityInput", "responseDto": "AvailableQuantityResponse", "successStatus": 200, "notFoundStatus": 404 },
+      { "method": "POST", "path": "/product/{productId:guid}/increase", "useCasePort": "IIncreaseStockUseCase", "input": "IncreaseStockInput", "requestDto": "IncreaseStockRequest", "responseDto": "AvailableQuantityResponse", "successStatus": 200, "businessFailureStatus": 400 },
+      { "method": "POST", "path": "/product/{productId:guid}/decrease", "useCasePort": "IDecreaseStockUseCase", "input": "DecreaseStockInput", "requestDto": "DecreaseStockRequest", "responseDto": "AvailableQuantityResponse", "successStatus": 200, "businessFailureStatus": 400 },
+      { "method": "POST", "path": "/product/{productId:guid}/restock", "useCasePort": "IRestockUseCase", "input": "RestockInput", "requestDto": "ProductRestockRequest", "responseDto": "AvailableQuantityResponse", "successStatus": 200, "businessFailureStatus": 400 }
+    ],
+    "errorMapping": { "invalidGuidOrQuantity": 400, "InventoryItemAlreadyExists": 400, "InventoryItemNotFoundOnCommand": 400, "InventoryItemNotFoundOnQuery": 404, "InsufficientStock": 400, "unexpected": 500 }
+  },
+  "contracts": { "requestDtos": ["InitProductStockRequest(Stock)", "IncreaseStockRequest(Stock)", "DecreaseStockRequest(Stock)", "ProductRestockRequest(Stock)"], "responseDto": "AvailableQuantityResponse(ProductId,AvailableQuantity)" },
+  "policies": { "validation": "Initialize requires Stock>=0; mutations require Stock>0", "idempotency": "HTTP stock mutation idempotency is not defined; MQ reservation uses its separate OperationId contract", "observability": "Record operation/result metadata, not unrestricted payloads" },
+  "evidence": ["src/Inventory/Presentation/InventoryControl.WebApi/Controllers/InventoryController.cs"]
+}

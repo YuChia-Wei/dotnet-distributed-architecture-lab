@@ -1,94 +1,48 @@
 using System.Data;
 using Dapper;
+using InventoryControl.Applications.Outbox;
 using InventoryControl.Applications.Reservations;
 using Npgsql;
 
 namespace InventoryControl.Infrastructure.Applications.Repositories;
 
 public sealed class PostgresInventoryReservationRepository(string connectionString)
-    : IInventoryReservationRepository
+    : IInventoryReservationOutbox
 {
-    public async Task<InventoryReservationOutcome> ReserveAsync(
+    public async Task<InventoryReservationOutcome> ReserveAndStageAsync(
         Guid operationId,
         Guid productId,
         int quantity,
+        Func<InventoryReservationOutcome, InventoryOutboxMessage> successfulMessageFactory,
         CancellationToken cancellationToken)
     {
+        await using var connection = new NpgsqlConnection(connectionString);
         try
         {
-            await using var connection = new NpgsqlConnection(connectionString);
             await connection.OpenAsync(cancellationToken);
             await using var transaction = await connection.BeginTransactionAsync(
                 IsolationLevel.ReadCommitted,
                 cancellationToken);
 
-            const string claimSql = """
-                INSERT INTO InventoryReservationOperations
-                    (OperationId, ProductId, Quantity, CompletedAt)
-                VALUES
-                    (@OperationId, @ProductId, @Quantity, NULL)
-                ON CONFLICT (OperationId) DO NOTHING
-                RETURNING OperationId;
-                """;
-
-            var claimed = await connection.QuerySingleOrDefaultAsync<Guid?>(new CommandDefinition(
-                claimSql,
-                new { OperationId = operationId, ProductId = productId, Quantity = quantity },
+            var outcome = await ReserveAsync(
+                connection,
                 transaction,
-                cancellationToken: cancellationToken));
+                operationId,
+                productId,
+                quantity,
+                cancellationToken);
 
-            if (claimed is null)
+            if (outcome.IsSuccess)
             {
-                var replay = await ReadExistingAsync(
+                var message = successfulMessageFactory(outcome)
+                    ?? throw new InvalidOperationException("A successful reservation requires an outbox message.");
+                await InventoryOutboxWriter.StageAsync(
                     connection,
                     transaction,
-                    operationId,
-                    productId,
-                    quantity,
+                    message,
                     cancellationToken);
-                await transaction.CommitAsync(cancellationToken);
-                return replay;
             }
 
-            const string inventorySql = """
-                SELECT Id, Stock
-                FROM InventoryItems
-                WHERE ProductId = @ProductId
-                FOR UPDATE;
-                """;
-            var inventory = await connection.QuerySingleOrDefaultAsync<InventoryRow>(new CommandDefinition(
-                inventorySql,
-                new { ProductId = productId },
-                transaction,
-                cancellationToken: cancellationToken));
-
-            InventoryReservationOutcome outcome;
-            if (inventory is null)
-            {
-                outcome = Failed(operationId, productId, quantity, "InventoryItemNotFound");
-            }
-            else if (inventory.Stock < quantity)
-            {
-                outcome = Failed(operationId, productId, quantity, "InventoryIsNotEnough", inventory.Id, inventory.Stock);
-            }
-            else
-            {
-                const string decreaseSql = """
-                    UPDATE InventoryItems
-                    SET Stock = Stock - @Quantity
-                    WHERE Id = @InventoryItemId
-                    RETURNING Stock;
-                    """;
-                var remainingStock = await connection.QuerySingleAsync<int>(new CommandDefinition(
-                    decreaseSql,
-                    new { Quantity = quantity, InventoryItemId = inventory.Id },
-                    transaction,
-                    cancellationToken: cancellationToken));
-                outcome = new InventoryReservationOutcome(
-                    operationId, productId, quantity, inventory.Id, true, remainingStock, null, false);
-            }
-
-            await SaveOutcomeAsync(connection, transaction, outcome, cancellationToken);
             await transaction.CommitAsync(cancellationToken);
             return outcome;
         }
@@ -98,6 +52,95 @@ public sealed class PostgresInventoryReservationRepository(string connectionStri
                 $"Inventory reservation {operationId} could not reach its durable store.",
                 exception);
         }
+    }
+
+    private static async Task<InventoryReservationOutcome> ReserveAsync(
+        NpgsqlConnection connection,
+        NpgsqlTransaction transaction,
+        Guid operationId,
+        Guid productId,
+        int quantity,
+        CancellationToken cancellationToken)
+    {
+        const string claimSql = """
+            INSERT INTO InventoryReservationOperations
+                (OperationId, ProductId, Quantity, CompletedAt)
+            VALUES
+                (@OperationId, @ProductId, @Quantity, NULL)
+            ON CONFLICT (OperationId) DO NOTHING
+            RETURNING OperationId;
+            """;
+
+        var claimed = await connection.QuerySingleOrDefaultAsync<Guid?>(new CommandDefinition(
+            claimSql,
+            new { OperationId = operationId, ProductId = productId, Quantity = quantity },
+            transaction,
+            cancellationToken: cancellationToken));
+
+        if (claimed is null)
+        {
+            return await ReadExistingAsync(
+                connection,
+                transaction,
+                operationId,
+                productId,
+                quantity,
+                cancellationToken);
+        }
+
+        const string inventorySql = """
+            SELECT Id, Stock
+            FROM InventoryItems
+            WHERE ProductId = @ProductId
+            FOR UPDATE;
+            """;
+        var inventory = await connection.QuerySingleOrDefaultAsync<InventoryRow>(new CommandDefinition(
+            inventorySql,
+            new { ProductId = productId },
+            transaction,
+            cancellationToken: cancellationToken));
+
+        InventoryReservationOutcome outcome;
+        if (inventory is null)
+        {
+            outcome = Failed(operationId, productId, quantity, "InventoryItemNotFound");
+        }
+        else if (inventory.Stock < quantity)
+        {
+            outcome = Failed(
+                operationId,
+                productId,
+                quantity,
+                "InventoryIsNotEnough",
+                inventory.Id,
+                inventory.Stock);
+        }
+        else
+        {
+            const string decreaseSql = """
+                UPDATE InventoryItems
+                SET Stock = Stock - @Quantity
+                WHERE Id = @InventoryItemId
+                RETURNING Stock;
+                """;
+            var remainingStock = await connection.QuerySingleAsync<int>(new CommandDefinition(
+                decreaseSql,
+                new { Quantity = quantity, InventoryItemId = inventory.Id },
+                transaction,
+                cancellationToken: cancellationToken));
+            outcome = new InventoryReservationOutcome(
+                operationId,
+                productId,
+                quantity,
+                inventory.Id,
+                true,
+                remainingStock,
+                null,
+                false);
+        }
+
+        await SaveOutcomeAsync(connection, transaction, outcome, cancellationToken);
+        return outcome;
     }
 
     private static async Task<InventoryReservationOutcome> ReadExistingAsync(
@@ -122,7 +165,12 @@ public sealed class PostgresInventoryReservationRepository(string connectionStri
 
         if (row.ProductId != productId || row.Quantity != quantity)
         {
-            return Failed(operationId, productId, quantity, "OperationIdentityConflict", wasAlreadyProcessed: true);
+            return Failed(
+                operationId,
+                productId,
+                quantity,
+                "OperationIdentityConflict",
+                wasAlreadyProcessed: true);
         }
 
         return new InventoryReservationOutcome(
@@ -168,7 +216,14 @@ public sealed class PostgresInventoryReservationRepository(string connectionStri
         bool wasAlreadyProcessed = false)
     {
         return new InventoryReservationOutcome(
-            operationId, productId, quantity, inventoryItemId, false, remainingStock, reason, wasAlreadyProcessed);
+            operationId,
+            productId,
+            quantity,
+            inventoryItemId,
+            false,
+            remainingStock,
+            reason,
+            wasAlreadyProcessed);
     }
 
     private sealed record InventoryRow(Guid Id, int Stock);

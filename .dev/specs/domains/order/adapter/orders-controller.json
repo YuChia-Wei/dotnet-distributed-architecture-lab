@@ -1,0 +1,19 @@
+{
+  "useCase": "OrdersController",
+  "behavior": "Expose order placement, lifecycle transitions, and order-details query over HTTP.",
+  "requirements": ["API-001", "API-002", "API-003", "ORD-003", "ORD-004", "ORD-007"],
+  "spec": {
+    "basePath": "/api/Orders",
+    "endpoints": [
+      { "method": "POST", "path": "", "useCasePort": "IPlaceOrderUseCase", "input": "PlaceOrderInput", "requestDto": "PlaceOrderRequest", "successStatus": 200, "businessFailureStatus": 400 },
+      { "method": "GET", "path": "/{orderId:guid}", "useCasePort": "IGetOrderDetailsUseCase", "input": "GetOrderDetailsInput", "responseDto": "OrderDetailsResponse", "successStatus": 200, "notFoundStatus": 404 },
+      { "method": "PATCH", "path": "/{orderId:guid}/ship", "useCasePort": "IShipOrderUseCase", "input": "ShipOrderInput(orderId,reason)", "requestDto": "ChangeOrderStateRequest", "successStatus": 204 },
+      { "method": "PATCH", "path": "/{orderId:guid}/deliver", "useCasePort": "IDeliverOrderUseCase", "input": "DeliverOrderInput(orderId,reason)", "requestDto": "ChangeOrderStateRequest", "successStatus": 204 },
+      { "method": "PATCH", "path": "/{orderId:guid}/cancel", "useCasePort": "ICancelOrderUseCase", "input": "CancelOrderInput(orderId,reason)", "requestDto": "ChangeOrderStateRequest", "successStatus": 204 }
+    ],
+    "errorMapping": { "invalidReasonOrInput": 400, "inventoryReservationFailure": 400, "KeyNotFoundException": 404, "DBConcurrencyException": 409, "unexpected": 500 }
+  },
+  "contracts": { "dtos": ["PlaceOrderRequest(OperationId,OrderDate,TotalAmount,ProductId,ProductName,Quantity)", "ChangeOrderStateRequest(Reason)", "OrderDetailsResponse(OrderId,LineItems)", "LineItemDto(ProductId,Quantity)"] },
+  "policies": { "validation": "Validate request constraints before transport-neutral input execution", "idempotency": "PlaceOrder forwards OperationId to Inventory; order creation itself must not commit after a failed/replayed incompatible reservation", "observability": "Transition Reason may contain user/operator text and is not unrestricted log metadata" },
+  "evidence": ["src/Order/Presentation/SaleOrders.WebApi/Controllers/OrdersController.cs", "src/BC-Contracts/Lab.BoundedContextContracts.Orders/DataTransferObjects/OrderDetailsResponse.cs"]
+}

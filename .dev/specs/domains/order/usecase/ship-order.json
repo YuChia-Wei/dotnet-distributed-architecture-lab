@@ -2,7 +2,8 @@
   "useCase": "ShipOrder",
   "behavior": "Mark an existing order as shipped and publish an order-shipped integration event.",
   "input": [
-    { "name": "orderId", "type": "Guid" }
+    { "name": "orderId", "type": "Guid" },
+    { "name": "reason", "type": "string", "constraint": "nonblank" }
   ],
   "aggregate": "Order",
   "aggregateId": "Guid",
@@ -20,7 +21,9 @@
     "Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderShipped"
   ],
   "constructorPostconditions": [
-    "The order status becomes Shipped.",
-    "An OrderShipped integration event is published after persistence."
-  ]
+    "If current status is not Shipped, status becomes Shipped and the reason is carried in domain and integration events.",
+    "If current status is already Shipped, no event, persistence, or integration event occurs.",
+    "The integration event is staged atomically with the event stream and read model."
+  ],
+  "requirements": ["ORD-003", "ORD-005"]
 }

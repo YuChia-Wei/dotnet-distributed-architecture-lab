@@ -6,8 +6,8 @@ Integration-focused verification for inventory persistence and outbound stock in
 
 ## Implementation Status
 
-- Status: `planned`
-- There is no current Inventory test project; all scenarios below are future verification targets.
+- Status: `partially-implemented`
+- Broker-free Application/outbox contract anchors exist in `tests/InventoryControl.Tests/InventoryStockUseCaseTests.cs`. Real PostgreSQL atomic-commit and expected-stock concurrency anchors exist in `tests/InventoryControl.Tests/PostgresInventoryStockOutboxTests.cs`; they are opt-in external tests, and a skipped result is non-passing evidence.
 
 ## Related Production Spec
 
@@ -17,10 +17,11 @@ Integration-focused verification for inventory persistence and outbound stock in
 
 ## Scenario List
 
-- Happy path: stock decrease persists and publishes `ProductStockDecreasedIntegrationEvent`
-- Happy path: stock increase persists and publishes `ProductStockIncreasedIntegrationEvent`
-- Happy path: restock persists and publishes `ProductStockReturnedIntegrationEvent`
-- Failure path: not-found or insufficient-stock outcomes do not publish success events
+- Happy path: stock decrease and `ProductStockDecreasedIntegrationEvent` outbox row commit together
+- Happy path: stock increase and `ProductStockIncreasedIntegrationEvent` outbox row commit together
+- Happy path: restock and `ProductStockReturnedIntegrationEvent` outbox row commit together
+- Failure path: not-found or insufficient-stock outcomes do not stage success events
+- Concurrency path: expected-stock mismatch rolls back and produces no outbox row
 
 ## Given-When-Then
 
@@ -31,8 +32,7 @@ Integration-focused verification for inventory persistence and outbound stock in
 - When:
   - `IDecreaseStockUseCase.ExecuteAsync` is invoked with `DecreaseStockInput`
 - Then:
-  - the updated stock is persisted
-  - a `ProductStockDecreasedIntegrationEvent` is published
+  - the updated stock and one `ProductStockDecreasedIntegrationEvent` outbox row are committed atomically
 
 ### Scenario 2: increase stock with persistence and publication
 
@@ -41,8 +41,7 @@ Integration-focused verification for inventory persistence and outbound stock in
 - When:
   - `IIncreaseStockUseCase.ExecuteAsync` is invoked with `IncreaseStockInput`
 - Then:
-  - the updated stock is persisted
-  - a `ProductStockIncreasedIntegrationEvent` is published
+  - the updated stock and one `ProductStockIncreasedIntegrationEvent` outbox row are committed atomically
 
 ### Scenario 3: restock with persistence and publication
 
@@ -51,8 +50,7 @@ Integration-focused verification for inventory persistence and outbound stock in
 - When:
   - `IRestockUseCase.ExecuteAsync` is invoked with `RestockInput`
 - Then:
-  - the updated stock is persisted
-  - a `ProductStockReturnedIntegrationEvent` is published
+  - the updated stock and one `ProductStockReturnedIntegrationEvent` outbox row are committed atomically
 
 ### Scenario 4: suppress success publication on business failure
 
@@ -61,14 +59,14 @@ Integration-focused verification for inventory persistence and outbound stock in
 - When:
   - the corresponding command is handled
 - Then:
-  - no success integration event is published
+  - no success integration event is staged
   - no invalid stock mutation is persisted
 
 ## Assertions
 
-- repository load/save behavior
+- repository load and outbox save-and-stage behavior
 - persisted stock values
-- integration event publication behavior
+- integration-event staging and relay behavior
 - suppression of success publication on failed operations
 
 ## Test Level

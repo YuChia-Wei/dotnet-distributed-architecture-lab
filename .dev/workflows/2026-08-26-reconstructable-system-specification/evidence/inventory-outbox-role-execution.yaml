@@ -1,0 +1,71 @@
+role_execution_id: "RECON-008-outbox-sub-agent-01"
+role_asset_id: "outbox-sub-agent"
+role_path: ".ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml"
+owning_skill: "slice-implementer"
+stage_id: "RECON-008"
+applicability:
+  result: "applies"
+  reason: "ReserveInventory requires an atomic PostgreSQL source outbox and bounded relay."
+selection:
+  disposition: "direct"
+  reason: "The Application transaction port, PostgreSQL adapter, relay, schema, and acceptance specs form one overlapping mutation scope; the user did not request delegated agents."
+input_envelope:
+  goal: "Atomically commit Inventory reservation state, terminal outcome, and one producer-created integration-event outbox row, then relay it with stable delivery metadata."
+  scope:
+    - "src/Inventory/DomainCore/"
+    - "docker-compose/sql-script/"
+    - ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json"
+    - ".dev/specs/reconstruction/"
+  non_goals:
+    - "Convert other Inventory commands to source outbox."
+    - "Define RabbitMQ fanout topology."
+  source_refs:
+    - ".dev/requirement/reconstructable-system-baseline.md"
+    - ".dev/problem-frames/inventory/cbf/reserve-inventory/"
+  mandatory_references:
+    - ".ai/assets/sub-agent-role-prompts/outbox-sub-agent/references/implementation-playbook.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md"
+  constraints:
+    - "Producer use case owns event meaning."
+    - "One local transaction owns state, outcome, and outbox."
+    - "Relay is at-least-once and consumers remain idempotent."
+  stop_conditions:
+    - "Return after code, schema, tests, and durable design evidence are integrated."
+permissions:
+  read_scope: ["src/Inventory/", "src/BC-Contracts/", "docker-compose/", ".dev/"]
+  write_scope: ["src/Inventory/", "src/BC-Contracts/Lab.BoundedContextContracts.Inventory/", "docker-compose/", "tests/InventoryControl.Tests/", ".dev/"]
+  external_actions: []
+  secret_handling: "no-secret-values"
+executor:
+  kind: "parent-inline"
+  identity: "root-workflow-parent"
+  runtime_support_verified: true
+invocation_evidence: null
+output:
+  expected: ["transaction port", "PostgreSQL atomic adapter", "source-outbox relay", "schema and tests"]
+  returned: ["IInventoryReservationTransactionFactory", "PostgresInventoryReservationRepository transaction", "InventoryIntegrationOutboxRelay", "InventoryIntegrationOutbox SQL"]
+  evidence_refs:
+    - "src/Inventory/DomainCore/InventoryControl.Applications/Reservations/InventoryReservation.cs"
+    - "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/PostgresInventoryReservationRepository.cs"
+    - "src/Inventory/DomainCore/InventoryControl.Infrastructure/BuildingBlocks/InventoryIntegrationOutboxRelay.cs"
+    - "docker-compose/sql-script/migrations/inventory/20260827_0002_add_inventory_integration_outbox.sql"
+  bounded: true
+attempts:
+  - number: 1
+    disposition: "direct"
+    executor: { kind: "parent-inline", identity: "root-workflow-parent", runtime_support_verified: true }
+    invocation_evidence: null
+    outcome: "completed"
+    correctable_failure: false
+    material_state_change: "ReserveInventory now stages its producer-owned event atomically and relays committed rows with stable identity."
+    authorization_source: ["User decisions on 2026-08-27", "GitHub Issue #2"]
+    evidence_refs: ["src/Inventory/", "docker-compose/sql-script/"]
+fallback:
+  considered: false
+  reason: "Direct execution was selected initially."
+  resulting_disposition: null
+final_integration_owner:
+  owner: "slice-implementer parent stage owner"
+  decision: "accepted-provisionally-pending-owner-design-review"
+  evidence_refs: ["tests/InventoryControl.Tests/", ".dev/specs/reconstruction/persistence-contracts.json"]

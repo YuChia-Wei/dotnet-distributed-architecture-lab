@@ -16,7 +16,7 @@ This runbook covers the request/reply path:
 
 - `Orders` sends `ReserveInventoryRequestContract`
 - `Inventory` handles the request through `ReserveInventoryRequestContractHandler`
-- `Inventory` invokes `IDecreaseStockUseCase.ExecuteAsync` with `DecreaseStockInput`
+- `Inventory` invokes `IReserveInventoryUseCase.ExecuteAsync` with `ReserveInventoryInput`
 - `Inventory` returns `ReserveInventoryResponseContract`
 - `Orders` decides whether to persist and publish `OrderPlaced`
 
@@ -32,7 +32,7 @@ This runbook covers the request/reply path:
 
 1. Confirm whether the failure is a business failure or a transport/runtime failure.
 2. Check whether `ReserveInventoryResponseContract.Result` is `false` versus missing/timeout behavior.
-3. Check the active broker mode from `QUEUE_SERVICE`.
+3. Check the active broker mode from `Messaging:Profile` (`InMemory`, `Kafka`, or `RabbitMq`).
 4. Check whether the relevant runtime endpoints are up:
    - `SaleOrders.WebApi`
    - `InventoryControl.WebApi`
@@ -47,13 +47,13 @@ This runbook covers the request/reply path:
    - If reply is missing or times out, move to MQ routing and consumer checks.
 2. Check `Inventory` logs around `ReserveInventoryRequestContractHandler`.
    - Confirm the request reached the handler.
-   - Confirm `IDecreaseStockUseCase.ExecuteAsync` executed with `DecreaseStockInput`.
+   - Confirm `IReserveInventoryUseCase.ExecuteAsync` executed with `ReserveInventoryInput` and the expected `OperationId`.
 3. Check the inventory aggregate state for the requested `ProductId`.
    - If no inventory item exists, expect `InventoryItemNotFound`.
    - If stock is insufficient, expect a business failure result.
 4. Check whether the active broker topology matches runtime configuration.
    - Kafka mode should involve `inventory.requests` and `orders.outbound.replies`.
-   - RabbitMQ reservation is currently broken/unconfigured because `InventoryControl.WebApi` does not listen to `inventory.requests` in its RabbitMQ branch; do not treat this route as healthy until the listener is implemented and verified.
+   - RabbitMQ has a code-backed `inventory.requests` listener and reply route, but do not treat it as healthy until real broker connectivity and physical routing are verified.
 5. Check for inbox/outbox backlog or stuck consumers if request reached the broker but not the handler.
 
 ## Recovery Actions
@@ -67,10 +67,11 @@ This runbook covers the request/reply path:
   - restore the affected runtime or broker path first
   - only retry business messages after confirming request/reply flow is healthy
 - If RabbitMQ mode is active:
-  - do not manually replay reservation messages into `inventory.requests` while the Inventory listener is absent
-  - use a dedicated code workflow to implement and verify the missing listener before retrying business traffic
+  - verify exchange/queue/binding/reply behavior and the Wolverine error queue before replay
+  - do not manually replay until the original `OperationId`, stored reservation outcome, and current stock are inspected
 - If duplicate retries may have occurred:
-  - inspect stock and order state before replaying any message manually
+  - inspect `InventoryReservationOperations`, stock, and order state before replaying any message manually
+  - reuse the original `OperationId`; a new identity is a new logical operation
 
 ## Verification
 

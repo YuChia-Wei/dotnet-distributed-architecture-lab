@@ -1,0 +1,16 @@
+{
+  "useCase": "GetAllProducts",
+  "behavior": "Return all non-deleted products as read-only DTOs.",
+  "input": [],
+  "aggregate": "Product read model",
+  "aggregateId": "Guid",
+  "method": "IProductQueryService.GetAllAsync",
+  "domainEvent": null,
+  "repository": "IProductQueryRepository through IProductQueryService",
+  "inputType": "GetAllProductsInput",
+  "output": "IReadOnlyList<ProductDto>",
+  "requirements": ["PRD-004", "PRD-005"],
+  "preconditions": [],
+  "postconditions": ["Only rows with IsDeleted=false are returned.", "Each DTO contains Id, Name, Description, and Price.", "No aggregate is rehydrated or mutated."],
+  "evidence": ["src/Product/DomainCore/SaleProducts.Applications/UseCases/GetAllProductsUseCase.cs", "src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductQueryRepository.cs"]
+}

@@ -3,13 +3,13 @@
   "behavior": "Increase available stock for a product and publish an inventory integration event when successful.",
   "input": [
     { "name": "productId", "type": "Guid" },
-    { "name": "quantity", "type": "int" }
+    { "name": "quantity", "type": "int", "constraint": "> 0" }
   ],
   "aggregate": "InventoryItem",
   "aggregateId": "Guid",
   "method": "InventoryItem.IncreaseStock",
   "domainEvent": "InventoryControl.Domains.DomainEvents.StockIncreased",
-  "repository": "IInventoryItemDomainRepository",
+  "repository": "IInventoryItemDomainRepository for load plus IInventoryStockOutbox for atomic state/event commit",
   "inputType": "IncreaseStockInput",
   "output": "Result<IncreaseStockOutput>",
   "domainModelNotes": [
@@ -22,6 +22,9 @@
   ],
   "constructorPostconditions": [
     "Current stock is increased by the requested quantity.",
-    "A ProductStockIncreasedIntegrationEvent is published after persistence."
-  ]
+    "IInventoryStockOutbox atomically updates stock and inserts ProductStockIncreasedIntegrationEvent with a UUID v7 message ID and ProductId N partition key.",
+    "The update matches the expected pre-mutation stock and fails closed on a concurrent change."
+  ],
+  "requirements": ["INV-003", "INV-004", "INV-009", "INT-004"],
+  "qualityUplift": "Current aggregate permits non-positive increase values; reconstruction must reject them without side effects."
 }

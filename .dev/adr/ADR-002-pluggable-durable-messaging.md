@@ -45,3 +45,5 @@ The repository must demonstrate reliable bounded-context messaging and allow alt
 ## Notes
 
 The Product producer is not part of this decision's current implementation scope. `MSG-003` remains a future commercial requirement.
+
+ADR-003 later selected Kafka as the canonical verification transport. ADR-004 applied the source-outbox boundary specifically to `ReserveInventory`; ADR-005 superseded that port shape, extended Inventory outbox coverage, and recorded destination-aware prerequisites for the target Kafka + RabbitMQ dual broadcast.

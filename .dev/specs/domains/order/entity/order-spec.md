@@ -53,3 +53,6 @@
 - Replayed events establish state and version but are not pending events.
 - After a successful append, the committed version is advanced and committed pending events are cleared.
 - Order placement in the application layer also requires successful inventory reservation before persistence and integration event publication.
+- The event stream, Orders read model, and outgoing integration events are committed atomically through `IOrderEventCommitter`.
+- Integration events carry transition reasons for Ship, Deliver, and Cancel.
+- Stream version conflicts fail closed and must preserve pending events for retry or diagnosis.

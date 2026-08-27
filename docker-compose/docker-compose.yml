@@ -275,6 +275,8 @@ services:
     environment:
       - Messaging__Profile=Kafka
       - Messaging__Kafka__ConnectionString=kafka:9092
+      - Messaging__OutboxRelay__Enabled=true
+      - Messaging__OutboxRelay__Retention__Mode=RetainAll
 #      - Messaging__RabbitMq__ConnectionString=amqp://guest:guest@rabbitmq:5672
       - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-inventory;Port=5432;Database=inventory_db;Pooling=true;
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317

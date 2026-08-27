@@ -6,8 +6,8 @@ Aggregate and application verification for `DecreaseStock`.
 
 ## Implementation Status
 
-- Status: `planned`
-- There is no current Inventory test project; these scenarios are not implemented tests.
+- Status: `implemented-broker-free`; PostgreSQL atomicity remains an opt-in external gate.
+- Anchor: `tests/InventoryControl.Tests/InventoryStockUseCaseTests.cs`
 
 ## Related Production Spec
 
@@ -31,8 +31,8 @@ Aggregate and application verification for `DecreaseStock`.
   - `IDecreaseStockUseCase.ExecuteAsync` is invoked with `DecreaseStockInput`
 - Then:
   - the aggregate stock is reduced
-  - persistence is performed
-  - a `ProductStockDecreasedIntegrationEvent` is published
+  - `IInventoryStockOutbox` receives the mutated aggregate and expected prior stock
+  - a `ProductStockDecreasedIntegrationEvent` plus stable ProductId partition key is staged atomically with persistence
 
 ### Scenario 2: insufficient stock
 
@@ -43,15 +43,15 @@ Aggregate and application verification for `DecreaseStock`.
   - `IDecreaseStockUseCase.ExecuteAsync` is invoked with `DecreaseStockInput`
 - Then:
   - the result indicates failure
-  - the aggregate is not persisted with a reduced stock
-  - no stock-decreased integration event is published
+  - the aggregate is not committed with a reduced stock
+  - no stock-decreased integration event is staged
 
 ## Assertions
 
 - `Result<DecreaseStockOutput>` success or failure content
 - stock mutation or non-mutation
-- repository save behavior
-- integration event publication behavior
+- outbox save-and-stage behavior
+- event schema, non-empty message ID, and ProductId partition key
 
 ## Test Level
 

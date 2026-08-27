@@ -20,11 +20,11 @@ Cross-context contracts are located under `src/BC-Contracts/`. The inventory res
 
 ## Technology Stack
 
-- .NET SDK `10.0.0`, with `net10.0` as the primary target framework
+- .NET SDK `10.0.302` (`global.json` permits `latestMajor` roll-forward), with `net10.0` as the primary target framework
 - ASP.NET Core Web API and Scalar OpenAPI UI
 - WolverineFx `5.32.1`
-- Kafka (the broker currently enabled in Docker Compose)
-- RabbitMQ (packages and partial conditional configuration are retained; the Compose service is commented out and the Inventory request listener is not fully configured)
+- Kafka (the canonical broker; enabled in Docker Compose, with producer-selected partition keys used to verify per-business-entity ordering)
+- RabbitMQ (a deferred compatibility profile; its Compose service is commented out, current shared queues are not broadcast topology, and migration or dual deployment requires a separate evaluation)
 - PostgreSQL 16, Dapper `2.1.72`, and Npgsql `10.0.2`
 - xUnit `2.9.3`, Moq, and Shouldly
 - OpenTelemetry, Prometheus, Tempo, Loki, and Grafana

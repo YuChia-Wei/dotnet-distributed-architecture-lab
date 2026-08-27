@@ -1,0 +1,110 @@
+role_execution_id: "RECON-005-problem-frame-sub-agent-01"
+role_asset_id: "problem-frame-sub-agent"
+role_path: ".ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/sub-agent.yaml"
+owning_skill: "problem-frame-author"
+stage_id: "RECON-005"
+applicability:
+  result: "applies"
+  reason: "The stage authors one bounded ReserveInventory CommandedBehaviorFrame from requirement, specification, code, and test evidence."
+selection:
+  disposition: "direct"
+  reason: "The bounded frame and test-oracle files share one mutation scope; inline execution has lower coordination and retry risk."
+  delegation_evaluation:
+    safety_gates:
+      applicable_role: true
+      current_session_runtime_support_verified: false
+      bounded_input_output_permissions_stop: true
+      approval_security_credential_boundaries_satisfied: true
+      disjoint_mutation_scope: true
+      named_parent_and_final_integration_owner: true
+    material_value_triggers: []
+    cost_failure_retry_risk:
+      result: "favors-direct"
+      reason: "One compact frame must remain synchronized with the same-parent test specs and workflow evidence."
+input_envelope:
+  goal: "Draft one validator-ready CBF for durable idempotent Inventory reservation."
+  scope:
+    - ".dev/problem-frames/inventory/cbf/reserve-inventory/"
+    - ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md"
+  non_goals:
+    - "Implement or modify product and test code."
+    - "Claim 100-percent compliance before validation."
+  source_refs:
+    - ".dev/ai-context/effective-rule-packets/ROUTE-5376A2F088F0C2FB915830EEC987D1391E96AFDDE1208E4E68B362FE4D3A612E.yaml"
+    - ".dev/requirement/reconstructable-system-baseline.md"
+    - ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json"
+    - "src/Inventory/DomainCore/InventoryControl.Applications/Reservations/InventoryReservation.cs"
+    - "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/PostgresInventoryReservationRepository.cs"
+    - "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs"
+  mandatory_references:
+    - ".ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/references/authoring-playbook.md"
+    - ".ai/assets/skills/problem-frame-author/references/output-contract.md"
+    - ".dev/problem-frames/README.MD"
+  constraints:
+    - "Source-backed facts precede inference."
+    - "Every acceptance scenario has a tests_anchor."
+    - "Open design choices remain explicit."
+  stop_conditions:
+    - "Return control after the five-file CBF, inference/open-question notes, and test handoff are durable."
+permissions:
+  read_scope:
+    - ".dev/requirement/"
+    - ".dev/specs/"
+    - "src/Inventory/"
+    - "tests/SaleOrders.Tests/"
+  write_scope:
+    - ".dev/problem-frames/inventory/cbf/reserve-inventory/"
+    - ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md"
+  external_actions: []
+  secret_handling: "no-secret-values"
+executor:
+  kind: "parent-inline"
+  identity: "root-workflow-parent"
+  runtime_support_verified: true
+invocation_evidence: null
+output:
+  expected:
+    - "Five-file ReserveInventory CBF."
+    - "Traceable GWT test-oracle design."
+    - "Inferred items and open questions."
+  returned:
+    - "ReserveInventory frame, machine, use-case, aggregate, and acceptance files."
+    - "ReserveInventory test specification with current and planned evidence."
+    - "One open transactional-publication design question and no silent inference."
+  evidence_refs:
+    - ".dev/problem-frames/inventory/cbf/reserve-inventory/"
+    - ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md"
+  bounded: true
+attempts:
+  - number: 1
+    disposition: "direct"
+    executor:
+      kind: "parent-inline"
+      identity: "root-workflow-parent"
+      runtime_support_verified: true
+    invocation_evidence: null
+    outcome: "completed"
+    correctable_failure: false
+    material_state_change: ""
+    authorization_source:
+      - "User request dated 2026-08-26"
+      - "GitHub Issue #2"
+    evidence_refs:
+      - ".dev/problem-frames/inventory/cbf/reserve-inventory/"
+fallback:
+  considered: false
+  reason: "Direct execution selected initially."
+  resulting_disposition: null
+  inline_contract_evidence:
+    same_role_path_and_mandatory_references: false
+    bounded_input_output_permissions_stop: false
+    approval_security_credential_boundaries_satisfied: false
+    disjoint_mutation_scope: false
+    named_parent_and_final_integration_owner: false
+    current_inline_support_verified: false
+    evidence_refs: []
+final_integration_owner:
+  owner: "problem-frame-author parent stage owner"
+  decision: "accepted"
+  evidence_refs:
+    - ".dev/problem-frames/inventory/cbf/reserve-inventory/"

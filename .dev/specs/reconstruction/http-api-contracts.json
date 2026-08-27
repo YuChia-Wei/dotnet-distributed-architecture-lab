@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0",
+  "requirementRefs": ["API-001", "API-002", "API-003", "PRD-005", "ORD-007", "INV-008"],
+  "serialization": { "format": "application/json", "propertyConvention": "ASP.NET Core default camelCase", "uuid": "RFC 4122 string" },
+  "errorPolicy": {
+    "validation": { "status": 400, "targetShape": "ProblemDetails or a stable error-code envelope" },
+    "notFound": { "status": 404, "targetShape": "ProblemDetails or empty response" },
+    "concurrency": { "status": 409, "targetShape": "stable concurrency error code" },
+    "unexpected": { "status": 500, "targetShape": "redacted ProblemDetails; no internal exception text" },
+    "compatibilityNote": "The current implementation leaves some known KeyNotFound/Argument exceptions unmapped. Explicit mapping is a required quality uplift."
+  },
+  "contexts": [
+    {
+      "name": "Products",
+      "basePath": "/api/Products",
+      "adapterSpec": "../domains/product/adapter/products-controller.json",
+      "endpoints": [
+        { "operationId": "CreateProduct", "method": "POST", "path": "", "request": { "name": "string nonblank", "description": "string nonblank", "price": "decimal >= 0" }, "success": { "status": 200, "body": { "id": "Guid", "name": "string", "description": "string", "price": "decimal" } }, "errors": [400] },
+        { "operationId": "GetAllProducts", "method": "GET", "path": "", "request": null, "success": { "status": 200, "body": "array<ProductResponse>" }, "errors": [] },
+        { "operationId": "GetProductById", "method": "GET", "path": "/{id:guid}", "request": null, "success": { "status": 200, "body": { "id": "Guid", "name": "string", "description": "string", "price": "decimal" } }, "errors": [404] },
+        { "operationId": "UpdateProduct", "method": "PUT", "path": "/{id:guid}", "request": { "name": "string nonblank", "description": "string nonblank", "price": "decimal >= 0" }, "success": { "status": 200, "body": null }, "errors": [400, 404, 409] },
+        { "operationId": "DeleteProduct", "method": "DELETE", "path": "/{id:guid}", "request": null, "success": { "status": 200, "body": null }, "errors": [404, 409] }
+      ]
+    },
+    {
+      "name": "Orders",
+      "basePath": "/api/Orders",
+      "adapterSpec": "../domains/order/adapter/orders-controller.json",
+      "endpoints": [
+        { "operationId": "PlaceOrder", "method": "POST", "path": "", "request": { "operationId": "non-empty Guid", "orderDate": "DateTime", "totalAmount": "decimal >= 0", "productId": "non-empty Guid", "productName": "string nonblank", "quantity": "int > 0" }, "success": { "status": 200, "body": { "isSuccess": true, "value": { "orderId": "Guid" }, "errorMessage": null } }, "errors": [{ "status": 400, "codes": ["Inventory is not enough.", "validation error"] }] },
+        { "operationId": "GetOrderDetails", "method": "GET", "path": "/{orderId:guid}", "request": null, "success": { "status": 200, "body": { "orderId": "Guid", "lineItems": [{ "productId": "Guid", "quantity": "int" }] } }, "errors": [404] },
+        { "operationId": "ShipOrder", "method": "PATCH", "path": "/{orderId:guid}/ship", "request": { "reason": "string nonblank" }, "success": { "status": 204, "body": null }, "errors": [400, 404, 409] },
+        { "operationId": "DeliverOrder", "method": "PATCH", "path": "/{orderId:guid}/deliver", "request": { "reason": "string nonblank" }, "success": { "status": 204, "body": null }, "errors": [400, 404, 409] },
+        { "operationId": "CancelOrder", "method": "PATCH", "path": "/{orderId:guid}/cancel", "request": { "reason": "string nonblank" }, "success": { "status": 204, "body": null }, "errors": [400, 404, 409] }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "basePath": "/api/Inventory",
+      "adapterSpec": "../domains/inventory-item/adapter/inventory-controller.json",
+      "sharedSuccessBody": { "productId": "Guid", "availableQuantity": "int >= 0" },
+      "endpoints": [
+        { "operationId": "InitProductStock", "method": "POST", "path": "/product/{productId:guid}", "request": { "stock": "int >= 0" }, "success": { "status": 200, "body": "$sharedSuccessBody" }, "errors": [{ "status": 400, "codes": ["InventoryItemAlreadyExists", "validation error"] }] },
+        { "operationId": "GetAvailableQuantity", "method": "GET", "path": "/product/{productId:guid}", "request": null, "success": { "status": 200, "body": "$sharedSuccessBody" }, "errors": [404] },
+        { "operationId": "IncreaseStock", "method": "POST", "path": "/product/{productId:guid}/increase", "request": { "stock": "int > 0" }, "success": { "status": 200, "body": "$sharedSuccessBody" }, "errors": [{ "status": 400, "codes": ["InventoryItemNotFound", "validation error"] }] },
+        { "operationId": "DecreaseStock", "method": "POST", "path": "/product/{productId:guid}/decrease", "request": { "stock": "int > 0" }, "success": { "status": 200, "body": "$sharedSuccessBody" }, "errors": [{ "status": 400, "codes": ["InventoryItemNotFound", "InsufficientStock", "validation error"] }] },
+        { "operationId": "Restock", "method": "POST", "path": "/product/{productId:guid}/restock", "request": { "stock": "int > 0" }, "success": { "status": 200, "body": "$sharedSuccessBody" }, "errors": [{ "status": 400, "codes": ["InventoryItemNotFound", "validation error"] }] }
+      ]
+    }
+  ],
+  "acceptance": ["All endpoints invoke exactly one application use-case port.", "Cancellation is forwarded.", "Known validation/not-found/concurrency outcomes never fall through to an accidental 500.", "OpenAPI describes the same paths, schemas, and statuses."]
+}

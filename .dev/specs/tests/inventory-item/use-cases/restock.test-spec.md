@@ -6,8 +6,8 @@ Application and integration-aware verification for `Restock`.
 
 ## Implementation Status
 
-- Status: `planned`
-- There is no current Inventory test project; these scenarios are not implemented tests.
+- Status: `implemented-broker-free`; PostgreSQL atomicity remains an opt-in external gate.
+- Anchor: `tests/InventoryControl.Tests/InventoryStockUseCaseTests.cs`
 
 ## Related Production Spec
 
@@ -29,8 +29,8 @@ Application and integration-aware verification for `Restock`.
   - `IRestockUseCase.ExecuteAsync` is invoked with `RestockInput` containing a positive quantity
 - Then:
   - current stock is increased by the returned quantity
-  - persistence is performed
-  - a `ProductStockReturnedIntegrationEvent` is published
+  - `IInventoryStockOutbox` receives the mutated aggregate and expected prior stock
+  - a `ProductStockReturnedIntegrationEvent` plus stable ProductId partition key is staged atomically with persistence
 
 ### Scenario 2: inventory item does not exist
 
@@ -40,15 +40,15 @@ Application and integration-aware verification for `Restock`.
   - `IRestockUseCase.ExecuteAsync` is invoked with `RestockInput`
 - Then:
   - the result indicates inventory-item-not-found semantics
-  - no stock return is persisted
-  - no stock-returned integration event is published
+  - no stock return is committed
+  - no stock-returned integration event is staged
 
 ## Assertions
 
 - `Result<RestockOutput>` success or failure content
 - stock mutation or non-mutation
-- repository save behavior
-- integration event publication behavior
+- outbox save-and-stage behavior
+- event schema, non-empty message ID, and ProductId partition key
 
 ## Test Level
 

@@ -27,14 +27,15 @@ This catalog tracks integration events and request/reply contracts visible in `s
 - Business meaning:
   - `Orders` asks `Inventory` to reserve or deduct stock before an order is confirmed.
 - Payload summary:
+  - `OperationId`
   - `ProductId`
   - `Quantity`
 - Producer responsibility:
   - send only for a valid order-placement attempt
 - Consumer expectations:
-  - `Inventory` handles it by invoking `IDecreaseStockUseCase.ExecuteAsync` with `DecreaseStockInput`
+  - `Inventory` maps it through `ReserveInventoryRequestContractHandler` to `IReserveInventoryUseCase.ExecuteAsync` with `ReserveInventoryInput`
 - Idempotency expectation:
-  - not yet explicitly documented; should be treated as duplicate-sensitive
+  - `OperationId` is the durable identity; same-payload replay returns the stored outcome and mismatched payload returns `OperationIdentityConflict`
 - Ordering expectation:
   - per-product duplicate or re-ordered requests may produce incorrect stock changes if not handled upstream
 - Failure handling notes:
@@ -45,7 +46,9 @@ This catalog tracks integration events and request/reply contracts visible in `s
 - Business meaning:
   - reports whether stock reservation succeeded
 - Payload summary:
+  - `OperationId`
   - `Result`
+  - `FailureReason`
 - Producer responsibility:
   - return success only after inventory command succeeds
 - Consumer expectations:
@@ -113,34 +116,51 @@ This catalog tracks integration events and request/reply contracts visible in `s
 - Business meaning:
   - stock increased due to supply or return flow
 - Payload summary:
-  - `InventoryItemId`, `ProductId`, quantity field currently named `DecreasedQuantity`, `CurrentStock`, `OccurredOn`
+  - increase: `InventoryItemId`, `ProductId`, `IncreasedQuantity`, `CurrentStock`, `OccurredOn`
+  - return: `InventoryItemId`, `ProductId`, `ReturnedQuantity`, `CurrentStock`, `OccurredOn`
 - Producer responsibility:
   - publish only after persistence
 - Consumer expectations:
-  - consumers should interpret these as stock-up facts, despite the current quantity property naming
+  - consumers must bind the producer-owned corrected quantity name for each event type
 - Idempotency expectation:
   - duplicate handling should be assumed necessary
 - Ordering expectation:
   - consumers should not assume these can never interleave with decrease events
 - Failure handling notes:
-  - property naming inconsistency is a documentation and contract risk that should be tracked
+  - the prior erroneous `DecreasedQuantity` fields were removed by owner-approved breaking correction on 2026-08-27; no compatibility alias is retained
 
 ## Delivery Semantics
 
 - Request/reply reservation flow is synchronous from the caller perspective, but still mediated by the message bus.
 - Orders lifecycle events are atomically staged in `OrderIntegrationOutbox` and relayed with a stable message identity through the PostgreSQL-persisted Orders Wolverine runtime.
+- All Inventory commands that emit integration events atomically stage them in `InventoryIntegrationOutbox`. Reservation reuses `OperationId`; decrease/increase/restock generate UUID v7 message IDs. All use normalized `ProductId` as Kafka partition key.
+- Inventory relay failure never rolls back already committed stock state. It retries with bounded backoff, parks after five attempts, and sets `PublishedAt` after success. Published rows default to unlimited retention at `Messaging:OutboxRelay:Retention:Mode=RetainAll`.
 - Other hosts currently configure durable endpoint flags, but persisted durability is not proven until each host configures and tests a message store.
 - Consumer handling should assume at-least-once delivery and deduplicate by stable message identity unless stronger guarantees are explicitly documented later.
+
+## Concrete Consumer-Ownership Examples
+
+These examples separate executable repository behavior from business reactions that are only candidates:
+
+| Status | Message / flow | Producer-owned fact or contract | Consumer-owned reaction | Why ownership matters |
+| --- | --- | --- | --- | --- |
+| implemented | `ReserveInventoryRequestContract` request/reply | Inventory Published Language owns operation identity, product, quantity, result, and failure meanings | Orders owns when to request reservation and the rule that a failed result blocks order commit; Inventory owns handler mapping, idempotent reservation, and retry policy | The caller cannot redefine `InventoryIsNotEnough`; Inventory cannot decide whether Orders abandons or retries order placement. This is request/reply, not broadcast. |
+| configured but handler gap | `OrderPlaced` to `SaleProducts.Consumer` | Orders owns the fact that an order was placed and its schema | Products could own a sales/popularity projection keyed by ProductId and message identity | Changing projection fields or retry policy does not change `OrderPlaced`; changing the event schema requires an Orders compatibility decision. No such handler exists yet, so this is not current behavior. |
+| configured but contract gap | `OrderCancelled` to `InventoryControl.Consumer` | Orders owns cancellation fact and reason | Inventory could own compensation/restock, deduplication, and terminal failure handling | The current event lacks ProductId, quantity, or reservation correlation, so safe automatic restock cannot be reconstructed from it alone. The consumer must not guess; either a query/correlation design or producer-approved additive contract is required. |
+| external candidate | `ProductStockDecreasedIntegrationEvent` | Inventory owns the stock-change fact, quantity field, current stock, occurrence time, and ProductId ordering key | Search, availability, analytics, or notification consumers each own their own projection/reaction and idempotency | Independent consumers justify separate Kafka consumer groups or RabbitMQ queues. They do not justify changing the Inventory event to match one consumer's internal model. |
+
+Current `SaleProducts.Consumer` and `InventoryControl.Consumer` subscribe to `orders.integration.events`, and `SaleOrders.Consumer` subscribes to `products.integration.events`, but those Consumer projects contain no executable message handlers. Treat the subscription host/topology as compatibility evidence and the business reaction as a gap.
 
 ## Ownership and Versioning Rules
 
 - Contract source of truth lives under `src/BC-Contracts/`.
 - Producing bounded context owns event meaning and payload compatibility.
-- Consumer-specific assumptions should not redefine the producer contract.
-- The inventory stock increase/return event quantity property naming inconsistency should be treated as a contract risk, not normalized silently in consumers.
+- Consumer-specific assumptions should not redefine the producer contract; consumers own reactions, idempotency, retry, and dead-letter handling.
+- `ProductStockIncreasedIntegrationEvent.IncreasedQuantity` and `ProductStockReturnedIntegrationEvent.ReturnedQuantity` are the only normative quantity names after the 2026-08-27 owner decision.
 
 ## Deferred Items
 
 - `products.integration.events` is configured and has a listener, but current Product use cases do not confirm publication of a product integration event.
 - Legacy or unclear product stock deduction contracts need later review to decide whether they are active, deprecated, or obsolete.
-- Correlation IDs, versioning policy, and replay rules still need explicit runtime documentation.
+- Contract versioning and consumer replay procedures still need explicit runtime documentation; reservation correlation/replay is defined by `OperationId`.
+- Kafka + RabbitMQ dual broadcast is a target direction only. It requires destination-aware outbox completion and broker-specific fanout routing before this catalog may call it active.

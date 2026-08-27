@@ -6,8 +6,9 @@ Application-level and integration-aware verification for `PlaceOrder`.
 
 ## Implementation Status
 
-- Status: `planned`
-- No current test directly exercises `IPlaceOrderUseCase` or its inventory gateway interaction.
+- Status: `implemented-partial`
+- `tests/SaleOrders.Tests/PlaceOrderTests.cs` directly verifies successful reservation plus atomic commit and the reservation-failure no-commit branch.
+- Gateway exception/timeout and source-transaction failure branches remain planned.
 
 ## Related Production Spec
 
@@ -17,7 +18,8 @@ Application-level and integration-aware verification for `PlaceOrder`.
 
 - Happy path: inventory reservation succeeds and order is placed
 - Failure path: inventory reservation fails and order placement returns failure
-- Integration path: successful order placement emits `OrderPlaced` integration event
+- Integration path: successful order placement commits `OrderPlaced` to the source outbox
+- Failure path: source commit fails and neither order state nor publishable outbox state becomes externally successful
 
 ## Given-When-Then
 
@@ -31,7 +33,7 @@ Application-level and integration-aware verification for `PlaceOrder`.
 - Then:
   - a new order is persisted
   - the result is successful and returns an order id
-  - an `OrderPlaced` integration event is published
+  - an `OrderPlaced` integration event is committed to the source outbox
 
 ### Scenario 2: inventory not enough
 
@@ -58,4 +60,4 @@ Application-level and integration-aware verification for `PlaceOrder`.
 
 ## Notes / Deferred Cases
 
-- Duplicate delivery and MQ retry behavior belong to Stage 5 runtime docs and later test scenarios.
+- Reservation replay and MQ delivery identity are specified separately in `.dev/specs/tests/cross-domain/order-inventory-reservation.test-spec.md`.

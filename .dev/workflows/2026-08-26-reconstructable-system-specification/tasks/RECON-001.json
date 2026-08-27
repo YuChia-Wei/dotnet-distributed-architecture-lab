@@ -1,0 +1,43 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-08-26-reconstructable-system-specification",
+  "task_id": "RECON-001",
+  "owner_skill": "software-development-orchestrator",
+  "related_plan_id": "development-plan-2026-08-26-reconstructable-system-specification",
+  "status": "completed",
+  "created_at": "2026-08-26T19:03:36+08:00",
+  "updated_at": "2026-08-26T19:24:48+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-5",
+  "reasoning_effort": "unspecified",
+  "workflow_locator": ".dev/workflows/2026-08-26-reconstructable-system-specification/workflow.yaml",
+  "scope": {
+    "goal": "Create the authoritative evidence inventory and reconstruction acceptance contract.",
+    "target": "Current product architecture, behavior, contracts, runtime topology, tests, and existing specification coverage.",
+    "files": ["MQArchLab.slnx", "src/", "tests/", ".dev/", "docker-compose/"],
+    "constraints": ["Prefer codebase-memory graph tools for code discovery.", "Separate observed behavior, intended behavior, inference, and open decisions.", "Do not modify product source or tests."],
+    "non_goals": ["Author unverified product behavior.", "Delete source code.", "Push or integrate the branch."]
+  },
+  "inputs": {
+    "requirements": ["User request dated 2026-08-26", "GitHub Issue #2"],
+    "specifications": [".dev/specs/", ".dev/problem-frames/"],
+    "architecture_decisions": [".dev/ARCHITECTURE.md", ".dev/adr/"],
+    "user_constraints": ["A LUNA-class AI must be able to reconstruct an equal-or-better system after product source removal."]
+  },
+  "execution": {
+    "capability_slot": "workflow-orchestration",
+    "approval_contract": {"status": "approved", "required_before": "evidence inventory", "authorization_source": ["User request", "GitHub Issue #2"], "pending_decision": ""},
+    "implementation_contract": null,
+    "test_execution_contract": null,
+    "role_execution_records": [],
+    "spec_compliance": {"selected": false, "activation_source": [], "expected_outcome": "not-applicable"},
+    "steps": ["Inventory current evidence and existing documentation.", "Define coverage dimensions and evidence-status vocabulary.", "Create the reconstruction manifest and gap register.", "Hand off confirmed inputs to requirement and architecture authoring."],
+    "validation": ["Every active product project and host appears in the inventory.", "Every evidenced use case and integration channel appears in the coverage matrix.", "Existing spec and test coverage gaps are explicit."],
+    "commit_checkpoint": "Commit with the first coherent validated specification batch.",
+    "deferred_items": []
+  },
+  "results": {"summary": "Inventoried 22 product projects, four test projects, six hosts, 16 use cases, 15 HTTP endpoints, persistence models, messaging profiles, current evidence, and reconstruction gaps.", "files_changed": [".dev/specs/reconstruction/project-manifest.json", ".dev/specs/reconstruction/coverage-matrix.md", ".dev/specs/reconstruction/reconstruction-procedure.md"], "approval_evidence": ["GitHub Issue #2 is OPEN and read back."], "test_execution": [], "role_execution_aggregation": [], "spec_compliance": {"outcome": "not-applicable", "coverage_percent": null, "evidence": []}, "validation_evidence": ["Codebase Memory index refreshed at source revision 59d651e46816ddf82174bbc97f2cf1f21b71fe92.", "Project manifest includes generator, revision, scope, exclusions, and reproduction instructions."], "commits": ["containing-commit"], "follow_up_needed": false, "finding_status": "addressed"}
+}

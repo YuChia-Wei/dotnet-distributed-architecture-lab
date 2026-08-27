@@ -47,4 +47,4 @@ scenarios:
       frame_concerns: ["FC5", "FC6"]
     planned_tests_anchor:
       use_case_test: "tests/SaleOrders.Tests/PlaceOrderTests.cs"
-      reservation_test: "tests/SaleOrders.Tests/InventoryReservationIdempotencyTests.cs"
+      reservation_test: "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs"

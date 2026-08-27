@@ -6,14 +6,14 @@
 
 | Area | Current choice | Evidence-backed version / status |
 | --- | --- | --- |
-| SDK / Runtime | .NET / C# | SDK `10.0.0`; product target `net10.0` |
+| SDK / Runtime | .NET / C# | SDK `10.0.302` with `latestMajor` roll-forward; product target `net10.0` |
 | Web API | ASP.NET Core + OpenAPI + Scalar | ASP.NET Core packages `10.0.7`; Scalar `2.14.3` |
 | Messaging | WolverineFx | `5.32.1` |
-| Active local broker | Apache Kafka | Compose image `apache/kafka:4.0.0` |
-| Partial broker profile | RabbitMQ | Wolverine RabbitMQ `5.32.1`; Compose service disabled and Inventory request listener incomplete |
+| Canonical broker | Apache Kafka | Compose image `apache/kafka:4.0.0`; selected for event-driven verification and keyed partition ordering |
+| Deferred compatibility broker | RabbitMQ | Wolverine RabbitMQ `5.32.1`; logical listeners exist, Compose service is disabled, and exchange/per-consumer queue/binding/DLQ verification remains pending |
 | Persistence | Dapper + Npgsql | Dapper `2.1.72`; Npgsql `10.0.2` |
 | Database | PostgreSQL | Compose image `postgres:16-alpine` |
-| Testing | xUnit + Moq + Shouldly | xUnit `2.9.3`; Moq `4.20.72`; Shouldly `4.3.0` |
+| Testing | xUnit + Moq/NSubstitute + Shouldly | xUnit `2.9.3`; test-double package is selected per project; Shouldly `4.3.0` |
 | Observability | OpenTelemetry + Grafana stack | OTel `1.15.x`; Grafana `11.1.0`; Tempo `2.3.0`; Loki `3.5.3` |
 | Containers | Docker / Docker Compose | host Dockerfiles plus `docker-compose/docker-compose.yml` |
 
@@ -31,23 +31,25 @@
 - Write-side repositories use parameterized Dapper/Npgsql access.
 - Query repositories currently use Dapper/Npgsql in product source; EF Core is not a product runtime dependency.
 - The Orders event-sourcing repository is a context-specific capability and must not be assumed for Product or Inventory.
-- Persistence and integration publication must preserve the repository's documented transaction/outbox semantics.
+- Orders and every Inventory event-producing stock command write state plus source-outbox intent in one local transaction. Inventory declares this through capability-specific outbox ports; generic Unit of Work and transaction lifecycle types remain private Infrastructure details, and the relay is a separate adapter.
+- Other Inventory stock commands still persist then publish directly; do not generalize the reservation implementation until a separate slice adopts and tests it.
 - Credentials, connection strings, database names, and local ports belong in runtime configuration, not in `.dev/project-config.yaml`.
 
 ## Messaging Requirements
 
-- Kafka is the checked-in active local profile.
-- RabbitMQ must not be described as a complete profile until the Inventory request listener and request/reply path are configured and verified.
+- Kafka is the canonical checked-in profile. Ordering is scoped to records sharing the same producer-selected partition key; Inventory reservation uses normalized `ProductId`.
+- Multiple Kafka consumer groups can independently receive one topic. A broadcast requirement therefore requires an explicit topology comparison before choosing migration or dual deployment.
+- RabbitMQ is a compatibility profile and must not be described as broadcast-capable from the current shared queue names. Kafka + RabbitMQ dual broadcast is the target direction, but real connectivity, per-destination outbox state, exchange, per-consumer queue, binding, reply, and DLQ behavior require a separate implementation and environment gate.
 - Logical channel ownership and unresolved retry/DLQ details are documented in `.dev/operations/mq-topology.md`.
-- Contract compatibility is owned by projects under `src/BC-Contracts/`.
+- Contract meaning and compatibility are owned by the producing bounded context and encoded in its project under `src/BC-Contracts/`; consumers own reaction and delivery handling.
 
 ## Testing Requirements
 
 - Product and domain tests use xUnit.
-- Test doubles use Moq in current solution test projects; do not infer NSubstitute from reusable framework examples.
+- Test doubles use Moq or NSubstitute according to the owning test project; do not introduce a shared mutable base fixture.
 - Assertions use Shouldly where referenced by the test project.
 - Product tests and architecture-tool tests are separate validation surfaces because the `tools/` projects are not in `MQArchLab.slnx`.
-- Inventory has no checked-in test project and should be treated as a visible coverage gap, not silently inferred as covered.
+- `InventoryControl.Tests` owns Inventory application, contract, relay, idempotency, and opt-in PostgreSQL scenarios. External PostgreSQL/broker tests are skipped without explicit opt-in and skipped results are non-passing evidence.
 
 ## Version Ownership
 

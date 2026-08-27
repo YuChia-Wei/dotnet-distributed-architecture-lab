@@ -1,0 +1,53 @@
+role_execution_id: "RECON-009-usecase-test-sub-agent-01"
+role_asset_id: "usecase-test-sub-agent"
+role_path: ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml"
+owning_skill: "slice-implementer"
+stage_id: "RECON-009"
+applicability:
+  result: "applies"
+  reason: "Outbox delegation, stable delivery metadata, optimistic concurrency, retention, and external-service boundaries require executable oracles."
+selection:
+  disposition: "direct"
+  reason: "Tests share the production and specification integration scope; delegated agents were not requested."
+input_envelope:
+  goal: "Verify broker-free outbox behavior by default and preserve opt-in real PostgreSQL evidence without treating skips as passing."
+  scope: ["tests/InventoryControl.Tests/", ".dev/specs/tests/inventory-item/", ".dev/problem-frames/inventory/"]
+  non_goals: ["Require Kafka, RabbitMQ, or PostgreSQL during ordinary dotnet test.", "Count a skipped external test as passing compliance evidence."]
+  source_refs: ["ReserveInventory CBF", "RECON-009 implementation", "PACKET-D30CE87BD1F49C6BF04E18E179DEFFB9152CC2FD464D0A4E1B3D6B8841928A72"]
+  mandatory_references:
+    - ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-playbook.md"
+    - ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-generation-guidance.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
+  constraints: ["Plain xUnit GWT.", "NSubstitute in InventoryControl.Tests.", "No BaseTestClass."]
+  stop_conditions: ["Return after focused and full default-profile validation and explicit external skip evidence are recorded."]
+permissions:
+  read_scope: ["src/Inventory/", "src/BC-Contracts/", ".dev/"]
+  write_scope: ["tests/InventoryControl.Tests/", ".dev/specs/tests/inventory-item/", ".dev/workflows/2026-08-26-reconstructable-system-specification/"]
+  external_actions: []
+  secret_handling: "no-secret-values"
+executor: { kind: "parent-inline", identity: "root-workflow-parent", runtime_support_verified: true }
+invocation_evidence: null
+output:
+  expected: ["use-case staging tests", "retention validation tests", "real PostgreSQL opt-in tests", "default-profile solution result"]
+  returned: ["30 passed and 3 skipped Inventory result", "66 passed and 3 skipped solution result"]
+  evidence_refs: ["tests/InventoryControl.Tests/", "tests/README.md"]
+  bounded: true
+attempts:
+  - number: 1
+    disposition: "direct"
+    executor: { kind: "parent-inline", identity: "root-workflow-parent", runtime_support_verified: true }
+    invocation_evidence: null
+    outcome: "completed-with-external-gate-open"
+    correctable_failure: false
+    material_state_change: "Added outbox-message assertions, retention validation, and default-skipped real PostgreSQL atomicity/concurrency tests."
+    authorization_source: ["User decisions on 2026-08-27", "GitHub Issue #2"]
+    evidence_refs: ["tests/InventoryControl.Tests/", "tests/README.md"]
+fallback:
+  considered: false
+  reason: "Direct execution was selected initially."
+  resulting_disposition: null
+final_integration_owner:
+  owner: "slice-implementer parent stage owner"
+  decision: "accepted-with-external-postgresql-gate-open"
+  evidence_refs: ["tests/InventoryControl.Tests/", ".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md"]

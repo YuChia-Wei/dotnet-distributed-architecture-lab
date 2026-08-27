@@ -1,4 +1,5 @@
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
+using InventoryControl.Applications.Outbox;
 using Lab.BuildingBlocks.Integrations;
 
 namespace InventoryControl.Applications.Reservations;
@@ -22,12 +23,20 @@ public sealed record InventoryReservationOutcome(
     string? FailureReason,
     bool WasAlreadyProcessed);
 
-public interface IInventoryReservationRepository
+/// <summary>
+/// Resolves a reservation and atomically stages its successful integration event.
+/// </summary>
+/// <remarks>
+/// The port describes the outbox capability. Database transaction or Unit of Work mechanics remain
+/// private to the Infrastructure adapter.
+/// </remarks>
+public interface IInventoryReservationOutbox
 {
-    Task<InventoryReservationOutcome> ReserveAsync(
+    Task<InventoryReservationOutcome> ReserveAndStageAsync(
         Guid operationId,
         Guid productId,
         int quantity,
+        Func<InventoryReservationOutcome, InventoryOutboxMessage> successfulMessageFactory,
         CancellationToken cancellationToken);
 }
 
@@ -39,8 +48,7 @@ public interface IReserveInventoryUseCase
 }
 
 public sealed class ReserveInventoryUseCase(
-    IInventoryReservationRepository repository,
-    IIntegrationEventPublisher publisher) : IReserveInventoryUseCase
+    IInventoryReservationOutbox outbox) : IReserveInventoryUseCase
 {
     public async Task<ReserveInventoryOutput> ExecuteAsync(
         ReserveInventoryInput input,
@@ -61,22 +69,20 @@ public sealed class ReserveInventoryUseCase(
             return Invalid(input.OperationId, "QuantityMustBePositive");
         }
 
-        var outcome = await repository.ReserveAsync(
+        var outcome = await outbox.ReserveAndStageAsync(
             input.OperationId,
             input.ProductId,
             input.Quantity,
-            cancellationToken);
-
-        if (outcome.IsSuccess)
-        {
-            await publisher.PublishAsync(
+            successfulOutcome => new InventoryOutboxMessage(
                 new ProductStockDecreasedIntegrationEvent(
-                    outcome.InventoryItemId!.Value,
-                    outcome.ProductId,
-                    outcome.Quantity,
-                    outcome.RemainingStock!.Value),
-                new IntegrationMessageDelivery(outcome.OperationId, outcome.ProductId.ToString("N")));
-        }
+                    successfulOutcome.InventoryItemId!.Value,
+                    successfulOutcome.ProductId,
+                    successfulOutcome.Quantity,
+                    successfulOutcome.RemainingStock!.Value),
+                new IntegrationMessageDelivery(
+                    successfulOutcome.OperationId,
+                    successfulOutcome.ProductId.ToString("N"))),
+            cancellationToken);
 
         return new ReserveInventoryOutput(
             outcome.OperationId,
