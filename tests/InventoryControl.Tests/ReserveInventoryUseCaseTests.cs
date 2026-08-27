@@ -1,4 +1,5 @@
 using InventoryControl.Applications.Reservations;
+using InventoryControl.Applications.Outbox;
 using InventoryControl.Infrastructure.Applications.Repositories;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 using Lab.BuildingBlocks.Integrations;
@@ -87,19 +88,18 @@ public sealed class ReserveInventoryUseCaseTests
     public async Task given_a_transient_store_failure_when_reserving_then_exception_propagates_without_commit()
     {
         // Given
-        var transaction = Substitute.For<IInventoryReservationTransaction>();
-        var factory = Substitute.For<IInventoryReservationTransactionFactory>();
-        factory.BeginAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult(transaction));
+        var outbox = Substitute.For<IInventoryReservationOutbox>();
         var expected = new InventoryReservationTransientException(
             "store unavailable",
             new InvalidOperationException("simulated"));
-        transaction.ReserveAsync(
+        outbox.ReserveAndStageAsync(
                 Arg.Any<Guid>(),
                 Arg.Any<Guid>(),
                 Arg.Any<int>(),
+                Arg.Any<Func<InventoryReservationOutcome, InventoryOutboxMessage>>(),
                 Arg.Any<CancellationToken>())
             .Returns(_ => Task.FromException<InventoryReservationOutcome>(expected));
-        var useCase = new ReserveInventoryUseCase(factory);
+        var useCase = new ReserveInventoryUseCase(outbox);
 
         // When
         var actual = await Should.ThrowAsync<InventoryReservationTransientException>(() =>
@@ -109,8 +109,12 @@ public sealed class ReserveInventoryUseCaseTests
 
         // Then
         actual.ShouldBeSameAs(expected);
-        await transaction.DidNotReceiveWithAnyArgs().StageAsync(default!, default!, default);
-        await transaction.DidNotReceiveWithAnyArgs().CommitAsync(default);
+        await outbox.Received(1).ReserveAndStageAsync(
+            Arg.Any<Guid>(),
+            Arg.Any<Guid>(),
+            Arg.Any<int>(),
+            Arg.Any<Func<InventoryReservationOutcome, InventoryOutboxMessage>>(),
+            Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -160,46 +164,33 @@ public sealed class ReserveInventoryUseCaseTests
     }
 
     [Fact]
-    public async Task given_outbox_staging_fails_when_reserving_then_the_transaction_is_not_committed()
+    public async Task given_outbox_staging_fails_when_reserving_then_state_and_outbox_are_rolled_back()
     {
         // Given
         var operationId = Guid.CreateVersion7();
         var productId = Guid.CreateVersion7();
-        var transaction = Substitute.For<IInventoryReservationTransaction>();
-        var factory = Substitute.For<IInventoryReservationTransactionFactory>();
-        factory.BeginAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult(transaction));
-        transaction.ReserveAsync(operationId, productId, 2, Arg.Any<CancellationToken>())
-            .Returns(new InventoryReservationOutcome(
-                operationId,
-                productId,
-                2,
-                Guid.CreateVersion7(),
-                true,
-                3,
-                null,
-                false));
-        transaction.StageAsync(
-                Arg.Any<IIntegrationEvent>(),
-                Arg.Any<IntegrationMessageDelivery>(),
-                Arg.Any<CancellationToken>())
-            .Returns(_ => Task.FromException(new InvalidOperationException("simulated outbox failure")));
-        var useCase = new ReserveInventoryUseCase(factory);
+        var repository = new InMemoryInventoryReservationRepository();
+        repository.Seed(Guid.CreateVersion7(), productId, 5);
 
         // When
         await Should.ThrowAsync<InvalidOperationException>(() =>
-            useCase.ExecuteAsync(
-                new ReserveInventoryInput(operationId, productId, 2),
+            repository.ReserveAndStageAsync(
+                operationId,
+                productId,
+                2,
+                _ => throw new InvalidOperationException("simulated outbox failure"),
                 CancellationToken.None));
 
         // Then
-        await transaction.DidNotReceiveWithAnyArgs().CommitAsync(default);
+        repository.GetStock(productId).ShouldBe(5);
+        repository.GetStagedMessages().ShouldBeEmpty();
     }
 
     private static async Task AssertInvalidAsync(ReserveInventoryInput input, string expectedReason)
     {
         // Given
-        var factory = Substitute.For<IInventoryReservationTransactionFactory>();
-        var useCase = new ReserveInventoryUseCase(factory);
+        var outbox = Substitute.For<IInventoryReservationOutbox>();
+        var useCase = new ReserveInventoryUseCase(outbox);
 
         // When
         var result = await useCase.ExecuteAsync(input, CancellationToken.None);
@@ -209,6 +200,11 @@ public sealed class ReserveInventoryUseCaseTests
         result.FailureReason.ShouldBe(expectedReason);
         result.WasAlreadyProcessed.ShouldBeFalse();
         result.RemainingStock.ShouldBeNull();
-        await factory.DidNotReceiveWithAnyArgs().BeginAsync(default);
+        await outbox.DidNotReceiveWithAnyArgs().ReserveAndStageAsync(
+            default,
+            default,
+            default,
+            default!,
+            default);
     }
 }

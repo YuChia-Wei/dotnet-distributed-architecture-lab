@@ -133,10 +133,23 @@ This catalog tracks integration events and request/reply contracts visible in `s
 
 - Request/reply reservation flow is synchronous from the caller perspective, but still mediated by the message bus.
 - Orders lifecycle events are atomically staged in `OrderIntegrationOutbox` and relayed with a stable message identity through the PostgreSQL-persisted Orders Wolverine runtime.
-- Successful `ReserveInventory` operations atomically stage `ProductStockDecreasedIntegrationEvent` in `InventoryIntegrationOutbox`; the retained row uses `OperationId` as message identity and normalized `ProductId` as Kafka partition key.
-- Inventory relay failure never rolls back an already committed reservation. It retries with bounded backoff, parks after five attempts, and sets `PublishedAt` after success.
+- All Inventory commands that emit integration events atomically stage them in `InventoryIntegrationOutbox`. Reservation reuses `OperationId`; decrease/increase/restock generate UUID v7 message IDs. All use normalized `ProductId` as Kafka partition key.
+- Inventory relay failure never rolls back already committed stock state. It retries with bounded backoff, parks after five attempts, and sets `PublishedAt` after success. Published rows default to unlimited retention at `Messaging:OutboxRelay:Retention:Mode=RetainAll`.
 - Other hosts currently configure durable endpoint flags, but persisted durability is not proven until each host configures and tests a message store.
 - Consumer handling should assume at-least-once delivery and deduplicate by stable message identity unless stronger guarantees are explicitly documented later.
+
+## Concrete Consumer-Ownership Examples
+
+These examples separate executable repository behavior from business reactions that are only candidates:
+
+| Status | Message / flow | Producer-owned fact or contract | Consumer-owned reaction | Why ownership matters |
+| --- | --- | --- | --- | --- |
+| implemented | `ReserveInventoryRequestContract` request/reply | Inventory Published Language owns operation identity, product, quantity, result, and failure meanings | Orders owns when to request reservation and the rule that a failed result blocks order commit; Inventory owns handler mapping, idempotent reservation, and retry policy | The caller cannot redefine `InventoryIsNotEnough`; Inventory cannot decide whether Orders abandons or retries order placement. This is request/reply, not broadcast. |
+| configured but handler gap | `OrderPlaced` to `SaleProducts.Consumer` | Orders owns the fact that an order was placed and its schema | Products could own a sales/popularity projection keyed by ProductId and message identity | Changing projection fields or retry policy does not change `OrderPlaced`; changing the event schema requires an Orders compatibility decision. No such handler exists yet, so this is not current behavior. |
+| configured but contract gap | `OrderCancelled` to `InventoryControl.Consumer` | Orders owns cancellation fact and reason | Inventory could own compensation/restock, deduplication, and terminal failure handling | The current event lacks ProductId, quantity, or reservation correlation, so safe automatic restock cannot be reconstructed from it alone. The consumer must not guess; either a query/correlation design or producer-approved additive contract is required. |
+| external candidate | `ProductStockDecreasedIntegrationEvent` | Inventory owns the stock-change fact, quantity field, current stock, occurrence time, and ProductId ordering key | Search, availability, analytics, or notification consumers each own their own projection/reaction and idempotency | Independent consumers justify separate Kafka consumer groups or RabbitMQ queues. They do not justify changing the Inventory event to match one consumer's internal model. |
+
+Current `SaleProducts.Consumer` and `InventoryControl.Consumer` subscribe to `orders.integration.events`, and `SaleOrders.Consumer` subscribes to `products.integration.events`, but those Consumer projects contain no executable message handlers. Treat the subscription host/topology as compatibility evidence and the business reaction as a gap.
 
 ## Ownership and Versioning Rules
 
@@ -150,3 +163,4 @@ This catalog tracks integration events and request/reply contracts visible in `s
 - `products.integration.events` is configured and has a listener, but current Product use cases do not confirm publication of a product integration event.
 - Legacy or unclear product stock deduction contracts need later review to decide whether they are active, deprecated, or obsolete.
 - Contract versioning and consumer replay procedures still need explicit runtime documentation; reservation correlation/replay is defined by `OperationId`.
+- Kafka + RabbitMQ dual broadcast is a target direction only. It requires destination-aware outbox completion and broker-specific fanout routing before this catalog may call it active.

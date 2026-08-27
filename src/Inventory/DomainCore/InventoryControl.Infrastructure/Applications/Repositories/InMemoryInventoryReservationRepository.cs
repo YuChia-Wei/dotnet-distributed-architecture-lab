@@ -1,9 +1,9 @@
+using InventoryControl.Applications.Outbox;
 using InventoryControl.Applications.Reservations;
-using Lab.BuildingBlocks.Integrations;
 
 namespace InventoryControl.Infrastructure.Applications.Repositories;
 
-public sealed class InMemoryInventoryReservationRepository : IInventoryReservationTransactionFactory
+public sealed class InMemoryInventoryReservationRepository : IInventoryReservationOutbox
 {
     private readonly SemaphoreSlim transactionGate = new(1, 1);
     private readonly Dictionary<Guid, StockItem> inventory = new();
@@ -21,22 +21,43 @@ public sealed class InMemoryInventoryReservationRepository : IInventoryReservati
     public IReadOnlyList<StagedIntegrationMessage> GetStagedMessages()
         => this.outbox.Values.ToArray();
 
-    public async Task<IInventoryReservationTransaction> BeginAsync(CancellationToken cancellationToken)
-    {
-        await this.transactionGate.WaitAsync(cancellationToken);
-        return new Transaction(this);
-    }
-
-    public async Task<InventoryReservationOutcome> ReserveAsync(
+    public async Task<InventoryReservationOutcome> ReserveAndStageAsync(
         Guid operationId,
         Guid productId,
         int quantity,
+        Func<InventoryReservationOutcome, InventoryOutboxMessage> successfulMessageFactory,
         CancellationToken cancellationToken)
     {
-        await using var transaction = await this.BeginAsync(cancellationToken);
-        var outcome = await transaction.ReserveAsync(operationId, productId, quantity, cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
-        return outcome;
+        await this.transactionGate.WaitAsync(cancellationToken);
+        var inventorySnapshot = this.inventory.ToDictionary(
+            pair => pair.Key,
+            pair => new StockItem(pair.Value.InventoryItemId, pair.Value.Stock));
+        var outcomesSnapshot = new Dictionary<Guid, InventoryReservationOutcome>(this.outcomes);
+        var outboxSnapshot = new Dictionary<Guid, StagedIntegrationMessage>(this.outbox);
+
+        try
+        {
+            var outcome = this.ReserveCore(operationId, productId, quantity);
+            if (outcome.IsSuccess)
+            {
+                var message = successfulMessageFactory(outcome)
+                    ?? throw new InvalidOperationException("A successful reservation requires an outbox message.");
+                this.StageCore(message);
+            }
+
+            return outcome;
+        }
+        catch
+        {
+            Restore(this.inventory, inventorySnapshot);
+            Restore(this.outcomes, outcomesSnapshot);
+            Restore(this.outbox, outboxSnapshot);
+            throw;
+        }
+        finally
+        {
+            this.transactionGate.Release();
+        }
     }
 
     private InventoryReservationOutcome ReserveCore(Guid operationId, Guid productId, int quantity)
@@ -74,21 +95,23 @@ public sealed class InMemoryInventoryReservationRepository : IInventoryReservati
         return outcome;
     }
 
-    private void StageCore(IIntegrationEvent integrationEvent, IntegrationMessageDelivery delivery)
+    private void StageCore(InventoryOutboxMessage message)
     {
-        if (this.outbox.TryGetValue(delivery.MessageId, out var existing))
+        if (this.outbox.TryGetValue(message.Delivery.MessageId, out var existing))
         {
-            if (existing.IntegrationEvent.GetType() != integrationEvent.GetType() ||
-                existing.Delivery.PartitionKey != delivery.PartitionKey)
+            if (existing.IntegrationEvent.GetType() != message.IntegrationEvent.GetType() ||
+                existing.Delivery.PartitionKey != message.Delivery.PartitionKey)
             {
                 throw new InvalidOperationException(
-                    $"Outbox message identity {delivery.MessageId} is already bound to another payload.");
+                    $"Outbox message identity {message.Delivery.MessageId} is already bound to another payload.");
             }
 
             return;
         }
 
-        this.outbox.Add(delivery.MessageId, new StagedIntegrationMessage(integrationEvent, delivery));
+        this.outbox.Add(
+            message.Delivery.MessageId,
+            new StagedIntegrationMessage(message.IntegrationEvent, message.Delivery));
     }
 
     private static InventoryReservationOutcome Failed(
@@ -103,84 +126,18 @@ public sealed class InMemoryInventoryReservationRepository : IInventoryReservati
             operationId, productId, quantity, inventoryItemId, false, remainingStock, reason, false);
     }
 
-    public sealed record StagedIntegrationMessage(
-        IIntegrationEvent IntegrationEvent,
-        IntegrationMessageDelivery Delivery);
-
-    private sealed class Transaction : IInventoryReservationTransaction
+    private static void Restore<T>(Dictionary<Guid, T> target, Dictionary<Guid, T> snapshot)
     {
-        private readonly InMemoryInventoryReservationRepository owner;
-        private readonly Dictionary<Guid, StockItem> inventorySnapshot;
-        private readonly Dictionary<Guid, InventoryReservationOutcome> outcomesSnapshot;
-        private readonly Dictionary<Guid, StagedIntegrationMessage> outboxSnapshot;
-        private bool committed;
-        private bool disposed;
-
-        public Transaction(InMemoryInventoryReservationRepository owner)
+        target.Clear();
+        foreach (var pair in snapshot)
         {
-            this.owner = owner;
-            this.inventorySnapshot = owner.inventory.ToDictionary(
-                pair => pair.Key,
-                pair => new StockItem(pair.Value.InventoryItemId, pair.Value.Stock));
-            this.outcomesSnapshot = new Dictionary<Guid, InventoryReservationOutcome>(owner.outcomes);
-            this.outboxSnapshot = new Dictionary<Guid, StagedIntegrationMessage>(owner.outbox);
-        }
-
-        public Task<InventoryReservationOutcome> ReserveAsync(
-            Guid operationId,
-            Guid productId,
-            int quantity,
-            CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult(this.owner.ReserveCore(operationId, productId, quantity));
-        }
-
-        public Task StageAsync(
-            IIntegrationEvent integrationEvent,
-            IntegrationMessageDelivery delivery,
-            CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            this.owner.StageCore(integrationEvent, delivery);
-            return Task.CompletedTask;
-        }
-
-        public Task CommitAsync(CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            this.committed = true;
-            return Task.CompletedTask;
-        }
-
-        public ValueTask DisposeAsync()
-        {
-            if (this.disposed)
-            {
-                return ValueTask.CompletedTask;
-            }
-
-            if (!this.committed)
-            {
-                Restore(this.owner.inventory, this.inventorySnapshot);
-                Restore(this.owner.outcomes, this.outcomesSnapshot);
-                Restore(this.owner.outbox, this.outboxSnapshot);
-            }
-
-            this.disposed = true;
-            this.owner.transactionGate.Release();
-            return ValueTask.CompletedTask;
-        }
-
-        private static void Restore<T>(Dictionary<Guid, T> target, Dictionary<Guid, T> snapshot)
-        {
-            target.Clear();
-            foreach (var pair in snapshot)
-            {
-                target.Add(pair.Key, pair.Value);
-            }
+            target.Add(pair.Key, pair.Value);
         }
     }
+
+    public sealed record StagedIntegrationMessage(
+        Lab.BuildingBlocks.Integrations.IIntegrationEvent IntegrationEvent,
+        Lab.BuildingBlocks.Integrations.IntegrationMessageDelivery Delivery);
 
     private sealed class StockItem(Guid inventoryItemId, int stock)
     {

@@ -6,8 +6,8 @@ Application and integration-aware verification for `IncreaseStock`.
 
 ## Implementation Status
 
-- Status: `planned`
-- There is no current Inventory test project; these scenarios are not implemented tests.
+- Status: `implemented-broker-free`; PostgreSQL atomicity remains an opt-in external gate.
+- Anchor: `tests/InventoryControl.Tests/InventoryStockUseCaseTests.cs`
 
 ## Related Production Spec
 
@@ -29,8 +29,8 @@ Application and integration-aware verification for `IncreaseStock`.
   - `IIncreaseStockUseCase.ExecuteAsync` is invoked with `IncreaseStockInput` containing a positive quantity
 - Then:
   - current stock is increased
-  - persistence is performed
-  - a `ProductStockIncreasedIntegrationEvent` is published
+  - `IInventoryStockOutbox` receives the mutated aggregate and expected prior stock
+  - a `ProductStockIncreasedIntegrationEvent` plus stable ProductId partition key is staged atomically with persistence
 
 ### Scenario 2: inventory item does not exist
 
@@ -40,15 +40,15 @@ Application and integration-aware verification for `IncreaseStock`.
   - `IIncreaseStockUseCase.ExecuteAsync` is invoked with `IncreaseStockInput`
 - Then:
   - the result indicates inventory-item-not-found semantics
-  - no stock increase is persisted
-  - no stock-increased integration event is published
+  - no stock increase is committed
+  - no stock-increased integration event is staged
 
 ## Assertions
 
 - `Result<IncreaseStockOutput>` success or failure content
 - stock mutation or non-mutation
-- repository save behavior
-- integration event publication behavior
+- outbox save-and-stage behavior
+- event schema, non-empty message ID, and ProductId partition key
 
 ## Test Level
 

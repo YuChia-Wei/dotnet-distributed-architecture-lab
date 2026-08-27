@@ -2,7 +2,7 @@
 
 ## Scope
 
-This document records the selected topology and the message-bus behavior explicitly visible in current Wolverine configuration. Kafka is canonical; RabbitMQ is a deferred compatibility profile.
+This document records the selected topology and the message-bus behavior explicitly visible in current Wolverine configuration. Kafka is canonical. RabbitMQ is retained as a compatibility profile, and Kafka + RabbitMQ dual broadcast is the owner-selected target direction but is not yet implemented.
 
 It distinguishes between:
 
@@ -32,8 +32,8 @@ It distinguishes between:
 | `OrderPlaced`, `OrderShipped`, `OrderDelivered`, `OrderCancelled` | `Orders` | `orders.integration.events` | product/inventory consumers and other listeners | durable outbox on publish; consumer inbox on listeners |
 | `ReserveInventoryRequestContract` | `Orders` | `inventory.requests` | `Inventory` request contract handler | request/reply flow through Wolverine `InvokeAsync` |
 | `ReserveInventoryResponseContract` | `Inventory` | `orders.outbound.replies` or Wolverine reply path | `Orders` caller | used as reply path for reservation result |
-| `ProductStockDecreasedIntegrationEvent` from `ReserveInventory` | `Inventory` | `inventory.integration.events` | downstream listeners | producer-created event is atomically staged in `InventoryIntegrationOutbox`, then relayed |
-| Other Inventory stock events | `Inventory` | `inventory.integration.events` | downstream listeners | current direct publish path; migration to the source outbox is deferred |
+| `ProductStockDecreasedIntegrationEvent` from `ReserveInventory` or `DecreaseStock` | `Inventory` | `inventory.integration.events` | downstream listeners | producer-created event is atomically staged in `InventoryIntegrationOutbox`, then relayed |
+| `ProductStockIncreasedIntegrationEvent`, `ProductStockReturnedIntegrationEvent` | `Inventory` | `inventory.integration.events` | downstream listeners | state and producer-created event are atomically staged through `IInventoryStockOutbox`, then relayed |
 | future product integration events implementing `IIntegrationEvent` | `Products` | `products.integration.events` | downstream listeners | route is configured with durable outbox, but no current Product use case confirms publication |
 
 ## Retry / Dead-Letter Strategy
@@ -49,8 +49,10 @@ Known from current code:
 - `OrderIntegrationOutboxRelay` leases committed source-outbox rows, publishes them through Wolverine, and deletes them after publication. A crash after publication and before deletion can redeliver an event, so consumers must remain idempotent.
 - The source outbox row `Id` is reused as Wolverine `DeduplicationId` and the `lab-message-id` header on every relay attempt; `AggregateId` is supplied as the partition key.
 - Relay claims carry an owner token; failed rows back off per row and park after five attempts for manual inspection/replay.
-- `ReserveInventoryUseCase` opens an explicit Application-owned transaction, resolves the reservation, creates the successful event, stages `InventoryIntegrationOutbox.Id = OperationId`, and commits once. Infrastructure owns SQL/serialization/relay mechanics, not event meaning.
-- `InventoryIntegrationOutboxRelay` uses the stored normalized ProductId partition key, preserves the event occurrence time, marks `PublishedAt` after success, retains the row as delivery evidence, and parks after five failures. A crash after transport publication but before `PublishedAt` can redeliver, so consumers remain idempotent.
+- `ReserveInventoryUseCase` passes a producer-owned success-event factory to `IInventoryReservationOutbox`; the PostgreSQL adapter privately owns the transaction that commits reservation state, outcome, and `InventoryIntegrationOutbox.Id = OperationId` once.
+- `DecreaseStock`, `IncreaseStock`, and `Restock` pass the mutated aggregate, expected prior stock, and producer-owned message to `IInventoryStockOutbox`. The PostgreSQL adapter updates only when the prior stock still matches and inserts the outbox row in the same transaction.
+- `InventoryIntegrationOutboxRelay` supports decreased, increased, and returned events, uses the stored normalized ProductId partition key, preserves event occurrence time, marks `PublishedAt` after success, and parks after five failures. A crash after transport publication but before `PublishedAt` can redeliver, so consumers remain idempotent.
+- Published rows are retained without limit by default. Change only `Messaging:OutboxRelay:Retention:Mode` (`RetainAll` or `PublishedForDays`) and, for finite retention, a positive `Messaging:OutboxRelay:Retention:PublishedRetentionDays`. The finite policy never removes unpublished or parked rows.
 - `Messaging:Profile=InMemory` is the automated-test profile: external transports and Wolverine PostgreSQL persistence are not configured, local queues are used, and `Messaging:OutboxRelay:Enabled=false` disables database polling.
 - `Messaging:Profile` accepts only `InMemory`, `Kafka`, or `RabbitMq`. Kafka requires `Messaging:Kafka:ConnectionString`; RabbitMQ requires an absolute `amqp` or `amqps` URI at `Messaging:RabbitMq:ConnectionString`. Missing or unknown values fail during startup configuration.
 - Inventory reservation transient persistence failures retry after 100 ms, 500 ms, and 2 seconds, then move to Wolverine's error queue.
@@ -67,9 +69,9 @@ Current maintainer rule:
 
 ## Operational Risks
 
-- The native Orders and Inventory reservation source outboxes close their code-level commit-to-enqueue gaps, but the external PostgreSQL failure-injection gate remains open until rollback and recovery run successfully.
+- The native Orders and Inventory source outboxes close their code-level commit-to-enqueue gaps, but the external PostgreSQL failure-injection gate remains open until rollback and recovery run successfully.
 - Kafka and RabbitMQ both route reservation requests to `inventory.requests` and return responses through Wolverine's request reply endpoint (`orders.outbound.replies` on the Orders side). This topology still requires the maintainer's explicit broker runtime verification.
-- RabbitMQ logical names are explicit, but the current shared queue configuration is competing-consumer topology. Broadcast requires an exchange plus separate bound queues; broker migration or dual deployment is not authorized by the present selection.
+- RabbitMQ logical names are explicit, but the current shared queue configuration is competing-consumer topology. The dual-broadcast direction is authorized, but implementation is not: it still requires an exchange plus separate bound queues and a delivery ledger keyed by message plus destination. Reusing the current single `PublishedAt` would make partial Kafka/RabbitMQ success indistinguishable and is prohibited.
 - Product consumer currently listens to `orders.integration.events`, but the business purpose is not yet documented in a matching handler map.
 
 ## Orders Schema Upgrade
@@ -103,8 +105,8 @@ The Inventory runtime role needs permission to create and use Wolverine's `wolve
 
 ## Deferred Items
 
-- decision to retain, promote, replace, or dual-deploy RabbitMQ
-- explicit RabbitMQ exchange, per-consumer queue, and binding map for any claimed broadcast behavior
+- exact RabbitMQ exchange, per-consumer queue, binding, and DLQ map for the selected dual-broadcast direction
+- `InventoryIntegrationOutboxDelivery`-style per-destination schema, migration, publisher routing, and partial-success recovery policy
 - broker-specific dead-letter queue/topic naming
 - replay procedures
 - confirmed consumer ownership matrix per channel

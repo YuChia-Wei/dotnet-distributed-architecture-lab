@@ -11,6 +11,7 @@ namespace InventoryControl.Infrastructure.BuildingBlocks;
 
 internal sealed class InventoryIntegrationOutboxRelay(
     IServiceScopeFactory scopeFactory,
+    InventoryOutboxRelayOptions options,
     ILogger<InventoryIntegrationOutboxRelay> logger) : BackgroundService
 {
     private const int BatchSize = 20;
@@ -26,7 +27,9 @@ internal sealed class InventoryIntegrationOutboxRelay(
     private static readonly IReadOnlyDictionary<string, Type> MessageTypes =
         new Dictionary<string, Type>(StringComparer.Ordinal)
         {
-            [nameof(ProductStockDecreasedIntegrationEvent)] = typeof(ProductStockDecreasedIntegrationEvent)
+            [nameof(ProductStockDecreasedIntegrationEvent)] = typeof(ProductStockDecreasedIntegrationEvent),
+            [nameof(ProductStockIncreasedIntegrationEvent)] = typeof(ProductStockIncreasedIntegrationEvent),
+            [nameof(ProductStockReturnedIntegrationEvent)] = typeof(ProductStockReturnedIntegrationEvent)
         };
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -130,6 +133,26 @@ internal sealed class InventoryIntegrationOutboxRelay(
                 await RecordFailureAsync(connection, row, lockId, exception, cancellationToken);
             }
         }
+
+        await this.ApplyRetentionAsync(connection, cancellationToken);
+    }
+
+    private Task ApplyRetentionAsync(IDbConnection connection, CancellationToken cancellationToken)
+    {
+        if (options.RetentionMode == InventoryOutboxRetentionMode.RetainAll)
+        {
+            return Task.CompletedTask;
+        }
+
+        const string sql = """
+            DELETE FROM InventoryIntegrationOutbox
+            WHERE PublishedAt IS NOT NULL
+              AND PublishedAt < NOW() - (@PublishedRetentionDays * INTERVAL '1 day');
+            """;
+        return connection.ExecuteAsync(new CommandDefinition(
+            sql,
+            new { options.PublishedRetentionDays },
+            cancellationToken: cancellationToken));
     }
 
     private async Task RecordFailureAsync(

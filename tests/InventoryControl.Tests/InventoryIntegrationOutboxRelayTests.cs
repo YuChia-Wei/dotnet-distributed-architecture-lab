@@ -102,7 +102,35 @@ public sealed class InventoryIntegrationOutboxRelayTests
         connection.ParkedCount.ShouldBe(1);
     }
 
-    private static object CreateRelay(IDbConnection connection, IIntegrationEventPublisher publisher)
+    [Fact]
+    public async Task given_finite_published_retention_when_relay_runs_then_expired_published_rows_are_pruned()
+    {
+        // Given
+        var productId = Guid.CreateVersion7();
+        var connection = new OutboxDbConnection(
+            Guid.CreateVersion7(),
+            productId.ToString("N"),
+            nameof(ProductStockIncreasedIntegrationEvent),
+            $$"""{"InventoryItemId":"{{Guid.CreateVersion7()}}","ProductId":"{{productId}}","IncreasedQuantity":1,"CurrentStock":3,"OccurredOn":"2026-08-27T00:00:00.0000000Z"}""");
+        var relay = CreateRelay(
+            connection,
+            new RetryRecordingPublisher(),
+            new InventoryOutboxRelayOptions(
+                true,
+                InventoryOutboxRetentionMode.PublishedForDays,
+                30));
+
+        // When
+        await RelayBatchAsync(relay);
+
+        // Then
+        connection.RetentionDeleteCount.ShouldBe(1);
+    }
+
+    private static object CreateRelay(
+        IDbConnection connection,
+        IIntegrationEventPublisher publisher,
+        InventoryOutboxRelayOptions? options = null)
     {
         var relayType = typeof(IntegrationEventPublisher).Assembly.GetType(
             "InventoryControl.Infrastructure.BuildingBlocks.InventoryIntegrationOutboxRelay",
@@ -115,7 +143,14 @@ public sealed class InventoryIntegrationOutboxRelayTests
         var loggerType = typeof(Microsoft.Extensions.Logging.Abstractions.NullLogger<>).MakeGenericType(relayType);
         var logger = loggerType.GetField("Instance", BindingFlags.Public | BindingFlags.Static)!.GetValue(null);
 
-        return Activator.CreateInstance(relayType, scopeFactory, logger)!;
+        return Activator.CreateInstance(
+            relayType,
+            scopeFactory,
+            options ?? new InventoryOutboxRelayOptions(
+                false,
+                InventoryOutboxRetentionMode.RetainAll,
+                null),
+            logger)!;
     }
 
     private static async Task RelayBatchAsync(object relay)
@@ -168,6 +203,7 @@ public sealed class InventoryIntegrationOutboxRelayTests
         public int PublishedCount { get; private set; }
         public int FailureCount { get; private set; }
         public int ParkedCount { get; private set; }
+        public int RetentionDeleteCount { get; private set; }
 
         [AllowNull]
         public override string ConnectionString { get; set; } = string.Empty;
@@ -223,6 +259,10 @@ public sealed class InventoryIntegrationOutboxRelayTests
                 {
                     this.ParkedCount++;
                 }
+            }
+            else if (commandText.Contains("DELETE FROM InventoryIntegrationOutbox", StringComparison.OrdinalIgnoreCase))
+            {
+                this.RetentionDeleteCount++;
             }
 
             return 1;

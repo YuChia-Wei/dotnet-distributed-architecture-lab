@@ -1,9 +1,9 @@
 using InventoryControl.Applications.Repositories;
 using InventoryControl.Applications.Queries;
 using InventoryControl.Applications.UseCases;
+using InventoryControl.Applications.Outbox;
 using InventoryControl.Domains;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
-using Lab.BuildingBlocks.Integrations;
 using NSubstitute;
 using Shouldly;
 
@@ -14,14 +14,14 @@ public sealed class InventoryStockUseCaseTests
 {
     /// <summary>Available stock is persisted and announced after a successful decrease.</summary>
     [Fact]
-    public async Task given_sufficient_stock_when_stock_is_decreased_then_state_is_saved_and_event_is_published()
+    public async Task given_sufficient_stock_when_stock_is_decreased_then_state_and_event_are_staged()
     {
         // Given
         var productId = Guid.CreateVersion7();
         var item = new InventoryItem(productId, 10);
         var (repository, queries) = RepositoriesReturning(productId, item);
-        var publisher = PublisherAcceptingMessages();
-        var useCase = new DecreaseStockUseCase(repository, queries, publisher);
+        var outbox = OutboxAcceptingMessages();
+        var useCase = new DecreaseStockUseCase(repository, queries, outbox);
 
         // When
         var result = await useCase.ExecuteAsync(new DecreaseStockInput(productId, 4), CancellationToken.None);
@@ -31,9 +31,11 @@ public sealed class InventoryStockUseCaseTests
         result.Value.ShouldNotBeNull();
         result.Value.CurrentStock.ShouldBe(6);
         item.Stock.ShouldBe(6);
-        await repository.Received(1).SaveAsync(item, Arg.Any<CancellationToken>());
-        await publisher.Received(1).PublishAsync(
-            Arg.Is<IIntegrationEvent>(message => IsExpectedDecrease(message, item.Id, productId, 4, 6)));
+        await outbox.Received(1).SaveAndStageAsync(
+            item,
+            10,
+            Arg.Is<InventoryOutboxMessage>(message => IsExpectedDecrease(message, item.Id, productId, 4, 6)),
+            Arg.Any<CancellationToken>());
     }
 
     /// <summary>Insufficient stock is a business failure without persistence or publication.</summary>
@@ -44,8 +46,8 @@ public sealed class InventoryStockUseCaseTests
         var productId = Guid.CreateVersion7();
         var item = new InventoryItem(productId, 2);
         var (repository, queries) = RepositoriesReturning(productId, item);
-        var publisher = Substitute.For<IIntegrationEventPublisher>();
-        var useCase = new DecreaseStockUseCase(repository, queries, publisher);
+        var outbox = Substitute.For<IInventoryStockOutbox>();
+        var useCase = new DecreaseStockUseCase(repository, queries, outbox);
 
         // When
         var result = await useCase.ExecuteAsync(new DecreaseStockInput(productId, 3), CancellationToken.None);
@@ -55,8 +57,7 @@ public sealed class InventoryStockUseCaseTests
         result.ErrorMessage.ShouldBe("Available stock is not enough.");
         item.Stock.ShouldBe(2);
         item.DomainEvents.ShouldBeEmpty();
-        await repository.DidNotReceiveWithAnyArgs().SaveAsync(default!, default);
-        await publisher.DidNotReceiveWithAnyArgs().PublishAsync(default!);
+        await outbox.DidNotReceiveWithAnyArgs().SaveAndStageAsync(default!, default, default!, default);
     }
 
     /// <summary>A missing item suppresses persistence and the stock-decreased success message.</summary>
@@ -66,8 +67,8 @@ public sealed class InventoryStockUseCaseTests
         // Given
         var productId = Guid.CreateVersion7();
         var (repository, queries) = RepositoriesReturning(productId, null);
-        var publisher = Substitute.For<IIntegrationEventPublisher>();
-        var useCase = new DecreaseStockUseCase(repository, queries, publisher);
+        var outbox = Substitute.For<IInventoryStockOutbox>();
+        var useCase = new DecreaseStockUseCase(repository, queries, outbox);
 
         // When
         var result = await useCase.ExecuteAsync(new DecreaseStockInput(productId, 1), CancellationToken.None);
@@ -75,20 +76,19 @@ public sealed class InventoryStockUseCaseTests
         // Then
         result.IsSuccess.ShouldBeFalse();
         result.ErrorMessage.ShouldBe("InventoryItemNotFound");
-        await repository.DidNotReceiveWithAnyArgs().SaveAsync(default!, default);
-        await publisher.DidNotReceiveWithAnyArgs().PublishAsync(default!);
+        await outbox.DidNotReceiveWithAnyArgs().SaveAndStageAsync(default!, default, default!, default);
     }
 
     /// <summary>Increasing stock persists the aggregate and publishes the resulting current stock.</summary>
     [Fact]
-    public async Task given_inventory_item_exists_when_stock_is_increased_then_state_is_saved_and_event_is_published()
+    public async Task given_inventory_item_exists_when_stock_is_increased_then_state_and_event_are_staged()
     {
         // Given
         var productId = Guid.CreateVersion7();
         var item = new InventoryItem(productId, 5);
         var (repository, queries) = RepositoriesReturning(productId, item);
-        var publisher = PublisherAcceptingMessages();
-        var useCase = new IncreaseStockUseCase(repository, queries, publisher);
+        var outbox = OutboxAcceptingMessages();
+        var useCase = new IncreaseStockUseCase(repository, queries, outbox);
 
         // When
         var result = await useCase.ExecuteAsync(new IncreaseStockInput(productId, 4), CancellationToken.None);
@@ -96,21 +96,23 @@ public sealed class InventoryStockUseCaseTests
         // Then
         result.IsSuccess.ShouldBeTrue();
         result.Value!.CurrentStock.ShouldBe(9);
-        await repository.Received(1).SaveAsync(item, Arg.Any<CancellationToken>());
-        await publisher.Received(1).PublishAsync(
-            Arg.Is<IIntegrationEvent>(message => IsExpectedIncrease(message, productId, 4, 9)));
+        await outbox.Received(1).SaveAndStageAsync(
+            item,
+            5,
+            Arg.Is<InventoryOutboxMessage>(message => IsExpectedIncrease(message, productId, 4, 9)),
+            Arg.Any<CancellationToken>());
     }
 
     /// <summary>Restocking persists the aggregate and publishes the returned quantity.</summary>
     [Fact]
-    public async Task given_inventory_item_exists_when_stock_is_restocked_then_state_is_saved_and_event_is_published()
+    public async Task given_inventory_item_exists_when_stock_is_restocked_then_state_and_event_are_staged()
     {
         // Given
         var productId = Guid.CreateVersion7();
         var item = new InventoryItem(productId, 5);
         var (repository, queries) = RepositoriesReturning(productId, item);
-        var publisher = PublisherAcceptingMessages();
-        var useCase = new RestockUseCase(repository, queries, publisher);
+        var outbox = OutboxAcceptingMessages();
+        var useCase = new RestockUseCase(repository, queries, outbox);
 
         // When
         var result = await useCase.ExecuteAsync(new RestockInput(productId, 2), CancellationToken.None);
@@ -118,9 +120,11 @@ public sealed class InventoryStockUseCaseTests
         // Then
         result.IsSuccess.ShouldBeTrue();
         result.Value!.CurrentStock.ShouldBe(7);
-        await repository.Received(1).SaveAsync(item, Arg.Any<CancellationToken>());
-        await publisher.Received(1).PublishAsync(
-            Arg.Is<IIntegrationEvent>(message => IsExpectedReturn(message, productId, 2, 7)));
+        await outbox.Received(1).SaveAndStageAsync(
+            item,
+            5,
+            Arg.Is<InventoryOutboxMessage>(message => IsExpectedReturn(message, productId, 2, 7)),
+            Arg.Any<CancellationToken>());
     }
 
     private static (IInventoryItemDomainRepository Repository, IInventoryItemQueryRepository Queries) RepositoriesReturning(
@@ -139,46 +143,52 @@ public sealed class InventoryStockUseCaseTests
         return (repository, queries);
     }
 
-    private static IIntegrationEventPublisher PublisherAcceptingMessages()
+    private static IInventoryStockOutbox OutboxAcceptingMessages()
     {
-        return Substitute.For<IIntegrationEventPublisher>();
+        return Substitute.For<IInventoryStockOutbox>();
     }
 
     private static bool IsExpectedDecrease(
-        IIntegrationEvent message,
+        InventoryOutboxMessage message,
         Guid inventoryItemId,
         Guid productId,
         int quantity,
         int currentStock)
     {
-        var decreased = message as ProductStockDecreasedIntegrationEvent;
+        var decreased = message.IntegrationEvent as ProductStockDecreasedIntegrationEvent;
         return decreased?.InventoryItemId == inventoryItemId &&
                decreased.ProductId == productId &&
                decreased.DecreasedQuantity == quantity &&
-               decreased.CurrentStock == currentStock;
+               decreased.CurrentStock == currentStock &&
+               message.Delivery.MessageId != Guid.Empty &&
+               message.Delivery.PartitionKey == productId.ToString("N");
     }
 
     private static bool IsExpectedIncrease(
-        IIntegrationEvent message,
+        InventoryOutboxMessage message,
         Guid productId,
         int quantity,
         int currentStock)
     {
-        var increased = message as ProductStockIncreasedIntegrationEvent;
+        var increased = message.IntegrationEvent as ProductStockIncreasedIntegrationEvent;
         return increased?.ProductId == productId &&
                increased.IncreasedQuantity == quantity &&
-               increased.CurrentStock == currentStock;
+               increased.CurrentStock == currentStock &&
+               message.Delivery.MessageId != Guid.Empty &&
+               message.Delivery.PartitionKey == productId.ToString("N");
     }
 
     private static bool IsExpectedReturn(
-        IIntegrationEvent message,
+        InventoryOutboxMessage message,
         Guid productId,
         int quantity,
         int currentStock)
     {
-        var returned = message as ProductStockReturnedIntegrationEvent;
+        var returned = message.IntegrationEvent as ProductStockReturnedIntegrationEvent;
         return returned?.ProductId == productId &&
                returned.ReturnedQuantity == quantity &&
-               returned.CurrentStock == currentStock;
+               returned.CurrentStock == currentStock &&
+               message.Delivery.MessageId != Guid.Empty &&
+               message.Delivery.PartitionKey == productId.ToString("N");
     }
 }

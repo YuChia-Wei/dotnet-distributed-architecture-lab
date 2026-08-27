@@ -225,7 +225,7 @@ technologySelections:
       - docker-compose/docker-compose.yml
     reason: PostgreSQL is the active product persistence provider.
   - slot: messaging.broker
-    value: Apache Kafka canonical; RabbitMQ deferred compatibility profile
+    value: Apache Kafka canonical; RabbitMQ compatibility profile; dual broadcast target requires destination-aware implementation
     status: selected
     source: explicit-target-decision
     evidence:

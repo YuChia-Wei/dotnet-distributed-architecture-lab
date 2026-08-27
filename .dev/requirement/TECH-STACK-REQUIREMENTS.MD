@@ -31,7 +31,7 @@
 - Write-side repositories use parameterized Dapper/Npgsql access.
 - Query repositories currently use Dapper/Npgsql in product source; EF Core is not a product runtime dependency.
 - The Orders event-sourcing repository is a context-specific capability and must not be assumed for Product or Inventory.
-- Orders and `ReserveInventory` source-outbox writes share their owning state transaction. `ReserveInventory` declares this strong-consistency need through an Application transaction port; its relay is a separate Infrastructure adapter.
+- Orders and every Inventory event-producing stock command write state plus source-outbox intent in one local transaction. Inventory declares this through capability-specific outbox ports; generic Unit of Work and transaction lifecycle types remain private Infrastructure details, and the relay is a separate adapter.
 - Other Inventory stock commands still persist then publish directly; do not generalize the reservation implementation until a separate slice adopts and tests it.
 - Credentials, connection strings, database names, and local ports belong in runtime configuration, not in `.dev/project-config.yaml`.
 
@@ -39,7 +39,7 @@
 
 - Kafka is the canonical checked-in profile. Ordering is scoped to records sharing the same producer-selected partition key; Inventory reservation uses normalized `ProductId`.
 - Multiple Kafka consumer groups can independently receive one topic. A broadcast requirement therefore requires an explicit topology comparison before choosing migration or dual deployment.
-- RabbitMQ is a deferred compatibility profile and must not be described as broadcast-capable from the current shared queue names. Real connectivity plus exchange, per-consumer queue, binding, reply, and DLQ behavior require a separate environment gate.
+- RabbitMQ is a compatibility profile and must not be described as broadcast-capable from the current shared queue names. Kafka + RabbitMQ dual broadcast is the target direction, but real connectivity, per-destination outbox state, exchange, per-consumer queue, binding, reply, and DLQ behavior require a separate implementation and environment gate.
 - Logical channel ownership and unresolved retry/DLQ details are documented in `.dev/operations/mq-topology.md`.
 - Contract meaning and compatibility are owned by the producing bounded context and encoded in its project under `src/BC-Contracts/`; consumers own reaction and delivery handling.
 

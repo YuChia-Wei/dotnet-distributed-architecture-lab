@@ -82,8 +82,8 @@ Cross-context arrows represent message contracts, never direct project/domain ca
 - Aggregate: `InventoryItem(Guid Id, Guid ProductId, int Stock)` with exactly one row per product.
 - Commands: Initialize, Increase, Decrease, Restock, Reserve.
 - Query: GetAvailableQuantity.
-- Normal stock commands use the aggregate repository and emit stock integration events after persistence.
-- Reserve uses `IInventoryReservationTransactionFactory` / `IInventoryReservationTransaction` because one local transaction spans the idempotency record, locked stock row, terminal outcome, and successful integration-event outbox row. The use case creates the event before commit; Infrastructure supplies SQL, serialization, leasing, and transport.
+- Normal event-producing stock commands load through aggregate/query repositories and commit the mutated aggregate plus producer-created message through `IInventoryStockOutbox` with expected-stock concurrency.
+- Reserve uses `IInventoryReservationOutbox`; the use case supplies a successful-message factory while Infrastructure privately owns the local transaction spanning idempotency record, locked stock row, terminal outcome, and outbox row.
 - Expected errors are stable codes, including `InventoryItemAlreadyExists`, `InventoryItemNotFound`, `InsufficientStock`/`InventoryIsNotEnough`, `OperationIdRequired`, `ProductIdRequired`, `QuantityMustBePositive`, and `OperationIdentityConflict`.
 
 ## Use-Case Execution Contract
@@ -106,11 +106,13 @@ The source outbox relay leases eligible rows, publishes with stable row ID and a
 
 ### Inventory
 
-Normal aggregate persistence upserts by inventory ID. The target-quality implementation must clear/acknowledge domain events only after durable success and must make persistence plus corresponding integration publication reliable; a source outbox or equivalently proven atomic design is preferred over a publish-after-save crash window.
+Inventory commands that emit integration events use `IInventoryStockOutbox`, not direct publish-after-save. The Application use case loads and mutates one `InventoryItem`, creates the producer-owned event plus delivery metadata, and passes the mutated aggregate, expected pre-mutation stock, and message to the port. The PostgreSQL adapter updates with `WHERE Id = @Id AND Stock = @ExpectedStock`, inserts `InventoryIntegrationOutbox`, and commits once; zero updated rows is an optimistic-concurrency failure. Local database transaction/UoW types stay private to Infrastructure.
 
-Reservation inserts/claims `OperationId`, locks the product inventory row, calculates and stores the terminal outcome, and on success stages `ProductStockDecreasedIntegrationEvent` in `InventoryIntegrationOutbox` before one commit. Existing operation with identical payload returns the stored outcome and reuses the outbox row; payload mismatch returns conflict without mutation.
+`ReserveInventoryUseCase` calls `IInventoryReservationOutbox.ReserveAndStageAsync` with a producer-owned successful-message factory. The adapter inserts/claims `OperationId`, locks the product inventory row, calculates and stores the terminal outcome, invokes the factory only on success, stages `ProductStockDecreasedIntegrationEvent`, and commits once. Existing operation with identical payload returns the stored outcome and reuses the outbox row; payload mismatch returns conflict without mutation. A generic Application `IUnitOfWork` is intentionally absent because the current invariant spans one aggregate/capability plus its outbox, not multiple aggregates.
 
-The Inventory relay leases unpublished rows, publishes with `MessageId = OperationId` and `PartitionKey = ProductId.ToString("N")`, and sets `PublishedAt` without deleting the row. Failures back off per row and park after five attempts. Retention/archive after successful publication is deferred. A publish-before-mark crash may redeliver; at-least-once remains normative.
+The Inventory relay leases unpublished rows, deserializes decrease/increase/return events, publishes with the stored message ID and `PartitionKey = ProductId.ToString("N")`, and sets `PublishedAt`. Reservation message ID equals `OperationId`; other stock commands generate UUID v7. Failures back off per row and park after five attempts. `Messaging:OutboxRelay:Retention:Mode=RetainAll` is the default; `PublishedForDays` plus a positive `PublishedRetentionDays` explicitly enables pruning only of published rows. A publish-before-mark crash may redeliver; at-least-once remains normative.
+
+Kafka remains the current single canonical destination. Kafka + RabbitMQ dual broadcast is the owner-selected target direction, not a current runtime claim. Before enabling it, replace the single-row `PublishedAt` completion model with per-destination delivery records so Kafka and RabbitMQ can retry, park, and complete independently; configure RabbitMQ as exchange plus one queue per independent consumer.
 
 ## Runtime Composition
 
@@ -118,7 +120,8 @@ All hosts consume the shared `Messaging` section:
 
 - `Profile`: exactly `InMemory`, `Kafka`, or `RabbitMq`;
 - Kafka is canonical and requires `Messaging:Kafka:ConnectionString`; producer-selected partition keys scope ordering, and distinct consumer groups provide independent topic delivery;
-- RabbitMQ is a deferred compatibility profile and requires an absolute `amqp` or `amqps` URI at `Messaging:RabbitMq:ConnectionString`; current shared queues are not a broadcast design;
+- RabbitMQ is a compatibility profile and requires an absolute `amqp` or `amqps` URI at `Messaging:RabbitMq:ConnectionString`; current shared queues are not a broadcast design, and dual broadcast remains unimplemented until destination-aware outbox state and fanout routing exist;
+- Inventory published-row retention is adjusted only at `Messaging:OutboxRelay:Retention:Mode` and `Messaging:OutboxRelay:Retention:PublishedRetentionDays`;
 - external profiles require the host-specific PostgreSQL connection string when Wolverine persistence is used;
 - InMemory stubs external transports and must not require broker/database persistence solely for message delivery.
 
@@ -162,5 +165,6 @@ The exact project identities are in `project-manifest.json`.
 - Do not invent business meaning for consumer subscriptions that have no handler map.
 - Do not introduce distributed transactions.
 - Do not place broker/database/framework types in Domain or portable use-case contracts.
-- Do not promote, migrate to, or dual-deploy RabbitMQ, or define its exchange/per-consumer queue/DLQ topology, without a separate owner decision.
-- Do not generalize the ReserveInventory source-outbox implementation to other Inventory commands without a separate bounded slice and tests.
+- Do not claim Kafka + RabbitMQ dual delivery until destination-aware delivery state, exchange/per-consumer queues, routing tests, and runtime evidence pass; the target direction alone is not implementation evidence.
+- Do not apply source outbox to `InitProductStock` unless a producer-owned outgoing event is first specified; it currently emits none.
+- Never delete original source as part of reconstruction validation. Create source-free disposable copies; original-source deletion is repository-owner-only.

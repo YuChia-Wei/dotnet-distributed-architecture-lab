@@ -15,9 +15,12 @@ public sealed class InventoryReservationIdempotencyTests
         var operationId = Guid.CreateVersion7();
         var productId = Guid.CreateVersion7();
         repository.Seed(Guid.CreateVersion7(), productId, 5);
+        var useCase = new ReserveInventoryUseCase(repository);
 
-        var first = await repository.ReserveAsync(operationId, productId, 2, CancellationToken.None);
-        var replay = await repository.ReserveAsync(operationId, productId, 2, CancellationToken.None);
+        var first = await useCase.ExecuteAsync(
+            new ReserveInventoryInput(operationId, productId, 2), CancellationToken.None);
+        var replay = await useCase.ExecuteAsync(
+            new ReserveInventoryInput(operationId, productId, 2), CancellationToken.None);
 
         first.WasAlreadyProcessed.ShouldBeFalse();
         replay.WasAlreadyProcessed.ShouldBeTrue();
@@ -33,9 +36,12 @@ public sealed class InventoryReservationIdempotencyTests
         var operationId = Guid.CreateVersion7();
         var productId = Guid.CreateVersion7();
         repository.Seed(Guid.CreateVersion7(), productId, 5);
+        var useCase = new ReserveInventoryUseCase(repository);
 
-        await repository.ReserveAsync(operationId, productId, 2, CancellationToken.None);
-        var conflict = await repository.ReserveAsync(operationId, productId, 3, CancellationToken.None);
+        await useCase.ExecuteAsync(
+            new ReserveInventoryInput(operationId, productId, 2), CancellationToken.None);
+        var conflict = await useCase.ExecuteAsync(
+            new ReserveInventoryInput(operationId, productId, 3), CancellationToken.None);
 
         conflict.IsSuccess.ShouldBeFalse();
         conflict.WasAlreadyProcessed.ShouldBeTrue();
@@ -49,10 +55,13 @@ public sealed class InventoryReservationIdempotencyTests
         var repository = new InMemoryInventoryReservationRepository();
         var operationId = Guid.CreateVersion7();
         var productId = Guid.CreateVersion7();
+        var useCase = new ReserveInventoryUseCase(repository);
 
-        var first = await repository.ReserveAsync(operationId, productId, 2, CancellationToken.None);
+        var first = await useCase.ExecuteAsync(
+            new ReserveInventoryInput(operationId, productId, 2), CancellationToken.None);
         repository.Seed(Guid.CreateVersion7(), productId, 5);
-        var replay = await repository.ReserveAsync(operationId, productId, 2, CancellationToken.None);
+        var replay = await useCase.ExecuteAsync(
+            new ReserveInventoryInput(operationId, productId, 2), CancellationToken.None);
 
         first.FailureReason.ShouldBe("InventoryItemNotFound");
         replay.FailureReason.ShouldBe("InventoryItemNotFound");
@@ -88,9 +97,11 @@ public sealed class InventoryReservationIdempotencyTests
         repository.Seed(Guid.CreateVersion7(), productId, 5);
         using var cancellation = new CancellationTokenSource();
         cancellation.Cancel();
+        var useCase = new ReserveInventoryUseCase(repository);
 
         await Should.ThrowAsync<OperationCanceledException>(() =>
-            repository.ReserveAsync(operationId, productId, 2, cancellation.Token));
+            useCase.ExecuteAsync(
+                new ReserveInventoryInput(operationId, productId, 2), cancellation.Token));
 
         repository.GetStock(productId).ShouldBe(5);
     }

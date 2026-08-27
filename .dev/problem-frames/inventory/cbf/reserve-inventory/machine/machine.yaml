@@ -2,10 +2,10 @@ command_processing:
   steps:
     - "Receive ReserveInventoryInput through IReserveInventoryUseCase.ExecuteAsync."
     - "Reject empty operation id, empty product id, or non-positive quantity without opening a transaction."
-    - "Open IInventoryReservationTransaction through its Application-owned factory."
+    - "Call the Application-owned IInventoryReservationOutbox with reservation identity, payload, and a successful-message factory."
     - "For a new operation, lock the InventoryItems row, evaluate stock, decrement when sufficient, and store the outcome in one transaction."
     - "For an existing operation, return the stored outcome when payload matches or OperationIdentityConflict when it differs."
-    - "When successful, create ProductStockDecreasedIntegrationEvent in the use case and stage it with MessageId=OperationId and PartitionKey=ProductId.ToString(\"N\")."
+    - "When successful, the supplied factory creates ProductStockDecreasedIntegrationEvent with MessageId=OperationId and PartitionKey=ProductId.ToString(\"N\"); the adapter stages it before its private local transaction commits."
     - "Commit reservation state, terminal outcome, and source-outbox row together; otherwise dispose and roll back."
     - "A separate Infrastructure relay publishes committed rows with stable delivery metadata, bounded backoff, and parking after five failures."
     - "Return ReserveInventoryOutput with operation id, success, remaining stock, failure reason, and replay marker."

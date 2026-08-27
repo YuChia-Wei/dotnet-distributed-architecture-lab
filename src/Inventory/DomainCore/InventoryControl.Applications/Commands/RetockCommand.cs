@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using InventoryControl.Applications.Repositories;
 using InventoryControl.Applications.Queries;
+using InventoryControl.Applications.Outbox;
 using Lab.BuildingBlocks.Application;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 using Lab.BuildingBlocks.Integrations;
@@ -55,7 +56,7 @@ public interface IRestockUseCase
 public class RestockUseCase(
     IInventoryItemDomainRepository repository,
     IInventoryItemQueryRepository queries,
-    IIntegrationEventPublisher publisher) : IRestockUseCase
+    IInventoryStockOutbox outbox) : IRestockUseCase
 {
     /// <summary>
     /// 執行退貨回補 use case。
@@ -76,6 +77,7 @@ public class RestockUseCase(
             return Result<RestockOutput>.Failure("InventoryItemNotFound");
         }
 
+        var expectedStock = inventoryItem.Stock;
         var stockResult = inventoryItem.Restock(input.Quantity);
 
         if (!stockResult.IsSuccess)
@@ -83,14 +85,17 @@ public class RestockUseCase(
             return Result<RestockOutput>.Failure(stockResult.ErrorMessage!);
         }
 
-        await repository.SaveAsync(inventoryItem, cancellationToken);
-
-        await publisher.PublishAsync(
-            new ProductStockReturnedIntegrationEvent(
-                inventoryItem.Id,
-                input.ProductId,
-                input.Quantity,
-                inventoryItem.Stock));
+        await outbox.SaveAndStageAsync(
+            inventoryItem,
+            expectedStock,
+            new InventoryOutboxMessage(
+                new ProductStockReturnedIntegrationEvent(
+                    inventoryItem.Id,
+                    input.ProductId,
+                    input.Quantity,
+                    inventoryItem.Stock),
+                new IntegrationMessageDelivery(Guid.CreateVersion7(), input.ProductId.ToString("N"))),
+            cancellationToken);
 
         return Result<RestockOutput>.Success(new RestockOutput(inventoryItem.Stock));
     }

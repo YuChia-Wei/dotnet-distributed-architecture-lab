@@ -23,26 +23,33 @@ The durable artifact set can start two source-independent LUNA-class reconstruct
 | 6 hosts, profiles, containers, observability | covered as design | `runtime-contracts.json` |
 | Two source-free LUNA-class reconstruction proofs | not run | `.dev/specs/tests/e2e/reconstruction-acceptance.test-spec.md` |
 
-## Concrete Provisional Architecture
+## Concrete Inventory Outbox Architecture
 
 ```text
 ReserveInventoryUseCase
-  -> IInventoryReservationTransactionFactory.BeginAsync
-  -> IInventoryReservationTransaction.ReserveAsync
-  -> use case creates ProductStockDecreasedIntegrationEvent
-  -> IInventoryReservationTransaction.StageAsync
-  -> one PostgreSQL commit: stock + terminal outcome + InventoryIntegrationOutbox
+  -> IInventoryReservationOutbox.ReserveAndStageAsync
+  -> use case supplies ProductStockDecreasedIntegrationEvent factory
+  -> adapter-private PostgreSQL transaction: stock + terminal outcome + InventoryIntegrationOutbox
   -> InventoryIntegrationOutboxRelay
   -> IIntegrationEventPublisher / Wolverine / Kafka
+
+DecreaseStock / IncreaseStock / Restock
+  -> load InventoryItem and capture expected stock
+  -> execute aggregate behavior and create producer-owned event
+  -> IInventoryStockOutbox.SaveAndStageAsync
+  -> one PostgreSQL commit: expected-stock update + InventoryIntegrationOutbox
+  -> InventoryIntegrationOutboxRelay
 ```
 
-This design deliberately keeps event meaning in Application and persistence/relay mechanics in Infrastructure. The user may revise the transaction-port shape after inspecting the implementation; that review is a design gate, not evidence that the provisional implementation failed.
+This design deliberately keeps event meaning in Application and persistence/relay plus transaction/UoW mechanics in Infrastructure. It replaces the earlier explicit transaction lifecycle after owner review. Kafka + RabbitMQ dual broadcast still requires per-destination delivery state and is not yet implemented.
 
 ## Resolved And Deferred Decisions
 
 - Resolved: Kafka is canonical; Inventory ordering uses normalized `ProductId` as partition key.
 - Resolved: the producer owns integration-event meaning and schema; consumers own reactions, projections, idempotency, retry, and dead-letter handling.
-- Resolved provisionally: ReserveInventory uses a transactional source outbox.
+- Resolved: all current Inventory event-producing commands use capability-specific transactional source outbox ports; generic UoW is not exposed to Application.
+- Resolved: published Inventory rows default to `RetainAll`; finite retention is adjusted only under `Messaging:OutboxRelay:Retention:*`.
+- Resolved direction: Kafka + RabbitMQ dual broadcast; destination-aware state and RabbitMQ fanout details remain deferred implementation.
 - Resolved: increase/return quantity properties use `IncreasedQuantity` and `ReturnedQuantity` with no legacy alias.
 - Resolved provisionally: source deletion requires two independent clean-room LUNA-class reconstructions.
 - Deferred: RabbitMQ fanout/queue topology or dual deployment, outbox retention, adoption by other Inventory commands, and final owner acceptance of the transaction-port design.

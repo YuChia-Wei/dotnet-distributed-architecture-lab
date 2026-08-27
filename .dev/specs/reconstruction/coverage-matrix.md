@@ -14,7 +14,7 @@
 | Aggregates | Product, Order, InventoryItem | covered | domain entity specs |
 | Runtime hosts | 3 Web APIs + 3 Consumers | covered | `runtime-contracts.json` |
 | Databases | Products, Orders, Inventory | covered | `persistence-contracts.json` |
-| Broker profiles | InMemory, canonical Kafka, deferred RabbitMq compatibility | covered selection; RabbitMQ physical topology deferred | `runtime-contracts.json`, `message-contracts.json` |
+| Broker profiles | InMemory, canonical Kafka, RabbitMq compatibility, target dual broadcast | current single-profile selection covered; dual-destination state and RabbitMQ physical fanout deferred | `runtime-contracts.json`, `message-contracts.json` |
 | Observability | logs, traces, metrics via OTLP | covered | runtime contract |
 
 ## Use Cases
@@ -54,11 +54,11 @@ The authoritative request/response/status mapping is `http-api-contracts.json` a
 | --- | --- | --- |
 | ReserveInventory request/reply | covered | broker runtime verification remains environment-dependent |
 | Orders lifecycle events | covered | consumer business ownership not fully documented |
-| Inventory stock events | covered | increase/return names corrected by owner decision; other commands still use direct publish |
+| Inventory stock events | covered in source outbox | decrease/increase/return are atomically staged; increase/return names corrected by owner decision |
 | Orders source outbox relay | covered | PostgreSQL failure-injection proof remains required |
 | Inventory reservation source outbox relay | covered | real PostgreSQL atomic rollback proof remains required |
 | Product integration route | deferred | no confirmed producer use case |
-| RabbitMQ compatibility topology | deferred | shared queues are not broadcast; exchange/per-consumer queue/binding/DLQ and promotion decision deferred |
+| RabbitMQ compatibility topology | target direction selected / implementation deferred | shared queues are not broadcast; exchange/per-consumer queue/binding/DLQ and per-destination outbox state remain open |
 
 ## Persistence
 
@@ -96,7 +96,7 @@ The authoritative request/response/status mapping is `http-api-contracts.json` a
 6. PostgreSQL failure injection has not yet proven Orders source transaction rollback/recovery.
 7. The Inventory PostgreSQL concurrency test is checked in but remains non-passing evidence until an opted-in run succeeds.
 8. Product integration event production and subscribed consumer business ownership need owner decisions.
-9. RabbitMQ promotion/dual-deployment and physical broadcast/DLQ topology remain owner-deferred; they are not canonical Kafka blockers.
+9. Kafka + RabbitMQ dual broadcast is the owner-selected target direction; per-destination delivery schema, physical fanout/DLQ topology, and runtime proof remain incomplete and are not canonical Kafka blockers.
 10. The Inventory outbox external test proves successful-row insertion when PostgreSQL runs, but failure injection must still prove state/outcome/outbox rollback together.
 11. Two independent LUNA-class clean-room reconstructions have not run.
 

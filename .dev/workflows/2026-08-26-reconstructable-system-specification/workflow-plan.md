@@ -17,7 +17,7 @@
 - `branch_segment`: `1`
 - `status`: `active`
 - `created_at`: `2026-08-26T19:03:36+08:00`
-- `updated_at`: `2026-08-27T08:57:38+08:00`
+- `updated_at`: `2026-08-27T09:38:37+08:00`
 - `template_source`: `.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
 - `template_version`: `1.4.0`
 - `workflow_locator`: `.dev/workflows/2026-08-26-reconstructable-system-specification/workflow.yaml`
@@ -29,7 +29,7 @@
 - Product or software outcome: Create a repository-native specification baseline from which a low-reasoning-cost AI model can reconstruct the current distributed commerce system without relying on product source code or hidden conversation context.
 - Current lifecycle entry point: Reverse engineering and specification authoring from the current repository implementation, tests, configuration, and retained documents.
 - User constraints: Preserve or improve current quality; make the documentation sufficient after all product source code is removed; optimize clarity for a LUNA-class model.
-- Non-goals: Delete source code; implement RabbitMQ fanout/dual deployment; convert every Inventory command to outbox; push; create a pull request; merge; close Issue #2; publish or release.
+- Non-goals: Delete source code; claim RabbitMQ fanout/dual delivery before destination-aware implementation and proof; invent an InitProductStock event; push; create a pull request; merge; close Issue #2; publish or release.
 
 ## Inputs
 
@@ -114,6 +114,15 @@
 - Validation: Broker-free tests pass by default; stable relay metadata is executable; PostgreSQL/Kafka and clean-room evidence remain fail-closed until run.
 - Commit checkpoint: Kafka decision, Inventory source outbox, event corrections, specifications, tests, and validation evidence.
 
+### RECON-009 — Inventory outbox boundary, retention, and dual-broadcast prerequisites
+
+- Goal: Hide local transaction/UoW mechanics behind capability-specific outbox ports, migrate every current Inventory event-producing stock command to atomic state/outbox persistence, and make retention/dual-broadcast/deletion boundaries reconstruction-safe.
+- Capability slot: `implementation`
+- Owner skill: `slice-implementer`, with architecture and specifications owned by their routed skills.
+- Dependencies: RECON-008, ADR-005, and the owner's follow-up decisions on 2026-08-27.
+- Validation: Broker-free Inventory/full-solution tests; explicit external skip; JSON/YAML/workflow/spec gates; unchanged 100% compliance policy.
+- Commit checkpoint: Inventory outbox application boundary, retention configuration, and dual-broadcast prerequisites.
+
 ## Role Execution Coordination
 
 | Stage | Role / Canonical Path | Owning Skill | Final/Current Disposition | Attempt Summary | Final Integration Owner / Decision | Record or Task Reference |
@@ -122,6 +131,9 @@
 | RECON-007 | `usecase-test-sub-agent` / `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml` | `slice-implementer` | direct | Parent-inline execution selected because the test project move and assertions share one mutation scope | `slice-implementer` / accepted | `tasks/RECON-007.json`; `evidence/inventory-test-role-execution.yaml` |
 | RECON-008 | `outbox-sub-agent` / `.ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml` | `slice-implementer` | direct | One overlapping transaction, SQL, relay, and DI scope; delegated agents were not requested | `slice-implementer` / provisionally accepted | `tasks/RECON-008.json`; `evidence/inventory-outbox-role-execution.yaml` |
 | RECON-008 | `usecase-test-sub-agent` / `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml` | `slice-implementer` | direct | Transaction, contract, and relay tests overlap the same implementation slice | `slice-implementer` / accepted | `tasks/RECON-008.json`; `evidence/inventory-outbox-test-role-execution.yaml` |
+| RECON-009 | `outbox-sub-agent` / `.ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml` | `slice-implementer` | direct | Capability port, adapters, relay, and specs overlap one mutation scope | `slice-implementer` / accepted with dual-destination implementation deferred | `tasks/RECON-009.json`; `evidence/inventory-outbox-boundary-role-execution.yaml` |
+| RECON-009 | `usecase-test-sub-agent` / `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml` | `slice-implementer` | direct | Application/outbox tests share the same slice | `slice-implementer` / accepted with external PostgreSQL gate open | `tasks/RECON-009.json`; `evidence/inventory-outbox-boundary-test-role-execution.yaml` |
+| RECON-009 | `profile-config-sub-agent` / `.ai/assets/sub-agent-role-prompts/profile-config-sub-agent/sub-agent.yaml` | `slice-implementer` | direct | Retention setting is consumed and validated by the relay | `slice-implementer` / accepted | `tasks/RECON-009.json`; `evidence/inventory-outbox-retention-role-execution.yaml` |
 
 ## Approval Gates
 
@@ -130,7 +142,8 @@
 | reverse engineering -> requirement/specification authoring | `approved` | User request and GitHub Issue #2 | None |
 | requirement/design/specification -> product implementation | `not-required` | Product source changes are outside scope | None |
 | failed compliance -> test implementation | `approved` | User request on 2026-08-26 and GitHub Issue #2 | None |
-| architecture/specification -> Inventory source-outbox implementation | `approved` | User decisions on 2026-08-27 and GitHub Issue #2 | Final transaction-port shape remains an owner review gate |
+| architecture/specification -> Inventory reservation source-outbox implementation | `approved/resolved` | User decisions on 2026-08-27 and GitHub Issue #2 | Explicit transaction-port shape was replaced by RECON-009 capability outbox ports |
+| explicit transaction port -> capability outbox ports and remaining Inventory commands | `approved` | User follow-up decisions on 2026-08-27 and GitHub Issue #2 | Dual-broker implementation remains a separate gate |
 
 ## Validation Strategy
 
@@ -163,12 +176,12 @@
 
 ## Progress And Handoff
 
-- Current stage: RECON-008.
+- Current stage: RECON-009.
 - Completed stages: RECON-001 through RECON-004; RECON-005 authored its artifacts and remains blocked on the remediation and unchanged 100% gate.
 - Deferred stages and reasons: RECON-006 cannot close while selected compliance is below 100% and both source-free reconstruction exercises are unrun.
-- Resolved decisions: Kafka canonical; producer owns event meaning/schema; ReserveInventory source outbox provisional; event names corrected; two LUNA-class reconstruction runs required provisionally.
-- Open decisions: final transaction-port shape, outbox retention, other Inventory outbox adoption, RabbitMQ broadcast/dual deployment, and downstream consumer business ownership.
-- Continuation instructions: Read `workflow.yaml`, this plan, `tasks/RECON-008.json`, reports 05-07, ADR-003, and ADR-004; inspect the concrete design, obtain external evidence, and run the unchanged 100% gate.
+- Resolved decisions: Kafka canonical; producer owns event meaning/schema; capability-specific Inventory outbox ports; all current Inventory event-producing commands use source outbox; RetainAll default; Kafka plus RabbitMQ dual broadcast target direction; original-source deletion owner-only; event names corrected; two LUNA-class reconstruction runs required provisionally.
+- Open decisions: per-destination delivery schema, RabbitMQ fanout routing details, concrete Consumer handlers, and external proof.
+- Continuation instructions: Read `workflow.yaml`, this plan, `tasks/RECON-009.json`, reports 05-07, ADR-003, and ADR-005; obtain external evidence and run the unchanged 100% gate.
 - Target policy references: `.dev/standards/WORKFLOW-GATE-POLICY.md`, `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`, `.dev/TEAM-GIT-FLOW-RULES.MD`, `.dev/project-config.yaml`.
 - Registered handoff checkpoint: None; this session remains active.
 - Branch history and checkpoint handoffs: Segment 1 started from `main` at `59d651e`.

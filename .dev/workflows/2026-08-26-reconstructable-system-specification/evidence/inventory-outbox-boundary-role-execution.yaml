@@ -1,0 +1,72 @@
+role_execution_id: "RECON-009-outbox-sub-agent-01"
+role_asset_id: "outbox-sub-agent"
+role_path: ".ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml"
+owning_skill: "slice-implementer"
+stage_id: "RECON-009"
+applicability:
+  result: "applies"
+  reason: "The slice replaces an Application-visible transaction lifecycle with capability-specific Inventory outbox ports and extends atomic staging to every current event-producing stock command."
+selection:
+  disposition: "direct"
+  reason: "Production, SQL, relay, and specification changes overlap one bounded mutation scope; delegated agents were not requested."
+input_envelope:
+  goal: "Expose outbox capabilities to Application code while keeping the local transaction or Unit of Work private to PostgreSQL adapters."
+  scope:
+    - "src/Inventory/DomainCore/"
+    - ".dev/adr/"
+    - ".dev/specs/domains/inventory-item/"
+    - ".dev/specs/reconstruction/"
+  non_goals:
+    - "Implement RabbitMQ or dual-destination delivery state."
+    - "Invent an integration event for InitProductStock."
+  source_refs:
+    - ".dev/requirement/reconstructable-system-baseline.md"
+    - ".dev/adr/ADR-005-inventory-outbox-application-boundary.md"
+  mandatory_references:
+    - ".ai/assets/sub-agent-role-prompts/outbox-sub-agent/references/implementation-playbook.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md"
+    - ".ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md"
+  constraints:
+    - "Producer use cases own event meaning and stable delivery identity."
+    - "State and outbox intent commit in one local transaction."
+    - "A single PublishedAt cannot be presented as dual-broker completion."
+  stop_conditions:
+    - "Return after capability ports, adapters, relay support, tests, and durable design evidence are integrated."
+permissions:
+  read_scope: ["src/Inventory/", "src/BC-Contracts/", ".dev/"]
+  write_scope: ["src/Inventory/", "tests/InventoryControl.Tests/", ".dev/"]
+  external_actions: []
+  secret_handling: "no-secret-values"
+executor:
+  kind: "parent-inline"
+  identity: "root-workflow-parent"
+  runtime_support_verified: true
+invocation_evidence: null
+output:
+  expected: ["capability-specific outbox ports", "atomic PostgreSQL adapters", "multi-event relay support", "durable architecture decision"]
+  returned: ["IInventoryStockOutbox", "IInventoryReservationOutbox", "PostgresInventoryStockOutbox", "revised PostgresInventoryReservationRepository", "ADR-005"]
+  evidence_refs:
+    - "src/Inventory/DomainCore/InventoryControl.Applications/Outbox/InventoryIntegrationOutbox.cs"
+    - "src/Inventory/DomainCore/InventoryControl.Applications/Reservations/InventoryReservation.cs"
+    - "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/PostgresInventoryStockOutbox.cs"
+    - "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/PostgresInventoryReservationRepository.cs"
+    - ".dev/adr/ADR-005-inventory-outbox-application-boundary.md"
+  bounded: true
+attempts:
+  - number: 1
+    disposition: "direct"
+    executor: { kind: "parent-inline", identity: "root-workflow-parent", runtime_support_verified: true }
+    invocation_evidence: null
+    outcome: "completed"
+    correctable_failure: false
+    material_state_change: "DecreaseStock, IncreaseStock, Restock, and successful ReserveInventory now delegate atomic state/outbox persistence through capability-specific ports."
+    authorization_source: ["User decisions on 2026-08-27", "GitHub Issue #2"]
+    evidence_refs: ["src/Inventory/", ".dev/adr/ADR-005-inventory-outbox-application-boundary.md"]
+fallback:
+  considered: false
+  reason: "Direct execution was selected initially."
+  resulting_disposition: null
+final_integration_owner:
+  owner: "slice-implementer parent stage owner"
+  decision: "accepted-with-dual-destination-implementation-deferred"
+  evidence_refs: ["tests/InventoryControl.Tests/", ".dev/specs/reconstruction/persistence-contracts.json"]

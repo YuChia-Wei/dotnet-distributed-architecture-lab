@@ -1,0 +1,199 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-08-26-reconstructable-system-specification",
+  "task_id": "RECON-009",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-08-26-reconstructable-system-specification",
+  "status": "in_progress",
+  "created_at": "2026-08-27T09:26:52+08:00",
+  "updated_at": "2026-08-27T09:38:37+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-5",
+  "reasoning_effort": "unspecified",
+  "workflow_locator": ".dev/workflows/2026-08-26-reconstructable-system-specification/workflow.yaml",
+  "scope": {
+    "goal": "Replace the explicit Inventory transaction lifecycle with capability-specific outbox ports, migrate all Inventory event-producing stock commands to atomic state/outbox persistence, add explicit retention configuration, and record the dual-broadcast and source-deletion boundaries.",
+    "target": "Inventory Application/Infrastructure outbox slice, broker-free tests, architecture/requirements/specifications, operations docs, and workflow evidence",
+    "files": [],
+    "constraints": [
+      "Application depends on outbox capabilities; local transaction or Unit of Work remains an Infrastructure detail.",
+      "DecreaseStock, IncreaseStock, Restock, and successful ReserveInventory state plus event intent commit atomically.",
+      "InitProductStock remains without an invented integration event.",
+      "Published Inventory outbox rows default to unlimited retention with one validated configuration path.",
+      "Kafka plus RabbitMQ dual broadcast is a target direction, but no active claim is allowed before destination-aware delivery state and fanout routing exist.",
+      "External-service tests remain opt-in and skipped results are never passing evidence.",
+      "Original-source deletion is repository-owner-only and prohibited for AI execution."
+    ],
+    "non_goals": [
+      "Implement RabbitMQ exchange bindings, per-consumer queues, or dual-destination publisher routing in this slice.",
+      "Add an integration event to InitProductStock.",
+      "Delete source, push, open a pull request, merge, close Issue #2, or publish."
+    ]
+  },
+  "inputs": {
+    "requirements": ["INV-004", "INV-006", "INV-007", "INV-009", "INV-010", "INT-004", "INT-009", "NFR-004", "NFR-011"],
+    "specifications": [
+      ".dev/specs/domains/inventory-item/usecase/decrease-stock.json",
+      ".dev/specs/domains/inventory-item/usecase/increase-stock.json",
+      ".dev/specs/domains/inventory-item/usecase/restock.json",
+      ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json",
+      ".dev/specs/reconstruction/message-contracts.json",
+      ".dev/specs/reconstruction/persistence-contracts.json"
+    ],
+    "architecture_decisions": [
+      "Transactional Outbox is the Application-visible capability; Unit of Work is an optional private adapter mechanism.",
+      "All Inventory commands that emit integration events use source outbox.",
+      "RetainAll is the default Inventory published-row retention policy.",
+      "Kafka plus RabbitMQ dual broadcast requires independent destination state and remains unimplemented.",
+      "Original-source deletion is owner-only."
+    ],
+    "user_constraints": [
+      "Prefer outbox over a broadly exposed Unit of Work for the current architecture.",
+      "Do not limit retention now, but make the adjustment location explicit.",
+      "Adopt the source-outbox recommendation for other applicable Inventory commands.",
+      "Treat dual broadcast as the likely direction.",
+      "Provide concrete consumer-ownership examples.",
+      "Do not delete source; only the owner may do so."
+    ]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "production architecture, specification, source, configuration, and test changes",
+      "authorization_source": ["User decisions on 2026-08-27", "GitHub Issue #2"],
+      "pending_decision": ""
+    },
+    "implementation_contract": {
+      "intent": "refactor",
+      "execution_mode": "generic",
+      "overlays": [],
+      "authorization_source": ["User decisions on 2026-08-27", "GitHub Issue #2"],
+      "normative_truth": [
+        ".dev/requirement/reconstructable-system-baseline.md",
+        ".dev/adr/ADR-005-inventory-outbox-application-boundary.md",
+        "PACKET-EA6A3ACE",
+        "PACKET-701FC7A9",
+        "PACKET-6AD8DBCF"
+      ],
+      "finding_evidence": [
+        "DecreaseStock, IncreaseStock, and Restock saved the aggregate before direct broker publication.",
+        "ReserveInventory exposed Begin, Stage, and Commit through Application transaction interfaces.",
+        "InventoryIntegrationOutbox had one PublishedAt and therefore could not represent two broker destinations independently."
+      ],
+      "subject_revision": "fd712c35c8741a9dcf105c5ad081eecc2be532ba",
+      "acceptance_criteria": [
+        "No Inventory event-producing use case directly publishes after save.",
+        "Application exposes IInventoryReservationOutbox and IInventoryStockOutbox, not a generic Unit of Work or explicit transaction lifecycle.",
+        "PostgreSQL ordinary stock updates use expected-stock optimistic concurrency and stage the outgoing event in the same local transaction.",
+        "Relay supports decreased, increased, and returned event types with stable ProductId partition keys.",
+        "Retention defaults to RetainAll and finite retention fails fast without positive days.",
+        "Dual-broadcast prerequisites, concrete consumer ownership examples, and owner-only source deletion are durable and unambiguous."
+      ]
+    },
+    "test_execution_contract": null,
+    "role_execution_records": [
+      {
+        "role_execution_id": "RECON-009-outbox-sub-agent-01",
+        "role_asset_id": "outbox-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "RECON-009",
+        "applicability": {"result": "applies", "reason": "The slice changes Inventory atomic state/outbox boundaries and relay behavior."},
+        "selection": {"disposition": "direct", "reason": "Production, SQL contract, and tests overlap one bounded mutation scope; delegated agents were not requested."},
+        "record_ref": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-boundary-role-execution.yaml"
+      },
+      {
+        "role_execution_id": "RECON-009-usecase-test-sub-agent-01",
+        "role_asset_id": "usecase-test-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "RECON-009",
+        "applicability": {"result": "applies", "reason": "Outbox delegation, identity, retention, rollback, and external skip boundaries require executable GWT oracles."},
+        "selection": {"disposition": "direct", "reason": "Tests share the same code/spec integration scope; delegated agents were not requested."},
+        "record_ref": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-boundary-test-role-execution.yaml"
+      },
+      {
+        "role_execution_id": "RECON-009-profile-config-sub-agent-01",
+        "role_asset_id": "profile-config-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/profile-config-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "RECON-009",
+        "applicability": {"result": "applies", "reason": "Inventory outbox retention introduces a validated runtime configuration surface."},
+        "selection": {"disposition": "direct", "reason": "The setting is consumed by the same relay and tested in the same bounded slice."},
+        "record_ref": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-retention-role-execution.yaml"
+      }
+    ],
+    "spec_compliance": {
+      "selected": true,
+      "activation_source": ["ReserveInventory problem frame", "AGENTS.md mandatory 100% gate"],
+      "expected_outcome": "100-percent-pass"
+    },
+    "steps": [
+      "Record the Outbox versus Unit of Work decision and the dual-destination prerequisite.",
+      "Replace the reservation transaction lifecycle with an atomic outbox port.",
+      "Move decrease, increase, and restock from direct publication to atomic stock/outbox persistence.",
+      "Add validated retention configuration and relay message-type coverage.",
+      "Update reconstruction specs, consumer ownership examples, and owner-only deletion boundary.",
+      "Run focused and full validation without counting skipped external checks as passing."
+    ],
+    "validation": [
+      "Broker-free Inventory tests pass by default.",
+      "External PostgreSQL tests remain skipped without explicit opt-in.",
+      "Inventory and full solution build/tests pass.",
+      "JSON/YAML/workflow/spec validators pass; unavailable external evidence remains non-passing."
+    ],
+    "commit_checkpoint": "Inventory outbox application boundary, retention configuration, and dual-broadcast prerequisites checkpoint.",
+    "deferred_items": [
+      "Per-destination outbox delivery schema and migration.",
+      "RabbitMQ exchange, queue, binding, DLQ, and Wolverine dual-publisher routing.",
+      "Real PostgreSQL atomicity/concurrency proof for ordinary stock commands.",
+      "Concrete Consumer handler implementation decisions."
+    ]
+  },
+  "results": {
+    "summary": "Replaced the Application-visible reservation transaction lifecycle with capability-specific outbox ports, migrated all current Inventory event-producing commands to atomic state/outbox persistence, added explicit RetainAll configuration, and documented dual-broadcast prerequisites and owner-only source deletion. Broker-free validation passes; PostgreSQL proof and the unchanged 100% gate remain open.",
+    "files_changed": [
+      "src/Inventory/DomainCore/InventoryControl.Applications/",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/",
+      "src/Inventory/Presentation/InventoryControl.WebApi/appsettings.json",
+      "docker-compose/docker-compose.yml",
+      "tests/InventoryControl.Tests/",
+      "tests/README.md",
+      ".dev/adr/",
+      ".dev/requirement/",
+      ".dev/specs/",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/",
+      ".dev/operations/",
+      ".dev/workflows/2026-08-26-reconstructable-system-specification/"
+    ],
+    "approval_evidence": ["User decisions on 2026-08-27 and GitHub Issue #2."],
+    "test_execution": [
+      {"command": "dotnet build tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false /p:UseSharedCompilation=false", "outcome": "passed", "evidence": "0 warnings, 0 errors."},
+      {"command": "dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-build --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false", "outcome": "passed", "evidence": "30 passed, 3 external PostgreSQL tests skipped, 0 failed."},
+      {"command": "dotnet test MQArchLab.slnx --no-build --no-restore --nologo --verbosity minimal -m:1 /nodeReuse:false", "outcome": "passed", "evidence": "66 passed, 3 external PostgreSQL tests skipped, 0 failed."},
+      {"command": "bash ./.ai/scripts/check-spec-compliance.sh .dev/specs/domains/inventory-item/usecase/reserve-inventory.json RECON-009", "outcome": "passed-best-effort", "evidence": "No listed mapper, projection, or DTO omissions; the manual 100% gate remains authoritative."},
+      {"command": "Inventory ExternalIntegration profile", "outcome": "not-run", "evidence": "No compatible PostgreSQL execution evidence was available; skipped results were not counted as passing."}
+    ],
+    "role_execution_aggregation": [
+      {"stage_id": "RECON-009", "record_id": "RECON-009-outbox-sub-agent-01", "disposition": "direct", "integration_decision": "accepted-with-dual-destination-implementation-deferred", "evidence": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-boundary-role-execution.yaml"},
+      {"stage_id": "RECON-009", "record_id": "RECON-009-usecase-test-sub-agent-01", "disposition": "direct", "integration_decision": "accepted-with-external-postgresql-gate-open", "evidence": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-boundary-test-role-execution.yaml"},
+      {"stage_id": "RECON-009", "record_id": "RECON-009-profile-config-sub-agent-01", "disposition": "direct", "integration_decision": "accepted", "evidence": ".dev/workflows/2026-08-26-reconstructable-system-specification/evidence/inventory-outbox-retention-role-execution.yaml"}
+    ],
+    "spec_compliance": {"outcome": "failed-closed", "coverage_percent": 89, "evidence": [".dev/workflows/2026-08-26-reconstructable-system-specification/reports/05-spec-compliance-report.md"]},
+    "validation_evidence": [
+      "Effective compliance packet PACKET-D30CE87BD1F49C6BF04E18E179DEFFB9152CC2FD464D0A4E1B3D6B8841928A72 freshness verified.",
+      "Codebase graph reindexed and DecreaseStock traces to SaveAndStageAsync without direct PublishAsync.",
+      "Focused Inventory build/tests and full solution default-profile tests passed.",
+      "67 JSON files and 23 selected problem-frame/workflow YAML files parsed.",
+      "Workflow artifact validation and target AI-context validation passed.",
+      "Changed/new Markdown local links passed for 26 files; git diff --check passed with line-ending warnings only.",
+      "External PostgreSQL tests remain default-skipped and non-passing."
+    ],
+    "commits": [],
+    "follow_up_needed": true
+  }
+}

@@ -61,7 +61,7 @@ Current use cases include product create/update/delete/query, order place/ship/d
 
 - Product and Inventory persistence use Dapper + Npgsql repositories with PostgreSQL.
 - Order includes both a Dapper domain repository and `OrderEventSourcingRepository`; event sourcing is an explicit Orders capability rather than a universal default.
-- Orders atomically commits domain events, read model state, and its source outbox. Inventory `ReserveInventory` uses an explicit application transaction port so the reservation outcome and `InventoryIntegrationOutbox` row commit or roll back together; other Inventory stock commands have not yet adopted this source-outbox pattern.
+- Orders atomically commits domain events, read model state, and its source outbox. Inventory exposes capability-specific outbox ports rather than a generic Unit of Work: `IInventoryReservationOutbox` atomically commits reservation outcome/state/event, while `IInventoryStockOutbox` atomically commits decrease/increase/restock state and event with an expected-stock concurrency check. Database transaction/UoW mechanics remain private Infrastructure details.
 - Source-outbox relays are Infrastructure adapters: they do not decide event meaning. They publish the producer-created contract with stable delivery metadata and bounded retry/park behavior.
 - Product source projects do not currently reference EF Core; the retired target validation tooling is no longer part of the active repository.
 
@@ -70,7 +70,7 @@ Current use cases include product create/update/delete/query, order place/ship/d
 - WolverineFx is the messaging abstraction used by APIs and consumers.
 - Kafka is the canonical broker and event-driven verification path. Inventory reservation events use normalized `ProductId` as their Kafka partition key so events for one product can preserve partition order; no cross-partition global ordering is promised.
 - Kafka can deliver one topic to multiple independent consumer groups. A future broadcast requirement therefore triggers a topology comparison, not an automatic RabbitMQ migration.
-- RabbitMQ packages and logical request/reply routing remain as a deferred compatibility profile. Its Compose service is commented out, current shared queue names describe competing-consumer behavior rather than fanout, and physical exchange/per-consumer queue/binding/DLQ behavior requires a separate owner decision and runtime proof.
+- RabbitMQ packages and logical request/reply routing remain as a compatibility profile. The owner selected Kafka + RabbitMQ dual broadcast as the target direction, but current shared queue names still describe competing-consumer behavior and the code still selects one broker profile. Dual delivery is therefore not implemented: it requires exchange + per-consumer queues and one independent delivery state per broker destination before runtime proof.
 - The producing bounded context owns integration-event meaning, schema, and compatibility. Consumers own only their reactions, projections, idempotency, retry, and dead-letter handling.
 - Known logical channels include `orders.integration.events`, `products.integration.events`, `inventory.integration.events`, `inventory.requests`, and `orders.outbound.replies`.
 - Orders reserves inventory through `ReserveInventoryRequestContract` / `ReserveInventoryResponseContract` request/reply over Wolverine, not through direct domain references.

@@ -20,7 +20,7 @@ Treating both profiles as equally authoritative created ambiguity about partitio
 - The producing bounded context owns integration-event meaning, schema, compatibility, and partition-key selection.
 - Inventory reservation uses normalized `ProductId` as its Kafka partition key; ordering is promised only within that partition, never globally across partitions.
 - Independent Kafka subscribers use distinct consumer groups.
-- RabbitMQ remains a deferred compatibility profile. Current shared queue names are competing-consumer topology and are not a broadcast contract.
+- RabbitMQ remains a compatibility profile. Current shared queue names are competing-consumer topology and are not a broadcast contract. ADR-005 later selected Kafka + RabbitMQ dual broadcast as a target direction, with implementation gated on destination-aware outbox state and fanout routing.
 - Migration to RabbitMQ, promotion to an equally required profile, or dual deployment requires a separate owner decision supported by topology and workload evidence.
 
 ## Consequences

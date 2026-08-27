@@ -18,7 +18,7 @@
 - Test level: `application`
 - Given: no inventory row exists and initial stock is non-negative.
 - When: `IInitProductStockUseCase.ExecuteAsync` runs.
-- Then: one item is persisted; the result contains its id; the product-stock-initialized event is published after persistence.
+- Then: one item is persisted and the result contains its stock value. No integration event is staged because no producer-owned initialization event contract exists.
 
 ### Scenario 2: reject invalid initial stock
 

@@ -6,8 +6,8 @@ Aggregate-focused verification for `InventoryItem` stock mutation rules and busi
 
 ## Implementation Status
 
-- Status: `planned`
-- There is no current Inventory test project; all scenarios below are future verification targets.
+- Status: `partially-implemented`
+- Current aggregate/use-case anchors are in `tests/InventoryControl.Tests/InventoryStockUseCaseTests.cs`; the remaining quantity quality-uplift cases are still required.
 
 ## Related Production Spec
 

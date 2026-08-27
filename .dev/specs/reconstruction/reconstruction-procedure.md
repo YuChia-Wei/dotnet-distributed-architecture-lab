@@ -34,8 +34,8 @@ Exit gate: all use-case tests pass, including no-side-effect failure paths and s
 1. Create database schemas from `persistence-contracts.json`.
 2. Implement Products state repository/query repository.
 3. Implement Orders event store, read model, native source outbox, and relay as one durability capability.
-4. Implement Inventory aggregate/query repositories and `ReserveInventory` through an explicit Application transaction port. The use case creates the successful event; the PostgreSQL adapter commits stock, terminal outcome, and `InventoryIntegrationOutbox` together.
-5. Implement the Inventory relay with stable `OperationId`, normalized ProductId partition key, retained `PublishedAt` evidence, bounded retry, and park-after-five behavior. Do not silently apply this source-outbox design to other Inventory commands.
+4. Implement Inventory aggregate/query repositories plus capability-specific outbox ports. `IInventoryReservationOutbox` commits stock, terminal outcome, and the successful event together. `IInventoryStockOutbox` commits decrease/increase/restock state and the corresponding producer-created event together with an expected-stock concurrency predicate. Keep local transaction/UoW types private to Infrastructure; do not add a generic Application `IUnitOfWork`.
+5. Implement the Inventory relay for all three Inventory stock-event types with normalized ProductId partition keys, stable outbox message IDs, configurable published-row retention, bounded retry, and park-after-five behavior. Reservation reuses `OperationId`; non-idempotent stock commands generate a new UUID v7 message ID per accepted command.
 6. Implement project-owned integration publisher/gateway adapters and stable delivery metadata.
 
 Exit gate: database-backed concurrency, atomicity, idempotency, retry identity, rollback, and replay tests pass.
@@ -48,7 +48,7 @@ Exit gate: HTTP contract tests and InMemory broker routing tests pass.
 
 ## Phase 6 — Hosts, Containers, And Observability
 
-Create three APIs, three Consumers, six Dockerfiles, Compose services, broker/database dependencies, and OTLP telemetry. Kafka is canonical. Use stable partition keys for per-entity ordering and distinct consumer groups for independent subscribers. RabbitMQ remains a deferred compatibility profile; a shared queue is not a broadcast design.
+Create three APIs, three Consumers, six Dockerfiles, Compose services, broker/database dependencies, and OTLP telemetry. Kafka is canonical. Use stable partition keys for per-entity ordering and distinct consumer groups for independent subscribers. Preserve RabbitMQ compatibility. Do not enable the target Kafka + RabbitMQ dual broadcast until per-destination delivery state and exchange plus per-consumer queue routing are implemented; a shared queue is not broadcast.
 
 Exit gate: InMemory hosts start without external broker persistence; Kafka passes fail-fast configuration plus actual connectivity/keyed-order verification; RabbitMQ fails fast for its declared compatibility configuration without claiming unproven exchange/queue topology; container restore layers include recursive project metadata.
 
@@ -66,9 +66,9 @@ The ordinary command must not require PostgreSQL, Kafka, or RabbitMQ. External-s
 
 Then run the selected problem-frame compliance gate, JSON/link validators, database failure-injection tests, and canonical Kafka gates. Record each result as passed, failed, blocked-by-environment, not-applicable, or owner-deferred. Only passed, or an explicitly policy-accepted owner deferral on a non-canonical scope, can satisfy a required gate.
 
-Finally execute the acceptance spec twice in isolated disposable copies. Each copy removes `src/`, `tests/`, `.git/`, `bin/`, `obj/`, code-knowledge caches, uncommitted state, and conversation history before a fresh LUNA-class agent starts. The two agents must not read each other's outputs. Both reconstructed systems must pass the same contract and external-service gates.
+Finally execute the acceptance spec twice in isolated disposable copies. Build each copy from an explicit allowlist that omits `src/`, `tests/`, `.git/`, `bin/`, `obj/`, code-knowledge caches, uncommitted state, and conversation history; do not delete those paths from the original repository. The two agents must not read each other's outputs. Both reconstructed systems must pass the same contract and external-service gates.
 
-Passing these exercises is evidence for an owner decision; it does not authorize deletion of the original source. Original-source deletion remains a separate explicit action.
+Passing these exercises is evidence for an owner decision; it does not authorize deletion of the original source. Only the repository owner may perform original-source deletion. AI agents must not execute that operation, even after all gates pass.
 
 ## Fresh-Context Review
 

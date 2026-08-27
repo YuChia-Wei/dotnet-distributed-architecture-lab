@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using InventoryControl.Applications.Repositories;
 using InventoryControl.Applications.Queries;
+using InventoryControl.Applications.Outbox;
 using InventoryControl.Applications.Reservations;
 
 namespace InventoryControl.Infrastructure;
@@ -25,11 +26,17 @@ public static class ServiceCollectionExtensions
             sp => sp.GetRequiredService<InventoryItemDomainRepository>());
         services.AddScoped<IInventoryItemQueryRepository>(
             sp => sp.GetRequiredService<InventoryItemDomainRepository>());
-        services.AddScoped<IInventoryReservationTransactionFactory>(
+        services.AddScoped<IInventoryStockOutbox>(
+            sp => new PostgresInventoryStockOutbox(
+                connectionString,
+                sp.GetRequiredService<IDomainEventDispatcher>()));
+        services.AddScoped<IInventoryReservationOutbox>(
             _ => new PostgresInventoryReservationRepository(connectionString));
         services.AddScoped<IIntegrationEventPublisher, IntegrationEventPublisher>();
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-        if (configuration.GetValue("Messaging:OutboxRelay:Enabled", false))
+        var outboxOptions = InventoryOutboxRelayOptions.FromConfiguration(configuration);
+        services.AddSingleton(outboxOptions);
+        if (outboxOptions.Enabled)
         {
             services.AddHostedService<InventoryIntegrationOutboxRelay>();
         }

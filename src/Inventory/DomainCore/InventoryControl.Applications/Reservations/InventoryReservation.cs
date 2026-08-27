@@ -1,4 +1,5 @@
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
+using InventoryControl.Applications.Outbox;
 using Lab.BuildingBlocks.Integrations;
 
 namespace InventoryControl.Applications.Reservations;
@@ -22,25 +23,21 @@ public sealed record InventoryReservationOutcome(
     string? FailureReason,
     bool WasAlreadyProcessed);
 
-public interface IInventoryReservationTransactionFactory
+/// <summary>
+/// Resolves a reservation and atomically stages its successful integration event.
+/// </summary>
+/// <remarks>
+/// The port describes the outbox capability. Database transaction or Unit of Work mechanics remain
+/// private to the Infrastructure adapter.
+/// </remarks>
+public interface IInventoryReservationOutbox
 {
-    Task<IInventoryReservationTransaction> BeginAsync(CancellationToken cancellationToken);
-}
-
-public interface IInventoryReservationTransaction : IAsyncDisposable
-{
-    Task<InventoryReservationOutcome> ReserveAsync(
+    Task<InventoryReservationOutcome> ReserveAndStageAsync(
         Guid operationId,
         Guid productId,
         int quantity,
+        Func<InventoryReservationOutcome, InventoryOutboxMessage> successfulMessageFactory,
         CancellationToken cancellationToken);
-
-    Task StageAsync(
-        IIntegrationEvent integrationEvent,
-        IntegrationMessageDelivery delivery,
-        CancellationToken cancellationToken);
-
-    Task CommitAsync(CancellationToken cancellationToken);
 }
 
 public interface IReserveInventoryUseCase
@@ -51,7 +48,7 @@ public interface IReserveInventoryUseCase
 }
 
 public sealed class ReserveInventoryUseCase(
-    IInventoryReservationTransactionFactory transactionFactory) : IReserveInventoryUseCase
+    IInventoryReservationOutbox outbox) : IReserveInventoryUseCase
 {
     public async Task<ReserveInventoryOutput> ExecuteAsync(
         ReserveInventoryInput input,
@@ -72,26 +69,20 @@ public sealed class ReserveInventoryUseCase(
             return Invalid(input.OperationId, "QuantityMustBePositive");
         }
 
-        await using var transaction = await transactionFactory.BeginAsync(cancellationToken);
-        var outcome = await transaction.ReserveAsync(
+        var outcome = await outbox.ReserveAndStageAsync(
             input.OperationId,
             input.ProductId,
             input.Quantity,
-            cancellationToken);
-
-        if (outcome.IsSuccess)
-        {
-            await transaction.StageAsync(
+            successfulOutcome => new InventoryOutboxMessage(
                 new ProductStockDecreasedIntegrationEvent(
-                    outcome.InventoryItemId!.Value,
-                    outcome.ProductId,
-                    outcome.Quantity,
-                    outcome.RemainingStock!.Value),
-                new IntegrationMessageDelivery(outcome.OperationId, outcome.ProductId.ToString("N")),
-                cancellationToken);
-        }
-
-        await transaction.CommitAsync(cancellationToken);
+                    successfulOutcome.InventoryItemId!.Value,
+                    successfulOutcome.ProductId,
+                    successfulOutcome.Quantity,
+                    successfulOutcome.RemainingStock!.Value),
+                new IntegrationMessageDelivery(
+                    successfulOutcome.OperationId,
+                    successfulOutcome.ProductId.ToString("N"))),
+            cancellationToken);
 
         return new ReserveInventoryOutput(
             outcome.OperationId,

@@ -9,7 +9,7 @@
   "aggregateId": "Guid",
   "method": "InventoryItem.Restock",
   "domainEvent": "InventoryControl.Domains.DomainEvents.StockReturned",
-  "repository": "IInventoryItemDomainRepository",
+  "repository": "IInventoryItemDomainRepository for load plus IInventoryStockOutbox for atomic state/event commit",
   "inputType": "RestockInput",
   "output": "Result<RestockOutput>",
   "domainModelNotes": [
@@ -22,8 +22,9 @@
   ],
   "constructorPostconditions": [
     "Current stock is increased by the returned quantity.",
-    "A ProductStockReturnedIntegrationEvent is published after persistence."
+    "IInventoryStockOutbox atomically updates stock and inserts ProductStockReturnedIntegrationEvent with a UUID v7 message ID and ProductId N partition key.",
+    "The update matches the expected pre-mutation stock and fails closed on a concurrent change."
   ],
-  "requirements": ["INV-003", "INV-004"],
+  "requirements": ["INV-003", "INV-004", "INV-009", "INT-004"],
   "qualityUplift": "Current aggregate permits non-positive restock values; reconstruction must reject them without side effects."
 }

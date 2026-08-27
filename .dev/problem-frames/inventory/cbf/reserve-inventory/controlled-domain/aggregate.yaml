@@ -15,8 +15,8 @@ contracts:
     - { id: INV4, rule: "For each successful OperationId, exactly one InventoryIntegrationOutbox row carries that same stable Id." }
 
 behavior:
-  signature: "IReserveInventoryUseCase.ExecuteAsync(ReserveInventoryInput, CancellationToken) through IInventoryReservationTransactionFactory"
-  persistence_boundary: "The Application use case creates the event and explicitly controls an IInventoryReservationTransaction; PostgresInventoryReservationRepository atomically persists stock, operation outcome, and outbox without owning business meaning."
+  signature: "IReserveInventoryUseCase.ExecuteAsync(ReserveInventoryInput, CancellationToken) through IInventoryReservationOutbox"
+  persistence_boundary: "The Application use case supplies the successful event factory to a capability-specific outbox port; PostgresInventoryReservationRepository privately controls the local transaction and atomically persists stock, operation outcome, and outbox without owning business meaning."
 
 domain_events:
   - name: "Lab.BoundedContextContracts.Inventory.IntegrationEvents.ProductStockDecreasedIntegrationEvent"

@@ -17,6 +17,6 @@ $env:INVENTORY_TEST_POSTGRES_CONNECTION_STRING = "Host=localhost;Port=5435;Datab
 dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --filter "Category=ExternalIntegration"
 ```
 
-The target database must already contain `InventoryItems`, `InventoryReservationOperations`, and `InventoryIntegrationOutbox`; apply both Inventory migrations documented in `.dev/operations/mq-topology.md` for an existing volume.
+The target database must already contain `InventoryItems`, `InventoryReservationOperations`, and `InventoryIntegrationOutbox`; apply both Inventory migrations documented in `.dev/operations/mq-topology.md` for an existing volume. The opted-in profile covers reservation concurrency plus ordinary stock/outbox atomic commit and expected-stock concurrency. Without the opt-in, all such tests are reported as skipped and remain non-passing external evidence.
 
 Without both environment variables, the external test is skipped. A skipped external test is not passing evidence for PostgreSQL locking, reservation/outbox atomicity, or rollback behavior; release or reconstruction gates that require this evidence remain open until an opted-in run passes.

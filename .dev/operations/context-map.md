@@ -37,7 +37,7 @@ It is limited to relationships that can be traced back to:
 - Shared contracts belong under `src/BC-Contracts/`, not inside a single bounded context.
 - Eventual consistency is expected for inter-context propagation.
 - Kafka is canonical. Multiple independent subscribers use distinct consumer groups; this is the current broadcast-style delivery mechanism.
-- RabbitMQ remains a deferred compatibility profile. Current shared queue names imply competing consumers and must not be described as fanout without an exchange plus one queue per subscriber.
+- RabbitMQ remains a compatibility profile. Kafka + RabbitMQ dual broadcast is the target direction, but current shared queue names imply competing consumers and must not be described as fanout without an exchange, one queue per subscriber, and per-destination delivery state.
 - Runtime documentation must distinguish clearly between:
   - active, code-backed routes
   - legacy or unclear routes that still exist in runtime configuration
