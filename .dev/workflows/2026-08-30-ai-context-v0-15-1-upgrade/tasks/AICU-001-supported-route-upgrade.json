@@ -8,7 +8,7 @@
   "owner_skill": "ai-context-governance",
   "status": "in_progress",
   "created_at": "2026-08-30T18:16:45+08:00",
-  "updated_at": "2026-08-30T22:14:45+08:00",
+  "updated_at": "2026-08-30T22:30:00+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "GPT-5",
   "reasoning_effort": "unspecified",
@@ -22,15 +22,15 @@
   "execution": {
     "steps": ["Record direct-jump rejection", "Apply v0.14.0", "Apply v0.15.0", "Apply v0.15.1"],
     "validation": ["Package payload validation", "Plan and receipt validation", "Target AI-context gate"],
-    "last_completed_step": "Finalized v0.14.0, measured two complete v0.15.0 applies at about 45 seconds, fully rolled back the audit transaction, completed ASM-20260830-002, and prepared the exact v0.15.0 target-gate projection required before final planning.",
-    "next_action": "Commit all v0.15.0 final-transaction preconditions, regenerate the plan and candidate-authority decision, then keep active HEAD fixed through apply, receipt binding, authority finalization, and terminal validation."
+    "last_completed_step": "Finalized v0.15.0 transaction 2bc517d97800823bd849429536cf4ce7d0076eef07174e9584d131dcb318290e with all 50 operations, a supervised 33-test target validation, ready effective-rule packets, a bound terminal receipt, and checkpoint 7e3d204.",
+    "next_action": "Clear the checkpointed v0.15.0 pending receipt, then plan and execute the supported v0.15.0 to v0.15.1 edge from the clean handoff checkpoint."
   },
   "results": {
-    "summary": "v0.14.0 is finalized and v0.15.0 is measured materially faster; the post-upgrade audit and exact target-gate projection are ready for the final clean transaction.",
+    "summary": "v0.14.0 and v0.15.0 are finalized; v0.15.0 completed in about 42 seconds for 50 operations and passed its supervised and final target gates.",
     "files_changed": [".ai/**", ".agents/**", ".claude/**", ".codex/agents/**", ".dev/ai-context/tooling/**", ".dev/assessments/ASM-20260830-001/**", ".dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/**"],
-    "tests_run": ["33 target-owned unittest checks", "pre-finalization target AI-context gate", "assessment artifact validator", "workflow artifact validator"],
+    "tests_run": ["33 target-owned unittest checks", "pre-finalization target AI-context gate", "final target AI-context gate", "assessment artifact validator", "workflow artifact validator"],
     "finding_status": "in_progress",
-    "residual_risk": "The v0.15.0 rollback requires recovery replay at executable shell paths, and active HEAD must remain fixed throughout the final transaction.",
+    "residual_risk": "The v0.15.0 rollback defect required recovery replay at executable shell paths; verify whether v0.15.1 retains that behavior if rollback is exercised.",
     "follow_up_needed": true
   }
 }
