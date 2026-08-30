@@ -19,7 +19,7 @@
 - `current_phase`: `remediation-planning`
 - `artifact_root`: `.dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade`
 - `created_at`: `2026-08-30T18:16:45+08:00`
-- `updated_at`: `2026-08-30T18:16:45+08:00`
+- `updated_at`: `2026-08-30T18:26:45+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#3`
@@ -51,9 +51,9 @@
 
 ## Reconciliation Decisions For v0.14.0
 
-- Add narrow tracking for the five selected framework-managed `.codex/agents/*.toml` paths; do not broaden tracking outside `.codex/agents/`.
+- Narrow `.gitignore` to ignore only root `.codex/*.toml`; keep `.codex/agents/**` and `.codex/skills/**` visible without negation rules so the package planner does not misclassify selected framework-managed paths as ignored.
 - Preserve target semantics in `.editorconfig`, `.github/pull_request_template.md`, and `AGENTS.md`; merge only compatible incoming governance requirements.
-- Preserve `.dev/problem-frames/README.MD` and `.dev/specs/README.MD` as target product truth. Reject incoming source-framework wording that says no active product frames or specs exist.
+- Keep target problem-frame and spec truth in the target-template `INDEX` files, where the current catalogs already enumerate every active target artifact. Restore the two unchanged framework-managed README files to their exact released bytes so every supported edge and finalization gate can verify the managed-path identity.
 - Keep `repo-backlog` enabled because provenance records target-owned preservation.
 
 ## Stages And Checkpoints
@@ -76,7 +76,7 @@
 
 - Last completed action: direct v0.13.0 to v0.15.1 planner rejected the unsupported source; v0.13.0 to v0.14.0 dry-run succeeded and identified bounded reconciliation.
 - Current task: `AICU-001-supported-route-upgrade`.
-- Exact next action: persist the verified v0.13.0 to v0.14.0 plan and owner decision, then apply from the clean branch starting commit.
+- Exact next action: commit the bounded pre-apply reconciliation, regenerate a conflict-free v0.13.0 to v0.14.0 plan, seal its owner decision, and apply from that clean commit.
 - Validation already completed: current target validator with effective rules; four ZIP sidecars; v0.15.1 annotated tag; direct-jump fail-closed result; v0.14.0 dry-run.
 - Git state: dedicated local workflow branch at `cedd590e4f3393b5cb3ad5a0be5f5663274bb584`; only workflow artifacts are pending.
 - Branch history and checkpoint handoffs: segment 1 only; no push or merge handoff.

@@ -1,10 +1,10 @@
 # Specs
 
-This directory contains active target-repository production, test, and system-reconstruction specifications together with their authoring guidance.
+This directory contains spec authoring and organization guidance for the framework repository.
 
 ## Purpose
 
-Use `.dev/specs/reconstruction/README.MD` as the source-independent reconstruction entrypoint. Domain behavior lives under `domains/`, test oracles under `tests/`, and authoring guidance remains at this directory root.
+Use `.dev/specs/` for spec authoring rules, organization guidance, and test-spec materials. This framework repository does not contain an active production/domain specs subtree.
 
 ## Usage
 
@@ -12,7 +12,6 @@ Start with `.dev/specs/INDEX.MD` when you need the file and directory catalog. U
 
 ## Boundary
 
-- Requirements remain under `.dev/requirement/`; specifications must trace to them rather than replace them.
-- Product/domain specs under `domains/` and structured problem frames under `.dev/problem-frames/` describe this repository's active system truth.
-- Reusable examples under `.ai/` are guidance and cannot override target-repository requirements, specifications, or directly verified project facts.
-- Every observed gap and future improvement must remain labeled; a desired quality uplift is not evidence that current source already implements it.
+- Test-spec guidance and examples live under `tests/`.
+- Target-repository production specs are created by `repo-structure-sync` or a later spec workflow from confirmed target truth.
+- Do not invent product specs in this framework repository.
