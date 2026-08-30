@@ -15,11 +15,11 @@
 - `branch`: `codex/2026-08-30-ai-context-v0-15-1-upgrade`
 - `base_branch`: `main`
 - `branch_segment`: `1`
-- `status`: `in_progress`
-- `current_phase`: `blocked-remediation-recovery`
+- `status`: `completed`
+- `current_phase`: `completed`
 - `artifact_root`: `.dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade`
 - `created_at`: `2026-08-30T18:16:45+08:00`
-- `updated_at`: `2026-08-30T20:30:39+08:00`
+- `updated_at`: `2026-08-30T22:48:57+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#3`
@@ -76,8 +76,8 @@
   inspection.
 - v0.15.1 declares 6 operations and carries the byte-identical apply engine used
   by v0.15.0.
-- Static admission is therefore `PASS-FOR-MEASURED-DRY-RUN`; no later apply may
-  start until the v0.14 finalization blocker is safely resolved.
+- Measured admission is `PASS`: v0.15.0 completed its 50-operation apply in
+  about 42-45 seconds and v0.15.1 completed all 6 operations without conflict.
 - The retained post-apply unrelated-change guard still cannot distinguish
   required digest-bound target remediation from unrelated drift. This lifecycle
   defect requires separate tracking even though the main performance mechanism
@@ -92,16 +92,17 @@
 
 ## Resume Checkpoint
 
-- Last completed action: v0.14 applied all 188 automatic operations; target remediation and `ASM-20260830-001` were validated; the exact target gate passed; and the v0.15.x static performance preflight confirmed append-only progress with only 50 and 6 declared operations.
-- Current task: `AICU-001-supported-route-upgrade`.
-- Exact next action: obtain an owner decision before preserving the remediation patch, rolling back the unfinished v0.14 transaction, committing target validation preconditions, and regenerating the sealed v0.14 plan for a clean reapply.
-- Validation already completed: package identities and sidecars; direct-jump fail-closed result; 188-operation v0.14 apply; 33 target-owned tests; exact pre-finalization target gate; assessment and workflow validators; v0.15.x static operation and engine comparison.
-- Git state: dedicated local workflow branch at transaction-start commit `32140f52ffffd14dc235b310d386d6c1b3765e70`, with the v0.14 package delta, target remediation, assessment, and reports uncommitted under an unfinished transaction.
+- Last completed action: v0.15.1 applied all 6 automatic operations, bound the passed target-validation receipt, finalized target authorities and 20 effective-rule packets, passed the final target gate, and was preserved at local checkpoint `97446f2be22636c6bb2e0fa4e206ad6166117a2c`.
+- Current task: all workflow tasks completed.
+- Exact next action: none within the authorized local upgrade scope; push, pull request, merge, and Issue closure remain owner decisions.
+- Validation already completed: package identities and sidecars; direct-jump fail-closed result; all three supported package edges; fixed-head assessments `ASM-20260830-001` through `ASM-20260830-003`; terminal receipt binding; workflow, dependency, assessment, commit-policy, and final target gates; 34 target-owned tests for v0.15.1.
+- Git state: dedicated local workflow branch with a durable terminally validated v0.15.1 checkpoint; the active pending receipt is cleared only after that checkpoint.
 - Branch history and checkpoint handoffs: segment 1 only; no push or merge handoff.
-- Blockers or unresolved decisions: the v0.14 recorder rejects the target-owned remediation required by its own target validation contract. Rollback and reapply may repeat substantial v0.14 cost and therefore requires explicit owner approval. Detailed public follow-up Issue creation also requires explicit approval.
+- Blockers or unresolved decisions: none for the local upgrade. The unchanged Windows executable-path rollback replay risk and extracted-package cache contamination risk remain follow-up candidates; creating or closing online Issues is outside current authorization.
 
 ## Branch Lifecycle
 
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `codex/2026-08-30-ai-context-v0-15-1-upgrade` | `main` | workflow-start | `cedd590e4f3393b5cb3ad5a0be5f5663274bb584` | local | `2026-08-30T18:16:45+08:00` | Issue #3 authorized the governed upgrade and direct-jump analysis | Continue on the same branch with v0.14.0 planning and apply |
+| 1 | `codex/2026-08-30-ai-context-v0-15-1-upgrade` | `main` | v0.15.1-terminal-checkpoint | `97446f2be22636c6bb2e0fa4e206ad6166117a2c` | local | `2026-08-30T22:48:57+08:00` | Preserve the exact terminally validated v0.15.1 state before clearing the active pending receipt | Local closeout only; no remote action authorized |

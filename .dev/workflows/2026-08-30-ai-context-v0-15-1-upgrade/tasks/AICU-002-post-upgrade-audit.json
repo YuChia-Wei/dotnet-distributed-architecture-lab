@@ -6,14 +6,14 @@
   "task_id": "AICU-002-post-upgrade-audit",
   "workflow_id": "2026-08-30-ai-context-v0-15-1-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "pending",
+  "status": "completed",
   "created_at": "2026-08-30T18:16:45+08:00",
-  "updated_at": "2026-08-30T18:16:45+08:00",
+  "updated_at": "2026-08-30T22:48:57+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "GPT-5",
   "reasoning_effort": "unspecified",
   "finding_ids": ["AICU-POST-UPGRADE-AUDIT-001"],
   "scope": {"target": "Independent post-upgrade verification", "files": [".dev/assessments/**"], "constraints": ["Auditor remains read-only"], "non_goals": ["Remediation by the auditor"]},
-  "execution": {"steps": ["Run fixed-head AI-context audit", "Record assessment"], "validation": ["Assessment artifact validator"], "last_completed_step": "", "next_action": "Wait for the structural upgrade checkpoint."},
-  "results": {"summary": "", "files_changed": [], "tests_run": [], "finding_status": "not-addressed", "residual_risk": "Structural upgrade is not complete.", "follow_up_needed": true}
+  "execution": {"steps": ["Run fixed-head AI-context audit", "Record assessment"], "validation": ["Assessment artifact validator"], "last_completed_step": "Recorded fixed-head assessment ASM-20260830-003 and verified the six-file v0.15.1 candidate plus target projection.", "next_action": "None."},
+  "results": {"summary": "Fixed-head post-upgrade audit passed and the assessment artifact was validated.", "files_changed": [".dev/assessments/ASM-20260830-003/**"], "tests_run": ["assessment artifact validator", "fixed-head target AI-context gate"], "finding_status": "resolved", "residual_risk": "The package-apply rollback engine is unchanged from v0.15.0.", "follow_up_needed": false}
 }
