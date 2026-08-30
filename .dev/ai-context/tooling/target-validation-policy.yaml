@@ -5,7 +5,7 @@ package_policy:
   sha256: "f1cb257fefdaff2699b6c87022aa6ed08061979ba86003f07a32c4522e1b6783"
 package_validator:
   path: ".ai/scripts/validate-git-commits.py"
-  sha256: "ce91297e3cc1790d5a278777ea091b21d8f161df998aa3631667c6868139ce17"
+  sha256: "05504513d224d93e9847cb7fb7234f5281a29fc3c97b1e90b880242c0b87c747"
 commit_subject:
   effective_at_override: "2026-08-13T11:05:12+08:00"
 ai_signature:

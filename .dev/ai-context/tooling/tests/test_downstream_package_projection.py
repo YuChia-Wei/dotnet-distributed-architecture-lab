@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the explicit v0.14 downstream package applicability boundary."""
+"""Validate the explicit v0.15 downstream package applicability boundary."""
 
 from __future__ import annotations
 
@@ -26,13 +26,13 @@ class DownstreamPackageProjectionTests(unittest.TestCase):
         cls.defect = next(
             record
             for record in cls.manifest["package_projection_defects"]
-            if record["id"] == "AICU-V014-TARGET-GATE-PROJECTION-001"
+            if record["id"] == "AICU-V015-TARGET-GATE-PROJECTION-001"
         )
 
-    def test_gwt_001_framework_dependencies_are_v014_pinned(self) -> None:
-        self.assertEqual("v0.14.0", self.manifest["framework_version"])
+    def test_gwt_001_framework_dependencies_are_v015_pinned(self) -> None:
+        self.assertEqual("v0.15.0", self.manifest["framework_version"])
         self.assertEqual(
-            "412bb14a16fe75ee65a020b16680def0acc0ff1b",
+            "5fedaceef7e18b4cdcde3cb665adcc97070db2df",
             self.manifest["framework_commit"],
         )
         for record in self.manifest["checks"]:

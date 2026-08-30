@@ -1,0 +1,46 @@
+template_metadata:
+  template_id: "assessment-locator"
+  template_version: "1.0.0"
+  template_created_at: "2026-07-13T23:04:10+08:00"
+  template_updated_at: "2026-07-13T23:04:10+08:00"
+
+schema_version: "1.0"
+assessment_id: "ASM-20260830-002"
+commit_search_id: "ASM-20260830-002"
+assessment_type: "ai-context-verification"
+title: "v0.15.0 applied-state and closeout-precondition verification"
+owner_skill: "ai-context-auditor"
+status: "final"
+report: "report.md"
+artifact_branch: "codex/2026-08-30-ai-context-v0-15-1-upgrade"
+base_branch: "main"
+created_at: "2026-08-30T22:10:38+08:00"
+updated_at: "2026-08-30T22:10:38+08:00"
+template_source: ".dev/assessments/templates/assessment-locator-template.yaml"
+template_version: "1.0.0"
+report_template_source: ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md"
+report_template_version: "2.1.0"
+subject_ref:
+  repository: "dotnet-mq-arch-lab"
+  branch: "codex/2026-08-30-v0150-applied-audit-subject"
+  commit: "85f1e3675a84b36f927e950e2c8c4ac86a0a0ced"
+scope:
+  included:
+    - "v0.15.0 package-managed AI context, runtime wrappers, pending transaction receipt, and target-owned validation projection"
+    - "transaction 94905e9ebcb40076c93f8b994ecf37ae8ce26752fcedcf0731920bebaf5615e8"
+    - "v0.15.0 plan/apply and prior corrective rollback performance and recovery evidence"
+  excluded:
+    - "product src/** and tests/** review"
+    - "v0.15.1 apply"
+    - "push, pull request, merge, Issue closure, tag, Release, or publication"
+relations:
+  supersedes: []
+  superseded_by: []
+  related_assessments: ["ASM-20260830-001"]
+  workflow_refs: ["2026-08-30-ai-context-v0-15-1-upgrade"]
+  backlog_refs: []
+  adr_refs: []
+resume:
+  last_completed_action: "Verified the fixed v0.15.0 applied-state subject, measured the improved package transaction, and identified the exact target-gate dependency pin required before the final transaction."
+  next_action: "Governance must roll back the audit transaction, commit the target-gate pin and assessment evidence before planning, then reapply and complete target validation and authority finalization."
+  blockers: []
