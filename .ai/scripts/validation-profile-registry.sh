@@ -33,7 +33,7 @@ register_check assessment-artifacts-tests \
 register_check workflow-artifacts \
     "Workflow Artifact Metadata" required \
     "governance,metadata" "fast pr release nightly-full" \
-    ".dev/workflows" '' "python>=3.11" 30 cpu reuse-by-input source \
+    ".dev/workflows .dev/standards/WORKFLOW-ARTIFACT-POLICY.md .ai/scripts/validate-workflow-artifacts.py" '' "python>=3.11" 30 cpu reuse-by-input source \
     "python .ai/scripts/validate-workflow-artifacts.py" always
 register_check workflow-implementation-contract \
     "Workflow Implementation Contract Fail-Closed Tests" required \
@@ -44,7 +44,7 @@ register_check workflow-implementation-contract \
 register_check workflow-lifecycle-contract \
     "Workflow Lifecycle Contract Fail-Closed Tests" required \
     "governance,tests" "fast pr release nightly-full" \
-    ".ai/scripts/tests/test_workflow_lifecycle_contract.py .dev/workflows" workflow-artifacts \
+    ".ai/scripts/tests/test_workflow_lifecycle_contract.py .ai/scripts/tests/fixtures/workflow-terminal-anchors .ai/scripts/validate-workflow-artifacts.py .dev/standards/WORKFLOW-ARTIFACT-POLICY.md .dev/workflows" workflow-artifacts \
     "python>=3.11" 30 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_workflow_lifecycle_contract.py -v" always
 register_check git-commit-policy \
@@ -132,7 +132,7 @@ register_check source-ai-context-version \
 register_check package-apply \
     "AI Context Safe Apply GWT Tests" required \
     "package,tests" "pr release nightly-full" \
-    ".ai/scripts/ai_context_package_apply.py .ai/scripts/tests/test_ai_context_package_apply.py" '' "python>=3.11 git" 90 io reuse-by-input portable \
+    ".ai/scripts/ai_context_package_apply.py .ai/scripts/tests/test_ai_context_package_apply.py" '' "python>=3.11 git" 600 io reuse-by-input portable \
     "python .ai/scripts/tests/test_ai_context_package_apply.py -v" always
 register_check payload-user-view \
     "Selected Payload User-View Fail-Closed Contract" required \
@@ -157,7 +157,7 @@ register_check provider-role-package-projection \
 register_check multi-hop-upgrade-transaction \
     "AI Context Multi-Hop Upgrade Transaction GWT Tests" required \
     "upgrade,transaction,tests" "fast pr release nightly-full" \
-    ".ai/assets/skills/ai-context-upgrader .ai/distribution/profiles/dotnet-backend.yaml .ai/scripts/ai_context_multi_hop_upgrade.py .ai/scripts/ai_context_package_apply.py .ai/scripts/ai_context_target_provenance.py .ai/scripts/ai_context_upgrade_routes.py .ai/scripts/tests/test_ai_context_multi_hop_upgrade.py" '' "python>=3.11 git" 90 io reuse-by-input portable \
+    ".ai/assets/skills/ai-context-upgrader .ai/distribution/profiles/dotnet-backend.yaml .ai/scripts/ai_context_multi_hop_upgrade.py .ai/scripts/ai_context_package_apply.py .ai/scripts/ai_context_target_provenance.py .ai/scripts/ai_context_upgrade_routes.py .ai/scripts/tests/test_ai_context_multi_hop_upgrade.py" '' "python>=3.11 git" 360 io reuse-by-input portable \
     "python .ai/scripts/tests/test_ai_context_multi_hop_upgrade.py -v" always
 register_check dependency-versions \
     "Offline Dependency And Version Consistency" required \
@@ -187,13 +187,19 @@ register_check file-disposition-manifest \
 register_check aggregate-runner-contract \
     "Aggregate Runner And Shell Registry Fail-Closed Tests" required \
     "runner,tests" "release nightly-full" \
-    ".ai/scripts/check-all.sh .ai/scripts/validation-profile-registry.sh .ai/scripts/tests/test_fail_closed_validation.py" shell-assets "python>=3.11 bash" 300 cpu no-reuse portable \
+    ".ai/scripts/check-all.sh .ai/scripts/validation-profile-registry.sh .ai/scripts/tests/test_fail_closed_validation.py" shell-assets "python>=3.11 bash" 1200 cpu no-reuse portable \
     "python .ai/scripts/tests/test_fail_closed_validation.py -v" always
 register_check profile-registry-contract \
     "Validation Profile Registry Contract" required \
     "runner,registry,tests" "fast pr release nightly-full" \
     ".ai/scripts/validation-profile-registry.sh .ai/scripts/check-all.sh .ai/scripts/tests/test_validation_profile_registry.py" '' "python>=3.11 bash" 30 cpu reuse-by-input portable \
     "python .ai/scripts/tests/test_validation_profile_registry.py -v" always
+register_check test-fixture-routing-contract \
+    "Portable Test Fixture Routing Contract" required \
+    "runner,fixtures,tests" "fast pr release nightly-full" \
+    ".ai/scripts/test_fixture_runtime.py .ai/scripts/test-fixture-classifications.json .ai/scripts/run-test-fixture-profile.py .ai/scripts/tests/test_test_fixture_runtime.py .ai/scripts/tests/test_ai_context_release_state.py .ai/scripts/tests/test_ai_context_version_governance.py .ai/scripts/tests/test_release_notes_renderer.py" profile-registry-contract \
+    "python>=3.11 git" 60 io reuse-by-input source \
+    "python .ai/scripts/tests/test_test_fixture_runtime.py -v" always
 register_check validation-evidence-contract \
     "Validation Execution Evidence Contract" required \
     "runner,evidence,tests" "fast pr release nightly-full" \
@@ -322,12 +328,32 @@ register_check effective-rule-action-skill \
 register_check source-governance-manifest \
     "Source Governance Manifest Registry" required \
     "governance,source" "fast pr release nightly-full" \
-    ".ai/distribution/governance-checks.yaml .ai/distribution/repository-identity-policy.yaml .ai/scripts/validate-source-governance.py .ai/scripts/validate-repository-identity.py" '' "python>=3.11 git" 60 cpu reuse-by-input source \
+    ".ai/distribution/governance-checks.yaml .ai/distribution/repository-identity-policy.yaml .dev/standards/SOURCE-WORK-MANAGEMENT-AUTHORITY.yaml .ai/scripts/validate-source-governance.py .ai/scripts/validate-repository-identity.py .ai/scripts/validate-source-work-management.py" '' "python>=3.11 git" 60 cpu reuse-by-input source \
     "python .ai/scripts/validate-source-governance.py" source-governance
+register_check validation-lifecycle-contract \
+    "Validation Freeze And Evidence Reuse Contract" required \
+    "governance,validation,evidence" "fast pr release nightly-full" \
+    ".ai/assets/shared/VALIDATION-EVIDENCE-LIFECYCLE-CONTRACT.md .ai/assets/shared/validation-evidence-lifecycle.schema.yaml .ai/scripts/validate-validation-lifecycle.py .dev/standards/GITHUB-WORK-MANAGEMENT-POLICY.yaml" source-governance-manifest "python>=3.11" 60 cpu reuse-by-input source \
+    "python .ai/scripts/validate-validation-lifecycle.py" source-governance
+register_check validation-lifecycle-tests \
+    "Validation Lifecycle Fail-Closed Tests" required \
+    "governance,validation,evidence,tests" "fast pr release nightly-full" \
+    ".ai/scripts/tests/test_validation_lifecycle.py .ai/assets/shared/validation-evidence-lifecycle.schema.yaml .dev/standards/GITHUB-WORK-MANAGEMENT-POLICY.yaml" validation-lifecycle-contract "python>=3.11" 60 cpu reuse-by-input source \
+    "python .ai/scripts/tests/test_validation_lifecycle.py -v" source-governance
+register_check agent-execution-guardrails-contract \
+    "Agent Execution Guardrails Contract" required \
+    "governance,agents,evidence" "fast pr release nightly-full" \
+    ".ai/assets/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md .ai/assets/shared/agent-execution-guardrails.schema.yaml .ai/assets/shared/ROLE-EXECUTION-CONTRACT.md .ai/scripts/validate-agent-execution-guardrails.py .ai/assets/skills/software-development-orchestrator" validation-lifecycle-contract "python>=3.11" 60 cpu reuse-by-input source \
+    "python .ai/scripts/validate-agent-execution-guardrails.py" source-governance
+register_check agent-execution-guardrails-tests \
+    "Agent Execution Guardrails Fail-Closed Tests" required \
+    "governance,agents,evidence,tests" "fast pr release nightly-full" \
+    ".ai/scripts/tests/test_agent_execution_guardrails.py .ai/assets/shared/agent-execution-guardrails.schema.yaml" agent-execution-guardrails-contract "python>=3.11" 60 cpu reuse-by-input source \
+    "python .ai/scripts/tests/test_agent_execution_guardrails.py -v" source-governance
 register_check terminal-issue-closure \
     "Terminal Issue Closure Contract" required \
     "governance,source,closeout" "fast pr release nightly-full" \
-    ".dev/backlog/providers/github.yaml .dev/standards/GITHUB-TERMINAL-ISSUE-CLOSURE-POLICY.md .dev/workflows/*/evidence/terminal-issue-closure*.yaml .ai/scripts/validate-terminal-issue-closure.py" source-governance-manifest "python>=3.11" 60 cpu reuse-by-input source \
+    ".dev/standards/GITHUB-WORK-MANAGEMENT-POLICY.yaml .dev/standards/GITHUB-TERMINAL-ISSUE-CLOSURE-POLICY.md .dev/workflows/*/evidence/terminal-issue-closure*.yaml .ai/scripts/validate-terminal-issue-closure.py" source-governance-manifest "python>=3.11" 60 cpu reuse-by-input source \
     "python .ai/scripts/validate-terminal-issue-closure.py" source-governance
 register_check terminal-issue-closure-tests \
     "Terminal Issue Closure Fail-Closed Tests" required \

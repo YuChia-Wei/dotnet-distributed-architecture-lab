@@ -1,11 +1,11 @@
 schema_version: '1.0'
-packet_id: PACKET-AE15B8FCFBB687674055EAB9DF554BE01DEEAD49A3D58FD6457EC8AC68382C4E
+packet_id: PACKET-DB5F502984CDDF5FF7C19B6FF3E878A7F52293984A5F629F909DA94FEFC4E0A0
 resolver:
   version: '1.0'
   evidence:
-  - .dev/assessments/ASM-20260813-006/report.md
-  - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/validation-summary.yaml
+  - .dev/assessments/ASM-20260830-002/report.md
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+  - .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/03-v0.15.0-reconciliation.md
 request:
   route_id: ROUTE-5376A2F088F0C2FB915830EEC987D1391E96AFDDE1208E4E68B362FE4D3A612E
   capability: problem-framing
@@ -13,12 +13,12 @@ request:
   technology_profile: dotnet-backend
   file_type: problem-frame-yaml
 baseline:
-  framework_version: v0.14.0
-  framework_commit: 412bb14a16fe75ee65a020b16680def0acc0ff1b
+  framework_version: v0.15.0
+  framework_commit: 5fedaceef7e18b4cdcde3cb665adcc97070db2df
   selected_technology_profile: dotnet-backend
 target_state:
   path: .dev/ai-context/effective-rules.yaml
-  digest: 2bf68a3f909c09964232bcd059684472eb954b161ed511936f3110f4573cd680
+  digest: ce9d8ff8bc96e78406651c1c3221cab1d544f4396c09feff02c606d750ad9f26
 catalogs:
 - catalog_id: selected-profile
   path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
@@ -638,7 +638,7 @@ rules:
 freshness:
   status: verified
   verified_inputs:
-    target_state_digest: 2bf68a3f909c09964232bcd059684472eb954b161ed511936f3110f4573cd680
+    target_state_digest: ce9d8ff8bc96e78406651c1c3221cab1d544f4396c09feff02c606d750ad9f26
     catalog_digests:
     - catalog_id: selected-profile
       path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
@@ -646,4 +646,4 @@ freshness:
     - catalog_id: shared
       path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
       digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
-packet_digest: 69b338b29cb4ccd2e75bdf63bbfb887ecd4caad04d417d2e8cd29ac1be00d911
+packet_digest: c4137d5fa5e7cab5a40cff508e52ca62e00a0ce42cbfd68454c78a7853e79e27

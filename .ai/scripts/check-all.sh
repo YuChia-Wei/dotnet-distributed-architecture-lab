@@ -5,6 +5,7 @@
 # 
 # Purpose: Execute one declared validation profile and retain complete logs.
 # Usage: ./check-all.sh [--profile <name> | --quick | --full | --critical] [--verbose]
+#        ./check-all.sh --resolve-input-closure <check-id> [--subject <sha>]
 # ====================================================================
 
 set -e
@@ -37,6 +38,7 @@ declare -A CHECK_ENFORCEMENT=()
 declare -A CHECK_TAGS=()
 declare -A CHECK_PROFILES=()
 declare -A CHECK_INPUT_PATHS=()
+declare -A CHECK_RESOLVED_INPUT_PATHS=()
 declare -A CHECK_DEPENDS=()
 declare -A CHECK_ENVIRONMENT=()
 declare -A CHECK_TIMEOUT=()
@@ -308,6 +310,12 @@ is_global_invalidator() {
     case "$1" in
         .ai/scripts/validation-profile-registry.sh|.ai/scripts/check-all.sh|.ai/scripts/validation-evidence.py|\
         .ai/scripts/validation_process_supervisor.py|\
+        .ai/scripts/validate-validation-lifecycle.py|.ai/scripts/tests/test_validation_lifecycle.py|\
+        .ai/assets/shared/VALIDATION-EVIDENCE-LIFECYCLE-CONTRACT.md|\
+        .ai/assets/shared/validation-evidence-lifecycle.schema.yaml|\
+        .ai/scripts/validate-agent-execution-guardrails.py|.ai/scripts/tests/test_agent_execution_guardrails.py|\
+        .ai/assets/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md|\
+        .ai/assets/shared/agent-execution-guardrails.schema.yaml|\
         .ai/scripts/validate-immutable-history.py|.ai/distribution/validation/immutable-history-validation.yaml|\
         .ai/scripts/validate-workflow-artifacts.py|.ai/scripts/validate-assessment-artifacts.py|\
         .ai/scripts/validate-ai-context-versions.py|.dev/standards/WORKFLOW-ARTIFACT-POLICY.md|\
@@ -316,6 +324,39 @@ is_global_invalidator() {
             return 0 ;;
     esac
     return 1
+}
+
+resolve_check_input_closure() {
+    local root=$1 current dependency token cursor=0
+    local -a queue=("$root")
+    local -A seen_checks=() seen_paths=()
+    while [ "$cursor" -lt "${#queue[@]}" ]; do
+        current=${queue[$cursor]}
+        cursor=$((cursor + 1))
+        [ -z "${seen_checks[$current]:-}" ] || continue
+        seen_checks["$current"]=true
+        for token in ${CHECK_INPUT_PATHS[$current]}; do
+            seen_paths["$token"]=true
+        done
+        for dependency in ${CHECK_DEPENDS[$current]}; do
+            queue+=("$dependency")
+        done
+    done
+    for token in \
+        .ai/scripts/check-all.sh \
+        .ai/scripts/validation-profile-registry.sh \
+        .ai/scripts/validation-evidence.py \
+        .ai/scripts/python-entrypoints.json \
+        .ai/scripts/python_prerequisites.py \
+        .ai/scripts/validate-validation-lifecycle.py \
+        .ai/assets/shared/VALIDATION-EVIDENCE-LIFECYCLE-CONTRACT.md \
+        .ai/assets/shared/validation-evidence-lifecycle.schema.yaml \
+        .ai/scripts/validate-agent-execution-guardrails.py \
+        .ai/assets/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md \
+        .ai/assets/shared/agent-execution-guardrails.schema.yaml; do
+        seen_paths["$token"]=true
+    done
+    printf '%s\n' "${!seen_paths[@]}" | LC_ALL=C sort | paste -sd ' ' -
 }
 
 collect_changed_paths() {
@@ -446,6 +487,7 @@ check_is_selected() {
 show_usage() {
     cat <<'EOF'
 Usage: ./check-all.sh [--profile <fast|pr|release|closeout|nightly-full>] [--base <sha> --head <sha>] [--verbose]
+       ./check-all.sh --resolve-input-closure <check-id> [--subject <sha>]
 
 Profiles:
   fast          Local development feedback (30 seconds, report-and-warn)
@@ -467,6 +509,8 @@ VERBOSE=false
 PROFILE_EXPLICIT=false
 BASE_SHA=
 HEAD_SHA=
+RESOLVE_INPUT_CLOSURE_ID=
+RESOLVE_INPUT_CLOSURE_SUBJECT=
 while [ "$#" -gt 0 ]; do
     case "$1" in
         --profile)
@@ -508,6 +552,16 @@ while [ "$#" -gt 0 ]; do
             HEAD_SHA=$2
             shift 2
             ;;
+        --resolve-input-closure)
+            [ "$#" -ge 2 ] && [ -z "$RESOLVE_INPUT_CLOSURE_ID" ] || { show_usage >&2; exit 2; }
+            RESOLVE_INPUT_CLOSURE_ID=$2
+            shift 2
+            ;;
+        --subject)
+            [ "$#" -ge 2 ] && [ -z "$RESOLVE_INPUT_CLOSURE_SUBJECT" ] || { show_usage >&2; exit 2; }
+            RESOLVE_INPUT_CLOSURE_SUBJECT=$2
+            shift 2
+            ;;
         --help|-h)
             [ "$#" -eq 1 ] || { show_usage >&2; exit 2; }
             show_usage
@@ -520,6 +574,26 @@ while [ "$#" -gt 0 ]; do
             ;;
     esac
 done
+
+if [ -n "$RESOLVE_INPUT_CLOSURE_ID" ]; then
+    [ "$PROFILE_EXPLICIT" = false ] && [ "$VERBOSE" = false ] && [ -z "$BASE_SHA" ] && [ -z "$HEAD_SHA" ] || { show_usage >&2; exit 2; }
+    [ -n "${CHECK_DESCRIPTION[$RESOLVE_INPUT_CLOSURE_ID]:-}" ] || { echo "Unknown check id: $RESOLVE_INPUT_CLOSURE_ID" >&2; exit 2; }
+    RESOLVE_INPUT_CLOSURE_SUBJECT=${RESOLVE_INPUT_CLOSURE_SUBJECT:-HEAD}
+    git rev-parse --verify "$RESOLVE_INPUT_CLOSURE_SUBJECT^{commit}" >/dev/null 2>&1 || { echo "Unknown closure subject: $RESOLVE_INPUT_CLOSURE_SUBJECT" >&2; exit 2; }
+    closure_tokens=$(resolve_check_input_closure "$RESOLVE_INPUT_CLOSURE_ID")
+    closure_paths=
+    for closure_token in $closure_tokens; do
+        matched_paths=$(git ls-tree -r --name-only "$RESOLVE_INPUT_CLOSURE_SUBJECT" -- "$closure_token") || exit 2
+        [ -n "$matched_paths" ] || { echo "Unresolved closure token: $closure_token" >&2; exit 2; }
+        closure_paths="$closure_paths
+$matched_paths"
+    done
+    printf '%s\n' "$closure_paths" | sed '/^$/d' | LC_ALL=C sort -u
+    exit 0
+elif [ -n "$RESOLVE_INPUT_CLOSURE_SUBJECT" ]; then
+    show_usage >&2
+    exit 2
+fi
 
 if ! registry_has_profile "$PROFILE" || ! validate_profile_registry || ! prepare_profile_selection; then
     exit 2
@@ -944,7 +1018,7 @@ for id in "${SELECTED_CHECK_ORDER[@]}"; do
     printf '%s\t%s\n' "$id" "${SELECTION_REASON_BY_ID[$id]}" >> "$EVIDENCE_SELECTED_CHECKS"
 done
 
-now_millis() {
+wall_clock_millis() {
     local value seconds fraction
     if [ -n "${EPOCHREALTIME:-}" ]; then
         seconds=${EPOCHREALTIME%.*}
@@ -954,9 +1028,43 @@ now_millis() {
     fi
     value=$(date +%s%3N 2>/dev/null || true)
     case "$value" in
-        ''|*[!0-9]*) printf '%s\n' "$((SECONDS * 1000))" ;;
+        ''|*[!0-9]*) return 1 ;;
         *) printf '%s\n' "$value" ;;
     esac
+}
+
+monotonic_millis() {
+    local uptime seconds fraction
+    if [ -r /proc/uptime ]; then
+        IFS=' ' read -r uptime _ < /proc/uptime || return 1
+        case "$uptime" in
+            ''|*[!0-9.]*) return 1 ;;
+        esac
+        seconds=${uptime%.*}
+        fraction=${uptime#*.}000
+        printf '%s%03d\n' "$seconds" "$((10#${fraction:0:3}))"
+        return 0
+    fi
+    "$PYTHON_EXECUTABLE" -c 'import time; print(time.monotonic_ns() // 1_000_000)'
+}
+
+if ! RUNNER_WALL_ORIGIN_MS=$(wall_clock_millis) ||
+    ! RUNNER_MONOTONIC_ORIGIN_MS=$(monotonic_millis); then
+    echo "Validation runner could not initialize its logical monotonic clock." >&2
+    exit 2
+fi
+
+now_millis() {
+    local monotonic_now delta
+    monotonic_now=$(monotonic_millis) || return 1
+    case "$monotonic_now" in
+        ''|*[!0-9]*) return 1 ;;
+    esac
+    if [ "$monotonic_now" -lt "$RUNNER_MONOTONIC_ORIGIN_MS" ]; then
+        return 1
+    fi
+    delta=$((monotonic_now - RUNNER_MONOTONIC_ORIGIN_MS))
+    printf '%s\n' "$((RUNNER_WALL_ORIGIN_MS + delta))"
 }
 
 EVIDENCE_PATH="$LOG_DIR/evidence.jsonl"
@@ -993,6 +1101,12 @@ EVIDENCE_POLICY_FINGERPRINT=$(sha256sum \
     "$SCRIPT_DIR/check-all.sh" \
     "$EVIDENCE_HELPER" \
     "$SCRIPT_DIR/validation_process_supervisor.py" \
+    "$SCRIPT_DIR/python-entrypoints.json" \
+    "$SCRIPT_DIR/python_prerequisites.py" \
+    "$SCRIPT_DIR/validate-validation-lifecycle.py" \
+    "$PROJECT_ROOT/.ai/assets/shared/validation-evidence-lifecycle.schema.yaml" \
+    "$SCRIPT_DIR/validate-agent-execution-guardrails.py" \
+    "$PROJECT_ROOT/.ai/assets/shared/agent-execution-guardrails.schema.yaml" \
     2>/dev/null | sha256sum 2>/dev/null | awk '{print $1}')
 EVIDENCE_POLICY_FINGERPRINT=${EVIDENCE_POLICY_FINGERPRINT:-unavailable}
 EVIDENCE_INPUT_FINGERPRINT=
@@ -1036,8 +1150,9 @@ prepare_all_validation_evidence() {
         expected_ids["$id"]=true
         version=$(validator_version "$id")
         VALIDATOR_VERSION_BY_ID["$id"]=$version
+        CHECK_RESOLVED_INPUT_PATHS["$id"]=$(resolve_check_input_closure "$id")
         printf '%s\t%s\t%s\t%s\n' \
-            "$id" "$version" "${CHECK_INPUT_PATHS[$id]}" "${CHECK_CACHE_POLICY[$id]}" \
+            "$id" "$version" "${CHECK_RESOLVED_INPUT_PATHS[$id]}" "${CHECK_CACHE_POLICY[$id]}" \
             >> "$EVIDENCE_PREPARATION_SELECTION"
     done
     EVIDENCE_PREPARATION_SELECTION_REF=$(repo_relative_artifact "$EVIDENCE_PREPARATION_SELECTION") || return 1
@@ -1159,7 +1274,7 @@ write_final_fingerprint_selection() {
         [ -z "${omit_immutable_reuse[$id]:-}" ] || continue
         printf '%s\t%s\t%s\t%s\n' \
             "$id" "${VALIDATOR_VERSION_BY_ID[$id]}" \
-            "${CHECK_INPUT_PATHS[$id]}" "${CHECK_CACHE_POLICY[$id]}" \
+            "${CHECK_RESOLVED_INPUT_PATHS[$id]}" "${CHECK_CACHE_POLICY[$id]}" \
             >> "$EVIDENCE_SELECTION"
     done
 }
@@ -2031,6 +2146,10 @@ run_source_repository_governance_checks() {
     if ! source_governance_context_available; then
         for description in \
             "Source Governance Manifest Registry" \
+            "Validation Freeze And Evidence Reuse Contract" \
+            "Validation Lifecycle Fail-Closed Tests" \
+            "Agent Execution Guardrails Contract" \
+            "Agent Execution Guardrails Fail-Closed Tests" \
             "Terminal Issue Closure Contract" \
             "Terminal Issue Closure Fail-Closed Tests" \
             "Repository Identity Drift Fail-Closed Tests"; do
@@ -2052,6 +2171,22 @@ run_source_repository_governance_checks() {
 
     run_command_check "python .ai/scripts/validate-source-governance.py" \
         "Source Governance Manifest Registry" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/validate-validation-lifecycle.py" \
+        "Validation Freeze And Evidence Reuse Contract" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/tests/test_validation_lifecycle.py -v" \
+        "Validation Lifecycle Fail-Closed Tests" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/validate-agent-execution-guardrails.py" \
+        "Agent Execution Guardrails Contract" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/tests/test_agent_execution_guardrails.py -v" \
+        "Agent Execution Guardrails Fail-Closed Tests" \
         "required" "true" "true"
 
     run_command_check "python .ai/scripts/validate-terminal-issue-closure.py" \
@@ -2251,6 +2386,10 @@ run_command_check "python .ai/scripts/tests/test_fail_closed_validation.py -v" \
 
 run_command_check "python .ai/scripts/tests/test_validation_profile_registry.py -v" \
     "Validation Profile Registry Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_test_fixture_runtime.py -v" \
+    "Portable Test Fixture Routing Contract" \
     "required" "true" "true"
 
 run_command_check "python .ai/scripts/tests/test_validation_process_supervisor.py -v" \

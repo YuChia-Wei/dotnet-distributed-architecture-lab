@@ -934,6 +934,7 @@ def validated_bootstrap_sidecar(
 
 
 def raw_supervisor_timing(raw: dict[str, Any]) -> dict[str, int]:
+    has_clock_adjustment = "clock_adjustment_seconds" in raw
     try:
         if (
             not isinstance(raw["started_at"], str)
@@ -948,13 +949,32 @@ def raw_supervisor_timing(raw: dict[str, Any]) -> dict[str, int]:
         started = datetime.fromisoformat(raw["started_at"].replace("Z", "+00:00"))
         finished = datetime.fromisoformat(raw["finished_at"].replace("Z", "+00:00"))
         raw_duration_ms = round(float(raw["duration_seconds"]) * 1000)
+        if has_clock_adjustment:
+            clock_adjustment = raw["clock_adjustment_seconds"]
+            if (
+                not isinstance(clock_adjustment, (int, float))
+                or isinstance(clock_adjustment, bool)
+                or not math.isfinite(float(clock_adjustment))
+            ):
+                raise ValueError("clock adjustment must be finite")
+            clock_adjustment_ms = round(float(clock_adjustment) * 1000)
     except (KeyError, OverflowError, TypeError, ValueError) as exc:
         raise EvidenceError("raw supervisor timing is invalid") from exc
     started_ms = int(started.timestamp() * 1000)
-    completed_ms = int(finished.timestamp() * 1000)
-    duration_ms = completed_ms - started_ms
-    if duration_ms < 0 or raw_duration_ms < 0 or abs(duration_ms - raw_duration_ms) > 2:
+    wall_completed_ms = int(finished.timestamp() * 1000)
+    wall_duration_ms = wall_completed_ms - started_ms
+    if raw_duration_ms < 0:
         raise EvidenceError("raw supervisor duration is inconsistent")
+    if has_clock_adjustment:
+        if abs((wall_duration_ms - raw_duration_ms) - clock_adjustment_ms) > 2:
+            raise EvidenceError("raw supervisor clock adjustment is inconsistent")
+        completed_ms = started_ms + raw_duration_ms
+        duration_ms = raw_duration_ms
+    else:
+        completed_ms = wall_completed_ms
+        duration_ms = wall_duration_ms
+        if duration_ms < 0 or abs(duration_ms - raw_duration_ms) > 2:
+            raise EvidenceError("raw supervisor duration is inconsistent")
     return {
         "started_ms": started_ms,
         "completed_ms": completed_ms,

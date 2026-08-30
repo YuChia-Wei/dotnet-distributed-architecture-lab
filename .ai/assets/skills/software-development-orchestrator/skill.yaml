@@ -34,6 +34,7 @@ inputs:
 - canonical skill registry and relevant skill specs
 - available downstream skill metadata or runtime wrapper descriptions
 - owner-produced role_execution records when an applicable canonical role supports a development stage
+- schema-valid agent execution packet, worktree lease, and acceptance-evidence ledger when delegated, external, or fixed-head execution applies
 - zero, one, or multiple approved work-item identifiers; required branch policy; validation expectations; and handoff requirements
 - target-owned test commands, working directory, prerequisites, credential requirements or environment boundaries, and test policy when test execution is selected; never secret values
 - approval state for requirements, design, specification, implementation, specialized tests, and compliance gates
@@ -55,10 +56,12 @@ outputs:
 - final execution summary with separate requirement/spec approval, implementation, test, compliance, review, validation, task, commit, and handoff evidence
 - deterministic acceptance evidence from a preclassified input envelope and a repository-verified fresh-session checkpoint
 - provider-neutral aggregation of owning-skill role_execution records with direct/delegated evidence, attempts, fallback, and final integration decisions
+- validated execution-packet, lease, retry/failure-fingerprint, graph-freshness, and acceptance-to-human-report parity evidence without assuming governance ownership
 constraints:
 - Do not claim standalone fallback output has the same quality as a matching downstream specialist skill or project-specific standard.
 - Do not replace downstream development skills; delegate requirement, specification, problem framing, architecture, test design, implementation, review, and compliance work to the matching local skill when the profile provides one.
 - For an applicable canonical sub-agent role, require the owning skill to produce the shared role_execution record; aggregate it by stage without taking domain ownership or inventing child invocation evidence.
+- Before delegated, external, or fixed-head execution, require the owning skill to validate the shared agent execution packet; bind external dispatch to that packet, hold an exclusive worktree snapshot lease for tracked writes, and preserve its integration owner and stop/retry boundaries.
 - Default to direct inline role execution. Select delegated only when every shared safety gate passes, at least one material-value trigger exists, cost/failure/retry risk supports delegation, and genuine invocation evidence is available.
 - If delegation is unsupported or fails, select direct when the shared inline-parity contract can be satisfied; otherwise record unavailable. Preserve attempt continuity and require new owner or workflow authorization for attempt three or later.
 - Compose a role_execution input envelope with an existing loaded_rule_ids packet only by reference; do not redefine its resolver, provider, effective-state, or rule semantics.
@@ -81,6 +84,7 @@ constraints:
 - Record each selected test level as passed, failed, blocked-by-environment, not-applicable, or deferred-with-owner. Blocked-by-environment is never passed, and mandatory selected tests keep closeout open until target policy accepts the outcome.
 - Treat release, nightly-full, full-matrix, and validation expected or observed to take at least 120 seconds as long-running. After tracked mutations and focused checks are complete, pin the exact command to a clean immutable commit and dispatch it to the least expensive capable external runtime task.
 - Put exactly one canonical external-task dispatch envelope in a delegated validation prompt. Select a source-task callback or one parent event wait, require exactly one schema-valid terminal report, and prohibit repeated polling or progress narration. Before delivery, the delegated task must persist the dispatch and completed report in ignored artifacts, validate that exact pair with the canonical validator, and send the validated completion record without post-validation edits.
+- Require each external dispatch to reference a passing validation of its exact agent execution packet. Synthetic, mock, fixture, and unit evidence may support but never satisfy an acceptance that requires actual execution; validate acceptance-ledger and human-report parity before closeout.
 - Treat execution timeout, interruption, subject drift, missing terminal evidence, and blocked execution as non-passing. Treat a parent event-wait timeout as pending, and permit one schema-valid terminal read-back only after callback failure and terminal task state.
 - Do not parallelize aggregate validation until dependency ordering, artifact isolation, bounded concurrency, deterministic evidence, and fail-closed cancellation have independent contract coverage.
 - Resolve tracked validation.routine policy before interpreter discovery. A strict ignored local opt-in may only strengthen local mode; never write it implicitly or use environment overrides.
@@ -121,6 +125,9 @@ references:
 - .ai/assets/skills/software-development-orchestrator/templates/external-task-completion.template.yaml
 - .ai/assets/skills/software-development-orchestrator/scripts/validate-external-task-delegation.py
 - .ai/assets/shared/ROLE-EXECUTION-CONTRACT.md
+- .ai/assets/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md
+- .ai/assets/shared/agent-execution-guardrails.schema.yaml
+- .ai/scripts/validate-agent-execution-guardrails.py
 - .dev/standards/WORKFLOW-HANDOFF-POLICY.md
 acceptance:
   validator: .ai/assets/skills/software-development-orchestrator/scripts/validate-software-development-orchestrator-acceptance.py

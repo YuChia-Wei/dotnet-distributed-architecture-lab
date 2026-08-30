@@ -1,11 +1,11 @@
 schema_version: '1.0'
-packet_id: PACKET-417B08DC8F3D5D0C29DBFD8407DA4BB563E95465EFFD9732C0CEBA9D419229B8
+packet_id: PACKET-4EC8330DE7A082DD587A0E8169E1A6F27B93311A8656027516D945FA52980A07
 resolver:
   version: '1.0'
   evidence:
-  - .dev/assessments/ASM-20260813-006/report.md
-  - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/validation-summary.yaml
+  - .dev/assessments/ASM-20260830-002/report.md
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+  - .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/03-v0.15.0-reconciliation.md
 request:
   route_id: ROUTE-69320ED2F30633AA22DD3E91C72210D14A955614F1B4269844ED8EAC0274491C
   capability: local-change
@@ -13,12 +13,12 @@ request:
   technology_profile: dotnet-backend
   file_type: project-file
 baseline:
-  framework_version: v0.14.0
-  framework_commit: 412bb14a16fe75ee65a020b16680def0acc0ff1b
+  framework_version: v0.15.0
+  framework_commit: 5fedaceef7e18b4cdcde3cb665adcc97070db2df
   selected_technology_profile: dotnet-backend
 target_state:
   path: .dev/ai-context/effective-rules.yaml
-  digest: 2bf68a3f909c09964232bcd059684472eb954b161ed511936f3110f4573cd680
+  digest: ce9d8ff8bc96e78406651c1c3221cab1d544f4396c09feff02c606d750ad9f26
 catalogs:
 - catalog_id: selected-profile
   path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
@@ -638,7 +638,7 @@ rules:
 freshness:
   status: verified
   verified_inputs:
-    target_state_digest: 2bf68a3f909c09964232bcd059684472eb954b161ed511936f3110f4573cd680
+    target_state_digest: ce9d8ff8bc96e78406651c1c3221cab1d544f4396c09feff02c606d750ad9f26
     catalog_digests:
     - catalog_id: selected-profile
       path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
@@ -646,4 +646,4 @@ freshness:
     - catalog_id: shared
       path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
       digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
-packet_digest: 054a9a3a562ad5cda5ca6df99f9a1c0f5f200df012354b5cee5a75f9d7879784
+packet_digest: 18449ad38bce38cf164e00c64a9a0458857f68dd35b0705cbf4de7dceef70df4

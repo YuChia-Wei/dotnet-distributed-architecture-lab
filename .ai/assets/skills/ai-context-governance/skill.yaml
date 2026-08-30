@@ -54,6 +54,7 @@ constraints:
   - "Require WORKFLOW-HANDOFF-POLICY for cross-model, runtime, host, machine, or fresh-session continuation; never normalize provider-native Git attribution without real provider fixtures."
   - "Own `.dev/ai-context/customizations.yaml`; identify capability, rule, or contract before supporting paths and follow the shared semantic customization lifecycle."
   - "Resolve governance terms through `.dev/standards/AI-CONTEXT-OWNERSHIP.yaml`; do not infer cross-owner authority from bare candidate, validated, integration, publication, closeout, finalization, or lifecycle wording."
+  - "Reconcile a satisfied workflow terminal anchor only from the explicit machine-readable relationship and tracked evidence contract in WORKFLOW-ARTIFACT-POLICY; never infer an anchor from titles, paths, dates, versions, or ambient provider access, and require an exact continuation declaration when work truthfully remains active."
 workflow:
   - step: 1
     description: "Classify context by audience, scope, language, and action, or intake an ai-context-auditor baseline assessment; when workflow mode applies, create or switch to the dedicated branch before artifacts or material edits"

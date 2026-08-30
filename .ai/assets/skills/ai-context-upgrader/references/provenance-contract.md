@@ -77,6 +77,16 @@ retain both files as active authorities.
   validation. Target reads must not cross symlink or reparse boundaries. Resume
   and rollback preserve the last validated provenance bytes
   and cannot add selection or reconciliation authority.
+- Newly written and recovered package-apply transactions use journal v5 only.
+  Each completed apply operation or rollback path is appended as one canonical,
+  fsynced `progress.jsonl` record before the next mutation begins; `journal.yaml`
+  snapshots bind the compacted record count and tail digest. A trailing partial
+  record is unacknowledged and may be discarded before the next append. New
+  tooling never resumes, rolls back, migrates, or converts v4. An unfinished v4
+  journal blocks new target mutation with the stable
+  `unsupported-transaction-journal-version` classification and prior-tooling or
+  owner-directed recovery guidance; terminal v4 evidence remains archival and
+  does not block an unrelated v5 transaction.
 - A source-version advancement additionally requires a fresh sealed
   `upgrade-remediation-packet/v1`, a matching accepted
   `upgrade-remediation-decision/v1`, its deterministic derived report, and a

@@ -1,0 +1,47 @@
+schema_version: "1.0"
+contract_id: "validation-evidence-lifecycle"
+evidence_classes:
+  identity-sensitive:
+    reusable: false
+    freshness: every-tracked-head
+  input-sensitive:
+    reusable: content-addressed-proof-only
+    freshness: dependency-closure
+  environment-sensitive:
+    reusable: content-addressed-and-compatible-environment-only
+    freshness: dependency-closure-and-environment
+  provider-sensitive:
+    reusable: false
+    freshness: live-provider-read-back
+audit_dispositions:
+  - re-executed
+  - reused-with-proof
+  - blocked
+  - deferred
+  - not-applicable
+reuse_receipt:
+  schema_version: "1.0"
+  record_type: validation-reuse-receipt
+  reusable_classes: [input-sensitive, environment-sensitive]
+  terminal_profiles: [release, nightly-full]
+  required_fresh_gates:
+    - exact-head-independent-audit
+    - hosted-required-contexts
+    - live-merge-admission
+  authority_dimensions: [runner, manifest, resolver, policy, configuration]
+  dependency_closure:
+    required: [check_id, resolver_argv, complete, unknown_paths, path_count, original_paths_sha256, current_paths_sha256, resolver_receipt_sha256]
+    completeness_required: true
+    unknown_paths_required_empty: true
+  terminal_metadata:
+    excluded_from_dependency_fingerprint: true
+  decisions: [reused-with-proof, re-executed, blocked]
+freeze:
+  schema_version: "1.0"
+  record_type: validation-freeze
+  states: [active, invalidated, released]
+  allowed_untracked_mutation: ignored-validation-artifacts-only
+required_contexts:
+  terminal_outcomes: [success, failure, cancelled, timed-out, blocked]
+privacy:
+  forbidden_fields: [private_path, username, hostname, secret, token]

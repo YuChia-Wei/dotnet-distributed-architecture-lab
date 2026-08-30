@@ -43,12 +43,18 @@ target repository Git-admin directory:
 The outer transaction coordinates the existing child package-apply
 transaction; it does not replace or reimplement it. A child plan remains
 schema `2.2.0` and a child journal remains
-`ai-context-package-apply-journal/v4`. The child transaction plan and journal
+`ai-context-package-apply-journal/v5`. The child transaction plan and journal
 remain only at `ai-context-package-apply/<child-transaction-id>/`; neither is
 duplicated into the outer route transaction. The short-lived canonical
 `hops/NNNN/preparation.json` uses the plan schema as a pre-decision proposal,
 but it is not child transaction evidence and must be removed when the child
 transaction has been created.
+
+The v5 child journal binds an append-only `progress.jsonl` digest chain. Each
+completed child operation or rollback path is fsynced before the next mutation;
+snapshot writes compact lifecycle state and bind the applied record count/tail
+without rewriting the completed prefix after every operation. Route recovery
+never uses a v4 child journal.
 
 The formal machine contract is
 `templates/multi-hop-upgrade-transaction.schema.yaml`; start from

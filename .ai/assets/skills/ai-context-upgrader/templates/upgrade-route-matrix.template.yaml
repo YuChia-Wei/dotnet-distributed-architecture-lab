@@ -1,12 +1,12 @@
 template_metadata:
   template_id: "upgrade-route-matrix"
-  template_version: "1.0.0"
+  template_version: "1.1.0"
   created_at: "2026-08-20T00:00:00+08:00"
-  updated_at: "2026-08-20T00:00:00+08:00"
+  updated_at: "2026-08-23T16:21:28+08:00"
 
 # This is a source-framework route inventory, not a target plan. Replace every
 # placeholder with exact release evidence before a resolver may consume it.
-schema_version: "1.0"
+schema_version: "1.1"
 matrix_id: "upgrade-route-matrix-<target-version>"
 target:
   version: "v0.0.0"
@@ -16,6 +16,10 @@ target:
     asset_id: "target-release-manifest"
     path: "artifacts/<target>/manifest.yaml"
     sha256: "<lowercase-sha256>"
+  package_identity:
+    package_id: "ai-context-dotnet-backend-<target-version>"
+    release_id: "REL-<target-version>"
+    payload_fingerprint: "<lowercase-sha256-of-canonical-target-payload>"
 
 # All three governed roles must be accounted for across retained_origins and
 # deprecations. The immediate predecessor is a role, while the two historical
@@ -63,6 +67,13 @@ routes:
         order: 1
         from_version: "v0.0.0"
         to_version: "v0.0.0"
+        # Each hop binds the package materialized by this edge. A direct edge
+        # equals target.package_identity; an intermediate edge names its own
+        # to_version package instead of the final route target.
+        package_identity:
+          package_id: "ai-context-dotnet-backend-<edge-to-version>"
+          release_id: "REL-<edge-to-version>"
+          payload_fingerprint: "<lowercase-sha256-of-edge-package-payload>"
         artifacts:
           archive:
             asset_id: "<edge>-archive"
@@ -97,9 +108,15 @@ routes:
             - "--edge-id"
             - "<origin>-to-<target>"
           report:
-            # Its canonical upgrade-edge-validation/v1 JSON receipt also binds
+            # Its canonical upgrade-edge-validation/v2 JSON receipt also binds
             # this edge_id, from_version, to_version, all artifacts, argv, and
-            # ordered semantic_cutovers as {cutover_id, required, state}.
+            # ordered semantic_cutovers as {cutover_id, required, state}. It
+            # additionally records incoming-package-validation/v1 with the
+            # archive's manifest path/SHA-256, validator path/SHA-256/argv,
+            # package_id/release_id/payload_fingerprint, passed exit 0, and
+            # portable output SHA-256. That package identity must exactly equal
+            # this edge's package_identity. The final edge identity must also
+            # equal target.package_identity.
             asset_id: "<edge>-validation-report"
             path: "artifacts/<edge>/validation-report.json"
             sha256: "<lowercase-sha256>"

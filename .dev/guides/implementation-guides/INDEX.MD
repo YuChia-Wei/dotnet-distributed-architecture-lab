@@ -13,6 +13,7 @@
 | `FAQ.md` | Implementation FAQ. |
 | `NEW-PROJECT-TEST-SETUP-GUIDE.md` | New-project test setup. |
 | `PERSISTENCE-CONFIGURATION-GUIDE.md` | Persistence placement and conditional EF Core registration. |
+| `PORTABLE-TEST-FIXTURE-ACCELERATION-GUIDE.md` | Explicit, portable acceleration for classified disposable test fixtures. |
 | `PREVENT-SERVICE-REGISTRATION-MISSING.md` | DI registration and resolution troubleshooting. |
 | `PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md` | Profile configuration complexity. |
 | `quick-setup.md` | Quick setup walkthrough. |

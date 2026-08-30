@@ -42,6 +42,8 @@ python payload/.ai/scripts/plan-ai-context-package-apply.py \
 
 先審查 dry-run 的新增、取代、移除、重新命名與 reconciliation 結果；只有在
 所有 reconciliation item 都已按 operation ID 處置後，才加入 `--apply`。
+需要互動式進度時可額外加入 `--progress`；進度只會寫入 stderr，不會混入
+既有的 stdout plan/receipt 輸出。
 乾淨安裝完成後執行 `repo-structure-sync`，版本升級則使用
 `ai-context-upgrader`。完整流程與 provenance 邊界以 package 內的
 `INSTALL.md` 為準。

@@ -14,7 +14,9 @@ from typing import Any
 import yaml
 
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
+LEGACY_SCHEMA_VERSION = "1.0"
+SUPPORTED_SCHEMA_VERSIONS = frozenset({LEGACY_SCHEMA_VERSION, SCHEMA_VERSION})
 ROUTE_KINDS = frozenset(
     {
         "direct",
@@ -30,7 +32,8 @@ SHA256_RE = re.compile(r"[0-9a-f]{64}\Z")
 SHA1_RE = re.compile(r"[0-9a-f]{40}\Z")
 VERSION_RE = re.compile(r"v[0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?\Z")
 VALIDATION_STATES = frozenset({"passed", "failed", "blocked", "not-run", "deferred-with-owner"})
-EDGE_VALIDATION_RECEIPT_SCHEMA_VERSION = "upgrade-edge-validation/v1"
+EDGE_VALIDATION_RECEIPT_SCHEMA_VERSION = "upgrade-edge-validation/v2"
+PORTABLE_VALIDATION_SCHEMA_VERSION = "incoming-package-validation/v1"
 DEPRECATION_NOTICE_SCHEMA_VERSION = "upgrade-deprecation-notice/v1"
 DEPRECATION_DECISION_SCHEMA_VERSION = "upgrade-deprecation-owner-decision/v1"
 DEPRECATION_VALIDATION_RECEIPT_SCHEMA_VERSION = "upgrade-deprecation-validation/v1"
@@ -324,17 +327,42 @@ def _asset_identity(value: Any, label: str) -> dict[str, str]:
     }
 
 
-def _validate_target(value: Any) -> dict[str, Any]:
+def _package_identity(value: Any, label: str) -> dict[str, str]:
+    data = _mapping(value, label)
+    _exact_keys(data, {"package_id", "release_id", "payload_fingerprint"}, label)
+    return {
+        "package_id": _string(data["package_id"], f"{label}.package_id"),
+        "release_id": _string(data["release_id"], f"{label}.release_id"),
+        "payload_fingerprint": _sha256(
+            data["payload_fingerprint"], f"{label}.payload_fingerprint"
+        ),
+    }
+
+
+def _validate_target(value: Any, *, require_package_identity: bool) -> dict[str, Any]:
     data = _mapping(value, "target")
-    _exact_keys(data, {"version", "release_id", "commit", "manifest"}, "target")
+    expected = {"version", "release_id", "commit", "manifest"}
+    if require_package_identity:
+        expected.add("package_identity")
+    _exact_keys(data, expected, "target")
     version = _version(data["version"], "target.version")
     if data["release_id"] != f"REL-{version}":
         raise MatrixValidationError("target.release_id must equal REL-target.version")
+    package_identity = (
+        _package_identity(data["package_identity"], "target.package_identity")
+        if require_package_identity
+        else None
+    )
+    if package_identity is not None and package_identity["release_id"] != data["release_id"]:
+        raise MatrixValidationError(
+            "target.package_identity.release_id must equal target.release_id"
+        )
     return {
         "version": version,
         "release_id": data["release_id"],
         "commit": _commit(data["commit"], "target.commit"),
         "manifest": _asset_identity(data["manifest"], "target.manifest"),
+        "package_identity": package_identity,
     }
 
 
@@ -400,19 +428,24 @@ def _validate_edge(
     label: str,
     expected_order: int,
     cutover_requirements: Mapping[str, bool],
+    *,
+    require_package_identity: bool,
 ) -> dict[str, Any]:
     data = _mapping(value, label)
+    expected_keys = {
+        "edge_id",
+        "order",
+        "from_version",
+        "to_version",
+        "artifacts",
+        "semantic_cutovers",
+        "validation",
+    }
+    if require_package_identity:
+        expected_keys.add("package_identity")
     _exact_keys(
         data,
-        {
-            "edge_id",
-            "order",
-            "from_version",
-            "to_version",
-            "artifacts",
-            "semantic_cutovers",
-            "validation",
-        },
+        expected_keys,
         label,
     )
     if data["order"] != expected_order:
@@ -454,11 +487,23 @@ def _validate_edge(
                 "state": state,
             }
         )
+    from_version = _version(data["from_version"], f"{label}.from_version")
+    to_version = _version(data["to_version"], f"{label}.to_version")
+    package_identity = (
+        _package_identity(data["package_identity"], f"{label}.package_identity")
+        if require_package_identity
+        else None
+    )
+    if package_identity is not None and package_identity["release_id"] != f"REL-{to_version}":
+        raise MatrixValidationError(
+            f"{label}.package_identity.release_id must equal REL-to_version"
+        )
     return {
         "edge_id": _string(data["edge_id"], f"{label}.edge_id"),
         "order": expected_order,
-        "from_version": _version(data["from_version"], f"{label}.from_version"),
-        "to_version": _version(data["to_version"], f"{label}.to_version"),
+        "from_version": from_version,
+        "to_version": to_version,
+        "package_identity": package_identity,
         "artifacts": normalized_artifacts,
         "semantic_cutovers": edge_cutovers,
         "validation": {
@@ -478,7 +523,10 @@ def _validate_routes(
     value: Any,
     retained_versions: set[str],
     target_version: str,
+    target_package_identity: Mapping[str, str] | None,
     cutover_requirements: Mapping[str, bool],
+    *,
+    require_package_identity: bool,
 ) -> list[dict[str, Any]]:
     routes = _list(value, "routes")
     route_ids: set[str] = set()
@@ -506,6 +554,7 @@ def _validate_routes(
                 f"{label}.edges[{edge_index}]",
                 edge_index + 1,
                 cutover_requirements,
+                require_package_identity=require_package_identity,
             )
             for edge_index, edge in enumerate(edge_values)
         ]
@@ -513,6 +562,13 @@ def _validate_routes(
             raise MatrixValidationError(f"{label}.edges[0].from_version must equal route origin")
         if edges[-1]["to_version"] != target:
             raise MatrixValidationError(f"{label}.edges[-1].to_version must equal route target")
+        if (
+            require_package_identity
+            and edges[-1]["package_identity"] != target_package_identity
+        ):
+            raise MatrixValidationError(
+                f"{label}.edges[-1].package_identity must equal target.package_identity"
+            )
         for previous, current in zip(edges, edges[1:]):
             if previous["to_version"] != current["from_version"]:
                 raise MatrixValidationError(f"{label}.edges are not an exact continuous chain")
@@ -613,9 +669,15 @@ def validate_matrix(matrix: Mapping[str, Any]) -> dict[str, Any]:
         )
         for key in ("template_id", "template_version", "created_at", "updated_at"):
             _string(metadata[key], f"template_metadata.{key}")
-    if data["schema_version"] != SCHEMA_VERSION:
-        raise MatrixValidationError(f"matrix.schema_version must be {SCHEMA_VERSION}")
-    target = _validate_target(data["target"])
+    schema_version = _string(data["schema_version"], "matrix.schema_version")
+    if schema_version not in SUPPORTED_SCHEMA_VERSIONS:
+        raise MatrixValidationError(
+            "matrix.schema_version must be one of "
+            + ", ".join(sorted(SUPPORTED_SCHEMA_VERSIONS))
+        )
+    target = _validate_target(
+        data["target"], require_package_identity=schema_version == SCHEMA_VERSION
+    )
     origins = _validate_retained_origins(data["retained_origins"])
     cutovers = _validate_cutovers(data["semantic_cutovers"])
     retained_versions = {item["version"] for item in origins}
@@ -623,7 +685,9 @@ def validate_matrix(matrix: Mapping[str, Any]) -> dict[str, Any]:
         data["routes"],
         retained_versions,
         target["version"],
+        target["package_identity"],
         {item["cutover_id"]: item["required"] for item in cutovers},
+        require_package_identity=schema_version == SCHEMA_VERSION,
     )
     retained_roles = {item["role"] for item in origins}
     deprecations = _validate_deprecations(
@@ -638,7 +702,7 @@ def validate_matrix(matrix: Mapping[str, Any]) -> dict[str, Any]:
     if len(deprecated_roles) != len(deprecations):
         raise MatrixValidationError("deprecations must have unique retained-origin roles")
     return {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": schema_version,
         "matrix_id": _string(data["matrix_id"], "matrix.matrix_id"),
         "target": target,
         "retained_origins": origins,
@@ -727,11 +791,105 @@ def _checksum_sidecar_diagnostic(
     return None
 
 
+def _portable_validation_record(value: Any) -> dict[str, Any]:
+    label = "edge validation report.portable_validation"
+    data = _mapping(value, label)
+    _exact_keys(
+        data,
+        {"schema_version", "authority", "package_identity", "execution"},
+        label,
+    )
+    schema_version = _string(data["schema_version"], f"{label}.schema_version")
+    if schema_version != PORTABLE_VALIDATION_SCHEMA_VERSION:
+        raise MatrixValidationError(f"{label}.schema_version is unsupported")
+    authority = _mapping(data["authority"], f"{label}.authority")
+    _exact_keys(authority, {"kind", "manifest", "validator"}, f"{label}.authority")
+    if authority["kind"] != "incoming-candidate":
+        raise MatrixValidationError(f"{label}.authority.kind must be incoming-candidate")
+    manifest = _mapping(authority["manifest"], f"{label}.authority.manifest")
+    _exact_keys(manifest, {"path", "sha256"}, f"{label}.authority.manifest")
+    manifest_path = _safe_relative_path(
+        manifest["path"], f"{label}.authority.manifest.path"
+    )
+    if manifest_path != "metadata/validation.json":
+        raise MatrixValidationError(
+            f"{label}.authority.manifest.path must be metadata/validation.json"
+        )
+    validator = _mapping(authority["validator"], f"{label}.authority.validator")
+    _exact_keys(
+        validator,
+        {"path", "sha256", "argv"},
+        f"{label}.authority.validator",
+    )
+    validator_path = _safe_relative_path(
+        validator["path"], f"{label}.authority.validator.path"
+    )
+    validator_argv = _list(validator["argv"], f"{label}.authority.validator.argv")
+    expected_argv = ["python", f"payload/{validator_path}", "--package-root", "."]
+    if validator_argv != expected_argv:
+        raise MatrixValidationError(
+            f"{label}.authority.validator.argv must execute the declared validator"
+        )
+    execution = _mapping(data["execution"], f"{label}.execution")
+    _exact_keys(
+        execution,
+        {"outcome", "exit_code", "output_sha256"},
+        f"{label}.execution",
+    )
+    if (
+        execution["outcome"] != "passed"
+        or type(execution["exit_code"]) is not int
+        or execution["exit_code"] != 0
+    ):
+        raise MatrixValidationError(
+            f"{label}.execution must report passed with integer exit code zero"
+        )
+    return {
+        "schema_version": schema_version,
+        "authority": {
+            "kind": "incoming-candidate",
+            "manifest": {
+                "path": manifest_path,
+                "sha256": _sha256(
+                    manifest["sha256"], f"{label}.authority.manifest.sha256"
+                ),
+            },
+            "validator": {
+                "path": validator_path,
+                "sha256": _sha256(
+                    validator["sha256"], f"{label}.authority.validator.sha256"
+                ),
+                "argv": expected_argv,
+            },
+        },
+        "package_identity": _package_identity(
+            data["package_identity"], f"{label}.package_identity"
+        ),
+        "execution": {
+            "outcome": "passed",
+            "exit_code": 0,
+            "output_sha256": _sha256(
+                execution["output_sha256"], f"{label}.execution.output_sha256"
+            ),
+        },
+    }
+
+
 def _edge_validation_receipt_diagnostic(
-    edge: Mapping[str, Any], report: bytes, output: bytes, context: Mapping[str, str]
+    edge: Mapping[str, Any],
+    report: bytes,
+    output: bytes,
+    context: Mapping[str, str],
+    target_package_identity: Mapping[str, str] | None,
 ) -> dict[str, str] | None:
     """Parse a canonical edge receipt and bind it to the declared edge evidence."""
 
+    if target_package_identity is None:
+        return {
+            **context,
+            "artifact": "validation-report",
+            "code": "edge-portable-validation-proof-missing",
+        }
     report_identity = edge["validation"]["report"]
     if PurePosixPath(report_identity["path"]).suffix.lower() != ".json":
         return {
@@ -752,6 +910,7 @@ def _edge_validation_receipt_diagnostic(
                     "artifacts",
                     "validator_argv",
                     "semantic_cutovers",
+                    "portable_validation",
                     "outcome",
                     "exit_code",
                     "output_sha256",
@@ -797,6 +956,9 @@ def _edge_validation_receipt_diagnostic(
                         "state": state,
                     }
                 )
+            portable_validation = _portable_validation_record(
+                receipt["portable_validation"]
+            )
             outcome = _string(receipt["outcome"], "edge validation report.outcome")
             if type(receipt["exit_code"]) is not int:
                 raise MatrixValidationError("edge validation report.exit_code must be an integer")
@@ -836,6 +998,24 @@ def _edge_validation_receipt_diagnostic(
             raise EvidenceValidationError(
                 "edge-validation-report-cutover-mismatch",
                 "edge validation report cutovers do not match the matrix edge",
+            )
+        portable_package_identity = portable_validation["package_identity"]
+        if portable_package_identity != target_package_identity:
+            if (
+                portable_package_identity["package_id"]
+                == target_package_identity["package_id"]
+                and portable_package_identity["release_id"]
+                == target_package_identity["release_id"]
+                and portable_package_identity["payload_fingerprint"]
+                != target_package_identity["payload_fingerprint"]
+            ):
+                raise EvidenceValidationError(
+                    "edge-package-payload-identity-conflict",
+                    "one package/release identity names different payload fingerprints",
+                )
+            raise EvidenceValidationError(
+                "edge-package-identity-mismatch",
+                "portable package identity does not match the target package identity",
             )
         if outcome != "passed":
             raise EvidenceValidationError(
@@ -1111,7 +1291,9 @@ def _deprecation_evidence_errors(matrix: Mapping[str, Any], asset_root: Path) ->
 
 
 def _route_diagnostics(
-    route: Mapping[str, Any], required_cutovers: set[str], asset_root: Path
+    route: Mapping[str, Any],
+    required_cutovers: set[str],
+    asset_root: Path,
 ) -> list[dict[str, str]]:
     diagnostics: list[dict[str, str]] = []
     covered_cutovers: set[str] = set()
@@ -1153,7 +1335,11 @@ def _route_diagnostics(
             and output is not None
         ):
             receipt_diagnostic = _edge_validation_receipt_diagnostic(
-                edge, report, output, edge_context
+                edge,
+                report,
+                output,
+                edge_context,
+                edge["package_identity"],
             )
             if receipt_diagnostic is not None:
                 diagnostics.append(receipt_diagnostic)
@@ -1330,7 +1516,11 @@ def resolve_upgrade_route(
         cutover["cutover_id"] for cutover in normalized["semantic_cutovers"] if cutover["required"]
     }
     route_diagnostics: dict[str, list[dict[str, str]]] = {
-        route["route_id"]: _route_diagnostics(route, required_cutovers, asset_root)
+        route["route_id"]: _route_diagnostics(
+            route,
+            required_cutovers,
+            asset_root,
+        )
         for route in matching
     }
     if target_diagnostic is not None or origin_diagnostic is not None:

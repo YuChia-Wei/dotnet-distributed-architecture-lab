@@ -18,7 +18,9 @@ The canonical contract is
 `.ai/assets/skills/ai-context-upgrader/templates/upgrade-route-matrix.schema.yaml`; start from
 `templates/upgrade-route-matrix.template.yaml`.
 
-- The target binds its version, release ID, full commit, and manifest identity.
+- The target binds its version, release ID, full commit, manifest identity, and
+  canonical package identity: `package_id`, `release_id`, and
+  `payload_fingerprint`.
 - The governed origin roles are exactly `immediate-predecessor`, `v0.9.0`, and
   `v0.6.0`. Each role must appear exactly once, either as a retained origin
   binding version, release ID, full commit, and manifest identity, or as a
@@ -27,9 +29,12 @@ The canonical contract is
   target. A route kind is deliberately not stored; one edge can become
   `direct`, while two or more can become `orchestrated-multi-hop` only after
   verification.
-- Every edge binds four identities: `archive`, `checksum`, `manifest`, and
-  `validator`, plus a non-empty `validator_argv`, canonical validation receipt,
-  and separate raw validation-output identity. The validator identity is the
+- Every edge binds the package identity materialized by its `to_version`, four
+  asset identities (`archive`, `checksum`, `manifest`, and `validator`), a
+  non-empty `validator_argv`, canonical validation receipt, and separate raw
+  validation-output identity. The final edge package identity equals the matrix
+  target identity; intermediate edges bind their own package rather than the
+  final target package. The validator identity is the
   exact executable asset and `validator_argv` must name its exact
   matrix-relative path exactly once, while preserving any interpreter and
   option tokens. An identity has `asset_id`, a safe matrix-relative POSIX
@@ -39,7 +44,8 @@ The canonical contract is
   bytes must be exactly one standard `sha256sum` record whose digest and
   filename match the verified archive bytes and archive basename. Updating the
   sidecar identity after putting a wrong archive digest in it remains unsafe.
-- An edge validation receipt is canonical UTF-8 JSON. It must bind the exact
+- An edge validation receipt uses `upgrade-edge-validation/v2` canonical UTF-8
+  JSON. It must bind the exact
   edge ID, `from_version`, `to_version`, all four edge identities, validator
   argv, and the ordered edge semantic-cutover claims after the matrix-level
   `required` value has been bound into each `{cutover_id, required, state}`
@@ -47,7 +53,14 @@ The canonical contract is
   That output digest must equal both the declared output identity and separately
   retained raw output bytes. The matrix validation state cannot disagree with
   the receipt. Relabelling a matrix edge or adding a cutover claim without a
-  corresponding immutable receipt is reconciliation-required.
+  corresponding immutable receipt is reconciliation-required. The receipt also
+  records `incoming-package-validation/v1`: the exact archive-declared
+  incoming-candidate manifest path and SHA-256, validator path/SHA-256/argv,
+  passed exit code and output digest, and the archive's package ID, release ID,
+  and payload fingerprint. The receipt package identity must equal the current
+  edge package identity, whose release ID names that edge's `to_version`.
+  Reusing the same package/release identity for a
+  different payload fingerprint is a fail-closed identity conflict.
 - Semantic cutovers are declared once at matrix level. A required cutover must
   have a `passed` record in at least one ordered edge of a selected route.
 - A deprecation is valid only with `complete: true`, `unsupported` disposition,
@@ -95,7 +108,8 @@ produce identical evidence bytes.
 
 Invalid matrix syntax, unsafe paths, invalid identity shape, or incomplete or
 tampered deprecation evidence is a fail-closed command error rather than a new
-route kind. Missing, malformed, tampered, or cross-mismatched in-scope edge
+route kind. Missing, malformed, tampered, legacy-v1,
+portable-validation-incomplete, or cross-mismatched in-scope edge
 evidence instead produces `reconciliation-required`; no resolver path executes
 an asset, changes a target, or creates a fifth result kind.
 
@@ -104,8 +118,12 @@ an asset, changes a target, or creates a fifth result kind.
 A source-repository archive validator, release-phase command, or successful
 hosted publication is not automatically an upgrade-edge validator. An edge may
 name a validator only when the matrix binds the exact executable bytes and its
-later transaction stage can execute the declared contract against that edge's
-package or resulting target state.
+edge proof executes the archive-declared incoming-candidate validator, records
+its exact authority and result, and binds its package identity to the package
+materialized by that edge. The resolver verifies that immutable receipt
+without re-executing package code. A legacy `1.0` matrix remains parseable only
+to produce `reconciliation-required`; it cannot obtain a passing route without
+the new proof.
 
 Published v0.7.0 through v0.13.0 packages predate the portable
 incoming-candidate validator contract: they contain the package-apply planner

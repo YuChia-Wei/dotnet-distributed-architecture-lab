@@ -10,6 +10,8 @@ from pathlib import Path
 # This command itself runs inside the extracted payload.  Set the process flag
 # before importing the sibling validator so validation never creates an
 # unchecksummed __pycache__ member in the candidate envelope.
+SCRIPT_ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(SCRIPT_ROOT))
 sys.dont_write_bytecode = True
 
 from ai_context_package_validation import PackageValidationError, validate_extracted_package

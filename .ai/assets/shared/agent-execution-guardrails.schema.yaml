@@ -1,0 +1,48 @@
+schema_version: "1.0"
+contract_id: agent-execution-guardrails
+record_types:
+  packet: agent-execution-packet
+  lease: worktree-snapshot-lease
+  evidence: acceptance-evidence-ledger
+  retry: agent-retry-decision
+  graph: code-graph-freshness
+execution_kinds: [delegated, external, fixed-head-audit]
+role_applicability: [applies, not-applicable]
+permission_modes: [allow, deny]
+lease_states: [active, released, invalidated]
+lease_access: [tracked-writer, read-only]
+artifact_states: [open, sealed, released]
+evidence_kinds: [actual-execution, synthetic-test, mock, unit, document]
+execution_receipt_producers: [local-command-runner, external-task-completion]
+actual_execution_binding: existing-contained-receipt-and-output-files-with-byte-digests
+outcomes: [passed, failed, blocked, deferred, not-applicable]
+retry_decisions: [retry, stop]
+graph_states: [fresh, stale, missing]
+graph_coverage: [complete, partial, unknown]
+graph_fallbacks: [none, tracked-search]
+terminal_modes: [callback, event-wait]
+reserved_powershell_variables:
+  - args
+  - error
+  - executioncontext
+  - false
+  - foreach
+  - home
+  - host
+  - input
+  - lastexitcode
+  - matches
+  - myinvocation
+  - null
+  - pid
+  - profile
+  - psboundparameters
+  - pscmdlet
+  - psitem
+  - psscriptroot
+  - pwd
+  - shellid
+  - stacktrace
+  - this
+  - true
+privacy_forbidden_keys: [raw_output, absolute_path, secret, token, credential, prompt]

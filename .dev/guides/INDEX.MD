@@ -25,6 +25,7 @@ This index owns the file and directory catalog for `.dev/guides/`.
 | `implementation-guides/DATABASE-MIGRATION-GUIDE.md` | Target-selected database migration and rollback guidance. |
 | `implementation-guides/DEVELOPMENT-TOOLS-GUIDE.md` | Target-neutral .NET and repository tool command reference. |
 | `implementation-guides/PERSISTENCE-CONFIGURATION-GUIDE.md` | Persistence placement, conditional EF Core registration, and validation guidance. |
+| `implementation-guides/PORTABLE-TEST-FIXTURE-ACCELERATION-GUIDE.md` | Portable opt-in fixture acceleration, safe routing, diagnostics, and benchmark guidance. |
 | `implementation-guides/PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md` | Profile configuration complexity guidance. |
 | `learning-guides/LEARNING-PATH.md` | Profile-specific .NET backend learning reference; conditional, not target-project truth. |
 | `learning-guides/NEW-PROJECT-GUIDE.md` | Retired ExampleApp onboarding example; current target initialization uses `ai-context-init`. |

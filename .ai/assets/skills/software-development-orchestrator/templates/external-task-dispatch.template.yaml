@@ -19,6 +19,17 @@ execution:
   working_directory: "<exact working directory>"
   argv: ["<executable>", "<arg-1>"]
   timeout_seconds: 900
+execution_packet:
+  schema_ref: ".ai/assets/shared/agent-execution-guardrails.schema.yaml"
+  packet_ref: "<ignored-agent-execution-packet-path>"
+  packet_sha256: "<lowercase-canonical-packet-sha256>"
+  subject_sha: "<full immutable Git SHA>"
+  validator_argv:
+    - "python"
+    - ".ai/scripts/validate-agent-execution-guardrails.py"
+    - "--packet"
+    - "<ignored-agent-execution-packet-path>"
+  validation_outcome: "passed"
 permissions:
   read_scope: ["repository"]
   write_scope: ["ignored-validation-artifacts"]

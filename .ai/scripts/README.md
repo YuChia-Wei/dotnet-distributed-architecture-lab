@@ -130,12 +130,19 @@ Shell or PowerShell scripts should be retired or replaced when they:
 - `validate-ai-context-target.py`
 - `resolve-effective-rule-packet.py`
 - `validate-source-dispositions.py`
+- `validate-source-work-management.py`
 - `validate-file-disposition-manifest.py`
 - `validate-git-commits.py`
 - `validate-workflow-handoff.py`
 - `plan-ai-context-package-apply.py`
 
 These scripts inspect AI context, markdown, prompt portability, or repository hygiene. They are not substitutes for dotnet C# validation.
+
+`validate-source-work-management.py` checks the source repository's live GitHub
+authority boundary, the frozen `.dev/backlog` path-and-byte identity, historical
+v0.5.0-v0.9.0 `backlog_refs`, v0.10.0+ online Issue scope, and prospective
+workflow rejection of retired local planning bindings. It is deterministic and
+does not use GitHub credentials or network access.
 
 Source-maintainer release validation, tag handoff, hosted publication,
 provider reconciliation, release rendering, package building, immutable source
@@ -163,7 +170,7 @@ candidate remains unusable because freshness and digest validation fails closed.
 
 `validate-ai-context.py` checks objective repository facts: active index paths, literal table corruption, declared runtime-root status, canonical/Agents/Claude skill inventory parity, case-safe `AGENTS.md` and thin `CLAUDE.md` root entries, canonical wrapper-metadata target/path integrity, sub-agent dynamic/native dispositions, exact adapter target/path/schema/canonical-link/package-profile parity, policy-scoped agent-facing language, root bilingual entry ownership/link/structural markers, rule ownership registry structure, qualified governance-term namespace/owner/shorthand/machine-binding routes, canonical skill/sub-agent schema compliance, canonical template-family hygiene, and deterministic development capability routing. It scans both tracked and untracked non-ignored files so a new context file cannot bypass the gate before staging, while filtering tracked paths that are deleted in the working tree. Language lint uses exact path-and-line exceptions for deliberate routing triggers; other Han prose and selected non-ASCII punctuation fail with a file and line number. Script source, generated/example/archive/migration material, workflows, product `src`/`test` trees, and human-facing `.dev` documentation are outside that language scan; Markdown documentation under `.ai/scripts` remains in scope. Root bilingual validation checks reciprocal ownership links, headings, links, fences, inline-code identifiers, tables, lists, and ordered backtick table paths. These are structural drift guards, not proof of semantic equivalence; retained semantic review remains required when a bilingual entry changes materially.
 
-`validate-workflow-artifacts.py` validates post-adoption workflow locator/task metadata, complete `.dev/workflows/INDEX.MD` directory coverage, locator-backed title/owner/status/timestamp/entrypoint parity, explicit legacy/no-locator rows, durable `.dev/backlog/items/*.yaml` identity/lifecycle/reference integrity, and fail-closed development implementation contracts for intent, execution mode, overlays, layered sources, subject revision, and acceptance criteria. Locators that opt into `lifecycle_contract: "1.0"` also enforce active-task cardinality, completed-workflow closure, and completed-task result semantics. Historical tasks and locators before their respective contract adoption remain compatible. The development implementation-contract and orchestrator acceptance tests live with `software-development-orchestrator`; the old `.ai/scripts/tests/` paths are thin compatibility entrypoints only.
+`validate-workflow-artifacts.py` validates post-adoption workflow locator/task metadata, complete `.dev/workflows/INDEX.MD` directory coverage, locator-backed title/owner/status/timestamp/entrypoint parity, explicit legacy/no-locator rows, durable `.dev/backlog/items/*.yaml` identity/lifecycle/reference integrity, and fail-closed development implementation contracts for intent, execution mode, overlays, layered sources, subject revision, and acceptance criteria. Locators that opt into `lifecycle_contract: "1.0"` also enforce active-task cardinality, completed-workflow closure, and completed-task result semantics. An explicit `terminal_anchor_contract` binds lifecycle effects to tracked evidence: a satisfied `complete` anchor rejects active workflow/task state, while a satisfied `continue` anchor requires a reason and the exact unfinished task IDs. The error names the workflow, anchor, task, and conflicting state. The validator never infers anchors from names, paths, dates, or versions and performs no live provider access. Historical tasks and locators before their respective contract adoption remain compatible. The development implementation-contract and orchestrator acceptance tests live with `software-development-orchestrator`; the old `.ai/scripts/tests/` paths are thin compatibility entrypoints only.
 
 `validate-assessment-artifacts.py` validates `.dev/assessments/` locator and
 index coverage, `ASM-YYYYMMDD-NNN` identity, template and report paths, assessed
@@ -413,10 +420,26 @@ Job Object and supported Linux hosts use subreaper-aware descendant tracking;
 unsupported POSIX containment is rejected before launch. A passing execution
 requires a sealed log, complete descendant cleanup, exact effective-argv and
 duration binding, a privacy-safe persisted argv, and matching raw plus adapter
-receipts. Timeout, cancellation, snapshot drift, launch failure, and unproven
+receipts. The raw receipt treats monotonic elapsed time as the authoritative
+duration and records any UTC wall-clock adjustment explicitly; the adapter
+authenticates that adjustment before deriving internally consistent timing.
+Legacy receipts without an adjustment retain the strict wall-clock equality
+contract. Timeout, cancellation, snapshot drift, launch failure, and unproven
 cleanup are never reusable passes. Selected checks that never launch are
 recorded explicitly as `not-executed` and cannot impersonate supervised
 execution.
+
+The aggregate shell runner also derives every evidence timestamp from one
+wall-clock origin plus monotonic elapsed time. A hosted NTP or VM clock
+adjustment therefore cannot create a negative per-check duration or invalidate
+otherwise authentic finalization evidence. The wall origin preserves an
+epoch-compatible `started_at`; subsequent timing never re-reads wall time.
+
+Per-check timeouts are execution ceilings, not profile budgets. The
+`multi-hop-upgrade-transaction`, `package-apply`, and
+`aggregate-runner-contract` ceilings include measured Windows full-suite
+duration plus bounded headroom; profile membership and required enforcement
+remain unchanged when those ceilings are calibrated.
 
 After every selected ID has exactly one event, the runner verifies the final
 repository snapshot, atomically writes summaries, and seals their canonical

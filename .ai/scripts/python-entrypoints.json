@@ -19,6 +19,8 @@
     {"path": ".ai/scripts/validate-dependency-versions.py", "portable": true, "dependency_profile": [], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-file-disposition-manifest.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-git-commits.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
+    {"path": ".ai/scripts/validate-agent-execution-guardrails.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
+    {"path": ".ai/scripts/validate-validation-lifecycle.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-shell-assets.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-software-development-orchestrator-acceptance.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-workflow-artifacts.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
@@ -28,8 +30,12 @@
     {"path": ".ai/scripts/measure-ai-context-load.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/plan-github-backlog-migration.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/prepare-ai-context-release.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
+    {"path": ".ai/scripts/resolve-ai-context-package-identity.py", "portable": false, "dependency_profile": [], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/reconcile-ai-context-release-provider.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/render-ai-context-release-notes.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
+    {"path": ".ai/scripts/run-test-fixture-profile.py", "portable": false, "dependency_profile": [], "prerequisite_exit_code": 1},
+    {"path": ".ai/scripts/run-v015-package-validation.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
+    {"path": ".ai/scripts/run-v015-package-validation-wsl.py", "portable": false, "dependency_profile": [], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-ai-behavior-evaluation.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-ai-context-package.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/ai_context_release_closeout.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 3},
@@ -41,6 +47,7 @@
     {"path": ".ai/scripts/validate-skill-transition.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-repository-identity.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-source-dispositions.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
+    {"path": ".ai/scripts/validate-source-work-management.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-source-governance.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1}
   ]
 }

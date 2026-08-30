@@ -44,7 +44,7 @@ storage_layout:
     - "hops/<index>/preparation.json is a temporary pre-child proposal and is removed once the child transaction exists; it is never child transaction evidence"
     - ".preparing-hops and failed-preparations are non-authoritative attempt retention, never active-hop, resume, validator-pass, child-binding, checkpoint, or rollback evidence"
     - "a child plan and child journal remain only under ai-context-package-apply/<child_transaction_id>"
-    - "a child plan has schema_version 2.2.0 and a child journal has schema_version ai-context-package-apply-journal/v4"
+    - "a child plan has schema_version 2.2.0 and a newly written child journal has schema_version ai-context-package-apply-journal/v5; v4 is never recovered or converted"
 
   prepared_hop:
     directory_pattern: "hops/<zero-based-four-digit-hop-index>/"
@@ -386,7 +386,7 @@ checkpoint:
         target_validation_receipt_sha256: lowercase-sha256
         terminal_receipt_sha256: lowercase-sha256
       invariants:
-        - "the child plan at evidence_path/plan.json has schema 2.2.0 and the child journal at evidence_path/journal.yaml has schema ai-context-package-apply-journal/v4"
+        - "the child plan at evidence_path/plan.json has schema 2.2.0 and the child journal at evidence_path/journal.yaml has schema ai-context-package-apply-journal/v5"
         - "transaction_id equals the semantic child plan_sha256; no temporary proposal raw-byte digest is stored in a child transaction or finalized checkpoint"
         - "child transaction, plan, package, remediation, validation, and terminal receipt identities bind this exact route edge"
     pending_receipt:

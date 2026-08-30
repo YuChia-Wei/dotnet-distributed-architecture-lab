@@ -16,6 +16,13 @@ from typing import Any
 
 import yaml
 
+from ai_context_package_identity import (
+    POLICY_ID as PUBLIC_PACKAGE_IDENTITY_POLICY,
+    PackageIdentityError,
+    expected_package_id,
+    expected_rule,
+)
+
 
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 CHECKSUM_LINE_RE = re.compile(r"^([0-9a-f]{64})  ([^\r\n]+)$")
@@ -754,16 +761,44 @@ def _validate_package_identity(
     records: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     identity = _require_mapping(package.get("identity"), "package.yaml identity")
-    if set(identity) != {
+    legacy_fields = {
         "schema_version",
         "selected_input_fingerprint",
         "payload_fingerprint",
         "files_manifest_digest",
         "migration_digest",
-    }:
+    }
+    current_fields = legacy_fields | {
+        "package_identity_policy",
+        "identity_rule",
+        "public_artifact_base",
+    }
+    expected_fields = current_fields if package.get("schema_version") == "2.4.0" else legacy_fields
+    if set(identity) != expected_fields:
         _fail("package.yaml identity fields are incomplete or unexpected")
-    if identity.get("schema_version") != "1.0.0":
-        _fail("package.yaml identity must use schema 1.0.0")
+    expected_identity_schema = "1.1.0" if package.get("schema_version") == "2.4.0" else "1.0.0"
+    if identity.get("schema_version") != expected_identity_schema:
+        _fail(f"package.yaml identity must use schema {expected_identity_schema}")
+    package_id = _require_string(package.get("package_id"), "package.yaml package_id")
+    if package.get("schema_version") == "2.4.0":
+        if identity.get("public_artifact_base") != package_id:
+            _fail("package public artifact base does not match package ID and envelope root")
+        if package.get("profile_id") == "dotnet-backend":
+            try:
+                resolved = expected_rule(package.get("version"))
+            except PackageIdentityError as exc:
+                _fail(f"package public identity version is invalid: {exc}")
+            if package_id != expected_package_id(package.get("version")):
+                _fail("package ID does not match the governed public identity boundary")
+            if identity.get("package_identity_policy") != PUBLIC_PACKAGE_IDENTITY_POLICY:
+                _fail("package identity policy is not the public canonical policy")
+            if identity.get("identity_rule") != resolved["rule_id"]:
+                _fail("package identity rule does not match the package version")
+        elif (
+            identity.get("package_identity_policy") != "profile-local-template"
+            or identity.get("identity_rule") != "profile.name_template"
+        ):
+            _fail("non-canonical fixture profile identity is invalid")
     expected = {
         "payload_fingerprint": _payload_fingerprint(records),
         "files_manifest_digest": _sha256(files_bytes),
@@ -895,6 +930,8 @@ def _validate_selected_input_proof(
         f".ai/distribution/profiles/{profile_id}.yaml",
         f".dev/releases/v{version}/release.yaml",
     }
+    if identity.get("package_identity_policy") == PUBLIC_PACKAGE_IDENTITY_POLICY:
+        expected_source_paths.add(".ai/distribution/identity-registry.yaml")
     if set(source_by_path) != expected_source_paths:
         _fail("selected-input source_inputs do not identify the exact package authority inputs")
     for envelope_path, source_path in (
@@ -1258,7 +1295,7 @@ def _validate_envelope_runtime_contract(
 def validate_extracted_package(
     package_root: Path, *, run_portable_entrypoints: bool = True
 ) -> dict[str, object]:
-    """Validate one freshly extracted schema-2.3.0 package without source-repo reads."""
+    """Validate one freshly extracted portable package without source-repo reads."""
 
     package_root = package_root.resolve()
     files = _validate_checksum_coverage(package_root)
@@ -1280,8 +1317,8 @@ def validate_extracted_package(
     package = _load_yaml_mapping(package_path, "package.yaml")
     inventory = _load_yaml_mapping(files_path, "files.yaml")
     migration = _load_yaml_mapping(migration_path, "migration.yaml")
-    if package.get("schema_version") != "2.3.0":
-        _fail("package.yaml must use schema 2.3.0")
+    if package.get("schema_version") not in {"2.3.0", "2.4.0"}:
+        _fail("package.yaml must use schema 2.3.0 or 2.4.0")
     package_id = _require_string(package.get("package_id"), "package.yaml package_id")
     if migration.get("package_id") != package_id:
         _fail("migration.yaml package_id does not match package.yaml")

@@ -123,6 +123,18 @@ def _utc_now() -> str:
     )
 
 
+def _clock_adjustment_seconds(
+    started_at: str,
+    finished_at: str,
+    duration_seconds: float,
+) -> float:
+    """Return wall elapsed time minus the authoritative monotonic duration."""
+
+    started = datetime.fromisoformat(started_at.replace("Z", "+00:00"))
+    finished = datetime.fromisoformat(finished_at.replace("Z", "+00:00"))
+    return round((finished - started).total_seconds() - duration_seconds, 6)
+
+
 def _safe_error(stage: str, exc: BaseException) -> dict[str, object]:
     """Return an error descriptor that cannot disclose a host path."""
 
@@ -281,6 +293,23 @@ def _validate_receipt_invariants(receipt: dict[str, object]) -> None:
         value = receipt.get(field)
         if not isinstance(value, str) or not value.endswith("Z"):
             raise ValueError(f"invalid {field}")
+    clock_adjustment = receipt.get("clock_adjustment_seconds")
+    if (
+        not isinstance(clock_adjustment, (int, float))
+        or isinstance(clock_adjustment, bool)
+        or not math.isfinite(float(clock_adjustment))
+    ):
+        raise ValueError("invalid clock_adjustment_seconds")
+    try:
+        expected_clock_adjustment = _clock_adjustment_seconds(
+            receipt["started_at"],  # type: ignore[arg-type]
+            receipt["finished_at"],  # type: ignore[arg-type]
+            float(receipt["duration_seconds"]),
+        )
+    except (TypeError, ValueError) as exc:
+        raise ValueError("invalid supervision receipt timestamp") from exc
+    if abs(float(clock_adjustment) - expected_clock_adjustment) > 0.000002:
+        raise ValueError("inconsistent clock_adjustment_seconds")
 
     platform = receipt.get("platform")
     if not isinstance(platform, dict):
@@ -2246,6 +2275,11 @@ def supervise_command(
 
     finished_at = _utc_now()
     duration_seconds = round(max(0.0, time.monotonic() - monotonic_started), 6)
+    clock_adjustment_seconds = _clock_adjustment_seconds(
+        started_at,
+        finished_at,
+        duration_seconds,
+    )
     safe_argv = _privacy_safe_argv(normalized_argv, cwd)
     safe_argv_bytes = _canonical_argv_bytes(safe_argv)
     effective_argv_bytes = _canonical_argv_bytes(normalized_argv)
@@ -2262,6 +2296,7 @@ def supervise_command(
         "started_at": started_at,
         "finished_at": finished_at,
         "duration_seconds": duration_seconds,
+        "clock_adjustment_seconds": clock_adjustment_seconds,
         "platform": {
             "family": platform_family,
             "mechanism": outcome.mechanism,

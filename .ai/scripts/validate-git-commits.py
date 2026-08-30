@@ -364,6 +364,11 @@ def main() -> int:
     selector = parser.add_mutually_exclusive_group()
     selector.add_argument("--range", dest="commit_range", help="Git revision range, for example main..HEAD")
     selector.add_argument("--commit", help="Single commit-ish; defaults to HEAD")
+    selector.add_argument(
+        "--message-file",
+        type=Path,
+        help="Validate a planned UTF-8 commit message before git commit",
+    )
     parser.add_argument("--workflow-id", help="Require workflow sections and this workflow identity")
     adoption_source = parser.add_mutually_exclusive_group()
     adoption_source.add_argument(
@@ -396,6 +401,35 @@ def main() -> int:
     except (OSError, UnicodeDecodeError, yaml.YAMLError, ValueError) as exc:
         print(f"Git commit validation failed: cannot load adoption evidence: {exc}")
         return 1
+    if args.message_file is not None:
+        if adoption_evidence is not None:
+            print(
+                "Git commit validation failed: planned messages cannot select "
+                "target-history adoption evidence"
+            )
+            return 1
+        try:
+            message = args.message_file.read_text(encoding="utf-8", errors="strict")
+        except (OSError, UnicodeDecodeError) as exc:
+            print(f"Git commit validation failed: cannot read planned message: {exc}")
+            return 1
+        errors: list[str] = []
+        validate_message(
+            "planned-message",
+            message,
+            policy,
+            errors,
+            args.workflow_id,
+            committed_at=datetime.now().astimezone(),
+            use_legacy_subject_grammar=False,
+        )
+        if errors:
+            print("Git commit validation failed:")
+            for error in errors:
+                print(f"- {error}")
+            return 1
+        print("Git commit validation passed for planned message.")
+        return 0
     shas = selected_commits(
         args.commit_range,
         args.commit,

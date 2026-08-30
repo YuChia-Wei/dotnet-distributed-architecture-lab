@@ -24,6 +24,7 @@ dispatch:
     - objective
     - subject
     - execution
+    - execution_packet
     - permissions
     - completion_delivery
     - stop_conditions
@@ -41,6 +42,13 @@ dispatch:
     required: [working_directory, argv, timeout_seconds]
     argv: "non-empty argument vector; do not rely on an implicit shell wrapper"
     timeout_seconds: "positive integer covering command execution, not parent wait transport"
+  execution_packet:
+    required: [schema_ref, packet_ref, packet_sha256, subject_sha, validator_argv, validation_outcome]
+    schema_ref: ".ai/assets/shared/agent-execution-guardrails.schema.yaml"
+    validator: ".ai/scripts/validate-agent-execution-guardrails.py --packet <packet-ref>"
+    packet_sha256: "SHA-256 of the exact packet file bytes; the packet's internal packet_sha256 independently seals canonical content"
+    binding: "load the contained packet, run the canonical packet validator, and match subject, argv, cwd, and integration owner"
+    validation_outcome: passed
   permissions:
     required: [read_scope, write_scope, repair_allowed, external_mutations, secret_values]
     allowed_write_scope: [ignored-validation-artifacts]
@@ -132,3 +140,4 @@ security:
   secret_values_in_envelope: prohibited
   issue_project_merge_release_or_publication_mutation: separately-authorized-only
   delegated_repair: prohibited-by-default
+  validated_execution_packet: required-before-dispatch

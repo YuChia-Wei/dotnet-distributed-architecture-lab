@@ -85,3 +85,21 @@ When completing a task:
 - list validation in `results.tests_run`;
 - leave `follow_up_needed` true only when another explicit task remains outside the current workflow.
 - update the task's `updated_at` while preserving `created_at`.
+
+## Terminal Anchor Reconciliation
+
+Follow `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md` when an external lifecycle
+event can make an active workflow projection stale.
+
+- Declare the stable anchor relationship and exact Git-trackable evidence file;
+  never derive the relationship from a title, directory, date, version, or
+  hard-coded release list.
+- Use `on_satisfied: complete` only when satisfying the anchor makes every
+  workflow-owned task terminal.
+- Use `on_satisfied: continue` only with the reason and exact unfinished task
+  IDs for separately authorized work that truthfully continues after the
+  anchor.
+- Capture live provider evidence when creating or refreshing the observation,
+  but keep ordinary validation deterministic and credential-free.
+- Preserve earlier failed, blocked, and intermediate records with their
+  original outcomes when reconciling the current workflow/task projection.

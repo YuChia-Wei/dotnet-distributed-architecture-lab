@@ -1,4 +1,4 @@
-schema_version: "1.0"
+schema_version: "1.1"
 document: upgrade-route-matrix.yaml
 purpose: >-
   Declare the complete, evidence-bound read-only route inventory for one
@@ -19,15 +19,21 @@ properties:
     exact_keys: [template_id, template_version, created_at, updated_at]
     values: non-empty-string
   schema_version:
-    const: "1.0"
+    const: "1.1"
+    legacy_read_support:
+      version: "1.0"
+      disposition: "parse-only; every route is reconciliation-required because portable proof and canonical target package identity are absent"
   matrix_id: non-empty-string
   target:
-    required: [version, release_id, commit, manifest]
+    required: [version, release_id, commit, manifest, package_identity]
     properties:
       version: semver-tag-with-v-prefix
       release_id: "REL- plus target.version"
       commit: full-lowercase-git-sha
       manifest: asset-identity
+      package_identity: package-identity
+    invariants:
+      - "package_identity.release_id equals target.release_id"
   retained_origins:
     type: ordered-list
     governed_roles:
@@ -71,6 +77,7 @@ properties:
           - order
           - from_version
           - to_version
+          - package_identity
           - artifacts
           - semantic_cutovers
           - validation
@@ -79,6 +86,7 @@ properties:
           order: one-based-contiguous-in-list-order
           from_version: semver-tag-with-v-prefix
           to_version: semver-tag-with-v-prefix
+          package_identity: package-identity
           artifacts:
             required: [archive, checksum, manifest, validator]
             exact_keys: [archive, checksum, manifest, validator]
@@ -108,14 +116,17 @@ properties:
               report:
                 type: asset-identity
                 format: canonical-utf8-json
-                exact_keys: [schema_version, edge_id, from_version, to_version, artifacts, validator_argv, semantic_cutovers, outcome, exit_code, output_sha256]
-                schema_version: upgrade-edge-validation/v1
+                exact_keys: [schema_version, edge_id, from_version, to_version, artifacts, validator_argv, semantic_cutovers, portable_validation, outcome, exit_code, output_sha256]
+                schema_version: upgrade-edge-validation/v2
                 invariants:
                   - "edge_id equals edge.edge_id"
                   - "from_version and to_version exactly equal edge.from_version and edge.to_version"
                   - "artifacts exactly equals the edge archive, checksum, manifest, and validator identities"
                   - "validator_argv exactly equals validation.validator_argv"
                   - "semantic_cutovers exactly equals the ordered edge cutover claims after each declared cutover's matrix-level required value is bound as {cutover_id, required, state}"
+                  - "portable_validation records incoming-package-validation/v1, exact incoming-candidate manifest and validator path/SHA-256/argv, passed exit 0, output SHA-256, and package identity"
+                  - "portable_validation.package_identity exactly equals edge.package_identity"
+                  - "the same package_id and release_id with another payload_fingerprint is an identity conflict and cannot pass"
                   - "outcome is passed and equals validation.state"
                   - "exit_code is integer 0"
                   - "output_sha256 equals validation.output.sha256 and the raw output asset digest"
@@ -123,6 +134,8 @@ properties:
     invariants:
       - "route_id is unique"
       - "edges form the exact ordered origin-to-target chain"
+      - "each edge.package_identity.release_id equals REL-edge.to_version"
+      - "the final edge.package_identity equals target.package_identity"
       - "a route is direct only when it has exactly one edge; the resolver derives route kind"
       - "every required semantic cutover is passed by a selected route"
   deprecations:
@@ -186,6 +199,13 @@ asset_identity:
     path: safe-matrix-relative-posix-path
     sha256: lowercase-sha256
   path_safety: reject-absolute-dot-dot-backslash-empty-drive-and-symlink-escape
+package_identity:
+  required: [package_id, release_id, payload_fingerprint]
+  exact_keys: [package_id, release_id, payload_fingerprint]
+  properties:
+    package_id: non-empty-string
+    release_id: non-empty-string
+    payload_fingerprint: lowercase-sha256
 resolution_contract:
   route_kinds: [direct, orchestrated-multi-hop, reconciliation-required, unsupported]
   matrix_bytes: "raw input bytes and SHA-256 are emitted in every result"
@@ -194,7 +214,7 @@ resolution_contract:
     - "prefer one proven direct route unless it bypasses a required semantic cutover"
     - "otherwise choose one complete safe multi-hop chain"
     - "multiple complete safe candidates are reconciliation-required"
-    - "missing, tampered, failed, deferred-with-owner, or incomplete in-scope evidence is reconciliation-required"
+    - "missing, tampered, failed, deferred-with-owner, legacy-v1, portable-validation-incomplete, or payload-identity-conflicting in-scope evidence is reconciliation-required"
     - "outside matrix or fully explicit complete deprecation is unsupported"
   deprecation_failure: incomplete-or-tampered-deprecation-evidence-invalidates-the-matrix
   side_effects: read-only; package-apply-forbidden; target-mutation-forbidden

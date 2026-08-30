@@ -716,9 +716,9 @@ def _previous_files_for_hop(
         if initial_previous_files_path.is_symlink() or not initial_previous_files_path.is_file():
             raise _route_error("first route hop previous files must be a regular file")
         return initial_previous_files_path.resolve(), initial_previous_version
-    # The predecessor package manifest is usable only after the exact retained
-    # checkpoint has passed the shared complete child/receipt/authority gate.
-    # This happens before reading any predecessor package bytes.
+    # The caller holds the same plan-admission snapshot that build_plan reuses,
+    # so the complete retained checkpoint is admitted before reading any
+    # predecessor package bytes without creating another Git snapshot.
     APPLY.verify_multi_hop_checkpoint_for_planning(target, context)
     checkpoint, _ = _read_checkpoint(route_root, index - 1)
     package = checkpoint.get("package")
@@ -1434,7 +1434,14 @@ def prepare_next_hop(
     """Seal exact package and route-validator evidence before owner decision."""
     target = target_root.resolve()
     matrix_root = matrix_root.resolve()
-    with APPLY.transaction_lock(target):
+    admission_snapshot = APPLY.capture_target_git_snapshot(
+        target,
+        [],
+        phase="plan-admission",
+        require_clean=False,
+    )
+    with APPLY.target_git_snapshot_scope(admission_snapshot), APPLY.transaction_lock(target):
+        admission_snapshot.changed_paths(full_worktree_scan=True)
         route_root, intent, journal = _load_route(target, route_transaction_id)
         if journal["state"] not in {"planned", "checkpointed", "rolled-back"} or journal["active_hop"] is not None:
             raise _route_error("multi-hop route is not ready to prepare its next hop")
