@@ -223,4 +223,3 @@ git diff --stat
 - Related remediation workflow: `2026-08-30-ai-context-v0-15-1-upgrade`
 - Verification assessment: `ASM-20260830-001`
 - Remediation intentionally not performed by this skill: `yes`
-
