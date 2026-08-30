@@ -1,54 +1,62 @@
 schema_version: "1.0"
-framework_version: "v0.13.0"
-framework_commit: "8584337b47295da1af914180baf2b3f815b9dcc7"
+framework_version: "v0.15.1"
+framework_commit: "f2b5fa7c13550efaeb65ab9fcaeb0403baa2a5af"
 unfinalized_target_diagnostics:
   - "effective state catalogs[0] is stale"
 checks:
   - id: "target-provenance"
     path: ".ai/scripts/validate-ai-context-target.py"
-    sha256: "1a94082385ad2586fb9a5994625b816144d1ab9af7cc772753bad3d7a41d9d4f"
+    sha256: "733864a04a004349bd1d99c41740b1330bac950359c0b8413d4b420e16218421"
     args: []
   - id: "workflow-artifacts"
     path: ".ai/scripts/validate-workflow-artifacts.py"
-    sha256: "473dd614048c3bad7b2833454b1b0042466ea0885cb48f9b03a4f1362241a2c3"
+    sha256: "420d26b33cc8572b76849a09fb7699c006c6d8a563b96d6adccf3f259754db07"
     args: []
   - id: "dependency-versions"
     path: ".ai/scripts/validate-dependency-versions.py"
-    sha256: "0d4c8d797d4a8ab842c5858e1a1b7c326d89c2a78ba2c3e56f3a0b9b6759a42e"
+    sha256: "c0b62745845bf4c463e85bee16195000ed32daae519230812cfe0f9fe133f405"
     args: []
   - id: "assessment-artifacts"
     path: ".ai/scripts/validate-assessment-artifacts.py"
     sha256: "a24fe8d300ce016a2c30b0b1b92eb451d7289b0bf0c38ec16b005751c8d7b401"
     args: []
-  - id: "shell-assets"
-    path: ".ai/scripts/validate-shell-assets.py"
-    sha256: "709dd677b862212b2273f83239b5648a7eef496a9a5cb034cedd6e149fd46e3b"
-    args: []
-  - id: "python-prerequisites-tests"
-    path: ".ai/scripts/tests/test_python_prerequisites.py"
-    sha256: "187c4c482bcaaa73cce6345d95ab8592c10c411ade3f4a73ca67bc7fbbb8c494"
-    args: ["-v"]
-  - id: "validation-evidence-tests"
-    path: ".ai/scripts/tests/test_validation_evidence.py"
-    sha256: "488e6e24d80bdfa9e61859e41414ccf7ad74ae9b8ffedc8b490f818d5c147483"
-    args: ["-v"]
-  - id: "effective-rules-tests"
-    path: ".ai/scripts/tests/test_ai_context_effective_rules.py"
-    sha256: "8c2e2c39744808e473d1be687ef3a9e4b1b62e3826bd738783c6a658d30216d0"
-    args: ["-v"]
-  - id: "effective-rule-action-skill-tests"
-    path: ".ai/scripts/tests/test_effective_rule_action_skill_contract.py"
-    sha256: "8fda1a2f82d90bde01336770bab1343b283b39f52f388c39be9a162444b0f2de"
-    args: ["-v"]
-  - id: "ai-context-lessons-tests"
-    path: ".ai/scripts/tests/test_ai_context_lessons.py"
-    sha256: "c8f5a87eb768b65d02b8b2304fa87605a168223ce4e270c2d4e2429f9d59f67e"
-    args: ["-v"]
-  - id: "canonical-commit-policy-tests"
-    path: ".ai/scripts/tests/test_git_commit_policy.py"
-    sha256: "cfafe8c024f390ad1960a34ade3cd6c851145c76393de05b37d31379179be105"
-    args: ["-v"]
 package_projection_defects:
+  - id: "AICU-V015-TARGET-GATE-PROJECTION-001"
+    status: "target-overlay-required"
+    observed_through: "v0.15.1"
+    framework_commit: "f2b5fa7c13550efaeb65ab9fcaeb0403baa2a5af"
+    generic_validator:
+      path: ".ai/scripts/validate-ai-context.py"
+      sha256: "05db9e16513c6cbb3325523e2eb3ca99f9290a48055184d1bb3b0b7d5e0f18d5"
+      outcome: "blocked-by-package-projection"
+    python_entrypoints:
+      path: ".ai/scripts/python-entrypoints.json"
+      sha256: "6f6ed046bd6b5f10c3deeab27adfb308f3f51d40344ba498e2c6a9586357f614"
+      portable_count: 16
+      source_only_count: 24
+      missing_source_only_count: 23
+      target_available_source_only_paths:
+        - ".dev/ai-context/tooling/validate-target-ai-context.py"
+    shell_assets:
+      path: ".ai/scripts/shell-assets.yaml"
+      sha256: "9cfeb338e988552eccc6859e767d0d8672204ff751361f23a119d7565eab8857"
+      outcome: "blocked-by-removed-active-references"
+    removed_target_checks:
+      - ".ai/scripts/tests/test_python_prerequisites.py"
+      - ".ai/scripts/tests/test_validation_evidence.py"
+      - ".ai/scripts/tests/test_ai_context_effective_rules.py"
+      - ".ai/scripts/tests/test_effective_rule_action_skill_contract.py"
+      - ".ai/scripts/tests/test_ai_context_lessons.py"
+      - ".ai/scripts/tests/test_git_commit_policy.py"
+    pre_finalization_cycle:
+      validator: ".ai/scripts/validate-ai-context-target.py"
+      diagnostic: "target validation receipt: required transaction artifact is missing or unsafe"
+      disposition: "Skip the provenance sub-check only while --allow-unfinalized records the receipt; require it again for final validation."
+    disposition: >-
+      Keep the generic validator, shell-assets validator, and removed stock tests
+      outside the downstream target gate. Pin their exact v0.15 evidence, run the
+      remaining package-applicable validators plus target-owned projection tests,
+      and do not report the excluded source-only checks as passed.
   - id: "AICU-V010-PROJECTION-001"
     status: "blocked-by-package-projection"
     observed_through: "v0.13.0"
@@ -132,25 +140,26 @@ package_projection_defects:
       construction rather than the installed downstream context.
 validation_selection_defects:
   - id: "AICU-V011-SELECTION-001"
-    status: "blocked-by-selector-defect"
+    status: "resolved-upstream"
+    resolved_in: "v0.15.0"
+    verified_through: "v0.15.1"
     selector:
       path: ".ai/scripts/check-all.sh"
-      sha256: "b862cf8a5c9068e25f8d6b94fd4a39dff20f83c107676157dc383acb25a0719e"
+      sha256: "db1c355db117f430aca4a990a83121eaddf2858fdf8e606593c74d4a570e6d57"
     evidence_helper:
       path: ".ai/scripts/validation-evidence.py"
-      sha256: "01cb263e0148dffcb0498c8cd4ece30f5f03745d42eb14ecb16c7221f76a4938"
+      sha256: "58be9ef73e2646b413605b35e567b75e673df2ed8e22db90a86fe0113e40d290"
     product_source_contract:
       path: ".ai/assets/shared/PRODUCT-SOURCE-PROJECTION-CONTRACT.md"
       sha256: "70286a75c2feadb9c1b5a833a208b7fbec78bdc8dd3447fb06e1cd26cc9b0084"
     finding: >-
-      Changed-path matching inserts direct check IDs before dependency expansion;
-      select_with_dependencies then returns immediately for an already-selected
-      ID, so declared dependencies may be omitted. The shipped v0.10-identical
-      tests do not cover the new base/head selector or dependency expansion.
+      Changed-path matching now records discovered roots before a separate
+      dependency expansion pass. The v0.15.1 patch additionally validates every
+      declared timeout and binds portable policy-file plus runtime fingerprints.
     disposition: >-
-      Keep changed-path profile execution and evidence reuse inactive. Retain
-      the target-owned full applicable gate until a later exact package proves
-      dependency expansion and regression coverage corrected.
+      Retain the target-owned full applicable gate as local policy, while no
+      longer classifying upstream dependency expansion as blocked. Pin the
+      exact v0.15.1 selector and evidence-helper bytes in the target projection.
 commit_policy_defects:
   - id: "AICU-V012-COMMIT-CUTOVER-001"
     status: "target-overlay-required"

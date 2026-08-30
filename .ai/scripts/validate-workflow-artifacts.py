@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import subprocess
@@ -76,6 +77,9 @@ COMPLIANCE_OUTCOMES = {
 WORKFLOW_STATUSES = {"planned", "in_progress", "completed", "blocked", "cancelled"}
 TASK_STATUSES = {"pending", "in_progress", "completed", "deferred", "blocked", "cancelled"}
 TERMINAL_TASK_STATUSES = {"completed", "deferred", "cancelled"}
+TERMINAL_ANCHOR_SCHEMA_VERSION = "1.0"
+TERMINAL_ANCHOR_EVIDENCE_STATES = {"satisfied", "not-satisfied", "unknown"}
+TERMINAL_ANCHOR_EFFECTS = {"complete", "continue"}
 ID_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})-[a-z0-9][a-z0-9-]*$")
 TASK_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 REQUIRED_LOCATOR = {
@@ -269,9 +273,13 @@ def validate_backlog(repo: Path, errors: list[str]) -> int:
 
 
 def backlog_provider_enabled(repo: Path, errors: list[str]) -> bool:
-    """Resolve backlog applicability from source identity or governed provenance."""
+    """Resolve target-selected repo-backlog applicability from provenance."""
     if (repo / ".ai/distribution/profiles/dotnet-backend.yaml").is_file():
-        return True
+        # The framework source froze its local backlog in GOV-012. Historical
+        # integrity is validated by source governance, not by active workflow
+        # applicability. Downstream targets still select repo-backlog through
+        # governed provenance below.
+        return False
 
     provenance_path = repo / ".dev/ai-context/provenance.yaml"
     legacy_path = repo / ".dev/AI-CONTEXT-SOURCE.yaml"
@@ -968,7 +976,278 @@ def validate_lifecycle_contract(
             errors.append(f"{label}: completed workflow current_phase must be completed or closed")
 
 
-def main() -> int:
+def validate_terminal_anchor_contract(
+    locator: dict,
+    tasks: list[tuple[str, dict]],
+    label: str,
+    errors: list[str],
+    *,
+    repo: Path,
+) -> None:
+    """Reconcile explicitly declared terminal anchors against offline evidence."""
+    contract = locator.get("terminal_anchor_contract")
+    if contract is None:
+        return
+    if not isinstance(contract, dict):
+        errors.append(f"{label}: terminal_anchor_contract must be a mapping")
+        return
+    unknown_contract_keys = sorted(set(contract) - {"schema_version", "anchors"})
+    missing_contract_keys = sorted({"schema_version", "anchors"} - set(contract))
+    if unknown_contract_keys:
+        errors.append(
+            f"{label}: terminal_anchor_contract has unknown fields {unknown_contract_keys}"
+        )
+    if missing_contract_keys:
+        errors.append(
+            f"{label}: terminal_anchor_contract missing fields {missing_contract_keys}"
+        )
+        return
+    if contract.get("schema_version") != TERMINAL_ANCHOR_SCHEMA_VERSION:
+        errors.append(
+            f"{label}: terminal_anchor_contract.schema_version must be "
+            f"{TERMINAL_ANCHOR_SCHEMA_VERSION}"
+        )
+
+    anchors = contract.get("anchors")
+    if not isinstance(anchors, list) or not anchors:
+        errors.append(f"{label}: terminal_anchor_contract.anchors must be a non-empty list")
+        return
+
+    workflow_id = str(locator.get("workflow_id") or label)
+    workflow_status = str(locator.get("status", ""))
+    task_by_id = {
+        str(task.get("task_id")): (task_label, str(task.get("status", "")))
+        for task_label, task in tasks
+        if isinstance(task.get("task_id"), str) and task.get("task_id")
+    }
+    seen_anchor_ids: set[str] = set()
+    seen_evidence_refs: set[str] = set()
+
+    for index, anchor in enumerate(anchors):
+        anchor_label = f"{label}: terminal_anchor_contract.anchors[{index}]"
+        if not isinstance(anchor, dict):
+            errors.append(f"{anchor_label} must be a mapping")
+            continue
+        allowed_anchor_keys = {
+            "anchor_id",
+            "anchor_kind",
+            "evidence_ref",
+            "on_satisfied",
+            "continuation",
+        }
+        required_anchor_keys = {
+            "anchor_id",
+            "anchor_kind",
+            "evidence_ref",
+            "on_satisfied",
+        }
+        unknown_anchor_keys = sorted(set(anchor) - allowed_anchor_keys)
+        missing_anchor_keys = sorted(required_anchor_keys - set(anchor))
+        if unknown_anchor_keys:
+            errors.append(f"{anchor_label} has unknown fields {unknown_anchor_keys}")
+        if missing_anchor_keys:
+            errors.append(f"{anchor_label} missing fields {missing_anchor_keys}")
+            continue
+
+        anchor_id = anchor.get("anchor_id")
+        if not isinstance(anchor_id, str) or not TASK_ID_RE.fullmatch(anchor_id):
+            errors.append(f"{anchor_label}.anchor_id must be a path-safe identifier")
+            continue
+        if anchor_id in seen_anchor_ids:
+            errors.append(f"{anchor_label}.anchor_id duplicates {anchor_id!r}")
+        seen_anchor_ids.add(anchor_id)
+        anchor_kind = anchor.get("anchor_kind")
+        if not isinstance(anchor_kind, str) or not anchor_kind.strip():
+            errors.append(f"{anchor_label}.anchor_kind must be a non-empty string")
+
+        effect = anchor.get("on_satisfied")
+        if effect not in TERMINAL_ANCHOR_EFFECTS:
+            errors.append(
+                f"{anchor_label}.on_satisfied must be one of "
+                f"{sorted(TERMINAL_ANCHOR_EFFECTS)}"
+            )
+            continue
+        continuation = anchor.get("continuation")
+        declared_continuation_task_ids: set[str] = set()
+        if effect == "complete" and continuation is not None:
+            errors.append(
+                f"{anchor_label}.continuation is forbidden when on_satisfied is 'complete'"
+            )
+        if effect == "continue":
+            if not isinstance(continuation, dict):
+                errors.append(
+                    f"{anchor_label}.continuation must be a mapping when "
+                    "on_satisfied is 'continue'"
+                )
+            else:
+                unknown_continuation_keys = sorted(
+                    set(continuation) - {"reason", "task_ids"}
+                )
+                missing_continuation_keys = sorted(
+                    {"reason", "task_ids"} - set(continuation)
+                )
+                if unknown_continuation_keys:
+                    errors.append(
+                        f"{anchor_label}.continuation has unknown fields "
+                        f"{unknown_continuation_keys}"
+                    )
+                if missing_continuation_keys:
+                    errors.append(
+                        f"{anchor_label}.continuation missing fields "
+                        f"{missing_continuation_keys}"
+                    )
+                reason = continuation.get("reason")
+                if not isinstance(reason, str) or not reason.strip():
+                    errors.append(
+                        f"{anchor_label}.continuation.reason must be a non-empty string"
+                    )
+                task_ids = continuation.get("task_ids")
+                if not isinstance(task_ids, list) or not task_ids or not all(
+                    isinstance(task_id, str) and TASK_ID_RE.fullmatch(task_id)
+                    for task_id in task_ids
+                ):
+                    errors.append(
+                        f"{anchor_label}.continuation.task_ids must be a non-empty "
+                        "list of path-safe task identifiers"
+                    )
+                elif len(task_ids) != len(set(task_ids)):
+                    errors.append(
+                        f"{anchor_label}.continuation.task_ids must not contain duplicates"
+                    )
+                else:
+                    declared_continuation_task_ids = set(task_ids)
+                    missing_task_ids = sorted(
+                        declared_continuation_task_ids - set(task_by_id)
+                    )
+                    if missing_task_ids:
+                        errors.append(
+                            f"{anchor_label}.continuation.task_ids reference missing tasks "
+                            f"{missing_task_ids}"
+                        )
+
+        evidence_ref = anchor.get("evidence_ref")
+        if not safe_repo_reference(evidence_ref) or "#" in str(evidence_ref):
+            errors.append(
+                f"{anchor_label}.evidence_ref must be an exact safe repository file"
+            )
+            continue
+        if evidence_ref in seen_evidence_refs:
+            errors.append(f"{anchor_label}.evidence_ref duplicates {evidence_ref!r}")
+        seen_evidence_refs.add(str(evidence_ref))
+        evidence_path = reference_path(repo, str(evidence_ref))
+        if not evidence_path.is_file():
+            errors.append(
+                f"{anchor_label}.evidence_ref does not exist: {evidence_ref}"
+            )
+            continue
+        ignored = subprocess.run(
+            ["git", "check-ignore", "-q", "--", str(evidence_ref)],
+            cwd=repo,
+            check=False,
+            capture_output=True,
+        )
+        if ignored.returncode == 0:
+            errors.append(
+                f"{anchor_label}.evidence_ref must be Git-trackable: {evidence_ref}"
+            )
+            continue
+        evidence = parse_yaml_mapping(evidence_path, str(evidence_ref), errors)
+        if evidence is None:
+            continue
+        required_evidence_keys = {
+            "schema_version",
+            "evidence_id",
+            "anchor_id",
+            "observed_state",
+            "observed_at",
+            "source",
+            "facts",
+        }
+        unknown_evidence_keys = sorted(set(evidence) - required_evidence_keys)
+        missing_evidence_keys = sorted(required_evidence_keys - set(evidence))
+        if unknown_evidence_keys:
+            errors.append(
+                f"{evidence_ref}: terminal anchor evidence has unknown fields "
+                f"{unknown_evidence_keys}"
+            )
+        if missing_evidence_keys:
+            errors.append(
+                f"{evidence_ref}: terminal anchor evidence missing fields "
+                f"{missing_evidence_keys}"
+            )
+            continue
+        if evidence.get("schema_version") != TERMINAL_ANCHOR_SCHEMA_VERSION:
+            errors.append(
+                f"{evidence_ref}: schema_version must be {TERMINAL_ANCHOR_SCHEMA_VERSION}"
+            )
+        evidence_id = evidence.get("evidence_id")
+        if not isinstance(evidence_id, str) or not TASK_ID_RE.fullmatch(evidence_id):
+            errors.append(f"{evidence_ref}: evidence_id must be a path-safe identifier")
+        if evidence.get("anchor_id") != anchor_id:
+            errors.append(
+                f"{evidence_ref}: anchor_id must match declared terminal anchor {anchor_id!r}"
+            )
+        observed_state = evidence.get("observed_state")
+        if observed_state not in TERMINAL_ANCHOR_EVIDENCE_STATES:
+            errors.append(
+                f"{evidence_ref}: observed_state must be one of "
+                f"{sorted(TERMINAL_ANCHOR_EVIDENCE_STATES)}"
+            )
+            continue
+        timestamp(evidence.get("observed_at"), f"{evidence_ref} observed_at", errors)
+        source = evidence.get("source")
+        if not isinstance(source, dict) or set(source) != {"kind", "references"}:
+            errors.append(
+                f"{evidence_ref}: source must contain exactly kind and references"
+            )
+        else:
+            if not isinstance(source.get("kind"), str) or not source["kind"].strip():
+                errors.append(f"{evidence_ref}: source.kind must be a non-empty string")
+            references = source.get("references")
+            if not isinstance(references, list) or not references or not all(
+                isinstance(reference, str) and reference.strip()
+                for reference in references
+            ):
+                errors.append(
+                    f"{evidence_ref}: source.references must be a non-empty string list"
+                )
+        if not isinstance(evidence.get("facts"), dict) or not evidence["facts"]:
+            errors.append(f"{evidence_ref}: facts must be a non-empty mapping")
+
+        if observed_state != "satisfied":
+            continue
+        if effect == "complete":
+            if workflow_status != "completed":
+                errors.append(
+                    f"{label}: workflow {workflow_id!r} terminal anchor {anchor_id!r} "
+                    f"is satisfied but workflow state {workflow_status!r} conflicts with "
+                    "on_satisfied 'complete'"
+                )
+            for task_id, (task_label, task_status) in task_by_id.items():
+                if task_status not in TERMINAL_TASK_STATUSES:
+                    errors.append(
+                        f"{label}: workflow {workflow_id!r} terminal anchor {anchor_id!r} "
+                        f"is satisfied but task {task_id!r} state {task_status!r} conflicts "
+                        f"with on_satisfied 'complete' ({task_label})"
+                    )
+        elif workflow_status == "in_progress" and declared_continuation_task_ids:
+            unfinished_task_ids = {
+                task_id
+                for task_id, (_, task_status) in task_by_id.items()
+                if task_status not in TERMINAL_TASK_STATUSES
+            }
+            if declared_continuation_task_ids != unfinished_task_ids:
+                errors.append(
+                    f"{anchor_label}.continuation.task_ids must match all unfinished tasks; "
+                    f"declared={sorted(declared_continuation_task_ids)}, "
+                    f"unfinished={sorted(unfinished_task_ids)}"
+                )
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.parse_args(argv)
+
     repo = Path(__file__).resolve().parents[2]
     discovery_root = repo / ".dev" / "workflows"
     errors: list[str] = []
@@ -1102,6 +1381,13 @@ def main() -> int:
             task_records,
             str(locator_path.relative_to(repo)),
             errors,
+        )
+        validate_terminal_anchor_contract(
+            locator,
+            task_records,
+            str(locator_path.relative_to(repo)),
+            errors,
+            repo=repo,
         )
 
     indexed_workflows = validate_workflow_index(repo, discovery_root, errors)

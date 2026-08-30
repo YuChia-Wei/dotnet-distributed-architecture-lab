@@ -1,0 +1,36 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.1.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-27T09:52:09+08:00",
+  "task_id": "AICU-001-supported-route-upgrade",
+  "workflow_id": "2026-08-30-ai-context-v0-15-1-upgrade",
+  "owner_skill": "ai-context-governance",
+  "status": "completed",
+  "created_at": "2026-08-30T18:16:45+08:00",
+  "updated_at": "2026-08-30T22:48:57+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "GPT-5",
+  "reasoning_effort": "unspecified",
+  "finding_ids": ["AICU-DIRECT-JUMP-001", "AICU-V014-RECONCILIATION-001", "AICU-V014-RECEIPT-CYCLE-001", "AICU-V015-PERFORMANCE-001"],
+  "scope": {
+    "target": "Upgrade the installed AI collaboration framework through supported package edges to v0.15.1.",
+    "files": [".ai/**", ".agents/**", ".claude/**", ".codex/agents/**", ".dev/ai-context/**", ".dev/standards/**", ".dev/guides/**"],
+    "constraints": ["Preserve target-owned truth", "Use exact published manifests", "Do not finalize a failed edge"],
+    "non_goals": ["Product source or test changes", "Push", "Pull request", "Merge", "Publication"]
+  },
+  "execution": {
+    "steps": ["Record direct-jump rejection", "Apply v0.14.0", "Apply v0.15.0", "Apply v0.15.1"],
+    "validation": ["Package payload validation", "Plan and receipt validation", "Target AI-context gate"],
+    "last_completed_step": "Applied and finalized v0.15.1 from fixed checkpoint a8713fc, passed terminal target validation, and preserved the exact result at checkpoint 97446f2.",
+    "next_action": "No further local upgrade action; external integration remains owner-controlled."
+  },
+  "results": {
+    "summary": "The supported v0.13.0 to v0.14.0 to v0.15.0 to v0.15.1 route is finalized; v0.15.1 applied six automatic replacements with no reconciliation or conflicts.",
+    "files_changed": [".ai/**", ".agents/**", ".claude/**", ".codex/agents/**", ".dev/ai-context/tooling/**", ".dev/assessments/ASM-20260830-001/**", ".dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/**"],
+    "tests_run": ["34 target-owned unittest checks", "pre-finalization target AI-context gate", "final target AI-context gate", "assessment artifact validator", "workflow artifact validator"],
+    "finding_status": "resolved",
+    "residual_risk": "v0.15.1 does not change the package-apply engine, so the executable-path rollback replay risk remains; keep the extracted package immutable to avoid strict SHA256SUMS rejection from generated cache files.",
+    "follow_up_needed": true
+  }
+}

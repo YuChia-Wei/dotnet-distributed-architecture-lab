@@ -1,0 +1,111 @@
+schema_version: "1.0"
+binding_manifest_id: "ai-context-upgrader-role-execution-bindings"
+owning_skill: "ai-context-upgrader"
+role_binding_authority: "Only .ai/assets/skills/ai-context-upgrader/skill.yaml#role_bindings declares the owning-skill mapping and applicability."
+execution_contract: ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"
+role_bindings:
+  - role_asset_id: "mechanical-evidence-worker"
+    role_path: ".ai/assets/sub-agent-role-prompts/mechanical-evidence-worker/sub-agent.yaml"
+    recommendation: "recommended"
+    stage:
+      - "route-and-evidence-discovery"
+    inputs:
+      - "Exact route matrix, package metadata, target state, and bounded deterministic evidence request."
+    outputs:
+      - "Structured route, checksum, manifest, path, mode, or receipt evidence for the upgrader stage."
+    mutation_boundary: "read-only"
+    concurrency:
+      maximum_parallel_instances: 2
+      disjoint_scope_required: true
+    stop_and_escalation:
+      - "Stop for missing authoritative input, unbounded inventory, a requested write, or a semantic decision."
+      - "Return evidence and unknowns to the upgrader owner."
+    direct_sequential_fallback:
+      allowed: true
+      same_contract_required: true
+    selection_guard:
+      - "Do not substitute natural-language evidence for deterministic CLI or validator output."
+  - role_asset_id: "reconciliation-worker"
+    role_path: ".ai/assets/sub-agent-role-prompts/reconciliation-worker/sub-agent.yaml"
+    recommendation: "recommended"
+    stage:
+      - "three-way-classification-and-reconciliation"
+    inputs:
+      - "Bounded base, target, incoming, expected, actual, result, and any already authorized disposition evidence."
+    outputs:
+      - "Evidence comparison rows and authorized disposition projections with unresolved conflicts retained."
+    mutation_boundary: "read-only"
+    concurrency:
+      maximum_parallel_instances: 2
+      disjoint_scope_required: true
+    stop_and_escalation:
+      - "Stop for a missing credible base, semantic ambiguity, conflicting authority, or a requested write."
+      - "Escalate to the named owner."
+    direct_sequential_fallback:
+      allowed: true
+      same_contract_required: true
+    selection_guard:
+      - "Do not infer semantic equivalence from paths or select an owner-sensitive disposition."
+  - role_asset_id: "semantic-governance-analyst"
+    role_path: ".ai/assets/sub-agent-role-prompts/semantic-governance-analyst/sub-agent.yaml"
+    recommendation: "recommended"
+    stage:
+      - "semantic-customization-and-governance-analysis"
+    inputs:
+      - "Bounded governance, policy, customization, decision-history, and target-truth evidence."
+    outputs:
+      - "Source-grounded semantic analysis and an escalation list for owner-sensitive questions."
+    mutation_boundary: "read-only"
+    concurrency:
+      maximum_parallel_instances: 2
+      disjoint_scope_required: true
+    stop_and_escalation:
+      - "Stop for an owner-sensitive semantic choice, conflicting authority, or insufficient evidence."
+      - "Return the competing sources."
+    direct_sequential_fallback:
+      allowed: true
+      same_contract_required: true
+    selection_guard:
+      - "Static projections and index results are not proof of semantic equivalence, availability, or invocation."
+  - role_asset_id: "evidence-report-synthesizer"
+    role_path: ".ai/assets/sub-agent-role-prompts/evidence-report-synthesizer/sub-agent.yaml"
+    recommendation: "optional"
+    stage:
+      - "plan-report-handoff-or-feedback-synthesis"
+    inputs:
+      - "Verified evidence, required report shape, and any explicit artifact write authorization."
+    outputs:
+      - "Bounded evidence-backed report, assessment, handoff, or feedback projection with uncertainty retained."
+    mutation_boundary: "workflow-authorized-output-only"
+    concurrency:
+      maximum_parallel_instances: 1
+      disjoint_scope_required: true
+    stop_and_escalation:
+      - "Stop for a missing verification source, a requested new conclusion, an owner decision, or unauthorized writing."
+      - "Return the evidence gap."
+    direct_sequential_fallback:
+      allowed: true
+      same_contract_required: true
+    selection_guard:
+      - "A report cannot manufacture a passed result, invocation claim, or completion claim."
+  - role_asset_id: "fixed-head-independent-auditor"
+    role_path: ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml"
+    recommendation: "optional"
+    stage:
+      - "terminal-fixed-head-independent-audit"
+    inputs:
+      - "One exact clean fixed commit, bounded audit criteria, retained prior evidence, and explicit terminal or high-risk selection."
+    outputs:
+      - "A fail-closed read-only audit result bound to the fixed subject and retained evidence."
+    mutation_boundary: "read-only"
+    concurrency:
+      maximum_parallel_instances: 1
+      disjoint_scope_required: true
+    stop_and_escalation:
+      - "Stop on subject drift, unclean or unpinned head, missing terminal or high-risk selection, missing evidence, timeout, interruption, or repair request."
+    direct_sequential_fallback:
+      allowed: true
+      same_contract_required: true
+    selection_guard:
+      - "Select only for an explicitly named terminal or high-risk gate."
+      - "Routine work, tag presence, and profile presence are prohibited selection grounds."

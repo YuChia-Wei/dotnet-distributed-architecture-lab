@@ -1,0 +1,43 @@
+schema_version: "1.0"
+document: "role-execution-bindings.yaml"
+required:
+  - schema_version
+  - binding_manifest_id
+  - owning_skill
+  - role_binding_authority
+  - execution_contract
+  - role_bindings
+properties:
+  schema_version:
+    const: "1.0"
+  binding_manifest_id: stable-lowercase-kebab-id
+  owning_skill:
+    const: "ai-context-upgrader"
+  role_binding_authority: non-empty-string
+  execution_contract:
+    const: ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"
+  role_bindings:
+    type: unique-non-empty-list
+    record_required:
+      - role_asset_id
+      - role_path
+      - recommendation
+      - stage
+      - inputs
+      - outputs
+      - mutation_boundary
+      - concurrency
+      - stop_and_escalation
+      - direct_sequential_fallback
+      - selection_guard
+    recommendation:
+      enum:
+        - recommended
+        - optional
+    invariants:
+      - role-asset-id-and-role-path-match-the-skill-role-bindings
+      - role-binding-records-do-not-create-a-second-owning-skill-or-applicability-authority
+      - direct-sequential-fallback-remains-valid-when-delegation-is-declined-or-unavailable
+      - every-mutation-boundary-is-explicit
+      - terminal-auditor-selection-is-explicitly-terminal-or-high-risk-only
+additional_properties: false

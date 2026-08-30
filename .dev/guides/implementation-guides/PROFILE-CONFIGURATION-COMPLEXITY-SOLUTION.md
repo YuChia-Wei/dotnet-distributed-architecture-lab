@@ -253,5 +253,3 @@ services.AddDbContext<AppDbContext>();
 - [ ] No in-memory message bus in outbox
 
 This solution reduces profile conflicts and keeps the DI graph predictable for both InMemory and Outbox modes.
-
-

@@ -1,0 +1,51 @@
+schema_version: "1.0"
+record_type: "engineering-guardrails-provider-selection"
+template_status: "reference-only"
+ownership:
+  source: "framework-managed-reference"
+  after_copy: "target-owned"
+  target_record_path: null
+capability:
+  id: "dotnet.mechanical-validation"
+  provider_binding: "engineering-guardrails"
+recommendation:
+  status: "official-recommended"
+  selection_independent: true
+selection:
+  status: "not-selected"
+  target_decision: null
+  decision_evidence: null
+  selected_diagnostic_subset: []
+provider_package_identity:
+  status: "unknown"
+  nuget_id: null
+  version: null
+  feed: null
+  publication_contract: "unknown"
+  identity_evidence: null
+capability_gap:
+  status: "mechanical-validation-capability-not-selected"
+  fallback: "target-owned-templates-available"
+readiness:
+  status: "not-claimed"
+  receipt: null
+compatibility:
+  status: "not-claimed"
+  receipt: null
+execution:
+  status: "not-claimed"
+  receipt: null
+  required_real_receipt: true
+evidence_receipts:
+  selection: null
+  readiness: null
+  compatibility: null
+  execution: null
+fallback:
+  status: "available"
+  analyzer_template: "minimal-diagnostic-analyzer.cs.template"
+  analyzer_test_template: "minimal-diagnostic-analyzer-test.cs.template"
+  code_fix_decision_template: "code-fix-decision.md"
+notes:
+  - "Copying this record makes it target-owned; fill it only from target decision and exact evidence."
+  - "A synthetic readiness receipt may prove a schema transition only and cannot prove real-provider execution."

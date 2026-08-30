@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import importlib.util
 import re
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +25,8 @@ COMPLETION_BEGIN_MARKER = "BEGIN_EXTERNAL_TASK_COMPLETION"
 COMPLETION_END_MARKER = "END_EXTERNAL_TASK_COMPLETION"
 SHA_RE = re.compile(r"^(?:[0-9a-fA-F]{40}|[0-9a-fA-F]{64})$")
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
+AGENT_VALIDATOR_PATH = ROOT / ".ai/scripts/validate-agent-execution-guardrails.py"
+AGENT_SCHEMA_PATH = ROOT / ".ai/assets/shared/agent-execution-guardrails.schema.yaml"
 
 
 def load_mapping(path: Path) -> dict[str, Any]:
@@ -58,6 +62,55 @@ def iso_with_offset(value: object) -> bool:
     except ValueError:
         return False
     return parsed.tzinfo is not None and parsed.utcoffset() is not None
+
+
+def contained_path(value: object) -> Path | None:
+    if not non_empty_string(value):
+        return None
+    candidate = Path(str(value))
+    if candidate.is_absolute() or ".." in candidate.parts:
+        return None
+    resolved = (ROOT / candidate).resolve()
+    if resolved != ROOT and ROOT not in resolved.parents:
+        return None
+    return resolved
+
+
+def validate_bound_packet(packet_contract: dict[str, Any], dispatch: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    packet_path = contained_path(packet_contract.get("packet_ref"))
+    if packet_path is None:
+        return ["dispatch.execution_packet.packet_ref must be a contained repository-relative path"]
+    if not packet_path.is_file():
+        return ["dispatch.execution_packet.packet_ref does not exist"]
+    observed_file_digest = hashlib.sha256(packet_path.read_bytes()).hexdigest()
+    if packet_contract.get("packet_sha256") != observed_file_digest:
+        errors.append("dispatch.execution_packet.packet_sha256 does not match packet file bytes")
+    try:
+        packet_record = load_mapping(packet_path)
+        spec = importlib.util.spec_from_file_location("agent_execution_guardrails_for_dispatch", AGENT_VALIDATOR_PATH)
+        if spec is None or spec.loader is None:
+            raise ValueError("canonical agent execution validator cannot be loaded")
+        validator = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(validator)
+        agent_schema = load_mapping(AGENT_SCHEMA_PATH)
+        validator.validate_packet(packet_record, agent_schema)
+    except (OSError, ValueError, yaml.YAMLError) as exc:
+        errors.append(f"dispatch.execution_packet canonical validation failed: {exc}")
+        return errors
+    subject = dispatch.get("subject", {})
+    execution = dispatch.get("execution", {})
+    source = dispatch.get("source", {})
+    if packet_record.get("execution_kind") != "external":
+        errors.append("dispatch.execution_packet execution_kind must be external")
+    if packet_record.get("subject", {}).get("exact_sha") != subject.get("commit_sha"):
+        errors.append("dispatch.execution_packet content subject must match dispatch subject")
+    invocation = packet_record.get("invocation", {})
+    if invocation.get("argv") != execution.get("argv") or invocation.get("cwd") != execution.get("working_directory"):
+        errors.append("dispatch.execution_packet invocation must match dispatch execution")
+    if packet_record.get("integration_owner") != source.get("final_integration_owner"):
+        errors.append("dispatch.execution_packet integration_owner must match dispatch source")
+    return errors
 
 
 def validate_schema_definition(schema: dict[str, Any]) -> list[str]:
@@ -195,6 +248,40 @@ def validate_dispatch(record: dict[str, Any], schema: dict[str, Any]) -> list[st
         timeout = execution.get("timeout_seconds")
         if not isinstance(timeout, int) or isinstance(timeout, bool) or timeout <= 0:
             errors.append("dispatch.execution.timeout_seconds must be a positive integer")
+
+    packet = record.get("execution_packet")
+    errors.extend(
+        missing_fields(
+            packet,
+            schema["dispatch"]["execution_packet"]["required"],
+            "dispatch.execution_packet",
+        )
+    )
+    if isinstance(packet, dict):
+        if packet.get("schema_ref") != ".ai/assets/shared/agent-execution-guardrails.schema.yaml":
+            errors.append("dispatch.execution_packet.schema_ref is invalid")
+        if not non_empty_string(packet.get("packet_ref")):
+            errors.append("dispatch.execution_packet.packet_ref must be non-empty")
+        if not re.fullmatch(r"[0-9a-f]{64}", str(packet.get("packet_sha256", ""))):
+            errors.append("dispatch.execution_packet.packet_sha256 must be lowercase SHA-256")
+        if not SHA_RE.fullmatch(str(packet.get("subject_sha", ""))):
+            errors.append("dispatch.execution_packet.subject_sha must be a full Git SHA")
+        elif isinstance(subject, dict) and packet.get("subject_sha") != subject.get("commit_sha"):
+            errors.append("dispatch.execution_packet.subject_sha must match dispatch subject")
+        packet_validator = packet.get("validator_argv")
+        if (
+            not string_list(packet_validator, allow_empty=False)
+            or not any(
+                str(item).replace("\\", "/").endswith("/validate-agent-execution-guardrails.py")
+                for item in packet_validator
+            )
+            or "--packet" not in packet_validator
+            or packet.get("packet_ref") not in packet_validator
+        ):
+            errors.append("dispatch.execution_packet.validator_argv must validate the bound packet ref")
+        if packet.get("validation_outcome") != "passed":
+            errors.append("dispatch.execution_packet.validation_outcome must be passed")
+        errors.extend(validate_bound_packet(packet, record))
 
     permissions = record.get("permissions")
     errors.extend(missing_fields(permissions, schema["dispatch"]["permissions"]["required"], "dispatch.permissions"))

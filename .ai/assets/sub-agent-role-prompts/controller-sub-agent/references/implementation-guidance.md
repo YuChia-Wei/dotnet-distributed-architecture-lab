@@ -22,4 +22,3 @@ Generate ASP.NET Core controllers that are thin and map DTOs to Use Cases.
 
 ## Output Structure
 `src/Api/Controllers/<Aggregate>/`
-

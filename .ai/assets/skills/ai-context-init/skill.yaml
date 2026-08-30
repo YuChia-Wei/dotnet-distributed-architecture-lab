@@ -22,6 +22,7 @@ outputs:
   - "repo inventory"
   - "evidence-based `.dev/project-config.yaml` or an explicit not-initialized decision"
   - "tracked routine-validation defaults: local `manual` and CI `unconfigured`, preserved as target-owned policy"
+  - "tracked `/.dev/ai-context/local/` ignore rule without creating a personal CLI execution-route binding"
   - "atomic `.dev/ai-context/provenance.yaml` and `customizations.yaml` initialization when credible source evidence is available, or an unresolved no-write result"
   - "complexity verdict"
   - "safe direct update targets"
@@ -38,6 +39,7 @@ constraints:
   - "Never retain dual provenance authorities; follow the shared semantic customization lifecycle and write neither schema-2 authority when source evidence is incomplete."
   - "Finalize target-specific English `AGENTS.md` before delegating `AGENTS.zh-TW.md` to the low-cost context-translator role; do not use a pretranslated root template."
   - "Generate validation.routine defaults unless target evidence selects stronger policy; never create or write `.dev/validation.local.conf`."
+  - "Ensure the target ignore contract covers `/.dev/ai-context/local/`; never create or write `cli-execution-routing.yaml` without the contract's separate post-recovery user consent."
 role_bindings:
   - role_path: ".ai/assets/sub-agent-role-prompts/context-translator/sub-agent.yaml"
     role_asset_id: "context-translator"
@@ -53,7 +55,7 @@ workflow:
   - step: 3
     description: "Evaluate P0 and P1 triggers to decide whether escalation is needed"
   - step: 4
-    description: "Generate or update `.dev/project-config.yaml`; atomically initialize provenance and the customization ledger only from credible source facts; update architecture-facing docs from confirmed facts"
+    description: "Generate or update `.dev/project-config.yaml`; ensure the local CLI execution-routing ignore rule without creating a personal binding; atomically initialize provenance and the customization ledger only from credible source facts; update architecture-facing docs from confirmed facts"
   - step: 5
     description: "If needed, evaluate the context-translator binding, load the exact role manifest and mandatory references, and prepare its bounded source packet"
   - step: 6
@@ -75,6 +77,8 @@ references:
   - ".ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml"
   - ".ai/assets/skills/ai-context-init/templates/work-item-binding.schema.yaml"
   - ".ai/assets/skills/ai-context-init/templates/public-template-manifest.yaml"
+  - ".ai/assets/shared/CLI-EXECUTION-ROUTING-CONTRACT.md"
+  - ".ai/assets/shared/cli-execution-routing.schema.yaml"
   - ".ai/assets/sub-agent-role-prompts/context-translator/sub-agent.yaml"
   - ".ai/assets/skills/ai-context-upgrader/templates/provenance-template.yaml"
   - ".ai/assets/skills/ai-context-upgrader/templates/customizations-template.yaml"

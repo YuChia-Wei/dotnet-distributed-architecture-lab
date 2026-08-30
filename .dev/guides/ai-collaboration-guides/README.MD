@@ -53,5 +53,3 @@ examples. Canonical execution rules remain under `.ai/assets/skills/`.
 - 本目錄的文件是給人讀的，不應複製大量 `.ai/` prompt 內部細節。
 - canonical skill 規則仍以 `.ai/assets/skills/<skill>/skill.yaml` 與其 references 為準；wrapper 只保留薄入口。
 - 若 guide 內容與 canonical skill spec 衝突，應同步修正並避免形成雙重真相。
-
-

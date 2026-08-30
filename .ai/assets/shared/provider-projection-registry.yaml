@@ -1,0 +1,112 @@
+schema_version: "1.0"
+registry_id: "provider-capability-projections"
+source_of_truth: "canonical"
+canonical_contract:
+  availability: "canonical-contract-available"
+  registry_path: ".ai/assets/shared/provider-neutral-capability-registry.yaml"
+  role_asset_ids:
+    - "mechanical-evidence-worker"
+    - "reconciliation-worker"
+    - "semantic-governance-analyst"
+    - "evidence-report-synthesizer"
+    - "fixed-head-independent-auditor"
+  delegation_intent:
+    root_capability: "frontier"
+    delegated_capability: "balanced"
+    quality_posture: "quality-first"
+    delegation: "optional"
+    quota_sensitivity: "quota-sensitive"
+    fallback: "disclosed"
+provider_projections:
+  codex:
+    configuration_state: "codex-runtime-configured"
+    delegation_advisory:
+      schema_version: "1.0"
+      configuration_scope: "static-provider-projection"
+      max_concurrent_workers: 2
+      fast_priority: "disabled"
+      model_mismatch_disposition: "advisory-one-prompt"
+      mismatch_prompt_limit: 1
+      mismatch_choice_boundary: "current-vs-recommended/continue-or-switch"
+      root_preflight:
+        recommended_root:
+          model: "gpt-5.6-sol"
+          model_reasoning_effort: "xhigh"
+          service_tier: "priority"
+        observed_current_state:
+          active_model: "unknown"
+          active_reasoning_effort: "unknown"
+          active_speed_service_tier: "unknown"
+          configuration_default_inference: "forbidden"
+        quota_cost_disclosure: "required-before-switch"
+        verified_switch_action:
+          verification_state: "not-verified"
+          shortest_verified_ui_or_command: null
+          evidence_refs: []
+        unavailable_fallback:
+          prompt_required: true
+          options:
+            - "gpt-5.6-terra/xhigh"
+            - "current-model"
+        owner_run_fast_priority:
+          status: "disabled"
+          activation: "explicit-owner-choice-required"
+      worker_preference:
+        model: "gpt-5.6-terra"
+        model_reasoning_effort: "max"
+        unavailable_fallback: "root-sequential"
+      terminal_auditor_preference:
+        model: "gpt-5.6-sol"
+        model_reasoning_effort: "max"
+        unavailable_fallback: "fresh-sol-high-independent-context"
+    profiles:
+      - role_asset_id: "mechanical-evidence-worker"
+        profile_path: ".codex/agents/bounded-routine-worker.toml"
+        profile_name: "bounded-routine-worker"
+        model: "gpt-5.6-terra"
+        model_reasoning_effort: "medium"
+        sandbox_mode: "read-only"
+      - role_asset_id: "reconciliation-worker"
+        profile_path: ".codex/agents/reconciliation-worker.toml"
+        profile_name: "reconciliation-worker"
+        model: "gpt-5.6-terra"
+        model_reasoning_effort: "high"
+        sandbox_mode: "read-only"
+      - role_asset_id: "semantic-governance-analyst"
+        profile_path: ".codex/agents/semantic-governance-analyst.toml"
+        profile_name: "semantic-governance-analyst"
+        model: "gpt-5.6-sol"
+        model_reasoning_effort: "xhigh"
+        sandbox_mode: "read-only"
+      - role_asset_id: "evidence-report-synthesizer"
+        profile_path: ".codex/agents/evidence-report-synthesizer.toml"
+        profile_name: "evidence-report-synthesizer"
+        model: "gpt-5.6-terra"
+        model_reasoning_effort: "high"
+        sandbox_mode: "read-only"
+      - role_asset_id: "fixed-head-independent-auditor"
+        profile_path: ".codex/agents/fixed-head-independent-auditor.toml"
+        profile_name: "fixed-head-independent-auditor"
+        model: "gpt-5.6-sol"
+        model_reasoning_effort: "max"
+        sandbox_mode: "read-only"
+  claude:
+    configuration_state: "claude-runtime-deferred"
+    profiles: []
+    deferred_reason: "No generic capability projection is configured by this registry; deferred does not mean permanently unsupported."
+  copilot:
+    configuration_state: "copilot-runtime-deferred"
+    profiles: []
+    deferred_reason: "No generic capability projection is configured by this registry; deferred does not mean permanently unsupported."
+current_session:
+  availability: "unknown"
+  invocation_evidence: "not-claimed"
+package_projection:
+  configured_provider: "codex"
+  profile_paths:
+    - ".codex/agents/bounded-routine-worker.toml"
+    - ".codex/agents/reconciliation-worker.toml"
+    - ".codex/agents/semantic-governance-analyst.toml"
+    - ".codex/agents/evidence-report-synthesizer.toml"
+    - ".codex/agents/fixed-head-independent-auditor.toml"
+  deferred_provider_runtime_paths: []

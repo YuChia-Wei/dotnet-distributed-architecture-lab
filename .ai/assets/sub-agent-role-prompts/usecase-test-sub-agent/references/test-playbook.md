@@ -22,4 +22,3 @@ Use this delegated worker role when the main agent needs concrete test implement
 
 - `bdd-gwt-test-designer` designs scenarios
 - this sub-agent implements concrete use case tests from that design
-

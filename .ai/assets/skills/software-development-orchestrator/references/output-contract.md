@@ -129,3 +129,10 @@ Role Execution Aggregation:
 Do not label a direct result as delegated, create child evidence from an
 adapter or plan, or use an unavailable delegation path to skip inline work that
 can meet the same contract.
+
+For delegated, external, or fixed-head execution, also return the validated
+agent execution packet reference and digest, worktree lease terminal state,
+retry/failure fingerprint if any, graph freshness or tracked-fallback evidence,
+and the acceptance-evidence ledger plus its matching human report projection.
+These governance artifacts remain owner-produced inputs that the orchestrator
+aggregates; they do not make this skill the governance-domain owner.

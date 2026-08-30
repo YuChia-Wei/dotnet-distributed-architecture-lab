@@ -25,7 +25,9 @@ workflow references the assessment; it does not copy the report.
   methodology, and domain-specific evidence contract.
 - `.dev/assessments/INDEX.MD` owns assessment discovery and current lifecycle
   state; `assessment.yaml` owns one assessment's identity and relationships.
-- `.dev/backlog/` owns candidate work selected from assessments.
+- For this source repository, an online GitHub Issue owns candidate work
+  selected from assessments; targets use their own configured work-item surface.
+  The frozen `.dev/backlog/` tree is historical and legacy compatibility only.
 - `.dev/workflows/` owns authorized execution plans, tasks, remediation evidence,
   and checkpoints.
 - ADRs and standards own adopted decisions and normative truth.
@@ -183,8 +185,9 @@ when the commit message and assessment artifact are preserved.
 
 ## Handoff Contract
 
-- A backlog item references the assessment and selected finding IDs in
-  `origin_refs`; it does not duplicate the full report.
+- A source GitHub Issue references the assessment and selected finding IDs
+  without duplicating the full report. A target that selects a repository
+  backlog may use its provider-neutral `origin_refs` equivalent.
 - A workflow records source assessment IDs in its plan or task metadata and
   maps each selected finding to an execution disposition.
 - A post-remediation verification is a new assessment related to the baseline
@@ -199,8 +202,8 @@ finding identifiers. Do not require a reviewer on another host or runtime to
 instantiate this repository's locator or report templates before giving an
 independent opinion.
 
-Before external claims become durable backlog, workflow, policy, or release
-evidence, the receiving agent must:
+Before external claims become durable source Issue, workflow, policy, or
+release evidence, the receiving agent must:
 
 1. create a repo-native assessment on the applicable assessment or active
    governance workflow branch;
@@ -212,8 +215,8 @@ evidence, the receiving agent must:
    repository-native evidence;
 4. record confirmed, added, downgraded, and overturned claims in `report.md`;
 5. assign stable `<assessment-id>#<finding-id>` identifiers;
-6. reference only those stable identifiers from backlog and remediation
-   artifacts; and
+6. reference only those stable identifiers from the online Issue and
+   remediation artifacts; and
 7. catalog the raw source and normalized assessment in
    `.dev/assessments/INDEX.MD`.
 

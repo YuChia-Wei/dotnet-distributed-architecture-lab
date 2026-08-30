@@ -340,11 +340,8 @@ ASALocalRun/
 healthchecksdb
 
 # ai agent cli config
-/.codex/*
-!/.codex/agents/
-!/.codex/agents/**
-!/.codex/skills/
-!/.codex/skills/**
+/.codex/*.toml
 /.dotnet_cli_home/
 .dotnet
 /.dev/validation.local.conf
+/.dev/ai-context/local/

@@ -39,6 +39,12 @@ retain both files as active authorities.
   action uses them.
 - Customization and unresolved-item IDs are unique and stable within the target repository.
 - `last_migration.to_version` equals `source.version` after a completed upgrade.
+- When present, `policy_adoptions.commit_subject_grammar` contains exactly the
+  stable policy ID `git-commit-subject/v2`, a full lowercase
+  `legacy_history_tip`, ISO-offset `adopted_at`, the raw SHA-256 of the
+  installed incoming commit policy, and repository-relative `decision_evidence`.
+  The installed policy bytes and Git history must still validate the record;
+  adoption time is audit evidence only, not a historical grammar selector.
 
 ## Mutation Rules
 
@@ -62,6 +68,51 @@ retain both files as active authorities.
 - Do not delete customizations merely because incoming framework paths changed;
   reconcile capability, rule, or contract equivalence and disposition.
 - Do not change the source version to describe a partially applied or failed upgrade. Record such work under `reconciliation.unresolved` while retaining the last validated source.
+- A package apply journal in `planned`, `applying`, `interrupted`,
+  `awaiting-target-validation`, `rolling-back`, or `rolled-back` state never
+  authorizes provenance advancement. Only a schema-2 pending receipt bound to a
+  `validated` transaction, the same resolved target
+  root and planned `HEAD`, exact sealed operation schema, selected-input proof,
+  raw managed-path results, and intended Git modes may proceed to target
+  validation. Target reads must not cross symlink or reparse boundaries. Resume
+  and rollback preserve the last validated provenance bytes
+  and cannot add selection or reconciliation authority.
+- Newly written and recovered package-apply transactions use journal v5 only.
+  Each completed apply operation or rollback path is appended as one canonical,
+  fsynced `progress.jsonl` record before the next mutation begins; `journal.yaml`
+  snapshots bind the compacted record count and tail digest. A trailing partial
+  record is unacknowledged and may be discarded before the next append. New
+  tooling never resumes, rolls back, migrates, or converts v4. An unfinished v4
+  journal blocks new target mutation with the stable
+  `unsupported-transaction-journal-version` classification and prior-tooling or
+  owner-directed recovery guidance; terminal v4 evidence remains archival and
+  does not block an unrelated v5 transaction.
+- A source-version advancement additionally requires a fresh sealed
+  `upgrade-remediation-packet/v1`, a matching accepted
+  `upgrade-remediation-decision/v1`, its deterministic derived report, and a
+  passing `incoming-candidate` validator execution receipt. Their digests,
+  target root/HEAD/prestate, package, plan, selection, target validation
+  profile, and prior provenance/customization identities must agree with the
+  validated transaction. The decision's exact `policy_adoptions` value must
+  equal the candidate provenance value, so cutover metadata cannot be invented
+  during finalization. The decision also binds canonical digests of the full
+  candidate provenance and customization ledger; any candidate authority drift
+  requires a new decision. Rejected, stale, interrupted, or rolled-back records
+  are retained but cannot update provenance or adoption metadata.
+- Target validation is separate from incoming-package validation. After target
+  writes, a separately routed canonical receipt must prove the exact target
+  profile argv passed and bind its profile, output, timing, target, pending
+  receipt, packet, decision, plan, and transaction identities before authority
+  finalization.
+- After successful authority publication, one immutable terminal receipt under
+  the transaction binds the packet, decision, pending receipt, and resulting
+  provenance/customization digests. The journal makes one terminal transition
+  from `validated` to `finalized` while binding that receipt path/hash; it
+  cannot change the sealed plan or earlier evidence.
+- A finalized upgrade terminal receipt remains an active target invariant.
+  Validation rejects missing, corrupt, unlinked, or authority-mismatched
+  terminal evidence. An identical retry may complete only a missing exact
+  terminal transition after interrupted authority publication.
 - Do not treat an omitted rule record, a cached packet, or an action skill's
   memory as baseline acceptance. Missing, stale, ambiguous, unknown,
   unpacketized, or invariant-conflicting state fails closed until owner

@@ -22,4 +22,3 @@ Use this delegated worker role when the main agent needs tests for event-driven 
 
 - `bdd-gwt-test-designer` designs scenarios and assertion intent
 - this sub-agent implements reactor-oriented test code
-

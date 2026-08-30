@@ -1,0 +1,202 @@
+schema_version: "1.0"
+document: "provider-projection-registry.yaml"
+required:
+  - schema_version
+  - registry_id
+  - source_of_truth
+  - canonical_contract
+  - provider_projections
+  - current_session
+  - package_projection
+properties:
+  schema_version:
+    const: "1.0"
+  registry_id: stable-lowercase-kebab-id
+  source_of_truth:
+    const: "canonical"
+  canonical_contract:
+    required:
+      - availability
+      - registry_path
+      - role_asset_ids
+      - delegation_intent
+    availability:
+      const: "canonical-contract-available"
+    delegation_intent:
+      required:
+        - root_capability
+        - delegated_capability
+        - quality_posture
+        - delegation
+        - quota_sensitivity
+        - fallback
+      root_capability:
+        const: "frontier"
+      delegated_capability:
+        const: "balanced"
+      quality_posture:
+        const: "quality-first"
+      delegation:
+        const: "optional"
+      quota_sensitivity:
+        const: "quota-sensitive"
+      fallback:
+        const: "disclosed"
+  provider_projections:
+    required_keys:
+      - codex
+      - claude
+      - copilot
+    codex:
+      required:
+        - configuration_state
+        - delegation_advisory
+        - profiles
+      configuration_state:
+        const: "codex-runtime-configured"
+      delegation_advisory:
+        required:
+          - schema_version
+          - configuration_scope
+          - max_concurrent_workers
+          - fast_priority
+          - model_mismatch_disposition
+          - mismatch_prompt_limit
+          - mismatch_choice_boundary
+          - root_preflight
+          - worker_preference
+          - terminal_auditor_preference
+        schema_version:
+          const: "1.0"
+        configuration_scope:
+          const: "static-provider-projection"
+        max_concurrent_workers:
+          const: 2
+        fast_priority:
+          const: "disabled"
+        model_mismatch_disposition:
+          const: "advisory-one-prompt"
+        mismatch_prompt_limit:
+          const: 1
+        mismatch_choice_boundary:
+          const: "current-vs-recommended/continue-or-switch"
+        root_preflight:
+          required:
+            - recommended_root
+            - observed_current_state
+            - quota_cost_disclosure
+            - verified_switch_action
+            - unavailable_fallback
+            - owner_run_fast_priority
+          recommended_root:
+            required:
+              - model
+              - model_reasoning_effort
+              - service_tier
+            model:
+              const: "gpt-5.6-sol"
+            model_reasoning_effort:
+              const: "xhigh"
+            service_tier:
+              const: "priority"
+          observed_current_state:
+            required:
+              - active_model
+              - active_reasoning_effort
+              - active_speed_service_tier
+              - configuration_default_inference
+            active_model:
+              const: "unknown"
+            active_reasoning_effort:
+              const: "unknown"
+            active_speed_service_tier:
+              const: "unknown"
+            configuration_default_inference:
+              const: "forbidden"
+          quota_cost_disclosure:
+            const: "required-before-switch"
+          verified_switch_action:
+            required:
+              - verification_state
+              - shortest_verified_ui_or_command
+              - evidence_refs
+          unavailable_fallback:
+            required:
+              - prompt_required
+              - options
+          owner_run_fast_priority:
+            required:
+              - status
+              - activation
+            status:
+              const: "disabled"
+            activation:
+              const: "explicit-owner-choice-required"
+        worker_preference:
+          required:
+            - model
+            - model_reasoning_effort
+            - unavailable_fallback
+          unavailable_fallback:
+            const: "root-sequential"
+        terminal_auditor_preference:
+          required:
+            - model
+            - model_reasoning_effort
+            - unavailable_fallback
+          unavailable_fallback:
+            const: "fresh-sol-high-independent-context"
+      profiles:
+        type: unique-non-empty-list
+        record_required:
+          - role_asset_id
+          - profile_path
+          - profile_name
+          - model
+          - model_reasoning_effort
+          - sandbox_mode
+        sandbox_mode:
+          const: "read-only"
+    claude:
+      required:
+        - configuration_state
+        - profiles
+        - deferred_reason
+      configuration_state:
+        const: "claude-runtime-deferred"
+      profiles:
+        const: []
+    copilot:
+      required:
+        - configuration_state
+        - profiles
+        - deferred_reason
+      configuration_state:
+        const: "copilot-runtime-deferred"
+      profiles:
+        const: []
+  current_session:
+    required:
+      - availability
+      - invocation_evidence
+    availability:
+      const: "unknown"
+    invocation_evidence:
+      const: "not-claimed"
+  package_projection:
+    required:
+      - configured_provider
+      - profile_paths
+      - deferred_provider_runtime_paths
+    configured_provider:
+      const: "codex"
+invariants:
+  - static-configuration-is-not-current-session-availability
+  - static-configuration-is-not-genuine-invocation-evidence
+  - deferred-projections-are-not-permanent-unsupported-claims
+  - generic-capability-package-projection-contains-only-configured-codex-profile-paths
+  - specialized-adapters-do-not-prove-generic-capability-support
+prohibited_static_claim_fields:
+  - runtime_enabled
+  - invoked
+additional_properties: false

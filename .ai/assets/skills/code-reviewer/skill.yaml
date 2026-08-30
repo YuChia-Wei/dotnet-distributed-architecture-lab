@@ -1,122 +1,135 @@
-asset_id: "code-reviewer"
-schema_version: "1.0"
-asset_type: "skill-spec"
-title: "Code Reviewer"
-purpose: "Review .NET code in this repository for DDD, Clean Architecture, CQRS, and Event Sourcing compliance. This skill reviews, scores, and marks issues; it does not plan refactors or define target architecture."
-portability: "repo-portable"
+asset_id: code-reviewer
+schema_version: '1.0'
+asset_type: skill-spec
+title: Code Reviewer
+purpose: Review .NET code in this repository for DDD, Clean Architecture, CQRS, and Event Sourcing compliance. This skill reviews, scores, and marks issues; it does not plan refactors or define target architecture.
+portability: repo-portable
 component_availability:
-  component_id: "dotnet-backend"
-  core_only: "unavailable-not-selected"
-  dotnet_selected: "available"
-audience: "agent-facing"
-source_of_truth: "canonical"
+  component_id: dotnet-backend
+  core_only: unavailable-not-selected
+  dotnet_selected: available
+audience: agent-facing
+source_of_truth: canonical
 capability_slots:
-  - "review"
+- review
 triggers:
-  - "code review"
-  - "review code"
-  - "check this file"
+- code review
+- review code
+- check this file
 inputs:
-  - "target file or reviewed scope"
-  - "file-type and finding route selected from the canonical review-routing contract"
+- target file or reviewed scope
+- file-type and finding route selected from the canonical review-routing contract
 outputs:
-  - "transient conversational review or standalone durable assessment"
-  - "architecture-level findings"
-  - "code-level findings"
-  - "review scores"
-  - "one provider-neutral role_execution record for every considered review-role binding, handed to the orchestrator without transferring review ownership"
+- transient conversational review or standalone durable assessment
+- architecture-level findings
+- code-level findings
+- review scores
+- one provider-neutral role_execution record for every considered review-role binding, handed to the orchestrator without transferring review ownership
 constraints:
-  - "Do not define target architecture"
-  - "Do not output a staged refactoring plan"
-  - "Preserve software engineering reasoning even when analyzer or test output is available"
-  - "Treat .ai/scripts C# grep checks as transitional aids, not final semantic validation"
-  - "Keep review read-only; route remediation to software-development-orchestrator or the appropriate implementer"
-  - "Pin durable assessments to the reviewed Git revision and use ASM-YYYYMMDD-NNN#CR-NNN finding references"
-  - "Load only the canonical standards selected by the file-type and finding route"
-  - "Do not treat compatibility indexes, shared summaries, or role prompts as semantic owners"
+- Do not define target architecture
+- Do not output a staged refactoring plan
+- Preserve software engineering reasoning even when analyzer or test output is available
+- Treat .ai/scripts C# grep checks as transitional aids, not final semantic validation
+- Keep review read-only; route remediation to software-development-orchestrator or the appropriate implementer
+- Pin durable assessments to the reviewed Git revision and use ASM-YYYYMMDD-NNN#CR-NNN finding references
+- Load only the canonical standards selected by the file-type and finding route
+- Do not treat compatibility indexes, shared summaries, or role prompts as semantic owners
 role_bindings:
-  - role_path: ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml"
-    role_asset_id: "code-review-sub-agent"
-    expected_role_status: "active"
-    binding_kind: "primary"
-    applicability: "A .NET code-review scope is selected."
-    load_obligation: "mandatory-when-applicable"
-  - role_path: ".ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/sub-agent.yaml"
-    role_asset_id: "aggregate-code-review-sub-agent"
-    expected_role_status: "active"
-    binding_kind: "conditional"
-    applicability: "The selected code-review scope includes aggregate, event-sourcing, or domain-invariant behavior."
-    load_obligation: "mandatory-when-applicable"
-  - role_path: ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/sub-agent.yaml"
-    role_asset_id: "controller-code-review-sub-agent"
-    expected_role_status: "active"
-    binding_kind: "conditional"
-    applicability: "The selected code-review scope includes an ASP.NET Core controller, endpoint, DTO boundary, or HTTP semantics."
-    load_obligation: "mandatory-when-applicable"
-  - role_path: ".ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml"
-    role_asset_id: "reactor-code-review-sub-agent"
-    expected_role_status: "active"
-    binding_kind: "conditional"
-    applicability: "The selected code-review scope includes reactor event handling, DI registration, or cross-aggregate integration behavior."
-    load_obligation: "mandatory-when-applicable"
+- role_path: .ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml
+  role_asset_id: code-review-sub-agent
+  expected_role_status: active
+  binding_kind: primary
+  applicability: A .NET code-review scope is selected.
+  load_obligation: mandatory-when-applicable
+- role_path: .ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/sub-agent.yaml
+  role_asset_id: aggregate-code-review-sub-agent
+  expected_role_status: active
+  binding_kind: conditional
+  applicability: The selected code-review scope includes aggregate, event-sourcing, or domain-invariant behavior.
+  load_obligation: mandatory-when-applicable
+- role_path: .ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/sub-agent.yaml
+  role_asset_id: controller-code-review-sub-agent
+  expected_role_status: active
+  binding_kind: conditional
+  applicability: The selected code-review scope includes an ASP.NET Core controller, endpoint, DTO boundary, or HTTP semantics.
+  load_obligation: mandatory-when-applicable
+- role_path: .ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml
+  role_asset_id: reactor-code-review-sub-agent
+  expected_role_status: active
+  binding_kind: conditional
+  applicability: The selected code-review scope includes reactor event handling, DI registration, or cross-aggregate integration behavior.
+  load_obligation: mandatory-when-applicable
 workflow:
-  - step: 1
-    description: "Complete any applicable effective-rule preflight, read review-routing.yaml, select every matching file-type route, and evaluate each review-role binding's applicability"
-  - step: 2
-    description: "Load only the selected routes' canonical references, applicable finding rules, and matching role manifests; de-duplicate references and build a scoped checklist comparison"
-  - step: 3
-    description: "After route and role selection, load the role-execution phase reference, execute directly by default or make an eligible bounded delegation, then separate architecture-level and code-level findings"
-  - step: 4
-    description: "After findings exist, load the output phase reference, return transient findings or persist an explicitly requested assessment, and hand role_execution records to the orchestrator for aggregation"
+- step: 1
+  description: Complete any applicable effective-rule preflight, read review-routing.yaml, select every matching file-type route, and evaluate each review-role binding's applicability
+- step: 2
+  description: Load only the selected routes' canonical references, applicable finding rules, and matching role manifests; de-duplicate references and build a scoped checklist comparison
+- step: 3
+  description: After route and role selection, load the role-execution phase reference, execute directly by default or make an eligible bounded delegation, then separate architecture-level and code-level findings
+- step: 4
+  description: After findings exist, load the output phase reference, return transient findings or persist an explicitly requested assessment, and hand role_execution records to the orchestrator for aggregation
 references:
-  - ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
+- .ai/assets/skills/code-reviewer/references/review-routing.yaml
 templates:
-  - ".ai/assets/skills/code-reviewer/templates/code-review-assessment-report-template.md"
+- .ai/assets/skills/code-reviewer/templates/code-review-assessment-report-template.md
 examples:
-  - ".dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md"
-human_guide: ".dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md"
+- .dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md
+human_guide: .dev/guides/ai-collaboration-guides/AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md
 wrapper_targets:
-  - "claude"
-  - "codex"
+- claude
+- codex
 wrapper_metadata:
   claude:
-    wrapper_path: ".claude/skills/code-reviewer/"
+    wrapper_path: .claude/skills/code-reviewer/
   codex:
-    wrapper_path: ".agents/skills/code-reviewer/"
-status: "active"
+    wrapper_path: .agents/skills/code-reviewer/
+status: active
 effective_rule_consumption:
   applies_when:
-    - "The skill reviews selected .NET backend code or dotnet-backend implementation guidance against applicable review rules."
+  - The skill reviews selected .NET backend code or dotnet-backend implementation guidance against applicable review rules.
   excludes:
-    - "Architecture design, remediation implementation, or an assessment locator operation that does not perform review analysis."
-  resolver: ".ai/scripts/resolve-effective-rule-packet.py"
+  - Architecture design, remediation implementation, or an assessment locator operation that does not perform review analysis.
+  resolver: .ai/scripts/resolve-effective-rule-packet.py
+  applicability:
+    selector: applicability_mode
+    modes:
+      initialized-target:
+        authority: .dev/ai-context/provenance.yaml
+        rule_selection: exact target effective-state route
+        downstream_provenance: required
   selectors:
-    - "capability"
-    - "execution_mode"
-    - "technology_profile"
-    - "file_type"
-  unresolved_outcome: "stop-applicable-action"
-  consumption_order: "Consume a freshness-verified task-scoped packet before reading profile references needed for the applicable action."
+  - capability
+  - execution_mode
+  - technology_profile
+  - file_type
+  unresolved_outcome: stop-applicable-action
+  consumption_order: Select the applicability mode explicitly, then consume its freshness-verified task-scoped evidence before reading profile references needed for the applicable action.
   evidence:
-    required:
-      - "resolver_outcome"
-      - "loaded_rule_ids"
-      - "baseline.framework_version"
-      - "target_state.digest"
-      - "request.capability"
-      - "request.execution_mode"
-      - "request.technology_profile"
-      - "request.file_type"
+    required_common:
+    - resolver_outcome
+    - applicability_mode
+    - loaded_rule_ids
+    - request.capability
+    - request.execution_mode
+    - request.technology_profile
+    - request.file_type
+    - rules[].normative_statement_digest
+    - packet_digest
+    required_by_mode:
+      initialized-target:
+      - baseline.framework_version
+      - target_state.digest
   semantic_consistency:
-    identity: "rule_id"
-    statement_bytes: "exact UTF-8 rules[].normative_statement bytes"
-    statement_digest: "rules[].normative_statement_digest"
-    cross_consumer_requirement: "the same rule_id must resolve to byte-equivalent effective semantics across consumers"
-    default_mismatch_outcome: "warning"
-    stricter_policy_owner: "target-owned"
+    identity: rule_id
+    statement_bytes: exact UTF-8 rules[].normative_statement bytes
+    statement_digest: rules[].normative_statement_digest
+    cross_consumer_requirement: the same rule_id must resolve to byte-equivalent effective semantics across consumers
+    default_mismatch_outcome: warning
+    stricter_policy_owner: target-owned in initialized-target mode
   prohibitions:
-    - "Do not scan broad target or framework documents to discover rule semantics."
-    - "Do not fall back to framework defaults."
-    - "Do not select an alternate route when the exact request route is unresolved."
-    - "Do not compare analyzer output as effective-rule semantics."
-    - "Keep analyzer severity and warnings-as-errors separate and target-owned."
+  - Do not infer applicability mode from repository contents, remembered state, or missing downstream provenance.
+  - Do not scan broad target or framework documents to discover rule semantics.
+  - Do not fall back to framework defaults.
+  - Do not select an alternate route when the exact request route is unresolved.
+  - Do not compare analyzer output as effective-rule semantics.
+  - Keep analyzer severity and warnings-as-errors separate and target-owned.

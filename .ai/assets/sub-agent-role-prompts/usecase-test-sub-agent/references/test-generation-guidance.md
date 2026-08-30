@@ -17,4 +17,3 @@ Generate use case tests with mandatory Given-When-Then structure and naming. Use
 
 ## Output Structure
 `src/tests/Application/<Aggregate>/UseCases/`
-

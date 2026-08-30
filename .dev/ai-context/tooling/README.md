@@ -3,7 +3,7 @@
 This directory contains repository-owned validation behavior that must remain
 separate from byte-exact framework-managed paths.
 
-The v0.13 package receipt binds every selected framework path to the published
+The v0.14 package receipt binds every selected framework path to the published
 package SHA-256. Therefore target policy is composed here instead of editing
 `.ai/scripts/` or `.dev/standards/` after package installation.
 
@@ -23,26 +23,25 @@ Run the target gate with:
 python -B .dev/ai-context/tooling/validate-target-ai-context.py `
   --allow-unfinalized `
   --commit-range main..HEAD `
-  --workflow-id 2026-08-12-ai-context-v0-13-upgrade
+  --workflow-id 2026-08-30-ai-context-v0-15-1-upgrade
 ```
 
 After provenance and effective rules are finalized, omit
 `--allow-unfinalized` and add `--require-effective-rules`.
 
-The published v0.13 `check-all.sh` and `validate-ai-context.py` are not the
-target gate. Their downstream projection still retains source-only paths that
-are absent from the published payload, and the new package-smoke/closeout
-routes add further missing source-only dependencies. The version-pinned
-applicability manifest records those package-native failures for upstream
-feedback. The profile-registry test itself still requires a source-only
-distribution profile, so its exact bytes are pinned as defect evidence and it
-is excluded from the downstream gate. Applicable lessons and canonical commit
-policy tests are selected instead. The new stock code-review routing test is
-also recorded as a projection defect because it imports an omitted source-only
-package module before its tests can run. A target-owned projection executes
-the downstream-applicable GWT1-GWT7 contract; source-release payload GWT8 is
-explicitly not applicable. Profile execution, evidence reuse, and CI selection
-remain inactive target choices. This overlay does not alter package bytes or
+The published v0.14 `check-all.sh`, `validate-ai-context.py`, and
+`validate-shell-assets.py` are not the target gate. The downstream package
+removes six formerly selected stock tests while the active Python and shell
+registries still retain source-only or removed references. The version-pinned
+applicability manifest records the exact package-native failures and keeps
+those checks outside the target pass claim. A target-owned projection runs the
+remaining package-applicable validators, 33 downstream tests, and the
+preserved prospective commit-policy overlay. During `--allow-unfinalized`, the
+gate also skips the provenance sub-check because the package transaction
+cannot bind its target-validation receipt until this command succeeds; the
+transaction recorder and final gate restore that exact validation after the
+receipt exists. Profile execution, evidence reuse, and CI selection remain
+inactive target choices. This overlay does not alter package bytes or
 synthesize omitted source assets to conceal them.
 
 The carried product-source projection contract and changed-path

@@ -17,4 +17,3 @@ Generate reactor tests using xUnit with mandatory Given-When-Then structure and 
 
 ## Output Structure
 `src/tests/Application/<Aggregate>/Reactors/`
-

@@ -66,6 +66,14 @@ that conforms to `../templates/external-task-delegation.schema.yaml`. Start from
 the dispatch template, bind either an explicit or runtime-injected source-task
 identity, and name the source task as final integration owner.
 
+Before dispatch, the owning skill creates and validates the exact
+`agent-execution-packet` defined by
+`../../../shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md`. Bind its reference,
+digest, exact subject SHA, and passing validator argv in `execution_packet`.
+The external worker is read-only, may write only declared ignored validation
+artifacts, and must not start when the packet or worktree snapshot lease is
+missing, stale, or conflicts with another tracked writer.
+
 Select one completion path before dispatch:
 
 - `source-task-callback`: the delegated task sends its single schema-valid
@@ -83,6 +91,11 @@ passing validator command and artifact references in `delivery.schema_validation
 It must then deliver that validated completion record without any
 post-validation edit. A missing or failed validation, mismatched artifact
 reference, or different delivered record is non-passing.
+
+At integration, validate the acceptance-evidence ledger against its human
+report projection. Actual-execution requirements cannot be satisfied by a
+fixture, mock, synthetic test, or unit result, even when that supporting test
+passes.
 
 Use an event wait as the normal callback fallback. A wait transport timeout
 leaves validation pending; it is not an execution failure. If callback delivery

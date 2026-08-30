@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 from collections import Counter
 import re
 import subprocess
@@ -191,7 +192,10 @@ def validate_manifest(manifest: object, modes: dict[str, str], errors: list[str]
     return assets
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.parse_args(argv)
+
     errors: list[str] = []
     try:
         manifest = yaml.safe_load((ROOT / MANIFEST).read_text(encoding="utf-8"))

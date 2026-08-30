@@ -27,8 +27,8 @@ def load_manifest() -> dict[str, object]:
         raise ValueError("target gate manifest must be a mapping")
     if str(manifest.get("schema_version")) != "1.0":
         raise ValueError("target gate manifest schema_version must be 1.0")
-    if str(manifest.get("framework_version")) != "v0.13.0":
-        raise ValueError("target gate manifest must be explicitly pinned to v0.13.0")
+    if str(manifest.get("framework_version")) != "v0.15.1":
+        raise ValueError("target gate manifest must be explicitly pinned to v0.15.1")
     expected_diagnostics = manifest.get("unfinalized_target_diagnostics")
     if not isinstance(expected_diagnostics, list) or not expected_diagnostics or not all(
         isinstance(value, str) and value for value in expected_diagnostics
@@ -105,6 +105,59 @@ def run_allowing_exact_diagnostics(
     return result.returncode
 
 
+def build_commands(
+    manifest: dict[str, object],
+    args: argparse.Namespace,
+    python: str,
+) -> list[list[str]]:
+    """Build the target-applicable command set for one validation phase."""
+    commands: list[list[str]] = []
+    for check in manifest["checks"]:
+        if check["id"] == "target-provenance" and args.allow_unfinalized:
+            # The package transaction records target validation before it can
+            # bind the receipt that validate-ai-context-target requires. The
+            # transaction recorder and finalization gate validate provenance
+            # after that receipt exists; running it here would be circular.
+            continue
+        command = [
+            python,
+            "-B",
+            str(check["path"]),
+            *[str(value) for value in check["args"]],
+        ]
+        if check["id"] == "target-provenance" and args.require_effective_rules:
+            command.append("--require-effective-rules")
+        commands.append(command)
+    commands.append(
+        [
+            python,
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            ".dev/ai-context/tooling/tests",
+            "-p",
+            "test_*.py",
+            "-v",
+        ],
+    )
+    if args.commit_range or args.commit:
+        commit_command = [
+            python,
+            "-B",
+            ".dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py",
+        ]
+        if args.commit_range:
+            commit_command.extend(["--range", args.commit_range])
+        else:
+            commit_command.extend(["--commit", args.commit])
+        if args.workflow_id:
+            commit_command.extend(["--workflow-id", args.workflow_id])
+        commands.append(commit_command)
+    return commands
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commit_selector = parser.add_mutually_exclusive_group()
@@ -121,58 +174,10 @@ def main() -> int:
         print(f"Target AI context validation failed: {exc}")
         return 1
 
-    python = sys.executable
-    commands: list[list[str]] = []
-    for check in manifest["checks"]:
-        command = [
-            python,
-            "-B",
-            str(check["path"]),
-            *[str(value) for value in check["args"]],
-        ]
-        if check["id"] == "target-provenance":
-            if args.allow_unfinalized:
-                command.append("--allow-unfinalized")
-            if args.require_effective_rules:
-                command.append("--require-effective-rules")
-        commands.append(command)
-    commands.append(
-        [
-            python,
-            "-B",
-            "-m",
-            "unittest",
-            "discover",
-            "-s",
-            ".dev/ai-context/tooling/tests",
-            "-p",
-            "test_*.py",
-            "-v",
-        ],
-    )
+    commands = build_commands(manifest, args, sys.executable)
 
-    if args.commit_range or args.commit:
-        commit_command = [
-            python,
-            "-B",
-            ".dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py",
-        ]
-        if args.commit_range:
-            commit_command.extend(["--range", args.commit_range])
-        else:
-            commit_command.extend(["--commit", args.commit])
-        if args.workflow_id:
-            commit_command.extend(["--workflow-id", args.workflow_id])
-        commands.append(commit_command)
-
-    for index, command in enumerate(commands):
-        if index == 0 and args.allow_unfinalized:
-            result = run_allowing_exact_diagnostics(
-                command,
-                [str(value) for value in manifest["unfinalized_target_diagnostics"]],
-            )
-        else:
-            result = run(command)
+    for command in commands:
+        result = run(command)
         if result != 0:
             print("Target AI context validation failed.")
             return 1

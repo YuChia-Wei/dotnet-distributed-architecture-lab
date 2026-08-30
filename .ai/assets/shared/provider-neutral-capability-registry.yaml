@@ -1,0 +1,89 @@
+schema_version: "1.0"
+registry_id: "provider-neutral-capability-roles"
+source_of_truth: "canonical"
+capabilities:
+  - capability_id: "mechanical-evidence"
+    role_asset_id: "mechanical-evidence-worker"
+    role_path: ".ai/assets/sub-agent-role-prompts/mechanical-evidence-worker/sub-agent.yaml"
+    capability_tags:
+      - "deterministic-evidence"
+      - "inventory"
+      - "checksum"
+      - "manifest"
+      - "path-mode-comparison"
+    deterministic_authority:
+      required: true
+      surfaces:
+        - "deterministic-cli"
+        - "repository-validator"
+      agent_boundary: "The role collects and projects evidence but does not replace deterministic results."
+    default_mutation_boundary: "read-only"
+    execution_contract: ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"
+  - capability_id: "reconciliation"
+    role_asset_id: "reconciliation-worker"
+    role_path: ".ai/assets/sub-agent-role-prompts/reconciliation-worker/sub-agent.yaml"
+    capability_tags:
+      - "base-target-incoming"
+      - "expected-actual-result"
+      - "authorized-disposition-projection"
+      - "conflict-escalation"
+    deterministic_authority:
+      required: true
+      surfaces:
+        - "exact-compared-evidence"
+        - "authorized-disposition-record"
+      agent_boundary: "The role compares evidence and projects authorized dispositions without inferring semantic equivalence."
+    default_mutation_boundary: "read-only"
+    execution_contract: ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"
+  - capability_id: "semantic-governance-analysis"
+    role_asset_id: "semantic-governance-analyst"
+    role_path: ".ai/assets/sub-agent-role-prompts/semantic-governance-analyst/sub-agent.yaml"
+    capability_tags:
+      - "policy-analysis"
+      - "governance-analysis"
+      - "semantic-customization"
+      - "target-truth"
+      - "decision-escalation"
+    deterministic_authority:
+      required: true
+      surfaces:
+        - "direct-source-evidence"
+        - "recorded-owner-decision"
+      agent_boundary: "The role analyzes bounded semantics and escalates owner-sensitive decisions."
+    default_mutation_boundary: "read-only"
+    execution_contract: ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"
+  - capability_id: "evidence-report-synthesis"
+    role_asset_id: "evidence-report-synthesizer"
+    role_path: ".ai/assets/sub-agent-role-prompts/evidence-report-synthesizer/sub-agent.yaml"
+    capability_tags:
+      - "report-synthesis"
+      - "assessment-synthesis"
+      - "handoff"
+      - "feedback"
+      - "verified-evidence-only"
+    deterministic_authority:
+      required: true
+      surfaces:
+        - "verified-evidence"
+        - "deterministic-receipt"
+        - "recorded-decision"
+      agent_boundary: "The role synthesizes supplied evidence and does not create a verification conclusion."
+    default_mutation_boundary: "workflow-authorized-output-only"
+    execution_contract: ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"
+  - capability_id: "fixed-head-independent-audit"
+    role_asset_id: "fixed-head-independent-auditor"
+    role_path: ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml"
+    capability_tags:
+      - "fixed-head"
+      - "independent-audit"
+      - "terminal-gate"
+      - "high-risk-gate"
+      - "fail-closed"
+    deterministic_authority:
+      required: true
+      surfaces:
+        - "fixed-commit-identity"
+        - "retained-audit-evidence"
+      agent_boundary: "The role audits one fixed subject and cannot repair or supersede prior failures."
+    default_mutation_boundary: "read-only"
+    execution_contract: ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"

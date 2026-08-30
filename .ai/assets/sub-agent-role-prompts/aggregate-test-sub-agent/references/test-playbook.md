@@ -22,4 +22,3 @@ Use this delegated worker role when the main agent needs aggregate-focused tests
 
 - `bdd-gwt-test-designer` supplies scenario intent
 - this sub-agent turns that intent into aggregate-focused tests
-

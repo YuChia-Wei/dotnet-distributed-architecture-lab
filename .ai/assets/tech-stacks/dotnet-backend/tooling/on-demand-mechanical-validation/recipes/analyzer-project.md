@@ -1,64 +1,58 @@
-# Target-Owned Analyzer Project Recipe
+# Target-Owned Analyzer Starting-Point Recipe
 
 Evidence tier: `reference-only`.
 
-This recipe does not supply an analyzer implementation or select an SDK,
-target framework, Roslyn version, package source, or compatibility range. Use it
-only after a target owner selects a bounded diagnostic subset from
-[`../diagnostic-mapping.yaml`](../diagnostic-mapping.yaml).
+This recipe supplies no analyzer project, selected provider delivery, SDK,
+Roslyn version, test framework, package source, compatibility result, or
+execution result. Use it only after a target owner records a bounded diagnostic
+subset from [`../diagnostic-mapping.yaml`](../diagnostic-mapping.yaml) in the
+[`../templates/provider-selection.template.yaml`](../templates/provider-selection.template.yaml)
+shape.
 
-## Project Creation Shape
+## Copy Bounded Starting Templates
 
-The target may create its own analyzer project with a project file shaped like
-the following. Every placeholder is a target decision; the snippet is not a
-buildable framework asset.
+Copy these files into a target-owned path only after the target records its
+selection decision:
 
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>{{target-owned-tfm}}</TargetFramework>
-    <IsPackable>{{target-owned-packaging-decision}}</IsPackable>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp"
-                      Version="{{target-owned-roslyn-version}}"
-                      PrivateAssets="all" />
-  </ItemGroup>
-</Project>
-```
+- [`../templates/minimal-diagnostic-analyzer.cs.template`](../templates/minimal-diagnostic-analyzer.cs.template)
+- [`../templates/minimal-diagnostic-analyzer-test.cs.template`](../templates/minimal-diagnostic-analyzer-test.cs.template)
+- [`../templates/code-fix-decision.md`](../templates/code-fix-decision.md)
 
-The target must implement positive, negative, exception, and false-positive
-tests for each selected rule. DBA labels are compatibility names only; canonical
-standards remain the semantic owners.
+They are deliberately incomplete reference material. Replacing placeholders,
+choosing compiler and test dependencies, creating project structure, wiring
+selected projects, and deciding severity remain target-owned work. The
+framework neither writes target source nor selects a provider on copy.
 
-## Target Wiring Shape
+The analyzer test template preserves explicit Given / When / Then steps. The
+target must add positive, negative, exception, and false-positive coverage for
+each selected rule. DBA labels are compatibility names only; canonical standards
+remain the semantic owners.
 
-After the analyzer project exists and its tests pass, the target may wire it to
-selected projects:
+## Provider Availability Gate
 
-```xml
-<Project>
-  <ItemGroup Condition="Exists('{{target-owned-analyzer-project}}')">
-    <ProjectReference Include="{{target-owned-analyzer-project}}"
-                      OutputItemType="Analyzer"
-                      ReferenceOutputAssembly="false"
-                      PrivateAssets="all" />
-  </ItemGroup>
-</Project>
-```
+Read [`../provider-contract.yaml`](../provider-contract.yaml) before treating a
+selection as executable.
 
-The target owns which projects receive the reference and whether a missing
-analyzer path fails the build. A broad `Directory.Build.props` reference is not
-the framework default.
+- `not-selected` is the default capability gap; fallback templates remain
+  available and no installation is inferred.
+- `declined` records an explicit target decision without changing the official
+  recommendation.
+- `selected-unavailable` prohibits execution until exact provider identity,
+  fresh readiness, and compatibility evidence exist.
+- `synthetic-readiness-proven` proves only a schema transition. It does not
+  prove real-provider execution.
 
-## Evidence Required For An Active Claim
+## Evidence Required For an Active Claim
 
-- target decision naming selected diagnostics and exceptions;
-- exact project, SDK, target framework, Roslyn, and test package versions;
+- a target decision naming selected diagnostics and exceptions;
+- exact provider identity and delivery evidence selected by that target;
+- separately typed and digested readiness, compatibility, and execution
+  receipts;
 - implementation and test commit;
-- applied project wiring and severity configuration;
-- exact build/test/CI command outcomes against the claimed target commit; and
+- applied target-owned wiring and severity configuration;
+- exact validation outcomes against the claimed target commit; and
 - a compatibility and rollback statement.
 
-Without all of that evidence, report the recipe as `not-selected` or the target
-implementation as `unresolved`; do not infer activation from this directory.
+Without all of that evidence, report the target state as `not-selected`,
+`selected-unavailable`, or `unresolved`; do not infer activation from this
+directory.

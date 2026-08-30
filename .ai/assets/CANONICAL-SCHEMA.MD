@@ -201,9 +201,10 @@ metadata for every promoted runtime target.
 ## Effective Rule Consumption
 
 `effective_rule_consumption` is a top-level sibling section for canonical
-action-skill specifications. It records how a routine action consumes the
-target-effective rule packet without becoming a second rule owner or defining
-the task-selected `execution_mode` vocabulary.
+action-skill specifications. It records how a routine action explicitly selects
+`framework-source` or `initialized-target` applicability and consumes the
+corresponding evidence without becoming a second rule owner or defining the
+task-selected `execution_mode` vocabulary.
 
 Each section requires this shape:
 
@@ -212,13 +213,18 @@ Each section requires this shape:
 | `applies_when` | `string[]` | Describes the skill-owned action that needs an effective rule packet. |
 | `excludes` | `string[]` | Describes adjacent work outside that action. |
 | `resolver` | `string` | Exactly `.ai/scripts/resolve-effective-rule-packet.py`. |
+| `applicability` | `object` | Requires an explicit `applicability_mode`. `framework-source` is governed by `.dev/standards/AI-CONTEXT-SOURCE-EFFECTIVE-RULES.yaml`, requires explicit rule IDs and selection evidence, and treats downstream provenance as not applicable. `initialized-target` keeps `.dev/ai-context/provenance.yaml` and the exact target-effective route authoritative. |
 | `selectors` | `string[]` | Exactly `capability`, `execution_mode`, `technology_profile`, and `file_type`, treated as opaque task-selected inputs. |
 | `unresolved_outcome` | `string` | Exactly `stop-applicable-action`. |
-| `consumption_order` | `string` | Requires a freshness-verified task-scoped packet before profile references needed for the action. |
-| `evidence.required` | `string[]` | Includes `resolver_outcome`, `loaded_rule_ids`, `baseline.framework_version`, `target_state.digest`, and the four request paths `request.capability`, `request.execution_mode`, `request.technology_profile`, and `request.file_type`. |
-| `semantic_consistency` | `object` | Uses `rule_id`, exact UTF-8 `rules[].normative_statement` bytes, and `rules[].normative_statement_digest`; the default mismatch outcome is a warning and any stricter outcome is target-owned. |
+| `consumption_order` | `string` | Requires explicit mode selection and freshness-verified task-scoped evidence before profile references needed for the action. |
+| `evidence.required_common` | `string[]` | Includes `resolver_outcome`, `applicability_mode`, `loaded_rule_ids`, the four request selectors, `rules[].normative_statement_digest`, and `packet_digest`. |
+| `evidence.required_by_mode` | `object` | `framework-source` binds exact repository, commit, status, execution-file Git blobs and working-tree bytes, selection evidence, and catalog digests. `initialized-target` binds `baseline.framework_version` and `target_state.digest`. |
+| `semantic_consistency` | `object` | Uses `rule_id`, exact UTF-8 `rules[].normative_statement` bytes, and `rules[].normative_statement_digest`; the default mismatch outcome is a warning and any stricter outcome belongs to the selected mode's authority. |
 | `prohibitions` | `string[]` | Prohibits broad target or framework document scans, framework-default fallback, alternate-route selection, and analyzer-output comparison as rule semantics; analyzer severity and warnings-as-errors remain separate target-owned policy. |
 
 The same `rule_id` must resolve to byte-equivalent effective semantics across
-consumers. Consumers record resolver and packet evidence; they do not compare
-analyzer output or derive rule semantics from a broad document scan.
+consumers. Framework-source evidence is transient and source-only; it never
+creates or satisfies downstream provenance. Initialized-target evidence remains
+fail-closed on missing, stale, unresolved, or digest-invalid target authorities.
+Consumers record resolver and packet evidence; they do not compare analyzer
+output or derive rule semantics from a broad document scan.

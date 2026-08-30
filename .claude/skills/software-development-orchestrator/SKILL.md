@@ -30,6 +30,9 @@ This is a thin Claude-compatible wrapper.
   - `.ai/assets/skills/software-development-orchestrator/templates/external-task-completion.template.yaml`
   - `.ai/assets/skills/software-development-orchestrator/scripts/validate-external-task-delegation.py`
   - `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`
+  - `.ai/assets/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md`
+  - `.ai/assets/shared/agent-execution-guardrails.schema.yaml`
+  - `.ai/scripts/validate-agent-execution-guardrails.py`
 - Templates:
   - `.ai/assets/skills/software-development-orchestrator/templates/workflow-locator-template.yaml`
   - `.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`

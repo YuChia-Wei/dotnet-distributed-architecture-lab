@@ -59,12 +59,24 @@ building controls are not target payload. The distribution profile declares
 their exclusions; this contract does not infer portability from a path's
 format, language, or apparent reusability.
 
-The source-only `bounded-general-worker` and `bounded-routine-worker` Codex
-execution profiles are expressly excluded from downstream product projection.
-They remain runtime execution profiles, not canonical skills or canonical
-sub-agent roles. A future change requires an explicit owner-approved contract
-revision and a separately selected canonical role or adapter; it must not be
-inferred from profile availability.
+The source-only `bounded-general-worker` Codex execution profile is expressly
+excluded from downstream product projection. It remains a source-repository
+fallback profile, not a canonical skill or canonical sub-agent role.
+
+The generic provider-neutral capability contracts are canonical assets. Their
+separate provider projection registry declares five configured Codex profile
+paths for the package projection: the evolved `bounded-routine-worker` mapping
+for mechanical evidence plus reconciliation, semantic governance analysis,
+evidence report synthesis, and fixed-head independent audit. Those static
+profiles remain runtime projections, not canonical role owners, and do not
+prove current-session availability, resolved model selection, delegation, or
+genuine invocation.
+
+The generic capability package projection does not claim Claude or Copilot
+runtime support. Deferred generic provider projections do not mean permanently
+unsupported. The existing `context-translator` multi-provider adapter family is
+separately configured and does not establish generic capability support for any
+other role.
 
 ## Migration and Compatibility Boundary
 
@@ -78,4 +90,3 @@ inferred from profile availability.
   authority.
 - A migration is incomplete while the old and new full-text trees are both
   treated as canonical.
-

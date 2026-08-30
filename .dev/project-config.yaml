@@ -127,6 +127,13 @@ workManagement:
     mergeGate: required
 validation:
   routine:
+    argv:
+      - python
+      - -B
+      - .dev/ai-context/tooling/validate-target-ai-context.py
+      - --allow-unfinalized
+      - --workflow-id
+      - 2026-08-30-ai-context-v0-15-1-upgrade
     local:
       mode: manual
     ci:

@@ -154,4 +154,3 @@
 - `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
 - `../../../.ai/assets/skills/software-development-orchestrator/templates/development-review-report-template.md`
 - `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json`
-

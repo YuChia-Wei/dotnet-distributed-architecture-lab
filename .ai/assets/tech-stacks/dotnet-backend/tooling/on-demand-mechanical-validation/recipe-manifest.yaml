@@ -7,10 +7,36 @@ compilable_payload: false
 framework_sdk_requirement: "none"
 activation_contract: "none"
 activation_inference_from_presence: "forbidden"
+provider_contract:
+  path: "provider-contract.yaml"
+  schema: "provider-contract.schema.yaml"
+  capability_id: "dotnet.mechanical-validation"
+  recommendation_status: "official-recommended"
+  default_selection_state: "not-selected"
+  canonical_provider_package_identity: "unknown"
+  framework_delivery: "real-provider-unavailable"
 semantic_ownership:
   canonical_catalog: "../../engineering-rule-catalog.yaml"
   binding_only: true
 materials:
+  provider_contract:
+    path: "provider-contract.yaml"
+    evidence_tier: "reference-only"
+  provider_contract_schema:
+    path: "provider-contract.schema.yaml"
+    evidence_tier: "reference-only"
+  provider_selection_template:
+    path: "templates/provider-selection.template.yaml"
+    evidence_tier: "reference-only"
+  minimal_diagnostic_analyzer_template:
+    path: "templates/minimal-diagnostic-analyzer.cs.template"
+    evidence_tier: "reference-only"
+  minimal_diagnostic_analyzer_test_template:
+    path: "templates/minimal-diagnostic-analyzer-test.cs.template"
+    evidence_tier: "reference-only"
+  code_fix_decision_template:
+    path: "templates/code-fix-decision.md"
+    evidence_tier: "reference-only"
   diagnostic_mapping:
     path: "diagnostic-mapping.yaml"
     evidence_tier: "reference-only"
@@ -25,6 +51,11 @@ materials:
     evidence_tier: "reference-only"
 target_ownership:
   selection: "explicit target owner decision"
+  provider_selection_record: "target-owned after copy"
+  provider_package_identity: "target evidence required"
+  readiness_receipt: "target-owned"
+  compatibility_receipt: "target-owned"
+  execution_receipt: "target-owned"
   project_creation: "target-owned"
   sdk_and_target_framework: "target-owned"
   roslyn_and_package_versions: "target-owned"
@@ -39,4 +70,8 @@ unsupported_framework_claims:
   - "materialized activation"
   - "framework-verified analyzer compatibility"
   - "framework-verified target configuration"
-  - "Architecture Kit availability or cutover"
+  - "framework-known provider package identity"
+  - "framework-verified provider readiness"
+  - "framework-verified provider execution"
+  - "automatic provider selection or installation"
+  - "Engineering Guardrails availability or cutover"

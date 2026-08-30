@@ -1,6 +1,6 @@
 # Problem Frames
 
-This directory contains active target-repository problem frames, authoring guidance, and reusable templates for validator-ready specs.
+This directory contains problem-frame authoring guidance and reusable templates for validator-ready specs.
 
 ## Purpose
 
@@ -15,5 +15,4 @@ Start with `.dev/problem-frames/INDEX.md` when you need the file catalog, minimu
 - Requirements remain under `.dev/requirement/`.
 - Human-readable functional specs remain under `.dev/specs/`.
 - Problem frames hold structured machine-readable validation inputs.
-- Product-specific frames listed in `INDEX.md` are active validation inputs for this repository and must remain traceable to requirements, production specs, code, and tests.
-- A frame draft does not establish compliance; `spec-compliance-validator` owns the 100% gate and truthful gap report.
+- This framework repository does not keep product-specific problem frames as active truth.

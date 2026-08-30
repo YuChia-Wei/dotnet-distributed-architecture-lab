@@ -84,4 +84,11 @@ wrapper_metadata:
     wrapper_path: ".claude/skills/ai-context-auditor/"
   codex:
     wrapper_path: ".agents/skills/ai-context-auditor/"
+role_bindings:
+  - role_path: ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml"
+    role_asset_id: "fixed-head-independent-auditor"
+    expected_role_status: "active"
+    binding_kind: "conditional"
+    applicability: "An explicitly selected terminal or high-risk post-remediation AI-context verification requires a read-only audit against one fixed clean commit."
+    load_obligation: "mandatory-when-applicable"
 status: "active"

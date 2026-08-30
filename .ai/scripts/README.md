@@ -79,6 +79,15 @@ guide at
 `.dev/guides/ai-collaboration-guides/PYTHON-PREREQUISITE-DIAGNOSTICS-GUIDE.zh-TW.md`
 for the approved modes and recovery process.
 
+`.dev/ai-context/local/cli-execution-routing.yaml` is an optional,
+per-clone CLI execution-route binding covered by the tracked
+`/.dev/ai-context/local/` ignore rule. `validate-ai-context.py` validates the
+portable schema and, when the local file exists, rejects tracked, staged,
+unignored, symlinked, sensitive, ambiguous, or implicitly consented records.
+Agents never create or update the file implicitly; after a successful reusable
+recovery they must ask first under the canonical CLI execution-routing
+contract.
+
 Source-only registered CLIs remain source-framework tooling. Their presence or
 absence in an extracted target is not a prerequisite failure, and release
 publication is outside this diagnostic contract.
@@ -121,12 +130,19 @@ Shell or PowerShell scripts should be retired or replaced when they:
 - `validate-ai-context-target.py`
 - `resolve-effective-rule-packet.py`
 - `validate-source-dispositions.py`
+- `validate-source-work-management.py`
 - `validate-file-disposition-manifest.py`
 - `validate-git-commits.py`
 - `validate-workflow-handoff.py`
 - `plan-ai-context-package-apply.py`
 
 These scripts inspect AI context, markdown, prompt portability, or repository hygiene. They are not substitutes for dotnet C# validation.
+
+`validate-source-work-management.py` checks the source repository's live GitHub
+authority boundary, the frozen `.dev/backlog` path-and-byte identity, historical
+v0.5.0-v0.9.0 `backlog_refs`, v0.10.0+ online Issue scope, and prospective
+workflow rejection of retired local planning bindings. It is deterministic and
+does not use GitHub credentials or network access.
 
 Source-maintainer release validation, tag handoff, hosted publication,
 provider reconciliation, release rendering, package building, immutable source
@@ -135,22 +151,26 @@ target packages. Their names and commands belong to upstream source policy and
 runbooks; this portable instruction path does not make them target actions.
 
 `resolve-effective-rule-packet.py` is the shared, read-only action-time resolver for one exact
-`capability` / `execution_mode` / `technology_profile` / `file_type` tuple. It consumes only the
-two engineering-rule catalogs, the pinned `.dev/ai-context/provenance.yaml` and
-`customizations.yaml` authorities for complete contract and freshness checks, and the target's
-freshness-validated `.dev/ai-context/effective-rules.yaml` plus selected packet. It never scans
-target Markdown, ADRs, or directories for nearby semantics and never silently falls back to
-framework defaults. A missing, malformed, stale, ambiguous, or digest-mismatched authority,
-catalog, state, route, or packet is unresolved and stops the action. `--emit-candidate` is an
-explicit reconciliation aid only: it prints a packet candidate with complete effective normative
-statements but neither writes nor activates it. Reconciliation publication stages all packets
-first and the state index last, with rollback for in-process exceptions. It does not claim
-cross-file crash atomicity; a crash-mixed candidate remains unusable because freshness and digest
-validation fails closed.
+`capability` / `execution_mode` / `technology_profile` / `file_type` tuple. Every invocation must
+select `--applicability-mode framework-source` or `--applicability-mode initialized-target`.
+Framework-source mode requires explicit `--source-rule-id` and `--selection-evidence` inputs,
+reads its policy, resolver, schema, and catalogs from the exact Git `HEAD`, verifies corresponding
+working-tree bytes, and emits transient source-only evidence. It neither requires nor creates
+`.dev/ai-context/provenance.yaml`, and it never persists evidence into a downstream package or
+target authority. Initialized-target mode preserves the pinned `.dev/ai-context/provenance.yaml`,
+`customizations.yaml`, freshness-validated `.dev/ai-context/effective-rules.yaml`, and selected
+packet contract. Neither mode scans Markdown, ADRs, directories, remembered defaults, or alternate
+skills for nearby semantics. Missing applicability, source selection, downstream provenance,
+stale state, unresolved semantics, or digest-invalid evidence stops the action with a distinct
+diagnostic. In initialized-target mode, `--emit-candidate` remains an explicit reconciliation aid:
+it prints a packet candidate with complete effective normative statements but neither writes nor
+activates it. Reconciliation publication stages all packets first and the state index last, with
+rollback for in-process exceptions. It does not claim cross-file crash atomicity; a crash-mixed
+candidate remains unusable because freshness and digest validation fails closed.
 
 `validate-ai-context.py` checks objective repository facts: active index paths, literal table corruption, declared runtime-root status, canonical/Agents/Claude skill inventory parity, case-safe `AGENTS.md` and thin `CLAUDE.md` root entries, canonical wrapper-metadata target/path integrity, sub-agent dynamic/native dispositions, exact adapter target/path/schema/canonical-link/package-profile parity, policy-scoped agent-facing language, root bilingual entry ownership/link/structural markers, rule ownership registry structure, qualified governance-term namespace/owner/shorthand/machine-binding routes, canonical skill/sub-agent schema compliance, canonical template-family hygiene, and deterministic development capability routing. It scans both tracked and untracked non-ignored files so a new context file cannot bypass the gate before staging, while filtering tracked paths that are deleted in the working tree. Language lint uses exact path-and-line exceptions for deliberate routing triggers; other Han prose and selected non-ASCII punctuation fail with a file and line number. Script source, generated/example/archive/migration material, workflows, product `src`/`test` trees, and human-facing `.dev` documentation are outside that language scan; Markdown documentation under `.ai/scripts` remains in scope. Root bilingual validation checks reciprocal ownership links, headings, links, fences, inline-code identifiers, tables, lists, and ordered backtick table paths. These are structural drift guards, not proof of semantic equivalence; retained semantic review remains required when a bilingual entry changes materially.
 
-`validate-workflow-artifacts.py` validates post-adoption workflow locator/task metadata, complete `.dev/workflows/INDEX.MD` directory coverage, locator-backed title/owner/status/timestamp/entrypoint parity, explicit legacy/no-locator rows, durable `.dev/backlog/items/*.yaml` identity/lifecycle/reference integrity, and fail-closed development implementation contracts for intent, execution mode, overlays, layered sources, subject revision, and acceptance criteria. Locators that opt into `lifecycle_contract: "1.0"` also enforce active-task cardinality, completed-workflow closure, and completed-task result semantics. Historical tasks and locators before their respective contract adoption remain compatible. The development implementation-contract and orchestrator acceptance tests live with `software-development-orchestrator`; the old `.ai/scripts/tests/` paths are thin compatibility entrypoints only.
+`validate-workflow-artifacts.py` validates post-adoption workflow locator/task metadata, complete `.dev/workflows/INDEX.MD` directory coverage, locator-backed title/owner/status/timestamp/entrypoint parity, explicit legacy/no-locator rows, durable `.dev/backlog/items/*.yaml` identity/lifecycle/reference integrity, and fail-closed development implementation contracts for intent, execution mode, overlays, layered sources, subject revision, and acceptance criteria. Locators that opt into `lifecycle_contract: "1.0"` also enforce active-task cardinality, completed-workflow closure, and completed-task result semantics. An explicit `terminal_anchor_contract` binds lifecycle effects to tracked evidence: a satisfied `complete` anchor rejects active workflow/task state, while a satisfied `continue` anchor requires a reason and the exact unfinished task IDs. The error names the workflow, anchor, task, and conflicting state. The validator never infers anchors from names, paths, dates, or versions and performs no live provider access. Historical tasks and locators before their respective contract adoption remain compatible. The development implementation-contract and orchestrator acceptance tests live with `software-development-orchestrator`; the old `.ai/scripts/tests/` paths are thin compatibility entrypoints only.
 
 `validate-assessment-artifacts.py` validates `.dev/assessments/` locator and
 index coverage, `ASM-YYYYMMDD-NNN` identity, template and report paths, assessed
@@ -241,13 +261,37 @@ closed. Incoming, previous, and operation sets are filtered together so a
 disabled provider never generates removal work. Existing target
 templates and locally changed managed files become reconciliation items.
 Acknowledging such an item skips it; acknowledgement never grants overwrite or
-delete permission. `--apply` rechecks the complete binding, applies only safe
-operations transactionally, and writes
-`.dev/AI-CONTEXT-APPLY-PENDING.yaml`. It never updates validated source
-provenance; the receipt records the resolved/default selection, authority
-evidence, and applied/skipped counts by component. Apply revalidates that
-authority before mutation. `ai-context-init` or `ai-context-upgrader` owns
-validation and provenance finalization.
+delete permission. `--apply` rechecks the complete binding, rejects drift in
+unchanged selected managed paths, and seals a schema-2 plan. Raw bytes are the
+authority; a clean tracked Git projection may satisfy the previous identity
+only when its index bytes and LF-normalized UTF-8 bytes match and no content
+transform attribute is configured. The transaction ID is the plan SHA-256.
+Before the first target mutation, the tool durably stores the plan, ordered
+operation boundary, exact prestates, and recovery bytes under the target Git
+administrative `ai-context-package-apply/<transaction-id>/` directory. Atomic
+same-directory writes (including Windows `MoveFileExW` write-through namespace
+transitions) and a durable state machine (`planned`, `applying`,
+`interrupted`, `rolling-back`, `rolled-back`, `finalized`) make process-death
+recovery explicit. Rollback seals its starting target surface and persists an
+ordered reverse-prestate path prefix, so a retry can distinguish the one
+in-flight restore from completed and untouched rollback paths.
+Resume the exact sealed package with `--resume <transaction-id>`; restore the
+exact prestate without package availability with `--rollback <transaction-id>`.
+Both terminal operations are idempotent, while ambiguous state and unrelated
+worktree changes fail closed.
+
+An apply publishes `.dev/AI-CONTEXT-APPLY-PENDING.yaml` immediately before its
+final journal transition. The receipt is non-authoritative until the durable
+`finalized` journal binds its exact SHA-256; interruption at that boundary must
+be resumed or rolled back. Target validation additionally requires the sealed
+target root and starting commit to match the current target and `HEAD`. Its
+schema-2 receipt binds the plan and selected-input proof identities, operation order,
+every applied artifact's raw SHA-256 and intended Git mode, removed paths, the
+complete selected framework-managed identity, resolved/default selection, and
+applied/skipped counts by component. It never updates validated source
+provenance. `ai-context-init` or `ai-context-upgrader` owns validation and
+provenance finalization; reconciliation-preserved managed paths remain an
+explicit target-validation failure until owner resolution.
 
 For every selected framework-managed path, dry run also records an exact target
 Git ignore match (`source`, line, and pattern). An ignored path is an explicit
@@ -274,28 +318,14 @@ the actual `repository_loaded` events. A provider may report
 bytes-divided-by-four value is marked as a repository-loaded heuristic and is
 never treated as total prompt usage.
 
-Fail-closed validation and packaging regression tests use Given-When-Then
-naming and comments and run entirely in disposable Git repositories:
-
-```powershell
-python .ai/scripts/tests/test_fail_closed_validation.py -v
-python .ai/scripts/tests/test_ai_context_wrapper_metadata.py -v
-python .ai/scripts/tests/test_ai_context_root_entries.py -v
-python .ai/scripts/tests/test_ai_context_language_policy.py -v
-python .ai/assets/skills/software-development-orchestrator/scripts/tests/test_workflow_implementation_contract.py -v
-python .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_capability_contract.py -v
-python .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_acceptance.py -v
-python .ai/scripts/tests/test_workflow_lifecycle_contract.py -v
-python .ai/scripts/tests/test_assessment_artifacts.py -v
-python .ai/scripts/tests/test_git_commit_policy.py -v
-python .ai/scripts/tests/test_ai_context_package_apply.py -v
-python .ai/scripts/tests/test_dependency_version_consistency.py -v
-python .ai/scripts/tests/test_file_disposition_manifest.py -v
-```
-
-Additional source-repository governance and release-history tests are intentionally
-excluded from the portable payload and therefore are not advertised here as runnable
-downstream commands.
+Source-repository fail-closed and packaging regression tests use
+Given-When-Then naming and disposable Git repositories. All test trees under
+`.ai/scripts/tests/` and skill-owned `scripts/tests/` are explicitly
+source-only, are excluded from the portable payload, and cannot contribute to
+portable validation success. A freshly extracted package instead runs the
+candidate-owned `.ai/scripts/validate-ai-context-payload.py` command documented
+by the envelope `INSTALL.md`; its exact identity and arguments are recorded in
+`metadata/validation.json`.
 
 `test_ai_context_load_measurement.py` proves the source-only context-load
 measurement contract in disposable synthetic Git repositories; it creates no
@@ -312,9 +342,9 @@ unclassified retired names, overlapping rules, stale rules, or any attempted
 `current-operational` exception. These checks remain required when
 `check-all.sh` detects their exact source context, but the source-only
 validators, tests, registry, and workflow evidence are intentionally excluded
-from public target packages. `test_ai_context_package_apply.py` and the
-synthetic file-disposition fixture suite are downstream-supported and remain
-packaged and required. A packaged `check-all.sh` reports source-only checks as
+from public target packages. The package apply and file-disposition runtime
+capabilities remain downstream-supported, while their source test modules stay
+excluded. A packaged `check-all.sh` reports source-only checks as
 not applicable instead of requiring unavailable release history, Git tags,
 builder modules, workflow evidence, or source CI configuration.
 
@@ -378,17 +408,63 @@ pass with the same validator/profile/input/environment identity may be reported
 as `reused`; that remains distinct from a new execution in both the compact
 summary and evidence record.
 
+Before any validation command is launched, the runner retains a repository
+admission snapshot. `release` and `nightly-full` require a clean, operation-free
+commit; `fast` and `pr` may use a stable dirty snapshot, but any subsequent
+HEAD, index, tracked/untracked content, or Git-operation drift aborts the
+remaining command chain. Admission failure retains a private failure artifact
+and launches no check.
+
+Launched checks run through `validation_process_supervisor.py`. Windows uses a
+Job Object and supported Linux hosts use subreaper-aware descendant tracking;
+unsupported POSIX containment is rejected before launch. A passing execution
+requires a sealed log, complete descendant cleanup, exact effective-argv and
+duration binding, a privacy-safe persisted argv, and matching raw plus adapter
+receipts. The raw receipt treats monotonic elapsed time as the authoritative
+duration and records any UTC wall-clock adjustment explicitly; the adapter
+authenticates that adjustment before deriving internally consistent timing.
+Legacy receipts without an adjustment retain the strict wall-clock equality
+contract. Timeout, cancellation, snapshot drift, launch failure, and unproven
+cleanup are never reusable passes. Selected checks that never launch are
+recorded explicitly as `not-executed` and cannot impersonate supervised
+execution.
+
+The aggregate shell runner also derives every evidence timestamp from one
+wall-clock origin plus monotonic elapsed time. A hosted NTP or VM clock
+adjustment therefore cannot create a negative per-check duration or invalidate
+otherwise authentic finalization evidence. The wall origin preserves an
+epoch-compatible `started_at`; subsequent timing never re-reads wall time.
+
+Per-check timeouts are execution ceilings, not profile budgets. The
+`multi-hop-upgrade-transaction`, `package-apply`, and
+`aggregate-runner-contract` ceilings include measured Windows full-suite
+duration plus bounded headroom; profile membership and required enforcement
+remain unchanged when those ceilings are calibrated.
+
+After every selected ID has exactly one event, the runner verifies the final
+repository snapshot, atomically writes summaries, and seals their canonical
+digests with the selection, logs, receipts, and evidence records. Cache reads
+and writes are disabled for terminal profiles. For eligible non-terminal
+profiles, a new pass becomes reusable only after the complete invocation seal
+has succeeded; failed finalization or sealing publishes neither a passing
+manifest nor new reusable cache state.
+
 For the source-only immutable-history checks, `fast` and `pr` may also report
 `reused` from the tracked full-validation receipt. This path does not consume a
-host-local cache and does not rescan unchanged historical blobs. A release,
+host-local cache and does not rescan unchanged historical blobs. The receipt
+decision is itself a supervised preparation: its exact selected Python
+interpreter and verifier argument vector are authenticated without persisting
+the interpreter's host path, and its wrapper, raw receipt, log, snapshot, and
+tracked receipt are included in the final invocation seal. A release,
 scheduled full run, protected-path change, validator/schema change, unknown
 diff path, or invalid receipt forces fresh native execution. Downstream runs do
 not load this source receipt.
 
 `check-all.sh` uses four enforcement classes:
 
-- `required`: when selected by the active mode, the check must execute; missing,
-  non-executable/unlaunchable, or non-zero outcomes fail the aggregate gate;
+- `required`: when selected by the active mode, the check must execute or carry
+  an authenticated eligible reuse source; missing, non-executable/unlaunchable,
+  or non-zero outcomes fail the aggregate gate;
 - `conditional-required`: absence of all applicability inputs is reported as not
   applicable, partial configuration fails, and an applicable check is required;
 - `advisory`: execution problems and non-zero outcomes remain visible warnings
@@ -399,7 +475,8 @@ not load this source receipt.
 Profile non-selection is distinct from a selected required check being skipped.
 Invalid profiles or extra arguments return exit code `2`. A successful aggregate
 result may contain explicit advisory warnings, deferred work, or not-applicable
-conditional checks, but it cannot contain an unexecuted selected required check.
+conditional checks, but it cannot contain a selected required check that has
+neither a supervised execution nor an authenticated eligible reuse source.
 
 Current source-framework behavior is SDK-free: required profiles use Python and
 shell contracts and do not install or invoke `dotnet`. A target may separately

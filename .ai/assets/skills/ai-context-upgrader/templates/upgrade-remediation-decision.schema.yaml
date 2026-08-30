@@ -1,0 +1,51 @@
+schema_version: "1.0"
+record_schema: "upgrade-remediation-decision/v1"
+document: ".git/ai-context-package-apply/<transaction-id>/remediation-decision.json"
+encoding: "canonical-compact-sorted-json-with-terminal-lf"
+required:
+  - schema_version
+  - packet_sha256
+  - plan_sha256
+  - transaction_id
+  - status
+  - owner
+  - decided_at
+  - evidence
+  - reason
+  - accepted_operation_ids
+  - reconciliation_ids
+  - policy_adoptions
+  - candidate_authority
+bindings:
+  packet_sha256: "remediation-packet.json canonical_digest"
+  plan_sha256: equals-transaction_id
+  transaction_id: lowercase-sha256
+decision:
+  status: [approved, rejected]
+  owner: non-empty-string
+  decided_at: ISO-8601-with-offset
+  evidence: safe-repository-reference
+  reason: non-empty-string
+  accepted_operation_ids: unique-operation-id-list
+  reconciliation_ids: unique-operation-id-list
+  policy_adoptions: "null or exact target provenance policy_adoptions selected by the owner"
+  candidate_authority: "null or exact canonical JSON digests of the full candidate provenance and customization ledger"
+approved:
+  accepted_operation_ids: "exact ordered automatic_proposal.apply_operation_ids"
+  reconciliation_ids: "exact ordered automatic_proposal.reconciliation_ids"
+  policy_adoptions: "must exactly equal the successfully finalized candidate provenance value"
+  candidate_authority:
+    required: [provenance_sha256, customizations_sha256]
+    provenance_sha256: "canonical JSON SHA-256 of the exact candidate provenance document"
+    customizations_sha256: "canonical JSON SHA-256 of the exact candidate customization ledger"
+  forbidden_when:
+    - automatic_proposal.unresolved_operation_ids is non-empty
+    - automatic_proposal.ignored_framework_paths is non-empty
+    - automatic_proposal.managed_state_conflicts is non-empty
+rejected:
+  accepted_operation_ids: []
+  reconciliation_ids: []
+  policy_adoptions: null
+  candidate_authority: null
+  transaction_state: rejected
+  target_mutation: forbidden

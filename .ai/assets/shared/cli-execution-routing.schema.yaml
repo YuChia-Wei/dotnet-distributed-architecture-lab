@@ -1,0 +1,99 @@
+schema_version: "1.0"
+contract_id: "cli-execution-routing"
+record_type: "cli-execution-routing-local"
+purpose: >-
+  Define the portable shape of an optional per-clone CLI execution-route
+  binding without supplying personal or host-specific default values.
+
+storage:
+  default_local_path: ".dev/ai-context/local/cli-execution-routing.yaml"
+  gitignore_rule: "/.dev/ai-context/local/"
+  tracked_instance: "prohibited"
+  packaged_instance: "prohibited"
+  create_or_update_requires: "explicit-user-consent-after-successful-recovery"
+  missing_record: "valid-unconfigured"
+
+top_level:
+  required: [schema_version, record_type, routes]
+  allowed: [schema_version, record_type, routes]
+  schema_version: "1.0"
+  record_type: "cli-execution-routing-local"
+
+routes:
+  type: "non-empty-list"
+  ordering: "operation_id ascending"
+  unique_by: "operation_id"
+  record:
+    required: [operation_id, capability_id, candidates, persistence]
+    allowed: [operation_id, capability_id, candidates, persistence]
+    operation_id:
+      pattern: "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)+$"
+    capability_id:
+      pattern: "^[a-z][a-z0-9-]*(?:\\.[a-z][a-z0-9-]*)*$"
+
+candidates:
+  type: "non-empty-list"
+  ordering: "list order is deterministic preference order"
+  unique_by: "route_id"
+  record:
+    required: [route_id, surface, sandbox, requirements, fallback]
+    allowed: [route_id, surface, sandbox, selectors, working_directory, requirements, fallback]
+    route_id:
+      pattern: "^[a-z][a-z0-9-]*$"
+    surface:
+      values: [sandboxed-cli, host-cli, wsl-cli, container-cli]
+    sandbox:
+      values: [inside, outside, runtime-default, not-applicable]
+    selectors:
+      allowed_keys: [distribution, shell, executable, container]
+      values: "non-empty single-line strings; URIs and secret-bearing values are prohibited"
+    working_directory:
+      values: [repository-root, current-directory, explicit-local-path]
+
+requirements:
+  required: [network, credential_boundary, filesystem_write, privilege, approval]
+  allowed: [network, credential_boundary, filesystem_write, privilege, approval]
+  network: [forbidden, allowed, required]
+  credential_boundary: [none, runtime-managed, host-managed]
+  filesystem_write: [none, repository, ignored-local, external]
+  privilege: [standard, elevated-owner-approved]
+  approval: [not-required, required-before-execution]
+
+fallback:
+  required: [on, to, retry, max_attempts]
+  allowed: [on, to, retry, max_attempts]
+  "on": [unavailable, blocked-by-environment, stale]
+  forbidden_on: [disallowed]
+  to: "unique route_id list resolved within the same operation"
+  retry: "material-change-only"
+  max_attempts: 1
+
+persistence:
+  required: [consent, reason, recorded_at, change]
+  allowed: [consent, reason, recorded_at, change]
+  consent: "explicit"
+  reason: [post-recovery-success, owner-requested]
+  recorded_at: "ISO 8601 timestamp with an explicit UTC offset"
+  change: [create, merge, replace]
+
+forbidden_fields:
+  - token
+  - password
+  - secret
+  - credential
+  - credential_value
+  - session
+  - username
+  - endpoint
+  - private_endpoint
+  - approval_message
+
+execution_evidence:
+  storage: "separate from the local binding"
+  rule: "A saved route or readiness state never proves execution or success."
+
+fail_closed:
+  - "local path is tracked, staged, not ignored, or crosses a symlink boundary"
+  - "unknown, duplicate, malformed, or forbidden fields"
+  - "fallback after disallowed or retry without material change"
+  - "persistence without explicit user consent"

@@ -17,4 +17,3 @@ Generate aggregate-level tests (not use case tests).
 
 ## Output Location
 `src/tests/Domain/<Aggregate>/`
-

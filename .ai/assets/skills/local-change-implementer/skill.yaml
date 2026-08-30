@@ -1,89 +1,102 @@
-asset_id: "local-change-implementer"
-schema_version: "1.0"
-asset_type: "skill-spec"
-title: "Local Change Implementer"
-purpose: "Execute one local class, object, method, symbol, SQL/ORM, or direct-call-site technical change without introducing new architecture boundaries or broadening into a slice."
-portability: "repo-portable"
-audience: "agent-facing"
-source_of_truth: "canonical"
+asset_id: local-change-implementer
+schema_version: '1.0'
+asset_type: skill-spec
+title: Local Change Implementer
+purpose: Execute one local class, object, method, symbol, SQL/ORM, or direct-call-site technical change without introducing new architecture boundaries or broadening into a slice.
+portability: repo-portable
+audience: agent-facing
+source_of_truth: canonical
 capability_slots:
-  - "local-change"
+- local-change
 triggers:
-  - "local change"
-  - "local-change-implementer"
-  - "small code fix"
-  - "extract method"
-  - "rename symbol"
+- local change
+- local-change-implementer
+- small code fix
+- extract method
+- rename symbol
 inputs:
-  - "single target class, object, method, symbol, or local query"
-  - "one bounded local change operation"
-  - "allowed dependency radius"
+- single target class, object, method, symbol, or local query
+- one bounded local change operation
+- allowed dependency radius
 outputs:
-  - "local change result"
-  - "dependency radius touched"
-  - "behavior compatibility notes"
-  - "handoff if a larger slice or architecture decision is required"
+- local change result
+- dependency radius touched
+- behavior compatibility notes
+- handoff if a larger slice or architecture decision is required
 constraints:
-  - "Do not introduce a new class or interface"
-  - "Do not expand into architecture redesign or stage planning"
-  - "Do not change domain language, DTO/API/event names, dependency direction, or module boundaries"
-  - "Stop and hand off when the change no longer fits local scope"
+- Do not introduce a new class or interface
+- Do not expand into architecture redesign or stage planning
+- Do not change domain language, DTO/API/event names, dependency direction, or module boundaries
+- Stop and hand off when the change no longer fits local scope
 workflow:
-  - step: 1
-    description: "Confirm the main target, local operation, and dependency radius"
-  - step: 2
-    description: "Apply one coherent local change"
-  - step: 3
-    description: "Update direct usage sites and validate the narrowest meaningful scope"
+- step: 1
+  description: Confirm the main target, local operation, and dependency radius
+- step: 2
+  description: Apply one coherent local change
+- step: 3
+  description: Update direct usage sites and validate the narrowest meaningful scope
 references:
-  - ".ai/assets/skills/local-change-implementer/references/allowed-operations.md"
-  - ".ai/assets/skills/local-change-implementer/references/execution-rules.md"
-  - ".ai/assets/skills/local-change-implementer/references/skill-boundaries.md"
+- .ai/assets/skills/local-change-implementer/references/allowed-operations.md
+- .ai/assets/skills/local-change-implementer/references/execution-rules.md
+- .ai/assets/skills/local-change-implementer/references/skill-boundaries.md
 examples:
-  - ".dev/guides/ai-collaboration-guides/LOCAL-CHANGE-IMPLEMENTER-SKILL-GUIDE.md"
-human_guide: ".dev/guides/ai-collaboration-guides/LOCAL-CHANGE-IMPLEMENTER-SKILL-GUIDE.md"
+- .dev/guides/ai-collaboration-guides/LOCAL-CHANGE-IMPLEMENTER-SKILL-GUIDE.md
+human_guide: .dev/guides/ai-collaboration-guides/LOCAL-CHANGE-IMPLEMENTER-SKILL-GUIDE.md
 wrapper_targets:
-  - "claude"
-  - "codex"
+- claude
+- codex
 wrapper_metadata:
   claude:
-    wrapper_path: ".claude/skills/local-change-implementer/"
+    wrapper_path: .claude/skills/local-change-implementer/
   codex:
-    wrapper_path: ".agents/skills/local-change-implementer/"
-status: "active"
+    wrapper_path: .agents/skills/local-change-implementer/
+status: active
 effective_rule_consumption:
   applies_when:
-    - "The skill makes one bounded local class, object, method, symbol, query, ORM, SQL, or direct-call-site change."
+  - The skill makes one bounded local class, object, method, symbol, query, ORM, SQL, or direct-call-site change.
   excludes:
-    - "A change that requires a new architecture boundary, a broader implementation slice, or a handoff without a local technical change."
-  resolver: ".ai/scripts/resolve-effective-rule-packet.py"
+  - A change that requires a new architecture boundary, a broader implementation slice, or a handoff without a local technical change.
+  resolver: .ai/scripts/resolve-effective-rule-packet.py
+  applicability:
+    selector: applicability_mode
+    modes:
+      initialized-target:
+        authority: .dev/ai-context/provenance.yaml
+        rule_selection: exact target effective-state route
+        downstream_provenance: required
   selectors:
-    - "capability"
-    - "execution_mode"
-    - "technology_profile"
-    - "file_type"
-  unresolved_outcome: "stop-applicable-action"
-  consumption_order: "Consume a freshness-verified task-scoped packet before reading profile references needed for the applicable action."
+  - capability
+  - execution_mode
+  - technology_profile
+  - file_type
+  unresolved_outcome: stop-applicable-action
+  consumption_order: Select the applicability mode explicitly, then consume its freshness-verified task-scoped evidence before reading profile references needed for the applicable action.
   evidence:
-    required:
-      - "resolver_outcome"
-      - "loaded_rule_ids"
-      - "baseline.framework_version"
-      - "target_state.digest"
-      - "request.capability"
-      - "request.execution_mode"
-      - "request.technology_profile"
-      - "request.file_type"
+    required_common:
+    - resolver_outcome
+    - applicability_mode
+    - loaded_rule_ids
+    - request.capability
+    - request.execution_mode
+    - request.technology_profile
+    - request.file_type
+    - rules[].normative_statement_digest
+    - packet_digest
+    required_by_mode:
+      initialized-target:
+      - baseline.framework_version
+      - target_state.digest
   semantic_consistency:
-    identity: "rule_id"
-    statement_bytes: "exact UTF-8 rules[].normative_statement bytes"
-    statement_digest: "rules[].normative_statement_digest"
-    cross_consumer_requirement: "the same rule_id must resolve to byte-equivalent effective semantics across consumers"
-    default_mismatch_outcome: "warning"
-    stricter_policy_owner: "target-owned"
+    identity: rule_id
+    statement_bytes: exact UTF-8 rules[].normative_statement bytes
+    statement_digest: rules[].normative_statement_digest
+    cross_consumer_requirement: the same rule_id must resolve to byte-equivalent effective semantics across consumers
+    default_mismatch_outcome: warning
+    stricter_policy_owner: target-owned in initialized-target mode
   prohibitions:
-    - "Do not scan broad target or framework documents to discover rule semantics."
-    - "Do not fall back to framework defaults."
-    - "Do not select an alternate route when the exact request route is unresolved."
-    - "Do not compare analyzer output as effective-rule semantics."
-    - "Keep analyzer severity and warnings-as-errors separate and target-owned."
+  - Do not infer applicability mode from repository contents, remembered state, or missing downstream provenance.
+  - Do not scan broad target or framework documents to discover rule semantics.
+  - Do not fall back to framework defaults.
+  - Do not select an alternate route when the exact request route is unresolved.
+  - Do not compare analyzer output as effective-rule semantics.
+  - Keep analyzer severity and warnings-as-errors separate and target-owned.
