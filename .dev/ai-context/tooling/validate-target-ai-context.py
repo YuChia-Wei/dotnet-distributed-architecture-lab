@@ -27,8 +27,8 @@ def load_manifest() -> dict[str, object]:
         raise ValueError("target gate manifest must be a mapping")
     if str(manifest.get("schema_version")) != "1.0":
         raise ValueError("target gate manifest schema_version must be 1.0")
-    if str(manifest.get("framework_version")) != "v0.15.0":
-        raise ValueError("target gate manifest must be explicitly pinned to v0.15.0")
+    if str(manifest.get("framework_version")) != "v0.15.1":
+        raise ValueError("target gate manifest must be explicitly pinned to v0.15.1")
     expected_diagnostics = manifest.get("unfinalized_target_diagnostics")
     if not isinstance(expected_diagnostics, list) or not expected_diagnostics or not all(
         isinstance(value, str) and value for value in expected_diagnostics

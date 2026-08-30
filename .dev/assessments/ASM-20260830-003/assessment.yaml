@@ -1,0 +1,45 @@
+template_metadata:
+  template_id: "assessment-locator"
+  template_version: "1.0.0"
+  template_created_at: "2026-07-13T23:04:10+08:00"
+  template_updated_at: "2026-07-13T23:04:10+08:00"
+
+schema_version: "1.0"
+assessment_id: "ASM-20260830-003"
+commit_search_id: "ASM-20260830-003"
+assessment_type: "ai-context-verification"
+title: "v0.15.1 six-file patch and final-transaction precondition verification"
+owner_skill: "ai-context-auditor"
+status: "final"
+report: "report.md"
+artifact_branch: "codex/2026-08-30-ai-context-v0-15-1-upgrade"
+base_branch: "main"
+created_at: "2026-08-30T22:36:06+08:00"
+updated_at: "2026-08-30T22:36:06+08:00"
+template_source: ".dev/assessments/templates/assessment-locator-template.yaml"
+template_version: "1.0.0"
+report_template_source: ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md"
+report_template_version: "2.1.0"
+subject_ref:
+  repository: "dotnet-mq-arch-lab"
+  branch: "codex/2026-08-30-v0151-applied-audit-subject"
+  commit: "911b85f599e4f263aff2a6c68ac173d6ad6747bd"
+scope:
+  included:
+    - "v0.15.1 six-file package delta and exact dry-run plan"
+    - "target-owned v0.15.1 validation projection preconditions"
+    - "upgrade time and rollback-risk comparison with v0.14.0 and v0.15.0"
+  excluded:
+    - "product src/** and tests/** review"
+    - "push, pull request, merge, Issue closure, tag, Release, or publication"
+relations:
+  supersedes: []
+  superseded_by: []
+  related_assessments: ["ASM-20260830-002"]
+  workflow_refs: ["2026-08-30-ai-context-v0-15-1-upgrade"]
+  backlog_refs: []
+  adr_refs: []
+resume:
+  last_completed_action: "Verified the exact six-file v0.15.1 candidate, its portable fingerprints, and the target projection updates required before the final plan."
+  next_action: "Governance must commit this assessment and target projection, then execute the final v0.15.1 transaction from that clean checkpoint."
+  blockers: []

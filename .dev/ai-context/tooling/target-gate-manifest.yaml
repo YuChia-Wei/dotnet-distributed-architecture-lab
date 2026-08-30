@@ -1,6 +1,6 @@
 schema_version: "1.0"
-framework_version: "v0.15.0"
-framework_commit: "5fedaceef7e18b4cdcde3cb665adcc97070db2df"
+framework_version: "v0.15.1"
+framework_commit: "f2b5fa7c13550efaeb65ab9fcaeb0403baa2a5af"
 unfinalized_target_diagnostics:
   - "effective state catalogs[0] is stale"
 checks:
@@ -23,8 +23,8 @@ checks:
 package_projection_defects:
   - id: "AICU-V015-TARGET-GATE-PROJECTION-001"
     status: "target-overlay-required"
-    observed_through: "v0.15.0"
-    framework_commit: "5fedaceef7e18b4cdcde3cb665adcc97070db2df"
+    observed_through: "v0.15.1"
+    framework_commit: "f2b5fa7c13550efaeb65ab9fcaeb0403baa2a5af"
     generic_validator:
       path: ".ai/scripts/validate-ai-context.py"
       sha256: "05db9e16513c6cbb3325523e2eb3ca99f9290a48055184d1bb3b0b7d5e0f18d5"
@@ -140,25 +140,26 @@ package_projection_defects:
       construction rather than the installed downstream context.
 validation_selection_defects:
   - id: "AICU-V011-SELECTION-001"
-    status: "blocked-by-selector-defect"
+    status: "resolved-upstream"
+    resolved_in: "v0.15.0"
+    verified_through: "v0.15.1"
     selector:
       path: ".ai/scripts/check-all.sh"
-      sha256: "84c536ded79b5a4bbfc5ef02255ff98c22bce5f7afd1529f9a0f23f17e33871d"
+      sha256: "db1c355db117f430aca4a990a83121eaddf2858fdf8e606593c74d4a570e6d57"
     evidence_helper:
       path: ".ai/scripts/validation-evidence.py"
-      sha256: "2999d9b919b15666bccee4c4d44f0250e093709ca68eb97fc969054e0b71f198"
+      sha256: "58be9ef73e2646b413605b35e567b75e673df2ed8e22db90a86fe0113e40d290"
     product_source_contract:
       path: ".ai/assets/shared/PRODUCT-SOURCE-PROJECTION-CONTRACT.md"
       sha256: "70286a75c2feadb9c1b5a833a208b7fbec78bdc8dd3447fb06e1cd26cc9b0084"
     finding: >-
-      Changed-path matching inserts direct check IDs before dependency expansion;
-      select_with_dependencies then returns immediately for an already-selected
-      ID, so declared dependencies may be omitted. The shipped v0.10-identical
-      tests do not cover the new base/head selector or dependency expansion.
+      Changed-path matching now records discovered roots before a separate
+      dependency expansion pass. The v0.15.1 patch additionally validates every
+      declared timeout and binds portable policy-file plus runtime fingerprints.
     disposition: >-
-      Keep changed-path profile execution and evidence reuse inactive. Retain
-      the target-owned full applicable gate until a later exact package proves
-      dependency expansion and regression coverage corrected.
+      Retain the target-owned full applicable gate as local policy, while no
+      longer classifying upstream dependency expansion as blocked. Pin the
+      exact v0.15.1 selector and evidence-helper bytes in the target projection.
 commit_policy_defects:
   - id: "AICU-V012-COMMIT-CUTOVER-001"
     status: "target-overlay-required"
