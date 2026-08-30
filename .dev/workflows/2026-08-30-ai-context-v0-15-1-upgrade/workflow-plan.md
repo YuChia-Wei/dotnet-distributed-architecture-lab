@@ -19,7 +19,7 @@
 - `current_phase`: `remediation-planning`
 - `artifact_root`: `.dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade`
 - `created_at`: `2026-08-30T18:16:45+08:00`
-- `updated_at`: `2026-08-30T18:26:45+08:00`
+- `updated_at`: `2026-08-30T18:38:52+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#3`
@@ -55,6 +55,7 @@
 - Preserve target semantics in `.editorconfig`, `.github/pull_request_template.md`, and `AGENTS.md`; merge only compatible incoming governance requirements.
 - Keep target problem-frame and spec truth in the target-template `INDEX` files, where the current catalogs already enumerate every active target artifact. Restore the two unchanged framework-managed README files to their exact released bytes so every supported edge and finalization gate can verify the managed-path identity.
 - Keep `repo-backlog` enabled because provenance records target-owned preservation.
+- Bind the target validation profile to `python -B .dev/ai-context/tooling/validate-target-ai-context.py --allow-unfinalized --workflow-id 2026-08-30-ai-context-v0-15-1-upgrade`; preserve `local.mode: manual` and `ci.mode: unconfigured`. The owner explicitly approved this executable profile after the v0.14 finalization preflight found that an empty `validation.routine.argv` could not produce a terminal target-validation receipt.
 
 ## Stages And Checkpoints
 
@@ -74,11 +75,11 @@
 
 ## Resume Checkpoint
 
-- Last completed action: direct v0.13.0 to v0.15.1 planner rejected the unsupported source; v0.13.0 to v0.14.0 dry-run succeeded and identified bounded reconciliation.
+- Last completed action: direct v0.13.0 to v0.15.1 planner rejected the unsupported source; the bounded v0.14.0 preconditions were committed, and the owner approved the exact target validation command required for finalization.
 - Current task: `AICU-001-supported-route-upgrade`.
-- Exact next action: commit the bounded pre-apply reconciliation, regenerate a conflict-free v0.13.0 to v0.14.0 plan, seal its owner decision, and apply from that clean commit.
+- Exact next action: commit the approved target validation profile, regenerate the conflict-free v0.13.0 to v0.14.0 plan, verify that its operation identity is unchanged, seal its owner decision, and apply from that clean commit.
 - Validation already completed: current target validator with effective rules; four ZIP sidecars; v0.15.1 annotated tag; direct-jump fail-closed result; v0.14.0 dry-run.
-- Git state: dedicated local workflow branch at `cedd590e4f3393b5cb3ad5a0be5f5663274bb584`; only workflow artifacts are pending.
+- Git state: dedicated local workflow branch with workflow-start and v0.14 precondition checkpoints; the approved target validation profile is pending its own checkpoint commit.
 - Branch history and checkpoint handoffs: segment 1 only; no push or merge handoff.
 - Blockers or unresolved decisions: none after applying the recorded existing CUST decisions; post-upgrade audit remains a required future gate.
 
