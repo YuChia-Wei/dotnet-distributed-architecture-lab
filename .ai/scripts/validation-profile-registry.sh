@@ -383,15 +383,15 @@ register_check source-release-closeout-contract \
 register_check test-di-compliance \
     "Test DI Compliance" advisory \
     "deferred,nightly" "nightly-full" \
-    ".ai/scripts/check-test-di-compliance.sh" '' "bash" 0 cpu no-reuse portable \
+    ".ai/scripts/check-test-di-compliance.sh" '' "bash" 60 cpu no-reuse portable \
     "check-test-di-compliance.sh" deferred
 register_check template-synchronization \
     "Template Synchronization" advisory \
     "deferred,nightly" "nightly-full" \
-    ".ai/scripts/check-template-sync.sh" '' "bash" 0 cpu no-reuse portable \
+    ".ai/scripts/check-template-sync.sh" '' "bash" 60 cpu no-reuse portable \
     "check-template-sync.sh" deferred
 register_check adr-index-update \
     "ADR Index Update" advisory \
     "deferred,nightly" "nightly-full" \
-    ".ai/scripts/update-adr-index.sh" '' "bash" 0 cpu no-reuse portable \
+    ".ai/scripts/update-adr-index.sh" '' "bash" 60 cpu no-reuse portable \
     "update-adr-index.sh" deferred

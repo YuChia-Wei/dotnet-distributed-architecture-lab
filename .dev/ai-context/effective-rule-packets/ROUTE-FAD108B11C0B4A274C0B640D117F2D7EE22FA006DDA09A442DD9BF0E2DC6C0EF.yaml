@@ -1,11 +1,11 @@
 schema_version: '1.0'
-packet_id: PACKET-99AC0AD74A787ED1409EDBA04D25D88A4FE030C27837D8E7820A34827E28468C
+packet_id: PACKET-B470427843AE2669C47A96A9D09F491012A0043EF3F6089B87EADAB453297AB4
 resolver:
   version: '1.0'
   evidence:
-  - .dev/assessments/ASM-20260830-002/report.md
+  - .dev/assessments/ASM-20260830-003/report.md
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
-  - .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/03-v0.15.0-reconciliation.md
+  - .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/04-v0.15.1-verification.md
 request:
   route_id: ROUTE-FAD108B11C0B4A274C0B640D117F2D7EE22FA006DDA09A442DD9BF0E2DC6C0EF
   capability: specification
@@ -13,12 +13,12 @@ request:
   technology_profile: dotnet-backend
   file_type: specification-json
 baseline:
-  framework_version: v0.15.0
-  framework_commit: 5fedaceef7e18b4cdcde3cb665adcc97070db2df
+  framework_version: v0.15.1
+  framework_commit: f2b5fa7c13550efaeb65ab9fcaeb0403baa2a5af
   selected_technology_profile: dotnet-backend
 target_state:
   path: .dev/ai-context/effective-rules.yaml
-  digest: ce9d8ff8bc96e78406651c1c3221cab1d544f4396c09feff02c606d750ad9f26
+  digest: 3492e251b8c63f87adef32f7f83223bbbf8e0a8553e93747551c1bc743ff01bc
 catalogs:
 - catalog_id: selected-profile
   path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
@@ -638,7 +638,7 @@ rules:
 freshness:
   status: verified
   verified_inputs:
-    target_state_digest: ce9d8ff8bc96e78406651c1c3221cab1d544f4396c09feff02c606d750ad9f26
+    target_state_digest: 3492e251b8c63f87adef32f7f83223bbbf8e0a8553e93747551c1bc743ff01bc
     catalog_digests:
     - catalog_id: selected-profile
       path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
@@ -646,4 +646,4 @@ freshness:
     - catalog_id: shared
       path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
       digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
-packet_digest: 74631839dda4328e7ebfa6687f7d97fe7c9bbf5ca31b88d97b825095ba7fbc37
+packet_digest: ddf4a8b6facddcef9c2e9cac92be265629b84d15b1e585974cff94f711e63d69

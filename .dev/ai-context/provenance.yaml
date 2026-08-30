@@ -2,18 +2,18 @@ template_metadata:
   template_id: ai-context-provenance
   template_version: 2.1.0
   created_at: '2026-07-24T00:50:47+08:00'
-  updated_at: '2026-08-30T22:03:24+08:00'
+  updated_at: '2026-08-30T22:36:06+08:00'
 schema_version: '2.0'
 source:
   repository: https://github.com/YuChia-Wei/ai-collaboration-framework
-  release_id: REL-v0.15.0
-  version: v0.15.0
-  tag: v0.15.0
-  commit: 5fedaceef7e18b4cdcde3cb665adcc97070db2df
+  release_id: REL-v0.15.1
+  version: v0.15.1
+  tag: v0.15.1
+  commit: f2b5fa7c13550efaeb65ab9fcaeb0403baa2a5af
 installation:
   initialized_by: ai-context-upgrader
   imported_at: '2026-07-13T20:42:19+08:00'
-  last_upgraded_at: '2026-08-30T22:03:24+08:00'
+  last_upgraded_at: '2026-08-30T22:36:06+08:00'
 selection:
   mandatory_components:
   - software-development-core
@@ -30,18 +30,18 @@ customizations:
   schema_version: '1.0'
 previous_source:
   repository: https://github.com/YuChia-Wei/ai-collaboration-framework
-  release_id: REL-v0.14.0
-  version: v0.14.0
-  tag: v0.14.0
-  commit: 412bb14a16fe75ee65a020b16680def0acc0ff1b
+  release_id: REL-v0.15.0
+  version: v0.15.0
+  tag: v0.15.0
+  commit: 5fedaceef7e18b4cdcde3cb665adcc97070db2df
 reconciliation:
   unresolved: []
 last_migration:
   status: completed
-  from_version: v0.14.0
-  to_version: v0.15.0
-  completed_at: '2026-08-30T22:03:24+08:00'
-  evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/03-v0.15.0-reconciliation.md
+  from_version: v0.15.0
+  to_version: v0.15.1
+  completed_at: '2026-08-30T22:36:06+08:00'
+  evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/04-v0.15.1-verification.md
 effective_rules:
   state: .dev/ai-context/effective-rules.yaml
   packets_root: .dev/ai-context/effective-rule-packets/

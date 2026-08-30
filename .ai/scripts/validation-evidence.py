@@ -7,12 +7,15 @@ import argparse
 import fnmatch
 import hashlib
 import importlib
+import importlib.metadata
 import json
 import math
 import os
+import platform
 import re
 import subprocess
 import sys
+import sysconfig
 import tempfile
 import time
 from datetime import datetime, timezone
@@ -25,7 +28,8 @@ SCHEMA_VERSION = "2.0.0"
 # schema.  Existing successful evidence remains safe to reuse when the input
 # and validator fingerprints still match; a presentation-schema increment must
 # not turn an otherwise valid run into a cache-read failure.
-CACHE_SCHEMA_VERSION = "1.0.0"
+CACHE_SCHEMA_VERSION = "2.0.0"
+LEGACY_CACHE_SCHEMA_VERSIONS = {"1.0.0"}
 OUTCOMES = {"passed", "failed", "blocked-by-environment", "not-applicable", "deferred-with-owner"}
 DISPOSITIONS = {
     "executed",
@@ -71,6 +75,78 @@ def canonical_sha256(value: object) -> str:
     return sha256_bytes(
         json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     )
+
+
+def fingerprint_files(repo: Path, paths: Iterable[str]) -> str:
+    """Authenticate one canonical set of regular, non-symlink repository files."""
+    repo = repo.resolve()
+    records: list[dict[str, object]] = []
+    seen: set[str] = set()
+    for raw_path in paths:
+        candidate = Path(raw_path)
+        if not candidate.is_absolute():
+            candidate = repo / candidate
+        try:
+            if candidate.is_symlink() or not candidate.is_file():
+                raise EvidenceError("policy fingerprint input is missing or not a regular file")
+            resolved = candidate.resolve(strict=True)
+            relative = resolved.relative_to(repo).as_posix()
+            content = resolved.read_bytes()
+        except EvidenceError:
+            raise
+        except (OSError, ValueError) as exc:
+            raise EvidenceError("policy fingerprint input is unavailable") from exc
+        if relative in seen:
+            raise EvidenceError("policy fingerprint input is duplicated")
+        seen.add(relative)
+        records.append(
+            {"path": relative, "sha256": sha256_bytes(content), "bytes": len(content)}
+        )
+    if not records:
+        raise EvidenceError("policy fingerprint input set is empty")
+    records.sort(key=lambda item: str(item["path"]).encode("utf-8"))
+    return canonical_sha256(
+        {"schema_version": "validation-policy-fingerprint/v1", "records": records}
+    )
+
+
+def validation_runtime_identity() -> dict[str, object]:
+    """Return the reusable-validator runtime identity without host-specific paths."""
+    try:
+        yaml_module = importlib.import_module("yaml")
+        yaml_distribution_version = importlib.metadata.version("PyYAML")
+        yaml_module_version = getattr(yaml_module, "__version__", None)
+        implementation = platform.python_implementation()
+        cache_tag = sys.implementation.cache_tag
+        soabi = sysconfig.get_config_var("SOABI")
+    except Exception as exc:
+        raise EvidenceError("validation runtime identity is unavailable") from exc
+    if (
+        not implementation
+        or not isinstance(cache_tag, str)
+        or not cache_tag
+        or not isinstance(soabi, str)
+        or not soabi
+        or not isinstance(yaml_module_version, str)
+        or not yaml_module_version
+        or yaml_module_version != yaml_distribution_version
+    ):
+        raise EvidenceError("validation runtime identity is incomplete")
+    return {
+        "schema_version": "validation-runtime-identity/v1",
+        "python": {
+            "implementation": implementation,
+            "version": list(sys.version_info[:3]),
+            "cache_tag": cache_tag,
+            "abi_flags": getattr(sys, "abiflags", ""),
+            "soabi": soabi,
+        },
+        "dependencies": {"PyYAML": yaml_distribution_version},
+    }
+
+
+def validation_runtime_fingerprint() -> str:
+    return canonical_sha256(validation_runtime_identity())
 
 
 def is_sha256(value: object) -> bool:
@@ -700,7 +776,11 @@ def load_cache(path: Path) -> dict[str, object]:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise EvidenceError("cannot read validation evidence cache") from exc
-    if value.get("schema_version") != CACHE_SCHEMA_VERSION or not isinstance(value.get("entries"), dict):
+    if not isinstance(value, dict) or not isinstance(value.get("entries"), dict):
+        raise EvidenceError("validation evidence cache schema is invalid")
+    if value.get("schema_version") in LEGACY_CACHE_SCHEMA_VERSIONS:
+        return {"schema_version": CACHE_SCHEMA_VERSION, "entries": {}}
+    if value.get("schema_version") != CACHE_SCHEMA_VERSION:
         raise EvidenceError("validation evidence cache schema is invalid")
     return value
 
@@ -2151,7 +2231,11 @@ def reusable_cache_log_ref(
     input_fingerprint: str,
     cache_policy: str,
 ) -> str | None:
-    if cache is None or cache_policy == "no-reuse":
+    if (
+        cache is None
+        or cache_policy == "no-reuse"
+        or not reuse_identity_available(validator_version)
+    ):
         return None
     entry = cache["entries"].get(
         cache_key(
@@ -2524,11 +2608,19 @@ def build_record(arguments: argparse.Namespace) -> dict[str, Any]:
     return record_value
 
 
+def reuse_identity_available(validator_version: object) -> bool:
+    return (
+        isinstance(validator_version, str)
+        and "unavailable" not in validator_version.split(":")
+    )
+
+
 def cache_promotable(record_value: dict[str, Any]) -> bool:
     return (
         record_value["execution_disposition"] == "executed"
         and record_value["outcome"] == "passed"
         and record_value["profile"] not in {"release", "nightly-full"}
+        and reuse_identity_available(record_value.get("validator_version"))
     )
 
 
@@ -4337,6 +4429,8 @@ def seal_invocation(arguments: argparse.Namespace) -> None:
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
     commands = result.add_subparsers(dest="command", required=True)
+    fingerprint_files_parser = commands.add_parser("fingerprint-files")
+    runtime_fingerprint_parser = commands.add_parser("runtime-fingerprint")
     lookup_parser = commands.add_parser("lookup")
     prepare_parser = commands.add_parser("prepare")
     record_parser = commands.add_parser("record")
@@ -4464,13 +4558,19 @@ def parser() -> argparse.ArgumentParser:
     seal_parser.add_argument("--preparation-python")
     seal_parser.add_argument("--preparation-result", action="append", default=[])
     seal_parser.add_argument("--outcome", choices=("passed", "failed", "blocked"), required=True)
+    fingerprint_files_parser.add_argument("--repo", required=True)
+    fingerprint_files_parser.add_argument("--path", action="append", required=True)
     return result
 
 
 def main() -> int:
     arguments = parser().parse_args()
     try:
-        if arguments.command == "lookup":
+        if arguments.command == "fingerprint-files":
+            print(fingerprint_files(Path(arguments.repo), arguments.path))
+        elif arguments.command == "runtime-fingerprint":
+            print(validation_runtime_fingerprint())
+        elif arguments.command == "lookup":
             lookup(arguments)
         elif arguments.command == "prepare":
             prepare(arguments)

@@ -2,7 +2,7 @@ template_metadata:
   template_id: ai-context-customizations
   template_version: 1.1.0
   created_at: '2026-07-24T00:50:47+08:00'
-  updated_at: '2026-08-30T22:03:24+08:00'
+  updated_at: '2026-08-30T22:36:06+08:00'
 schema_version: '1.0'
 customizations:
 - id: CUST-DOTNET-MQ-GOVERNANCE
@@ -37,7 +37,7 @@ customizations:
   owner_reconciliation:
     status: approved
     owner: 'dotnet-mq-arch-lab maintainer via GitHub Issue #3'
-    decided_at: '2026-08-30T22:03:24+08:00'
+    decided_at: '2026-08-30T22:36:06+08:00'
     evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/workflow-plan.md
   decision_evidence:
     requirements: []
@@ -59,14 +59,14 @@ customizations:
     status: verified
     evidence: .dev/assessments/ASM-20260812-002/report.md
   incoming:
-    version: v0.15.0
+    version: v0.15.1
     status: partial
-    evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/03-v0.15.0-reconciliation.md
+    evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/04-v0.15.1-verification.md
   disposition: merge
   post_upgrade_audit:
-    assessment_id: ASM-20260830-002
+    assessment_id: ASM-20260830-003
     status: verified
-    evidence: .dev/assessments/ASM-20260830-002/report.md
+    evidence: .dev/assessments/ASM-20260830-003/report.md
   validation:
   - python -B .dev/ai-context/tooling/validate-target-ai-context.py --allow-unfinalized
     --workflow-id 2026-08-30-ai-context-v0-15-1-upgrade
@@ -108,7 +108,7 @@ customizations:
   owner_reconciliation:
     status: approved
     owner: 'dotnet-mq-arch-lab maintainer via GitHub Issue #3'
-    decided_at: '2026-08-30T22:03:24+08:00'
+    decided_at: '2026-08-30T22:36:06+08:00'
     evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/workflow-plan.md
   decision_evidence:
     requirements: []
@@ -133,14 +133,14 @@ customizations:
     status: verified
     evidence: .dev/assessments/ASM-20260812-002/report.md
   incoming:
-    version: v0.15.0
+    version: v0.15.1
     status: conflicting
-    evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/03-v0.15.0-reconciliation.md
+    evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/04-v0.15.1-verification.md
   disposition: merge
   post_upgrade_audit:
-    assessment_id: ASM-20260830-002
+    assessment_id: ASM-20260830-003
     status: verified
-    evidence: .dev/assessments/ASM-20260830-002/report.md
+    evidence: .dev/assessments/ASM-20260830-003/report.md
   validation:
   - python -B .dev/ai-context/tooling/validate-target-ai-context.py --allow-unfinalized
     --workflow-id 2026-08-30-ai-context-v0-15-1-upgrade
@@ -191,7 +191,7 @@ customizations:
   owner_reconciliation:
     status: approved
     owner: 'dotnet-mq-arch-lab maintainer via GitHub Issue #3'
-    decided_at: '2026-08-30T22:03:24+08:00'
+    decided_at: '2026-08-30T22:36:06+08:00'
     evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/workflow-plan.md
   decision_evidence:
     requirements: []
@@ -214,14 +214,14 @@ customizations:
     status: verified
     evidence: .dev/assessments/ASM-20260812-002/report.md
   incoming:
-    version: v0.15.0
+    version: v0.15.1
     status: conflicting
-    evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/03-v0.15.0-reconciliation.md
+    evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/04-v0.15.1-verification.md
   disposition: retain
   post_upgrade_audit:
-    assessment_id: ASM-20260830-002
+    assessment_id: ASM-20260830-003
     status: verified
-    evidence: .dev/assessments/ASM-20260830-002/report.md
+    evidence: .dev/assessments/ASM-20260830-003/report.md
   validation:
   - python -B .dev/ai-context/tooling/validate-target-ai-context.py --allow-unfinalized
     --workflow-id 2026-08-30-ai-context-v0-15-1-upgrade
@@ -260,7 +260,7 @@ customizations:
   owner_reconciliation:
     status: approved
     owner: 'dotnet-mq-arch-lab maintainer via GitHub Issue #3'
-    decided_at: '2026-08-30T22:03:24+08:00'
+    decided_at: '2026-08-30T22:36:06+08:00'
     evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/workflow-plan.md
   decision_evidence:
     requirements: []
@@ -283,14 +283,14 @@ customizations:
     status: verified
     evidence: .dev/assessments/ASM-20260812-002/report.md
   incoming:
-    version: v0.15.0
+    version: v0.15.1
     status: conflicting
-    evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/03-v0.15.0-reconciliation.md
+    evidence: .dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/reports/04-v0.15.1-verification.md
   disposition: merge
   post_upgrade_audit:
-    assessment_id: ASM-20260830-002
+    assessment_id: ASM-20260830-003
     status: verified
-    evidence: .dev/assessments/ASM-20260830-002/report.md
+    evidence: .dev/assessments/ASM-20260830-003/report.md
   validation:
   - python -B .dev/ai-context/tooling/validate-target-ai-context.py --allow-unfinalized
     --workflow-id 2026-08-30-ai-context-v0-15-1-upgrade

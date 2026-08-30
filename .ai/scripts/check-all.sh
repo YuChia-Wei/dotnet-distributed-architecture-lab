@@ -162,7 +162,7 @@ validate_dependency_graph_node() {
 }
 
 validate_profile_registry() {
-    local profile id dependency
+    local profile id dependency timeout_seconds
     for profile in fast pr release closeout nightly-full; do
         if ! registry_has_profile "$profile" || [ -z "${PROFILE_PURPOSE[$profile]:-}" ] ||
             { [ "${PROFILE_ENFORCEMENT[$profile]:-}" != report-and-warn ] &&
@@ -179,6 +179,11 @@ validate_profile_registry() {
             [ -z "${CHECK_DISPOSITION[$id]:-}" ] || [ -z "${CHECK_COMMAND[$id]:-}" ] ||
             [ -z "${CHECK_APPLICABILITY[$id]:-}" ]; then
             echo "Incomplete validation check registry entry: $id" >&2
+            return 1
+        fi
+        timeout_seconds=${CHECK_TIMEOUT[$id]:-}
+        if [[ ! "$timeout_seconds" =~ ^[1-9][0-9]*$ ]]; then
+            echo "Invalid validation check timeout '$timeout_seconds' for '$id'" >&2
             return 1
         fi
         for profile in ${CHECK_PROFILES[$id]}; do
@@ -1096,19 +1101,30 @@ elif [ -n "${MSYSTEM:-}" ]; then
 elif [ -r /proc/version ] && grep -qi microsoft /proc/version 2>/dev/null; then
     EVIDENCE_ENVIRONMENT_CLASS=wsl-linux
 fi
-EVIDENCE_POLICY_FINGERPRINT=$(sha256sum \
-    "$REGISTRY_PATH" \
-    "$SCRIPT_DIR/check-all.sh" \
-    "$EVIDENCE_HELPER" \
-    "$SCRIPT_DIR/validation_process_supervisor.py" \
-    "$SCRIPT_DIR/python-entrypoints.json" \
-    "$SCRIPT_DIR/python_prerequisites.py" \
-    "$SCRIPT_DIR/validate-validation-lifecycle.py" \
-    "$PROJECT_ROOT/.ai/assets/shared/validation-evidence-lifecycle.schema.yaml" \
-    "$SCRIPT_DIR/validate-agent-execution-guardrails.py" \
-    "$PROJECT_ROOT/.ai/assets/shared/agent-execution-guardrails.schema.yaml" \
-    2>/dev/null | sha256sum 2>/dev/null | awk '{print $1}')
-EVIDENCE_POLICY_FINGERPRINT=${EVIDENCE_POLICY_FINGERPRINT:-unavailable}
+EVIDENCE_POLICY_FINGERPRINT=unavailable
+if policy_fingerprint=$(
+    "$PYTHON_EXECUTABLE" "$EVIDENCE_HELPER" fingerprint-files \
+        --repo "$PROJECT_ROOT" \
+        --path "$REGISTRY_PATH" \
+        --path "$SCRIPT_DIR/check-all.sh" \
+        --path "$EVIDENCE_HELPER" \
+        --path "$SCRIPT_DIR/validation_process_supervisor.py" \
+        --path "$SCRIPT_DIR/python-entrypoints.json" \
+        --path "$SCRIPT_DIR/python_prerequisites.py" \
+        --path "$SCRIPT_DIR/validate-validation-lifecycle.py" \
+        --path "$PROJECT_ROOT/.ai/assets/shared/validation-evidence-lifecycle.schema.yaml" \
+        --path "$SCRIPT_DIR/validate-agent-execution-guardrails.py" \
+        --path "$PROJECT_ROOT/.ai/assets/shared/agent-execution-guardrails.schema.yaml" \
+        2>/dev/null
+) && [[ "$policy_fingerprint" =~ ^[0-9a-f]{64}$ ]]; then
+    EVIDENCE_POLICY_FINGERPRINT=$policy_fingerprint
+fi
+EVIDENCE_RUNTIME_FINGERPRINT=unavailable
+if runtime_fingerprint=$(
+    "$PYTHON_EXECUTABLE" "$EVIDENCE_HELPER" runtime-fingerprint 2>/dev/null
+) && [[ "$runtime_fingerprint" =~ ^[0-9a-f]{64}$ ]]; then
+    EVIDENCE_RUNTIME_FINGERPRINT=$runtime_fingerprint
+fi
 EVIDENCE_INPUT_FINGERPRINT=
 EVIDENCE_CACHE_HIT=false
 EVIDENCE_RECEIPT_HIT=false
@@ -1125,7 +1141,8 @@ record_runner_abort_failure() {
 
 validator_version() {
     local id=$1
-    printf '%s:%s\n' "$EVIDENCE_POLICY_FINGERPRINT" "$id"
+    printf '%s:%s:%s\n' \
+        "$EVIDENCE_POLICY_FINGERPRINT" "$EVIDENCE_RUNTIME_FINGERPRINT" "$id"
 }
 
 prepare_validation_evidence() {

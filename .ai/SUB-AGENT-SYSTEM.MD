@@ -141,6 +141,7 @@ remain outside this derived projection and this execution contract.
 | `semantic-governance-analyst` | `ai-context-upgrader` | `conditional` | The selected upgrade stage needs read-only semantic analysis of governance, policy, customization, or target-owned truth. |
 | `evidence-report-synthesizer` | `ai-context-upgrader` | `conditional` | The selected upgrade stage needs a bounded report, assessment, handoff, or feedback synthesis from verified evidence only. |
 | `fixed-head-independent-auditor` | `ai-context-upgrader` | `conditional` | An explicitly selected terminal or high-risk gate requires a read-only audit against one fixed clean commit. |
+| `fixed-head-independent-auditor` | `ai-context-auditor` | `conditional` | An explicitly selected terminal or high-risk post-remediation AI-context verification requires a read-only audit against one fixed clean commit. |
 | `code-review-sub-agent` | `code-reviewer` | `primary` | A .NET code-review scope is selected. |
 | `aggregate-code-review-sub-agent` | `code-reviewer` | `conditional` | The selected code-review scope includes aggregate, event-sourcing, or domain-invariant behavior. |
 | `controller-code-review-sub-agent` | `code-reviewer` | `conditional` | The selected code-review scope includes an ASP.NET Core controller, endpoint, DTO boundary, or HTTP semantics. |

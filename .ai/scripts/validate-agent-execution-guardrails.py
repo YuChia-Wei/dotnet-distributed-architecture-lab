@@ -22,6 +22,10 @@ guard_direct_entrypoint(".ai/scripts/validate-agent-execution-guardrails.py")
 
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_PATH = ROOT / ".ai/assets/shared/agent-execution-guardrails.schema.yaml"
+EXTERNAL_TASK_SCHEMA_REF = (
+    ".ai/assets/skills/software-development-orchestrator/templates/"
+    "external-task-delegation.schema.yaml"
+)
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 SAFE_REF = re.compile(r"^(?:ignored|workflow|issue|commit|run|job|fixture|tracked):[^\s]+$")
@@ -213,7 +217,27 @@ def validate_packet(record: dict[str, Any], schema: dict[str, Any]) -> None:
         raise GuardrailError("ignored artifact roots must be contained repository-relative paths")
     terminal = mapping(record["terminal"], "terminal")
     exact_keys(terminal, {"schema_ref", "mode", "destination", "max_terminal_messages"}, "terminal")
-    string(terminal["schema_ref"], "terminal.schema_ref")
+    terminal_schema_path = tracked_path(
+        string(terminal["schema_ref"], "terminal.schema_ref"),
+        "terminal.schema_ref",
+    )
+    terminal_schema = mapping(
+        yaml.safe_load(terminal_schema_path.read_text(encoding="utf-8")),
+        "terminal schema",
+    )
+    terminal_schema_ref = terminal["schema_ref"]
+    if terminal_schema_ref == SCHEMA_PATH.relative_to(ROOT).as_posix():
+        if terminal_schema != schema:
+            raise GuardrailError("terminal.schema_ref does not match the active guardrail schema")
+    elif terminal_schema_ref == EXTERNAL_TASK_SCHEMA_REF:
+        if (
+            terminal_schema.get("contract_id") != "external-task-delegation"
+            or terminal_schema.get("record_types", {}).get("completion")
+            != "external-task-completion"
+        ):
+            raise GuardrailError("terminal.schema_ref is not an enforceable completion schema")
+    else:
+        raise GuardrailError("terminal.schema_ref is not a supported canonical terminal schema")
     if terminal["mode"] not in schema["terminal_modes"] or terminal["max_terminal_messages"] != 1:
         raise GuardrailError("terminal transport must be one callback or event wait")
     string(terminal["destination"], "terminal.destination")
