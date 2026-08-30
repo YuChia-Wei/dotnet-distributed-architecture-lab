@@ -16,6 +16,7 @@ from python_prerequisites import guard_direct_entrypoint
 guard_direct_entrypoint(".ai/scripts/validate-ai-context-target.py")
 
 from ai_context_target_provenance import effective_rule_readiness, validate_target
+from ai_context_cli_routing import validate_cli_execution_routing
 
 
 def main() -> int:
@@ -33,12 +34,19 @@ def main() -> int:
         require_finalized=not args.allow_unfinalized,
         require_effective_rules=args.require_effective_rules,
     )
+    cli_routes = validate_cli_execution_routing(
+        errors,
+        root=args.root,
+    )
     if errors:
         print("AI context target validation failed:")
         for error in errors:
             print(f"- {error}")
         return 1
-    print("AI context target validation passed.")
+    print(
+        "AI context target validation passed: "
+        f"{cli_routes} local CLI routes."
+    )
     readiness = effective_rule_readiness(args.root)
     if readiness["action_ready"]:
         print("Effective rule action readiness: ready.")

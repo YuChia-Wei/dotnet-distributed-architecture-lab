@@ -1,0 +1,435 @@
+schema_version: "1.0"
+document: ai-context-multi-hop-upgrade-transaction
+purpose: >-
+  Define the strict durable outer transaction for one selected multi-hop
+  AI-context upgrade route while preserving the existing child package-apply
+  transaction and finalization contracts.
+encoding: utf-8-yaml
+
+storage_layout:
+  outer_git_admin_directory: "ai-context-multi-hop-upgrade"
+  outer_transaction_root: "<target-git-dir>/ai-context-multi-hop-upgrade/<route_transaction_id>"
+  route_matrix_file: "route-matrix.yaml"
+  resolver_result_file: "resolver-result.json"
+  route_intent_file: "route-intent.json"
+  outer_journal_file: "journal.yaml"
+  checkpoint_directory: "checkpoints"
+  checkpoint_file_pattern: "checkpoints/<zero-based-four-digit-checkpoint-index>.json"
+  checkpoint_pending_receipt_pattern: "checkpoints/<zero-based-four-digit-checkpoint-index>.pending-receipt.yaml"
+  promoted_hop_directory_pattern: "hops/<zero-based-four-digit-hop-index>/"
+  temporary_preparation_pattern: "hops/<zero-based-four-digit-hop-index>/preparation.json"
+  prepared_hop_evidence_pattern: "hops/<zero-based-four-digit-hop-index>/evidence.json"
+  materialized_archive_pattern: "hops/<zero-based-four-digit-hop-index>/<exact-archive-file-name>"
+  materialized_checksum_pattern: "hops/<zero-based-four-digit-hop-index>/checksum.sha256"
+  materialized_migration_pattern: "hops/<zero-based-four-digit-hop-index>/migration.yaml"
+  materialized_validator_pattern: "hops/<zero-based-four-digit-hop-index>/validator.asset"
+  extracted_package_root_pattern: "hops/<zero-based-four-digit-hop-index>/extracted/<single-archive-envelope>/"
+  validator_execution_record_pattern: "hops/<zero-based-four-digit-hop-index>/validator-execution.json"
+  validator_stdout_pattern: "hops/<zero-based-four-digit-hop-index>/validator.stdout.log"
+  validator_stderr_pattern: "hops/<zero-based-four-digit-hop-index>/validator.stderr.log"
+  preparation_staging_directory: ".preparing-hops"
+  preparation_staging_pattern: ".preparing-hops/<zero-based-four-digit-hop-index>-<opaque-attempt-suffix>/"
+  failed_preparation_directory: "failed-preparations"
+  failed_preparation_pattern: "failed-preparations/<staging-attempt-basename>/"
+  failed_preparation_record_pattern: "failed-preparations/<staging-attempt-basename>/failure.json"
+  child_git_admin_directory: "ai-context-package-apply"
+  child_transaction_root: "<target-git-dir>/ai-context-package-apply/<child_transaction_id>"
+  invariants:
+    - "route-matrix.yaml is the only retained raw route-matrix byte stream"
+    - "resolver-result.json is immutable canonical UTF-8 JSON containing the path-free full S1 selection; it has no external matrix root, absolute source path, source locator, provider state, or credential state"
+    - "route-intent.json is immutable canonical UTF-8 JSON and is retained before the first child mutation"
+    - "journal.yaml is the only mutable outer progress record"
+    - "checkpoints/<index>.json is canonical UTF-8 JSON, created no-overwrite, and immutable after creation"
+    - "only a promoted hops/<index>/ tree is prepared-hop evidence; its paths must be safe regular paths when consumed"
+    - "hops/<index>/preparation.json is a temporary pre-child proposal and is removed once the child transaction exists; it is never child transaction evidence"
+    - ".preparing-hops and failed-preparations are non-authoritative attempt retention, never active-hop, resume, validator-pass, child-binding, checkpoint, or rollback evidence"
+    - "a child plan and child journal remain only under ai-context-package-apply/<child_transaction_id>"
+    - "a child plan has schema_version 2.2.0 and a child journal has schema_version ai-context-package-apply-journal/v4"
+
+  prepared_hop:
+    directory_pattern: "hops/<zero-based-four-digit-hop-index>/"
+    promotion:
+      source_pattern: ".preparing-hops/<zero-based-four-digit-hop-index>-<opaque-attempt-suffix>/hops/<zero-based-four-digit-hop-index>/"
+      operation: atomic-no-overwrite-directory-promotion
+      retry_behavior: "validate only the exact already-promoted evidence or create one new staging attempt"
+    pre_child_proposal:
+      file_pattern: "hops/<zero-based-four-digit-hop-index>/preparation.json"
+      format: canonical-utf8-json
+      schema_version: "2.2.0"
+      semantic_plan_sha256: "the proposal document's plan_sha256 semantic identity; it is the derived child transaction ID"
+      raw_canonical_bytes_sha256: "SHA-256 of the complete canonical preparation.json byte stream; retained separately as journal.active_hop.proposal_plan_sha256"
+      retention: "removed only after the exact child transaction is created, including a retained owner-rejected child result"
+      invariant: "a temporary proposal is not child transaction evidence and no child journal is copied into the outer root; its raw-byte digest must never be equated with or substituted for its semantic plan_sha256"
+    evidence:
+      file_pattern: "hops/<zero-based-four-digit-hop-index>/evidence.json"
+      format: canonical-utf8-json
+      required: [schema_version, hop_index, edge, package, validator_execution, plan_sha256]
+      exact_keys: [schema_version, hop_index, edge, package, validator_execution, plan_sha256]
+      properties:
+        schema_version: {const: "multi-hop-prepared-hop/v1"}
+        hop_index: zero-based-route-edge-index
+        edge: route-intent.route.edges-item-at-hop-index
+        package:
+          required: [archive_path, archive_sha256, checksum_sha256, migration_artifact_sha256, validator_path, validator_artifact_sha256, extracted_root, package_id, package_version, package_manifest_sha256, migration_sha256, files_manifest_sha256]
+          exact_keys: [archive_path, archive_sha256, checksum_sha256, migration_artifact_sha256, validator_path, validator_artifact_sha256, extracted_root, package_id, package_version, package_manifest_sha256, migration_sha256, files_manifest_sha256]
+          properties:
+            archive_path: "fixed-safe-outer-relative-path: hops/<hop_index:04d>/<exact-archive-file-name>"
+            archive_sha256: lowercase-sha256
+            checksum_sha256: lowercase-sha256
+            migration_artifact_sha256: lowercase-sha256
+            validator_path: "fixed-safe-outer-relative-path: hops/<hop_index:04d>/validator.asset"
+            validator_artifact_sha256: lowercase-sha256
+            extracted_root: "fixed-safe-outer-relative-path: hops/<hop_index:04d>/extracted/<single-archive-envelope>/"
+            package_id: non-empty-string
+            package_version: semver-without-v-prefix
+            package_manifest_sha256: lowercase-sha256
+            migration_sha256: lowercase-sha256
+            files_manifest_sha256: lowercase-sha256
+        validator_execution:
+          required: [record_path, record_sha256, stdout_path, stdout_sha256]
+          exact_keys: [record_path, record_sha256, stdout_path, stdout_sha256]
+          properties:
+            record_path: "fixed-safe-outer-relative-path: hops/<hop_index:04d>/validator-execution.json"
+            record_sha256: lowercase-sha256
+            stdout_path: "fixed-safe-outer-relative-path: hops/<hop_index:04d>/validator.stdout.log"
+            stdout_sha256: lowercase-sha256
+        plan_sha256: lowercase-sha256
+      invariants:
+        - "validator-execution.json is canonical UTF-8 JSON with schema multi-hop-edge-validator-execution/v1 and exact fields schema_version, hop_index, edge_id, validator_argv, validator_sha256, expected_output_sha256, stdout_sha256, stderr_sha256, return_code, outcome"
+        - "a promotable record has hop_index and edge identity matching the selected edge, exact selected validator argv, retained validator.asset digest, and expected output digest; outcome is passed only for return_code 0, empty stderr, and byte-identical expected stdout"
+        - "validator.stdout.log binds the expected-output bytes for a passed record; no separate expected-output file is retained"
+        - "evidence package and validator execution identities bind safe regular files under this same promoted hop directory, including package.validator_path at hops/<hop_index:04d>/validator.asset"
+        - "evidence.plan_sha256 is the semantic plan identity and equals preparation.json.plan_sha256; the raw canonical preparation.json bytes are independently bound by journal.active_hop.proposal_plan_sha256 while the proposal exists"
+    failed_preparation:
+      directory_pattern: "failed-preparations/<staging-attempt-basename>/"
+      failure_record:
+        file_pattern: "failed-preparations/<staging-attempt-basename>/failure.json"
+        format: canonical-utf8-json
+        required: [schema_version, exception_type, message]
+        exact_keys: [schema_version, exception_type, message]
+        properties:
+          schema_version: {const: "multi-hop-preparation-failure/v1"}
+          exception_type: non-empty-string
+          message: string
+      invariants:
+        - "failed preparation bytes are retained only for diagnosis and are never selected, reused, promoted, or accepted as current route evidence"
+        - "a failed attempt may contain partial package, extraction, validator, proposal, or evidence bytes; their presence does not prove validator success or a resumable hop"
+        - "automatic cleanup, replacement, and directory-scan recovery of failed preparations are prohibited by the transaction contract"
+
+resolver_result:
+  file: "resolver-result.json"
+  format: canonical-utf8-json
+  required: [schema_version, origin, target, matrix, route_kind, selected_route]
+  exact_keys: [schema_version, origin, target, matrix, route_kind, selected_route]
+  properties:
+    schema_version: {const: "ai-context-multi-hop-upgrade-resolver-result/v1"}
+    origin: semver-tag-with-v-prefix
+    target: semver-tag-with-v-prefix
+    matrix:
+      required: [matrix_id, sha256, byte_length]
+      exact_keys: [matrix_id, sha256, byte_length]
+      properties:
+        matrix_id: non-empty-string
+        sha256: lowercase-sha256
+        byte_length: non-negative-integer
+    route_kind: {const: "orchestrated-multi-hop"}
+    selected_route:
+      required: [route_id, edge_count, edges]
+      exact_keys: [route_id, edge_count, edges]
+      properties:
+        route_id: non-empty-string
+        edge_count: integer-at-least-two
+        edges:
+          type: ordered-list
+          min_items: 2
+          item: complete-selected-S1-edge-mapping
+          invariants:
+            - "edge_count equals the exact number of full selected S1 edges"
+            - "full edges preserve the resolver-selected one-based ordered S1 chain, artifact identities, validator argv, expected-output identity, and semantic-cutover result"
+            - "each compact intent edge identity_sha256 equals the canonical digest of its corresponding full selected S1 edge"
+  invariants:
+    - "the result contains the durable S1 selection only; it is not a second raw matrix and it contains no external matrix root, absolute source path, source locator, provider state, or credential state"
+    - "matrix sha256 and byte_length equal the raw retained route-matrix.yaml identity in route-intent.json; matrix_id is bound only by this result"
+    - "origin, target, selected_route.route_id, and compact route-intent projection exactly match route-intent.json"
+    - "post-begin loading and target validation use this retained result rather than re-resolving an external source root"
+    - "preparation alone receives an explicit external matrix_root, re-resolves retained raw matrix bytes there, and rejects any fresh full S1 result that differs from this sealed full result or route-intent projection"
+  additional_properties: false
+
+route_intent:
+  file: "route-intent.json"
+  format: canonical-utf8-json
+  required:
+    - schema_version
+    - route_transaction_id
+    - target_root
+    - target_starting_commit
+    - origin
+    - target
+    - matrix
+    - resolver_result
+    - route
+  exact_keys:
+    - schema_version
+    - route_transaction_id
+    - target_root
+    - target_starting_commit
+    - origin
+    - target
+    - matrix
+    - resolver_result
+    - route
+  properties:
+    schema_version:
+      const: "ai-context-multi-hop-upgrade-intent/v1"
+    route_transaction_id: lowercase-sha256
+    target_root: canonical-absolute-target-root
+    target_starting_commit: full-lowercase-git-sha
+    origin: semver-tag-with-v-prefix
+    target: semver-tag-with-v-prefix
+    matrix:
+      required: [path, sha256, byte_length]
+      exact_keys: [path, sha256, byte_length]
+      properties:
+        path: {const: "route-matrix.yaml"}
+        sha256: lowercase-sha256
+        byte_length: non-negative-integer
+    resolver_result:
+      required: [path, sha256, byte_length]
+      exact_keys: [path, sha256, byte_length]
+      properties:
+        path: {const: "resolver-result.json"}
+        sha256: lowercase-sha256
+        byte_length: non-negative-integer
+    route:
+      required: [route_id, edges]
+      exact_keys: [route_id, edges]
+      properties:
+        route_id: non-empty-string
+        edges:
+          type: ordered-list
+          min_items: 2
+          item_required: [edge_id, order, from_version, to_version, identity_sha256]
+          item_exact_keys: [edge_id, order, from_version, to_version, identity_sha256]
+          item_properties:
+            edge_id: non-empty-string
+            order: one-based-contiguous-in-list-order
+            from_version: semver-tag-with-v-prefix
+            to_version: semver-tag-with-v-prefix
+            identity_sha256: lowercase-sha256
+          item_invariants:
+            - "identity_sha256 is the canonical digest of the selected matrix edge"
+          invariants:
+            - "edges form one exact ordered origin-to-target chain"
+  invariants:
+    - "route_transaction_id equals SHA-256 of canonical route-intent JSON after omitting only route_transaction_id"
+    - "matrix sha256 and byte_length exactly bind raw route-matrix.yaml bytes"
+    - "resolver_result sha256 and byte_length exactly bind canonical resolver-result.json bytes; its path is fixed and safe"
+    - "route_transaction_id includes resolver_result identity because it is computed from the entire unsigned intent; it is not the raw intent file digest"
+    - "the intent contains no child transaction ID, child plan, child journal, copied matrix object, copied resolver-result object, package artifact, validator execution, remediation packet, or owner decision"
+    - "edge N+1 is planned only after checkpoint N is sealed; the first edge has zero-based hop index 0 and human-facing order 1"
+  additional_properties: false
+
+outer_journal:
+  file: "journal.yaml"
+  format: deterministic-utf8-yaml
+  required:
+    - schema_version
+    - route_transaction_id
+    - route_intent_sha256
+    - target_root
+    - target_starting_commit
+    - state
+    - next_hop_index
+    - last_checkpoint_index
+    - last_checkpoint_sha256
+    - active_hop
+  exact_keys:
+    - schema_version
+    - route_transaction_id
+    - route_intent_sha256
+    - target_root
+    - target_starting_commit
+    - state
+    - next_hop_index
+    - last_checkpoint_index
+    - last_checkpoint_sha256
+    - active_hop
+  properties:
+    schema_version:
+      const: "ai-context-multi-hop-upgrade-journal/v1"
+    route_transaction_id: lowercase-sha256
+    route_intent_sha256: lowercase-sha256
+    target_root: route-intent.target_root
+    target_starting_commit: route-intent.target_starting_commit
+    state:
+      enum:
+        - planned
+        - awaiting-owner-decision
+        - applying
+        - awaiting-target-validation
+        - validating
+        - finalizing
+        - checkpointing
+        - checkpointed
+        - rolling-back
+        - completed
+        - rolled-back
+    next_hop_index: zero-based-route-edge-index-or-edge-count-when-completed
+    last_checkpoint_index: null-or-zero-based-route-edge-index
+    last_checkpoint_sha256: null-or-lowercase-sha256
+    active_hop:
+      type: null-or-mapping
+      required_when_present:
+        - hop_index
+        - edge
+        - package
+        - validator_execution
+        - plan_sha256
+        - proposal_plan_sha256
+        - child_transaction_id
+      properties:
+        hop_index: route-intent.route.edge-zero-based-index
+        edge: route-intent.route.edges-item-at-hop-index
+        package: exact-materialized-selected-edge-package-identity
+        validator_execution: exact-retained-selected-edge-validator-execution-identity
+        plan_sha256: "lowercase-sha256 semantic child plan identity and derived child transaction ID"
+        proposal_plan_sha256: "lowercase-sha256 raw canonical bytes digest of hops/<hop_index:04d>/preparation.json"
+        child_transaction_id: null-or-lowercase-sha256
+        pending_receipt_sha256: lowercase-sha256
+        child_evidence_path: "fixed-safe-git-admin-relative-path: ai-context-package-apply/<child_transaction_id>"
+      state_invariants:
+        - "awaiting-owner-decision and applying retain child_transaction_id null, a semantic plan_sha256, and the independently bound exact temporary proposal raw-byte digest"
+        - "awaiting-target-validation, validating, finalizing, checkpointing, and rolling-back retain a non-null child_transaction_id, pending_receipt_sha256, and child_evidence_path"
+        - "when present, child_evidence_path equals ai-context-package-apply/<child_transaction_id>"
+        - "plan_sha256 equals evidence.plan_sha256 and, once present, child plan.plan_sha256 and child_transaction_id; it never denotes raw proposal-file bytes"
+        - "proposal_plan_sha256 equals SHA-256 of the exact canonical preparation.json bytes while that file exists; no equality comparison or substitution with plan_sha256 is valid"
+        - "preparation/reuse, apply-before-child-creation, and awaiting-owner-decision resume cross-check both semantic and raw-byte bindings; once a child exists, its plan semantic identity is authoritative and the temporary proposal is removed"
+  invariants:
+    - "route_intent_sha256 binds raw route-intent.json bytes; route_transaction_id binds the unsigned canonical intent"
+    - "next_hop_index is zero-based; its human-facing order is next_hop_index + 1"
+    - "last_checkpoint_index and last_checkpoint_sha256 are both null before checkpoint 0 and otherwise identify exactly checkpoints/<last_checkpoint_index:04d>.json"
+    - "active_hop is null after its checkpoint is sealed"
+    - "completed requires next_hop_index equal to the selected edge count and active_hop null"
+    - "no checkpoint body is embedded in or mutated through journal.yaml"
+  additional_properties: false
+
+checkpoint:
+  file_pattern: "checkpoints/<zero-based-four-digit-checkpoint-index>.json"
+  format: canonical-utf8-json
+  required:
+    - schema_version
+    - route_transaction_id
+    - route_intent_sha256
+    - checkpoint_index
+    - predecessor_checkpoint_sha256
+    - edge
+    - package
+    - child_transaction
+    - pending_receipt
+    - authority
+    - target_surface
+    - digest
+  exact_keys:
+    - schema_version
+    - route_transaction_id
+    - route_intent_sha256
+    - checkpoint_index
+    - predecessor_checkpoint_sha256
+    - edge
+    - package
+    - child_transaction
+    - pending_receipt
+    - authority
+    - target_surface
+    - digest
+  properties:
+    schema_version:
+      const: "ai-context-multi-hop-upgrade-checkpoint/v1"
+    route_transaction_id: lowercase-sha256
+    route_intent_sha256: lowercase-sha256
+    checkpoint_index: zero-based-route-edge-index
+    predecessor_checkpoint_sha256: null-or-lowercase-sha256
+    edge: route-intent.route.edges-item-at-checkpoint-index
+    package: exact-materialized-selected-edge-package-identity
+    child_transaction:
+      required:
+        - transaction_id
+        - plan_sha256
+        - evidence_path
+        - package_manifest_sha256
+        - migration_sha256
+        - remediation_packet_sha256
+        - remediation_decision_sha256
+        - incoming_validation_receipt_sha256
+        - target_validation_receipt_sha256
+        - terminal_receipt_sha256
+      exact_keys:
+        - transaction_id
+        - plan_sha256
+        - evidence_path
+        - package_manifest_sha256
+        - migration_sha256
+        - remediation_packet_sha256
+        - remediation_decision_sha256
+        - incoming_validation_receipt_sha256
+        - target_validation_receipt_sha256
+        - terminal_receipt_sha256
+      properties:
+        transaction_id: "lowercase-sha256 derived from the semantic child plan identity"
+        plan_sha256: "lowercase-sha256 semantic child plan identity"
+        evidence_path: "fixed-safe-git-admin-relative-path: ai-context-package-apply/<transaction_id>"
+        package_manifest_sha256: lowercase-sha256
+        migration_sha256: lowercase-sha256
+        remediation_packet_sha256: lowercase-sha256
+        remediation_decision_sha256: lowercase-sha256
+        incoming_validation_receipt_sha256: lowercase-sha256
+        target_validation_receipt_sha256: lowercase-sha256
+        terminal_receipt_sha256: lowercase-sha256
+      invariants:
+        - "the child plan at evidence_path/plan.json has schema 2.2.0 and the child journal at evidence_path/journal.yaml has schema ai-context-package-apply-journal/v4"
+        - "transaction_id equals the semantic child plan_sha256; no temporary proposal raw-byte digest is stored in a child transaction or finalized checkpoint"
+        - "child transaction, plan, package, remediation, validation, and terminal receipt identities bind this exact route edge"
+    pending_receipt:
+      required: [path, sha256, archive_path]
+      exact_keys: [path, sha256, archive_path]
+      properties:
+        path: {const: ".dev/AI-CONTEXT-APPLY-PENDING.yaml"}
+        sha256: lowercase-sha256
+        archive_path: "fixed-safe-outer-relative-path: checkpoints/<checkpoint_index:04d>.pending-receipt.yaml"
+      invariants:
+        - "archive_path retains byte-identical pending receipt evidence before the target-side pending receipt is cleared"
+    authority:
+      required: [provenance_sha256, customizations_sha256]
+      exact_keys: [provenance_sha256, customizations_sha256]
+      properties:
+        provenance_sha256: lowercase-sha256
+        customizations_sha256: lowercase-sha256
+    target_surface:
+      required: [starting_commit, paths]
+      exact_keys: [starting_commit, paths]
+      properties:
+        starting_commit: route-intent.target_starting_commit
+        paths: deterministic-safe-target-path-state-mapping
+    digest: lowercase-sha256
+  invariants:
+    - "checkpoint_index is zero-based; the human-facing finalized hop order is checkpoint_index + 1"
+    - "checkpoint 0 has predecessor_checkpoint_sha256 null; every later checkpoint binds the preceding checkpoint raw SHA-256"
+    - "digest equals SHA-256 of canonical checkpoint JSON after omitting only digest"
+    - "checkpoint creation follows child target validation and provenance finalization, has no overwrite, and is immutable after creation"
+    - "route_intent_sha256 binds the resolver-result identity and its compact route projection; checkpoint.edge and checkpoint.package must therefore bind the same sealed full S1 edge through the intent"
+    - "the complete chain is resolver-result -> route-intent -> promoted hop -> checkpoint -> target validation; each later stage verifies rather than copies the preceding sealed authority"
+    - "the checkpoint never copies raw matrix bytes, the full resolver result, or an external matrix root, and never silently substitutes route, validator asset, package, receipt, remediation packet, or owner-decision evidence"
+  additional_properties: false
+
+resume_and_rollback:
+  resume_requires:
+    - "exact raw route-matrix digest/length, path-free retained resolver-result digest/length, unsigned intent route transaction ID, raw intent digest, and selected ordered edge identities"
+    - "the same zero-based checkpoint chain, target surface, target authority digests, and active child evidence identities"
+    - "a non-terminal active child must retain the exact child transaction, package including validator.asset, validator execution, plan/proposal digest, and owner-decision/validation state"
+  rollback_requires:
+    - "a non-null active_hop with a non-null child_transaction_id"
+    - "the exact active child plan, journal, package, validator, and owner decision"
+  prohibited:
+    - "rollback of a sealed checkpoint or a previously finalized hop"
+    - "directory scanning, remembered route defaults, or alternate package, validator, receipt, remediation packet, or owner-decision fallback"
+    - "target provenance finalization before the active child target validation passes"

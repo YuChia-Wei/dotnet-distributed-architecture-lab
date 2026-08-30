@@ -1,0 +1,119 @@
+schema_version: "1.0"
+record_schema: "upgrade-remediation-packet/v1"
+document: ".git/ai-context-package-apply/<transaction-id>/remediation-packet.json"
+encoding: "canonical-compact-sorted-json-with-terminal-lf"
+required:
+  - schema_version
+  - transaction_id
+  - plan_sha256
+  - target
+  - package
+  - migration
+  - selection
+  - automatic_proposal
+  - owner_decision
+  - unresolved_conflicts
+  - target_validation_profile
+  - target_validation_profile_digest
+  - provenance
+  - semantic_customizations
+  - resume_rollback
+  - canonical_digest
+identity:
+  transaction_id: lowercase-sha256
+  plan_sha256: equals-transaction_id
+  canonical_digest: "SHA-256 of the canonical JSON object excluding canonical_digest"
+target:
+  required: [root, starting_commit, observed_prestate_sha256, observed]
+  starting_commit: full-lowercase-git-sha
+  observed_prestate_sha256: lowercase-sha256
+package:
+  required:
+    - id
+    - version
+    - root
+    - source
+    - manifest_sha256
+    - migration_sha256
+    - selected_input_proof
+    - validation
+  validation:
+    required:
+      - applicable
+      - schema_version
+      - manifest_path
+      - manifest_sha256
+      - authority
+      - path
+      - sha256
+      - argv
+      - execution
+    applicable_authority:
+      true: incoming-candidate
+      false: not-applicable
+    execution:
+      required: [outcome, exit_code, output_sha256]
+      outcomes: [passed, not-applicable]
+migration:
+  required: [contract, selected_input]
+automatic_proposal:
+  required:
+    - apply_operation_ids
+    - apply_operations
+    - reconciliation_ids
+    - unresolved_operation_ids
+    - ignored_framework_paths
+    - managed_state_conflicts
+  authority: proposal-only
+  grants_write_authority: false
+  apply_operation_ids: "stable IDs in the same order as apply_operations"
+  apply_operations: "ordered actionable copies of sealed plan operations with id, kind, action, path, from_path, ownership, component_id, and reason"
+owner_decision:
+  value: null
+  authority: "separate remediation-decision.json bound by journal digest"
+target_validation_profile:
+  required: [path, sha256, argv, snapshot]
+  path: safe-target-relative-posix-path
+  sha256: lowercase-sha256-or-null
+  argv: string-list
+provenance:
+  required: [path, sha256, source]
+  source: "exact predecessor provenance source identity captured before mutation"
+semantic_customizations:
+  required: [path, sha256]
+resume_rollback:
+  required: [initial_state, resume_requires, rollback_allowed_until_provenance_finalized]
+derived_report:
+  document: ".git/ai-context-package-apply/<transaction-id>/remediation-report.md"
+  first_line: "derived_from_packet_digest: <canonical_digest>"
+  source: packet-only
+target_validation_receipt:
+  document: ".git/ai-context-package-apply/<transaction-id>/target-validation-receipt.json"
+  record_schema: "target-validation-receipt/v1"
+  encoding: "canonical-compact-sorted-json-with-terminal-lf"
+  journal_binding:
+    path: target_validation_receipt_path
+    raw_sha256: target_validation_receipt_sha256
+    reserved_path: target-validation-receipt.json
+  required:
+    - schema_version
+    - transaction_id
+    - plan_sha256
+    - packet_sha256
+    - decision_sha256
+    - target
+    - target_validation_profile
+    - target_validation_profile_digest
+    - pending_receipt
+    - execution
+  target: [root, starting_commit, observed_prestate_sha256]
+  pending_receipt: [path, sha256]
+  execution:
+    required: [argv, outcome, exit_code, started_at, completed_at, output_sha256, evidence]
+    outcome: passed
+    exit_code: 0
+    argv: "exact target_validation_profile.argv; receipt recording never executes or routes it"
+    started_at: ISO-8601-with-offset
+    completed_at: "ISO-8601-with-offset; must not precede started_at"
+    evidence: ".git/ai-context-package-apply/<transaction-id>/target-validation-output.log; raw bytes SHA-256 must equal output_sha256"
+  lifecycle: "record only after package writes enter awaiting-target-validation; atomically persist file, then bind its raw SHA-256 and enter validated; provenance publication plus terminal receipt alone enters finalized"

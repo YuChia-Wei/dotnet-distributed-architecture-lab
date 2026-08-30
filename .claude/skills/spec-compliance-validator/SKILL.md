@@ -26,5 +26,3 @@ This is a thin Claude-compatible wrapper.
 Use this wrapper only as a compatibility entry.
 Keep runtime-specific metadata in this wrapper directory only when the runtime requires it.
 If wrapper text and canonical spec differ, follow `.ai/assets/skills/spec-compliance-validator/skill.yaml`.
-
-

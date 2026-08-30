@@ -42,6 +42,15 @@ Preserve:
 
 Use `.ai/assets/skills/ai-context-init/templates/public-root/AGENTS.md` only as the installation seed. After the target-specific English rewrite is final, optionally derive `AGENTS.zh-TW.md` through the low-cost `context-translator` role. Do not copy a pretranslated root template.
 
+### `.gitignore`
+
+Ensure the exact `/.dev/ai-context/local/` rule exists before any optional CLI
+execution-routing binding can be created. This tracked rule is
+framework collaboration infrastructure, not a personal value. Do not create
+`.dev/ai-context/local/cli-execution-routing.yaml` during
+initialization; that file requires a later successful recovery plus explicit
+user consent under the CLI execution-routing contract.
+
 ### `CLAUDE.md`
 
 Preserve the thin Claude Code project-memory adapter. It must import

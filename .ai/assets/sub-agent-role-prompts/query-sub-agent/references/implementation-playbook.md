@@ -44,4 +44,3 @@ Naming:
 ## Output Structure
 
 - `src/Application/UseCases/<Operation>/`
-

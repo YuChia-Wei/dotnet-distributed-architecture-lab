@@ -9,6 +9,12 @@ The target-effective state and packet contracts are
 `../templates/effective-rule-state.schema.yaml` and
 `../templates/effective-rule-packet.schema.yaml`.
 
+These authorities apply only to `initialized-target` mode. Framework-source
+action execution is governed separately by
+`.dev/standards/AI-CONTEXT-SOURCE-EFFECTIVE-RULES.yaml`; its evidence is
+transient, source-only, and cannot create or satisfy target provenance,
+customization, effective-state, or packet truth.
+
 ## Authorities
 
 - `.dev/ai-context/provenance.yaml` records the installed framework source,

@@ -1,0 +1,50 @@
+schema_version: "1.0"
+document: "provider-neutral-capability-registry.yaml"
+required:
+  - schema_version
+  - registry_id
+  - source_of_truth
+  - capabilities
+properties:
+  schema_version:
+    const: "1.0"
+  registry_id: stable-lowercase-kebab-id
+  source_of_truth:
+    const: "canonical"
+  capabilities:
+    type: unique-non-empty-list
+    record_required:
+      - capability_id
+      - role_asset_id
+      - role_path
+      - capability_tags
+      - deterministic_authority
+      - default_mutation_boundary
+      - execution_contract
+    invariants:
+      - capability-id-is-unique
+      - role-asset-id-is-unique
+      - role-path-is-exact-canonical-sub-agent-manifest-path
+      - capability-tags-are-non-empty-and-provider-neutral
+      - deterministic-authority-has-required-surfaces-and-agent-boundary
+      - execution-contract-is-the-shared-role-execution-contract
+      - an-owning-skill-role-binding-remains-required-outside-this-registry
+prohibited_fields:
+  - model
+  - model_slug
+  - model_reasoning_effort
+  - service_tier
+  - sandbox_mode
+  - provider
+  - provider_projection
+  - configured_provider
+  - configuration_state
+  - current_session
+  - runtime_availability
+  - runtime_path
+  - adapter_path
+  - profile_path
+  - current_session_availability
+  - invocation_evidence
+  - actual_invocation
+additional_properties: false

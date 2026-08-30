@@ -43,4 +43,3 @@ examples:
   - ".ai/assets/sub-agent-role-prompts/reactor-test-sub-agent/references/test-generation-guidance.md"
 human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
 status: "active"
-

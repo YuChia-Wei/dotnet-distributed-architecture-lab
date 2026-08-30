@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""GWT coverage for exact v0.13 unfinalized target diagnostics."""
+"""GWT coverage for the v0.14 target-validation phase boundary."""
 
 from __future__ import annotations
 
 import importlib.util
-import subprocess
+import argparse
 import unittest
 from pathlib import Path
-from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[4]
@@ -17,45 +16,35 @@ if SPEC is None or SPEC.loader is None:
     raise RuntimeError(f"Unable to load target gate: {RUNNER_PATH}")
 RUNNER = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(RUNNER)
-COMMAND = ["python", "-B", ".ai/scripts/validate-ai-context-target.py"]
-EXPECTED = ["effective state catalogs[0] is stale"]
-
-
 class TargetGateCandidateDiagnosticTests(unittest.TestCase):
-    @mock.patch.object(RUNNER.subprocess, "run")
-    def test_gwt_001_exact_stale_catalog_diagnostic_is_accepted(self, run: mock.Mock) -> None:
-        run.return_value = subprocess.CompletedProcess(
-            COMMAND,
-            1,
-            "AI context target validation failed:\n"
-            "- effective state catalogs[0] is stale\n",
-            "",
+    def args(self, *, allow_unfinalized: bool) -> argparse.Namespace:
+        return argparse.Namespace(
+            allow_unfinalized=allow_unfinalized,
+            require_effective_rules=False,
+            commit_range=None,
+            commit=None,
+            workflow_id=None,
         )
-        self.assertEqual(0, RUNNER.run_allowing_exact_diagnostics(COMMAND, EXPECTED))
 
-    @mock.patch.object(RUNNER.subprocess, "run")
-    def test_gwt_002_additional_receipt_error_fails_closed(self, run: mock.Mock) -> None:
-        run.return_value = subprocess.CompletedProcess(
-            COMMAND,
-            1,
-            "AI context target validation failed:\n"
-            "- pending receipt required path hash mismatch\n"
-            "- effective state catalogs[0] is stale\n",
-            "",
+    def test_gwt_001_pre_finalization_route_avoids_receipt_cycle(self) -> None:
+        manifest = RUNNER.load_manifest()
+        commands = RUNNER.build_commands(
+            manifest, self.args(allow_unfinalized=True), "python"
         )
-        self.assertEqual(1, RUNNER.run_allowing_exact_diagnostics(COMMAND, EXPECTED))
+        self.assertNotIn(
+            ".ai/scripts/validate-ai-context-target.py",
+            [value for command in commands for value in command],
+        )
 
-    @mock.patch.object(RUNNER.subprocess, "run")
-    def test_gwt_003_unexpected_stderr_fails_closed(self, run: mock.Mock) -> None:
-        run.return_value = subprocess.CompletedProcess(
-            COMMAND,
-            1,
-            "AI context target validation failed:\n"
-            "- effective state catalogs[0] is stale\n"
-            "unexpected output\n",
-            "",
+    def test_gwt_002_final_route_restores_provenance_validation(self) -> None:
+        manifest = RUNNER.load_manifest()
+        commands = RUNNER.build_commands(
+            manifest, self.args(allow_unfinalized=False), "python"
         )
-        self.assertEqual(1, RUNNER.run_allowing_exact_diagnostics(COMMAND, EXPECTED))
+        self.assertIn(
+            ".ai/scripts/validate-ai-context-target.py",
+            [value for command in commands for value in command],
+        )
 
 
 if __name__ == "__main__":

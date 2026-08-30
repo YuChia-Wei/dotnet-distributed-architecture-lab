@@ -76,11 +76,9 @@ environment-dependent gates remains target-owned acceptance evidence.
 
 ## Commands
 
-Run both acceptance paths:
-
-```text
-python .ai/assets/skills/software-development-orchestrator/scripts/tests/test_software_development_orchestrator_acceptance.py -v
-```
+The source repository runs its skill-owned acceptance test before packaging.
+That test suite is classified as source-only and is not a portable package
+entrypoint.
 
 Run the activation oracle directly:
 

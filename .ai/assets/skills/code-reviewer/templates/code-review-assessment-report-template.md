@@ -100,4 +100,3 @@ Durable reference form: `<assessment-id>#<finding-id>`.
 - Related remediation workflow:
 - Verification assessment:
 - Supersedes:
-

@@ -1,0 +1,237 @@
+template_metadata:
+  template_id: "ai-context-multi-hop-upgrade-transaction"
+  template_version: "1.0.0"
+  created_at: "2026-08-20T00:00:00+08:00"
+  updated_at: "2026-08-20T00:00:00+08:00"
+
+# The outer transaction is target-local Git-admin evidence. The raw route
+# matrix is retained exactly once under this root. A child plan/journal is not
+# copied here: it remains at ai-context-package-apply/<child_transaction_id>.
+outer_transaction_root: "<target-git-dir>/ai-context-multi-hop-upgrade/<route_transaction_id>"
+
+# The sealed resolver result persists the exact full S1 selection without an
+# external matrix root, absolute source path, source locator, provider state,
+# or credential state. Matrix-defined safe relative asset paths may exist
+# inside selected_route.edges; they are not an external source root. Later
+# loading and target validation use this retained result. Only prepare accepts
+# a supplied matrix_root and requires a fresh full S1 resolution to match it.
+resolver_result:
+  file: "resolver-result.json"
+  format: canonical-json
+  content:
+    schema_version: "ai-context-multi-hop-upgrade-resolver-result/v1"
+    origin: "v0.0.0"
+    target: "v0.0.0"
+    matrix:
+      matrix_id: "<stable-route-matrix-id>"
+      sha256: "<lowercase-sha256-of-retained-raw-matrix-bytes>"
+      byte_length: 1
+    route_kind: "orchestrated-multi-hop"
+    selected_route:
+      route_id: "<selected-route-id>"
+      edge_count: 2
+      # Retain the complete ordered S1 edge mappings, including their
+      # matrix-relative artifact identities, validator argv/output identity,
+      # and cutover result. These are not merely the compact intent identities.
+      edges: "<full-selected-S1-edge-mappings-in-one-based-route-order>"
+
+# A promoted hop is the only prepared-hop evidence the route can use. The
+# temporary proposal records two separate identities: plan_sha256 is its
+# semantic child-plan/transaction identity, while proposal_plan_sha256 in the
+# outer journal binds the raw canonical file bytes. They are never compared for
+# equality or used interchangeably. The proposal is deleted after the child
+# package-apply transaction is created; all other bytes remain per-hop proof.
+promoted_hop_before_child:
+  directory: "hops/0000/"
+  temporary_proposal:
+    file: "hops/0000/preparation.json"
+    format: canonical-json
+    schema_version: "2.2.0"
+    plan_sha256: "<semantic-child-plan-digest-and-derived-transaction-id>"
+    raw_canonical_bytes_sha256_bound_as: "journal.active_hop.proposal_plan_sha256"
+    raw_canonical_bytes_sha256: "<sha256-of-exact-canonical-preparation-json-bytes>"
+    retention: "remove only after the exact child transaction is created, including retained owner rejection"
+  package:
+    archive_path: "hops/0000/<exact-archive-file-name>"
+    archive_sha256: "<lowercase-sha256>"
+    checksum_sha256: "<lowercase-sha256>"
+    migration_artifact_sha256: "<lowercase-sha256>"
+    validator_path: "hops/0000/validator.asset"
+    validator_artifact_sha256: "<lowercase-sha256>"
+    extracted_root: "hops/0000/extracted/<single-archive-envelope>/"
+    package_id: "<exact-package-id>"
+    package_version: "0.0.0"
+    package_manifest_sha256: "<lowercase-sha256>"
+    migration_sha256: "<lowercase-sha256>"
+    files_manifest_sha256: "<lowercase-sha256>"
+  validator_execution:
+    record_path: "hops/0000/validator-execution.json"
+    record_sha256: "<lowercase-sha256>"
+    stdout_path: "hops/0000/validator.stdout.log"
+    stdout_sha256: "<lowercase-sha256>"
+    # For a passed execution, stdout bytes exactly match the sealed expected
+    # output bytes. No second expected-output file is retained in the hop.
+  evidence:
+    file: "hops/0000/evidence.json"
+    format: canonical-json
+    content:
+      schema_version: "multi-hop-prepared-hop/v1"
+      hop_index: 0
+      edge: "<same-first-selected-edge-identity>"
+      package: "<same-materialized-package-identity>"
+      validator_execution: "<same-validator-execution-identity>"
+      plan_sha256: "<same-semantic-child-plan-digest>"
+
+# Staging and failed attempts are retained only as non-authoritative evidence.
+# No route continuation, validation, owner decision, child bind, checkpoint, or
+# rollback may read them as a substitute for the promoted hop above.
+non_authoritative_attempt_paths:
+  staging:
+    directory: ".preparing-hops/0000-<opaque-attempt-suffix>/"
+    staged_hop: ".preparing-hops/0000-<opaque-attempt-suffix>/hops/0000/"
+    promotion: "atomically promote the staged_hop once, with no overwrite"
+  failed_retention:
+    directory: "failed-preparations/0000-<opaque-attempt-suffix>/"
+    failure_record:
+      file: "failed-preparations/0000-<opaque-attempt-suffix>/failure.json"
+      format: canonical-json
+      content:
+        schema_version: "multi-hop-preparation-failure/v1"
+        exception_type: "<exception-class-name>"
+        message: "<diagnostic-message>"
+    rule: "retain partial attempt bytes for diagnosis; never reuse, promote, scan, or accept them as route evidence"
+
+route_intent:
+  file: "route-intent.json"
+  format: canonical-json
+  content:
+    schema_version: "ai-context-multi-hop-upgrade-intent/v1"
+    # SHA-256 of canonical intent JSON after omitting only route_transaction_id.
+    # This is deliberately different from the raw route-intent.json digest.
+    route_transaction_id: "<sha256-of-unsigned-canonical-route-intent>"
+    target_root: "<canonical-absolute-target-root>"
+    target_starting_commit: "<40-character-lowercase-target-git-sha>"
+    origin: "v0.0.0"
+    target: "v0.0.0"
+    matrix:
+      path: "route-matrix.yaml"
+      sha256: "<lowercase-sha256-of-retained-raw-matrix-bytes>"
+      byte_length: 1
+    resolver_result:
+      path: "resolver-result.json"
+      sha256: "<lowercase-sha256-of-exact-canonical-resolver-result-json-bytes>"
+      byte_length: 1
+    route:
+      route_id: "<selected-route-id>"
+      edges:
+        # order is human-facing and one-based. The first edge has zero-based
+        # hop index 0 and checkpoint file checkpoints/0000.json.
+        - edge_id: "<first-selected-edge-id>"
+          order: 1
+          from_version: "v0.0.0"
+          to_version: "v0.0.0"
+          identity_sha256: "<canonical-selected-edge-digest>"
+
+# The route transaction ID above includes this resolver_result identity in its
+# unsigned canonical intent. The compact route below must project exactly from
+# resolver_result.content.selected_route: same route_id and each full edge's
+# canonical identity digest. A checkpoint binds this intent's raw digest, then
+# its compact edge/package and child evidence; target validation completes the
+# sealed result -> intent -> hop -> checkpoint -> target chain without copying
+# a full result or an external source root into the checkpoint.
+        - edge_id: "<second-selected-edge-id>"
+          order: 2
+          from_version: "v0.0.0"
+          to_version: "v0.0.0"
+          identity_sha256: "<canonical-selected-edge-digest>"
+
+# The outer journal is the sole mutable record. It contains no checkpoint
+# bodies. Its active_hop is null until the first exact child proposal exists.
+outer_journal:
+  file: "journal.yaml"
+  content:
+    schema_version: "ai-context-multi-hop-upgrade-journal/v1"
+    route_transaction_id: "<same-route-transaction-id>"
+    route_intent_sha256: "<raw-sha256-of-route-intent-json>"
+    target_root: "<same-canonical-absolute-target-root>"
+    target_starting_commit: "<same-target-starting-commit>"
+    state: "planned"
+    next_hop_index: 0
+    last_checkpoint_index: null
+    last_checkpoint_sha256: null
+    active_hop: null
+
+active_hop_before_child:
+  # This data belongs inside journal.active_hop while awaiting one owner
+  # decision. hops/0000/preparation.json is the temporary proposal, removed
+  # when the real child package-apply transaction is created. The two digests
+  # below bind different representations and are independently cross-checked.
+  hop_index: 0
+  edge:
+    edge_id: "<first-selected-edge-id>"
+    order: 1
+    from_version: "v0.0.0"
+    to_version: "v0.0.0"
+    identity_sha256: "<same-first-selected-edge-digest>"
+  package: "<exact-materialized-selected-edge-package-identity>"
+  validator_execution: "<exact-retained-selected-edge-validator-execution-identity>"
+  plan_sha256: "<semantic-child-plan-digest-and-derived-transaction-id>"
+  proposal_plan_sha256: "<sha256-of-exact-canonical-hops-0000-preparation-json-bytes>"
+  child_transaction_id: null
+
+active_hop_after_child:
+  # This is the same active_hop after the child has been created. It binds the
+  # fixed child evidence root rather than copying the child plan or journal.
+  # proposal_plan_sha256 remains a historic raw-byte binding although the
+  # temporary preparation.json file has been removed.
+  hop_index: 0
+  edge: "<same-selected-edge-identity>"
+  package: "<same-materialized-package-identity>"
+  validator_execution: "<same-validator-execution-identity>"
+  plan_sha256: "<semantic-child-plan-digest-and-derived-transaction-id>"
+  proposal_plan_sha256: "<same-raw-canonical-preparation-json-bytes-digest>"
+  child_transaction_id: "<same-semantic-child-plan-digest-and-derived-transaction-id>"
+  pending_receipt_sha256: "<pending-target-validation-receipt-sha256>"
+  child_evidence_path: "ai-context-package-apply/<derived-child-plan-transaction-id>"
+
+# The first checkpoint is zero-based. It is canonical JSON, write-once, and
+# emitted only after child target validation and provenance finalization pass.
+checkpoint:
+  file: "checkpoints/0000.json"
+  format: canonical-json
+  content:
+    schema_version: "ai-context-multi-hop-upgrade-checkpoint/v1"
+    route_transaction_id: "<same-route-transaction-id>"
+    route_intent_sha256: "<raw-sha256-of-route-intent-json>"
+    checkpoint_index: 0
+    predecessor_checkpoint_sha256: null
+    edge:
+      edge_id: "<first-selected-edge-id>"
+      order: 1
+      from_version: "v0.0.0"
+      to_version: "v0.0.0"
+      identity_sha256: "<same-first-selected-edge-digest>"
+    package: "<exact-materialized-selected-edge-package-identity>"
+    child_transaction:
+      transaction_id: "<semantic-child-plan-digest-and-derived-transaction-id>"
+      plan_sha256: "<same-semantic-child-plan-digest-and-derived-transaction-id>"
+      evidence_path: "ai-context-package-apply/<semantic-child-plan-digest-and-derived-transaction-id>"
+      package_manifest_sha256: "<lowercase-sha256>"
+      migration_sha256: "<lowercase-sha256>"
+      remediation_packet_sha256: "<lowercase-sha256>"
+      remediation_decision_sha256: "<lowercase-sha256>"
+      incoming_validation_receipt_sha256: "<lowercase-sha256>"
+      target_validation_receipt_sha256: "<lowercase-sha256>"
+      terminal_receipt_sha256: "<lowercase-sha256>"
+    pending_receipt:
+      path: ".dev/AI-CONTEXT-APPLY-PENDING.yaml"
+      sha256: "<lowercase-sha256>"
+      archive_path: "checkpoints/0000.pending-receipt.yaml"
+    authority:
+      provenance_sha256: "<lowercase-sha256>"
+      customizations_sha256: "<lowercase-sha256>"
+    target_surface:
+      starting_commit: "<same-target-starting-commit>"
+      paths: {}
+    # SHA-256 of canonical checkpoint JSON after omitting only digest.
+    digest: "<sha256-of-unsigned-canonical-checkpoint>"

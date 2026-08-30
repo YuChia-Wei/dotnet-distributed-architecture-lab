@@ -89,4 +89,3 @@ checkpoint 統一登錄於 `handoff-checkpoints.yaml`，並依
 - 若問題核心是 requirement、spec、runbook、context map、event catalog、AI routing 文件不足，應優先建立 document workflow
 - document workflow 的 stage 應以知識邊界切分，而不是以程式碼檔案切分
 - 若後續需要 code refactor，應在 document stage 補齊最小必要真相後再展開
-

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import posixpath
 import re
 import subprocess
@@ -19,6 +20,8 @@ guard_direct_entrypoint(".ai/scripts/validate-ai-context.py")
 
 import tomllib
 import yaml
+
+from ai_context_cli_routing import validate_cli_execution_routing
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -150,6 +153,170 @@ ROLE_BINDING_PROJECTION_HEADERS = (
 CAPABILITY_PROFILE = Path(
     ".ai/assets/skills/software-development-orchestrator/references/capability-profile.yaml"
 )
+SAG003_ROLE_IDS = frozenset(
+    {
+        "mechanical-evidence-worker",
+        "reconciliation-worker",
+        "semantic-governance-analyst",
+        "evidence-report-synthesizer",
+        "fixed-head-independent-auditor",
+    }
+)
+SAG003_CAPABILITY_REGISTRY = Path(
+    ".ai/assets/shared/provider-neutral-capability-registry.yaml"
+)
+SAG003_CAPABILITY_REGISTRY_SCHEMA = Path(
+    ".ai/assets/shared/provider-neutral-capability-registry.schema.yaml"
+)
+SAG003_PROVIDER_PROJECTION_REGISTRY = Path(
+    ".ai/assets/shared/provider-projection-registry.yaml"
+)
+SAG003_PROVIDER_PROJECTION_REGISTRY_SCHEMA = Path(
+    ".ai/assets/shared/provider-projection-registry.schema.yaml"
+)
+SAG003_UPGRADER_ROLE_BINDINGS = Path(
+    ".ai/assets/skills/ai-context-upgrader/references/role-execution-bindings.yaml"
+)
+SAG003_EXECUTION_CONTRACT = Path(".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md")
+SAG003_MUTATION_BOUNDARIES = {
+    "read-only",
+    "workflow-authorized-output-only",
+}
+SAG003_CODEX_PROFILE_ROOT = PurePosixPath(".codex/agents")
+SAG003_CODEX_PROFILE_KEYS = {
+    "name",
+    "description",
+    "model",
+    "model_reasoning_effort",
+    "sandbox_mode",
+    "developer_instructions",
+}
+SAG003_CODEX_PROFILE_NAMES = {
+    "mechanical-evidence-worker": "bounded-routine-worker",
+    "reconciliation-worker": "reconciliation-worker",
+    "semantic-governance-analyst": "semantic-governance-analyst",
+    "evidence-report-synthesizer": "evidence-report-synthesizer",
+    "fixed-head-independent-auditor": "fixed-head-independent-auditor",
+}
+SAG003_CODEX_SANDBOX_MODE = "read-only"
+SAG003_CANONICAL_PROVIDER_FIELDS = {
+    "model",
+    "model_reasoning_effort",
+    "service_tier",
+    "service-tier",
+    "fast",
+    "sandbox",
+    "sandbox_mode",
+    "runtime_enabled",
+    "runtime-enabled",
+    "provider",
+    "provider_projection",
+    "provider-projection",
+    "configured_provider",
+    "configuration_state",
+    "current_session",
+    "current_session_availability",
+    "runtime_availability",
+    "invocation_evidence",
+    "actual_invocation",
+    "profile_path",
+    "runtime_path",
+    "adapter_path",
+}
+SAG003_CANONICAL_PROVIDER_VALUE = re.compile(
+    r"(?:^|[^a-z0-9])(?:gpt(?:-[a-z0-9.-]+)?|claude|copilot|codex|"
+    r"model_reasoning_effort|service[ _-]?tier|fast|sandbox(?:_mode)?|"
+    r"\.codex/agents|\.claude/agents|\.github/agents)(?:$|[^a-z0-9])",
+    re.IGNORECASE,
+)
+SAG003_STATIC_RUNTIME_CLAIMS = {
+    "runtime-enabled",
+    "runtime-invoked",
+    "invoked",
+    "invocation-proven",
+    "session-available",
+}
+UPG004_DELEGATION_RUN_CONTRACT = Path(
+    ".ai/assets/skills/ai-context-upgrader/references/delegation-run-contract.md"
+)
+UPG004_DELEGATION_RUN_SCHEMA = Path(
+    ".ai/assets/skills/ai-context-upgrader/references/delegation-run-contract.schema.yaml"
+)
+UPG004_DELEGATION_RUN_TEMPLATE = Path(
+    ".ai/assets/skills/ai-context-upgrader/templates/delegation-run-record.template.yaml"
+)
+UPG004_UPGRADER_SKILL = Path(".ai/assets/skills/ai-context-upgrader/skill.yaml")
+UPG004_WRAPPER_PATHS = (
+    Path(".agents/skills/ai-context-upgrader/SKILL.md"),
+    Path(".claude/skills/ai-context-upgrader/SKILL.md"),
+)
+UPG004_CANONICAL_STAGE_IDS = (
+    "route-and-evidence-discovery",
+    "three-way-classification-and-reconciliation",
+    "semantic-customization-and-governance-analysis",
+    "plan-report-handoff-or-feedback-synthesis",
+    "terminal-fixed-head-independent-audit",
+)
+UPG004_DELEGATION_MODES = ("none", "analysis-only", "full-recommended")
+UPG004_ROLE_ASSET_IDS = (
+    "mechanical-evidence-worker",
+    "reconciliation-worker",
+    "semantic-governance-analyst",
+    "evidence-report-synthesizer",
+    "fixed-head-independent-auditor",
+)
+UPG004_ANALYSIS_ONLY_ROLE_ASSET_IDS = (
+    "semantic-governance-analyst",
+    "fixed-head-independent-auditor",
+)
+UPG004_ANALYSIS_ONLY_ROOT_AUTHORITIES = (
+    "mechanical-evidence",
+    "checksum",
+    "copy",
+    "planner",
+    "apply",
+    "receipt",
+    "build",
+    "test",
+    "git",
+)
+UPG004_MODE_SEMANTICS = {
+    "none": {
+        "eligible_role_asset_ids": [],
+        "max_concurrent_workers": 0,
+        "allowed_execution_path_kinds": ["root-sequential"],
+        "terminal_independent_auditor_auto_selected": False,
+    },
+    "analysis-only": {
+        "eligible_role_asset_ids": list(UPG004_ANALYSIS_ONLY_ROLE_ASSET_IDS),
+        "max_concurrent_workers": 2,
+        "allowed_execution_path_kinds": [
+            "delegation-evaluation",
+            "root-sequential",
+        ],
+        "terminal_independent_auditor_auto_selected": False,
+        "root_deterministic_authorities": list(
+            UPG004_ANALYSIS_ONLY_ROOT_AUTHORITIES
+        ),
+    },
+    "full-recommended": {
+        "eligible_role_asset_ids": list(UPG004_ROLE_ASSET_IDS),
+        "max_concurrent_workers": 2,
+        "allowed_execution_path_kinds": [
+            "delegation-evaluation",
+            "root-sequential",
+        ],
+        "terminal_independent_auditor_auto_selected": False,
+    },
+}
+UPG004_ROOT_FALLBACK_SCOPE = "role-evaluation"
+UPG004_TERMINAL_FALLBACK_SCOPE = "terminal-independent-audit"
+UPG004_EXECUTION_SUPPORT_STATES = {
+    "unknown",
+    "verified-available",
+    "verified-unavailable",
+}
+UPG004_TERMINAL_AUDIT_STATUSES = {"pending", "passed", "failed", "blocked"}
 PROJECT_CONFIG_TEMPLATE = Path(
     ".ai/assets/skills/ai-context-init/templates/project-config.template.yaml"
 )
@@ -2851,7 +3018,1565 @@ def validate_capability_profile(skill_assets: dict[str, dict], errors: list[str]
     return len(mappings)
 
 
-def main() -> int:
+def sag003_load_yaml_mapping(
+    root: Path, path: Path, errors: list[str]
+) -> dict | None:
+    """Load one required SAG-003 YAML mapping beneath an explicit root."""
+    absolute = root / path
+    if not absolute.is_file():
+        errors.append(f"{path}: required SAG-003 contract file is missing")
+        return None
+    try:
+        value = yaml.safe_load(absolute.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        errors.append(f"{path}: invalid YAML: {exc}")
+        return None
+    if not isinstance(value, dict):
+        errors.append(f"{path}: root must be a mapping")
+        return None
+    return value
+
+
+def sag003_exact_keys(
+    value: object,
+    expected: set[str],
+    errors: list[str],
+    label: str,
+) -> dict | None:
+    """Require an exact mapping shape for a non-extensible SAG-003 record."""
+    if not isinstance(value, dict):
+        errors.append(f"{label} must be a mapping")
+        return None
+    keys = set(value)
+    missing = sorted(expected - keys)
+    extra = sorted(repr(key) for key in keys - expected)
+    if missing:
+        errors.append(f"{label}: missing required fields {missing}")
+    if extra:
+        errors.append(f"{label}: unsupported fields {extra}")
+    return value
+
+
+def sag003_non_empty_string_list(value: object) -> bool:
+    """Return whether a list is non-empty and contains only non-empty strings."""
+    return (
+        isinstance(value, list)
+        and bool(value)
+        and all(isinstance(item, str) and item.strip() for item in value)
+    )
+
+
+def sag003_safe_relative_path(
+    value: object,
+    errors: list[str],
+    label: str,
+) -> Path | None:
+    """Return a safe repository-relative path without silently normalizing it."""
+    if not isinstance(value, str) or not value:
+        errors.append(f"{label} must be a non-empty repository-relative path")
+        return None
+    pure = PurePosixPath(value)
+    if (
+        Path(value).is_absolute()
+        or pure.is_absolute()
+        or "\\" in value
+        or any(part in {".", ".."} for part in pure.parts)
+        or any(character in value for character in "<>*?[]{}")
+    ):
+        errors.append(f"{label} must be a safe repository-relative exact path")
+        return None
+    return Path(*pure.parts)
+
+
+def validate_sag003_provider_neutral_value(
+    value: object,
+    errors: list[str],
+    label: str,
+) -> None:
+    """Reject provider/runtime settings from the canonical capability authority."""
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if not isinstance(key, str):
+                errors.append(f"{label}: canonical field names must be strings")
+                continue
+            normalized = key.casefold().replace(" ", "_").replace("-", "_")
+            forbidden = {
+                field.casefold().replace(" ", "_").replace("-", "_")
+                for field in SAG003_CANONICAL_PROVIDER_FIELDS
+            }
+            provider_prefixes = (
+                "model_",
+                "provider_",
+                "runtime_",
+                "current_session_",
+                "invocation_",
+                "service_tier_",
+                "sandbox_",
+                "codex_",
+                "claude_",
+                "copilot_",
+            )
+            if normalized in forbidden or normalized.startswith(provider_prefixes):
+                errors.append(
+                    f"{label}.{key}: provider/runtime field leaks into the canonical registry"
+                )
+            validate_sag003_provider_neutral_value(item, errors, f"{label}.{key}")
+        return
+    if isinstance(value, list):
+        for index, item in enumerate(value):
+            validate_sag003_provider_neutral_value(item, errors, f"{label}[{index}]")
+        return
+    if isinstance(value, str) and SAG003_CANONICAL_PROVIDER_VALUE.search(value):
+        errors.append(
+            f"{label}: provider/runtime value leaks into the canonical registry"
+        )
+
+
+def upg004_load_yaml_mapping(
+    root: Path, path: Path, errors: list[str]
+) -> dict | None:
+    """Load one required UPG-004 YAML mapping beneath an explicit root."""
+    absolute = root / path
+    if not absolute.is_file():
+        errors.append(f"{path}: required UPG-004 contract file is missing")
+        return None
+    try:
+        value = yaml.safe_load(absolute.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        errors.append(f"{path}: invalid YAML: {exc}")
+        return None
+    if not isinstance(value, dict):
+        errors.append(f"{path}: root must be a mapping")
+        return None
+    return value
+
+
+def upg004_non_empty_string_list(value: object) -> bool:
+    """Return whether a value is a non-empty list of non-empty strings."""
+    return (
+        isinstance(value, list)
+        and bool(value)
+        and all(isinstance(item, str) and item.strip() for item in value)
+    )
+
+
+def upg004_has_exact_stages(value: object) -> bool:
+    """Return whether one path retains the ordered canonical stage set."""
+    return value == list(UPG004_CANONICAL_STAGE_IDS)
+
+
+def validate_upg004_codex_delegation_advisory(
+    value: object,
+    errors: list[str],
+    label: str,
+) -> None:
+    """Validate the static Codex-only advisory without claiming session support."""
+    advisory = sag003_exact_keys(
+        value,
+        {
+            "schema_version",
+            "configuration_scope",
+            "max_concurrent_workers",
+            "fast_priority",
+            "model_mismatch_disposition",
+            "mismatch_prompt_limit",
+            "mismatch_choice_boundary",
+            "root_preflight",
+            "worker_preference",
+            "terminal_auditor_preference",
+        },
+        errors,
+        label,
+    )
+    if advisory is None:
+        return
+    expected = {
+        "schema_version": "1.0",
+        "configuration_scope": "static-provider-projection",
+        "max_concurrent_workers": 2,
+        "fast_priority": "disabled",
+        "model_mismatch_disposition": "advisory-one-prompt",
+        "mismatch_prompt_limit": 1,
+        "mismatch_choice_boundary": "current-vs-recommended/continue-or-switch",
+    }
+    for field, expected_value in expected.items():
+        if advisory.get(field) != expected_value:
+            errors.append(f"{label}.{field} must be {expected_value!r}")
+
+    root_preflight = sag003_exact_keys(
+        advisory.get("root_preflight"),
+        {
+            "recommended_root",
+            "observed_current_state",
+            "quota_cost_disclosure",
+            "verified_switch_action",
+            "unavailable_fallback",
+            "owner_run_fast_priority",
+        },
+        errors,
+        f"{label}.root_preflight",
+    )
+    if root_preflight is not None:
+        recommended_root = sag003_exact_keys(
+            root_preflight.get("recommended_root"),
+            {"model", "model_reasoning_effort", "service_tier"},
+            errors,
+            f"{label}.root_preflight.recommended_root",
+        )
+        if recommended_root is not None and recommended_root != {
+            "model": "gpt-5.6-sol",
+            "model_reasoning_effort": "xhigh",
+            "service_tier": "priority",
+        }:
+            errors.append(
+                f"{label}.root_preflight.recommended_root must be the Sol xhigh priority recommendation"
+            )
+        observed_current_state = sag003_exact_keys(
+            root_preflight.get("observed_current_state"),
+            {
+                "active_model",
+                "active_reasoning_effort",
+                "active_speed_service_tier",
+                "configuration_default_inference",
+            },
+            errors,
+            f"{label}.root_preflight.observed_current_state",
+        )
+        if observed_current_state is not None and observed_current_state != {
+            "active_model": "unknown",
+            "active_reasoning_effort": "unknown",
+            "active_speed_service_tier": "unknown",
+            "configuration_default_inference": "forbidden",
+        }:
+            errors.append(
+                f"{label}.root_preflight.observed_current_state must remain unknown without configuration-default inference"
+            )
+        if root_preflight.get("quota_cost_disclosure") != "required-before-switch":
+            errors.append(
+                f"{label}.root_preflight.quota_cost_disclosure must be 'required-before-switch'"
+            )
+        verified_switch_action = sag003_exact_keys(
+            root_preflight.get("verified_switch_action"),
+            {
+                "verification_state",
+                "shortest_verified_ui_or_command",
+                "evidence_refs",
+            },
+            errors,
+            f"{label}.root_preflight.verified_switch_action",
+        )
+        if verified_switch_action is not None:
+            verification_state = verified_switch_action.get("verification_state")
+            shortest_action = verified_switch_action.get(
+                "shortest_verified_ui_or_command"
+            )
+            evidence_refs = verified_switch_action.get("evidence_refs")
+            if verification_state == "not-verified":
+                if shortest_action is not None or evidence_refs != []:
+                    errors.append(
+                        f"{label}.root_preflight.verified_switch_action may name a shortest UI or command only when verified"
+                    )
+            elif verification_state == "verified":
+                if not isinstance(shortest_action, str) or not shortest_action.strip():
+                    errors.append(
+                        f"{label}.root_preflight.verified_switch_action.verified requires a non-empty shortest UI or command"
+                    )
+                if not upg004_non_empty_string_list(evidence_refs):
+                    errors.append(
+                        f"{label}.root_preflight.verified_switch_action.verified requires evidence refs"
+                    )
+            else:
+                errors.append(
+                    f"{label}.root_preflight.verified_switch_action.verification_state must be 'verified' or 'not-verified'"
+                )
+        unavailable_fallback = sag003_exact_keys(
+            root_preflight.get("unavailable_fallback"),
+            {"prompt_required", "options"},
+            errors,
+            f"{label}.root_preflight.unavailable_fallback",
+        )
+        if unavailable_fallback is not None:
+            if unavailable_fallback.get("prompt_required") is not True:
+                errors.append(
+                    f"{label}.root_preflight.unavailable_fallback.prompt_required must be true"
+                )
+            if unavailable_fallback.get("options") != [
+                "gpt-5.6-terra/xhigh",
+                "current-model",
+            ]:
+                errors.append(
+                    f"{label}.root_preflight.unavailable_fallback must ask Terra xhigh or the current model"
+                )
+        owner_run_fast_priority = sag003_exact_keys(
+            root_preflight.get("owner_run_fast_priority"),
+            {"status", "activation"},
+            errors,
+            f"{label}.root_preflight.owner_run_fast_priority",
+        )
+        if owner_run_fast_priority is not None and owner_run_fast_priority != {
+            "status": "disabled",
+            "activation": "explicit-owner-choice-required",
+        }:
+            errors.append(
+                f"{label}.root_preflight.owner_run_fast_priority must remain disabled until an explicit owner choice"
+            )
+
+    for field, expected_model, expected_fallback in (
+        ("worker_preference", "gpt-5.6-terra", "root-sequential"),
+        (
+            "terminal_auditor_preference",
+            "gpt-5.6-sol",
+            "fresh-sol-high-independent-context",
+        ),
+    ):
+        preference = sag003_exact_keys(
+            advisory.get(field),
+            {"model", "model_reasoning_effort", "unavailable_fallback"},
+            errors,
+            f"{label}.{field}",
+        )
+        if preference is None:
+            continue
+        if preference.get("model") != expected_model:
+            errors.append(f"{label}.{field}.model must be {expected_model!r}")
+        if preference.get("model_reasoning_effort") != "max":
+            errors.append(f"{label}.{field}.model_reasoning_effort must be 'max'")
+        if preference.get("unavailable_fallback") != expected_fallback:
+            errors.append(
+                f"{label}.{field}.unavailable_fallback must be {expected_fallback!r}"
+            )
+
+
+def validate_upg004_delegation_run_schema(errors: list[str], *, root: Path) -> bool:
+    """Validate the non-extensible portable delegation-record schema."""
+    schema = upg004_load_yaml_mapping(root, UPG004_DELEGATION_RUN_SCHEMA, errors)
+    if schema is None:
+        return False
+    expected_fields = {
+        "schema_version",
+        "document",
+        "source_of_truth",
+        "required",
+        "properties",
+        "invariants",
+        "additional_properties",
+    }
+    sag003_exact_keys(schema, expected_fields, errors, str(UPG004_DELEGATION_RUN_SCHEMA))
+    if schema.get("schema_version") != "1.0":
+        errors.append(f"{UPG004_DELEGATION_RUN_SCHEMA}.schema_version must be '1.0'")
+    if schema.get("document") != "delegation-run-record.yaml":
+        errors.append(f"{UPG004_DELEGATION_RUN_SCHEMA}.document must be delegation-run-record.yaml")
+    if schema.get("source_of_truth") != "workflow-execution-evidence":
+        errors.append(
+            f"{UPG004_DELEGATION_RUN_SCHEMA}.source_of_truth must be workflow-execution-evidence"
+        )
+    required = schema.get("required")
+    expected_required = {
+        "schema_version",
+        "delegation_run_id",
+        "selection",
+        "execution_support",
+        "canonical_stage_ids",
+        "execution_path",
+        "fallbacks",
+        "terminal_independent_audit",
+    }
+    if not isinstance(required, list) or set(required) != expected_required:
+        errors.append(f"{UPG004_DELEGATION_RUN_SCHEMA}.required must cover the exact run record")
+    if schema.get("additional_properties") is not False:
+        errors.append(f"{UPG004_DELEGATION_RUN_SCHEMA}.additional_properties must be false")
+
+    properties = sag003_exact_keys(
+        schema.get("properties"),
+        expected_required,
+        errors,
+        f"{UPG004_DELEGATION_RUN_SCHEMA}.properties",
+    )
+    if properties is None:
+        return False
+    selection = sag003_exact_keys(
+        properties.get("selection"),
+        {"required", "supported_modes", "prompt", "resume", "mode_semantics"},
+        errors,
+        f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.selection",
+    )
+    if selection is not None:
+        expected_selection_required = {
+            "mode",
+            "max_concurrent_workers",
+            "decision_source",
+            "owner_choice_evidence",
+            "eligible_role_asset_ids",
+            "terminal_independent_auditor_auto_selected",
+            "prompt",
+            "resume",
+        }
+        if set(selection.get("required", [])) != expected_selection_required:
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.selection.required "
+                "must retain the exact mode-eligibility fields"
+            )
+        if selection.get("supported_modes") != list(UPG004_DELEGATION_MODES):
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.selection.supported_modes "
+                "must retain none, analysis-only, and full-recommended"
+            )
+        for field, fields in (
+            ("prompt", {"count", "disposition"}),
+            ("resume", {"reuse_existing_selection", "repeat_prompt"}),
+        ):
+            nested = sag003_exact_keys(
+                selection.get(field),
+                {"required"},
+                errors,
+                f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.selection.{field}",
+            )
+            if nested is not None and set(nested.get("required", [])) != fields:
+                errors.append(
+                    f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.selection.{field}.required "
+                    f"must be {sorted(fields)}"
+                )
+        mode_semantics = sag003_exact_keys(
+            selection.get("mode_semantics"),
+            set(UPG004_DELEGATION_MODES),
+            errors,
+            f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.selection.mode_semantics",
+        )
+        if mode_semantics is not None:
+            for mode, expected_semantics in UPG004_MODE_SEMANTICS.items():
+                actual = sag003_exact_keys(
+                    mode_semantics.get(mode),
+                    set(expected_semantics),
+                    errors,
+                    f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.selection.mode_semantics.{mode}",
+                )
+                if actual is not None and actual != expected_semantics:
+                    errors.append(
+                        f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.selection.mode_semantics.{mode} "
+                        "must retain the exact fail-closed mode semantics"
+                    )
+    support = sag003_exact_keys(
+        properties.get("execution_support"),
+        {"required", "states"},
+        errors,
+        f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.execution_support",
+    )
+    if support is not None and set(support.get("states", [])) != UPG004_EXECUTION_SUPPORT_STATES:
+        errors.append(
+            f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.execution_support.states "
+            "must retain unknown and both verified states"
+        )
+    stages = sag003_exact_keys(
+        properties.get("canonical_stage_ids"),
+        {"ordered_const"},
+        errors,
+        f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.canonical_stage_ids",
+    )
+    if stages is not None and not upg004_has_exact_stages(stages.get("ordered_const")):
+        errors.append(
+            f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.canonical_stage_ids "
+            "must retain the ordered canonical stages"
+        )
+    execution_path = sag003_exact_keys(
+        properties.get("execution_path"),
+        {"required", "kinds"},
+        errors,
+        f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.execution_path",
+    )
+    if execution_path is not None and set(execution_path.get("kinds", [])) != {
+        "delegation-evaluation",
+        "root-sequential",
+    }:
+        errors.append(
+            f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.execution_path.kinds "
+            "must retain delegation-evaluation and root-sequential"
+        )
+    fallbacks = sag003_exact_keys(
+        properties.get("fallbacks"),
+        {"type", "record_required"},
+        errors,
+        f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.fallbacks",
+    )
+    if fallbacks is not None:
+        expected_fallback_fields = {
+            "scope",
+            "disposition",
+            "trigger",
+            "requested",
+            "observed",
+            "selected",
+            "owner_consent",
+            "authorization_evidence",
+            "evidence_refs",
+            "canonical_stage_ids",
+        }
+        if fallbacks.get("type") != "ordered-list":
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.fallbacks.type must be ordered-list"
+            )
+        if set(fallbacks.get("record_required", [])) != expected_fallback_fields:
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.fallbacks.record_required "
+                "must retain exact requested, observed, selected, owner-consent, and evidence fields"
+            )
+    audit = sag003_exact_keys(
+        properties.get("terminal_independent_audit"),
+        {"required", "statuses"},
+        errors,
+        f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.terminal_independent_audit",
+    )
+    if audit is not None and set(audit.get("statuses", [])) != UPG004_TERMINAL_AUDIT_STATUSES:
+        errors.append(
+            f"{UPG004_DELEGATION_RUN_SCHEMA}.properties.terminal_independent_audit.statuses "
+            "must retain all fail-closed audit states"
+        )
+    expected_invariants = {
+        "per-independent-run-selection",
+        "explicit-choice-suppresses-prompt",
+        "prompt-count-is-at-most-one",
+        "resume-never-repeats-prompt",
+        "canonical-stage-order-is-identical-across-paths",
+        "mode-eligibility-and-concurrency-are-exact",
+        "analysis-only-mechanical-authority-remains-root-driven",
+        "terminal-auditor-is-never-automatic",
+        "unknown-support-does-not-prove-invocation",
+        "fallback-requires-exact-request-observed-selected-owner-consent-and-evidence",
+        "terminal-audit-is-explicit-and-fail-closed",
+        "record-never-enters-target-provenance",
+    }
+    if not isinstance(schema.get("invariants"), list) or set(schema["invariants"]) != expected_invariants:
+        errors.append(f"{UPG004_DELEGATION_RUN_SCHEMA}.invariants must retain the UPG-004 boundaries")
+    return True
+
+
+def validate_upg004_delegation_run_record(
+    record: object,
+    errors: list[str],
+    *,
+    label: str,
+) -> bool:
+    """Validate one portable delegation record without assuming its retained path."""
+    if not isinstance(record, dict):
+        errors.append(f"{label}: root must be a mapping")
+        return False
+    # Keep the existing error-path construction local to this reusable validator.
+    UPG004_DELEGATION_RUN_TEMPLATE = Path(label)
+    expected_fields = {
+        "schema_version",
+        "delegation_run_id",
+        "selection",
+        "execution_support",
+        "canonical_stage_ids",
+        "execution_path",
+        "fallbacks",
+        "terminal_independent_audit",
+    }
+    sag003_exact_keys(record, expected_fields, errors, str(UPG004_DELEGATION_RUN_TEMPLATE))
+    validate_sag003_provider_neutral_value(record, errors, str(UPG004_DELEGATION_RUN_TEMPLATE))
+    if record.get("schema_version") != "1.0":
+        errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}.schema_version must be '1.0'")
+    if not isinstance(record.get("delegation_run_id"), str) or not record["delegation_run_id"].strip():
+        errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}.delegation_run_id must be non-empty")
+
+    selection = sag003_exact_keys(
+        record.get("selection"),
+        {
+            "mode",
+            "max_concurrent_workers",
+            "decision_source",
+            "owner_choice_evidence",
+            "eligible_role_asset_ids",
+            "terminal_independent_auditor_auto_selected",
+            "prompt",
+            "resume",
+        },
+        errors,
+        f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection",
+    )
+    if selection is not None:
+        mode = selection.get("mode")
+        if mode not in UPG004_DELEGATION_MODES:
+            errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.mode is not supported")
+        mode_semantics = UPG004_MODE_SEMANTICS.get(mode)
+        if mode_semantics is not None:
+            if (
+                selection.get("eligible_role_asset_ids")
+                != mode_semantics["eligible_role_asset_ids"]
+            ):
+                errors.append(
+                    f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.eligible_role_asset_ids "
+                    "must retain the exact mode-eligible roles"
+                )
+            if (
+                selection.get("max_concurrent_workers")
+                != mode_semantics["max_concurrent_workers"]
+            ):
+                errors.append(
+                    f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.max_concurrent_workers "
+                    "must retain the exact mode concurrency"
+                )
+            if (
+                selection.get("terminal_independent_auditor_auto_selected")
+                is not mode_semantics["terminal_independent_auditor_auto_selected"]
+            ):
+                errors.append(
+                    f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.terminal_independent_auditor_auto_selected "
+                    "must remain false"
+                )
+        elif selection.get("max_concurrent_workers") != 2:
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.max_concurrent_workers must be 2"
+            )
+        if selection.get("decision_source") not in {
+            "explicit-owner-choice",
+            "prompted-owner-choice",
+        }:
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.decision_source is not supported"
+            )
+        if not upg004_non_empty_string_list(selection.get("owner_choice_evidence")):
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.owner_choice_evidence "
+                "must be a non-empty string list"
+            )
+        prompt = sag003_exact_keys(
+            selection.get("prompt"),
+            {"count", "disposition"},
+            errors,
+            f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.prompt",
+        )
+        if prompt is not None:
+            count = prompt.get("count")
+            if isinstance(count, bool) or count not in {0, 1}:
+                errors.append(
+                    f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.prompt.count must be 0 or 1"
+                )
+            if selection.get("decision_source") == "explicit-owner-choice" and prompt != {
+                "count": 0,
+                "disposition": "suppressed-by-explicit-choice",
+            }:
+                errors.append(
+                    f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.prompt must suppress an explicit choice"
+                )
+            if selection.get("decision_source") == "prompted-owner-choice" and prompt != {
+                "count": 1,
+                "disposition": "recorded-owner-choice",
+            }:
+                errors.append(
+                    f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.prompt must retain one prompted choice"
+                )
+        resume = sag003_exact_keys(
+            selection.get("resume"),
+            {"reuse_existing_selection", "repeat_prompt"},
+            errors,
+            f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.resume",
+        )
+        if resume is not None and resume != {
+            "reuse_existing_selection": True,
+            "repeat_prompt": False,
+        }:
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.selection.resume must reuse without a repeat prompt"
+            )
+
+    support = sag003_exact_keys(
+        record.get("execution_support"),
+        {"state", "evidence_refs"},
+        errors,
+        f"{UPG004_DELEGATION_RUN_TEMPLATE}.execution_support",
+    )
+    if support is not None:
+        state = support.get("state")
+        evidence_refs = support.get("evidence_refs")
+        if state not in UPG004_EXECUTION_SUPPORT_STATES:
+            errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}.execution_support.state is not supported")
+        if state == "unknown" and evidence_refs != []:
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.execution_support.unknown must have no evidence refs"
+            )
+        if state in {"verified-available", "verified-unavailable"} and not upg004_non_empty_string_list(evidence_refs):
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.execution_support verified states require evidence refs"
+            )
+
+    if not upg004_has_exact_stages(record.get("canonical_stage_ids")):
+        errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}.canonical_stage_ids must retain ordered stages")
+    execution_path = sag003_exact_keys(
+        record.get("execution_path"),
+        {"kind", "canonical_stage_ids"},
+        errors,
+        f"{UPG004_DELEGATION_RUN_TEMPLATE}.execution_path",
+    )
+    if execution_path is not None:
+        if execution_path.get("kind") not in {"delegation-evaluation", "root-sequential"}:
+            errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}.execution_path.kind is not supported")
+        if not upg004_has_exact_stages(execution_path.get("canonical_stage_ids")):
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.execution_path must retain ordered stages"
+            )
+
+    fallbacks = record.get("fallbacks")
+    if not isinstance(fallbacks, list):
+        errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}.fallbacks must be a list")
+        fallbacks = []
+    fallback_scopes: set[str] = set()
+    for index, fallback in enumerate(fallbacks):
+        label = f"{UPG004_DELEGATION_RUN_TEMPLATE}.fallbacks[{index}]"
+        mapping = sag003_exact_keys(
+            fallback,
+            {
+                "scope",
+                "disposition",
+                "trigger",
+                "requested",
+                "observed",
+                "selected",
+                "owner_consent",
+                "authorization_evidence",
+                "evidence_refs",
+                "canonical_stage_ids",
+            },
+            errors,
+            label,
+        )
+        if mapping is None:
+            continue
+        validate_sag003_provider_neutral_value(mapping, errors, label)
+        scope = mapping.get("scope")
+        if scope not in {
+            UPG004_ROOT_FALLBACK_SCOPE,
+            UPG004_TERMINAL_FALLBACK_SCOPE,
+        }:
+            errors.append(f"{label}.scope is not supported")
+            continue
+        if scope in fallback_scopes:
+            errors.append(f"{label}.scope duplicates {scope!r}")
+        fallback_scopes.add(scope)
+        expected_disposition = (
+            "root-sequential"
+            if scope == UPG004_ROOT_FALLBACK_SCOPE
+            else "fresh-independent-context"
+        )
+        if mapping.get("disposition") != expected_disposition:
+            errors.append(f"{label}.disposition must be {expected_disposition!r}")
+        expected_requested = (
+            "delegation-evaluation"
+            if scope == UPG004_ROOT_FALLBACK_SCOPE
+            else "terminal-independent-audit"
+        )
+        expected_observed = (
+            "delegation-support-unavailable"
+            if scope == UPG004_ROOT_FALLBACK_SCOPE
+            else "primary-independent-auditor-unavailable"
+        )
+        if mapping.get("requested") != expected_requested:
+            errors.append(f"{label}.requested must be {expected_requested!r}")
+        if mapping.get("observed") != expected_observed:
+            errors.append(f"{label}.observed must be {expected_observed!r}")
+        if mapping.get("selected") != expected_disposition:
+            errors.append(f"{label}.selected must be {expected_disposition!r}")
+        if selection is not None and mapping.get("owner_consent") != selection.get(
+            "decision_source"
+        ):
+            errors.append(
+                f"{label}.owner_consent must exactly match the run decision_source"
+            )
+        if not isinstance(mapping.get("trigger"), str) or not mapping["trigger"].strip():
+            errors.append(f"{label}.trigger must be non-empty")
+        for field in ("authorization_evidence", "evidence_refs"):
+            if not upg004_non_empty_string_list(mapping.get(field)):
+                errors.append(f"{label}.{field} must be a non-empty string list")
+        expected_stages = (
+            list(UPG004_CANONICAL_STAGE_IDS)
+            if scope == UPG004_ROOT_FALLBACK_SCOPE
+            else ["terminal-fixed-head-independent-audit"]
+        )
+        if mapping.get("canonical_stage_ids") != expected_stages:
+            errors.append(f"{label}.canonical_stage_ids does not preserve the required stages")
+
+    if selection is not None and execution_path is not None:
+        mode = selection.get("mode")
+        path_kind = execution_path.get("kind")
+        mode_semantics = UPG004_MODE_SEMANTICS.get(mode)
+        if mode_semantics is not None and path_kind not in mode_semantics[
+            "allowed_execution_path_kinds"
+        ]:
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}: {mode} mode must use one of its exact execution paths"
+            )
+        if mode == "none" and fallbacks:
+            errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}: none mode must not record a fallback")
+        if (
+            mode != "none"
+            and path_kind == "root-sequential"
+            and UPG004_ROOT_FALLBACK_SCOPE not in fallback_scopes
+        ):
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}: root-sequential fallback requires exact evidence"
+            )
+
+    audit = sag003_exact_keys(
+        record.get("terminal_independent_audit"),
+        {
+            "required",
+            "selection_basis",
+            "status",
+            "subject_commit",
+            "independence",
+            "evidence_refs",
+        },
+        errors,
+        f"{UPG004_DELEGATION_RUN_TEMPLATE}.terminal_independent_audit",
+    )
+    if audit is not None:
+        if audit.get("required") is not True:
+            errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}.terminal_independent_audit.required must be true")
+        if audit.get("selection_basis") != "explicit-terminal-or-high-risk":
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.terminal_independent_audit "
+                "must use an explicit terminal-or-high-risk basis"
+            )
+        status = audit.get("status")
+        if status not in UPG004_TERMINAL_AUDIT_STATUSES:
+            errors.append(f"{UPG004_DELEGATION_RUN_TEMPLATE}.terminal_independent_audit.status is not supported")
+        if audit.get("independence") != "fresh-independent-context":
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.terminal_independent_audit "
+                "must retain fresh-independent-context"
+            )
+        if status == "pending" and (audit.get("subject_commit") is not None or audit.get("evidence_refs") != []):
+            errors.append(
+                f"{UPG004_DELEGATION_RUN_TEMPLATE}.terminal_independent_audit pending state must not claim evidence"
+            )
+        if status in {"passed", "failed", "blocked"}:
+            subject = audit.get("subject_commit")
+            if not isinstance(subject, str) or re.fullmatch(r"[0-9a-f]{40}", subject) is None:
+                errors.append(
+                    f"{UPG004_DELEGATION_RUN_TEMPLATE}.terminal_independent_audit "
+                    "terminal evidence requires a 40-character lowercase subject commit"
+                )
+            if not upg004_non_empty_string_list(audit.get("evidence_refs")):
+                errors.append(
+                    f"{UPG004_DELEGATION_RUN_TEMPLATE}.terminal_independent_audit "
+                    "terminal evidence requires non-empty evidence refs"
+                )
+    return True
+
+
+def validate_upg004_delegation_run_record_path(
+    errors: list[str],
+    *,
+    root: Path,
+    record_path: Path,
+) -> bool:
+    """Load and validate any retained portable delegation-run record."""
+    record = upg004_load_yaml_mapping(root, record_path, errors)
+    if record is None:
+        return False
+    return validate_upg004_delegation_run_record(
+        record,
+        errors,
+        label=str(record_path),
+    )
+
+
+def validate_upg004_delegation_run_template(errors: list[str], *, root: Path) -> bool:
+    """Validate the packaged owner-selection template through the reusable path."""
+    return validate_upg004_delegation_run_record_path(
+        errors,
+        root=root,
+        record_path=UPG004_DELEGATION_RUN_TEMPLATE,
+    )
+
+
+def validate_upg004_delegation_run_contract(errors: list[str], *, root: Path = ROOT) -> int:
+    """Validate portable UPG-004 records, wrappers, and canonical boundaries."""
+    document_path = root / UPG004_DELEGATION_RUN_CONTRACT
+    if not document_path.is_file():
+        errors.append(f"{UPG004_DELEGATION_RUN_CONTRACT}: required UPG-004 contract file is missing")
+    else:
+        document = document_path.read_text(encoding="utf-8")
+        for marker in (
+            "# Delegation Run Contract",
+            "## Portable Execution Intent",
+            "## Modes",
+            "selection.eligible_role_asset_ids",
+            "`none`",
+            "`analysis-only`",
+            "`full-recommended`",
+            "## Prompt And Resume",
+            "## Support And Fallback Evidence",
+            "## Terminal Independent Audit",
+        ):
+            if marker not in document:
+                errors.append(f"{UPG004_DELEGATION_RUN_CONTRACT}: missing required marker {marker!r}")
+
+    validate_upg004_delegation_run_schema(errors, root=root)
+    validate_upg004_delegation_run_template(errors, root=root)
+    required_references = {
+        UPG004_DELEGATION_RUN_CONTRACT.as_posix(),
+        UPG004_DELEGATION_RUN_SCHEMA.as_posix(),
+        UPG004_DELEGATION_RUN_TEMPLATE.as_posix(),
+    }
+    skill = upg004_load_yaml_mapping(root, UPG004_UPGRADER_SKILL, errors)
+    if skill is not None:
+        references = skill.get("references")
+        if not isinstance(references, list) or not required_references <= set(references):
+            errors.append(f"{UPG004_UPGRADER_SKILL}: missing UPG-004 delegation references")
+    for wrapper_path in UPG004_WRAPPER_PATHS:
+        absolute = root / wrapper_path
+        if not absolute.is_file():
+            errors.append(f"{wrapper_path}: required current-runtime wrapper is missing")
+            continue
+        wrapper = absolute.read_text(encoding="utf-8")
+        for reference in required_references:
+            if reference not in wrapper:
+                errors.append(f"{wrapper_path}: missing UPG-004 delegation reference {reference}")
+    return 1
+
+
+def sag003_active_role_binding_owners(
+    root: Path,
+    errors: list[str],
+) -> dict[str, list[tuple[str, Path]]]:
+    """Collect only exact, active canonical owners for the five SAG-003 roles."""
+    owners: dict[str, list[tuple[str, Path]]] = {
+        role_id: [] for role_id in SAG003_ROLE_IDS
+    }
+    for skill_path in sorted((root / ".ai/assets/skills").glob("*/skill.yaml")):
+        try:
+            skill = yaml.safe_load(skill_path.read_text(encoding="utf-8"))
+        except (OSError, yaml.YAMLError):
+            continue
+        if not isinstance(skill, dict) or skill.get("status") != "active":
+            continue
+        skill_id = skill.get("asset_id")
+        if not isinstance(skill_id, str) or not skill_id:
+            continue
+        bindings = skill.get("role_bindings", [])
+        if not isinstance(bindings, list):
+            continue
+        relative_skill_path = skill_path.relative_to(root)
+        for index, binding in enumerate(bindings):
+            if not isinstance(binding, dict):
+                continue
+            role_id = binding.get("role_asset_id")
+            if role_id not in SAG003_ROLE_IDS:
+                continue
+            label = f"{relative_skill_path}: role_bindings[{index}]"
+            expected_path = expected_role_binding_path(role_id)
+            valid = True
+            if set(binding) != ROLE_BINDING_REQUIRED_FIELDS:
+                errors.append(
+                    f"{label}: SAG-003 owner binding must use the exact canonical role_binding fields"
+                )
+                valid = False
+            if binding.get("role_path") != expected_path:
+                errors.append(
+                    f"{label}.role_path must be the exact canonical role path {expected_path}"
+                )
+                valid = False
+            if binding.get("expected_role_status") != ROLE_BINDING_EXPECTED_STATUS:
+                errors.append(
+                    f"{label}.expected_role_status must be {ROLE_BINDING_EXPECTED_STATUS!r}"
+                )
+                valid = False
+            if binding.get("binding_kind") not in ROLE_BINDING_KINDS:
+                errors.append(
+                    f"{label}.binding_kind must be one of {sorted(ROLE_BINDING_KINDS)}"
+                )
+                valid = False
+            if not isinstance(binding.get("applicability"), str) or not binding[
+                "applicability"
+            ].strip():
+                errors.append(f"{label}.applicability must be a non-empty declarative string")
+                valid = False
+            if binding.get("load_obligation") != ROLE_BINDING_LOAD_OBLIGATION:
+                errors.append(
+                    f"{label}.load_obligation must be {ROLE_BINDING_LOAD_OBLIGATION!r}"
+                )
+                valid = False
+            if valid:
+                owners[role_id].append((skill_id, relative_skill_path))
+    return owners
+
+
+def validate_sag003_capability_registry(
+    errors: list[str], *, root: Path = ROOT
+) -> tuple[dict[str, dict], dict[str, list[tuple[str, Path]]]]:
+    """Validate the provider-neutral role authority without making it provider-aware."""
+    for schema_path in (
+        SAG003_CAPABILITY_REGISTRY_SCHEMA,
+        SAG003_PROVIDER_PROJECTION_REGISTRY_SCHEMA,
+    ):
+        if not (root / schema_path).is_file():
+            errors.append(f"{schema_path}: required SAG-003 schema file is missing")
+
+    registry = sag003_load_yaml_mapping(root, SAG003_CAPABILITY_REGISTRY, errors)
+    if registry is None:
+        return {}, {role_id: [] for role_id in SAG003_ROLE_IDS}
+    sag003_exact_keys(
+        registry,
+        {"schema_version", "registry_id", "source_of_truth", "capabilities"},
+        errors,
+        str(SAG003_CAPABILITY_REGISTRY),
+    )
+    if registry.get("schema_version") != "1.0":
+        errors.append(f"{SAG003_CAPABILITY_REGISTRY}: schema_version must be '1.0'")
+    for field in ("registry_id",):
+        if not isinstance(registry.get(field), str) or not registry[field].strip():
+            errors.append(f"{SAG003_CAPABILITY_REGISTRY}.{field} must be a non-empty string")
+    if registry.get("source_of_truth") != "canonical":
+        errors.append(f"{SAG003_CAPABILITY_REGISTRY}.source_of_truth must be 'canonical'")
+
+    capabilities = registry.get("capabilities")
+    if not isinstance(capabilities, list):
+        errors.append(f"{SAG003_CAPABILITY_REGISTRY}.capabilities must be a list")
+        return {}, {role_id: [] for role_id in SAG003_ROLE_IDS}
+
+    capability_by_role: dict[str, dict] = {}
+    seen_capability_ids: set[str] = set()
+    expected_fields = {
+        "capability_id",
+        "role_path",
+        "role_asset_id",
+        "capability_tags",
+        "default_mutation_boundary",
+        "deterministic_authority",
+        "execution_contract",
+    }
+    for index, capability in enumerate(capabilities):
+        label = f"{SAG003_CAPABILITY_REGISTRY}: capabilities[{index}]"
+        mapping = sag003_exact_keys(capability, expected_fields, errors, label)
+        if mapping is None:
+            continue
+        validate_sag003_provider_neutral_value(mapping, errors, label)
+        capability_id = mapping.get("capability_id")
+        if not isinstance(capability_id, str) or not KEBAB_ID.fullmatch(capability_id):
+            errors.append(f"{label}.capability_id must be a non-empty kebab-case string")
+        elif capability_id in seen_capability_ids:
+            errors.append(f"{label}.capability_id duplicates {capability_id!r}")
+        else:
+            seen_capability_ids.add(capability_id)
+
+        role_id = mapping.get("role_asset_id")
+        if not isinstance(role_id, str) or role_id not in SAG003_ROLE_IDS:
+            errors.append(f"{label}.role_asset_id must be one of {sorted(SAG003_ROLE_IDS)}")
+            continue
+        if role_id in capability_by_role:
+            errors.append(f"{label}.role_asset_id duplicates {role_id!r}")
+            continue
+        capability_by_role[role_id] = mapping
+
+        expected_path = expected_role_binding_path(role_id)
+        role_path = mapping.get("role_path")
+        if role_path != expected_path:
+            errors.append(f"{label}.role_path must be the exact canonical role path {expected_path}")
+        relative_role_path = sag003_safe_relative_path(role_path, errors, f"{label}.role_path")
+        if relative_role_path is not None:
+            manifest_path = root / relative_role_path
+            if not manifest_path.is_file():
+                errors.append(f"{label}.role_path is dangling: {role_path!r}")
+            else:
+                try:
+                    role_manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+                except (OSError, yaml.YAMLError) as exc:
+                    errors.append(f"{label}.role_path cannot load role manifest: {exc}")
+                else:
+                    if not isinstance(role_manifest, dict):
+                        errors.append(f"{label}.role_path role manifest must be a mapping")
+                    else:
+                        if role_manifest.get("asset_id") != role_id:
+                            errors.append(
+                                f"{label}.role_asset_id must exactly match the role manifest"
+                            )
+                        if role_manifest.get("status") != "active":
+                            errors.append(f"{label}: target role must be active")
+                        if role_manifest.get("wrapper_targets") != [] or role_manifest.get(
+                            "adapter_metadata"
+                        ) != {}:
+                            errors.append(
+                                f"{label}: SAG-003 role manifests must remain dynamically loaded "
+                                "with empty wrapper_targets and adapter_metadata"
+                            )
+                        validate_sag003_provider_neutral_value(
+                            role_manifest, errors, f"{label}.role_manifest"
+                        )
+
+        if not sag003_non_empty_string_list(mapping.get("capability_tags")):
+            errors.append(f"{label}.capability_tags must be a non-empty string list")
+        elif len(mapping["capability_tags"]) != len(set(mapping["capability_tags"])):
+            errors.append(f"{label}.capability_tags must not contain duplicates")
+        if mapping.get("default_mutation_boundary") not in SAG003_MUTATION_BOUNDARIES:
+            errors.append(
+                f"{label}.default_mutation_boundary must be one of "
+                f"{sorted(SAG003_MUTATION_BOUNDARIES)}"
+            )
+        authority = sag003_exact_keys(
+            mapping.get("deterministic_authority"),
+            {"required", "surfaces", "agent_boundary"},
+            errors,
+            f"{label}.deterministic_authority",
+        )
+        if authority is not None:
+            if authority.get("required") is not True:
+                errors.append(
+                    f"{label}.deterministic_authority.required must be true"
+                )
+            if not sag003_non_empty_string_list(authority.get("surfaces")):
+                errors.append(
+                    f"{label}.deterministic_authority.surfaces must be a non-empty string list"
+                )
+            if not isinstance(authority.get("agent_boundary"), str) or not authority[
+                "agent_boundary"
+            ].strip():
+                errors.append(
+                    f"{label}.deterministic_authority.agent_boundary must be a non-empty string"
+                )
+        if mapping.get("execution_contract") != SAG003_EXECUTION_CONTRACT.as_posix():
+            errors.append(
+                f"{label}.execution_contract must be "
+                f"{SAG003_EXECUTION_CONTRACT.as_posix()!r}"
+            )
+
+    if set(capability_by_role) != SAG003_ROLE_IDS:
+        errors.append(
+            f"{SAG003_CAPABILITY_REGISTRY}: role_asset_ids must be exactly "
+            f"{sorted(SAG003_ROLE_IDS)}; actual={sorted(capability_by_role)}"
+        )
+
+    owners = sag003_active_role_binding_owners(root, errors)
+    for role_id in sorted(SAG003_ROLE_IDS):
+        matching_owners = owners[role_id]
+        if not matching_owners:
+            errors.append(
+                f"{SAG003_CAPABILITY_REGISTRY}: {role_id} is central-only and ownerless; "
+                "require at least one active owning-skill role_binding"
+            )
+    return capability_by_role, owners
+
+
+def validate_sag003_codex_profile(
+    root: Path,
+    profile: dict,
+    errors: list[str],
+    label: str,
+) -> None:
+    """Validate one static Codex projection without claiming it was loaded."""
+    profile_path = profile.get("profile_path")
+    relative = sag003_safe_relative_path(profile_path, errors, f"{label}.profile_path")
+    if relative is None:
+        return
+    expected_root = SAG003_CODEX_PROFILE_ROOT.parts
+    if PurePosixPath(profile_path).parts[: len(expected_root)] != expected_root:
+        errors.append(
+            f"{label}.profile_path must be under {SAG003_CODEX_PROFILE_ROOT.as_posix()}"
+        )
+        return
+    if not str(profile_path).endswith(".toml"):
+        errors.append(f"{label}.profile_path must name a TOML file")
+        return
+    file_path = root / relative
+    if not file_path.is_file():
+        errors.append(f"{label}.profile_path does not exist: {profile_path}")
+        return
+    exact_paths = {
+        item.relative_to(root).as_posix().casefold(): item.relative_to(root).as_posix()
+        for item in (root / Path(*expected_root)).rglob("*.toml")
+        if item.is_file()
+    }
+    exact_path = exact_paths.get(str(profile_path).casefold())
+    if exact_path != profile_path:
+        errors.append(
+            f"{label}.profile_path has an exact-case mismatch: {profile_path!r} -> {exact_path!r}"
+        )
+        return
+    try:
+        toml = tomllib.loads(file_path.read_text(encoding="utf-8"))
+    except (OSError, tomllib.TOMLDecodeError) as exc:
+        errors.append(f"{label}.profile_path is not valid Codex TOML: {exc}")
+        return
+    missing = sorted(SAG003_CODEX_PROFILE_KEYS - set(toml))
+    extra = sorted(repr(key) for key in set(toml) - SAG003_CODEX_PROFILE_KEYS)
+    if missing:
+        errors.append(f"{label}.profile_path is missing Codex profile fields {missing}")
+    if extra:
+        errors.append(f"{label}.profile_path has unsupported Codex profile fields {extra}")
+    for field in SAG003_CODEX_PROFILE_KEYS:
+        if not isinstance(toml.get(field), str) or not toml[field].strip():
+            errors.append(f"{label}.profile_path.{field} must be a non-empty string")
+    role_id = profile.get("role_asset_id")
+    expected_profile_name = (
+        SAG003_CODEX_PROFILE_NAMES.get(role_id) if isinstance(role_id, str) else None
+    )
+    if expected_profile_name is None:
+        errors.append(f"{label}.role_asset_id has no allowed Codex profile-name projection")
+    elif (
+        profile.get("profile_name") != expected_profile_name
+        or toml.get("name") != expected_profile_name
+    ):
+        errors.append(
+            f"{label}: profile_name and TOML name must equal the allowed Codex projection "
+            f"{expected_profile_name!r}"
+        )
+    for field in ("model", "model_reasoning_effort", "sandbox_mode"):
+        if toml.get(field) != profile.get(field):
+            errors.append(f"{label}: TOML {field} must match the static projection registry")
+    canonical_role_path = expected_role_binding_path(role_id) if isinstance(role_id, str) else ""
+    if canonical_role_path and canonical_role_path not in str(toml.get("developer_instructions", "")):
+        errors.append(f"{label}.profile_path must cite canonical role {canonical_role_path}")
+    instructions = str(toml.get("developer_instructions", "")).casefold()
+    if any(claim in instructions for claim in SAG003_STATIC_RUNTIME_CLAIMS):
+        errors.append(f"{label}.profile_path must not fabricate runtime-enabled or invoked evidence")
+
+
+def validate_sag003_provider_projection_registry(
+    capability_by_role: dict[str, dict],
+    errors: list[str],
+    *,
+    root: Path = ROOT,
+) -> list[str]:
+    """Validate static provider projections while retaining an unknown session state."""
+    registry = sag003_load_yaml_mapping(root, SAG003_PROVIDER_PROJECTION_REGISTRY, errors)
+    if registry is None:
+        return []
+    expected_fields = {
+        "schema_version",
+        "registry_id",
+        "source_of_truth",
+        "canonical_contract",
+        "provider_projections",
+        "current_session",
+        "package_projection",
+    }
+    sag003_exact_keys(registry, expected_fields, errors, str(SAG003_PROVIDER_PROJECTION_REGISTRY))
+    if registry.get("schema_version") != "1.0":
+        errors.append(f"{SAG003_PROVIDER_PROJECTION_REGISTRY}: schema_version must be '1.0'")
+    if not isinstance(registry.get("registry_id"), str) or not registry["registry_id"].strip():
+        errors.append(f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.registry_id must be a non-empty string")
+    if registry.get("source_of_truth") != "canonical":
+        errors.append(f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.source_of_truth must be 'canonical'")
+
+    canonical = sag003_exact_keys(
+        registry.get("canonical_contract"),
+        {"availability", "registry_path", "role_asset_ids", "delegation_intent"},
+        errors,
+        f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.canonical_contract",
+    )
+    if canonical is not None:
+        validate_sag003_provider_neutral_value(
+            canonical,
+            errors,
+            f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.canonical_contract",
+        )
+        if canonical.get("availability") != "canonical-contract-available":
+            errors.append("provider projection canonical_contract.availability must be canonical-contract-available")
+        if canonical.get("registry_path") != SAG003_CAPABILITY_REGISTRY.as_posix():
+            errors.append("provider projection canonical_contract.registry_path must bind the capability registry")
+        role_ids = canonical.get("role_asset_ids")
+        if not isinstance(role_ids, list) or len(role_ids) != len(set(role_ids)) or set(role_ids) != SAG003_ROLE_IDS:
+            errors.append("provider projection canonical_contract.role_asset_ids must be the exact five SAG-003 roles")
+        intent = sag003_exact_keys(
+            canonical.get("delegation_intent"),
+            {
+                "root_capability",
+                "delegated_capability",
+                "quality_posture",
+                "delegation",
+                "quota_sensitivity",
+                "fallback",
+            },
+            errors,
+            f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.canonical_contract.delegation_intent",
+        )
+        if intent is not None and intent != {
+            "root_capability": "frontier",
+            "delegated_capability": "balanced",
+            "quality_posture": "quality-first",
+            "delegation": "optional",
+            "quota_sensitivity": "quota-sensitive",
+            "fallback": "disclosed",
+        }:
+            errors.append(
+                "provider projection canonical_contract.delegation_intent must retain only the portable frontier/balanced/quality-first optional quota-sensitive disclosed intent"
+            )
+    if set(capability_by_role) != SAG003_ROLE_IDS:
+        errors.append("provider projection cannot be valid while the canonical capability set is incomplete")
+
+    projections = sag003_exact_keys(
+        registry.get("provider_projections"),
+        {"codex", "claude", "copilot"},
+        errors,
+        f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.provider_projections",
+    )
+    codex_paths: list[str] = []
+    if projections is not None:
+        codex = sag003_exact_keys(
+            projections.get("codex"),
+            {"configuration_state", "delegation_advisory", "profiles"},
+            errors,
+            f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.provider_projections.codex",
+        )
+        if codex is not None:
+            if codex.get("configuration_state") != "codex-runtime-configured":
+                errors.append("Codex projection must be statically configured, not runtime-enabled")
+            validate_upg004_codex_delegation_advisory(
+                codex.get("delegation_advisory"),
+                errors,
+                f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.provider_projections.codex.delegation_advisory",
+            )
+            profiles = codex.get("profiles")
+            if not isinstance(profiles, list):
+                errors.append("Codex projection profiles must be a list")
+            else:
+                seen_roles: set[str] = set()
+                seen_paths: set[str] = set()
+                profile_fields = {
+                    "role_asset_id",
+                    "profile_path",
+                    "profile_name",
+                    "model",
+                    "model_reasoning_effort",
+                    "sandbox_mode",
+                }
+                for index, profile in enumerate(profiles):
+                    label = f"Codex projection profiles[{index}]"
+                    mapping = sag003_exact_keys(profile, profile_fields, errors, label)
+                    if mapping is None:
+                        continue
+                    role_id = mapping.get("role_asset_id")
+                    if not isinstance(role_id, str) or role_id not in SAG003_ROLE_IDS:
+                        errors.append(f"{label}.role_asset_id must be one of the five SAG-003 roles")
+                    elif role_id in seen_roles:
+                        errors.append(f"{label}.role_asset_id duplicates {role_id!r}")
+                    else:
+                        seen_roles.add(role_id)
+                    for field in ("profile_path", "profile_name", "model", "model_reasoning_effort"):
+                        if not isinstance(mapping.get(field), str) or not mapping[field].strip():
+                            errors.append(f"{label}.{field} must be a non-empty string")
+                    if mapping.get("sandbox_mode") != SAG003_CODEX_SANDBOX_MODE:
+                        errors.append(
+                            f"{label}.sandbox_mode must remain read-only for SAG-003"
+                        )
+                    profile_path = mapping.get("profile_path")
+                    if isinstance(profile_path, str):
+                        if profile_path in seen_paths:
+                            errors.append(f"{label}.profile_path duplicates {profile_path!r}")
+                        else:
+                            seen_paths.add(profile_path)
+                            codex_paths.append(profile_path)
+                    validate_sag003_codex_profile(root, mapping, errors, label)
+                if seen_roles != SAG003_ROLE_IDS:
+                    errors.append("Codex projection profiles must cover the exact five SAG-003 roles")
+
+        for provider in ("claude", "copilot"):
+            mapping = sag003_exact_keys(
+                projections.get(provider),
+                {"configuration_state", "profiles", "deferred_reason"},
+                errors,
+                f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.provider_projections.{provider}",
+            )
+            if mapping is None:
+                continue
+            if mapping.get("configuration_state") != f"{provider}-runtime-deferred":
+                errors.append(f"{provider} projection must remain runtime-deferred, never unsupported")
+            if mapping.get("profiles") != []:
+                errors.append(f"{provider} deferred projection profiles must be an empty list")
+            if not isinstance(mapping.get("deferred_reason"), str) or not mapping[
+                "deferred_reason"
+            ].strip():
+                errors.append(f"{provider} deferred projection requires a non-empty deferred_reason")
+
+    current_session = sag003_exact_keys(
+        registry.get("current_session"),
+        {"availability", "invocation_evidence"},
+        errors,
+        f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.current_session",
+    )
+    if current_session is not None and current_session != {
+        "availability": "unknown",
+        "invocation_evidence": "not-claimed",
+    }:
+        errors.append("provider projection current_session must remain unknown with invocation not-claimed")
+
+    package_projection = sag003_exact_keys(
+        registry.get("package_projection"),
+        {"configured_provider", "profile_paths", "deferred_provider_runtime_paths"},
+        errors,
+        f"{SAG003_PROVIDER_PROJECTION_REGISTRY}.package_projection",
+    )
+    if package_projection is not None:
+        if package_projection.get("configured_provider") != "codex":
+            errors.append("package_projection.configured_provider must be codex")
+        paths = package_projection.get("profile_paths")
+        if not isinstance(paths, list) or len(paths) != len(set(paths)) or set(paths) != set(codex_paths):
+            errors.append("package_projection.profile_paths must exactly equal configured Codex paths")
+        if package_projection.get("deferred_provider_runtime_paths") != []:
+            errors.append("package_projection must not include Claude or Copilot deferred runtime paths")
+
+    def reject_static_claims(value: object, label: str) -> None:
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if isinstance(key, str) and key.casefold() in {"invoked", "runtime_enabled", "runtime-enabled"}:
+                    errors.append(f"{label}.{key}: static configuration cannot claim invocation or runtime enabled")
+                reject_static_claims(item, f"{label}.{key}")
+        elif isinstance(value, list):
+            for index, item in enumerate(value):
+                reject_static_claims(item, f"{label}[{index}]")
+        elif isinstance(value, str) and value.casefold() in SAG003_STATIC_RUNTIME_CLAIMS:
+            errors.append(f"{label}: static configuration cannot claim {value!r}")
+
+    reject_static_claims(registry, str(SAG003_PROVIDER_PROJECTION_REGISTRY))
+    return codex_paths
+
+
+def validate_sag003_upgrader_role_bindings(
+    owners: dict[str, list[tuple[str, Path]]],
+    errors: list[str],
+    *,
+    root: Path = ROOT,
+) -> int:
+    """Validate the upgrader's bounded-role plan against canonical skill bindings."""
+    manifest = sag003_load_yaml_mapping(root, SAG003_UPGRADER_ROLE_BINDINGS, errors)
+    if manifest is None:
+        return 0
+    expected_fields = {
+        "schema_version",
+        "binding_manifest_id",
+        "owning_skill",
+        "role_binding_authority",
+        "execution_contract",
+        "role_bindings",
+    }
+    sag003_exact_keys(manifest, expected_fields, errors, str(SAG003_UPGRADER_ROLE_BINDINGS))
+    if manifest.get("schema_version") != "1.0":
+        errors.append(f"{SAG003_UPGRADER_ROLE_BINDINGS}: schema_version must be '1.0'")
+    if not isinstance(manifest.get("binding_manifest_id"), str) or not manifest[
+        "binding_manifest_id"
+    ].strip():
+        errors.append(f"{SAG003_UPGRADER_ROLE_BINDINGS}.binding_manifest_id must be non-empty")
+    if manifest.get("owning_skill") != "ai-context-upgrader":
+        errors.append(f"{SAG003_UPGRADER_ROLE_BINDINGS}.owning_skill must be ai-context-upgrader")
+    if not isinstance(manifest.get("role_binding_authority"), str) or not manifest[
+        "role_binding_authority"
+    ].strip():
+        errors.append(f"{SAG003_UPGRADER_ROLE_BINDINGS}.role_binding_authority must be non-empty")
+    if manifest.get("execution_contract") != SAG003_EXECUTION_CONTRACT.as_posix():
+        errors.append(
+            f"{SAG003_UPGRADER_ROLE_BINDINGS}.execution_contract must be "
+            f"{SAG003_EXECUTION_CONTRACT.as_posix()!r}"
+        )
+
+    bindings = manifest.get("role_bindings")
+    if not isinstance(bindings, list):
+        errors.append(f"{SAG003_UPGRADER_ROLE_BINDINGS}.role_bindings must be a list")
+        return 0
+    binding_fields = {
+        "role_asset_id",
+        "role_path",
+        "recommendation",
+        "stage",
+        "inputs",
+        "outputs",
+        "mutation_boundary",
+        "concurrency",
+        "stop_and_escalation",
+        "direct_sequential_fallback",
+        "selection_guard",
+    }
+    seen_roles: set[str] = set()
+    for index, binding in enumerate(bindings):
+        label = f"{SAG003_UPGRADER_ROLE_BINDINGS}: role_bindings[{index}]"
+        mapping = sag003_exact_keys(binding, binding_fields, errors, label)
+        if mapping is None:
+            continue
+        role_id = mapping.get("role_asset_id")
+        if not isinstance(role_id, str) or role_id not in SAG003_ROLE_IDS:
+            errors.append(f"{label}.role_asset_id must be one of the five SAG-003 roles")
+            continue
+        if role_id in seen_roles:
+            errors.append(f"{label}.role_asset_id duplicates {role_id!r}")
+        seen_roles.add(role_id)
+        expected_path = expected_role_binding_path(role_id)
+        if mapping.get("role_path") != expected_path:
+            errors.append(f"{label}.role_path must be the exact canonical role path {expected_path}")
+        if mapping.get("recommendation") not in {"recommended", "optional"}:
+            errors.append(f"{label}.recommendation must be recommended or optional")
+        for field in ("stage", "inputs", "outputs", "stop_and_escalation", "selection_guard"):
+            if not sag003_non_empty_string_list(mapping.get(field)):
+                errors.append(f"{label}.{field} must be a non-empty string list")
+        if mapping.get("mutation_boundary") not in SAG003_MUTATION_BOUNDARIES:
+            errors.append(f"{label}.mutation_boundary must be a supported SAG-003 boundary")
+        concurrency = sag003_exact_keys(
+            mapping.get("concurrency"),
+            {"maximum_parallel_instances", "disjoint_scope_required"},
+            errors,
+            f"{label}.concurrency",
+        )
+        if concurrency is not None:
+            maximum = concurrency.get("maximum_parallel_instances")
+            if not isinstance(maximum, int) or isinstance(maximum, bool) or maximum < 1:
+                errors.append(f"{label}.concurrency.maximum_parallel_instances must be an integer >= 1")
+            if not isinstance(concurrency.get("disjoint_scope_required"), bool):
+                errors.append(f"{label}.concurrency.disjoint_scope_required must be boolean")
+        fallback = sag003_exact_keys(
+            mapping.get("direct_sequential_fallback"),
+            {"allowed", "same_contract_required"},
+            errors,
+            f"{label}.direct_sequential_fallback",
+        )
+        if fallback is not None and fallback != {
+            "allowed": True,
+            "same_contract_required": True,
+        }:
+            errors.append(f"{label}.direct_sequential_fallback must allow only same-contract direct fallback")
+
+        if role_id == "fixed-head-independent-auditor":
+            guard = " ".join(mapping.get("selection_guard", [])).casefold()
+            has_terminal_high_risk = "terminal" in guard and "high-risk" in guard
+            has_routine_profile_prohibition = (
+                "routine" in guard
+                and "profile" in guard
+                and any(token in guard for token in ("only", "not", "reject", "prohibit"))
+            )
+            if not has_terminal_high_risk or not has_routine_profile_prohibition:
+                errors.append(
+                    f"{label}.selection_guard must restrict the terminal auditor to explicit "
+                    "terminal/high-risk gates and reject routine task/profile presence"
+                )
+
+        owner_records = owners.get(role_id, [])
+        upgrader_records = [
+            record for record in owner_records if record[0] == "ai-context-upgrader"
+        ]
+        if upgrader_records != [
+            ("ai-context-upgrader", Path(".ai/assets/skills/ai-context-upgrader/skill.yaml"))
+        ]:
+            errors.append(
+                f"{label}: ai-context-upgrader must have exactly one active canonical role_binding; "
+                f"actual={[(owner, str(path)) for owner, path in owner_records]!r}"
+            )
+
+    if seen_roles != SAG003_ROLE_IDS:
+        errors.append(
+            f"{SAG003_UPGRADER_ROLE_BINDINGS}.role_bindings must cover the exact five SAG-003 roles"
+        )
+    return len(seen_roles)
+
+
+def validate_sag003_provider_role_projection_contract(
+    errors: list[str], *, root: Path = ROOT
+) -> int:
+    """Bind provider-neutral roles, static projections, and upgrader use without runtime claims."""
+    capability_by_role, owners = validate_sag003_capability_registry(errors, root=root)
+    validate_sag003_provider_projection_registry(capability_by_role, errors, root=root)
+    return validate_sag003_upgrader_role_bindings(owners, errors, root=root)
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.parse_args(argv)
+
     errors: list[str] = []
     files = tracked_files()
     indexes = active_indexes(files)
@@ -2863,6 +4588,7 @@ def main() -> int:
     validate_example_evidence_contract(errors)
     validate_example_placeholder_disposition(errors)
     validate_source_include_evidence(errors)
+    cli_routes = validate_cli_execution_routing(errors, root=ROOT)
     lesson_count = 0
     if (ROOT / SOURCE_GOVERNANCE_REGISTRY).is_file():
         lesson_count = validate_lesson_contract(files, errors)
@@ -2881,6 +4607,8 @@ def main() -> int:
     governance_terms = validate_governance_term_routing(errors)
     canonical_assets, skill_assets = validate_canonical_assets(errors)
     capability_mappings = validate_capability_profile(skill_assets, errors)
+    sag003_role_bindings = validate_sag003_provider_role_projection_contract(errors)
+    upg004_delegation_contracts = validate_upg004_delegation_run_contract(errors)
 
     for runtime_root in ACTIVE_RUNTIME_ROOTS:
         if not (ROOT / runtime_root).is_dir():
@@ -2914,7 +4642,9 @@ def main() -> int:
         f"{len(language_files)} language-policy files, {ownership_rules} owned rules, "
         f"{governance_terms} qualified governance terms, {canonical_assets} canonical manifests, "
         f"{capability_mappings} capability mappings, "
-        f"and {lesson_count} governed lessons."
+        f"{sag003_role_bindings} SAG-003 role bindings, "
+        f"{upg004_delegation_contracts} UPG-004 delegation contracts, "
+        f"{cli_routes} local CLI routes, and {lesson_count} governed lessons."
     )
     print(
         "Root bilingual entry ownership, links, and structural parity passed "

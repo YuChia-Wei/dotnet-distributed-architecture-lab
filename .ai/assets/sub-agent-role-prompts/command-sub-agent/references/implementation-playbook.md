@@ -26,4 +26,3 @@ Use this delegated sub-agent role when the main agent needs a worker focused on 
 ## Output Structure
 
 - `src/Application/UseCases/<Operation>/`
-

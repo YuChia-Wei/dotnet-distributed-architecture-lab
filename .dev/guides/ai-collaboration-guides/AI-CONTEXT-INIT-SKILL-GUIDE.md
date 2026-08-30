@@ -83,6 +83,17 @@ selection，不能弱化，也不能由環境變數取代。未選用的 routine
 Python prerequisite 的人類診斷與恢復說明見
 `PYTHON-PREREQUISITE-DIAGNOSTICS-GUIDE.zh-TW.md`。
 
+### 本機環境執行路由
+
+初始化必須確保 `.gitignore` 含有精確的 `/.dev/ai-context/local/` 規則，
+但不得建立 `.dev/ai-context/local/cli-execution-routing.yaml`。
+該檔案是每個 clone 各自擁有、ignored 且 unpackaged 的個人設定；只有在
+環境執行除錯找到可重用且已成功完成原操作的路由後，Agent 說明將保存的
+路徑、欄位與 create/merge/replace 動作，並取得使用者明確同意，才可寫入。
+使用者拒絕或未回覆時不得建立設定，且設定不得包含 credential 或 secret
+values。完整契約見
+`.ai/assets/shared/CLI-EXECUTION-ROUTING-CONTRACT.md`。
+
 ## 建議模型策略
 
 建議採用兩階段：

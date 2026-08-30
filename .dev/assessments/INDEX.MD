@@ -9,6 +9,7 @@
 
 | Assessment | Title | Type | Owner | Status | Subject Commit | Updated | Report |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| [`ASM-20260830-001`](ASM-20260830-001/assessment.yaml) | v0.14.0 upgrade checkpoint and performance-baseline verification | `ai-context-verification` | `ai-context-auditor` | `final` | `32140f52ffffd14dc235b310d386d6c1b3765e70` | `2026-08-30T20:21:40+08:00` | [report](ASM-20260830-001/report.md) |
 | [`ASM-20260813-008`](ASM-20260813-008/assessment.yaml) | Verified v0.13.0 developer-impact and architecture-expectation assessment | `ai-context-verification` | `ai-context-auditor` | `final` | `d97d8e8488bb8a87116f7d9f9b9089e1c2ed9010` | `2026-08-13T14:08:36+08:00` | [report](ASM-20260813-008/report.md) |
 | [`ASM-20260813-006`](ASM-20260813-006/assessment.yaml) | Independent v0.13.0 progressive-upgrade checkpoint verification | `ai-context-verification` | `ai-context-auditor` | `final` | `a3389994bf52f9265b7fe0a079ccd4041efc8997` | `2026-08-13T12:56:03+08:00` | [report](ASM-20260813-006/report.md) |
 | [`ASM-20260813-005`](ASM-20260813-005/assessment.yaml) | Independent v0.12.0 progressive-upgrade checkpoint verification | `ai-context-verification` | `ai-context-auditor` | `final` | `8437e178db96237edd7457bb48c531afb3bdae79` | `2026-08-13T11:33:19+08:00` | [report](ASM-20260813-005/report.md) |

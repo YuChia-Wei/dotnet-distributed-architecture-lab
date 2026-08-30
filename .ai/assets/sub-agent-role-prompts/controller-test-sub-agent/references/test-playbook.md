@@ -23,4 +23,3 @@ Use this delegated worker role when the main agent needs concrete controller or 
 
 - `bdd-gwt-test-designer` designs scenarios and assertion intent
 - this sub-agent implements controller-focused test code from that design
-

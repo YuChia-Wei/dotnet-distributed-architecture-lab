@@ -16,10 +16,10 @@
 - `base_branch`: `main`
 - `branch_segment`: `1`
 - `status`: `in_progress`
-- `current_phase`: `remediation-planning`
+- `current_phase`: `blocked-remediation-recovery`
 - `artifact_root`: `.dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade`
 - `created_at`: `2026-08-30T18:16:45+08:00`
-- `updated_at`: `2026-08-30T18:38:52+08:00`
+- `updated_at`: `2026-08-30T20:30:39+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#3`
@@ -66,6 +66,23 @@
 5. Run target validation and an independent `ai-context-auditor` post-upgrade assessment.
 6. Finalize target authorities, workflow evidence, and local commits without external integration actions.
 
+## v0.15.x Update-Cost Gate
+
+- v0.14 applied 188 automatic operations and took approximately 87 minutes on
+  Windows. Its engine rewrites the full journal and rescans the recovery surface
+  after each operation.
+- v0.15.0 declares 50 operations and replaces per-operation full-journal
+  snapshots with append-only digest-chained progress records plus cached Git
+  inspection.
+- v0.15.1 declares 6 operations and carries the byte-identical apply engine used
+  by v0.15.0.
+- Static admission is therefore `PASS-FOR-MEASURED-DRY-RUN`; no later apply may
+  start until the v0.14 finalization blocker is safely resolved.
+- The retained post-apply unrelated-change guard still cannot distinguish
+  required digest-bound target remediation from unrelated drift. This lifecycle
+  defect requires separate tracking even though the main performance mechanism
+  is materially improved.
+
 ## Rollback Boundary
 
 - Starting commit: `cedd590e4f3393b5cb3ad5a0be5f5663274bb584` on clean `main`, equal to `origin/main` after fetch.
@@ -75,13 +92,13 @@
 
 ## Resume Checkpoint
 
-- Last completed action: direct v0.13.0 to v0.15.1 planner rejected the unsupported source; the bounded v0.14.0 preconditions were committed, and the owner approved the exact target validation command required for finalization.
+- Last completed action: v0.14 applied all 188 automatic operations; target remediation and `ASM-20260830-001` were validated; the exact target gate passed; and the v0.15.x static performance preflight confirmed append-only progress with only 50 and 6 declared operations.
 - Current task: `AICU-001-supported-route-upgrade`.
-- Exact next action: commit the approved target validation profile, regenerate the conflict-free v0.13.0 to v0.14.0 plan, verify that its operation identity is unchanged, seal its owner decision, and apply from that clean commit.
-- Validation already completed: current target validator with effective rules; four ZIP sidecars; v0.15.1 annotated tag; direct-jump fail-closed result; v0.14.0 dry-run.
-- Git state: dedicated local workflow branch with workflow-start and v0.14 precondition checkpoints; the approved target validation profile is pending its own checkpoint commit.
+- Exact next action: obtain an owner decision before preserving the remediation patch, rolling back the unfinished v0.14 transaction, committing target validation preconditions, and regenerating the sealed v0.14 plan for a clean reapply.
+- Validation already completed: package identities and sidecars; direct-jump fail-closed result; 188-operation v0.14 apply; 33 target-owned tests; exact pre-finalization target gate; assessment and workflow validators; v0.15.x static operation and engine comparison.
+- Git state: dedicated local workflow branch at transaction-start commit `32140f52ffffd14dc235b310d386d6c1b3765e70`, with the v0.14 package delta, target remediation, assessment, and reports uncommitted under an unfinished transaction.
 - Branch history and checkpoint handoffs: segment 1 only; no push or merge handoff.
-- Blockers or unresolved decisions: none after applying the recorded existing CUST decisions; post-upgrade audit remains a required future gate.
+- Blockers or unresolved decisions: the v0.14 recorder rejects the target-owned remediation required by its own target validation contract. Rollback and reapply may repeat substantial v0.14 cost and therefore requires explicit owner approval. Detailed public follow-up Issue creation also requires explicit approval.
 
 ## Branch Lifecycle
 

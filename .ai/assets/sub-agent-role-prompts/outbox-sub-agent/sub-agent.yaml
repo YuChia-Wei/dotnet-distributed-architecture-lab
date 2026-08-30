@@ -40,5 +40,3 @@ examples:
   - ".ai/assets/sub-agent-role-prompts/outbox-sub-agent/references/implementation-playbook.md"
 human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
 status: "active"
-
-

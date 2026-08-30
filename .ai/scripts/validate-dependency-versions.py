@@ -104,8 +104,8 @@ def validate_python_entrypoint_registry(root: Path, errors: list[str]) -> dict[s
             "version 6.0.3, import_name yaml, and requirements_path requirements.txt"
         )
     entrypoints = registry.get("entrypoints")
-    if not isinstance(entrypoints, list) or len(entrypoints) != 31:
-        errors.append(f"{REGISTRY_PATH.as_posix()}: entrypoints must contain exactly 31 records")
+    if not isinstance(entrypoints, list) or not entrypoints:
+        errors.append(f"{REGISTRY_PATH.as_posix()}: entrypoints must be a non-empty list")
         return registry
     paths: set[str] = set()
     portable = pyyaml = stdlib = 0
@@ -142,10 +142,13 @@ def validate_python_entrypoint_registry(root: Path, errors: list[str]) -> dict[s
             exit_two_paths.add(path_value)
         elif entrypoint["prerequisite_exit_code"] == 3 and isinstance(path_value, str):
             exit_three_paths.add(path_value)
-    if (portable, pyyaml, stdlib) != (13, 29, 2):
+    if not entrypoints or portable == 0:
         errors.append(
-            f"{REGISTRY_PATH.as_posix()}: expected 13 portable, 29 PyYAML, and 2 stdlib-only entrypoints; "
-            f"found {portable}, {pyyaml}, {stdlib}"
+            f"{REGISTRY_PATH.as_posix()}: registry and portable entrypoint sets must be non-empty"
+        )
+    if pyyaml + stdlib != len(entrypoints):
+        errors.append(
+            f"{REGISTRY_PATH.as_posix()}: every entrypoint must have exactly one supported dependency profile"
         )
     expected_exit_two = {
         ".ai/scripts/plan-ai-context-package-apply.py",

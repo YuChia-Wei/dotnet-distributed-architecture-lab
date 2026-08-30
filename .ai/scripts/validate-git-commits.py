@@ -4,11 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import re
 import subprocess
 import sys
 from datetime import datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.dont_write_bytecode = True
@@ -22,6 +23,9 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY_PATH = ROOT / ".dev/standards/GIT-COMMIT-POLICY.yaml"
+SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+DEFAULT_SUBJECT_GRAMMAR_POLICY_ID = "git-commit-subject/v2"
 
 
 def git(*args: str, root: Path = ROOT) -> str:
@@ -60,11 +64,158 @@ def section_positions(message: str, required: list[str]) -> dict[str, int]:
     return positions
 
 
+def safe_repo_reference(value: object) -> bool:
+    """Accept a repository-relative path, optionally followed by a fragment."""
+    if not isinstance(value, str) or not value or "\\" in value:
+        return False
+    raw_path = value.split("#", 1)[0]
+    parts = raw_path.split("/")
+    path = PurePosixPath(raw_path)
+    return (
+        bool(raw_path)
+        and ":" not in raw_path
+        and all(parts)
+        and not path.is_absolute()
+        and all(part not in {"", ".", ".."} for part in path.parts)
+    )
+
+
+def policy_sha256(path: Path = POLICY_PATH) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def subject_grammar_adoption_from_provenance(provenance: object) -> dict[str, object] | None:
+    """Return the optional target adoption record without silently repairing it."""
+    if not isinstance(provenance, dict):
+        raise ValueError("target provenance must be a mapping")
+    adoptions = provenance.get("policy_adoptions")
+    if adoptions is None:
+        return None
+    if not isinstance(adoptions, dict):
+        raise ValueError("target provenance policy_adoptions must be a mapping")
+    adoption = adoptions.get("commit_subject_grammar")
+    if adoption is None:
+        return None
+    if not isinstance(adoption, dict):
+        raise ValueError(
+            "target provenance policy_adoptions.commit_subject_grammar must be a mapping"
+        )
+    return adoption
+
+
+def git_returncode(*args: str, root: Path) -> int:
+    try:
+        result = subprocess.run(
+            ["git", *args],
+            cwd=root,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError as exc:
+        raise ValueError(f"cannot inspect target Git history: {exc}") from exc
+    return result.returncode
+
+
+def validate_subject_grammar_adoption(
+    adoption: object,
+    policy: dict[str, object],
+    *,
+    root: Path,
+    incoming_policy_sha256: str,
+) -> dict[str, str]:
+    """Validate target-owned prospective grammar evidence before using it.
+
+    The history tip is an immutable boundary only when it still resolves and is
+    reachable from the target HEAD.  `adopted_at` is audit evidence; it never
+    selects a commit grammar.
+    """
+    if not isinstance(adoption, dict):
+        raise ValueError("commit subject grammar adoption must be a mapping")
+    required = {
+        "policy_id",
+        "legacy_history_tip",
+        "adopted_at",
+        "incoming_policy_sha256",
+        "decision_evidence",
+    }
+    if set(adoption) != required:
+        raise ValueError("commit subject grammar adoption fields are invalid")
+    expected_policy_id = str(
+        policy.get("subject_grammar_policy_id", DEFAULT_SUBJECT_GRAMMAR_POLICY_ID)
+    )
+    if adoption.get("policy_id") != expected_policy_id:
+        raise ValueError("commit subject grammar adoption policy_id differs")
+    tip = adoption.get("legacy_history_tip")
+    if not isinstance(tip, str) or not SHA_RE.fullmatch(tip):
+        raise ValueError("commit subject grammar adoption legacy_history_tip is invalid")
+    adopted_at = adoption.get("adopted_at")
+    if not isinstance(adopted_at, str):
+        raise ValueError("commit subject grammar adoption adopted_at is invalid")
+    try:
+        if datetime.fromisoformat(adopted_at).tzinfo is None:
+            raise ValueError
+    except ValueError as exc:
+        raise ValueError(
+            "commit subject grammar adoption adopted_at must use ISO 8601 with an offset"
+        ) from exc
+    declared_policy_sha = adoption.get("incoming_policy_sha256")
+    if (
+        not isinstance(declared_policy_sha, str)
+        or not SHA256_RE.fullmatch(declared_policy_sha)
+        or declared_policy_sha != incoming_policy_sha256
+    ):
+        raise ValueError("commit subject grammar adoption incoming policy SHA-256 differs")
+    if not safe_repo_reference(adoption.get("decision_evidence")):
+        raise ValueError("commit subject grammar adoption decision_evidence is invalid")
+    if git_returncode("rev-parse", "--verify", f"{tip}^{{commit}}", root=root) != 0:
+        raise ValueError("commit subject grammar adoption legacy_history_tip does not resolve")
+    if git_returncode("rev-parse", "--verify", "HEAD^{commit}", root=root) != 0:
+        raise ValueError("cannot inspect target HEAD for commit subject grammar adoption")
+    if git_returncode("merge-base", "--is-ancestor", tip, "HEAD", root=root) != 0:
+        raise ValueError(
+            "commit subject grammar adoption legacy_history_tip is not reachable from target HEAD"
+        )
+    return {
+        "policy_id": expected_policy_id,
+        "legacy_history_tip": tip,
+        "adopted_at": adopted_at,
+        "incoming_policy_sha256": declared_policy_sha,
+        "decision_evidence": str(adoption["decision_evidence"]),
+    }
+
+
+def commit_is_reachable_from_legacy_tip(
+    sha: str, adoption: dict[str, str], *, root: Path
+) -> bool:
+    result = git_returncode(
+        "merge-base",
+        "--is-ancestor",
+        sha,
+        adoption["legacy_history_tip"],
+        root=root,
+    )
+    if result == 0:
+        return True
+    if result == 1:
+        return False
+    raise ValueError(
+        "cannot inspect commit reachability for commit subject grammar adoption"
+    )
+
+
 def subject_pattern_for_commit(
     policy: dict[str, object],
     committed_at: datetime | None,
+    use_legacy_subject_grammar: bool | None = None,
 ) -> str:
-    """Select the prospective grammar or the explicit historical boundary."""
+    """Select an explicit target boundary or the source-history timestamp rule."""
+    if use_legacy_subject_grammar is not None:
+        return str(
+            policy["legacy_subject_pattern"]
+            if use_legacy_subject_grammar
+            else policy["subject_pattern"]
+        )
     effective_at = datetime.fromisoformat(str(policy["subject_pattern_effective_at"]))
     if committed_at is not None and committed_at < effective_at:
         return str(policy["legacy_subject_pattern"])
@@ -78,10 +229,16 @@ def validate_message(
     errors: list[str],
     workflow_id: str | None = None,
     committed_at: datetime | None = None,
+    use_legacy_subject_grammar: bool | None = None,
 ) -> None:
     lines = message.rstrip().splitlines()
     subject = lines[0] if lines else ""
-    if not re.fullmatch(subject_pattern_for_commit(policy, committed_at), subject):
+    if not re.fullmatch(
+        subject_pattern_for_commit(
+            policy, committed_at, use_legacy_subject_grammar
+        ),
+        subject,
+    ):
         errors.append(f"{sha}: subject does not match policy: {subject}")
 
     signature = policy["ai_signature"]
@@ -156,13 +313,40 @@ def validate_commits(
     policy: dict[str, object],
     workflow_id: str | None = None,
     root: Path = ROOT,
+    adoption_evidence: object | None = None,
+    incoming_policy_sha256: str | None = None,
 ) -> list[str]:
     errors: list[str] = []
+    adoption: dict[str, str] | None = None
+    if adoption_evidence is not None:
+        if incoming_policy_sha256 is None:
+            return [
+                "commit subject grammar adoption is invalid: "
+                "incoming policy SHA-256 is required"
+            ]
+        try:
+            adoption = validate_subject_grammar_adoption(
+                adoption_evidence,
+                policy,
+                root=root,
+                incoming_policy_sha256=incoming_policy_sha256,
+            )
+        except ValueError as exc:
+            return [f"commit subject grammar adoption is invalid: {exc}"]
     for sha in shas:
         message = git("show", "-s", "--format=%B", sha, root=root)
         committed_at = datetime.fromisoformat(
             git("show", "-s", "--format=%cI", sha, root=root).strip()
         )
+        try:
+            legacy_subject_grammar = (
+                commit_is_reachable_from_legacy_tip(sha, adoption, root=root)
+                if adoption is not None
+                else None
+            )
+        except ValueError as exc:
+            errors.append(f"{sha}: commit subject grammar adoption is invalid: {exc}")
+            continue
         validate_message(
             sha,
             message,
@@ -170,6 +354,7 @@ def validate_commits(
             errors,
             workflow_id,
             committed_at=committed_at,
+            use_legacy_subject_grammar=legacy_subject_grammar,
         )
     return errors
 
@@ -180,9 +365,37 @@ def main() -> int:
     selector.add_argument("--range", dest="commit_range", help="Git revision range, for example main..HEAD")
     selector.add_argument("--commit", help="Single commit-ish; defaults to HEAD")
     parser.add_argument("--workflow-id", help="Require workflow sections and this workflow identity")
+    adoption_source = parser.add_mutually_exclusive_group()
+    adoption_source.add_argument(
+        "--target-provenance",
+        type=Path,
+        help="Read policy_adoptions.commit_subject_grammar from this target provenance YAML",
+    )
+    adoption_source.add_argument(
+        "--adoption-evidence",
+        type=Path,
+        help="Read a standalone commit-subject-grammar adoption YAML mapping",
+    )
     args = parser.parse_args()
 
-    policy = yaml.safe_load(POLICY_PATH.read_text(encoding="utf-8"))
+    policy_bytes = POLICY_PATH.read_bytes()
+    policy = yaml.safe_load(policy_bytes.decode("utf-8"))
+    if not isinstance(policy, dict):
+        print(f"Git commit validation failed: {POLICY_PATH} must be a mapping")
+        return 1
+    adoption_evidence: object | None = None
+    try:
+        if args.target_provenance is not None:
+            adoption_evidence = subject_grammar_adoption_from_provenance(
+                yaml.safe_load(args.target_provenance.read_text(encoding="utf-8"))
+            )
+        elif args.adoption_evidence is not None:
+            adoption_evidence = yaml.safe_load(
+                args.adoption_evidence.read_text(encoding="utf-8")
+            )
+    except (OSError, UnicodeDecodeError, yaml.YAMLError, ValueError) as exc:
+        print(f"Git commit validation failed: cannot load adoption evidence: {exc}")
+        return 1
     shas = selected_commits(
         args.commit_range,
         args.commit,
@@ -191,7 +404,13 @@ def main() -> int:
     if not shas:
         print("Git commit validation failed: selected range contains no commits")
         return 1
-    errors = validate_commits(shas, policy, args.workflow_id)
+    errors = validate_commits(
+        shas,
+        policy,
+        args.workflow_id,
+        adoption_evidence=adoption_evidence,
+        incoming_policy_sha256=hashlib.sha256(policy_bytes).hexdigest(),
+    )
     if errors:
         print("Git commit validation failed:")
         for error in errors:

@@ -10,6 +10,8 @@ Reusable, technology-specific agent-facing context belongs under `.ai/assets/tec
 - contracts
 - [Provider-Neutral Role Execution Contract](ROLE-EXECUTION-CONTRACT.md)
 - [Product Source and Projection Contract](PRODUCT-SOURCE-PROJECTION-CONTRACT.md)
+- [CLI Execution Routing Contract](CLI-EXECUTION-ROUTING-CONTRACT.md)
+- `cli-execution-routing.schema.yaml` for ignored, per-clone CLI route bindings
 - prompt packages
 - reusable templates
 - examples

@@ -29,6 +29,8 @@ This is a thin current-runtime wrapper.
   - `.ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml`
   - `.ai/assets/skills/ai-context-init/templates/work-item-binding.schema.yaml`
   - `.ai/assets/skills/ai-context-init/templates/public-template-manifest.yaml`
+  - `.ai/assets/shared/CLI-EXECUTION-ROUTING-CONTRACT.md`
+  - `.ai/assets/shared/cli-execution-routing.schema.yaml`
   - `.ai/assets/sub-agent-role-prompts/context-translator/sub-agent.yaml`
   - `.ai/assets/skills/ai-context-upgrader/templates/provenance-template.yaml`
   - `.ai/assets/skills/ai-context-upgrader/templates/customizations-template.yaml`

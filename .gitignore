@@ -344,3 +344,4 @@ healthchecksdb
 /.dotnet_cli_home/
 .dotnet
 /.dev/validation.local.conf
+/.dev/ai-context/local/

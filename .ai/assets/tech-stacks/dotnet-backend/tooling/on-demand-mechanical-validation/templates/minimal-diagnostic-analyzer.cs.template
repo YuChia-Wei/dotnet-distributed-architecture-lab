@@ -1,0 +1,37 @@
+// Reference-only framework template. This file becomes target-owned after copy.
+// Replace every target-owned placeholder only after a bounded target selection.
+
+using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+namespace {{target-owned-analyzer-namespace}};
+
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public sealed class {{target-owned-analyzer-name}} : DiagnosticAnalyzer
+{
+    private static readonly DiagnosticDescriptor Rule = new(
+        "{{target-owned-diagnostic-id}}",
+        "{{target-owned-diagnostic-title}}",
+        "{{target-owned-diagnostic-message-format}}",
+        "{{target-owned-diagnostic-category}}",
+        {{target-owned-diagnostic-severity}},
+        isEnabledByDefault: false,
+        description: "{{target-owned-diagnostic-description}}");
+
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+        ImmutableArray.Create(Rule);
+
+    public override void Initialize(AnalysisContext context)
+    {
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+        context.EnableConcurrentExecution();
+        context.RegisterSymbolAction(AnalyzeNamedType, SymbolKind.NamedType);
+    }
+
+    private static void AnalyzeNamedType(SymbolAnalysisContext context)
+    {
+        // The target owner supplies the selected rule, exceptions, and report site.
+        _ = context;
+    }
+}

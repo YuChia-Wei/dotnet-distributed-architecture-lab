@@ -19,7 +19,7 @@ This index owns the file and directory catalog for `.ai/`. The `.ai/README.MD` f
 | --- | --- |
 | `assets/` | Canonical source root for reusable AI assets. |
 | `assets/README.MD` | Purpose and boundary of `.ai/assets/`. |
-| `assets/shared/` | Universal shared prompt fragments, rules, and supporting materials, including the canonical universal engineering-rule catalog. |
+| `assets/shared/` | Universal shared prompt fragments, rules, and supporting materials, including the CLI execution-routing contract/schema and the canonical universal engineering-rule catalog. |
 | `assets/tech-stacks/` | Tech-stack-specific reusable AI context. |
 | `assets/tech-stacks/dotnet-backend/` | .NET backend-only agent context, including the resolver-ready profile rule catalog and its Markdown owners. |
 | `assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml` | Resolver-ready exact projection for registered .NET backend rules. |

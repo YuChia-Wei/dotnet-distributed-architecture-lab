@@ -1,0 +1,165 @@
+schema_version: "1.0"
+contract_id: "dotnet-engineering-guardrails-provider-contract"
+contract_tier: "reference-only"
+technology_profile: "dotnet-backend"
+capability:
+  id: "dotnet.mechanical-validation"
+  provider_binding: "engineering-guardrails"
+  stable_identity_requirement: "The capability ID remains stable even when no provider package identity is known."
+  scope: "Optional target-selected mechanical validation for a bounded diagnostic subset."
+recommendation:
+  status: "official-recommended"
+  selection_independent: true
+  default_selection_state: "not-selected"
+  auto_install: "forbidden"
+  silent_selection: "forbidden"
+provider_package_identity:
+  status: "unknown"
+  nuget_id: null
+  version: null
+  feed: null
+  publication_contract: "unknown"
+  identity_evidence: null
+framework_delivery:
+  status: "real-provider-unavailable"
+  supplied_executable: false
+  supplied_readiness_receipt: false
+  supplied_compatibility_receipt: false
+  supplied_execution_receipt: false
+  reason: "This framework has no exact provider package identity, publication evidence, or fresh real-provider receipt."
+fallback:
+  status: "available"
+  ownership: "target-owned-after-copy"
+  materials:
+    - "templates/provider-selection.template.yaml"
+    - "templates/minimal-diagnostic-analyzer.cs.template"
+    - "templates/minimal-diagnostic-analyzer-test.cs.template"
+    - "templates/code-fix-decision.md"
+state_semantics:
+  default_state: "not-selected"
+  states:
+    declined:
+      recommendation:
+        status: "official-recommended"
+      selection:
+        status: "declined"
+        decision_evidence: "explicit-target-decision-required"
+      fallback:
+        status: "available"
+      readiness:
+        status: "not-claimed"
+        receipt: null
+      compatibility:
+        status: "not-claimed"
+        receipt: null
+      execution:
+        status: "not-claimed"
+        receipt: null
+    not-selected:
+      recommendation:
+        status: "official-recommended"
+      selection:
+        status: "not-selected"
+        auto_install: "forbidden"
+        silent_selection: "forbidden"
+      capability_gap:
+        status: "mechanical-validation-capability-not-selected"
+        fallback: "target-owned-templates-available"
+      readiness:
+        status: "not-claimed"
+        receipt: null
+      compatibility:
+        status: "not-claimed"
+        receipt: null
+      execution:
+        status: "not-claimed"
+        receipt: null
+    selected-unavailable:
+      recommendation:
+        status: "official-recommended"
+      selection:
+        status: "selected"
+      required_missing_evidence:
+        - "exact-provider-package-identity"
+        - "exact-provider-version"
+        - "provider-feed"
+        - "fresh-readiness-receipt"
+        - "compatibility-receipt"
+      readiness:
+        status: "unproven"
+        receipt: null
+      compatibility:
+        status: "unproven"
+        receipt: null
+      execution:
+        status: "prohibited"
+        receipt: null
+    synthetic-readiness-proven:
+      recommendation:
+        status: "official-recommended"
+      selection:
+        status: "selected"
+      readiness:
+        status: "synthetic-proven"
+        proof_scope: "schema-transition-only"
+        receipt_type: "engineering-guardrails-provider-readiness-receipt"
+        receipt_digest_required: true
+        receipt: null
+      compatibility:
+        status: "unproven"
+        receipt: null
+      execution:
+        status: "rejected"
+        required_real_receipt: true
+        receipt: null
+evidence_receipt_contracts:
+  readiness:
+    receipt_type: "engineering-guardrails-provider-readiness-receipt"
+    digest:
+      algorithm: "sha256"
+      field: "receipt_sha256"
+      required: true
+    required_fields:
+      - "receipt_type"
+      - "capability_id"
+      - "provider_package_identity"
+      - "observed_at"
+      - "fresh_until"
+      - "outcome"
+      - "receipt_sha256"
+  compatibility:
+    receipt_type: "engineering-guardrails-provider-compatibility-receipt"
+    digest:
+      algorithm: "sha256"
+      field: "receipt_sha256"
+      required: true
+    required_fields:
+      - "receipt_type"
+      - "capability_id"
+      - "provider_package_identity"
+      - "target_sdk"
+      - "target_framework"
+      - "roslyn_api_surface"
+      - "outcome"
+      - "receipt_sha256"
+  execution:
+    receipt_type: "engineering-guardrails-provider-execution-receipt"
+    digest:
+      algorithm: "sha256"
+      field: "receipt_sha256"
+      required: true
+    required_fields:
+      - "receipt_type"
+      - "capability_id"
+      - "provider_package_identity"
+      - "target_commit"
+      - "command"
+      - "outcome"
+      - "evidence_location"
+      - "receipt_sha256"
+prohibitions:
+  - "The framework must not infer selection from recommendation or reference-file presence."
+  - "The framework must not install or select a provider automatically."
+  - "A synthetic readiness receipt must not prove a real-provider execution claim."
+  - "Compatibility, readiness, and execution receipts must remain separately typed and digested."
+  - "The framework must not claim a NuGet identity, version, feed, publication contract, compatibility result, or execution result without exact target evidence."

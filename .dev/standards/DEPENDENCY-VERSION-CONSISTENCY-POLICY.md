@@ -65,16 +65,12 @@ generalized into a macOS claim.
 
 ## Change Procedure
 
-A dependency or runtime-version update must change every governed mirror,
-workflow route, or managed project declaration in one coherent change and pass:
-
-```text
-python .ai/scripts/tests/test_dependency_version_consistency.py -v
-python .ai/scripts/validate-dependency-versions.py
-python .ai/scripts/tests/test_fail_closed_validation.py -v
-python .ai/scripts/validate-shell-assets.py
-bash .ai/scripts/check-all.sh --quick
-```
+A source-repository dependency or runtime-version update must change every
+governed mirror, workflow route, or managed project declaration in one coherent
+change and pass the dependency-consistency, fail-closed, shell-asset, and quick
+aggregate checks selected by the source validation registry. Those source test
+commands are not portable package entrypoints; extracted candidates use their
+checksum-governed incoming validator instead.
 
 Online freshness or vulnerability results may inform the selected versions, but
 they do not replace these deterministic checks.

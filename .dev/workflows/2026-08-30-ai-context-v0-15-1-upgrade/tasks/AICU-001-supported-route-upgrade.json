@@ -8,11 +8,11 @@
   "owner_skill": "ai-context-governance",
   "status": "in_progress",
   "created_at": "2026-08-30T18:16:45+08:00",
-  "updated_at": "2026-08-30T18:38:52+08:00",
+  "updated_at": "2026-08-30T20:30:39+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "GPT-5",
   "reasoning_effort": "unspecified",
-  "finding_ids": ["AICU-DIRECT-JUMP-001", "AICU-V014-RECONCILIATION-001"],
+  "finding_ids": ["AICU-DIRECT-JUMP-001", "AICU-V014-RECONCILIATION-001", "AICU-V014-RECEIPT-CYCLE-001", "AICU-V015-PERFORMANCE-001"],
   "scope": {
     "target": "Upgrade the installed AI collaboration framework through supported package edges to v0.15.1.",
     "files": [".ai/**", ".agents/**", ".claude/**", ".codex/agents/**", ".dev/ai-context/**", ".dev/standards/**", ".dev/guides/**"],
@@ -22,15 +22,15 @@
   "execution": {
     "steps": ["Record direct-jump rejection", "Apply v0.14.0", "Apply v0.15.0", "Apply v0.15.1"],
     "validation": ["Package payload validation", "Plan and receipt validation", "Target AI-context gate"],
-    "last_completed_step": "Validated direct-jump rejection, committed the bounded v0.14 preconditions, and obtained owner approval for the exact executable target validation profile.",
-    "next_action": "Commit the approved validation profile, regenerate the conflict-free v0.14.0 plan, verify operation identity, seal the owner decision, then apply it."
+    "last_completed_step": "Applied all 188 v0.14 operations, validated the target overlay and ASM-20260830-001, produced an exact passing receipt candidate, recorded the recorder rejection, and completed the v0.15.x static update-cost preflight.",
+    "next_action": "Wait for owner approval before rolling back and regenerating the v0.14 transaction with target validation preconditions committed before apply."
   },
   "results": {
-    "summary": "",
-    "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
-    "residual_risk": "Later edges and final target authority regeneration remain pending.",
+    "summary": "v0.15.x has a materially improved append-only progress engine and smaller edges, but the unfinished v0.14 transaction cannot bind its passing receipt after required target remediation.",
+    "files_changed": [".ai/**", ".agents/**", ".claude/**", ".codex/agents/**", ".dev/ai-context/tooling/**", ".dev/assessments/ASM-20260830-001/**", ".dev/workflows/2026-08-30-ai-context-v0-15-1-upgrade/**"],
+    "tests_run": ["33 target-owned unittest checks", "pre-finalization target AI-context gate", "assessment artifact validator", "workflow artifact validator"],
+    "finding_status": "blocked",
+    "residual_risk": "Safe recovery may repeat a significant portion of the 87-minute v0.14 apply; v0.15.x measured apply and final authority regeneration remain pending.",
     "follow_up_needed": true
   }
 }

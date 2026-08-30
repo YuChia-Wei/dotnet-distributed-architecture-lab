@@ -1,0 +1,138 @@
+schema_version: "1.0"
+document: "delegation-run-record.yaml"
+source_of_truth: "workflow-execution-evidence"
+required:
+  - schema_version
+  - delegation_run_id
+  - selection
+  - execution_support
+  - canonical_stage_ids
+  - execution_path
+  - fallbacks
+  - terminal_independent_audit
+properties:
+  schema_version:
+    const: "1.0"
+  delegation_run_id: stable-run-id
+  selection:
+    required:
+      - mode
+      - max_concurrent_workers
+      - decision_source
+      - owner_choice_evidence
+      - eligible_role_asset_ids
+      - terminal_independent_auditor_auto_selected
+      - prompt
+      - resume
+    supported_modes:
+      - "none"
+      - "analysis-only"
+      - "full-recommended"
+    prompt:
+      required:
+        - count
+        - disposition
+    resume:
+      required:
+        - reuse_existing_selection
+        - repeat_prompt
+    mode_semantics:
+      none:
+        eligible_role_asset_ids: []
+        max_concurrent_workers: 0
+        allowed_execution_path_kinds:
+          - "root-sequential"
+        terminal_independent_auditor_auto_selected: false
+      analysis-only:
+        eligible_role_asset_ids:
+          - "semantic-governance-analyst"
+          - "fixed-head-independent-auditor"
+        max_concurrent_workers: 2
+        allowed_execution_path_kinds:
+          - "delegation-evaluation"
+          - "root-sequential"
+        terminal_independent_auditor_auto_selected: false
+        root_deterministic_authorities:
+          - "mechanical-evidence"
+          - "checksum"
+          - "copy"
+          - "planner"
+          - "apply"
+          - "receipt"
+          - "build"
+          - "test"
+          - "git"
+      full-recommended:
+        eligible_role_asset_ids:
+          - "mechanical-evidence-worker"
+          - "reconciliation-worker"
+          - "semantic-governance-analyst"
+          - "evidence-report-synthesizer"
+          - "fixed-head-independent-auditor"
+        max_concurrent_workers: 2
+        allowed_execution_path_kinds:
+          - "delegation-evaluation"
+          - "root-sequential"
+        terminal_independent_auditor_auto_selected: false
+  execution_support:
+    required:
+      - state
+      - evidence_refs
+    states:
+      - "unknown"
+      - "verified-available"
+      - "verified-unavailable"
+  canonical_stage_ids:
+    ordered_const:
+      - "route-and-evidence-discovery"
+      - "three-way-classification-and-reconciliation"
+      - "semantic-customization-and-governance-analysis"
+      - "plan-report-handoff-or-feedback-synthesis"
+      - "terminal-fixed-head-independent-audit"
+  execution_path:
+    required:
+      - kind
+      - canonical_stage_ids
+    kinds:
+      - "delegation-evaluation"
+      - "root-sequential"
+  fallbacks:
+    type: ordered-list
+    record_required:
+      - scope
+      - disposition
+      - trigger
+      - requested
+      - observed
+      - selected
+      - owner_consent
+      - authorization_evidence
+      - evidence_refs
+      - canonical_stage_ids
+  terminal_independent_audit:
+    required:
+      - required
+      - selection_basis
+      - status
+      - subject_commit
+      - independence
+      - evidence_refs
+    statuses:
+      - "pending"
+      - "passed"
+      - "failed"
+      - "blocked"
+invariants:
+  - per-independent-run-selection
+  - explicit-choice-suppresses-prompt
+  - prompt-count-is-at-most-one
+  - resume-never-repeats-prompt
+  - canonical-stage-order-is-identical-across-paths
+  - mode-eligibility-and-concurrency-are-exact
+  - analysis-only-mechanical-authority-remains-root-driven
+  - terminal-auditor-is-never-automatic
+  - unknown-support-does-not-prove-invocation
+  - fallback-requires-exact-request-observed-selected-owner-consent-and-evidence
+  - terminal-audit-is-explicit-and-fail-closed
+  - record-never-enters-target-provenance
+additional_properties: false

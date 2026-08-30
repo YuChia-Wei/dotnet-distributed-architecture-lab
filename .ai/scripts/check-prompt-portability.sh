@@ -93,4 +93,3 @@ fi
 echo -e "${RED}✗ Prompt portability check failed (${ERRORS} group(s) failed)${NC}"
 echo -e "${YELLOW}Tip:${NC} Update prompts or expand placeholders in .ai/assets/shared/PROMPT-PORTABILITY-RULES.md"
 exit 1
-

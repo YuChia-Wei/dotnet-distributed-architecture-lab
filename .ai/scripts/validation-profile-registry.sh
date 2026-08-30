@@ -93,7 +93,7 @@ register_check selected-git-commits \
     "Selected Git Commit Messages" required \
     "governance,git" "pr release nightly-full" \
     ".git" workflow-artifacts "python>=3.11 git" 30 cpu no-reuse source \
-    "python .ai/scripts/validate-git-commits.py --range COMMIT_RANGE" commit-range
+    "python .ai/scripts/validate-git-commits.py --range COMMIT_RANGE [--workflow-id WORKFLOW_ID]" commit-range
 register_check ai-context-navigation \
     "AI Context Navigation and Runtime Contracts" required \
     "context,navigation" "fast pr release nightly-full" \
@@ -144,6 +144,21 @@ register_check package-smoke \
     "package,smoke" "pr release nightly-full" \
     ".ai/scripts/ai_context_package.py .ai/scripts/tests/test_ai_context_package_smoke.py .ai/distribution" package-apply "python>=3.11 git" 120 io reuse-by-fingerprint source \
     "python .ai/scripts/tests/test_ai_context_package_smoke.py -v" source-release
+register_check upgrade-route-package-projection \
+    "AI Context Upgrade Route Package Projection" required \
+    "package,upgrade-route,tests" "fast pr release nightly-full" \
+    ".ai/distribution/profiles/dotnet-backend.yaml .ai/assets/skills/ai-context-upgrader .ai/assets/skills/ai-context-governance .ai/assets/shared .ai/scripts/ai_context_package.py .ai/scripts/ai_context_upgrade_routes.py .ai/scripts/plan-ai-context-upgrade.py .ai/scripts/tests/test_ai_context_packaging.py" '' "python>=3.11 git" 30 io reuse-by-input source \
+    "python .ai/scripts/tests/test_ai_context_packaging.py UpgradeRoutePackageProjectionGwtTests -v" always
+register_check provider-role-package-projection \
+    "Provider-Neutral Role Package Projection" required \
+    "package,provider-role,tests" "fast pr release nightly-full" \
+    ".ai/distribution/profiles/dotnet-backend.yaml .ai/assets/shared/provider-neutral-capability-registry.yaml .ai/assets/shared/provider-neutral-capability-registry.schema.yaml .ai/assets/shared/provider-projection-registry.yaml .ai/assets/shared/provider-projection-registry.schema.yaml .ai/assets/skills/ai-context-upgrader/references/role-execution-bindings.yaml .ai/assets/skills/ai-context-upgrader/references/role-execution-bindings.schema.yaml .ai/assets/sub-agent-role-prompts .codex/agents .ai/scripts/ai_context_package.py .ai/scripts/tests/test_ai_context_packaging.py" '' "python>=3.11 git" 30 io reuse-by-input source \
+    "python .ai/scripts/tests/test_ai_context_packaging.py ProviderRolePackageProjectionGwtTests -v" always
+register_check multi-hop-upgrade-transaction \
+    "AI Context Multi-Hop Upgrade Transaction GWT Tests" required \
+    "upgrade,transaction,tests" "fast pr release nightly-full" \
+    ".ai/assets/skills/ai-context-upgrader .ai/distribution/profiles/dotnet-backend.yaml .ai/scripts/ai_context_multi_hop_upgrade.py .ai/scripts/ai_context_package_apply.py .ai/scripts/ai_context_target_provenance.py .ai/scripts/ai_context_upgrade_routes.py .ai/scripts/tests/test_ai_context_multi_hop_upgrade.py" '' "python>=3.11 git" 90 io reuse-by-input portable \
+    "python .ai/scripts/tests/test_ai_context_multi_hop_upgrade.py -v" always
 register_check dependency-versions \
     "Offline Dependency And Version Consistency" required \
     "dependency,metadata" "fast pr release nightly-full" \
@@ -182,8 +197,18 @@ register_check profile-registry-contract \
 register_check validation-evidence-contract \
     "Validation Execution Evidence Contract" required \
     "runner,evidence,tests" "fast pr release nightly-full" \
-    ".ai/scripts/validation-evidence.py .ai/scripts/tests/test_validation_evidence.py .ai/scripts/check-all.sh" profile-registry-contract "python>=3.11" 30 cpu reuse-by-input source \
+    ".ai/scripts/validation-evidence.py .ai/scripts/tests/test_validation_evidence.py .ai/scripts/check-all.sh" validation-process-supervisor-contract "python>=3.11" 60 cpu reuse-by-input source \
+    "python .ai/scripts/tests/test_validation_evidence.py ValidationEvidenceRoutineContractGwtTests -v" always
+register_check validation-evidence-exhaustive-contract \
+    "Validation Execution Evidence Exhaustive Contract" required \
+    "runner,evidence,tests" "release nightly-full" \
+    ".ai/scripts/validation-evidence.py .ai/scripts/tests/test_validation_evidence.py .ai/scripts/check-all.sh" validation-evidence-contract "python>=3.11" 180 cpu no-reuse source \
     "python .ai/scripts/tests/test_validation_evidence.py -v" always
+register_check validation-process-supervisor-contract \
+    "Validation Process Supervisor Contract" required \
+    "runner,process-tree,tests" "fast pr release nightly-full" \
+    ".ai/scripts/validation_process_supervisor.py .ai/scripts/tests/test_validation_process_supervisor.py" profile-registry-contract "python>=3.11" 30 cpu reuse-by-input portable \
+    "python .ai/scripts/tests/test_validation_process_supervisor.py -v" always
 register_check immutable-history-validation-contract \
     "Immutable History Validation Contract" required \
     "governance,history,tests" "pr release nightly-full" \
@@ -224,6 +249,11 @@ register_check sdk-free-framework-contract \
     "portability,release" "fast pr release nightly-full" \
     ".ai/scripts/tests/test_sdk_free_framework_contract.py .ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation .github/workflows/portable-gates.yml" '' "python>=3.11 git" 30 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_sdk_free_framework_contract.py -v" source-release
+register_check engineering-guardrails-provider-contract \
+    "Engineering Guardrails Provider Contract" required \
+    "dotnet,provider-contract,portability,tests" "fast pr release nightly-full" \
+    ".ai/scripts/tests/test_engineering_guardrails_provider_contract.py .ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation" '' "python>=3.11" 30 cpu reuse-by-input source \
+    "python .ai/scripts/tests/test_engineering_guardrails_provider_contract.py -v" source-release
 register_check source-version-governance-tests \
     "AI Context Version Governance Fail-Closed Tests" required \
     "release,tests" "release nightly-full" \
@@ -294,6 +324,16 @@ register_check source-governance-manifest \
     "governance,source" "fast pr release nightly-full" \
     ".ai/distribution/governance-checks.yaml .ai/distribution/repository-identity-policy.yaml .ai/scripts/validate-source-governance.py .ai/scripts/validate-repository-identity.py" '' "python>=3.11 git" 60 cpu reuse-by-input source \
     "python .ai/scripts/validate-source-governance.py" source-governance
+register_check terminal-issue-closure \
+    "Terminal Issue Closure Contract" required \
+    "governance,source,closeout" "fast pr release nightly-full" \
+    ".dev/backlog/providers/github.yaml .dev/standards/GITHUB-TERMINAL-ISSUE-CLOSURE-POLICY.md .dev/workflows/*/evidence/terminal-issue-closure*.yaml .ai/scripts/validate-terminal-issue-closure.py" source-governance-manifest "python>=3.11" 60 cpu reuse-by-input source \
+    "python .ai/scripts/validate-terminal-issue-closure.py" source-governance
+register_check terminal-issue-closure-tests \
+    "Terminal Issue Closure Fail-Closed Tests" required \
+    "governance,source,closeout,tests" "fast pr release nightly-full" \
+    ".github/pull_request_template.md .ai/scripts/tests/test_terminal_issue_closure.py .ai/scripts/tests/fixtures/terminal-issue-closure .ai/distribution/profiles/dotnet-backend.yaml" terminal-issue-closure "python>=3.11" 60 cpu reuse-by-input source \
+    "python .ai/scripts/tests/test_terminal_issue_closure.py -v" source-governance
 register_check repository-identity-tests \
     "Repository Identity Drift Fail-Closed Tests" required \
     "governance,source,tests" "fast pr release nightly-full" \

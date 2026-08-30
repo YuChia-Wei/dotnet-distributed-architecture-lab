@@ -12,7 +12,10 @@ Return these sections in order:
 5. **Migration plan**: ordered actions, requested decisions, validation, and rollback boundary.
 6. **Result**: applied paths, validation evidence, updated manifest and
    effective-rule/packet state, loaded-rule evidence, remaining overrides, and
-   deferred items.
+   deferred items. For a completed source-version advancement, include the
+   sealed transaction ID, packet/decision/incoming-validation identities,
+   separately routed target-validation receipt, exact candidate-authority
+   digests, and terminal-receipt digest.
 
 The semantic reconciliation table includes relationship, incoming equivalence,
 proposed disposition, owner reconciliation, active-context audit,
@@ -25,3 +28,9 @@ publication rolls back on in-process failure; it does not claim cross-file
 crash atomicity, and any stale or mixed crash residue must fail closed. A
 read-only planning request stops before application and clearly states that no
 files were changed.
+
+Do not report a target grammar adoption as complete merely because its proposed
+timestamp exists. Report the policy ID, incoming-policy digest, decision
+evidence, legacy-history tip, reachability result, and whether the provenance
+record was actually finalized. Rejected or stale remediation evidence remains a
+decision/rollback result, not completion.

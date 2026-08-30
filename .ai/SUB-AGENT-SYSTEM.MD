@@ -12,6 +12,10 @@ runtime execution contract.
 - Delegated sub-agent role contract: `.ai/assets/sub-agent-role-prompts/<role-id>/sub-agent.yaml`
 - Provider-neutral execution record and evidence rules:
   `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`
+- Provider-neutral capability contracts:
+  `.ai/assets/shared/provider-neutral-capability-registry.yaml`
+- Provider projection status:
+  `.ai/assets/shared/provider-projection-registry.yaml`
 - Human-facing taxonomy guide: `.dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md`
 - Workflow discovery: `.dev/workflows/<workflow-id>/workflow.yaml`
 - Workflow artifact contract: `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`
@@ -26,7 +30,8 @@ infer, create, or change a binding.
 
 ## Static Projection and Selection
 
-SAG-001 projects the 18 active role contracts below. A row establishes only
+SAG-001 projects the active role contracts below, including SAG-003 reusable
+capability rows. A row establishes only
 that an active canonical binding makes the role **statically-reachable** for
 the stated applicability. It does not prove that the role applies to a
 particular task, that it was directly applied, that a runtime delegation was
@@ -79,6 +84,14 @@ session. Callers must confirm runtime availability and resolved model before
 delegating. They must not add adapters, packages, or promoted roles merely to
 make delegation appear available.
 
+SAG-003 generic capability roles remain dynamically loaded canonical contracts.
+Their separate provider projection registry distinguishes a canonical contract,
+static Codex configuration, deferred Claude and Copilot projections, and
+unknown current-session availability. A configured profile is not evidence of
+runtime reachability or a genuine invocation. The existing `context-translator`
+adapter family remains specialized and does not establish generic capability
+support for any provider.
+
 ## Runtime Execution
 
 For each applicable binding, the owning skill produces the provider-neutral
@@ -123,6 +136,11 @@ remain outside this derived projection and this execution contract.
 | `controller-test-sub-agent` | `slice-implementer` | `conditional` | The selected slice includes concrete controller or API test implementation; a test-only slice uses generic as its one primary execution mode, while BDD design and test execution remain separate. |
 | `reactor-test-sub-agent` | `slice-implementer` | `conditional` | The selected slice includes concrete reactor test implementation; a test-only slice uses generic as its one primary execution mode, while BDD design and test execution remain separate. |
 | `context-translator` | `ai-context-init` | `conditional` | A derived Traditional Chinese translation is requested after its English source is final and a caller-verified runtime can honor the role's low-cost model precondition. |
+| `mechanical-evidence-worker` | `ai-context-upgrader` | `conditional` | The selected upgrade stage needs bounded deterministic evidence collection or verification preparation; deterministic CLI and validators remain authority. |
+| `reconciliation-worker` | `ai-context-upgrader` | `conditional` | The selected upgrade stage needs a bounded base/target/incoming or expected/actual reconciliation projection without an owner-sensitive semantic decision. |
+| `semantic-governance-analyst` | `ai-context-upgrader` | `conditional` | The selected upgrade stage needs read-only semantic analysis of governance, policy, customization, or target-owned truth. |
+| `evidence-report-synthesizer` | `ai-context-upgrader` | `conditional` | The selected upgrade stage needs a bounded report, assessment, handoff, or feedback synthesis from verified evidence only. |
+| `fixed-head-independent-auditor` | `ai-context-upgrader` | `conditional` | An explicitly selected terminal or high-risk gate requires a read-only audit against one fixed clean commit. |
 | `code-review-sub-agent` | `code-reviewer` | `primary` | A .NET code-review scope is selected. |
 | `aggregate-code-review-sub-agent` | `code-reviewer` | `conditional` | The selected code-review scope includes aggregate, event-sourcing, or domain-invariant behavior. |
 | `controller-code-review-sub-agent` | `code-reviewer` | `conditional` | The selected code-review scope includes an ASP.NET Core controller, endpoint, DTO boundary, or HTTP semantics. |
@@ -142,9 +160,13 @@ only. It does not own concrete test implementation. The four test role
 contracts above are `slice-implementer` bindings; test execution remains a
 separate target-owned capability and is not a sub-agent binding in this table.
 
-## Non-Active Roles
+## Reusable Role Boundary
 
-A reconciler role is not active in this repository because `.ai/assets/sub-agent-role-prompts/reconciler-sub-agent/` does not exist. Do not route work to a reconciler sub-agent until a separate workflow creates and validates that canonical role prompt.
+The SAG-003 rows are reusable capability contracts, not upgrade-only runtime
+agents. `ai-context-upgrader` is their initial current binding. The capability
+registry itself never declares ownership or applicability; additional skills may
+add reconciled explicit canonical `role_bindings` later and retain their own
+execution evidence.
 
 ## Delegation Rules
 

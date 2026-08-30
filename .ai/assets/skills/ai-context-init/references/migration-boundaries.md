@@ -15,6 +15,7 @@ Usually keep these areas as reusable collaboration structure:
 - `.dev/adr/` governance files: `README.md`, `INDEX.md`, `ADR-TEMPLATE.md`, and `WHEN-TO-CREATE-ADR.MD`
 - `.dev/workflows/README.MD` workflow artifact contract
 - the public `AGENTS.md` collaboration seed, followed by an evidence-backed target rewrite
+- the `/.dev/ai-context/local/` ignore rule, while keeping every ignored local binding outside copied or tracked truth
 - `CLAUDE.md` thin Claude Code adapter that imports `@AGENTS.md`
 - root README template shape, while rewriting repository identity and product-specific sections
 
@@ -95,6 +96,7 @@ Before finishing a sync:
 
 - confirm root README files describe the target repo rather than the source template repo
 - confirm `AGENTS.md` stack and directory rules match the target repo
+- confirm `.gitignore` covers `/.dev/ai-context/local/` and no personal execution-routing binding is tracked or packaged
 - when a Traditional Chinese guide is requested, confirm the low-cost `context-translator` ran only after English finalization and structural parity passed
 - confirm `CLAUDE.md` still imports `@AGENTS.md` and contains no copied rule body
 - confirm `.dev/ARCHITECTURE.md` and `.dev/requirement/TECH-STACK-REQUIREMENTS.MD` are rebuilt from target facts

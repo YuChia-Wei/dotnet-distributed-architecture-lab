@@ -1,0 +1,127 @@
+template_metadata:
+  template_id: "upgrade-route-matrix"
+  template_version: "1.0.0"
+  created_at: "2026-08-20T00:00:00+08:00"
+  updated_at: "2026-08-20T00:00:00+08:00"
+
+# This is a source-framework route inventory, not a target plan. Replace every
+# placeholder with exact release evidence before a resolver may consume it.
+schema_version: "1.0"
+matrix_id: "upgrade-route-matrix-<target-version>"
+target:
+  version: "v0.0.0"
+  release_id: "REL-v0.0.0"
+  commit: "<40-character-lowercase-git-sha>"
+  manifest:
+    asset_id: "target-release-manifest"
+    path: "artifacts/<target>/manifest.yaml"
+    sha256: "<lowercase-sha256>"
+
+# All three governed roles must be accounted for across retained_origins and
+# deprecations. The immediate predecessor is a role, while the two historical
+# support origins are literal release versions.
+retained_origins:
+  - role: "immediate-predecessor"
+    version: "v0.0.0"
+    release_id: "REL-v0.0.0"
+    commit: "<40-character-lowercase-git-sha>"
+    manifest:
+      asset_id: "immediate-predecessor-manifest"
+      path: "artifacts/<immediate-predecessor>/manifest.yaml"
+      sha256: "<lowercase-sha256>"
+  - role: "v0.9.0"
+    version: "v0.9.0"
+    release_id: "REL-v0.9.0"
+    commit: "<40-character-lowercase-git-sha>"
+    manifest:
+      asset_id: "v0.9.0-manifest"
+      path: "artifacts/v0.9.0/manifest.yaml"
+      sha256: "<lowercase-sha256>"
+  - role: "v0.6.0"
+    version: "v0.6.0"
+    release_id: "REL-v0.6.0"
+    commit: "<40-character-lowercase-git-sha>"
+    manifest:
+      asset_id: "v0.6.0-manifest"
+      path: "artifacts/v0.6.0/manifest.yaml"
+      sha256: "<lowercase-sha256>"
+
+semantic_cutovers:
+  - cutover_id: "<stable-semantic-cutover-id>"
+    required: true
+    description: "<why every safe route to the target must pass this cutover>"
+
+# Each candidate route supplies its exact ordered edge sequence. A direct route
+# contains one edge; an orchestrated route contains more than one. Do not mark
+# a kind here: the resolver derives it after verifying all evidence.
+routes:
+  - route_id: "<origin>-to-<target>-direct"
+    origin: "v0.0.0"
+    target: "v0.0.0"
+    edges:
+      - edge_id: "<origin>-to-<target>"
+        order: 1
+        from_version: "v0.0.0"
+        to_version: "v0.0.0"
+        artifacts:
+          archive:
+            asset_id: "<edge>-archive"
+            path: "artifacts/<edge>/package.tar.gz"
+            sha256: "<lowercase-sha256>"
+          checksum:
+            # The bytes are exactly one standard sha256sum record for the
+            # archive: "<archive-sha256>  package.tar.gz\n" (or the standard
+            # binary-mode asterisk form), not merely a self-hashed sidecar.
+            asset_id: "<edge>-checksums"
+            path: "artifacts/<edge>/SHA256SUMS"
+            sha256: "<lowercase-sha256>"
+          manifest:
+            asset_id: "<edge>-manifest"
+            path: "artifacts/<edge>/migration.yaml"
+            sha256: "<lowercase-sha256>"
+          validator:
+            asset_id: "<edge>-validator"
+            path: "artifacts/<edge>/incoming-validator.py"
+            sha256: "<lowercase-sha256>"
+        semantic_cutovers:
+          - cutover_id: "<stable-semantic-cutover-id>"
+            state: "passed"
+        validation:
+          state: "passed"
+          # The executable is artifacts.validator. argv must contain its exact
+          # matrix-relative path once; interpreter and option tokens are
+          # retained verbatim in the canonical receipt.
+          validator_argv:
+            - "python"
+            - "artifacts/<edge>/incoming-validator.py"
+            - "--edge-id"
+            - "<origin>-to-<target>"
+          report:
+            # Its canonical upgrade-edge-validation/v1 JSON receipt also binds
+            # this edge_id, from_version, to_version, all artifacts, argv, and
+            # ordered semantic_cutovers as {cutover_id, required, state}.
+            asset_id: "<edge>-validation-report"
+            path: "artifacts/<edge>/validation-report.json"
+            sha256: "<lowercase-sha256>"
+          output:
+            asset_id: "<edge>-validation-output"
+            path: "artifacts/<edge>/validation-output.log"
+            sha256: "<lowercase-sha256>"
+
+# A deprecated role is unsupported only when every complete evidence asset is
+# declared, parses, and cross-binds. Move that role from retained_origins into
+# this list; an incomplete record invalidates the entire matrix. The notice and
+# owner-decision assets are strict UTF-8 JSON or YAML. The validator asset is a
+# canonical JSON receipt binding the notice/decision identities, passed outcome,
+# exit_code 0, and the raw output asset digest.
+#
+# Example typed deprecation asset shapes:
+# - notice: schema_version=upgrade-deprecation-notice/v1; deprecation_id, role,
+#   origin, target, disposition=unsupported, reason.
+# - owner decision: schema_version=upgrade-deprecation-owner-decision/v1;
+#   deprecation_id, role, origin, target, status=approved, approved=true,
+#   owner, decided_at=2026-08-20T00:00:00+08:00.
+# - receipt: schema_version=upgrade-deprecation-validation/v1; deprecation_id,
+#   role, origin, target, deprecation_notice identity, owner_decision identity,
+#   outcome=passed, exit_code=0, output_sha256.
+deprecations: []

@@ -190,9 +190,25 @@ canonical statement; it must not invent a path-derived replacement ID.
   None of them owns normative engineering semantics or may silently mutate
   target-owned configuration.
 
-### Target-Effective Consumption
+### Source-Repository Applicability
 
-Routine action work consumes a freshness-validated, task-scoped effective rule
+Framework-source action execution must select `framework-source` explicitly and
+follow source-only policy `.dev/standards/AI-CONTEXT-SOURCE-EFFECTIVE-RULES.yaml`.
+It binds the exact source repository, commit, policy, resolver, schema, catalog
+bytes, selectors, explicit rule IDs, selection evidence, and normative statement
+digests. This transient evidence is source-only. It does not require, fabricate,
+or satisfy downstream `.dev/ai-context/provenance.yaml`, target-effective state,
+or packet authorities, and it must not enter a downstream package.
+
+Applicability is never inferred from a missing provenance file, remembered
+default, broad scan, or alternate skill. A source identity or execution-byte
+mismatch is a source applicability failure, separate from downstream provenance,
+staleness, unresolved-semantic, and digest failures.
+
+### Initialized-Target Effective Consumption
+
+Initialized-target routine action work consumes a freshness-validated,
+task-scoped effective rule
 packet rather than scanning all target documents or relying on remembered
 framework defaults. The packet retains the selected rule and constraint's full
 normative statement and records the baseline version, target-state digest, and

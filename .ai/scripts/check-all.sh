@@ -45,19 +45,28 @@ declare -A CHECK_CACHE_POLICY=()
 declare -A CHECK_DISPOSITION=()
 declare -A CHECK_COMMAND=()
 declare -A CHECK_APPLICABILITY=()
+declare -A DISCOVERED_CHECK_IDS=()
+declare -A DEPENDENCY_VALIDATION_STATE=()
+declare -ag DEPENDENCY_VALIDATION_STACK=()
 declare -A SELECTED_CHECK_IDS=()
+declare -ag SELECTED_CHECK_ORDER=()
 declare -A SELECTION_REASON_BY_ID=()
 declare -A CHANGED_PATHS=()
 declare -A IMMUTABLE_HISTORY_RECEIPT_REUSE_BY_ID=()
 CHANGED_PATHS_DIGEST=unavailable
-SELECTION_MODE=profile-full
+SELECTION_MODE=full
 SELECTION_ESCALATION_REASON=
+SELECTION_BASE_SHA=
+SELECTION_HEAD_SHA=
 IMMUTABLE_HISTORY_SOURCE_CONTEXT=false
 IMMUTABLE_HISTORY_FORCE_FULL=false
 IMMUTABLE_HISTORY_MODE=downstream-target-local
 IMMUTABLE_HISTORY_REASON=not-source-repository
 IMMUTABLE_HISTORY_FINGERPRINT=
 IMMUTABLE_HISTORY_RECEIPT_SOURCE=
+IMMUTABLE_HISTORY_PREPARATION_ACTIVE=false
+IMMUTABLE_HISTORY_PREPARATION_LOG=
+IMMUTABLE_HISTORY_PREPARATION_RESULT=
 
 register_profile() {
     local id=$1 purpose=$2 budget=$3 enforcement=$4
@@ -114,6 +123,42 @@ profiles_include() {
     return 1
 }
 
+report_dependency_cycle() {
+    local repeated=$1 index start=-1 cycle=
+    for index in "${!DEPENDENCY_VALIDATION_STACK[@]}"; do
+        if [ "${DEPENDENCY_VALIDATION_STACK[$index]}" = "$repeated" ]; then
+            start=$index
+            break
+        fi
+    done
+    if [ "$start" -lt 0 ]; then
+        echo "Dependency cycle detected: $repeated -> $repeated" >&2
+        return 1
+    fi
+    for ((index = start; index < ${#DEPENDENCY_VALIDATION_STACK[@]}; index++)); do
+        [ -z "$cycle" ] || cycle="$cycle -> "
+        cycle="$cycle${DEPENDENCY_VALIDATION_STACK[$index]}"
+    done
+    echo "Dependency cycle detected: $cycle -> $repeated" >&2
+    return 1
+}
+
+validate_dependency_graph_node() {
+    local id=$1 dependency last_index
+    case "${DEPENDENCY_VALIDATION_STATE[$id]:-unvisited}" in
+        visited) return 0 ;;
+        visiting) report_dependency_cycle "$id"; return 1 ;;
+    esac
+    DEPENDENCY_VALIDATION_STATE["$id"]=visiting
+    DEPENDENCY_VALIDATION_STACK+=("$id")
+    for dependency in ${CHECK_DEPENDS[$id]}; do
+        validate_dependency_graph_node "$dependency" || return 1
+    done
+    last_index=$((${#DEPENDENCY_VALIDATION_STACK[@]} - 1))
+    unset "DEPENDENCY_VALIDATION_STACK[$last_index]"
+    DEPENDENCY_VALIDATION_STATE["$id"]=visited
+}
+
 validate_profile_registry() {
     local profile id dependency
     for profile in fast pr release closeout nightly-full; do
@@ -147,29 +192,61 @@ validate_profile_registry() {
             }
         done
     done
+    DEPENDENCY_VALIDATION_STATE=()
+    DEPENDENCY_VALIDATION_STACK=()
+    for id in "${CHECK_IDS[@]}"; do
+        validate_dependency_graph_node "$id" || return 1
+    done
+}
+
+reset_selection_state() {
+    DISCOVERED_CHECK_IDS=()
+    SELECTED_CHECK_IDS=()
+    SELECTED_CHECK_ORDER=()
+    SELECTION_REASON_BY_ID=()
+}
+
+discover_selection_root() {
+    local id=$1 reason=$2
+    DISCOVERED_CHECK_IDS["$id"]=discovered
+    [ -n "${SELECTION_REASON_BY_ID[$id]:-}" ] || SELECTION_REASON_BY_ID["$id"]=$reason
 }
 
 select_with_dependencies() {
-    local id=$1 dependency
+    local id=$1 chain=${2:-$1} dependency
     [ -n "${CHECK_DESCRIPTION[$id]:-}" ] || return 1
     [ -n "${SELECTED_CHECK_IDS[$id]:-}" ] && return 0
-    SELECTED_CHECK_IDS["$id"]=selected
     for dependency in ${CHECK_DEPENDS[$id]}; do
-        select_with_dependencies "$dependency" || return 1
+        select_with_dependencies "$dependency" "$chain -> $dependency" || return 1
+    done
+    SELECTED_CHECK_IDS["$id"]=selected
+    SELECTED_CHECK_ORDER+=("$id")
+    [ -n "${SELECTION_REASON_BY_ID[$id]:-}" ] || SELECTION_REASON_BY_ID["$id"]="dependency-chain:$chain"
+}
+
+expand_discovered_roots() {
+    local id
+    for id in "${CHECK_IDS[@]}"; do
+        [ -n "${DISCOVERED_CHECK_IDS[$id]:-}" ] || continue
+        select_with_dependencies "$id" "$id" || return 1
     done
 }
 
 prepare_full_profile_selection() {
     local reason=$1 id
-    SELECTED_CHECK_IDS=()
+    SELECTION_ESCALATION_REASON=${reason:-profile-full}
+    if [ -n "$reason" ]; then
+        SELECTION_MODE=escalated
+    else
+        SELECTION_MODE=full
+    fi
+    reset_selection_state
     for id in "${CHECK_IDS[@]}"; do
         if profiles_include "${CHECK_PROFILES[$id]}" "$PROFILE"; then
-            select_with_dependencies "$id" || return 1
+            discover_selection_root "$id" "profile-inclusion:$PROFILE${reason:+;escalation:$reason}"
         fi
     done
-    for id in "${!SELECTED_CHECK_IDS[@]}"; do
-        SELECTION_REASON_BY_ID["$id"]="full-profile-escalation:$reason"
-    done
+    expand_discovered_roots
 }
 
 path_is_safe() {
@@ -185,6 +262,29 @@ path_is_safe() {
     done
     IFS=$old_ifs
     return 0
+}
+
+sha256_regular_file() {
+    local output digest
+    output=$(sha256sum -- "$1") || return 1
+    digest=${output%%[[:space:]]*}
+    digest=${digest#\\}
+    [[ "$digest" =~ ^[0-9a-f]{64}$ ]] || return 1
+    printf '%s\n' "$digest"
+}
+
+repo_relative_artifact() {
+    local input_path normalized_root normalized_path relative
+    input_path=$1
+    normalized_root=$PROJECT_ROOT
+    normalized_path=$input_path
+    if command -v cygpath >/dev/null 2>&1; then
+        normalized_root=$(cygpath -u "$PROJECT_ROOT") || return 1
+        normalized_path=$(cygpath -u "$input_path") || return 1
+    fi
+    relative=$(realpath -m --relative-to="$normalized_root" "$normalized_path") || return 1
+    path_is_safe "$relative" || return 1
+    printf '%s\n' "$relative"
 }
 
 add_changed_path() {
@@ -207,6 +307,7 @@ input_owns_path() {
 is_global_invalidator() {
     case "$1" in
         .ai/scripts/validation-profile-registry.sh|.ai/scripts/check-all.sh|.ai/scripts/validation-evidence.py|\
+        .ai/scripts/validation_process_supervisor.py|\
         .ai/scripts/validate-immutable-history.py|.ai/distribution/validation/immutable-history-validation.yaml|\
         .ai/scripts/validate-workflow-artifacts.py|.ai/scripts/validate-assessment-artifacts.py|\
         .ai/scripts/validate-ai-context-versions.py|.dev/standards/WORKFLOW-ARTIFACT-POLICY.md|\
@@ -242,27 +343,26 @@ collect_changed_paths() {
 }
 
 prepare_changed_path_selection() {
-    local base=$1 head=$2 path id owned active_owned
+    local base=$1 head=$2 path id owned
+    reset_selection_state
     if ! collect_changed_paths "$base" "$head"; then
         SELECTION_ESCALATION_REASON=changed-path-diff-unavailable
         prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
         return
     fi
-    for path in "${!CHANGED_PATHS[@]}"; do
+    while IFS= read -r path; do
+        [ -n "$path" ] || continue
         if is_global_invalidator "$path"; then
             SELECTION_ESCALATION_REASON=global-invalidator
             prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
             return
         fi
         owned=false
-        active_owned=false
         for id in "${CHECK_IDS[@]}"; do
             if input_owns_path "$path" "${CHECK_INPUT_PATHS[$id]}"; then
                 owned=true
                 if profiles_include "${CHECK_PROFILES[$id]}" "$PROFILE"; then
-                    active_owned=true
-                    SELECTED_CHECK_IDS["$id"]=selected
-                    SELECTION_REASON_BY_ID["$id"]=changed-path-match
+                    discover_selection_root "$id" "direct-path-match:$path"
                 fi
             fi
         done
@@ -271,33 +371,53 @@ prepare_changed_path_selection() {
             prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
             return
         fi
-    done
-    for id in "${!SELECTED_CHECK_IDS[@]}"; do
-        select_with_dependencies "$id" || {
-            SELECTION_ESCALATION_REASON=dependency-resolution-failed
-            prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
-            return
-        }
-    done
-    for id in "${!SELECTED_CHECK_IDS[@]}"; do
-        [ -n "${SELECTION_REASON_BY_ID[$id]:-}" ] || SELECTION_REASON_BY_ID["$id"]=dependency-expansion
-    done
+    done < <(printf '%s\n' "${!CHANGED_PATHS[@]}" | LC_ALL=C sort)
+    expand_discovered_roots || return 1
     SELECTION_MODE=changed-path
 }
 
 prepare_profile_selection() {
-    local implicit_base
+    local current_head explicit_base explicit_head implicit_base repository_status
+    current_head=$(git rev-parse --verify 'HEAD^{commit}' 2>/dev/null) || return 1
+    SELECTION_BASE_SHA=$current_head
+    SELECTION_HEAD_SHA=$current_head
     if [ -n "$BASE_SHA" ] || [ -n "$HEAD_SHA" ]; then
         if [ -z "$BASE_SHA" ] || [ -z "$HEAD_SHA" ] ||
-            ! git rev-parse --verify "${BASE_SHA}^{commit}" >/dev/null 2>&1 ||
-            ! git rev-parse --verify "${HEAD_SHA}^{commit}" >/dev/null 2>&1; then
+            ! explicit_base=$(git rev-parse --verify "${BASE_SHA}^{commit}" 2>/dev/null) ||
+            ! explicit_head=$(git rev-parse --verify "${HEAD_SHA}^{commit}" 2>/dev/null); then
             SELECTION_ESCALATION_REASON=comparison-base-unavailable
             prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
+        elif [ "$explicit_head" != "$current_head" ]; then
+            SELECTION_BASE_SHA=$explicit_base
+            SELECTION_ESCALATION_REASON=comparison-head-mismatch
+            prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
+        elif ! git merge-base --is-ancestor "$explicit_base" "$current_head" >/dev/null 2>&1; then
+            SELECTION_BASE_SHA=$explicit_base
+            SELECTION_ESCALATION_REASON=comparison-base-not-ancestor
+            prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
+        elif ! repository_status=$(git status --porcelain --untracked-files=normal 2>/dev/null); then
+            SELECTION_BASE_SHA=$explicit_base
+            SELECTION_ESCALATION_REASON=selection-status-unavailable
+            prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
+        elif [ -n "$repository_status" ]; then
+            SELECTION_BASE_SHA=$explicit_base
+            SELECTION_ESCALATION_REASON=dirty-repository-selection
+            prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
         else
-            prepare_changed_path_selection "$BASE_SHA" "$HEAD_SHA"
+            SELECTION_BASE_SHA=$explicit_base
+            prepare_changed_path_selection "$explicit_base" "$current_head"
         fi
     elif implicit_base=$(git merge-base HEAD '@{upstream}' 2>/dev/null); then
-        prepare_changed_path_selection "$implicit_base" HEAD
+        SELECTION_BASE_SHA=$implicit_base
+        if ! repository_status=$(git status --porcelain --untracked-files=normal 2>/dev/null); then
+            SELECTION_ESCALATION_REASON=selection-status-unavailable
+            prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
+        elif [ -n "$repository_status" ]; then
+            SELECTION_ESCALATION_REASON=dirty-repository-selection
+            prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
+        else
+            prepare_changed_path_selection "$implicit_base" "$current_head"
+        fi
     else
         SELECTION_ESCALATION_REASON=comparison-base-unavailable
         prepare_full_profile_selection "$SELECTION_ESCALATION_REASON"
@@ -305,6 +425,16 @@ prepare_profile_selection() {
     for id in "${CHECK_IDS[@]}"; do
         [ -n "${SELECTION_REASON_BY_ID[$id]:-}" ] || SELECTION_REASON_BY_ID["$id"]=not-selected-unmatched-input-contract
     done
+}
+
+verify_selection_admission() {
+    local observed_head repository_status
+    observed_head=$(git rev-parse --verify 'HEAD^{commit}' 2>/dev/null) || return 1
+    [ "$observed_head" = "$SELECTION_HEAD_SHA" ] || return 1
+    if [ "$SELECTION_MODE" = changed-path ]; then
+        repository_status=$(git status --porcelain --untracked-files=normal 2>/dev/null) || return 1
+        [ -z "$repository_status" ] || return 1
+    fi
 }
 
 check_is_selected() {
@@ -471,6 +601,172 @@ python() {
     "$PYTHON_EXECUTABLE" "$@"
 }
 
+# Establish one retained invocation root and immutable source snapshot before
+# any validation child can launch. Fast/PR remain usable on a stable dirty
+# tree; release/nightly-full require a clean, operation-free commit.
+TOTAL_ELAPSED_START=$SECONDS
+EVIDENCE_HELPER="$SCRIPT_DIR/validation-evidence.py"
+LOG_BASE="${AI_CONTEXT_VALIDATION_LOG_DIR:-$PROJECT_ROOT/artifacts/validation}"
+INVOCATION_ID="${AI_CONTEXT_VALIDATION_INVOCATION_ID:-$(date -u +%Y%m%dT%H%M%SZ)-$$}"
+case "$INVOCATION_ID" in
+    ''|*[!A-Za-z0-9._-]*)
+        echo "Invalid validation invocation id: $INVOCATION_ID" >&2
+        exit 2
+        ;;
+esac
+LOG_DIR="$LOG_BASE/$INVOCATION_ID"
+if ! mkdir -p "$LOG_BASE" 2>/dev/null || ! mkdir "$LOG_DIR" 2>/dev/null; then
+    echo "Validation invocation evidence directory is not uniquely creatable: $INVOCATION_ID" >&2
+    exit 2
+fi
+export AI_CONTEXT_VALIDATION_RUN_LOG_DIR="$LOG_DIR"
+EVIDENCE_SNAPSHOT="$LOG_DIR/repository-snapshot-pre.json"
+VALIDATION_ABORTED=false
+VALIDATION_ABORT_REASON=
+RUNNER_CANCELLED_BY_SIGNAL=false
+ACTIVE_SUPERVISOR_PID=
+export AI_CONTEXT_VALIDATION_RUNNER_PID=$$
+
+request_validation_cancellation() {
+    local signal_name=$1
+    VALIDATION_ABORTED=true
+    RUNNER_CANCELLED_BY_SIGNAL=true
+    VALIDATION_ABORT_REASON="runner-signal-$signal_name"
+    if [ -n "$ACTIVE_SUPERVISOR_PID" ]; then
+        kill -TERM "$ACTIVE_SUPERVISOR_PID" 2>/dev/null || true
+    fi
+}
+
+cleanup_active_supervisor() {
+    if [ -n "$ACTIVE_SUPERVISOR_PID" ]; then
+        kill -TERM "$ACTIVE_SUPERVISOR_PID" 2>/dev/null || true
+        wait "$ACTIVE_SUPERVISOR_PID" 2>/dev/null || true
+    fi
+}
+
+remove_owned_terminal_publication() {
+    local owns_final=false
+    if [ -n "${EVIDENCE_STAGED_MANIFEST:-}" ] &&
+        [ -n "${EVIDENCE_SEALED_MANIFEST:-}" ] &&
+        [ -e "$EVIDENCE_STAGED_MANIFEST" ] &&
+        [ -e "$EVIDENCE_SEALED_MANIFEST" ] &&
+        [ "$EVIDENCE_STAGED_MANIFEST" -ef "$EVIDENCE_SEALED_MANIFEST" ]; then
+        owns_final=true
+    elif [ "${EVIDENCE_SEAL_PUBLISHED:-false}" = true ]; then
+        owns_final=true
+    fi
+    if [ "$owns_final" = true ]; then
+        rm -f -- "$EVIDENCE_SEALED_MANIFEST"
+    fi
+    [ -z "${EVIDENCE_STAGED_MANIFEST:-}" ] || rm -f -- "$EVIDENCE_STAGED_MANIFEST"
+    EVIDENCE_SEAL_PUBLISHED=false
+}
+
+cleanup_validation_runner() {
+    cleanup_active_supervisor
+    if [ "${RUNNER_CANCELLED_BY_SIGNAL:-false}" = true ]; then
+        remove_owned_terminal_publication
+    fi
+}
+
+trap 'request_validation_cancellation INT' INT
+trap 'request_validation_cancellation TERM' TERM
+trap 'request_validation_cancellation HUP' HUP
+trap cleanup_validation_runner EXIT
+
+run_managed_evidence_cli() {
+    local launch_mode=$1 supervisor_pid supervisor_rc
+    shift
+    case "$launch_mode" in
+        validator) [ "$VALIDATION_ABORTED" != true ] || return 130 ;;
+        control) [ "$RUNNER_CANCELLED_BY_SIGNAL" != true ] || return 130 ;;
+        *) return 2 ;;
+    esac
+    python .ai/scripts/validation-evidence.py "$@" &
+    supervisor_pid=$!
+    ACTIVE_SUPERVISOR_PID=$supervisor_pid
+    if [ "$RUNNER_CANCELLED_BY_SIGNAL" = true ]; then
+        kill -TERM "$supervisor_pid" 2>/dev/null || true
+    fi
+    while true; do
+        wait "$supervisor_pid"
+        supervisor_rc=$?
+        if kill -0 "$supervisor_pid" 2>/dev/null; then
+            [ "$RUNNER_CANCELLED_BY_SIGNAL" != true ] || kill -TERM "$supervisor_pid" 2>/dev/null || true
+            continue
+        fi
+        break
+    done
+    ACTIVE_SUPERVISOR_PID=
+    return "$supervisor_rc"
+}
+
+run_supervisor_cli() {
+    run_managed_evidence_cli validator "$@"
+}
+
+run_control_supervisor_cli() {
+    run_managed_evidence_cli control "$@"
+}
+
+declare -A EVIDENCE_CONTROL_RESULT_BY_ROLE=()
+EVIDENCE_BOOTSTRAP_SNAPSHOT_LOG="$LOG_DIR/control-bootstrap-snapshot.log"
+EVIDENCE_BOOTSTRAP_SNAPSHOT_RESULT="$LOG_DIR/control-bootstrap-snapshot.result.json"
+if ! EVIDENCE_SNAPSHOT_REF=$(repo_relative_artifact "$EVIDENCE_SNAPSHOT"); then
+    echo "Validation snapshot path is outside the repository evidence boundary." >&2
+    exit 2
+fi
+bootstrap_supervise_arguments=(
+    supervise
+    --repo "$PROJECT_ROOT"
+    --bootstrap-snapshot-output "$EVIDENCE_SNAPSHOT_REF"
+    --bootstrap-profile "$PROFILE"
+    --bootstrap-python "$PYTHON_EXECUTABLE"
+    --log-path "$EVIDENCE_BOOTSTRAP_SNAPSHOT_LOG"
+    --result-path "$EVIDENCE_BOOTSTRAP_SNAPSHOT_RESULT"
+    --timeout-seconds 60
+    --cwd-ref .
+)
+if [ "$PROFILE" = release ] || [ "$PROFILE" = nightly-full ]; then
+    bootstrap_supervise_arguments+=(--bootstrap-require-clean)
+fi
+bootstrap_supervise_arguments+=(
+    --
+    "$PYTHON_EXECUTABLE"
+    .ai/scripts/validation-evidence.py
+    verify-snapshot
+    --repo .
+    --snapshot "$EVIDENCE_SNAPSHOT_REF"
+)
+set +e
+run_control_supervisor_cli "${bootstrap_supervise_arguments[@]}"
+bootstrap_rc=$?
+set -e
+bootstrap_verified=
+if [ -f "$EVIDENCE_SNAPSHOT" ] && [ -f "$EVIDENCE_BOOTSTRAP_SNAPSHOT_RESULT" ]; then
+    bootstrap_verified=$(python .ai/scripts/validation-evidence.py verify-supervision-result \
+        --repo "$PROJECT_ROOT" \
+        --snapshot "$EVIDENCE_SNAPSHOT" \
+        --result-path "$EVIDENCE_BOOTSTRAP_SNAPSHOT_RESULT" 2>/dev/null) || bootstrap_verified=
+fi
+IFS=$'\t' read -r bootstrap_status bootstrap_launched bootstrap_exit bootstrap_extra \
+    <<< "$bootstrap_verified"
+if [ "$bootstrap_rc" -ne 0 ] || [ "$bootstrap_status" != completed ] ||
+    [ "$bootstrap_launched" != true ] || [ "$bootstrap_exit" != 0 ] ||
+    [ -n "$bootstrap_extra" ]; then
+    echo "Validation repository snapshot admission failed under process-tree supervision; no checks were launched." >&2
+    echo "admission-evidence: $EVIDENCE_SNAPSHOT" >&2
+    echo "admission-supervision: $EVIDENCE_BOOTSTRAP_SNAPSHOT_RESULT" >&2
+    exit 2
+fi
+EVIDENCE_CONTROL_RESULT_BY_ROLE["bootstrap-snapshot"]=$EVIDENCE_BOOTSTRAP_SNAPSHOT_RESULT
+if ! verify_selection_admission; then
+    echo "Validation selection changed before repository snapshot admission; no checks were launched." >&2
+    echo "admission-evidence: $EVIDENCE_SNAPSHOT" >&2
+    echo "admission-supervision: $EVIDENCE_BOOTSTRAP_SNAPSHOT_RESULT" >&2
+    exit 2
+fi
+
 IMMUTABLE_HISTORY_HELPER="$SCRIPT_DIR/validate-immutable-history.py"
 IMMUTABLE_HISTORY_CONTRACT="$PROJECT_ROOT/.ai/distribution/validation/immutable-history-validation.yaml"
 IMMUTABLE_HISTORY_RECEIPT="$PROJECT_ROOT/.ai/distribution/validation/immutable-history-receipt.yaml"
@@ -491,8 +787,8 @@ immutable_history_check_is_protected() {
 
 select_immutable_history_check() {
     local id=$1 reason=$2
-    select_with_dependencies "$id" || return 1
-    SELECTION_REASON_BY_ID["$id"]=$reason
+    SELECTION_REASON_BY_ID["$id"]="explicit-request:$reason"
+    select_with_dependencies "$id" "$id" || return 1
 }
 
 select_immutable_history_full_checks() {
@@ -506,22 +802,15 @@ select_immutable_history_full_checks() {
 }
 
 prepare_immutable_history_layer() {
-    local output rc outcome reason source_revision source_tree receipt_commit reusable_ids id
+    local rc outcome reason source_revision source_tree receipt_commit reusable_ids extra id preparation_line
+    local -a preparation_lines=()
     if ! immutable_history_source_context_available; then
         return 0
     fi
     IMMUTABLE_HISTORY_SOURCE_CONTEXT=true
 
     case "$PROFILE" in
-        release)
-            select_immutable_history_full_checks release-candidate
-            return
-            ;;
-        nightly-full)
-            select_immutable_history_full_checks scheduled-governance
-            return
-            ;;
-        fast|pr)
+        fast|pr|release|nightly-full)
             select_immutable_history_check workflow-artifacts immutable-history-routine-proof || return 1
             select_immutable_history_check assessment-artifacts immutable-history-routine-proof || return 1
             select_immutable_history_check source-ai-context-version immutable-history-routine-proof || return 1
@@ -531,32 +820,71 @@ prepare_immutable_history_layer() {
             ;;
     esac
 
-    if [ ! -f "$IMMUTABLE_HISTORY_HELPER" ] ||
-        [ ! -f "$IMMUTABLE_HISTORY_CONTRACT" ] ||
-        [ ! -f "$IMMUTABLE_HISTORY_RECEIPT" ]; then
-        select_immutable_history_full_checks missing-receipt-contract
-        return
+    if [ ! -f "$IMMUTABLE_HISTORY_HELPER" ] || [ ! -f "$IMMUTABLE_HISTORY_CONTRACT" ]; then
+        echo "Immutable history verifier or contract is missing; supervised preparation cannot run." >&2
+        return 1
     fi
 
+    IMMUTABLE_HISTORY_PREPARATION_LOG="$LOG_DIR/immutable-history-preparation.log"
+    IMMUTABLE_HISTORY_PREPARATION_RESULT="$LOG_DIR/immutable-history-preparation.result.json"
     set +e
-    output=$(python .ai/scripts/validate-immutable-history.py verify \
+    run_supervisor_cli supervise \
         --repo "$PROJECT_ROOT" \
-        --contract "$IMMUTABLE_HISTORY_CONTRACT" \
-        --receipt "$IMMUTABLE_HISTORY_RECEIPT" \
-        --head HEAD \
+        --snapshot "$EVIDENCE_SNAPSHOT" \
+        --log-path "$IMMUTABLE_HISTORY_PREPARATION_LOG" \
+        --result-path "$IMMUTABLE_HISTORY_PREPARATION_RESULT" \
+        --timeout-seconds 30 \
+        --accepted-child-exit-code 10 \
+        --cwd-ref . \
+        -- "$PYTHON_EXECUTABLE" .ai/scripts/validate-immutable-history.py verify \
+        --repo . \
         --profile "$PROFILE" \
-        --output-format tsv)
+        --output-format tsv
     rc=$?
     set -e
-    IFS=$'\t' read -r outcome reason source_revision source_tree receipt_commit reusable_ids <<< "$output"
+    IMMUTABLE_HISTORY_PREPARATION_ACTIVE=true
+    if [ ! -f "$IMMUTABLE_HISTORY_PREPARATION_LOG" ] ||
+        [ ! -f "$IMMUTABLE_HISTORY_PREPARATION_RESULT" ]; then
+        echo "Immutable history supervised preparation omitted retained evidence." >&2
+        return 1
+    fi
+    mapfile -t preparation_lines < "$IMMUTABLE_HISTORY_PREPARATION_LOG"
+    if [ "${#preparation_lines[@]}" -ne 1 ]; then
+        echo "Immutable history supervised preparation did not emit exactly one TSV decision." >&2
+        return 1
+    fi
+    preparation_line="${preparation_lines[0]%$'\r'}"
+    IFS=$'\t' read -r outcome reason source_revision source_tree receipt_commit reusable_ids extra \
+        <<< "$preparation_line"
+    if [ -n "$extra" ]; then
+        echo "Immutable history supervised preparation emitted an invalid TSV decision." >&2
+        return 1
+    fi
 
-    if [ "$rc" -eq 10 ] && [ "$outcome" = full-required ] && [ -n "$reason" ]; then
+    # This preparation alone accepts child exit 10 as a successful decision;
+    # the authenticated wrapper/raw receipts still retain the exact child exit.
+    if [ "$rc" -eq 0 ] && [ "$outcome" = full-required ] && [ -n "$reason" ] &&
+        [ -z "$reusable_ids" ] &&
+        { [ -z "$source_revision" ] || [[ "$source_revision" =~ ^[0-9a-f]{40}$ ]]; } &&
+        { [ -z "$source_tree" ] || [[ "$source_tree" =~ ^[0-9a-f]{40}$ ]]; } &&
+        { [ -z "$receipt_commit" ] || [[ "$receipt_commit" =~ ^[0-9a-f]{40}$ ]]; }; then
         select_immutable_history_full_checks "$reason"
         return
     fi
     if [ "$rc" -ne 0 ] || [ "$outcome" != routine-reusable ] ||
+        [ "$reason" != receipt-valid ] || [ -z "$reusable_ids" ] ||
         [ -z "$source_revision" ] || [ -z "$source_tree" ] || [ -z "$receipt_commit" ]; then
-        echo "Immutable history receipt verification failed closed: ${output:-no-output}" >&2
+        echo "Immutable history receipt verification failed closed: ${preparation_lines[0]:-no-output}" >&2
+        return 1
+    fi
+    if ! [[ "$source_revision" =~ ^[0-9a-f]{40}$ ]] ||
+        ! [[ "$source_tree" =~ ^[0-9a-f]{40}$ ]] ||
+        ! [[ "$receipt_commit" =~ ^[0-9a-f]{40}$ ]]; then
+        echo "Immutable history receipt verification identity is invalid." >&2
+        return 1
+    fi
+    if [ "$PROFILE" = release ] || [ "$PROFILE" = nightly-full ]; then
+        echo "Immutable history preparation unexpectedly authorized reuse for terminal profile: $PROFILE" >&2
         return 1
     fi
 
@@ -570,6 +898,10 @@ prepare_immutable_history_layer() {
             echo "Immutable history receipt returned an unsupported check id: $id" >&2
             return 1
         }
+        [ -z "${IMMUTABLE_HISTORY_RECEIPT_REUSE_BY_ID[$id]:-}" ] || {
+            echo "Immutable history receipt returned a duplicate reusable check id: $id" >&2
+            return 1
+        }
         IMMUTABLE_HISTORY_RECEIPT_REUSE_BY_ID["$id"]=true
     done
     for id in workflow-artifacts assessment-artifacts source-ai-context-version; do
@@ -577,7 +909,7 @@ prepare_immutable_history_layer() {
             echo "Immutable history receipt omitted required reusable check id: $id" >&2
             return 1
         }
-        SELECTION_REASON_BY_ID["$id"]="immutable-history-receipt:$source_revision"
+        SELECTION_REASON_BY_ID["$id"]="explicit-request:immutable-history-receipt:$source_revision"
     done
 }
 
@@ -599,22 +931,18 @@ REQUIRED_RUN=0
 REQUIRED_FAILED=0
 ADVISORY_SELECTED=0
 DEFERRED_CHECKS=0
+REQUIRED_DEFERRED=0
 NOT_APPLICABLE=0
 BLOCKED_CHECKS=0
 REQUIRED_BLOCKED=0
+RUNNER_ABORT_FAILURE_RECORDED=false
 CHECK_TIMINGS=()
 BLOCKED_LIST=()
-TOTAL_ELAPSED_START=$SECONDS
-LOG_BASE="${AI_CONTEXT_VALIDATION_LOG_DIR:-$PROJECT_ROOT/artifacts/validation}"
-INVOCATION_ID="$(date -u +%Y%m%dT%H%M%SZ)-$$"
-LOG_DIR="$LOG_BASE/$INVOCATION_ID"
-mkdir -p "$LOG_DIR"
-# Child contract tests must distinguish the aggregate runner's retained
-# diagnostics from mutations made by the entrypoint being tested.
-export AI_CONTEXT_VALIDATION_RUN_LOG_DIR="$LOG_DIR"
-# Child contract tests must distinguish the aggregate runner's retained
-# diagnostics from mutations made by the entrypoint being tested.
-export AI_CONTEXT_VALIDATION_RUN_LOG_DIR="$LOG_DIR"
+EVIDENCE_SELECTED_CHECKS="$LOG_DIR/selected-checks.tsv"
+: > "$EVIDENCE_SELECTED_CHECKS"
+for id in "${SELECTED_CHECK_ORDER[@]}"; do
+    printf '%s\t%s\n' "$id" "${SELECTION_REASON_BY_ID[$id]}" >> "$EVIDENCE_SELECTED_CHECKS"
+done
 
 now_millis() {
     local value seconds fraction
@@ -631,14 +959,23 @@ now_millis() {
     esac
 }
 
-EVIDENCE_HELPER="$SCRIPT_DIR/validation-evidence.py"
 EVIDENCE_PATH="$LOG_DIR/evidence.jsonl"
 EVIDENCE_SUMMARY="$LOG_DIR/evidence-summary.json"
+EVIDENCE_WORKFLOW_SUMMARY="$LOG_DIR/workflow-summary.json"
+EVIDENCE_POST_SNAPSHOT="$LOG_DIR/repository-snapshot-post.json"
+EVIDENCE_SEALED_MANIFEST="$LOG_DIR/sealed-manifest.json"
+EVIDENCE_STAGED_MANIFEST="$LOG_DIR/sealed-manifest.staged.json"
+EVIDENCE_SEAL_SUPERVISION_LOG="$LOG_DIR/control-seal.log"
+EVIDENCE_SEAL_SUPERVISION_RESULT="$LOG_DIR/control-seal.result.json"
+EVIDENCE_SEAL_PUBLISHED=false
 EVIDENCE_CACHE="$LOG_BASE/evidence-cache.json"
 EVIDENCE_SELECTION="$LOG_DIR/evidence-selection.tsv"
+EVIDENCE_PREPARATION_SELECTION="$LOG_DIR/evidence-preparation-selection.tsv"
 EVIDENCE_EVENTS="$LOG_DIR/evidence-events.tsv"
 EVIDENCE_CHANGED_PATHS="$LOG_DIR/changed-paths.txt"
+EVIDENCE_SELECTION_COMPARISON="$LOG_DIR/selection-comparison.tsv"
 declare -A EVIDENCE_FINGERPRINT_BY_ID=()
+declare -A EVIDENCE_STANDARD_FINGERPRINT_BY_ID=()
 declare -A EVIDENCE_CACHE_HIT_BY_ID=()
 declare -A EVIDENCE_RECEIPT_HIT_BY_ID=()
 declare -A EVIDENCE_PRIOR_LOG_BY_ID=()
@@ -651,12 +988,26 @@ elif [ -n "${MSYSTEM:-}" ]; then
 elif [ -r /proc/version ] && grep -qi microsoft /proc/version 2>/dev/null; then
     EVIDENCE_ENVIRONMENT_CLASS=wsl-linux
 fi
-EVIDENCE_POLICY_FINGERPRINT=$(sha256sum "$REGISTRY_PATH" "$SCRIPT_DIR/check-all.sh" "$EVIDENCE_HELPER" 2>/dev/null | sha256sum 2>/dev/null | awk '{print $1}')
+EVIDENCE_POLICY_FINGERPRINT=$(sha256sum \
+    "$REGISTRY_PATH" \
+    "$SCRIPT_DIR/check-all.sh" \
+    "$EVIDENCE_HELPER" \
+    "$SCRIPT_DIR/validation_process_supervisor.py" \
+    2>/dev/null | sha256sum 2>/dev/null | awk '{print $1}')
 EVIDENCE_POLICY_FINGERPRINT=${EVIDENCE_POLICY_FINGERPRINT:-unavailable}
 EVIDENCE_INPUT_FINGERPRINT=
 EVIDENCE_CACHE_HIT=false
 EVIDENCE_RECEIPT_HIT=false
 EVIDENCE_PRIOR_LOG=
+
+record_runner_abort_failure() {
+    if [ "$RUNNER_CANCELLED_BY_SIGNAL" = true ] && [ "$RUNNER_ABORT_FAILURE_RECORDED" = false ]; then
+        echo -e "${RED}✗ FAILED${NC}: validation runner was cancelled (${VALIDATION_ABORT_REASON:-signal})"
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+        RUNNER_ABORT_FAILURE_RECORDED=true
+    fi
+}
 
 validator_version() {
     local id=$1
@@ -674,39 +1025,99 @@ prepare_validation_evidence() {
 }
 
 prepare_all_validation_evidence() {
-    local id version prepared record fingerprint cache_hit prior_log
+    local id version prepared line parse_line record fingerprint cache_hit prior_log rest tab_count row_count=0
+    local -A expected_ids=() seen_ids=()
     [ -f "$EVIDENCE_HELPER" ] || {
         echo "Validation evidence helper is missing: $EVIDENCE_HELPER" >&2
         return 1
     }
-    : > "$EVIDENCE_SELECTION"
+    : > "$EVIDENCE_PREPARATION_SELECTION"
     for id in "${CHECK_IDS[@]}"; do
+        expected_ids["$id"]=true
         version=$(validator_version "$id")
         VALIDATOR_VERSION_BY_ID["$id"]=$version
-        if [ -n "${IMMUTABLE_HISTORY_RECEIPT_REUSE_BY_ID[$id]:-}" ]; then
-            EVIDENCE_FINGERPRINT_BY_ID["$id"]=$IMMUTABLE_HISTORY_FINGERPRINT
-            EVIDENCE_CACHE_HIT_BY_ID["$id"]=false
-            EVIDENCE_RECEIPT_HIT_BY_ID["$id"]=true
-            EVIDENCE_PRIOR_LOG_BY_ID["$id"]=$IMMUTABLE_HISTORY_RECEIPT
-            continue
-        fi
         printf '%s\t%s\t%s\t%s\n' \
             "$id" "$version" "${CHECK_INPUT_PATHS[$id]}" "${CHECK_CACHE_POLICY[$id]}" \
-            >> "$EVIDENCE_SELECTION"
+            >> "$EVIDENCE_PREPARATION_SELECTION"
     done
-    prepared=$(python .ai/scripts/validation-evidence.py prepare \
-        --repo "$PROJECT_ROOT" \
-        --cache "$EVIDENCE_CACHE" \
+    EVIDENCE_PREPARATION_SELECTION_REF=$(repo_relative_artifact "$EVIDENCE_PREPARATION_SELECTION") || return 1
+    EVIDENCE_CACHE_REF=$(repo_relative_artifact "$EVIDENCE_CACHE") || return 1
+    if ! run_supervised_control prepare 60 \
+        "$PYTHON_EXECUTABLE" .ai/scripts/validation-evidence.py prepare \
+        --repo . \
+        --cache "$EVIDENCE_CACHE_REF" \
         --profile "$PROFILE" \
         --environment-class "$EVIDENCE_ENVIRONMENT_CLASS" \
-        --selection "$EVIDENCE_SELECTION") || return 1
-    while IFS=$'\t' read -r record fingerprint cache_hit prior_log; do
-        [ -n "$record" ] || continue
+        --selection "$EVIDENCE_PREPARATION_SELECTION_REF"; then
+        return 1
+    fi
+    prepared=$(< "$LOG_DIR/control-prepare.log")
+    while IFS= read -r line; do
+        parse_line="${line%$'\r'}"
+        [ -n "$parse_line" ] || {
+            echo "Validation evidence preparation contains a blank or empty row" >&2
+            return 1
+        }
+        rest=$parse_line
+        tab_count=0
+        while [[ "$rest" == *$'\t'* ]]; do
+            rest=${rest#*$'\t'}
+            tab_count=$((tab_count + 1))
+        done
+        [ "$tab_count" -eq 3 ] || {
+            echo "Validation evidence preparation row must contain exactly four columns" >&2
+            return 1
+        }
+        IFS=$'\t' read -r record fingerprint cache_hit prior_log <<< "$parse_line"
+        [[ "$record" =~ ^[a-z0-9][a-z0-9-]*$ ]] || {
+            echo "Validation evidence preparation contains an invalid check id" >&2
+            return 1
+        }
+        [ -n "${expected_ids[$record]:-}" ] || {
+            echo "Validation evidence preparation contains an unknown check id: $record" >&2
+            return 1
+        }
+        [ -z "${seen_ids[$record]:-}" ] || {
+            echo "Validation evidence preparation contains a duplicate check id: $record" >&2
+            return 1
+        }
+        [[ "$fingerprint" =~ ^[0-9a-f]{64}$ ]] || {
+            echo "Validation evidence preparation contains an invalid fingerprint for: $record" >&2
+            return 1
+        }
+        { [ "$cache_hit" = true ] || [ "$cache_hit" = false ]; } || {
+            echo "Validation evidence preparation contains an invalid cache flag for: $record" >&2
+            return 1
+        }
+        if [ "$cache_hit" = true ]; then
+            path_is_safe "$prior_log" || {
+                echo "Validation evidence preparation contains an invalid cache log for: $record" >&2
+                return 1
+            }
+        elif [ -n "$prior_log" ]; then
+            echo "Validation evidence preparation contains a log without a cache hit for: $record" >&2
+            return 1
+        fi
+        seen_ids["$record"]=true
+        row_count=$((row_count + 1))
         EVIDENCE_FINGERPRINT_BY_ID["$record"]=$fingerprint
+        EVIDENCE_STANDARD_FINGERPRINT_BY_ID["$record"]=$fingerprint
         EVIDENCE_CACHE_HIT_BY_ID["$record"]=$cache_hit
         EVIDENCE_RECEIPT_HIT_BY_ID["$record"]=false
         EVIDENCE_PRIOR_LOG_BY_ID["$record"]=$prior_log
     done <<< "$prepared"
+    [ "$row_count" -eq "${#CHECK_IDS[@]}" ] || {
+        echo "Validation evidence preparation row count does not match the canonical registry" >&2
+        return 1
+    }
+    for id in "${CHECK_IDS[@]}"; do
+        if [ -n "${IMMUTABLE_HISTORY_RECEIPT_REUSE_BY_ID[$id]:-}" ]; then
+            EVIDENCE_FINGERPRINT_BY_ID["$id"]=$IMMUTABLE_HISTORY_FINGERPRINT
+            EVIDENCE_CACHE_HIT_BY_ID["$id"]=false
+            EVIDENCE_RECEIPT_HIT_BY_ID["$id"]=true
+            EVIDENCE_PRIOR_LOG_BY_ID["$id"]=.ai/distribution/validation/immutable-history-receipt.yaml
+        fi
+    done
     if [ "$IMMUTABLE_HISTORY_SOURCE_CONTEXT" = true ] && [ "$IMMUTABLE_HISTORY_FORCE_FULL" = true ]; then
         for id in workflow-artifacts assessment-artifacts source-ai-context-version; do
             EVIDENCE_CACHE_HIT_BY_ID["$id"]=false
@@ -722,26 +1133,73 @@ prepare_all_validation_evidence() {
     done
 }
 
+prepare_nonreuse_validation_evidence() {
+    local id=$1
+    EVIDENCE_INPUT_FINGERPRINT=${EVIDENCE_STANDARD_FINGERPRINT_BY_ID[$id]:-}
+    EVIDENCE_CACHE_HIT=false
+    EVIDENCE_RECEIPT_HIT=false
+    EVIDENCE_PRIOR_LOG=
+    [ -n "$EVIDENCE_INPUT_FINGERPRINT" ]
+}
+
+write_final_fingerprint_selection() {
+    local id event_id _version _fingerprint _outcome disposition _started _completed cache_hit
+    local _log _suppressed _reason _changed result_ref _enforcement
+    declare -A omit_immutable_reuse=()
+    while IFS=$'\t' read -r event_id _version _fingerprint _outcome disposition \
+        _started _completed cache_hit _log _suppressed _reason _changed result_ref _enforcement; do
+        if [ "$IMMUTABLE_HISTORY_PREPARATION_ACTIVE" = true ] &&
+            [ "$disposition" = reused ] && [ "$cache_hit" = false ] &&
+            [ "$result_ref" = "$(basename "$IMMUTABLE_HISTORY_PREPARATION_RESULT")" ]; then
+            omit_immutable_reuse["$event_id"]=true
+        fi
+    done < "$EVIDENCE_EVENTS"
+    : > "$EVIDENCE_SELECTION"
+    for id in "${CHECK_IDS[@]}"; do
+        [ -z "${omit_immutable_reuse[$id]:-}" ] || continue
+        printf '%s\t%s\t%s\t%s\n' \
+            "$id" "${VALIDATOR_VERSION_BY_ID[$id]}" \
+            "${CHECK_INPUT_PATHS[$id]}" "${CHECK_CACHE_POLICY[$id]}" \
+            >> "$EVIDENCE_SELECTION"
+    done
+}
+
 record_validation_evidence() {
     local id=$1 outcome=$2 disposition=$3 started_ms=$4 completed_ms=$5 log_path=$6
-    local suppressed_bytes=0 version selection_reason
+    local include_result=${7:-true}
+    local suppressed_bytes=0 version selection_reason enforcement result_path result_ref=
     [ "$VERBOSE" = true ] || suppressed_bytes=-1
     version=${VALIDATOR_VERSION_BY_ID[$id]:-}
     [ -n "$version" ] || return 1
     selection_reason=${SELECTION_REASON_BY_ID[$id]:-selection-reason-unavailable}
-    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+    enforcement=${CHECK_ENFORCEMENT[$id]:-}
+    [ "$enforcement" = required ] || [ "$enforcement" = advisory ] || return 1
+    if [ "$include_result" != true ]; then
+        result_path=
+    elif [ "$disposition" = reused ] && [ "$EVIDENCE_RECEIPT_HIT" = true ]; then
+        result_path=$IMMUTABLE_HISTORY_PREPARATION_RESULT
+    else
+        result_path="${log_path%.log}.result.json"
+    fi
+    [ -z "$result_path" ] || [ ! -f "$result_path" ] || result_ref=$(basename "$result_path")
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
         "$id" "$version" "$EVIDENCE_INPUT_FINGERPRINT" "$outcome" "$disposition" \
         "$started_ms" "$completed_ms" "$EVIDENCE_CACHE_HIT" "$(basename "$log_path")" "$suppressed_bytes" \
-        "$selection_reason" "$CHANGED_PATHS_DIGEST" \
+        "$selection_reason" "$CHANGED_PATHS_DIGEST" "$result_ref" "$enforcement" \
         >> "$EVIDENCE_EVENTS"
 }
 
-if ! prepare_all_validation_evidence; then
-    echo "Validation evidence preparation failed; no checks were launched." >&2
-    exit 2
-fi
 : > "$EVIDENCE_EVENTS"
-printf '%s\n' "${!CHANGED_PATHS[@]}" | LC_ALL=C sort > "$EVIDENCE_CHANGED_PATHS"
+: > "$EVIDENCE_CHANGED_PATHS"
+if [ "${#CHANGED_PATHS[@]}" -gt 0 ]; then
+    printf '%s\n' "${!CHANGED_PATHS[@]}" | LC_ALL=C sort > "$EVIDENCE_CHANGED_PATHS"
+fi
+CHANGED_PATHS_DIGEST=$(sha256_regular_file "$EVIDENCE_CHANGED_PATHS")
+CHANGED_PATHS_DIGEST=${CHANGED_PATHS_DIGEST:-unavailable}
+printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
+    validation-selection-comparison/v1 "$SELECTION_MODE" "$SELECTION_BASE_SHA" \
+    "$SELECTION_HEAD_SHA" "$CHANGED_PATHS_DIGEST" "$SELECTION_ESCALATION_REASON" \
+    > "$EVIDENCE_SELECTION_COMPARISON"
 
 record_not_selected_evidence() {
     local id log_path started_ms completed_ms
@@ -757,11 +1215,6 @@ record_not_selected_evidence() {
         record_validation_evidence "$id" "not-applicable" "not-selected" "$started_ms" "$completed_ms" "$log_path" || return 1
     done
 }
-
-if ! record_not_selected_evidence; then
-    echo "Validation not-selected evidence could not be recorded." >&2
-    exit 2
-fi
 
 emit_retained_output() {
     local log_path=$1 outcome=$2
@@ -859,45 +1312,224 @@ record_environment_block() {
     fi
 }
 
-wait_for_check_with_timeout() {
-    local child_pid=$1 timeout_seconds=$2 started_seconds=$SECONDS
-    local child_rc
-    while kill -0 "$child_pid" 2>/dev/null; do
-        if [ $((SECONDS - started_seconds)) -ge "$timeout_seconds" ]; then
-            kill -TERM "$child_pid" 2>/dev/null || true
-            sleep 0.1
-            kill -KILL "$child_pid" 2>/dev/null || true
-            wait "$child_pid" 2>/dev/null || true
-            return 124
-        fi
-        sleep 0.1
-    done
-    wait "$child_pid"
-    child_rc=$?
-    return "$child_rc"
-}
-
 run_script_with_timeout() {
-    local timeout_seconds=$1 log_path=$2
-    shift 2
-    if command -v timeout >/dev/null 2>&1; then
-        timeout --foreground "${timeout_seconds}s" "$@" >"$log_path" 2>&1
-        return $?
-    fi
-    "$@" >"$log_path" 2>&1 &
-    wait_for_check_with_timeout "$!" "$timeout_seconds"
+    local timeout_seconds=$1 log_path=$2 result_path=$3 script_path=$4
+    shift 4
+    run_supervisor_cli supervise \
+        --repo "$PROJECT_ROOT" \
+        --snapshot "$EVIDENCE_SNAPSHOT" \
+        --log-path "$log_path" \
+        --result-path "$result_path" \
+        --timeout-seconds "$timeout_seconds" \
+        --cwd-ref . \
+        -- bash "$script_path" "$@"
 }
 
-run_text_command_with_timeout() {
-    local timeout_seconds=$1 log_path=$2 command_text=$3
-    if command -v timeout >/dev/null 2>&1; then
-        export -f python
-        timeout --foreground "${timeout_seconds}s" bash -c \
-            'cd "$1" && eval "$2"' bash "$PROJECT_ROOT" "$command_text" >"$log_path" 2>&1
-        return $?
+PARSED_COMMAND_ARGV=()
+
+parse_declared_command_argv() {
+    local command_text=$1 token reconstructed
+    PARSED_COMMAND_ARGV=()
+    case "$command_text" in
+        ''|*$'\t'*|*$'\r'*|*$'\n'*) return 1 ;;
+    esac
+    read -r -a PARSED_COMMAND_ARGV <<< "$command_text"
+    [ "${#PARSED_COMMAND_ARGV[@]}" -gt 0 ] || return 1
+    printf -v reconstructed '%s ' "${PARSED_COMMAND_ARGV[@]}"
+    reconstructed=${reconstructed% }
+    [ "$reconstructed" = "$command_text" ] || return 1
+    for token in "${PARSED_COMMAND_ARGV[@]}"; do
+        [[ "$token" =~ ^[-A-Za-z0-9_./:=+@,%~]+$ ]] || return 1
+    done
+    if [ "${PARSED_COMMAND_ARGV[0]}" = python ]; then
+        PARSED_COMMAND_ARGV[0]=$PYTHON_EXECUTABLE
     fi
-    (cd "$PROJECT_ROOT" && eval "$command_text") >"$log_path" 2>&1 &
-    wait_for_check_with_timeout "$!" "$timeout_seconds"
+}
+
+declared_command_target_is_available() {
+    local executable=${1:-} target=${2:-}
+    [ "$executable" = "$PYTHON_EXECUTABLE" ] || return 1
+    [[ "$target" == *.py ]] || return 1
+    path_is_safe "$target" || return 1
+    [ -f "$PROJECT_ROOT/$target" ]
+}
+
+run_argv_with_timeout() {
+    local timeout_seconds=$1 log_path=$2 result_path=$3
+    shift 3
+    run_supervisor_cli supervise \
+        --repo "$PROJECT_ROOT" \
+        --snapshot "$EVIDENCE_SNAPSHOT" \
+        --log-path "$log_path" \
+        --result-path "$result_path" \
+        --timeout-seconds "$timeout_seconds" \
+        --cwd-ref . \
+        -- "$@"
+}
+
+VERIFIED_SUPERVISION_STATUS=
+VERIFIED_SUPERVISION_LAUNCHED=false
+VERIFIED_SUPERVISION_EXIT=
+
+verify_supervision_return_contract() {
+    local supervisor_rc=$1 result_path=$2 verified extra
+    VERIFIED_SUPERVISION_STATUS=
+    VERIFIED_SUPERVISION_LAUNCHED=false
+    VERIFIED_SUPERVISION_EXIT=
+    if [ "$supervisor_rc" -eq 130 ] && [ ! -f "$result_path" ] &&
+        [ "$RUNNER_CANCELLED_BY_SIGNAL" = true ]; then
+        VERIFIED_SUPERVISION_STATUS=cancelled-before-adapter-launch
+        return 0
+    fi
+    case "$supervisor_rc" in
+        0|1|124|125|126|127|128|130) ;;
+        *) return 1 ;;
+    esac
+    verified=$(python .ai/scripts/validation-evidence.py verify-supervision-result \
+        --repo "$PROJECT_ROOT" \
+        --snapshot "$EVIDENCE_SNAPSHOT" \
+        --result-path "$result_path") || return 1
+    IFS=$'\t' read -r VERIFIED_SUPERVISION_STATUS VERIFIED_SUPERVISION_LAUNCHED \
+        VERIFIED_SUPERVISION_EXIT extra <<< "$verified"
+    [ -z "$extra" ] || return 1
+    [ "$VERIFIED_SUPERVISION_LAUNCHED" = true ] ||
+        [ "$VERIFIED_SUPERVISION_LAUNCHED" = false ] || return 1
+    case "$supervisor_rc:$VERIFIED_SUPERVISION_STATUS:$VERIFIED_SUPERVISION_LAUNCHED" in
+        0:completed:true) ;;
+        1:completed:true) ;;
+        124:timed-out:true) ;;
+        125:snapshot-drift:true) ;;
+        126:cleanup-failed:true) ;;
+        127:launch-failed:false) ;;
+        128:snapshot-drift:false) ;;
+        130:cancelled:true) ;;
+        *) return 1 ;;
+    esac
+    case "$VERIFIED_SUPERVISION_EXIT" in
+        ''|*[!0-9-]*) [ -z "$VERIFIED_SUPERVISION_EXIT" ] || return 1 ;;
+    esac
+}
+
+run_supervised_control() {
+    local role=$1 timeout_seconds=$2 log_path result_path rc
+    shift 2
+    log_path="$LOG_DIR/control-$role.log"
+    result_path="$LOG_DIR/control-$role.result.json"
+    set +e
+    run_control_supervisor_cli supervise \
+        --repo "$PROJECT_ROOT" \
+        --snapshot "$EVIDENCE_SNAPSHOT" \
+        --log-path "$log_path" \
+        --result-path "$result_path" \
+        --timeout-seconds "$timeout_seconds" \
+        --cwd-ref . \
+        -- "$@"
+    rc=$?
+    set -e
+    if ! verify_supervision_return_contract "$rc" "$result_path" ||
+        [ "$rc" -ne 0 ] || [ "$VERIFIED_SUPERVISION_STATUS" != completed ] ||
+        [ "$VERIFIED_SUPERVISION_LAUNCHED" != true ] ||
+        [ "$VERIFIED_SUPERVISION_EXIT" != 0 ]; then
+        return 1
+    fi
+    EVIDENCE_CONTROL_RESULT_BY_ROLE["$role"]=$result_path
+}
+
+if ! prepare_all_validation_evidence; then
+    echo "Validation evidence preparation failed under process-tree supervision; no checks were launched." >&2
+    exit 2
+fi
+if ! record_not_selected_evidence; then
+    echo "Validation not-selected evidence could not be recorded." >&2
+    exit 2
+fi
+
+record_aborted_selected_check() {
+    local id=$1 description=$2 enforcement=$3
+    local started_ms completed_ms duration_ms log_path outcome=failed
+    local disposition=not-executed
+    log_path="$LOG_DIR/$id.log"
+    started_ms=$(now_millis)
+    printf 'Validation check was not launched: %s.\n' "${VALIDATION_ABORT_REASON:-validation-chain-aborted}" >"$log_path"
+    if ! prepare_nonreuse_validation_evidence "$id"; then
+        printf '%s\n' "validation evidence lookup failed for $id" >&2
+        EVIDENCE_INPUT_FINGERPRINT=unavailable
+        EVIDENCE_CACHE_HIT=false
+    fi
+    record_unavailable_or_failed "$enforcement" "$description was not launched after ${VALIDATION_ABORT_REASON:-validation-chain-abort}"
+    completed_ms=$(now_millis)
+    duration_ms=$((completed_ms - started_ms))
+    if ! record_validation_evidence "$id" "$outcome" "$disposition" "$started_ms" "$completed_ms" "$log_path"; then
+        echo "Validation evidence record failed for aborted check: $id" >&2
+    fi
+    record_timing "$id" "$duration_ms" "$description" "$outcome" "$disposition" "$log_path"
+    printf '%-36s %-24s %6sms %s\n' "$id" "$outcome" "$duration_ms" "$disposition"
+    emit_retained_output "$log_path" "$outcome"
+}
+
+admit_selected_check() {
+    local id=$1 description=$2 enforcement=$3
+    if [ "$VALIDATION_ABORTED" = true ]; then
+        record_aborted_selected_check "$id" "$description" "$enforcement"
+        return 1
+    fi
+    return 0
+}
+
+record_selected_without_execution() {
+    local description=$1 requested_outcome=$2 reason=$3
+    local id=${CHECK_ID_BY_DESCRIPTION[$description]:-}
+    local enforcement=${CHECK_ENFORCEMENT[$id]:-}
+    local started_ms completed_ms duration_ms log_path outcome=$requested_outcome
+    select_check "$description" || return 0
+    record_selected "$enforcement"
+    admit_selected_check "$id" "$description" "$enforcement" || return 0
+    log_path="$LOG_DIR/$id.log"
+    started_ms=$(now_millis)
+    if ! prepare_nonreuse_validation_evidence "$id"; then
+        outcome=failed
+        reason="validation evidence lookup failed before the selected check could be classified"
+        EVIDENCE_INPUT_FINGERPRINT=unavailable
+        EVIDENCE_CACHE_HIT=false
+        record_unavailable_or_failed "$enforcement" "validation evidence lookup for $description"
+    else
+        case "$outcome" in
+            not-applicable)
+                NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+                echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: $description ($reason)"
+                ;;
+            deferred-with-owner)
+                DEFERRED_CHECKS=$((DEFERRED_CHECKS + 1))
+                [ "$enforcement" != required ] || REQUIRED_DEFERRED=$((REQUIRED_DEFERRED + 1))
+                echo -e "${YELLOW}⊖${NC} DEFERRED: $description ($reason)"
+                ;;
+            failed)
+                record_unavailable_or_failed "$enforcement" "$description ($reason)"
+                ;;
+            *)
+                echo "Internal error: unsupported non-execution outcome '$outcome'" >&2
+                exit 2
+                ;;
+        esac
+    fi
+    printf 'Selected check was not launched; outcome=%s; reason=%s\n' "$outcome" "$reason" >"$log_path"
+    completed_ms=$(now_millis)
+    duration_ms=$((completed_ms - started_ms))
+    if ! record_validation_evidence "$id" "$outcome" "not-executed" "$started_ms" "$completed_ms" "$log_path"; then
+        echo "Validation evidence record failed for non-executed check: $id" >&2
+        if [ "$outcome" != failed ]; then
+            [ "$outcome" = not-applicable ] && NOT_APPLICABLE=$((NOT_APPLICABLE - 1))
+            if [ "$outcome" = deferred-with-owner ]; then
+                DEFERRED_CHECKS=$((DEFERRED_CHECKS - 1))
+                [ "$enforcement" != required ] || REQUIRED_DEFERRED=$((REQUIRED_DEFERRED - 1))
+            fi
+            record_unavailable_or_failed "$enforcement" "validation evidence record for $description"
+            outcome=failed
+        fi
+    fi
+    record_timing "$id" "$duration_ms" "$description" "$outcome" "not-executed" "$log_path"
+    printf '%-36s %-24s %6sms %s\n' "$id" "$outcome" "$duration_ms" "not-executed"
+    emit_retained_output "$log_path" "$outcome"
 }
 
 # Function to run a check script
@@ -907,21 +1539,42 @@ run_check() {
     local enforcement=$3
     local is_critical=$4
     local is_quick=$5
-    shift 5
+    local command_contract=$6
+    shift 6
     local args=("$@")
     local id=${CHECK_ID_BY_DESCRIPTION[$description]:-}
-    local started_ms completed_ms duration_ms output rc reason outcome log_path disposition timeout_seconds
+    local started_ms completed_ms duration_ms output rc reason outcome log_path result_path disposition timeout_seconds
+    local supervision_contract_valid=true record_result=true
     select_check "$description" "$is_critical" "$is_quick" || return 0
     record_selected "$enforcement"
+    admit_selected_check "$id" "$description" "$enforcement" || return 0
     log_path="$LOG_DIR/$id.log"
+    result_path="$LOG_DIR/$id.result.json"
     started_ms=$(now_millis)
     timeout_seconds=${CHECK_TIMEOUT[$id]:-}
 
     if ! prepare_validation_evidence "$id"; then
         printf '%s\n' "validation evidence lookup failed for $id" >"$log_path"
+        EVIDENCE_INPUT_FINGERPRINT=unavailable
+        EVIDENCE_CACHE_HIT=false
         record_unavailable_or_failed "$enforcement" "validation evidence lookup for $description"
         outcome="failed"
-        disposition="executed"
+        disposition="not-executed"
+    elif [ "${CHECK_COMMAND[$id]:-}" != "$command_contract" ]; then
+        printf '%s\n' "runner command does not match the canonical registry contract" >"$log_path"
+        record_unavailable_or_failed "$enforcement" "runner command contract for $description"
+        outcome="failed"
+        disposition="not-executed"
+    elif [ ! -f "$SCRIPT_DIR/$script_name" ]; then
+        printf '%s\n' "$script_name not found" >"$log_path"
+        record_unavailable_or_failed "$enforcement" "$script_name not found"
+        outcome="failed"
+        disposition="not-executed"
+    elif [ ! -x "$SCRIPT_DIR/$script_name" ]; then
+        printf '%s\n' "$script_name is not executable" >"$log_path"
+        record_unavailable_or_failed "$enforcement" "$script_name is not executable"
+        outcome="failed"
+        disposition="not-executed"
     elif [ "$EVIDENCE_CACHE_HIT" = true ] || [ "$EVIDENCE_RECEIPT_HIT" = true ]; then
         printf 'Reused eligible validation evidence; source=%s; prior_log=%s\n' \
             "$([ "$EVIDENCE_RECEIPT_HIT" = true ] && printf receipt || printf cache)" \
@@ -930,47 +1583,88 @@ run_check() {
         REUSED_CHECKS=$((REUSED_CHECKS + 1))
         outcome="passed"
         disposition="reused"
-    elif [ -f "$SCRIPT_DIR/$script_name" ]; then
-        if [ -x "$SCRIPT_DIR/$script_name" ]; then
+    else
+        set +e
+        run_script_with_timeout "$timeout_seconds" "$log_path" "$result_path" ".ai/scripts/$script_name" "${args[@]}"
+        rc=$?
+        set -e
+        output=$(cat "$log_path" 2>/dev/null || true)
+        if ! verify_supervision_return_contract "$rc" "$result_path"; then
+            supervision_contract_valid=false
+            record_result=false
+        fi
+        if [ "$supervision_contract_valid" = true ] &&
+            [ "$VERIFIED_SUPERVISION_LAUNCHED" = true ]; then
             [ "$enforcement" == "required" ] && REQUIRED_RUN=$((REQUIRED_RUN + 1))
             EXECUTED_CHECKS=$((EXECUTED_CHECKS + 1))
-            set +e
-            run_script_with_timeout "$timeout_seconds" "$log_path" "$SCRIPT_DIR/$script_name" "${args[@]}"
-            rc=$?
-            set -e
-            output=$(<"$log_path")
-            if [ "$rc" -eq 124 ]; then
-                printf 'Validation timed out after %ss.\n' "$timeout_seconds" >>"$log_path"
-                record_unavailable_or_failed "$enforcement" "$description timed out after ${timeout_seconds}s"
-                outcome="failed"
-                disposition="timed-out"
-            elif [ "$rc" -eq 0 ]; then
-                PASSED_CHECKS=$((PASSED_CHECKS + 1))
-                outcome="passed"
-            elif reason=$(classify_environment_block "$output"); then
-                record_environment_block "$enforcement" "$description" "$reason"
-                outcome="blocked-by-environment"
-            else
-                record_unavailable_or_failed "$enforcement" "$description returned non-zero"
-                outcome="failed"
-            fi
-            disposition=${disposition:-executed}
-        else
-            printf '%s\n' "$script_name is not executable" >"$log_path"
-            record_unavailable_or_failed "$enforcement" "$script_name is not executable"
+        fi
+        if [ "$supervision_contract_valid" != true ]; then
+            printf '\nValidation supervision result was missing or could not be authenticated.\n' >> "$log_path"
+            record_unavailable_or_failed "$enforcement" "$description supervision evidence was invalid"
+            outcome="failed"
+            disposition="not-executed"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=validation-supervision-evidence-invalid
+        elif [ "$rc" -eq 124 ]; then
+            record_unavailable_or_failed "$enforcement" "$description timed out after ${timeout_seconds}s"
+            outcome="failed"
+            disposition="timed-out"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=validation-timeout
+        elif [ "$rc" -eq 125 ]; then
+            record_unavailable_or_failed "$enforcement" "$description observed repository snapshot drift"
+            outcome="failed"
+            disposition="snapshot-drift"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=repository-snapshot-drift
+        elif [ "$rc" -eq 128 ]; then
+            record_unavailable_or_failed "$enforcement" "$description was blocked by repository snapshot drift before launch"
+            outcome="failed"
+            disposition="snapshot-drift"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=repository-snapshot-drift
+        elif [ "$rc" -eq 126 ]; then
+            record_unavailable_or_failed "$enforcement" "$description could not prove complete process-tree cleanup"
             outcome="failed"
             disposition="executed"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=process-tree-cleanup-failed
+        elif [ "$rc" -eq 130 ]; then
+            record_unavailable_or_failed "$enforcement" "$description was cancelled"
+            outcome="failed"
+            if [ "$VERIFIED_SUPERVISION_LAUNCHED" = true ]; then
+                disposition="cancelled"
+            else
+                disposition="not-executed"
+            fi
+            VALIDATION_ABORTED=true
+            [ -n "$VALIDATION_ABORT_REASON" ] || VALIDATION_ABORT_REASON=validation-cancelled
+        elif [ "$rc" -eq 127 ]; then
+            record_unavailable_or_failed "$enforcement" "$description could not be launched by the process supervisor"
+            outcome="failed"
+            disposition="not-executed"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=validation-launch-failed
+        elif [ "$rc" -eq 0 ]; then
+            PASSED_CHECKS=$((PASSED_CHECKS + 1))
+            outcome="passed"
+        elif reason=$(classify_environment_block "$output"); then
+            record_environment_block "$enforcement" "$description" "$reason"
+            outcome="blocked-by-environment"
+        else
+            record_unavailable_or_failed "$enforcement" "$description returned non-zero"
+            outcome="failed"
         fi
-    else
-        printf '%s\n' "$script_name not found" >"$log_path"
-        record_unavailable_or_failed "$enforcement" "$script_name not found"
-        outcome="failed"
-        disposition="executed"
+        disposition=${disposition:-executed}
     fi
     completed_ms=$(now_millis)
     duration_ms=$((completed_ms - started_ms))
-    if ! record_validation_evidence "$id" "$outcome" "$disposition" "$started_ms" "$completed_ms" "$log_path"; then
-        printf '%s\n' "validation evidence record failed" >>"$log_path"
+    if [ "$disposition" != reused ] &&
+        { [ "$EVIDENCE_CACHE_HIT" = true ] || [ "$EVIDENCE_RECEIPT_HIT" = true ]; }; then
+        prepare_nonreuse_validation_evidence "$id" || EVIDENCE_INPUT_FINGERPRINT=unavailable
+    fi
+    if ! record_validation_evidence "$id" "$outcome" "$disposition" "$started_ms" "$completed_ms" "$log_path" "$record_result"; then
+        printf '%s\n' "validation evidence record failed for $id" >&2
         if [ "$outcome" = passed ]; then
             PASSED_CHECKS=$((PASSED_CHECKS - 1))
             [ "$disposition" = reused ] && REUSED_CHECKS=$((REUSED_CHECKS - 1))
@@ -989,19 +1683,51 @@ run_command_check() {
     local enforcement=$3
     local is_critical=$4
     local is_quick=$5
+    shift 5
+    local supplied_argv=("$@")
+    local command_argv=() command_ready=true
     local id=${CHECK_ID_BY_DESCRIPTION[$description]:-}
-    local started_ms completed_ms duration_ms output rc reason outcome log_path disposition timeout_seconds
+    local started_ms completed_ms duration_ms output rc reason outcome log_path result_path disposition timeout_seconds
+    local supervision_contract_valid=true record_result=true
     select_check "$description" "$is_critical" "$is_quick" || return 0
     record_selected "$enforcement"
+    admit_selected_check "$id" "$description" "$enforcement" || return 0
     log_path="$LOG_DIR/$id.log"
+    result_path="$LOG_DIR/$id.result.json"
     started_ms=$(now_millis)
     timeout_seconds=${CHECK_TIMEOUT[$id]:-}
 
+    if [ "${#supplied_argv[@]}" -gt 0 ]; then
+        command_argv=("${supplied_argv[@]}")
+    elif parse_declared_command_argv "$command_text"; then
+        command_argv=("${PARSED_COMMAND_ARGV[@]}")
+    else
+        command_ready=false
+    fi
+
     if ! prepare_validation_evidence "$id"; then
         printf '%s\n' "validation evidence lookup failed for $id" >"$log_path"
+        EVIDENCE_INPUT_FINGERPRINT=unavailable
+        EVIDENCE_CACHE_HIT=false
         record_unavailable_or_failed "$enforcement" "validation evidence lookup for $description"
         outcome="failed"
-        disposition="executed"
+        disposition="not-executed"
+    elif [ "${CHECK_COMMAND[$id]:-}" != "$command_text" ]; then
+        printf '%s\n' "runner command does not match the canonical registry contract" >"$log_path"
+        record_unavailable_or_failed "$enforcement" "runner command contract for $description"
+        outcome="failed"
+        disposition="not-executed"
+    elif [ "$command_ready" != true ]; then
+        printf '%s\n' "canonical command cannot be represented as a direct argument vector" >"$log_path"
+        record_unavailable_or_failed "$enforcement" "direct argument vector for $description"
+        outcome="failed"
+        disposition="not-executed"
+    elif ! declared_command_target_is_available "${command_argv[@]}"; then
+        printf 'canonical command target is missing or unsafe: %s\n' \
+            "${command_argv[1]:-unavailable}" >"$log_path"
+        record_unavailable_or_failed "$enforcement" "canonical command target for $description"
+        outcome="failed"
+        disposition="not-executed"
     elif [ "$EVIDENCE_CACHE_HIT" = true ] || [ "$EVIDENCE_RECEIPT_HIT" = true ]; then
         printf 'Reused eligible validation evidence; source=%s; prior_log=%s\n' \
             "$([ "$EVIDENCE_RECEIPT_HIT" = true ] && printf receipt || printf cache)" \
@@ -1011,18 +1737,67 @@ run_command_check() {
         REUSED_CHECKS=$((REUSED_CHECKS + 1))
         disposition="reused"
     else
-        [ "$enforcement" == "required" ] && REQUIRED_RUN=$((REQUIRED_RUN + 1))
-        EXECUTED_CHECKS=$((EXECUTED_CHECKS + 1))
         set +e
-        run_text_command_with_timeout "$timeout_seconds" "$log_path" "$command_text"
+        run_argv_with_timeout "$timeout_seconds" "$log_path" "$result_path" "${command_argv[@]}"
         rc=$?
         set -e
-        output=$(<"$log_path")
-        if [ "$rc" -eq 124 ]; then
-            printf 'Validation timed out after %ss.\n' "$timeout_seconds" >>"$log_path"
+        output=$(cat "$log_path" 2>/dev/null || true)
+        if ! verify_supervision_return_contract "$rc" "$result_path"; then
+            supervision_contract_valid=false
+            record_result=false
+        fi
+        if [ "$supervision_contract_valid" = true ] &&
+            [ "$VERIFIED_SUPERVISION_LAUNCHED" = true ]; then
+            [ "$enforcement" == "required" ] && REQUIRED_RUN=$((REQUIRED_RUN + 1))
+            EXECUTED_CHECKS=$((EXECUTED_CHECKS + 1))
+        fi
+        if [ "$supervision_contract_valid" != true ]; then
+            printf '\nValidation supervision result was missing or could not be authenticated.\n' >> "$log_path"
+            record_unavailable_or_failed "$enforcement" "$description supervision evidence was invalid"
+            outcome="failed"
+            disposition="not-executed"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=validation-supervision-evidence-invalid
+        elif [ "$rc" -eq 124 ]; then
             record_unavailable_or_failed "$enforcement" "$description timed out after ${timeout_seconds}s"
             outcome="failed"
             disposition="timed-out"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=validation-timeout
+        elif [ "$rc" -eq 125 ]; then
+            record_unavailable_or_failed "$enforcement" "$description observed repository snapshot drift"
+            outcome="failed"
+            disposition="snapshot-drift"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=repository-snapshot-drift
+        elif [ "$rc" -eq 128 ]; then
+            record_unavailable_or_failed "$enforcement" "$description was blocked by repository snapshot drift before launch"
+            outcome="failed"
+            disposition="snapshot-drift"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=repository-snapshot-drift
+        elif [ "$rc" -eq 126 ]; then
+            record_unavailable_or_failed "$enforcement" "$description could not prove complete process-tree cleanup"
+            outcome="failed"
+            disposition="executed"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=process-tree-cleanup-failed
+        elif [ "$rc" -eq 130 ]; then
+            record_unavailable_or_failed "$enforcement" "$description was cancelled"
+            outcome="failed"
+            if [ "$VERIFIED_SUPERVISION_LAUNCHED" = true ]; then
+                disposition="cancelled"
+            else
+                disposition="not-executed"
+            fi
+            VALIDATION_ABORTED=true
+            [ -n "$VALIDATION_ABORT_REASON" ] || VALIDATION_ABORT_REASON=validation-cancelled
+        elif [ "$rc" -eq 127 ]; then
+            record_unavailable_or_failed "$enforcement" "$description could not be launched by the process supervisor"
+            outcome="failed"
+            disposition="not-executed"
+            VALIDATION_ABORTED=true
+            VALIDATION_ABORT_REASON=validation-launch-failed
         elif [ "$rc" -eq 0 ]; then
             PASSED_CHECKS=$((PASSED_CHECKS + 1))
             outcome="passed"
@@ -1037,8 +1812,12 @@ run_command_check() {
     fi
     completed_ms=$(now_millis)
     duration_ms=$((completed_ms - started_ms))
-    if ! record_validation_evidence "$id" "$outcome" "$disposition" "$started_ms" "$completed_ms" "$log_path"; then
-        printf '%s\n' "validation evidence record failed" >>"$log_path"
+    if [ "$disposition" != reused ] &&
+        { [ "$EVIDENCE_CACHE_HIT" = true ] || [ "$EVIDENCE_RECEIPT_HIT" = true ]; }; then
+        prepare_nonreuse_validation_evidence "$id" || EVIDENCE_INPUT_FINGERPRINT=unavailable
+    fi
+    if ! record_validation_evidence "$id" "$outcome" "$disposition" "$started_ms" "$completed_ms" "$log_path" "$record_result"; then
+        printf '%s\n' "validation evidence record failed for $id" >&2
         if [ "$outcome" = passed ]; then
             PASSED_CHECKS=$((PASSED_CHECKS - 1))
             [ "$disposition" = reused ] && REUSED_CHECKS=$((REUSED_CHECKS - 1))
@@ -1059,9 +1838,7 @@ run_deferred_check() {
     local is_quick=$4
     local reason=${5:-"dotnet-native replacement pending"}
 
-    select_check "$description" "$is_critical" "$is_quick" || return 0
-    echo -e "${YELLOW}⊖${NC} DEFERRED: $description ($reason)"
-    DEFERRED_CHECKS=$((DEFERRED_CHECKS + 1))
+    record_selected_without_execution "$description" "deferred-with-owner" "$reason"
 }
 
 run_spec_compliance_check() {
@@ -1069,22 +1846,24 @@ run_spec_compliance_check() {
     local task_name="${TASK_NAME:-}"
 
     if [ -z "$spec_file" ] && [ -z "$task_name" ]; then
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Spec Implementation Compliance (SPEC_FILE/TASK_NAME not set)"
-        NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+        record_selected_without_execution \
+            "Spec Implementation Compliance (.NET)" \
+            "not-applicable" \
+            "SPEC_FILE/TASK_NAME not set"
         return
     fi
     if [ -z "$spec_file" ] || [ -z "$task_name" ]; then
-        echo -e "${RED}✗ FAILED${NC}: Spec Implementation Compliance requires both SPEC_FILE and TASK_NAME"
-        TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-        FAILED_CHECKS=$((FAILED_CHECKS + 1))
-        REQUIRED_SELECTED=$((REQUIRED_SELECTED + 1))
-        REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+        record_selected_without_execution \
+            "Spec Implementation Compliance (.NET)" \
+            "failed" \
+            "requires both SPEC_FILE and TASK_NAME"
         return
     fi
 
     run_check "check-spec-compliance.sh" \
         "Spec Implementation Compliance (.NET)" \
-        "required" "false" "true" "$spec_file" "$task_name"
+        "required" "false" "true" \
+        "check-spec-compliance.sh SPEC_FILE TASK_NAME" "$spec_file" "$task_name"
 }
 
 source_release_context_available() {
@@ -1098,8 +1877,10 @@ run_source_repository_sdk_free_contract() {
         return
     fi
     if ! source_release_context_available; then
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: SDK-Free Framework Contract (source framework test not packaged)"
-        NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+        record_selected_without_execution \
+            "SDK-Free Framework Contract" \
+            "not-applicable" \
+            "source framework test not packaged"
         return
     fi
 
@@ -1108,28 +1889,46 @@ run_source_repository_sdk_free_contract() {
         "required" "true" "true"
 }
 
-run_source_repository_release_checks() {
-    if ! check_is_selected "Governance Term Routing And Release Projection Contract" &&
-        ! check_is_selected "AI Context Version Governance Fail-Closed Tests" &&
-        ! check_is_selected "AI Context Packaging GWT Tests"; then
+run_source_repository_engineering_guardrails_provider_contract() {
+    if ! check_is_selected "Engineering Guardrails Provider Contract"; then
         return
     fi
     if ! source_release_context_available; then
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Governance Term Routing And Release Projection Contract (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Version Governance Fail-Closed Tests (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Packaging GWT Tests (source package builder not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Release State Fail-Closed Tests (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Release Preparation Fail-Closed Tests (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Release Renderer Fail-Closed Tests (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Behavior Deterministic Evaluation (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Load Measurement Contract (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Repository Configuration Ownership Contract (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Repository Configuration Ownership Fail-Closed Tests (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Skill Transition Compatibility Contract (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Skill Transition Compatibility Fail-Closed Tests (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Effective Rule Packet Resolution and Consumer Parity Tests (source release context not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Effective Rule Action Skill Consumption Contract (source release context not packaged)"
-        NOT_APPLICABLE=$((NOT_APPLICABLE + 14))
+        record_selected_without_execution \
+            "Engineering Guardrails Provider Contract" \
+            "not-applicable" \
+            "source framework test not packaged"
+        return
+    fi
+
+    run_command_check "python .ai/scripts/tests/test_engineering_guardrails_provider_contract.py -v" \
+        "Engineering Guardrails Provider Contract" \
+        "required" "true" "true"
+}
+
+run_source_repository_release_checks() {
+    local description
+    if ! source_release_context_available; then
+        for description in \
+            "Governance Term Routing And Release Projection Contract" \
+            "AI Context Version Governance Fail-Closed Tests" \
+            "AI Context Packaging GWT Tests" \
+            "AI Context Release State Fail-Closed Tests" \
+            "AI Context Release Preparation Fail-Closed Tests" \
+            "AI Context Release Renderer Fail-Closed Tests" \
+            "AI Behavior Deterministic Evaluation" \
+            "AI Context Load Measurement Contract" \
+            "Repository Configuration Ownership Contract" \
+            "Repository Configuration Ownership Fail-Closed Tests" \
+            "Skill Transition Compatibility Contract" \
+            "Skill Transition Compatibility Fail-Closed Tests" \
+            "Effective Rule Packet Resolution and Consumer Parity Tests" \
+            "Effective Rule Action Skill Consumption Contract"; do
+            record_selected_without_execution \
+                "$description" \
+                "not-applicable" \
+                "source release context not packaged"
+        done
         return
     fi
 
@@ -1192,6 +1991,10 @@ run_source_repository_release_checks() {
 
 run_ai_context_version_check() {
     if source_release_context_available; then
+        record_selected_without_execution \
+            "AI Context Target Apply, Provenance And Customization Contracts" \
+            "not-applicable" \
+            "source release context owns version validation"
         run_command_check "python .ai/scripts/validate-ai-context-versions.py" \
             "AI Context Release And Version Contracts" \
             "required" "true" "true"
@@ -1200,9 +2003,19 @@ run_ai_context_version_check() {
         run_command_check "python .ai/scripts/validate-ai-context-target.py" \
             "AI Context Target Apply, Provenance And Customization Contracts" \
             "required" "true" "true"
+        record_selected_without_execution \
+            "AI Context Release And Version Contracts" \
+            "not-applicable" \
+            "source release context not packaged"
     else
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Target Provenance And Customization Contracts (target provenance not initialized)"
-        NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+        record_selected_without_execution \
+            "AI Context Target Apply, Provenance And Customization Contracts" \
+            "not-applicable" \
+            "target provenance not initialized"
+        record_selected_without_execution \
+            "AI Context Release And Version Contracts" \
+            "not-applicable" \
+            "source release context not packaged"
     fi
 }
 
@@ -1214,20 +2027,39 @@ source_governance_context_available() {
 }
 
 run_source_repository_governance_checks() {
-    if ! check_is_selected "Source Governance Manifest Registry"; then
-        return
-    fi
+    local description
     if ! source_governance_context_available; then
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Source Governance Manifest Registry (source governance registry not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Repository Identity Drift Fail-Closed Tests (source governance registry not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Governance Pull-Request Workflow Contract (source CI workflow not packaged)"
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: GitHub Workflow Lifecycle Contract (source CI workflows not packaged)"
-        NOT_APPLICABLE=$((NOT_APPLICABLE + 4))
+        for description in \
+            "Source Governance Manifest Registry" \
+            "Terminal Issue Closure Contract" \
+            "Terminal Issue Closure Fail-Closed Tests" \
+            "Repository Identity Drift Fail-Closed Tests"; do
+            record_selected_without_execution \
+                "$description" \
+                "not-applicable" \
+                "source governance registry not packaged"
+        done
+        for description in \
+            "Governance Pull-Request Workflow Contract" \
+            "GitHub Workflow Lifecycle Contract"; do
+            record_selected_without_execution \
+                "$description" \
+                "not-applicable" \
+                "source CI workflow not packaged"
+        done
         return
     fi
 
     run_command_check "python .ai/scripts/validate-source-governance.py" \
         "Source Governance Manifest Registry" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/validate-terminal-issue-closure.py" \
+        "Terminal Issue Closure Contract" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/tests/test_terminal_issue_closure.py -v" \
+        "Terminal Issue Closure Fail-Closed Tests" \
         "required" "true" "true"
 
     run_command_check "python .ai/scripts/tests/test_repository_identity.py -v" \
@@ -1248,8 +2080,10 @@ run_source_package_smoke() {
         return
     fi
     if ! source_release_context_available; then
-        echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: AI Context Package Smoke Tests (source package builder not packaged)"
-        NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+        record_selected_without_execution \
+            "AI Context Package Smoke Tests" \
+            "not-applicable" \
+            "source package builder not packaged"
         return
     fi
     run_command_check "python .ai/scripts/tests/test_ai_context_package_smoke.py -v" \
@@ -1326,16 +2160,25 @@ run_command_check "python .ai/scripts/tests/test_semantic_customization_skill_co
     "required" "true" "true"
 
 if [ -n "${COMMIT_RANGE:-}" ]; then
-    COMMIT_VALIDATION_COMMAND="python .ai/scripts/validate-git-commits.py --range '$COMMIT_RANGE'"
+    COMMIT_VALIDATION_ARGV=(
+        "$PYTHON_EXECUTABLE"
+        ".ai/scripts/validate-git-commits.py"
+        "--range"
+        "$COMMIT_RANGE"
+    )
     if [ -n "${WORKFLOW_ID:-}" ]; then
-        COMMIT_VALIDATION_COMMAND="$COMMIT_VALIDATION_COMMAND --workflow-id '$WORKFLOW_ID'"
+        COMMIT_VALIDATION_ARGV+=("--workflow-id" "$WORKFLOW_ID")
     fi
-    run_command_check "$COMMIT_VALIDATION_COMMAND" \
+    run_command_check \
+        "python .ai/scripts/validate-git-commits.py --range COMMIT_RANGE [--workflow-id WORKFLOW_ID]" \
         "Selected Git Commit Messages" \
-        "required" "true" "true"
+        "required" "true" "true" \
+        "${COMMIT_VALIDATION_ARGV[@]}"
 else
-    echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Selected Git Commit Messages (COMMIT_RANGE not set)"
-    NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+    record_selected_without_execution \
+        "Selected Git Commit Messages" \
+        "not-applicable" \
+        "COMMIT_RANGE not set"
 fi
 
 run_command_check "python .ai/scripts/validate-ai-context.py" \
@@ -1363,6 +2206,18 @@ run_command_check "python .ai/scripts/tests/test_payload_user_view_contract.py -
     "required" "true" "true"
 
 run_source_package_smoke
+
+run_command_check "python .ai/scripts/tests/test_ai_context_packaging.py UpgradeRoutePackageProjectionGwtTests -v" \
+    "AI Context Upgrade Route Package Projection" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_ai_context_packaging.py ProviderRolePackageProjectionGwtTests -v" \
+    "Provider-Neutral Role Package Projection" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_ai_context_multi_hop_upgrade.py -v" \
+    "AI Context Multi-Hop Upgrade Transaction GWT Tests" \
+    "required" "true" "true"
 
 run_command_check "python .ai/scripts/validate-dependency-versions.py" \
     "Offline Dependency And Version Consistency" \
@@ -1398,8 +2253,16 @@ run_command_check "python .ai/scripts/tests/test_validation_profile_registry.py 
     "Validation Profile Registry Contract" \
     "required" "true" "true"
 
-run_command_check "python .ai/scripts/tests/test_validation_evidence.py -v" \
+run_command_check "python .ai/scripts/tests/test_validation_process_supervisor.py -v" \
+    "Validation Process Supervisor Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_validation_evidence.py ValidationEvidenceRoutineContractGwtTests -v" \
     "Validation Execution Evidence Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_validation_evidence.py -v" \
+    "Validation Execution Evidence Exhaustive Contract" \
     "required" "true" "true"
 
 if immutable_history_source_context_available; then
@@ -1407,8 +2270,10 @@ if immutable_history_source_context_available; then
         "Immutable History Validation Contract" \
         "required" "true" "true"
 elif check_is_selected "Immutable History Validation Contract"; then
-    echo -e "${CYAN}ℹ${NC} NOT APPLICABLE: Immutable History Validation Contract (source history not packaged)"
-    NOT_APPLICABLE=$((NOT_APPLICABLE + 1))
+    record_selected_without_execution \
+        "Immutable History Validation Contract" \
+        "not-applicable" \
+        "source history not packaged"
 fi
 
 run_command_check "python .ai/scripts/tests/test_coding_standards_integrity_contract.py -v" \
@@ -1434,9 +2299,11 @@ run_command_check "python .ai/scripts/tests/test_ai_context_source_include_evide
 # Coding standards are fundamental for AI context and standards docs
 run_check "check-coding-standards.sh" \
     "Coding Standards Structural Integrity" \
-    "required" "true" "true"
+    "required" "true" "true" \
+    "check-coding-standards.sh"
 
 run_source_repository_sdk_free_contract
+run_source_repository_engineering_guardrails_provider_contract
 
 # Optional target analyzers and configuration tests are target-selected and are
 # never framework-owned required checks.
@@ -1464,7 +2331,10 @@ fi
 # Additional Checks (only in full mode)
 # ====================================================================
 
-if [ "$PROFILE" == "nightly-full" ]; then
+if [ "$PROFILE" == "nightly-full" ] ||
+    check_is_selected "Test DI Compliance" ||
+    check_is_selected "Template Synchronization" ||
+    check_is_selected "ADR Index Update"; then
     echo ""
     echo -e "${MAGENTA}════ Additional Checks ════${NC}"
 
@@ -1493,6 +2363,13 @@ fi
 # Results Summary
 # ====================================================================
 
+if ! write_final_fingerprint_selection; then
+    echo -e "${RED}✗ FAILED${NC}: final fingerprint selection could not be bound to evidence events"
+    FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+fi
+record_runner_abort_failure
+
 echo ""
 echo -e "${MAGENTA}╔════════════════════════════════════════╗${NC}"
 echo -e "${MAGENTA}║           Check Results Summary        ║${NC}"
@@ -1506,40 +2383,226 @@ else
     PASS_RATE=0
 fi
 
-if ! python .ai/scripts/validation-evidence.py finalize \
-    --repo "$PROJECT_ROOT" \
-    --cache "$EVIDENCE_CACHE" \
-    --evidence "$EVIDENCE_PATH" \
-    --events "$EVIDENCE_EVENTS" \
-    --invocation-id "$INVOCATION_ID" \
-    --profile "$PROFILE" \
-    --environment-class "$EVIDENCE_ENVIRONMENT_CLASS"; then
-    echo -e "${RED}✗ FAILED${NC}: validation evidence records could not be finalized"
+FINALIZATION_FAILED=false
+if ! EVIDENCE_SNAPSHOT_REF=$(repo_relative_artifact "$EVIDENCE_SNAPSHOT") ||
+    ! EVIDENCE_POST_SNAPSHOT_REF=$(repo_relative_artifact "$EVIDENCE_POST_SNAPSHOT") ||
+    ! EVIDENCE_CACHE_REF=$(repo_relative_artifact "$EVIDENCE_CACHE") ||
+    ! EVIDENCE_PATH_REF=$(repo_relative_artifact "$EVIDENCE_PATH") ||
+    ! EVIDENCE_EVENTS_REF=$(repo_relative_artifact "$EVIDENCE_EVENTS") ||
+    ! EVIDENCE_SUMMARY_REF=$(repo_relative_artifact "$EVIDENCE_SUMMARY") ||
+    ! EVIDENCE_WORKFLOW_SUMMARY_REF=$(repo_relative_artifact "$EVIDENCE_WORKFLOW_SUMMARY") ||
+    ! EVIDENCE_SELECTED_CHECKS_REF=$(repo_relative_artifact "$EVIDENCE_SELECTED_CHECKS") ||
+    ! EVIDENCE_SELECTION_REF=$(repo_relative_artifact "$EVIDENCE_SELECTION") ||
+    ! EVIDENCE_PREPARATION_SELECTION_REF=$(repo_relative_artifact "$EVIDENCE_PREPARATION_SELECTION") ||
+    ! EVIDENCE_CHANGED_PATHS_REF=$(repo_relative_artifact "$EVIDENCE_CHANGED_PATHS") ||
+    ! EVIDENCE_SELECTION_COMPARISON_REF=$(repo_relative_artifact "$EVIDENCE_SELECTION_COMPARISON") ||
+    ! EVIDENCE_STAGED_MANIFEST_REF=$(repo_relative_artifact "$EVIDENCE_STAGED_MANIFEST") ||
+    ! EVIDENCE_SEALED_MANIFEST_REF=$(repo_relative_artifact "$EVIDENCE_SEALED_MANIFEST") ||
+    ! EVIDENCE_SEAL_SUPERVISION_LOG_REF=$(repo_relative_artifact "$EVIDENCE_SEAL_SUPERVISION_LOG") ||
+    ! EVIDENCE_SEAL_SUPERVISION_RESULT_REF=$(repo_relative_artifact "$EVIDENCE_SEAL_SUPERVISION_RESULT"); then
+    echo -e "${RED}✗ FAILED${NC}: validation artifacts could not be represented as repository-relative paths"
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
     REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+    FINALIZATION_FAILED=true
 fi
 
-if ! python .ai/scripts/validation-evidence.py summarize \
-    --evidence "$EVIDENCE_PATH" \
-    --output "$EVIDENCE_SUMMARY" \
+if [ "$FINALIZATION_FAILED" = false ] && ! run_supervised_control post-snapshot 60 \
+    "$PYTHON_EXECUTABLE" .ai/scripts/validation-evidence.py verify-snapshot \
+    --repo . \
+    --snapshot "$EVIDENCE_SNAPSHOT_REF" \
+    --output "$EVIDENCE_POST_SNAPSHOT_REF"; then
+    echo -e "${RED}✗ FAILED${NC}: repository identity could not be supervised through final snapshot verification"
+    FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+    FINALIZATION_FAILED=true
+fi
+record_runner_abort_failure
+
+finalize_control_argv=(
+    "$PYTHON_EXECUTABLE"
+    .ai/scripts/validation-evidence.py
+    finalize
+    --repo .
+    --cache "$EVIDENCE_CACHE_REF"
+    --evidence "$EVIDENCE_PATH_REF"
+    --events "$EVIDENCE_EVENTS_REF"
+    --invocation-id "$INVOCATION_ID"
+    --profile "$PROFILE"
+    --environment-class "$EVIDENCE_ENVIRONMENT_CLASS"
+    --snapshot "$EVIDENCE_SNAPSHOT_REF"
+)
+if [ "$IMMUTABLE_HISTORY_PREPARATION_ACTIVE" = true ]; then
+    finalize_control_argv+=(--preparation-python "$PYTHON_EXECUTABLE")
+fi
+if [ "$FINALIZATION_FAILED" = false ] &&
+    ! run_supervised_control finalize 60 "${finalize_control_argv[@]}"; then
+    echo -e "${RED}✗ FAILED${NC}: validation evidence records could not be supervised through finalization"
+    FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+    FINALIZATION_FAILED=true
+fi
+record_runner_abort_failure
+
+if [ "$FINALIZATION_FAILED" = false ] && ! run_supervised_control summarize 60 \
+    "$PYTHON_EXECUTABLE" .ai/scripts/validation-evidence.py summarize \
+    --evidence "$EVIDENCE_PATH_REF" \
+    --output "$EVIDENCE_SUMMARY_REF" \
     --invocation-id "$INVOCATION_ID" \
     --profile "$PROFILE"; then
-    echo -e "${RED}✗ FAILED${NC}: validation evidence summary could not be written"
+    echo -e "${RED}✗ FAILED${NC}: validation evidence summary could not be supervised"
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
     REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+    FINALIZATION_FAILED=true
 fi
+record_runner_abort_failure
 
 TOTAL_ELAPSED=$((SECONDS - TOTAL_ELAPSED_START))
-if ! python .ai/scripts/validation-evidence.py workflow-summary \
-    --evidence "$EVIDENCE_PATH" \
-    --output "$LOG_DIR/workflow-summary.json" \
-    --profile "$PROFILE" \
-    --wall-span-ms "$((TOTAL_ELAPSED * 1000))" \
-    --workflow-id "${WORKFLOW_ID:-}"; then
-    echo -e "${RED}✗ FAILED${NC}: workflow evidence summary could not be written"
+workflow_summary_control_argv=(
+    "$PYTHON_EXECUTABLE"
+    .ai/scripts/validation-evidence.py
+    workflow-summary
+    --evidence "$EVIDENCE_PATH_REF"
+    --output "$EVIDENCE_WORKFLOW_SUMMARY_REF"
+    --invocation-id "$INVOCATION_ID"
+    --profile "$PROFILE"
+    --wall-span-ms "$((TOTAL_ELAPSED * 1000))"
+)
+if [ -n "${WORKFLOW_ID:-}" ]; then
+    workflow_summary_control_argv+=(--workflow-id "$WORKFLOW_ID")
+fi
+if [ "$FINALIZATION_FAILED" = false ] &&
+    ! run_supervised_control workflow-summary 60 "${workflow_summary_control_argv[@]}"; then
+    echo -e "${RED}✗ FAILED${NC}: workflow evidence summary could not be supervised"
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
     REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+    FINALIZATION_FAILED=true
 fi
+record_runner_abort_failure
+
+INVOCATION_OUTCOME=passed
+record_runner_abort_failure
+if [ "$VALIDATION_ABORTED" = true ] || [ "$FAILED_CHECKS" -gt 0 ] ||
+    [ "$REQUIRED_DEFERRED" -gt 0 ]; then
+    INVOCATION_OUTCOME=failed
+elif [ "$BLOCKED_CHECKS" -gt 0 ]; then
+    INVOCATION_OUTCOME=blocked
+fi
+seal_child_argv=(
+    "$PYTHON_EXECUTABLE"
+    .ai/scripts/validation-evidence.py
+    seal-invocation
+    --repo .
+    --snapshot "$EVIDENCE_SNAPSHOT_REF"
+    --post-snapshot "$EVIDENCE_POST_SNAPSHOT_REF"
+    --evidence "$EVIDENCE_PATH_REF"
+    --summary "$EVIDENCE_SUMMARY_REF"
+    --workflow-summary "$EVIDENCE_WORKFLOW_SUMMARY_REF"
+    --selection "$EVIDENCE_SELECTED_CHECKS_REF"
+    --preparation-selection "$EVIDENCE_PREPARATION_SELECTION_REF"
+    --fingerprint-selection "$EVIDENCE_SELECTION_REF"
+    --events "$EVIDENCE_EVENTS_REF"
+    --changed-paths "$EVIDENCE_CHANGED_PATHS_REF"
+    --selection-comparison "$EVIDENCE_SELECTION_COMPARISON_REF"
+    --output "$EVIDENCE_STAGED_MANIFEST_REF"
+    --publication-output "$EVIDENCE_SEALED_MANIFEST_REF"
+    --cache "$EVIDENCE_CACHE_REF"
+    --invocation-id "$INVOCATION_ID"
+    --control-python "$PYTHON_EXECUTABLE"
+)
+for control_role in bootstrap-snapshot prepare post-snapshot finalize summarize workflow-summary; do
+    if [ -z "${EVIDENCE_CONTROL_RESULT_BY_ROLE[$control_role]:-}" ] ||
+        ! control_result_ref=$(repo_relative_artifact "${EVIDENCE_CONTROL_RESULT_BY_ROLE[$control_role]}"); then
+        FINALIZATION_FAILED=true
+        break
+    fi
+    seal_child_argv+=(--control-result "$control_role" "$control_result_ref")
+done
+seal_child_argv+=(
+    --terminal-result "$EVIDENCE_SEAL_SUPERVISION_RESULT_REF"
+    --terminal-log "$EVIDENCE_SEAL_SUPERVISION_LOG_REF"
+)
+if [ "$IMMUTABLE_HISTORY_PREPARATION_ACTIVE" = true ]; then
+    if ! IMMUTABLE_HISTORY_PREPARATION_RESULT_REF=$(repo_relative_artifact "$IMMUTABLE_HISTORY_PREPARATION_RESULT"); then
+        FINALIZATION_FAILED=true
+    fi
+    seal_child_argv+=(
+        --preparation-python "$PYTHON_EXECUTABLE"
+        --preparation-result "$IMMUTABLE_HISTORY_PREPARATION_RESULT_REF"
+    )
+fi
+record_runner_abort_failure
+if [ "$RUNNER_ABORT_FAILURE_RECORDED" = true ]; then
+    INVOCATION_OUTCOME=failed
+fi
+seal_child_argv+=(--outcome "$INVOCATION_OUTCOME")
+seal_rc=1
+if [ "$FINALIZATION_FAILED" = false ]; then
+    set +e
+    run_control_supervisor_cli supervise \
+        --repo "$PROJECT_ROOT" \
+        --snapshot "$EVIDENCE_SNAPSHOT" \
+        --log-path "$EVIDENCE_SEAL_SUPERVISION_LOG" \
+        --result-path "$EVIDENCE_SEAL_SUPERVISION_RESULT" \
+        --timeout-seconds 90 \
+        --cwd-ref . \
+        -- "${seal_child_argv[@]}"
+    seal_rc=$?
+    set -e
+fi
+terminal_supervision_valid=false
+authenticated_staged_manifest_digest=
+if [ "$FINALIZATION_FAILED" = false ] && [ "$RUNNER_CANCELLED_BY_SIGNAL" != true ] &&
+    verify_supervision_return_contract "$seal_rc" "$EVIDENCE_SEAL_SUPERVISION_RESULT" &&
+    [ "$seal_rc" -eq 0 ] && [ "$VERIFIED_SUPERVISION_STATUS" = completed ] &&
+    [ "$VERIFIED_SUPERVISION_LAUNCHED" = true ] && [ "$VERIFIED_SUPERVISION_EXIT" = 0 ] &&
+    [ -f "$EVIDENCE_STAGED_MANIFEST" ] && [ ! -e "$EVIDENCE_SEALED_MANIFEST" ]; then
+    terminal_supervision_valid=true
+fi
+if [ "$terminal_supervision_valid" = true ]; then
+    authenticated_staged_manifest_digest=$(python .ai/scripts/validation-evidence.py \
+        verify-terminal-invocation \
+        --repo "$PROJECT_ROOT" \
+        --snapshot "$EVIDENCE_SNAPSHOT_REF" \
+        --manifest "$EVIDENCE_STAGED_MANIFEST_REF" \
+        --result-path "$EVIDENCE_SEAL_SUPERVISION_RESULT_REF" \
+        -- "${seal_child_argv[@]}") || authenticated_staged_manifest_digest=
+    if [[ ! "$authenticated_staged_manifest_digest" =~ ^[0-9a-f]{64}$ ]]; then
+        terminal_supervision_valid=false
+    fi
+fi
+if [ "$terminal_supervision_valid" != true ] ||
+    [ "$RUNNER_CANCELLED_BY_SIGNAL" = true ]; then
+    rm -f -- "$EVIDENCE_STAGED_MANIFEST"
+    echo -e "${RED}✗ FAILED${NC}: validation invocation artifacts could not be sealed"
+    FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+else
+    if ! ln -- "$EVIDENCE_STAGED_MANIFEST" "$EVIDENCE_SEALED_MANIFEST" ||
+        [ ! -f "$EVIDENCE_SEALED_MANIFEST" ]; then
+        rm -f -- "$EVIDENCE_STAGED_MANIFEST"
+        echo -e "${RED}✗ FAILED${NC}: sealed invocation manifest could not be published without overwrite"
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+    else
+        published_manifest_digest=$(sha256_regular_file "$EVIDENCE_SEALED_MANIFEST")
+        if [ "$published_manifest_digest" != "$authenticated_staged_manifest_digest" ]; then
+            remove_owned_terminal_publication
+            echo -e "${RED}✗ FAILED${NC}: published invocation manifest changed during atomic read-back"
+            printf 'authenticated-manifest-digest: %s\npublished-manifest-digest: %s\n' \
+                "$authenticated_staged_manifest_digest" "$published_manifest_digest"
+            FAILED_CHECKS=$((FAILED_CHECKS + 1))
+            REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+        else
+            EVIDENCE_SEAL_PUBLISHED=true
+            rm -f -- "$EVIDENCE_STAGED_MANIFEST"
+        fi
+    fi
+fi
+record_runner_abort_failure
+if [ "$RUNNER_CANCELLED_BY_SIGNAL" = true ]; then
+    remove_owned_terminal_publication
+fi
+TOTAL_ELAPSED=$((SECONDS - TOTAL_ELAPSED_START))
 PROFILE_BUDGET_SECONDS=${PROFILE_BUDGET[$PROFILE]:-}
 if [ -n "$PROFILE_BUDGET_SECONDS" ] && [ "$TOTAL_ELAPSED" -gt "$PROFILE_BUDGET_SECONDS" ]; then
     if [ "${PROFILE_ENFORCEMENT[$PROFILE]}" = report-and-warn ]; then
@@ -1551,13 +2614,22 @@ if [ -n "$PROFILE_BUDGET_SECONDS" ] && [ "$TOTAL_ELAPSED" -gt "$PROFILE_BUDGET_S
 fi
 
 # The concise summary deliberately separates outcome from execution disposition.
+record_runner_abort_failure
 echo "summary: profile=$PROFILE selected=$TOTAL_CHECKS executed=$EXECUTED_CHECKS reused=$REUSED_CHECKS failed=$FAILED_CHECKS blocked=$BLOCKED_CHECKS warnings=$WARNINGS deferred=$DEFERRED_CHECKS not-applicable=$NOT_APPLICABLE"
 echo "full-log: $LOG_DIR"
 echo "evidence: $EVIDENCE_PATH"
+if [ "$EVIDENCE_SEAL_PUBLISHED" = true ]; then
+    echo "sealed-manifest: $EVIDENCE_SEALED_MANIFEST"
+    echo "seal-supervision-result: $EVIDENCE_SEAL_SUPERVISION_RESULT"
+else
+    echo "sealed-manifest: unavailable"
+    echo "seal-supervision-result: unavailable"
+fi
 echo -e "Required Selected: ${CYAN}$REQUIRED_SELECTED${NC}"
 echo -e "Required Executed: ${CYAN}$REQUIRED_RUN${NC}"
 echo -e "Required Failed: ${RED}$REQUIRED_FAILED${NC}"
 echo -e "Required Blocked: ${YELLOW}$REQUIRED_BLOCKED${NC}"
+echo -e "Required Deferred: ${YELLOW}$REQUIRED_DEFERRED${NC}"
 
 echo ""
 if [ "$VERBOSE" = true ] && [ ${#CHECK_TIMINGS[@]} -gt 0 ]; then
@@ -1586,17 +2658,25 @@ echo -e "${BLUE}Completed at $(date '+%Y-%m-%d %H:%M:%S')${NC}"
 echo ""
 
 # Overall status
-if [ $FAILED_CHECKS -eq 0 ] && [ $BLOCKED_CHECKS -eq 0 ] && [ $WARNINGS -eq 0 ]; then
+record_runner_abort_failure
+finish_validation_successfully() {
+    trap 'request_validation_cancellation INT; exit 1' INT
+    trap 'request_validation_cancellation TERM; exit 1' TERM
+    trap 'request_validation_cancellation HUP; exit 1' HUP
+    [ "$VALIDATION_ABORTED" != true ] || exit 1
+    exit 0
+}
+if [ "$VALIDATION_ABORTED" != true ] && [ $FAILED_CHECKS -eq 0 ] && [ $BLOCKED_CHECKS -eq 0 ] && [ $WARNINGS -eq 0 ] && [ $REQUIRED_DEFERRED -eq 0 ]; then
     echo -e "${GREEN}╔════════════════════════════════════════╗${NC}"
     echo -e "${GREEN}║    ✓ All Checks Passed Successfully!   ║${NC}"
     echo -e "${GREEN}╚════════════════════════════════════════╝${NC}"
-    exit 0
-elif [ $FAILED_CHECKS -eq 0 ] && [ $BLOCKED_CHECKS -eq 0 ]; then
+    finish_validation_successfully
+elif [ "$VALIDATION_ABORTED" != true ] && [ $FAILED_CHECKS -eq 0 ] && [ $BLOCKED_CHECKS -eq 0 ] && [ $REQUIRED_DEFERRED -eq 0 ]; then
     echo -e "${YELLOW}╔════════════════════════════════════════╗${NC}"
     echo -e "${YELLOW}║  ⚠ Passed with $WARNINGS Advisory Warning(s) ║${NC}"
     echo -e "${YELLOW}╚════════════════════════════════════════╝${NC}"
-    exit 0
-elif [ $FAILED_CHECKS -eq 0 ]; then
+    finish_validation_successfully
+elif [ "$VALIDATION_ABORTED" != true ] && [ $FAILED_CHECKS -eq 0 ] && [ $REQUIRED_DEFERRED -eq 0 ]; then
     echo -e "${YELLOW}╔════════════════════════════════════════╗${NC}"
     echo -e "${YELLOW}║  ⊘ $BLOCKED_CHECKS check(s) blocked by environment  ║${NC}"
     echo -e "${YELLOW}╚════════════════════════════════════════╝${NC}"
@@ -1606,6 +2686,12 @@ elif [ $FAILED_CHECKS -eq 0 ]; then
     echo "2. Prepare the host prerequisite listed above."
     echo "3. Re-run. Exit code 3 means unverified, never passed."
     exit 3
+elif [ "$VALIDATION_ABORTED" != true ] && [ $FAILED_CHECKS -eq 0 ]; then
+    echo -e "${RED}╔═══════════════════════════════════════╗${NC}"
+    echo -e "${RED}║  ⊖ $REQUIRED_DEFERRED required check(s) remain deferred   ║${NC}"
+    echo -e "${RED}╚═══════════════════════════════════════╝${NC}"
+    echo "Required deferred validation is retained evidence, not a passing result."
+    exit 1
 else
     echo -e "${RED}╔════════════════════════════════════════╗${NC}"
     echo -e "${RED}║    ✗ $FAILED_CHECKS Check(s) Failed!              ║${NC}"

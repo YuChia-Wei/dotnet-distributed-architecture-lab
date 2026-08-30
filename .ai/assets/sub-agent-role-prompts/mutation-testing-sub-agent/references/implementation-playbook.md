@@ -20,4 +20,3 @@ Use this delegated sub-agent role when the main agent needs a worker focused on 
 - baseline mutation run
 - incremental contract and test strengthening
 - final mutation verification
-
