@@ -1,5 +1,5 @@
 {
   "GatewayAuthSetting": {
-    "Default": "Anonymous"
+    "Default": "Opid"
   }
 }
