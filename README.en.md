@@ -73,6 +73,51 @@ Default API entry points:
 - Products API: `http://localhost:8090`
 - Inventory API: `http://localhost:8100`
 
+### Verify Wolverine Consumer Exception Handling
+
+Compose explicitly enables a lab-only exception-policy probe. When the Product API is started with other configuration, this capability is disabled by default and returns HTTP 404. A probe does not modify product, inventory, or order data.
+
+Trigger the timeout policy through the authentication-free YARP Gateway:
+
+```powershell
+$probe = Invoke-RestMethod -Method Post `
+  -Uri http://localhost:8888/api/products/diagnostics/consumer-exception-policy/timeout
+$probe
+```
+
+Or trigger the fallback policy for an unclassified exception:
+
+```powershell
+$probe = Invoke-RestMethod -Method Post `
+  -Uri http://localhost:8888/api/products/diagnostics/consumer-exception-policy/unhandled
+$probe
+```
+
+Both endpoints return HTTP 202 and a `probeId` that correlates the complete processing path. An unsupported failure kind returns HTTP 400.
+
+Use the returned `probeId` to inspect Orders Consumer handler executions:
+
+```powershell
+$handlerPattern = "Consumer exception policy probe $($probe.probeId) is throwing"
+docker logs orders-consumer 2>&1 | Select-String -SimpleMatch $handlerPattern
+```
+
+Expect `timeout` to execute 4 times in total (the initial attempt plus 3 scheduled retries), and `unhandled` to execute 2 times (the initial attempt plus 1 retry). After all attempts are exhausted, the message reaches the Kafka native dead-letter topic `wolverine-dead-letter-queue`.
+
+Find the exception type, `attempts` header, and payload for this probe in the DLQ:
+
+```powershell
+docker exec kafka /opt/kafka/bin/kafka-console-consumer.sh `
+  --bootstrap-server localhost:9092 `
+  --topic wolverine-dead-letter-queue `
+  --from-beginning `
+  --timeout-ms 10000 `
+  --property print.headers=true 2>&1 |
+  Select-String $probe.probeId
+```
+
+The terminal record for `timeout` should contain `System.TimeoutException` and `attempts:4`; `unhandled` should contain `System.InvalidOperationException` and `attempts:2`. The topic retains earlier lab messages, so filter with the `probeId` returned by the current request.
+
 Run the solution tests:
 
 ```powershell
