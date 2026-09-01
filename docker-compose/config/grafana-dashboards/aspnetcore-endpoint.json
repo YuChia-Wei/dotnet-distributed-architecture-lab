@@ -906,7 +906,7 @@
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "definition": "label_values(http_server_request_duration_seconds_count{http_route=~\"$route\"},http_request_method)",
+        "definition": "label_values(http_server_request_duration_seconds_count{http_route=\"$route\"},http_request_method)",
         "hide": 0,
         "includeAll": false,
         "label": "Method",
@@ -914,7 +914,7 @@
         "name": "method",
         "options": [],
         "query": {
-          "query": "label_values(http_server_request_duration_seconds_count{http_route=~\"$route\"},http_request_method)",
+          "query": "label_values(http_server_request_duration_seconds_count{http_route=\"$route\"},http_request_method)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
