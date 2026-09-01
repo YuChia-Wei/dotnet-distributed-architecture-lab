@@ -1,6 +1,7 @@
-@Product.Api_HostAddress = http://localhost:5008
+@Gateway_HostAddress = http://localhost:8888
 
-GET {{Product.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{Gateway_HostAddress}}/api/products/diagnostics/consumer-exception-policy/timeout
 
 ###
+
+POST {{Gateway_HostAddress}}/api/products/diagnostics/consumer-exception-policy/unhandled

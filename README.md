@@ -73,6 +73,51 @@ API 預設入口：
 - Products API: `http://localhost:8090`
 - Inventory API: `http://localhost:8100`
 
+### 驗證 Wolverine Consumer 例外處理
+
+Compose 會明確啟用僅供實驗使用的 exception-policy probe；直接以其他設定啟動 Product API 時，此功能預設關閉並回傳 HTTP 404。Probe 不會修改產品、庫存或訂單資料。
+
+透過無身分認證的 YARP Gateway 觸發 timeout policy：
+
+```powershell
+$probe = Invoke-RestMethod -Method Post `
+  -Uri http://localhost:8888/api/products/diagnostics/consumer-exception-policy/timeout
+$probe
+```
+
+或觸發未分類例外的 fallback policy：
+
+```powershell
+$probe = Invoke-RestMethod -Method Post `
+  -Uri http://localhost:8888/api/products/diagnostics/consumer-exception-policy/unhandled
+$probe
+```
+
+兩個端點都會回傳 HTTP 202，以及可用來追蹤整段處理流程的 `probeId`。不支援的 failure kind 會回傳 HTTP 400。
+
+使用回傳的 `probeId` 查看 Orders Consumer 的 handler 執行紀錄：
+
+```powershell
+$handlerPattern = "Consumer exception policy probe $($probe.probeId) is throwing"
+docker logs orders-consumer 2>&1 | Select-String -SimpleMatch $handlerPattern
+```
+
+預期 `timeout` 共執行 4 次（初次執行加 3 次 scheduled retries），`unhandled` 共執行 2 次（初次執行加 1 次 retry）。所有嘗試耗盡後，訊息會進入 Kafka native dead-letter topic `wolverine-dead-letter-queue`。
+
+從 DLQ 找出這次 probe 的 exception type、`attempts` header 與 payload：
+
+```powershell
+docker exec kafka /opt/kafka/bin/kafka-console-consumer.sh `
+  --bootstrap-server localhost:9092 `
+  --topic wolverine-dead-letter-queue `
+  --from-beginning `
+  --timeout-ms 10000 `
+  --property print.headers=true 2>&1 |
+  Select-String $probe.probeId
+```
+
+`timeout` 的 terminal record 應包含 `System.TimeoutException` 與 `attempts:4`；`unhandled` 應包含 `System.InvalidOperationException` 與 `attempts:2`。Topic 會保留先前的實驗訊息，因此請以本次回傳的 `probeId` 篩選。
+
 執行 solution tests：
 
 ```powershell

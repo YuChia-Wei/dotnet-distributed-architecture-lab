@@ -6,6 +6,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using SaleProducts.Applications;
+using SaleProducts.Applications.UseCases;
 using SaleProducts.Infrastructure;
 using Scalar.AspNetCore;
 using Wolverine;
@@ -20,7 +21,12 @@ builder.Host.UseWolverine(opts =>
     // Get the queue service type from environment variables
     var queueService = builder.Configuration.GetValue<string>("QUEUE_SERVICE");
 
-    if ("Kafka".Equals(queueService, StringComparison.OrdinalIgnoreCase))
+    if ("InMemory".Equals(queueService, StringComparison.OrdinalIgnoreCase))
+    {
+        opts.StubAllExternalTransports();
+        opts.PublishMessage<IIntegrationEvent>().ToLocalQueue("products-integration-events");
+    }
+    else if ("Kafka".Equals(queueService, StringComparison.OrdinalIgnoreCase))
     {
         // Configure Kafka
         var kafkaConnectionString = builder.Configuration.GetConnectionString("KafkaBroker");
@@ -65,6 +71,8 @@ builder.Services.AddOpenApi();
 // domain core DI
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddSingleton(new ConsumerExceptionPolicyProbeOptions(
+    builder.Configuration.GetValue<bool>(ConsumerExceptionPolicyProbeOptions.EnabledConfigurationKey)));
 
 builder.Services.AddOpenTelemetry()
        .WithLogging(loggerProviderBuilder =>
@@ -119,3 +127,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+/// <summary>Public entry point used by ASP.NET Core integration tests.</summary>
+public partial class Program;

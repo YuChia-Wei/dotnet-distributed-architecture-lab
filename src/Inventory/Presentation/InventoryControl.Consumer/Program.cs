@@ -2,6 +2,7 @@
 
 using Confluent.Kafka.Extensions.OpenTelemetry;
 using Lab.BuildingBlocks.Integrations.Configuration;
+using InventoryControl.Consumer.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -56,6 +57,8 @@ var builder = Host.CreateDefaultBuilder(args)
                   })
                   .UseWolverine(opts =>
                   {
+                      ConsumerFailurePolicy.Configure(opts);
+
                       if (messaging.Profile == MessagingTransportProfile.InMemory)
                       {
                           opts.StubAllExternalTransports();

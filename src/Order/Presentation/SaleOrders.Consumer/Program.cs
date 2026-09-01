@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using SaleOrders.Consumer.Messaging;
 using Wolverine;
 using Wolverine.Kafka;
 using Wolverine.RabbitMQ;
@@ -56,6 +57,8 @@ var builder = Host.CreateDefaultBuilder(args)
                   })
                   .UseWolverine(opts =>
                   {
+                      ConsumerFailurePolicy.Configure(opts);
+
                       if (messaging.Profile == MessagingTransportProfile.InMemory)
                       {
                           opts.StubAllExternalTransports();
@@ -67,6 +70,7 @@ var builder = Host.CreateDefaultBuilder(args)
 
                           // 接收 產品服務 的整合事件
                           opts.ListenToKafkaTopic("products.integration.events")
+                              .EnableNativeDeadLetterQueue()
                               .UseDurableInbox();
                       }
                       else
