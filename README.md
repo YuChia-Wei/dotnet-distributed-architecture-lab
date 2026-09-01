@@ -61,17 +61,20 @@ Solution 入口為 `MQArchLab.slnx`。產品 project 採 `DomainCore` 與 `Prese
 啟動完整環境：
 
 ```powershell
-docker compose -f ./docker-compose/docker-compose.yml up -d --build
+docker compose `
+  -f ./docker-compose/docker-compose.yml `
+  -f ./docker-compose/docker-compose.override.yml `
+  up -d --build
 ```
 
 目前 Compose 會啟動三組 API/Consumer、無身分認證的 YARP Gateway、三個 PostgreSQL databases、Kafka/Kafdrop，以及 OpenTelemetry/Grafana observability stack。
 
-API 預設入口：
+預設 host 入口：
 
 - YARP Gateway（無身分認證）：`http://localhost:8888`（`/api/orders`、`/api/products`、`/api/inventory`）
-- Orders API: `http://localhost:8080`
-- Products API: `http://localhost:8090`
-- Inventory API: `http://localhost:8100`
+- Grafana：`http://localhost:3001`
+
+`docker-compose.override.yml` 只讓 YARP Gateway 與 Grafana 發布 host ports；APIs、Consumers、Kafka、Kafdrop、PostgreSQL、OpenTelemetry Collector、Tempo、Loki 與 Prometheus 僅透過 Compose 內部 network 通訊。基礎 `docker-compose.yml` 保持原始 standalone bindings，不受此部署 profile 影響。
 
 ### 驗證 Wolverine Consumer 例外處理
 

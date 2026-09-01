@@ -61,17 +61,20 @@ Prerequisites:
 Start the complete environment:
 
 ```powershell
-docker compose -f ./docker-compose/docker-compose.yml up -d --build
+docker compose `
+  -f ./docker-compose/docker-compose.yml `
+  -f ./docker-compose/docker-compose.override.yml `
+  up -d --build
 ```
 
 The current Compose topology starts three API/Consumer pairs, an authentication-free YARP Gateway, three PostgreSQL databases, Kafka/Kafdrop, and the OpenTelemetry/Grafana observability stack.
 
-Default API entry points:
+Default host entry points:
 
 - YARP Gateway (authentication-free): `http://localhost:8888` (`/api/orders`, `/api/products`, and `/api/inventory`)
-- Orders API: `http://localhost:8080`
-- Products API: `http://localhost:8090`
-- Inventory API: `http://localhost:8100`
+- Grafana: `http://localhost:3001`
+
+`docker-compose.override.yml` publishes host ports only for the YARP Gateway and Grafana. APIs, Consumers, Kafka, Kafdrop, PostgreSQL, the OpenTelemetry Collector, Tempo, Loki, and Prometheus communicate only through the internal Compose network. The base `docker-compose.yml` retains its original standalone bindings and is not changed by this deployment profile.
 
 ### Verify Wolverine Consumer Exception Handling
 
