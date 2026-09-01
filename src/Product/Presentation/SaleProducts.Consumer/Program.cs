@@ -7,6 +7,7 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using SaleProducts.Applications;
+using SaleProducts.Consumer.Messaging;
 using SaleProducts.Infrastructure;
 using Wolverine;
 using Wolverine.Kafka;
@@ -59,6 +60,8 @@ var builder = Host.CreateDefaultBuilder(args)
                   })
                   .UseWolverine(opts =>
                   {
+                      ConsumerFailurePolicy.Configure(opts);
+
                       if (queueServiceUri.Equals("Kafka", StringComparison.OrdinalIgnoreCase))
                       {
                           opts.UseKafka(brokerConnectionString)
