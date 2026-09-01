@@ -76,6 +76,24 @@ Default host entry points:
 
 `docker-compose.override.yml` publishes host ports only for the YARP Gateway and Grafana. APIs, Consumers, Kafka, Kafdrop, PostgreSQL, the OpenTelemetry Collector, Tempo, Loki, and Prometheus communicate only through the internal Compose network. The base `docker-compose.yml` retains its original standalone bindings and is not changed by this deployment profile.
 
+### Query Errors and Exceptions
+
+Open the Grafana [System Errors & Exceptions](http://localhost:3001/d/system-errors-exceptions/system-errors-exceptions) dashboard to quickly filter `Error`, `Critical`, and `Fatal` logs, plus any log carrying exception metadata, by service and text. Expand a log that has a `trace_id`, then select `View trace` to open the corresponding Tempo trace. A background operation without an active trace context has only a log entry and therefore no trace link.
+
+The Orders and Inventory APIs currently sample `wolverine_node_assignments` health-check traces to at most one trace every 10 minutes. This retains a small amount of diagnostic data without allowing the roughly 10-second background check to overwhelm Tempo:
+
+```csharp
+options.Durability.NodeAssignmentHealthCheckTraceSamplingPeriod = TimeSpan.FromMinutes(10);
+```
+
+The adjacent source comment also retains this fully disabled example, but it is commented out and therefore not applied:
+
+```csharp
+// options.Durability.NodeAssignmentHealthCheckTracingEnabled = false;
+```
+
+Both settings have been available since WolverineFx `5.9.0`, work with this project's `5.32.1`, and remain available in Wolverine `6.x`. With `DurabilityMode.Solo`, Wolverine `5.39.5` and `6.19.0` had a known issue where the sampling period did not suppress the recurring trace. This Compose topology uses the default Balanced mode and is not affected by that Solo-mode issue.
+
 ### Verify Wolverine Consumer Exception Handling
 
 Compose explicitly enables a lab-only exception-policy probe. When the Product API is started with other configuration, this capability is disabled by default and returns HTTP 404. A probe does not modify product, inventory, or order data.

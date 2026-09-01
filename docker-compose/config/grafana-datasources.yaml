@@ -70,4 +70,11 @@ datasources:
     isDefault: false
     jsonData:
       timeInterval: 5s
+      derivedFields:
+        - name: TraceID
+          matcherType: label
+          matcherRegex: trace_id
+          datasourceUid: tempo
+          url: '$${__value.raw}'
+          urlDisplayLabel: View trace
     uid: loki

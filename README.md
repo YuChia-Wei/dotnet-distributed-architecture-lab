@@ -76,6 +76,24 @@ docker compose `
 
 `docker-compose.override.yml` 只讓 YARP Gateway 與 Grafana 發布 host ports；APIs、Consumers、Kafka、Kafdrop、PostgreSQL、OpenTelemetry Collector、Tempo、Loki 與 Prometheus 僅透過 Compose 內部 network 通訊。基礎 `docker-compose.yml` 保持原始 standalone bindings，不受此部署 profile 影響。
 
+### 查詢錯誤與例外
+
+開啟 Grafana 的 [System Errors & Exceptions](http://localhost:3001/d/system-errors-exceptions/system-errors-exceptions) dashboard，即可依 service 與文字快速篩選 `Error`、`Critical`、`Fatal` logs，以及任何帶有 exception metadata 的 log。展開具有 `trace_id` 的 log 後，按下 `View trace` 會直接開啟對應的 Tempo trace；背景工作若沒有 active trace context，則只會顯示 log，不會建立無法對應的連結。
+
+Orders 與 Inventory APIs 目前將 `wolverine_node_assignments` health-check traces 取樣為每 10 分鐘最多保留一次，避免預設約每 10 秒的背景檢查淹沒 Tempo，又保留少量診斷資料：
+
+```csharp
+options.Durability.NodeAssignmentHealthCheckTraceSamplingPeriod = TimeSpan.FromMinutes(10);
+```
+
+程式碼旁也保留以下「完全不輸出」範例，但以註解停用，因此目前不會套用：
+
+```csharp
+// options.Durability.NodeAssignmentHealthCheckTracingEnabled = false;
+```
+
+這兩個設定 API 自 WolverineFx `5.9.0` 起提供，適用於本專案的 `5.32.1`，並仍存在於 Wolverine `6.x`。若使用 `DurabilityMode.Solo`，Wolverine `5.39.5` 與 `6.19.0` 曾有取樣週期無法抑制 recurring trace 的已知問題；本 Compose 使用預設的 Balanced mode，不受該 Solo-mode 問題影響。
+
 ### 驗證 Wolverine Consumer 例外處理
 
 Compose 會明確啟用僅供實驗使用的 exception-policy probe；直接以其他設定啟動 Product API 時，此功能預設關閉並回傳 HTTP 404。Probe 不會修改產品、庫存或訂單資料。

@@ -12,3 +12,9 @@ grafana dashboards url: https://grafana.com/grafana/dashboards
 - OpenTelemetry dotnet webapi: https://grafana.com/grafana/dashboards/20568-opentelemetry-dotnet-webapi/
   - **有針對資料來源進行修正**
   - **有針對搜尋條件進行修正**
+
+## 專案自訂 dashboards
+
+- `system-errors-exceptions.json`
+  - 快速依 service 與文字查詢 `Error`、`Critical`、`Fatal` logs，以及任何帶有 exception metadata 的 log。
+  - 展開具有 `trace_id` 的 log 後，可透過 Loki derived field 的 `View trace` 直接開啟對應 Tempo trace。
