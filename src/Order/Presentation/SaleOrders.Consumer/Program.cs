@@ -70,6 +70,7 @@ var builder = Host.CreateDefaultBuilder(args)
 
                           // 接收 產品服務 的整合事件
                           opts.ListenToKafkaTopic("products.integration.events")
+                              .EnableNativeDeadLetterQueue()
                               .UseDurableInbox();
                       }
                       else

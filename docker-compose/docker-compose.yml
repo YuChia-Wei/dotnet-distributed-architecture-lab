@@ -235,6 +235,7 @@ services:
 #      - ConnectionStrings__MessageBroker=amqp://guest:guest@rabbitmq:5672
       - ConnectionStrings__KafkaBroker=kafka:9092
       - ConnectionStrings__DefaultConnection=User ID=user;Password=password;Host=postgres-product;Port=5432;Database=products_db;Pooling=true;
+      - Diagnostics__ConsumerExceptionPolicyProbe__Enabled=true
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector-contrib:4317
       - OTEL_SERVICE_NAME=product-api
     ports:

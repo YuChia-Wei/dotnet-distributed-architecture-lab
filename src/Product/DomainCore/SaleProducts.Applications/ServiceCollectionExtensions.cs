@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
         services.AddScoped<IGetAllProductsUseCase, GetAllProductsUseCase>();
         services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
+        services.AddScoped<ITriggerConsumerExceptionPolicyProbeUseCase, TriggerConsumerExceptionPolicyProbeUseCase>();
         return services;
     }
 }
