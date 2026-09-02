@@ -25,9 +25,9 @@ Repository 同時維護一套可重用的 AI collaboration context；產品真�
 - WolverineFx `5.32.1`
 - Kafka（canonical broker；目前 Docker Compose 啟用，並以 producer-selected partition key 驗證同一業務實體的順序消費）
 - RabbitMQ（deferred compatibility profile；Compose service 預設註解，目前共享 queue 不是廣播拓撲，是否轉換或同步部署需另行評估）
-- PostgreSQL 16、Dapper `2.1.72`、Npgsql `10.0.2`
+- PostgreSQL `16.15-alpine`、Dapper `2.1.72`、Npgsql `10.0.2`
 - xUnit `2.9.3`、Moq、Shouldly
-- OpenTelemetry、Prometheus、Tempo、Loki、Grafana
+- OpenTelemetry Collector Contrib `0.159.0`、Prometheus `3.14.0`、Tempo `2.10.7`、Loki `3.7.7`、Grafana `13.2.1`
 
 精確版本與證據路徑見 [.dev/project-config.yaml](.dev/project-config.yaml) 與 [.dev/requirement/TECH-STACK-REQUIREMENTS.MD](.dev/requirement/TECH-STACK-REQUIREMENTS.MD)。
 
@@ -61,17 +61,40 @@ Solution 入口為 `MQArchLab.slnx`。產品 project 採 `DomainCore` 與 `Prese
 啟動完整環境：
 
 ```powershell
-docker compose -f ./docker-compose/docker-compose.yml up -d --build
+docker compose `
+  -f ./docker-compose/docker-compose.yml `
+  -f ./docker-compose/docker-compose.override.yml `
+  up -d --build
 ```
 
 目前 Compose 會啟動三組 API/Consumer、無身分認證的 YARP Gateway、三個 PostgreSQL databases、Kafka/Kafdrop，以及 OpenTelemetry/Grafana observability stack。
 
-API 預設入口：
+預設 host 入口：
 
 - YARP Gateway（無身分認證）：`http://localhost:8888`（`/api/orders`、`/api/products`、`/api/inventory`）
-- Orders API: `http://localhost:8080`
-- Products API: `http://localhost:8090`
-- Inventory API: `http://localhost:8100`
+- Grafana：`http://localhost:3001`
+
+`docker-compose.override.yml` 只讓 YARP Gateway 與 Grafana 發布 host ports；APIs、Consumers、Kafka、Kafdrop、PostgreSQL、OpenTelemetry Collector、Tempo、Loki 與 Prometheus 僅透過 Compose 內部 network 通訊。基礎 `docker-compose.yml` 保持原始 standalone bindings，不受此部署 profile 影響。
+
+PostgreSQL image 固定在 16 系列的最新 patch，讓既有 named volumes 可以直接繼續使用；跨 PostgreSQL major version 需要另外規劃資料升級，不應只替換 image tag。Tempo 固定在最新的 2.10 patch，因為 Tempo 3.0.3 在低流量 monolithic mode 仍會將正常的 idle scheduler 狀態持續記為 error，會污染本實驗室的例外診斷；設定已改為 scoped overrides，保留 OTLP、Jaeger 與 Zipkin receivers，並移除新版已不支援的 OpenCensus receiver。
+
+### 查詢錯誤與例外
+
+開啟 Grafana 的 [System Errors & Exceptions](http://localhost:3001/d/system-errors-exceptions/system-errors-exceptions) dashboard，即可依 service 與文字快速篩選 `Error`、`Critical`、`Fatal` logs，以及任何帶有 exception metadata 的 log。展開具有 `trace_id` 的 log 後，按下 `View trace` 會直接開啟對應的 Tempo trace；背景工作若沒有 active trace context，則只會顯示 log，不會建立無法對應的連結。
+
+Orders 與 Inventory APIs 目前將 `wolverine_node_assignments` health-check traces 取樣為每 10 分鐘最多保留一次，避免預設約每 10 秒的背景檢查淹沒 Tempo，又保留少量診斷資料：
+
+```csharp
+options.Durability.NodeAssignmentHealthCheckTraceSamplingPeriod = TimeSpan.FromMinutes(10);
+```
+
+程式碼旁也保留以下「完全不輸出」範例，但以註解停用，因此目前不會套用：
+
+```csharp
+// options.Durability.NodeAssignmentHealthCheckTracingEnabled = false;
+```
+
+這兩個設定 API 自 WolverineFx `5.9.0` 起提供，適用於本專案的 `5.32.1`，並仍存在於 Wolverine `6.x`。若使用 `DurabilityMode.Solo`，Wolverine `5.39.5` 與 `6.19.0` 曾有取樣週期無法抑制 recurring trace 的已知問題；本 Compose 使用預設的 Balanced mode，不受該 Solo-mode 問題影響。
 
 ### 驗證 Wolverine Consumer 例外處理
 

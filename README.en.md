@@ -25,9 +25,9 @@ Cross-context contracts are located under `src/BC-Contracts/`. The inventory res
 - WolverineFx `5.32.1`
 - Kafka (the canonical broker; enabled in Docker Compose, with producer-selected partition keys used to verify per-business-entity ordering)
 - RabbitMQ (a deferred compatibility profile; its Compose service is commented out, current shared queues are not broadcast topology, and migration or dual deployment requires a separate evaluation)
-- PostgreSQL 16, Dapper `2.1.72`, and Npgsql `10.0.2`
+- PostgreSQL `16.15-alpine`, Dapper `2.1.72`, and Npgsql `10.0.2`
 - xUnit `2.9.3`, Moq, and Shouldly
-- OpenTelemetry, Prometheus, Tempo, Loki, and Grafana
+- OpenTelemetry Collector Contrib `0.159.0`, Prometheus `3.14.0`, Tempo `2.10.7`, Loki `3.7.7`, and Grafana `13.2.1`
 
 For exact versions and evidence paths, see [.dev/project-config.yaml](.dev/project-config.yaml) and [.dev/requirement/TECH-STACK-REQUIREMENTS.MD](.dev/requirement/TECH-STACK-REQUIREMENTS.MD).
 
@@ -61,17 +61,40 @@ Prerequisites:
 Start the complete environment:
 
 ```powershell
-docker compose -f ./docker-compose/docker-compose.yml up -d --build
+docker compose `
+  -f ./docker-compose/docker-compose.yml `
+  -f ./docker-compose/docker-compose.override.yml `
+  up -d --build
 ```
 
 The current Compose topology starts three API/Consumer pairs, an authentication-free YARP Gateway, three PostgreSQL databases, Kafka/Kafdrop, and the OpenTelemetry/Grafana observability stack.
 
-Default API entry points:
+Default host entry points:
 
 - YARP Gateway (authentication-free): `http://localhost:8888` (`/api/orders`, `/api/products`, and `/api/inventory`)
-- Orders API: `http://localhost:8080`
-- Products API: `http://localhost:8090`
-- Inventory API: `http://localhost:8100`
+- Grafana: `http://localhost:3001`
+
+`docker-compose.override.yml` publishes host ports only for the YARP Gateway and Grafana. APIs, Consumers, Kafka, Kafdrop, PostgreSQL, the OpenTelemetry Collector, Tempo, Loki, and Prometheus communicate only through the internal Compose network. The base `docker-compose.yml` retains its original standalone bindings and is not changed by this deployment profile.
+
+The PostgreSQL image is pinned to the latest patch in the 16 series so existing named volumes remain directly usable. Moving across PostgreSQL major versions requires a separate data-upgrade plan and must not be performed by changing only the image tag. Tempo is pinned to the latest 2.10 patch because Tempo 3.0.3 still records a normal idle-scheduler state as recurring errors in low-volume monolithic mode, which would pollute this lab's exception diagnostics. The configuration now uses scoped overrides, retains the OTLP, Jaeger, and Zipkin receivers, and removes the OpenCensus receiver no longer supported by newer releases.
+
+### Query Errors and Exceptions
+
+Open the Grafana [System Errors & Exceptions](http://localhost:3001/d/system-errors-exceptions/system-errors-exceptions) dashboard to quickly filter `Error`, `Critical`, and `Fatal` logs, plus any log carrying exception metadata, by service and text. Expand a log that has a `trace_id`, then select `View trace` to open the corresponding Tempo trace. A background operation without an active trace context has only a log entry and therefore no trace link.
+
+The Orders and Inventory APIs currently sample `wolverine_node_assignments` health-check traces to at most one trace every 10 minutes. This retains a small amount of diagnostic data without allowing the roughly 10-second background check to overwhelm Tempo:
+
+```csharp
+options.Durability.NodeAssignmentHealthCheckTraceSamplingPeriod = TimeSpan.FromMinutes(10);
+```
+
+The adjacent source comment also retains this fully disabled example, but it is commented out and therefore not applied:
+
+```csharp
+// options.Durability.NodeAssignmentHealthCheckTracingEnabled = false;
+```
+
+Both settings have been available since WolverineFx `5.9.0`, work with this project's `5.32.1`, and remain available in Wolverine `6.x`. With `DurabilityMode.Solo`, Wolverine `5.39.5` and `6.19.0` had a known issue where the sampling period did not suppress the recurring trace. This Compose topology uses the default Balanced mode and is not affected by that Solo-mode issue.
 
 ### Verify Wolverine Consumer Exception Handling
 

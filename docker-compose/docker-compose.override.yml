@@ -1,0 +1,40 @@
+services:
+  otel-collector-contrib:
+    ports: !reset []
+
+  tempo:
+    ports: !reset []
+
+  loki:
+    ports: !reset []
+
+  prometheus:
+    ports: !reset []
+
+  grafana:
+    ports: !override
+      - "3001:3000"
+
+  kafka:
+    ports: !reset []
+
+  kafdrop:
+    ports: !reset []
+
+  postgres-order:
+    ports: !reset []
+
+  postgres-product:
+    ports: !reset []
+
+  postgres-inventory:
+    ports: !reset []
+
+  orders-api:
+    ports: !reset []
+
+  product-api:
+    ports: !reset []
+
+  inventory-api:
+    ports: !reset []

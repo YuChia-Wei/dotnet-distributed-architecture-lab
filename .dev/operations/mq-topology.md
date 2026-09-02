@@ -80,8 +80,8 @@ Fresh Docker volumes receive the current schema from `docker-compose/sql-script/
 Existing volumes must apply the idempotent migration before the upgraded Orders host starts:
 
 ```powershell
-psql "postgresql://user:password@localhost:5433/orders_db" `
-  -f docker-compose/sql-script/migrations/orders/20260714_0001_add_order_integration_outbox.sql
+Get-Content -Raw docker-compose/sql-script/migrations/orders/20260714_0001_add_order_integration_outbox.sql |
+  docker exec -i postgres-order psql -U user -d orders_db
 ```
 
 The Orders runtime role also needs permission to create and use Wolverine's `wolverine_messages` schema during environment provisioning. Production deployments should apply reviewed Wolverine-generated schema changes with a migration-capable role instead of granting ongoing DDL permission to the application role.
@@ -92,11 +92,11 @@ Fresh Docker volumes receive the reservation operation and Inventory source-outb
 Existing volumes must apply both idempotent migrations before enabling durable reservation handling and relay:
 
 ```powershell
-psql "postgresql://user:password@localhost:5435/inventory_db" `
-  -f docker-compose/sql-script/migrations/inventory/20260714_0001_add_inventory_reservations.sql
+Get-Content -Raw docker-compose/sql-script/migrations/inventory/20260714_0001_add_inventory_reservations.sql |
+  docker exec -i postgres-inventory psql -U user -d inventory_db
 
-psql "postgresql://user:password@localhost:5435/inventory_db" `
-  -f docker-compose/sql-script/migrations/inventory/20260827_0002_add_inventory_integration_outbox.sql
+Get-Content -Raw docker-compose/sql-script/migrations/inventory/20260827_0002_add_inventory_integration_outbox.sql |
+  docker exec -i postgres-inventory psql -U user -d inventory_db
 ```
 
 The Inventory runtime role needs permission to create and use Wolverine's `wolverine_messages` schema under Kafka and RabbitMQ profiles. Production deployments should apply reviewed schema changes with a migration-capable role.

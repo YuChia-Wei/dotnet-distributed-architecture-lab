@@ -87,6 +87,10 @@ static void ConfigurePostgresqlPersistence(WolverineOptions options, IConfigurat
     var connectionString = configuration.GetConnectionString("DefaultConnection")
         ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is required for Wolverine message persistence.");
     options.PersistMessagesWithPostgresql(connectionString, "wolverine_messages");
+    options.Durability.NodeAssignmentHealthCheckTraceSamplingPeriod = TimeSpan.FromMinutes(10);
+
+    // To suppress wolverine_node_assignments traces entirely instead of sampling them:
+    // options.Durability.NodeAssignmentHealthCheckTracingEnabled = false;
 }
 
 builder.Services.AddControllers();
