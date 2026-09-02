@@ -25,9 +25,9 @@ Repository 同時維護一套可重用的 AI collaboration context；產品真�
 - WolverineFx `5.32.1`
 - Kafka（canonical broker；目前 Docker Compose 啟用，並以 producer-selected partition key 驗證同一業務實體的順序消費）
 - RabbitMQ（deferred compatibility profile；Compose service 預設註解，目前共享 queue 不是廣播拓撲，是否轉換或同步部署需另行評估）
-- PostgreSQL 16、Dapper `2.1.72`、Npgsql `10.0.2`
+- PostgreSQL `16.15-alpine`、Dapper `2.1.72`、Npgsql `10.0.2`
 - xUnit `2.9.3`、Moq、Shouldly
-- OpenTelemetry、Prometheus、Tempo、Loki、Grafana
+- OpenTelemetry Collector Contrib `0.159.0`、Prometheus `3.14.0`、Tempo `2.10.7`、Loki `3.7.7`、Grafana `13.2.1`
 
 精確版本與證據路徑見 [.dev/project-config.yaml](.dev/project-config.yaml) 與 [.dev/requirement/TECH-STACK-REQUIREMENTS.MD](.dev/requirement/TECH-STACK-REQUIREMENTS.MD)。
 
@@ -75,6 +75,8 @@ docker compose `
 - Grafana：`http://localhost:3001`
 
 `docker-compose.override.yml` 只讓 YARP Gateway 與 Grafana 發布 host ports；APIs、Consumers、Kafka、Kafdrop、PostgreSQL、OpenTelemetry Collector、Tempo、Loki 與 Prometheus 僅透過 Compose 內部 network 通訊。基礎 `docker-compose.yml` 保持原始 standalone bindings，不受此部署 profile 影響。
+
+PostgreSQL image 固定在 16 系列的最新 patch，讓既有 named volumes 可以直接繼續使用；跨 PostgreSQL major version 需要另外規劃資料升級，不應只替換 image tag。Tempo 固定在最新的 2.10 patch，因為 Tempo 3.0.3 在低流量 monolithic mode 仍會將正常的 idle scheduler 狀態持續記為 error，會污染本實驗室的例外診斷；設定已改為 scoped overrides，保留 OTLP、Jaeger 與 Zipkin receivers，並移除新版已不支援的 OpenCensus receiver。
 
 ### 查詢錯誤與例外
 

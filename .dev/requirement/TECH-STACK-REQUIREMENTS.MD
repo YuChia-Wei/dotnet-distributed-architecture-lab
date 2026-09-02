@@ -12,9 +12,9 @@
 | Canonical broker | Apache Kafka | Compose image `apache/kafka:4.0.0`; selected for event-driven verification and keyed partition ordering |
 | Deferred compatibility broker | RabbitMQ | Wolverine RabbitMQ `5.32.1`; logical listeners exist, Compose service is disabled, and exchange/per-consumer queue/binding/DLQ verification remains pending |
 | Persistence | Dapper + Npgsql | Dapper `2.1.72`; Npgsql `10.0.2` |
-| Database | PostgreSQL | Compose image `postgres:16-alpine` |
+| Database | PostgreSQL | Compose image `postgres:16.15-alpine` |
 | Testing | xUnit + Moq/NSubstitute + Shouldly | xUnit `2.9.3`; test-double package is selected per project; Shouldly `4.3.0` |
-| Observability | OpenTelemetry + Grafana stack | OTel `1.15.x`; Grafana `11.1.0`; Tempo `2.3.0`; Loki `3.5.3` |
+| Observability | OpenTelemetry + Grafana stack | OTel SDK `1.15.x`; Collector Contrib `0.159.0`; Grafana `13.2.1`; Tempo `2.10.7`; Loki `3.7.7`; Prometheus `3.14.0` |
 | Containers | Docker / Docker Compose | host Dockerfiles plus `docker-compose/docker-compose.yml` |
 
 ## Architecture Requirements

@@ -1,6 +1,6 @@
 services:
   otel-collector-contrib:
-    image: otel/opentelemetry-collector-contrib:0.113.0
+    image: otel/opentelemetry-collector-contrib:0.159.0
     container_name: otel-collector-contrib
     command: [ "--config=/etc/otel-collector.yaml" ]
     volumes:
@@ -11,7 +11,7 @@ services:
       - "8889"
 
   tempo:
-    image: grafana/tempo:2.3.0
+    image: grafana/tempo:2.10.7
     container_name: tempo
     command: [ "-config.file=/etc/tempo.yaml" ]
     volumes:
@@ -27,7 +27,7 @@ services:
   # via: https://github.com/mnadeem/boot-opentelemetry-tempo/blob/main/docker-compose.yaml
   loki:
     container_name: loki
-    image: grafana/loki:3.5.3
+    image: grafana/loki:3.7.7
     command: -config.file=/etc/loki/config.yaml
     ports:
       - 3102:3100
@@ -37,7 +37,7 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:v2.53.0
+    image: prom/prometheus:v3.14.0
     command:
       - --config.file=/etc/prometheus.yaml
       - --web.enable-remote-write-receiver
@@ -51,7 +51,7 @@ services:
 
   grafana:
     container_name: grafana
-    image: grafana/grafana:11.1.0
+    image: grafana/grafana:13.2.1
     volumes:
       - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
       - ./config/grafana-dashboards-provisioning:/etc/grafana/provisioning/dashboards
@@ -143,7 +143,7 @@ services:
       - kafka
 
   postgres-order:
-    image: postgres:16-alpine
+    image: postgres:16.15-alpine
     container_name: postgres-order
     ports:
       - "5433:5432"
@@ -157,7 +157,7 @@ services:
       - POSTGRES_DB=orders_db
 
   postgres-product:
-    image: postgres:16-alpine
+    image: postgres:16.15-alpine
     container_name: postgres-product
     ports:
       - "5434:5432"
@@ -171,7 +171,7 @@ services:
       - POSTGRES_DB=products_db
 
   postgres-inventory:
-    image: postgres:16-alpine
+    image: postgres:16.15-alpine
     container_name: postgres-inventory
     ports:
       - "5435:5432"

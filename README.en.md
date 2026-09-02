@@ -25,9 +25,9 @@ Cross-context contracts are located under `src/BC-Contracts/`. The inventory res
 - WolverineFx `5.32.1`
 - Kafka (the canonical broker; enabled in Docker Compose, with producer-selected partition keys used to verify per-business-entity ordering)
 - RabbitMQ (a deferred compatibility profile; its Compose service is commented out, current shared queues are not broadcast topology, and migration or dual deployment requires a separate evaluation)
-- PostgreSQL 16, Dapper `2.1.72`, and Npgsql `10.0.2`
+- PostgreSQL `16.15-alpine`, Dapper `2.1.72`, and Npgsql `10.0.2`
 - xUnit `2.9.3`, Moq, and Shouldly
-- OpenTelemetry, Prometheus, Tempo, Loki, and Grafana
+- OpenTelemetry Collector Contrib `0.159.0`, Prometheus `3.14.0`, Tempo `2.10.7`, Loki `3.7.7`, and Grafana `13.2.1`
 
 For exact versions and evidence paths, see [.dev/project-config.yaml](.dev/project-config.yaml) and [.dev/requirement/TECH-STACK-REQUIREMENTS.MD](.dev/requirement/TECH-STACK-REQUIREMENTS.MD).
 
@@ -75,6 +75,8 @@ Default host entry points:
 - Grafana: `http://localhost:3001`
 
 `docker-compose.override.yml` publishes host ports only for the YARP Gateway and Grafana. APIs, Consumers, Kafka, Kafdrop, PostgreSQL, the OpenTelemetry Collector, Tempo, Loki, and Prometheus communicate only through the internal Compose network. The base `docker-compose.yml` retains its original standalone bindings and is not changed by this deployment profile.
+
+The PostgreSQL image is pinned to the latest patch in the 16 series so existing named volumes remain directly usable. Moving across PostgreSQL major versions requires a separate data-upgrade plan and must not be performed by changing only the image tag. Tempo is pinned to the latest 2.10 patch because Tempo 3.0.3 still records a normal idle-scheduler state as recurring errors in low-volume monolithic mode, which would pollute this lab's exception diagnostics. The configuration now uses scoped overrides, retains the OTLP, Jaeger, and Zipkin receivers, and removes the OpenCensus receiver no longer supported by newer releases.
 
 ### Query Errors and Exceptions
 
