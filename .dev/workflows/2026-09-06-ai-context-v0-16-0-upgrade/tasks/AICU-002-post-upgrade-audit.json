@@ -1,0 +1,36 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.1.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-27T09:52:09+08:00",
+  "task_id": "AICU-002-post-upgrade-audit",
+  "workflow_id": "2026-09-06-ai-context-v0-16-0-upgrade",
+  "owner_skill": "ai-context-governance",
+  "status": "pending",
+  "created_at": "2026-09-06T22:03:42+08:00",
+  "updated_at": "2026-09-06T22:03:42+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "GPT-5",
+  "reasoning_effort": "unspecified",
+  "finding_ids": ["AICU-V016-POST-AUDIT-001"],
+  "scope": {
+    "target": "Independently verify the applied v0.16.0 AI context and preserved target customizations.",
+    "files": [".ai/**", ".agents/**", ".claude/**", ".dev/ai-context/**", ".dev/standards/**"],
+    "constraints": ["Read-only audit of governed context", "Do not modify the audited context"],
+    "non_goals": ["Product source review", "Remediation", "Remote actions"]
+  },
+  "execution": {
+    "steps": ["Freeze the applied subject", "Run the ai-context-auditor checks", "Record a separate verification assessment"],
+    "validation": ["Assessment artifact validation", "Finding reconciliation"],
+    "last_completed_step": "",
+    "next_action": "Wait for the accepted package apply and target validation."
+  },
+  "results": {
+    "summary": "",
+    "files_changed": [],
+    "tests_run": [],
+    "finding_status": "not-addressed",
+    "residual_risk": "",
+    "follow_up_needed": true
+  }
+}

@@ -1,0 +1,40 @@
+schema_version: "1.0"
+delegation_run_id: "2026-09-06-ai-context-v0-16-0-upgrade-run-01"
+selection:
+  mode: "none"
+  max_concurrent_workers: 0
+  decision_source: "higher-priority-session-policy"
+  owner_choice_evidence: []
+  eligible_role_asset_ids: []
+  terminal_independent_auditor_auto_selected: false
+  prompt:
+    count: 0
+    disposition: "suppressed-by-session-policy"
+  resume:
+    reuse_existing_selection: true
+    repeat_prompt: false
+execution_support:
+  state: "unknown"
+  evidence_refs: []
+canonical_stage_ids:
+  - "route-and-evidence-discovery"
+  - "three-way-classification-and-reconciliation"
+  - "semantic-customization-and-governance-analysis"
+  - "plan-report-handoff-or-feedback-synthesis"
+  - "terminal-fixed-head-independent-audit"
+execution_path:
+  kind: "root-sequential"
+  canonical_stage_ids:
+    - "route-and-evidence-discovery"
+    - "three-way-classification-and-reconciliation"
+    - "semantic-customization-and-governance-analysis"
+    - "plan-report-handoff-or-feedback-synthesis"
+    - "terminal-fixed-head-independent-audit"
+fallbacks: []
+terminal_independent_audit:
+  required: true
+  selection_basis: "target-upgrade-terminal-gate"
+  status: "pending"
+  subject_commit: null
+  independence: "separate-ai-context-auditor-pass"
+  evidence_refs: []
