@@ -16,11 +16,11 @@
 - `branch`: `codex/2026-09-06-ai-context-v0-16-0-upgrade`
 - `base_branch`: `main`
 - `branch_segment`: `1`
-- `status`: `in_progress`
-- `current_phase`: `reconciliation`
+- `status`: `completed`
+- `current_phase`: `completed`
 - `artifact_root`: `.dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade`
 - `created_at`: `2026-09-06T22:03:42+08:00`
-- `updated_at`: `2026-09-06T22:11:53+08:00`
+- `updated_at`: `2026-09-06T23:21:20+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#9`
@@ -72,16 +72,17 @@ The first no-write package plan contained 70 automatic operations (47 replacemen
 
 ## Resume Checkpoint
 
-- Last completed action: the first no-write plan proved 70 automatic operations and no package conflict; target-owned active skill routes and the validation-profile workflow binding were reconciled before final plan generation.
-- Current task: `AICU-001-direct-v016-upgrade`.
-- Exact next action: commit the target-owned reconciliation checkpoint, then regenerate the v0.16.0 package plan and remediation packet from the new clean HEAD.
-- Validation already completed: public v0.16.0 Release read-back; ZIP/sidecar SHA-256; package validation (`650` files, `18` portable entrypoints); route resolver (`direct`, no diagnostics); baseline target gate (`34` target-owned tests); first package plan (`70` automatic operations, no conflict).
-- Git state: preflight checkpoint `9ae814e7136c6644350b260dc49853744cb9b21c`; target-owned reconciliation is pending a second local checkpoint.
+- Last completed action: finalized transaction `48d34abf53d7e8fc37bb8b51a9e3f128cac8954b62b71da1d094158d74255f22`, fixed the applied audit subject at `c0abe9c2ce288abf2b83edce1806fefb63b5886e`, persisted `ASM-20260906-001`, cleared the verified transient receipt, and passed the journal-only final target gate.
+- Current task: none; `AICU-001`, `AICU-002`, and `AICU-003` are complete.
+- Exact next action: none within the authorized local scope. Push, pull request, merge, Issue closure, and publication require separate authorization.
+- Validation completed: public Release and ZIP identity; package validation (`650` files, `18` portable entrypoints); direct route resolution; 70/70 operations; target-validation receipt; terminal receipt; 13 effective rules; 20 route packets; 15/15/15 skill parity; 16 assessment artifacts; 34/34 target tests; final commit-policy range.
+- Git state: applied checkpoint `c0abe9c2ce288abf2b83edce1806fefb63b5886e`; the workflow closeout commit contains this completed plan and reports.
 - Branch history and checkpoint handoffs: segment 1 only; no push or merge handoff.
-- Blockers or unresolved decisions: none before planning; any planner reconciliation or identity conflict remains fail-closed until explicitly recorded.
+- Blockers or unresolved decisions: none for local completion. Audit findings `ASM-20260906-001#AIC-001` through `#AIC-005` remain upstream operability follow-ups.
 
 ## Branch Lifecycle
 
 | Segment | Branch | Base | Checkpoint Type | Commit | Remote / Target | Recorded At | Reason | Resume Branch / Action |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | `codex/2026-09-06-ai-context-v0-16-0-upgrade` | `main` | workflow-start | `f1a0298fdca0dafe1d653802006e60bc004a74a5` | local | `2026-09-06T22:03:42+08:00` | Issue #9 authorizes the governed v0.15.1-to-v0.16.0 upgrade | Continue on the same branch with package planning |
+| 1 | `codex/2026-09-06-ai-context-v0-16-0-upgrade` | `main` | finalized-audit-subject | `c0abe9c2ce288abf2b83edce1806fefb63b5886e` | local | `2026-09-06T23:13:50+08:00` | Preserve finalized v0.16.0 authorities while excluding the transient pending receipt from durable target history | Complete local closeout on the same branch |

@@ -6,9 +6,9 @@
   "task_id": "AICU-002-post-upgrade-audit",
   "workflow_id": "2026-09-06-ai-context-v0-16-0-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "pending",
+  "status": "completed",
   "created_at": "2026-09-06T22:03:42+08:00",
-  "updated_at": "2026-09-06T22:03:42+08:00",
+  "updated_at": "2026-09-06T23:21:20+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "GPT-5",
   "reasoning_effort": "unspecified",
@@ -22,15 +22,23 @@
   "execution": {
     "steps": ["Freeze the applied subject", "Run the ai-context-auditor checks", "Record a separate verification assessment"],
     "validation": ["Assessment artifact validation", "Finding reconciliation"],
-    "last_completed_step": "",
-    "next_action": "Wait for the accepted package apply and target validation."
+    "last_completed_step": "Persisted final assessment ASM-20260906-001 against fixed applied commit c0abe9c2 with a healthy-with-followups verdict and no blocking finding.",
+    "next_action": "Track the five non-blocking upstream operability findings separately from this completed target upgrade."
   },
   "results": {
-    "summary": "",
-    "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
-    "residual_risk": "",
+    "summary": "The finalized target is coherent, skill wrappers are aligned, product paths are untouched, and update-engine performance remains materially better than v0.14.0.",
+    "files_changed": [
+      ".dev/assessments/ASM-20260906-001/**",
+      ".dev/assessments/INDEX.MD"
+    ],
+    "tests_run": [
+      "assessment artifact validator",
+      "skill registry and wrapper parity inventory",
+      "fixed-subject product-path exclusion",
+      "terminal transaction evidence review"
+    ],
+    "finding_status": "resolved",
+    "residual_risk": "Five non-blocking findings remain for stock downstream validation, pre-transaction projection, candidate serialization, Windows rollback replay, and transient-receipt ergonomics.",
     "follow_up_needed": true
   }
 }

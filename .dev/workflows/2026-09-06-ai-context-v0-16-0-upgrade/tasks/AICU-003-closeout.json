@@ -6,9 +6,9 @@
   "task_id": "AICU-003-closeout",
   "workflow_id": "2026-09-06-ai-context-v0-16-0-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "pending",
+  "status": "completed",
   "created_at": "2026-09-06T22:03:42+08:00",
-  "updated_at": "2026-09-06T22:03:42+08:00",
+  "updated_at": "2026-09-06T23:21:20+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "GPT-5",
   "reasoning_effort": "unspecified",
@@ -22,15 +22,23 @@
   "execution": {
     "steps": ["Reconcile all findings", "Run final target and workflow gates", "Create a local Git checkpoint"],
     "validation": ["Workflow artifact validator", "Target-owned AI-context gate", "Commit policy gate"],
-    "last_completed_step": "",
-    "next_action": "Wait for the post-upgrade audit."
+    "last_completed_step": "Completed local workflow evidence, verified and cleared the transient receipt, and passed the finalized journal-only target gate.",
+    "next_action": "None within local scope."
   },
   "results": {
-    "summary": "",
-    "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
-    "residual_risk": "",
-    "follow_up_needed": true
+    "summary": "Local v0.16.0 closeout is complete with a fixed applied checkpoint, final audit, terminal transaction evidence, and completed workflow reports.",
+    "files_changed": [
+      ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/**",
+      ".dev/workflows/INDEX.MD"
+    ],
+    "tests_run": [
+      "workflow artifact validator",
+      "target AI-context validator",
+      "target commit-policy gate",
+      "34 target-owned tests"
+    ],
+    "finding_status": "resolved",
+    "residual_risk": "Push, pull request, merge, Issue closure, and publication were not performed.",
+    "follow_up_needed": false
   }
 }
