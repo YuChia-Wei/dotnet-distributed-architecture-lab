@@ -33,6 +33,7 @@ WORKFLOW_VALIDATOR_PATH = ROOT / ".ai/scripts/validate-workflow-artifacts.py"
 HANDOFF_VALIDATOR_PATH = ROOT / ".ai/scripts/validate-workflow-handoff.py"
 
 INTENT_ROUTES = {
+    "diagnose-observed-symptom": "diagnosis",
     "capture-requirements": "requirements",
     "define-specification": "specification",
     "design-architecture": "architecture",

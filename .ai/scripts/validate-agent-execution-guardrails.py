@@ -456,6 +456,23 @@ def validate_retry(record: dict[str, Any], schema: dict[str, Any]) -> None:
     sealed(record, "retry_sha256")
 
 
+def git_tree_identity(commit_sha: str) -> str | None:
+    result = subprocess.run(
+        ["git", "rev-parse", "--verify", f"{commit_sha}^{{tree}}"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=30,
+    )
+    tree_sha = result.stdout.strip()
+    if result.returncode != 0 or not SHA40.fullmatch(tree_sha):
+        return None
+    return tree_sha
+
+
 def validate_graph(record: dict[str, Any], schema: dict[str, Any]) -> None:
     exact_keys(record, {"schema_version", "record_type", "project", "head_sha", "indexed_sha", "index_state", "coverage", "reindex_attempted", "fallback", "fallback_paths", "absence_claim", "freshness_sha256"}, "graph freshness")
     if record["schema_version"] != schema["schema_version"] or record["record_type"] != schema["record_types"]["graph"]:
@@ -473,12 +490,24 @@ def validate_graph(record: dict[str, Any], schema: dict[str, Any]) -> None:
     if paths:
         for index, path in enumerate(paths):
             tracked_path(path, f"fallback_paths[{index}]")
-    exact_complete = record["index_state"] == "fresh" and record["coverage"] == "complete" and record["indexed_sha"] == record["head_sha"]
+    indexed_sha = record["indexed_sha"]
+    content_equivalent = indexed_sha == record["head_sha"]
+    if indexed_sha is not None and not content_equivalent:
+        indexed_tree = git_tree_identity(indexed_sha)
+        head_tree = git_tree_identity(record["head_sha"])
+        content_equivalent = indexed_tree is not None and indexed_tree == head_tree
+    if record["index_state"] == "fresh" and not content_equivalent:
+        raise GuardrailError("fresh graph index does not match the current content tree")
+    content_complete = (
+        record["index_state"] == "fresh"
+        and record["coverage"] == "complete"
+        and content_equivalent
+    )
     tracked_fallback = record["fallback"] == "tracked-search" and bool(paths) and record["coverage"] == "complete"
     if record["index_state"] in {"stale", "missing"} and not record["reindex_attempted"] and not tracked_fallback:
         raise GuardrailError("stale or missing graph requires reindex or tracked fallback")
-    if record["absence_claim"] and not (exact_complete or tracked_fallback):
-        raise GuardrailError("search absence is not proof without exact complete index or tracked fallback")
+    if record["absence_claim"] and not (content_complete or tracked_fallback):
+        raise GuardrailError("search absence is not proof without a content-current complete index or tracked fallback")
     reject_private(record, schema)
     sealed(record, "freshness_sha256")
 

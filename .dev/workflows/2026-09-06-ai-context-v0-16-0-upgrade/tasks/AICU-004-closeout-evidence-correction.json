@@ -1,0 +1,39 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.1.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-27T09:52:09+08:00",
+  "task_id": "AICU-004-closeout-evidence-correction",
+  "workflow_id": "2026-09-06-ai-context-v0-16-0-upgrade",
+  "owner_skill": "ai-context-governance",
+  "status": "completed",
+  "created_at": "2026-09-07T07:12:53+08:00",
+  "updated_at": "2026-09-07T07:28:13+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-5.6-terra",
+  "reasoning_effort": "high",
+  "executor_setting_source": "configured default in user config; exact active runtime setting was unavailable",
+  "finding_ids": ["ASM-20260907-001#AIC-001", "ASM-20260907-001#AIC-002", "ASM-20260907-001#AIC-003"],
+  "scope": {
+    "target": "Correct local upgrade closeout evidence and enforce its declared terminal audit before owner-authorized local integration.",
+    "files": [".dev/ai-context/tooling/**", ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/**", ".dev/workflows/INDEX.MD", ".dev/assessments/**"],
+    "constraints": ["Keep sealed authorities and all package bytes unchanged", "Preserve historical incomplete and failed evidence", "Require genuine independent audit and exact full-tree admission"],
+    "non_goals": ["Package reapply or finalization", "Product source/test changes", "Upstream framework improvement implementation", "Push", "Pull request", "Issue closure", "Publication"]
+  },
+  "execution": {
+    "steps": ["Record baseline and explicit reopen", "Implement target-owned terminal evidence gate and regression tests", "Checkpoint repair and obtain independent verification", "Retain results and reconcile corrective content lifecycle"],
+    "validation": ["Narrow terminal-evidence tests", "Target AI-context gate", "Fresh fixed-head independent repair audit", "Exact audit artifact hash comparison"],
+    "last_completed_step": "Retained actual independent ASM-20260907-002 verification of c53dc84, its 52-test exact command evidence and genuine invocation; reconciled the corrective content lifecycle.",
+    "next_action": "Parent delivery gate remains separate: commit evidence, independently audit/admit the final full tree, then execute authorized no-ff local merge and post-merge target validation.",
+    "role_execution_refs": [".dev/assessments/ASM-20260907-002/evidence/role-execution.json"],
+    "delivery_evidence_root": ".tmp/ai-context-closeout/final-audit/"
+  },
+  "results": {
+    "summary": "Three local closeout defects are resolved through enforcement, truthful historical correction and retained independent current evidence. This content closure does not claim that local integration has occurred.",
+    "files_changed": [".dev/ai-context/tooling/validate-target-terminal-audit.py", ".dev/ai-context/tooling/tests/test_target_terminal_audit.py", ".dev/ai-context/tooling/target-gate-manifest.yaml", ".dev/ai-context/tooling/README.md", ".dev/assessments/ASM-20260907-001/", ".dev/assessments/ASM-20260907-002/", ".dev/assessments/ASM-20260906-001/assessment.yaml", ".dev/assessments/INDEX.md", ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/", ".dev/workflows/INDEX.MD"],
+    "tests_run": ["52/52 downstream unit tests; 18 new terminal-evidence tests", "independent c53dc84 target gate passed: 52 tests, 17 assessments, seven commits; exact output retained", "all five independent transport artifacts copied with identical SHA-256"],
+    "finding_status": "resolved",
+    "residual_risk": "Pre-finalization audit evidence was not retained; no retrospective certification is possible.",
+    "follow_up_needed": true
+  }
+}

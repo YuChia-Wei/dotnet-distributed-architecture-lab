@@ -24,6 +24,7 @@ The canonical skill registry currently includes:
 - `ai-context-upgrader`
 - `bdd-gwt-test-designer`
 - `code-reviewer` (`dotnet-backend` selected; unavailable in the core-only view)
+- `diagnostic-analyst`
 - `ddd-ca-hex-architect`
 - `local-change-implementer`
 - `problem-frame-author`
@@ -33,14 +34,32 @@ The canonical skill registry currently includes:
 - `spec-author`
 - `spec-compliance-validator`
 
-## Deprecated Compatibility Entries
+## Retired Identifiers
 
-[`transitions/v0.6.0.yaml`](transitions/v0.6.0.yaml) records the approved
-`repo-structure-sync` to `ai-context-init` and `dev-workflow` to
-`software-development-orchestrator` mappings. Both target identifiers are
-active. The historical identifiers remain thin deprecated compatibility
-entries with no scheduled removal release; do not rewrite historical workflow,
-task, assessment, release, or provenance values.
+[`transitions/v0.16.0.yaml`](transitions/v0.16.0.yaml) retires
+`repo-structure-sync` (replacement: `ai-context-init`) and `dev-workflow`
+(replacement: `software-development-orchestrator`) in v0.16.0. Their canonical
+specs and runtime wrappers are absent. On a new request using either retired
+identifier, explicitly report: "Skill '<identifier>' was retired in v0.16.0.
+Use '<replacement>' for a new request." Do not silently dispatch an alias.
+
+The portable deterministic request check is
+`python .ai/scripts/skill_identifier_lifecycle.py <identifier>`; a retired or
+unknown runtime request returns a nonzero status. `--context historical` accepts
+a known retired identifier only as evidence and preserves its original value.
+This is an explicit input-context boundary, not automatic history detection.
+
+[`transitions/v0.6.0.yaml`](transitions/v0.6.0.yaml) remains the immutable record
+of the earlier activation and its then-unscheduled removal. Do not rewrite
+historical workflow, task, assessment, release, provenance, commit, or evaluation
+identifiers. Continued execution uses the active replacement without rewriting
+past evidence. New runtime availability is governed by the retirement manifest.
+
+Downstream upgrade packages use the previous release's verified file inventory:
+remove unchanged framework-owned entries; retain modified or target-owned
+entries for explicit owner reconciliation. Missing baseline evidence blocks
+removal. The v0.6.0/v0.9.0 fixture coverage does not authorize a direct upgrade
+edge or publication; the selected release must still supply its verified route.
 
 ## Boundary
 

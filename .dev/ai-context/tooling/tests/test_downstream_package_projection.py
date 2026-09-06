@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the explicit v0.15.1 downstream package applicability boundary."""
+"""Validate the explicit v0.16.0 downstream package applicability boundary."""
 
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ class DownstreamPackageProjectionTests(unittest.TestCase):
         cls.defect = next(
             record
             for record in cls.manifest["package_projection_defects"]
-            if record["id"] == "AICU-V015-TARGET-GATE-PROJECTION-001"
+            if record["id"] == "AICU-V016-TARGET-GATE-PROJECTION-001"
         )
         cls.selection = next(
             record
@@ -34,10 +34,10 @@ class DownstreamPackageProjectionTests(unittest.TestCase):
             if record["id"] == "AICU-V011-SELECTION-001"
         )
 
-    def test_gwt_001_framework_dependencies_are_v0151_pinned(self) -> None:
-        self.assertEqual("v0.15.1", self.manifest["framework_version"])
+    def test_gwt_001_framework_dependencies_are_v0160_pinned(self) -> None:
+        self.assertEqual("v0.16.0", self.manifest["framework_version"])
         self.assertEqual(
-            "f2b5fa7c13550efaeb65ab9fcaeb0403baa2a5af",
+            "4d1a5c7d039618f007784679d9968c357347272b",
             self.manifest["framework_commit"],
         )
         for record in self.manifest["checks"]:
@@ -99,7 +99,7 @@ class DownstreamPackageProjectionTests(unittest.TestCase):
     def test_gwt_006_validation_selection_resolution_is_exact(self) -> None:
         self.assertEqual("resolved-upstream", self.selection["status"])
         self.assertEqual("v0.15.0", self.selection["resolved_in"])
-        self.assertEqual("v0.15.1", self.selection["verified_through"])
+        self.assertEqual("v0.16.0", self.selection["verified_through"])
         for key in ("selector", "evidence_helper"):
             record = self.selection[key]
             self.assertEqual(record["sha256"], digest(ROOT / record["path"]))

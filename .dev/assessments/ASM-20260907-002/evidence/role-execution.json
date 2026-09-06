@@ -1,0 +1,162 @@
+{
+  "role_execution_id": "v016-correction-post-remediation-audit-01",
+  "role_asset_id": "fixed-head-independent-auditor",
+  "role_path": ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml",
+  "owning_skill": "ai-context-auditor",
+  "stage_id": "post-remediation-fixed-head-audit",
+  "applicability": {
+    "result": "applies",
+    "reason": "Explicit terminal post-remediation audit selected before owner-authorized local integration."
+  },
+  "selection": {
+    "disposition": "delegated",
+    "reason": "A fresh context independent of implementation is required to verify the repair.",
+    "delegation_evaluation": {
+      "safety_gates": {
+        "applicable_role": true,
+        "current_session_runtime_support_verified": true,
+        "bounded_input_output_permissions_stop": true,
+        "approval_security_credential_boundaries_satisfied": true,
+        "disjoint_mutation_scope": true,
+        "named_parent_and_final_integration_owner": true
+      },
+      "material_value_triggers": [
+        "meaningful_isolation"
+      ],
+      "cost_failure_retry_risk": {
+        "result": "supports-delegation",
+        "reason": "Independent fixed-head verification addresses the specific missing-evidence defect; scope excludes package replay and product tests."
+      }
+    }
+  },
+  "input_envelope": {
+    "goal": "Verify the closeout repair at fixed clean c53dc84050685761b801bb992fae6101828b01e2 without changing it.",
+    "scope": [
+      ".dev/ai-context/tooling/",
+      ".dev/assessments/ASM-20260907-001/",
+      ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/",
+      "sealed AI-context authority parity"
+    ],
+    "non_goals": [
+      "implementation or repair",
+      "product source/test review",
+      "package reapply or finalization",
+      "local integration execution",
+      "hosted mutation"
+    ],
+    "source_refs": [
+      ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/evidence/terminal-audit-criteria.md",
+      ".dev/assessments/ASM-20260907-001/report.md"
+    ],
+    "mandatory_references": [
+      ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml",
+      ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/references/fixed-head-independent-audit-playbook.md",
+      ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"
+    ],
+    "constraints": [
+      "full fixed commit/tree subject",
+      "fresh independent context",
+      "no tracked writes"
+    ],
+    "stop_conditions": [
+      "subject drift",
+      "missing evidence",
+      "timeout",
+      "repair request"
+    ]
+  },
+  "permissions": {
+    "read_scope": [
+      "AI-context/governance scoped files",
+      "read-only Git metadata and sealed transaction validation"
+    ],
+    "write_scope": [
+      ".tmp/ai-context-closeout/repair-audit/"
+    ],
+    "external_actions": [],
+    "secret_handling": "no-secret-values"
+  },
+  "fallback": {
+    "considered": false,
+    "reason": "Fresh independent runtime context was available and used.",
+    "resulting_disposition": null,
+    "inline_contract_evidence": {
+      "same_role_path_and_mandatory_references": false,
+      "bounded_input_output_permissions_stop": false,
+      "approval_security_credential_boundaries_satisfied": false,
+      "disjoint_mutation_scope": false,
+      "named_parent_and_final_integration_owner": false,
+      "current_inline_support_verified": false,
+      "evidence_refs": []
+    }
+  },
+  "executor": {
+    "kind": "runtime-worker",
+    "identity": "/root/repair_audit",
+    "runtime_support_verified": true
+  },
+  "invocation_evidence": {
+    "invocation_id": "collaboration:/root/repair_audit:1",
+    "started_at": "2026-09-07T07:19:51+08:00",
+    "completed_at": "2026-09-07T07:24:42+08:00",
+    "outcome": "completed",
+    "evidence_refs": [
+      ".dev/assessments/ASM-20260907-002/evidence/invocation.json",
+      ".dev/assessments/ASM-20260907-002/report.md"
+    ]
+  },
+  "output": {
+    "expected": [
+      "Bounded fixed-head independent report",
+      "Exact command evidence and invocation identity"
+    ],
+    "returned": [
+      "PASSED repair candidate assessment with historical limitations",
+      "52/52 test target gate execution and complete output"
+    ],
+    "evidence_refs": [
+      ".dev/assessments/ASM-20260907-002/report.md",
+      ".dev/assessments/ASM-20260907-002/evidence/validation-execution.json",
+      ".dev/assessments/ASM-20260907-002/evidence/validation-output.txt"
+    ],
+    "bounded": true
+  },
+  "attempts": [
+    {
+      "number": 1,
+      "disposition": "delegated",
+      "executor": {
+        "kind": "runtime-worker",
+        "identity": "/root/repair_audit",
+        "runtime_support_verified": true
+      },
+      "invocation_evidence": {
+        "invocation_id": "collaboration:/root/repair_audit:1",
+        "started_at": "2026-09-07T07:19:51+08:00",
+        "completed_at": "2026-09-07T07:24:42+08:00",
+        "outcome": "completed",
+        "evidence_refs": [
+          ".dev/assessments/ASM-20260907-002/evidence/invocation.json",
+          ".dev/assessments/ASM-20260907-002/report.md"
+        ]
+      },
+      "outcome": "completed",
+      "correctable_failure": false,
+      "material_state_change": "",
+      "authorization_source": [],
+      "evidence_refs": [
+        ".dev/assessments/ASM-20260907-002/report.md",
+        ".dev/assessments/ASM-20260907-002/evidence/validation-execution.json",
+        ".dev/assessments/ASM-20260907-002/evidence/validation-output.txt"
+      ]
+    }
+  ],
+  "final_integration_owner": {
+    "owner": "/root",
+    "decision": "accepted",
+    "evidence_refs": [
+      ".dev/assessments/ASM-20260907-002/report.md",
+      ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/reports/remediation-report.md"
+    ]
+  }
+}

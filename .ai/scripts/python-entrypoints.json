@@ -9,9 +9,11 @@
     }
   },
   "entrypoints": [
+    {"path": ".ai/assets/skills/diagnostic-analyst/scripts/validate-diagnostic-record.py", "portable": true, "dependency_profile": [], "prerequisite_exit_code": 1},
     {"path": ".ai/assets/skills/software-development-orchestrator/scripts/validate-software-development-orchestrator-acceptance.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/plan-ai-context-package-apply.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 2},
     {"path": ".ai/scripts/resolve-effective-rule-packet.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
+    {"path": ".ai/scripts/observe-validation-dependencies.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-ai-context-payload.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-ai-context-target.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/validate-ai-context.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
@@ -27,6 +29,7 @@
     {"path": ".ai/scripts/validate-workflow-handoff.py", "portable": true, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py", "portable": false, "dependency_profile": [], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/build-ai-context-package.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
+    {"path": ".ai/scripts/manage-release-asset-identity.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/measure-ai-context-load.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/plan-github-backlog-migration.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},
     {"path": ".ai/scripts/prepare-ai-context-release.py", "portable": false, "dependency_profile": ["PyYAML"], "prerequisite_exit_code": 1},

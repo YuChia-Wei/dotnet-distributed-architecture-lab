@@ -22,6 +22,19 @@ from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, Iterable
 
+SCRIPT_DIRECTORY = Path(__file__).resolve().parent
+if str(SCRIPT_DIRECTORY) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIRECTORY))
+sys.dont_write_bytecode = True
+
+from validation_subject import (
+    SubjectError,
+    build_rebind_receipt,
+    build_subject_manifest,
+    sealable_subject_manifest_paths,
+    validated_rebind_source,
+)
+
 
 SCHEMA_VERSION = "2.0.0"
 # Reuse eligibility is intentionally independent from the emitted evidence
@@ -2432,29 +2445,47 @@ def build_record(arguments: argparse.Namespace) -> dict[str, Any]:
             if entry.get("log_ref") != reuse_source["source_log"]["ref"]:
                 raise EvidenceError("cache reuse entry log does not match its sealed source")
         else:
-            preparation_python = getattr(arguments, "preparation_python", None)
-            if result_path is None or snapshot_path is None or not preparation_python:
-                raise EvidenceError(
-                    "immutable-history reuse requires preparation result, Python identity, and snapshot"
-                )
+            if result_path is None or snapshot_path is None:
+                raise EvidenceError("receipt-backed reuse requires a result and repository snapshot")
             if not result_path.is_absolute():
                 result_path = Path(arguments.evidence).parent / result_path
-            reuse_source, _reuse_paths = validated_immutable_preparation(
-                repo,
-                result_path,
-                snapshot_path,
-                arguments.profile,
-                preparation_python,
-            )
-            decision = reuse_source["decision"]
-            if (
-                decision["outcome"] != "routine-reusable"
-                or arguments.validator_id not in decision["reusable_check_ids"]
-            ):
-                raise EvidenceError("immutable-history preparation does not authorize this reuse")
-            expected_fingerprint = immutable_history_fingerprint(decision)
-            if arguments.input_fingerprint != expected_fingerprint:
-                raise EvidenceError("immutable-history reuse fingerprint is invalid")
+            try:
+                result_identity = load_json_object(result_path, "reuse result")
+            except EvidenceError:
+                raise
+            if result_identity.get("schema_version") == "subject-evidence-rebind/v1":
+                try:
+                    reuse_source, _reuse_paths = validated_rebind_source(
+                        repo,
+                        result_path,
+                        expected_gate_id=arguments.validator_id,
+                        expected_profile=arguments.profile,
+                    )
+                except SubjectError as exc:
+                    raise EvidenceError(f"subject rebind reuse failed closed: {exc}") from exc
+                validated_snapshot(snapshot_path)
+            else:
+                preparation_python = getattr(arguments, "preparation_python", None)
+                if not preparation_python:
+                    raise EvidenceError(
+                        "immutable-history reuse requires the selected Python identity"
+                    )
+                reuse_source, _reuse_paths = validated_immutable_preparation(
+                    repo,
+                    result_path,
+                    snapshot_path,
+                    arguments.profile,
+                    preparation_python,
+                )
+                decision = reuse_source["decision"]
+                if (
+                    decision["outcome"] != "routine-reusable"
+                    or arguments.validator_id not in decision["reusable_check_ids"]
+                ):
+                    raise EvidenceError("immutable-history preparation does not authorize this reuse")
+                expected_fingerprint = immutable_history_fingerprint(decision)
+                if arguments.input_fingerprint != expected_fingerprint:
+                    raise EvidenceError("immutable-history reuse fingerprint is invalid")
     elif arguments.cache_hit:
         raise EvidenceError("cache-hit state is only valid for cache reuse")
 
@@ -3773,6 +3804,7 @@ def validate_evidence_record_core(
         if not isinstance(reuse_source, dict) or reuse_source.get("kind") not in {
             "cache",
             "immutable-history",
+            "subject-rebind",
         }:
             raise EvidenceError("reused evidence lacks an authenticated source")
         if record_value["cache_hit"] != (reuse_source.get("kind") == "cache"):
@@ -3906,17 +3938,22 @@ def validate_event_record_binding(
         event_result = artifact_path_inside(repo, str(event_result), "event result")
         event_ref = relative_path(repo, event_result)
         if record_value["execution_disposition"] == "reused":
-            preparation = reuse_source.get("preparation_result") if isinstance(reuse_source, dict) else None
-            if (
-                not isinstance(preparation, dict)
-                or reuse_source.get("kind") != "immutable-history"
-                or event_ref != preparation.get("ref")
-            ):
-                raise EvidenceError("event and immutable reuse preparation references do not match")
+            source_kind = reuse_source.get("kind") if isinstance(reuse_source, dict) else None
+            if source_kind == "immutable-history":
+                preparation = reuse_source.get("preparation_result")
+                if not isinstance(preparation, dict) or event_ref != preparation.get("ref"):
+                    raise EvidenceError("event and immutable reuse preparation references do not match")
+            elif source_kind == "subject-rebind":
+                rebind = reuse_source.get("rebind_receipt")
+                if not isinstance(rebind, dict) or event_ref != rebind.get("ref"):
+                    raise EvidenceError("event and subject rebind receipt references do not match")
+            else:
+                raise EvidenceError("event result references an unsupported reuse source")
         elif not isinstance(execution, dict) or event_ref != execution.get("receipt_ref"):
             raise EvidenceError("event and evidence result references do not match")
     elif execution is not None or (
-        isinstance(reuse_source, dict) and reuse_source.get("kind") == "immutable-history"
+        isinstance(reuse_source, dict)
+        and reuse_source.get("kind") in {"immutable-history", "subject-rebind"}
     ):
         raise EvidenceError("evidence receipt exists without an event result reference")
 
@@ -3961,6 +3998,28 @@ def validate_record_reuse_source(
         )
         if normalized != proof or record_value["cache_hit"] is not True:
             raise EvidenceError("cache reuse proof is inconsistent")
+        return paths
+    if proof.get("kind") == "subject-rebind":
+        if record_value["cache_hit"] is not False:
+            raise EvidenceError("subject rebind reuse cannot be reported as a cache hit")
+        rebind = proof.get("rebind_receipt")
+        if not isinstance(rebind, dict):
+            raise EvidenceError("subject rebind proof lacks its receipt")
+        rebind_ref = validate_relative_reference(
+            rebind.get("ref"), "subject rebind receipt"
+        )
+        try:
+            normalized, paths = validated_rebind_source(
+                repo,
+                rebind_ref,
+                expected_gate_id=record_value["validator_id"],
+                expected_profile=record_value["profile"],
+            )
+        except SubjectError as exc:
+            raise EvidenceError(f"subject rebind proof failed closed: {exc}") from exc
+        if normalized != proof:
+            raise EvidenceError("subject rebind proof differs from its authenticated receipt")
+        validated_snapshot(snapshot_path)
         return paths
     if proof.get("kind") != "immutable-history" or record_value["cache_hit"] is not False:
         raise EvidenceError("reused record source kind or cache state is invalid")
@@ -4293,6 +4352,16 @@ def seal_invocation(arguments: argparse.Namespace) -> None:
         *control_artifact_paths,
         *prepare_cache_artifact_paths,
     }
+    try:
+        artifact_paths.update(
+            sealable_subject_manifest_paths(
+                repo,
+                list(getattr(arguments, "subject_manifest", ()) or ()),
+                evidence_path,
+            )
+        )
+    except SubjectError as exc:
+        raise EvidenceError(f"subject manifest cannot be sealed: {exc}") from exc
     for record_value in evidence_records:
         log_path = artifact_path_inside(repo, record_value["log_ref"], "evidence log")
         if not log_path.is_file():
@@ -4444,6 +4513,9 @@ def parser() -> argparse.ArgumentParser:
     supervise_parser = commands.add_parser("supervise")
     bootstrap_run_parser = commands.add_parser("bootstrap-run")
     seal_parser = commands.add_parser("seal-invocation")
+    subject_manifest_parser = commands.add_parser("subject-manifest")
+    subject_rebind_parser = commands.add_parser("subject-rebind")
+    inspect_subject_rebind_parser = commands.add_parser("inspect-subject-rebind")
     for command in (lookup_parser, record_parser):
         command.add_argument("--repo", required=True)
         command.add_argument("--cache", required=True)
@@ -4557,7 +4629,25 @@ def parser() -> argparse.ArgumentParser:
     seal_parser.add_argument("--terminal-log")
     seal_parser.add_argument("--preparation-python")
     seal_parser.add_argument("--preparation-result", action="append", default=[])
+    seal_parser.add_argument("--subject-manifest", action="append", default=[])
     seal_parser.add_argument("--outcome", choices=("passed", "failed", "blocked"), required=True)
+    subject_manifest_parser.add_argument("--repo", required=True)
+    subject_manifest_parser.add_argument("--gate-id", required=True)
+    subject_manifest_parser.add_argument("--profile", choices=("fast", "pr"), required=True)
+    subject_manifest_parser.add_argument("--output", required=True)
+    subject_manifest_parser.add_argument("--closure-output", required=True)
+    subject_manifest_parser.add_argument("--runtime-output", required=True)
+    subject_manifest_parser.add_argument("--source-evidence")
+    subject_rebind_parser.add_argument("--repo", required=True)
+    subject_rebind_parser.add_argument("--original-manifest", required=True)
+    subject_rebind_parser.add_argument("--current-manifest", required=True)
+    subject_rebind_parser.add_argument("--original-seal", required=True)
+    subject_rebind_parser.add_argument("--original-seal-sha256", required=True)
+    subject_rebind_parser.add_argument("--output", required=True)
+    inspect_subject_rebind_parser.add_argument("--repo", required=True)
+    inspect_subject_rebind_parser.add_argument("--receipt", required=True)
+    inspect_subject_rebind_parser.add_argument("--expected-gate-id", required=True)
+    inspect_subject_rebind_parser.add_argument("--profile", choices=("fast", "pr"), required=True)
     fingerprint_files_parser.add_argument("--repo", required=True)
     fingerprint_files_parser.add_argument("--path", action="append", required=True)
     return result
@@ -4594,6 +4684,44 @@ def main() -> int:
             return bootstrap_run(arguments)
         elif arguments.command == "seal-invocation":
             seal_invocation(arguments)
+        elif arguments.command == "subject-manifest":
+            try:
+                manifest, _paths = build_subject_manifest(
+                    Path(arguments.repo),
+                    gate_id=arguments.gate_id,
+                    profile=arguments.profile,
+                    output=arguments.output,
+                    closure_output=arguments.closure_output,
+                    runtime_output=arguments.runtime_output,
+                    source_evidence=arguments.source_evidence,
+                )
+            except SubjectError as exc:
+                raise EvidenceError(f"subject manifest failed closed: {exc}") from exc
+            print(manifest["subject_digest"])
+        elif arguments.command == "subject-rebind":
+            try:
+                receipt = build_rebind_receipt(
+                    Path(arguments.repo),
+                    original_manifest_value=arguments.original_manifest,
+                    current_manifest_value=arguments.current_manifest,
+                    original_seal_value=arguments.original_seal,
+                    original_seal_sha256=arguments.original_seal_sha256,
+                    output=arguments.output,
+                )
+            except SubjectError as exc:
+                raise EvidenceError(f"subject rebind failed closed: {exc}") from exc
+            print(receipt["decision"]["outcome"])
+        elif arguments.command == "inspect-subject-rebind":
+            try:
+                proof, _paths = validated_rebind_source(
+                    Path(arguments.repo),
+                    arguments.receipt,
+                    expected_gate_id=arguments.expected_gate_id,
+                    expected_profile=arguments.profile,
+                )
+            except SubjectError as exc:
+                raise EvidenceError(f"subject rebind inspection failed closed: {exc}") from exc
+            print(f"{proof['gate_id']}\t{proof['profile']}")
         else:
             summarize(arguments)
     except EvidenceError as exc:

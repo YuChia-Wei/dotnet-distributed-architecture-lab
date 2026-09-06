@@ -3,7 +3,7 @@ contract_id: "validation-evidence-lifecycle"
 evidence_classes:
   identity-sensitive:
     reusable: false
-    freshness: every-tracked-head
+    freshness: identity-dependent-operation-only
   input-sensitive:
     reusable: content-addressed-proof-only
     freshness: dependency-closure
@@ -13,6 +13,46 @@ evidence_classes:
   provider-sensitive:
     reusable: false
     freshness: live-provider-read-back
+commit_identity:
+  permitted_roles:
+    - immutable-execution-locator
+    - git-range-selector
+    - provider-association
+    - provenance
+  forbidden_validity_key: commit-sha
+  history_only_change: content-subject-rebind
+gate_classification:
+  schema_version: "validation-gate-classification/v1"
+  authority_path: ".ai/assets/shared/validation-gate-classification.yaml"
+  sensitivities: [identity, input, environment, provider]
+  reuse_eligibility_values: [pilot-approved, candidate-disabled, not-reusable]
+  registry_coverage: exact
+subject_manifest:
+  schema_version: "subject-manifest/v1"
+  identity_schema_version: "subject-identity/v1"
+  digest_algorithm: sha256
+  canonicalization: utf8-json-sorted-keys-no-insignificant-whitespace-v1
+  required_components: [classification, tracked_closure, invocation, authority, runtime, environment]
+  provenance_excluded_from_subject_digest: true
+subject_rebind:
+  schema_version: "subject-evidence-rebind/v1"
+  record_type: subject-evidence-rebind
+  decisions: [reused-with-proof, re-executed, blocked]
+  required_fresh_gates:
+    - actual-upgrade-evidence
+    - current-head-review-binding
+    - hosted-required-contexts
+    - live-merge-admission
+    - mutable-provider-state
+    - tag-release-binding
+  original_authentication_modes: [sealed-at-original-execution]
+  append_only: true
+independent_review:
+  schema_version: "2.0"
+  record_type: content-addressed-validation-audit
+  subject_schema_version: independent-review-subject/v1
+  validity_key: subject-digest
+  provenance_excluded_from_subject_digest: true
 audit_dispositions:
   - re-executed
   - reused-with-proof
@@ -25,7 +65,7 @@ reuse_receipt:
   reusable_classes: [input-sensitive, environment-sensitive]
   terminal_profiles: [release, nightly-full]
   required_fresh_gates:
-    - exact-head-independent-audit
+    - current-head-review-binding
     - hosted-required-contexts
     - live-merge-admission
   authority_dimensions: [runner, manifest, resolver, policy, configuration]

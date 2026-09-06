@@ -1,0 +1,58 @@
+schema_version: "1.0"
+contract_id: "validation-dependency-observation"
+request:
+  schema_version: "validation-dependency-observation-request/v1"
+  supported_harnesses:
+    - "in-process-python-callable/v1"
+  required:
+    - "schema_version"
+    - "validator_id"
+    - "subject"
+    - "harness"
+    - "entrypoint"
+    - "callable"
+    - "argv"
+    - "declared_dependencies"
+  subject_values: ["HEAD", "40-character-lowercase-commit-sha"]
+  declaration_dimensions: ["file", "subprocess", "git", "environment", "runtime"]
+  declaration_order: "ascending-unique"
+  file_declarations: "existing-safe-repository-relative-file-or-directory"
+report:
+  schema_version: "validation-dependency-observation-report/v1"
+  required:
+    - "schema_version"
+    - "validator_id"
+    - "subject"
+    - "request_digest"
+    - "observation_boundary"
+    - "coverage"
+    - "observed_dependencies"
+    - "drift"
+    - "worktree"
+    - "decision"
+    - "report_digest"
+  coverage_dimensions: ["file", "subprocess", "git", "environment", "runtime"]
+  coverage_states: ["partial", "unsupported"]
+  closure_claim: "lower-bound-only"
+  complete_transitive_closure: false
+  automatic_registry_edits: false
+outcomes: ["passed", "failed", "blocked"]
+drift:
+  observed_but_undeclared: "failed"
+  declared_but_unobserved: "advisory-retain"
+fresh_gates:
+  - "current-head-review-binding"
+  - "hosted-required-contexts"
+  - "live-provider-admission"
+  - "tag-release-binding"
+privacy:
+  forbidden:
+    - "absolute paths"
+    - "username"
+    - "hostname"
+    - "environment values"
+    - "raw command arguments"
+    - "raw process output"
+    - "secret"
+    - "token"
+    - "credential"

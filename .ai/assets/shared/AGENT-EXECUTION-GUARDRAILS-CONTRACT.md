@@ -17,6 +17,12 @@ argv and working directory, permissions, ignored artifact roots, terminal
 schema and one-shot callback/event-wait transport, integration owner, stop
 conditions, retry budget, and current attempt authorization.
 
+The exact repository SHA pins a stable execution checkout and records where the
+work ran. It is a locator and provenance fact, not by itself the validity key
+for the resulting evidence. After history-only identity changes, eligible
+evidence or independent review may be rebound only through the content-addressed
+proof defined by `VALIDATION-EVIDENCE-LIFECYCLE-CONTRACT.md`.
+
 The validator resolves the owning skill's tracked canonical `skill.yaml`,
 requires the named role to be an active tracked canonical role asset, and
 requires that exact role path to appear in the skill's `role_bindings`.
@@ -77,11 +83,18 @@ unresolved reference is not authorization.
 
 ## Code graph freshness
 
-Graph discovery records the index SHA, head SHA, and coverage. A stale, missing,
-partial, or unknown graph must be reindexed or replaced by a tracked-file
-fallback over explicit paths. Search absence is evidence only from an exact-head
-complete index or such a tracked fallback; graph search alone is never proof of
-absence.
+Graph discovery records the indexed and current commit SHAs as provenance plus
+coverage. Freshness is content-addressed: a complete index remains applicable
+after a history-only commit change when Git proves that the indexed and current
+commits have the same full tree. Commit-SHA inequality by itself does not make
+the graph stale.
+
+A content-stale, missing, partial, or unknown graph must be reindexed or
+replaced by a tracked-file fallback over explicit paths. Search absence is
+evidence only from a complete index for the current content tree or such a
+tracked fallback; graph search alone is never proof of absence. If either
+commit tree cannot be resolved, content equivalence is unknown and fails
+closed to reindex or fallback.
 Fallback paths must be contained repository-relative paths with tracked content;
 an absolute or untracked search root is rejected.
 

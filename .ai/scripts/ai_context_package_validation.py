@@ -16,6 +16,8 @@ from typing import Any
 
 import yaml
 
+from ai_context_release_projection import validate_selected_release_projection
+
 from ai_context_package_identity import (
     POLICY_ID as PUBLIC_PACKAGE_IDENTITY_POLICY,
     PackageIdentityError,
@@ -866,13 +868,10 @@ def _validate_validation_manifest(
         "integrity_policy",
     }:
         _fail("validation.json fields are incomplete or unexpected")
-    if set(proof) != {
-        "schema_version",
-        "source_inputs",
-        "payload",
-        "migration_sources",
-    }:
-        _fail("selected-inputs.json fields are incomplete or unexpected")
+    try:
+        validate_selected_release_projection(proof, package["version"], package)
+    except ValueError as exc:
+        _fail(str(exc))
     if canonical_json_bytes(validation) != manifest_bytes:
         _fail("validation.json is not canonical compact sorted JSON bytes")
     if validation.get("schema_version") != "package-validation/v1":
@@ -886,8 +885,6 @@ def _validate_validation_manifest(
         _fail("validation.json selected-input proof identity does not match package bytes")
     if identity.get("selected_input_fingerprint") != _sha256(proof_bytes):
         _fail("package identity selected_input_fingerprint does not match selected-inputs.json")
-    if proof.get("schema_version") != "package-selected-input/v1":
-        _fail("selected-inputs.json must use schema package-selected-input/v1")
     if canonical_json_bytes(proof) != proof_bytes:
         _fail("selected-inputs.json is not canonical compact sorted JSON bytes")
     return validation, proof, proof_bytes

@@ -26,6 +26,7 @@ This directory contains Claude-compatible skill wrappers.
 - `ai-context-upgrader`
 - `bdd-gwt-test-designer`
 - `code-reviewer` (`dotnet-backend` selected; unavailable in the core-only view)
+- `diagnostic-analyst`
 - `ddd-ca-hex-architect`
 - `local-change-implementer`
 - `problem-frame-author`
@@ -35,9 +36,7 @@ This directory contains Claude-compatible skill wrappers.
 - `spec-author`
 - `spec-compliance-validator`
 
-Deprecated compatibility wrappers remain available for `repo-structure-sync`
-and `dev-workflow`. Route new work to their active replacements and preserve
-historical identifiers.
+`repo-structure-sync` and `dev-workflow` are retired in v0.16.0 and have no runtime wrappers. For a new request, report the retired identifier and its replacement (`ai-context-init` and `software-development-orchestrator`, respectively); do not silently route it. Preserve historical identifiers. The canonical registry owns the tombstone and deterministic diagnostic.
 
 ## Wrapper Rules
 

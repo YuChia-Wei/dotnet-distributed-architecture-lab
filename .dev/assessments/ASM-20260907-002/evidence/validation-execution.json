@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "python",
+    "-B",
+    ".dev/ai-context/tooling/validate-target-ai-context.py",
+    "--require-effective-rules",
+    "--commit-range",
+    "main..HEAD",
+    "--workflow-id",
+    "2026-09-06-ai-context-v0-16-0-upgrade"
+  ],
+  "cwd": "C:\\Github\\YuChia\\dotnet-mq-arch-lab",
+  "started_at": "2026-09-07T07:21:26.2324850+08:00",
+  "ended_at": "2026-09-07T07:21:52.8102943+08:00",
+  "exit_code": 0,
+  "duration_seconds": 26.5778093,
+  "output_sha256": "9c6461b5f0ac3ae3e7121c30b39ba3b3f1d62d1e7d2a96596ca00fedaa877499",
+  "subject_commit": "c53dc84050685761b801bb992fae6101828b01e2",
+  "subject_tree": "c14b79f00edb7f069f8883e8a6bec2e397bb7e24",
+  "output_file": "validation-output.txt",
+  "output_encoding": "UTF-8 without BOM; captured stdout and stderr merged; line endings normalized to LF"
+}

@@ -1,8 +1,8 @@
 schema_version: '1.0'
 framework:
-  version: v0.15.1
-  commit: f2b5fa7c13550efaeb65ab9fcaeb0403baa2a5af
+  commit: 4d1a5c7d039618f007784679d9968c357347272b
   selected_technology_profile: dotnet-backend
+  version: v0.16.0
 catalogs:
 - catalog_id: selected-profile
   path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
@@ -13,182 +13,223 @@ catalogs:
 target_authorities:
   provenance:
     path: .dev/ai-context/provenance.yaml
-    digest: bc2f8535cf49eaa963292c24729cdde7a3d3503aa4180c6a5e3cb19ba98cf9f5
+    digest: cd670d11a2e369960d584a2525b3a1643fbf1798cc8650bfa59f1881201d9ded
   customizations:
     path: .dev/ai-context/customizations.yaml
-    digest: 2d43726f0f4fd62e50f7901a498c2e2a4323bdb7eafba8a83119c21b90b9d71b
+    digest: 3dede13649ee71a657a6af677ab2a119498a17662063ce8cd7d6ba38566953f6
 rule_dispositions:
-- rule_id: AGGREGATE-ES-001
-  effective_disposition: baseline-effective
-  applicability: Orders adopts event sourcing and reconstructs Order by replaying
+- applicability: Orders adopts event sourcing and reconstructs Order by replaying
     persisted domain events through EsAggregateRoot behavior.
-  evidence: &id001
+  baseline_acceptance:
+    explicit: true
+    verification:
+      evidence:
+      - src/Order/DomainCore/SaleOrders.Domains/Order.cs
+      - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
+      - tests/SaleOrders.Domains.Tests/OrderTests.cs
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/aggregate-es-001-remediation.yaml
+      - .dev/assessments/ASM-20260813-006/report.md
+      status: verified
+  effective_disposition: baseline-effective
+  evidence:
   - src/Order/DomainCore/SaleOrders.Domains/Order.cs
   - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
   - tests/SaleOrders.Domains.Tests/OrderTests.cs
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.13.0/aggregate-es-001-remediation.yaml
   - .dev/assessments/ASM-20260813-006/report.md
+  rule_id: AGGREGATE-ES-001
+- applicability: AI-context initialization, upgrade, audit, and development must rely
+    on repository-backed evidence and disclose optional external discovery.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/apply-receipt.yaml
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/post-apply-required-path-reconciliation.yaml
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
       status: verified
-      evidence: *id001
-- rule_id: AICTX-EVIDENCE-001
   effective_disposition: baseline-effective
-  applicability: AI-context initialization, upgrade, audit, and development must rely
-    on repository-backed evidence and disclose optional external discovery.
-  evidence: &id002
+  evidence:
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/apply-receipt.yaml
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/post-apply-required-path-reconciliation.yaml
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+  rule_id: AICTX-EVIDENCE-001
+- applicability: Command use cases persist aggregates, use explicit local transactions
+    for aggregate/outbox consistency, and message across bounded contexts.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs
+      - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
+      - .dev/ARCHITECTURE.md
       status: verified
-      evidence: *id002
-- rule_id: ARCH-UOW-001
   effective_disposition: baseline-effective
-  applicability: Command use cases persist aggregates, use explicit local transactions
-    for aggregate/outbox consistency, and message across bounded contexts.
-  evidence: &id003
+  evidence:
   - src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs
   - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
   - .dev/ARCHITECTURE.md
+  rule_id: ARCH-UOW-001
+- applicability: AI-context audits, code reviews, and architecture assessments are
+    persisted as governed assessment artifacts.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - .dev/assessments/ASM-20260812-001/report.md
+      - .dev/assessments/ASM-20260812-002/report.md
+      - .dev/standards/ASSESSMENT-ARTIFACT-POLICY.md
       status: verified
-      evidence: *id003
-- rule_id: ASSESSMENT-ARTIFACT-001
   effective_disposition: baseline-effective
-  applicability: AI-context audits, code reviews, and architecture assessments are
-    persisted as governed assessment artifacts.
-  evidence: &id004
+  evidence:
   - .dev/assessments/ASM-20260812-001/report.md
   - .dev/assessments/ASM-20260812-002/report.md
   - .dev/standards/ASSESSMENT-ARTIFACT-POLICY.md
+  rule_id: ASSESSMENT-ARTIFACT-001
+- applicability: Domain behavior declares and enforces preconditions and invariants
+    for products, orders, and inventory.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - src/Product/DomainCore/SaleProducts.Domains/Product.cs
+      - src/Order/DomainCore/SaleOrders.Domains/Order.cs
+      - src/Inventory/DomainCore/InventoryControl.Domains/InventoryItem.cs
       status: verified
-      evidence: *id004
-- rule_id: CONTRACT-SEMANTICS-001
   effective_disposition: baseline-effective
-  applicability: Domain behavior declares and enforces preconditions and invariants
-    for products, orders, and inventory.
-  evidence: &id005
+  evidence:
   - src/Product/DomainCore/SaleProducts.Domains/Product.cs
   - src/Order/DomainCore/SaleOrders.Domains/Order.cs
   - src/Inventory/DomainCore/InventoryControl.Domains/InventoryItem.cs
+  rule_id: CONTRACT-SEMANTICS-001
+- applicability: Inventory persistence contains an executable physical-delete implementation,
+    so purge/archive governance cannot be globally excluded.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/InventoryItemDomainRepository.cs
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
       status: verified
-      evidence: *id005
-- rule_id: DELETE-PURGE-001
   effective_disposition: baseline-effective
-  applicability: Inventory persistence contains an executable physical-delete implementation,
-    so purge/archive governance cannot be globally excluded.
-  evidence: &id006
+  evidence:
   - src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/InventoryItemDomainRepository.cs
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+  rule_id: DELETE-PURGE-001
+- applicability: Products persists an isdeleted marker and filters deleted records
+    from aggregate and query repositories.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs
+      - src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductQueryRepository.cs
+      - src/Product/DomainCore/SaleProducts.Domains/Product.cs
       status: verified
-      evidence: *id006
-- rule_id: DELETE-SOFT-001
   effective_disposition: baseline-effective
-  applicability: Products persists an isdeleted marker and filters deleted records
-    from aggregate and query repositories.
-  evidence: &id007
+  evidence:
   - src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductDomainRepository.cs
   - src/Product/DomainCore/SaleProducts.Infrastructure/Repositories/ProductQueryRepository.cs
   - src/Product/DomainCore/SaleProducts.Domains/Product.cs
+  rule_id: DELETE-SOFT-001
+- applicability: Order reconstruction replays persisted events without creating pending
+    events, and tests verify clean rehydration behavior.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - src/BuildingBlocks/Lab.BuildingBlocks.Domains/EsAggregateRoot.cs
+      - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
+      - tests/SaleOrders.Domains.Tests/OrderTests.cs
       status: verified
-      evidence: *id007
-- rule_id: MAP-EVENTS-001
   effective_disposition: baseline-effective
-  applicability: Order reconstruction replays persisted events without creating pending
-    events, and tests verify clean rehydration behavior.
-  evidence: &id008
+  evidence:
   - src/BuildingBlocks/Lab.BuildingBlocks.Domains/EsAggregateRoot.cs
   - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
   - tests/SaleOrders.Domains.Tests/OrderTests.cs
+  rule_id: MAP-EVENTS-001
+- applicability: The target adopts the conditional slnx navigation profile with bounded
+    context DomainCore and Presentation solution folders.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - MQArchLab.slnx
+      - .dev/project-config.yaml
       status: verified
-      evidence: *id008
-- rule_id: PROJECT-GRAMMAR-001
   effective_disposition: baseline-effective
-  applicability: The target adopts the conditional slnx navigation profile with bounded
-    context DomainCore and Presentation solution folders.
-  evidence: &id009
+  evidence:
   - MQArchLab.slnx
   - .dev/project-config.yaml
+  rule_id: PROJECT-GRAMMAR-001
+- applicability: Testing, persistence, messaging, and observability choices are explicit,
+    evidence-backed, and recorded in target configuration.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - .dev/project-config.yaml
+      - .dev/standards/TECHNOLOGY-SELECTION-POLICY.md
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
       status: verified
-      evidence: *id009
-- rule_id: TECH-SELECT-001
   effective_disposition: baseline-effective
-  applicability: Testing, persistence, messaging, and observability choices are explicit,
-    evidence-backed, and recorded in target configuration.
-  evidence: &id010
+  evidence:
   - .dev/project-config.yaml
   - .dev/standards/TECHNOLOGY-SELECTION-POLICY.md
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+  rule_id: TECH-SELECT-001
+- applicability: The dotnet-backend profile applies and the target explicitly selects
+    the baseline-permitted plain-xUnit branch with mandatory GWT semantics.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - .dev/project-config.yaml
+      - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
+      - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
       status: verified
-      evidence: *id010
-- rule_id: TEST-BDDFY-001
   effective_disposition: baseline-effective
-  applicability: The dotnet-backend profile applies and the target explicitly selects
-    the baseline-permitted plain-xUnit branch with mandatory GWT semantics.
-  evidence: &id011
+  evidence:
   - .dev/project-config.yaml
   - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
   - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+  rule_id: TEST-BDDFY-001
+- applicability: New and modified tests use recognizable Given-When-Then semantics
+    regardless of the selected runner.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - tests/SaleOrders.Domains.Tests/OrderTests.cs
+      - tests/SaleOrders.Tests/PlaceOrderTests.cs
+      - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
       status: verified
-      evidence: *id011
-- rule_id: TEST-GWT-001
   effective_disposition: baseline-effective
-  applicability: New and modified tests use recognizable Given-When-Then semantics
-    regardless of the selected runner.
-  evidence: &id012
+  evidence:
   - tests/SaleOrders.Domains.Tests/OrderTests.cs
   - tests/SaleOrders.Tests/PlaceOrderTests.cs
   - .dev/workflows/2026-08-12-ai-context-v0-13-upgrade/evidence/v0.9.0/effective-rule-decisions.yaml
+  rule_id: TEST-GWT-001
+- applicability: Test projects use the explicitly recorded per-project Moq and NSubstitute
+    selection.
   baseline_acceptance:
     explicit: true
     verification:
+      evidence:
+      - .dev/project-config.yaml
+      - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
+      - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
       status: verified
-      evidence: *id012
-- rule_id: TEST-MOCK-001
   effective_disposition: baseline-effective
-  applicability: Test projects use the explicitly recorded per-project Moq and NSubstitute
-    selection.
-  evidence: &id013
+  evidence:
   - .dev/project-config.yaml
   - tests/SaleOrders.Tests/SaleOrders.Tests.csproj
   - tests/SaleProducts.Tests/SaleProducts.Tests.csproj
-  baseline_acceptance:
-    explicit: true
-    verification:
-      status: verified
-      evidence: *id013
+  rule_id: TEST-MOCK-001
 routing:
 - route_id: ROUTE-0060755BB97DCDEAC34944FA27E473EC92B448A74107DA66CB5D9D7E51EED46B
   selector:
@@ -212,8 +253,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-0060755BB97DCDEAC34944FA27E473EC92B448A74107DA66CB5D9D7E51EED46B.yaml
-    digest: 2e688ab6368befa80e642d1cc7d7989af29018f0888af9d35925ed81b70158a5
+    path: .dev/ai-context/effective-rule-packets/r-abqhkw5zpxg6.yaml
+    digest: 30c8902ab8b09282cdcc8a5f73cd94bedb38c82703d8139008e1d74fdca0e345
 - route_id: ROUTE-0CB791EB64099FC942CC9EF435809DB1E757848F558735D7D1417D83E22CAD3A
   selector:
     capability: specification
@@ -236,8 +277,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-0CB791EB64099FC942CC9EF435809DB1E757848F558735D7D1417D83E22CAD3A.yaml
-    digest: 91bfc314cc73cff6c2e529380cea43b93e0c456a3dd248612a7f8698937fea8e
+    path: .dev/ai-context/effective-rule-packets/r-bs3zd23ebgp4.yaml
+    digest: 6afa7676345e2b0ce23f64fb40dd004a78fd42529df0e46bcf2ddc94c3ce5d88
 - route_id: ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C
   selector:
     capability: local-change
@@ -260,8 +301,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C.yaml
-    digest: 3cef851947666157430e0b6025a37527b5984b33c8748f952d6ce912787c3f13
+    path: .dev/ai-context/effective-rule-packets/r-d7nezibej3hx.yaml
+    digest: 9ae43942f150cd1a8484ead00e9f8b08e0c45a041b0b0e256104ba95033b998e
 - route_id: ROUTE-3EE85C82323D6A52F24B406E8F1271F5ED88DDE38EAC1044F0BF971061FFE0C4
   selector:
     capability: implementation
@@ -284,8 +325,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-3EE85C82323D6A52F24B406E8F1271F5ED88DDE38EAC1044F0BF971061FFE0C4.yaml
-    digest: 067a13123f02b303b736d0309d030a1d96588a67578ec459814c8b1286ce1ec8
+    path: .dev/ai-context/effective-rule-packets/r-h3ufzarshvvf.yaml
+    digest: 4b96bb9e7ab5c5e2967868bbf16a59679b9e917d02d66add6f395c1e3529bb04
 - route_id: ROUTE-44441057FC3C725F5861E2149944CFB7EFDD0C5F890831C4208291A5B2371222
   selector:
     capability: review
@@ -308,8 +349,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-44441057FC3C725F5861E2149944CFB7EFDD0C5F890831C4208291A5B2371222.yaml
-    digest: c7c1cc640c1048862bc287e1b259d379ab6458260592d09b56ce735e454eddd6
+    path: .dev/ai-context/effective-rule-packets/r-ircbav74hrzf.yaml
+    digest: f784e5b6bd869a209b3334ced7e1c73f39700f5f1e15734be1b515394bb8205c
 - route_id: ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7
   selector:
     capability: local-change
@@ -332,8 +373,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7.yaml
-    digest: a1786a25df8f2b36685dc4648ef0ebae0cb11adcff2a599e2d116180c55bec23
+    path: .dev/ai-context/effective-rule-packets/r-kecjn7mge6bb.yaml
+    digest: 982f7b3e9a914fc846c46db230889e3b8f0ca1e07b74baaa8f67f7d6c39537fc
 - route_id: ROUTE-5376A2F088F0C2FB915830EEC987D1391E96AFDDE1208E4E68B362FE4D3A612E
   selector:
     capability: problem-framing
@@ -356,8 +397,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-5376A2F088F0C2FB915830EEC987D1391E96AFDDE1208E4E68B362FE4D3A612E.yaml
-    digest: 4bbca2d14bacb72b564e408dda414879bb19aaf55a9f85a49f42bc3fd84e3637
+    path: .dev/ai-context/effective-rule-packets/r-kn3kf4ei6dbp.yaml
+    digest: 5c7f5001af95005b97f044cbdc5b8e638de1bc1440d41c4777a419ba346768aa
 - route_id: ROUTE-595016B570726DB08342680D2195648944D898511253100E88AEA1B9E66957D5
   selector:
     capability: test-design
@@ -380,8 +421,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-595016B570726DB08342680D2195648944D898511253100E88AEA1B9E66957D5.yaml
-    digest: 635ca1e42ec34a5aa4f97f8afab0411175541903a59d98211e66a2e9f8c90bc4
+    path: .dev/ai-context/effective-rule-packets/r-lfibnnlqojw3.yaml
+    digest: 7110ab29860985ce41e257ee507cb9816eb9656819e65894555903ae84d99089
 - route_id: ROUTE-5FD9FBA84BFD386D5D5F3C8AC8B16EF6332DEA1D48EC5DBF6AA6B096D0828604
   selector:
     capability: review
@@ -404,8 +445,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-5FD9FBA84BFD386D5D5F3C8AC8B16EF6332DEA1D48EC5DBF6AA6B096D0828604.yaml
-    digest: 276cdf619fc43412c676a5109feb27e16b451c3af72c7265da268b9369edc0fc
+    path: .dev/ai-context/effective-rule-packets/r-l7m7xkcl7u4g.yaml
+    digest: c37e5256ea446c27e697bbec4b487933c20db1eb64c9cbe1aa718e29a3adda31
 - route_id: ROUTE-6793F2C32C4BF62763380BCF5CD83D284C40AB2401A5BB42904823E7F28BE96C
   selector:
     capability: architecture
@@ -428,8 +469,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-6793F2C32C4BF62763380BCF5CD83D284C40AB2401A5BB42904823E7F28BE96C.yaml
-    digest: b62b59623079c35f913346e4130edd0e6ad4123df87c4b23ff35b5fa8a812dff
+    path: .dev/ai-context/effective-rule-packets/r-m6j7fqzmjp3c.yaml
+    digest: c6fa229552c389a0fbebbcc2d6c4a63e820d2c6082b312a8517f7040e9f05d89
 - route_id: ROUTE-69320ED2F30633AA22DD3E91C72210D14A955614F1B4269844ED8EAC0274491C
   selector:
     capability: local-change
@@ -452,8 +493,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-69320ED2F30633AA22DD3E91C72210D14A955614F1B4269844ED8EAC0274491C.yaml
-    digest: 633bce001bd1a1825e7a9aa2ac88054dff4866a0cafb1cc16df6a12d043e4fb4
+    path: .dev/ai-context/effective-rule-packets/r-neza5uxtayz2.yaml
+    digest: 15cd815632a5c1c2a0e4d963306add634ca9a9f667002cf9c35d41a4c5ece0be
 - route_id: ROUTE-7C1C8C42DEAF9D889A157FA97FA2E5390CDCD0FD5509103DA4DA1A65CB2A85BE
   selector:
     capability: requirements
@@ -476,8 +517,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-7C1C8C42DEAF9D889A157FA97FA2E5390CDCD0FD5509103DA4DA1A65CB2A85BE.yaml
-    digest: 6abc0146c89333dfd1e56aac33e5e7484aaedc69478add8a9da6563174a9744f
+    path: .dev/ai-context/effective-rule-packets/r-pqoiyqw6v6oy.yaml
+    digest: 899b60446bfe65c202c790cd03995e78ef364d8e4bcdd41a4c6b40c9880448d2
 - route_id: ROUTE-8691EB94D951D12620A830D430E1934E0E228CE6B1342F65673ADBD57C484333
   selector:
     capability: test-design
@@ -500,8 +541,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-8691EB94D951D12620A830D430E1934E0E228CE6B1342F65673ADBD57C484333.yaml
-    digest: 37d6c223d9df51ce2aaa36842b341da8edadc6935c3ed2cd68880921cf7fd09c
+    path: .dev/ai-context/effective-rule-packets/r-q2i6xfgzkhis.yaml
+    digest: a0eb69a240197db00037848e1ea04ac2257a9230283915738cf2a3c1e763bd20
 - route_id: ROUTE-86B49603D837372BA200420228174C1CF61333171CE8D96FCFF63ABD07BB796D
   selector:
     capability: compliance-validation
@@ -524,8 +565,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-86B49603D837372BA200420228174C1CF61333171CE8D96FCFF63ABD07BB796D.yaml
-    digest: 3728ad0e1fdab8f3600753282a634bf339ac7ff513e713c92b9fb93304fcdcea
+    path: .dev/ai-context/effective-rule-packets/r-q22jma6yg43s.yaml
+    digest: 6f228d3fcdcc85eeea3a484d97c094965b17115ff94c0c1583a60337bdb575ec
 - route_id: ROUTE-88F8297799ABD7C258348FA6072DFE56306800798EACEB7529FAC1509F304A15
   selector:
     capability: local-change
@@ -548,8 +589,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-88F8297799ABD7C258348FA6072DFE56306800798EACEB7529FAC1509F304A15.yaml
-    digest: 5055a937f22514210c4b49ab99b3826e41889f8f9774b18d733869ce2a105142
+    path: .dev/ai-context/effective-rule-packets/r-rd4cs54zvpl4.yaml
+    digest: 9e590465a0c18cde4f2d80fb13f8a768dd6e8ef15046e30d48d48b0301bd05de
 - route_id: ROUTE-93389630E2EAEBD1C926310D5932AA0DB31893A1FC0108457AE8E9B63B44E356
   selector:
     capability: local-change
@@ -572,8 +613,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-93389630E2EAEBD1C926310D5932AA0DB31893A1FC0108457AE8E9B63B44E356.yaml
-    digest: 20cad149aaf204e8d61d7cf8a4b4bc46713979f73b246068dbbe78af91e3f200
+    path: .dev/ai-context/effective-rule-packets/r-sm4jmmhc5lv5.yaml
+    digest: 71dbc5d1d0c224b160831491426fc59aec7951bc29bbd1183d67b15a1654e5a4
 - route_id: ROUTE-DF0E762322A527898C635F453332C4FD4607EFC0A01AE6AFFA49D799E70BAB18
   selector:
     capability: implementation
@@ -596,8 +637,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-DF0E762322A527898C635F453332C4FD4607EFC0A01AE6AFFA49D799E70BAB18.yaml
-    digest: 2cc372cc07de72e17197842bd8b37b825722c68e2c0ede7c6c250870a9997f08
+    path: .dev/ai-context/effective-rule-packets/r-34hhmizcuuty.yaml
+    digest: 1a79e61a54aa7aecbace8f2d44ce318d2cb87ebe4ff2f79656088b3ff0d64f5c
 - route_id: ROUTE-E3B4869DC90073EEDA02B8105FB8EE99866C4CF93C5E3FC852258480BEDE8566
   selector:
     capability: implementation
@@ -620,8 +661,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-E3B4869DC90073EEDA02B8105FB8EE99866C4CF93C5E3FC852258480BEDE8566.yaml
-    digest: 129b1405d3d08c39c315a3d13180888a99ab088c9b4a4a5043114c5846f8f11f
+    path: .dev/ai-context/effective-rule-packets/r-4o2inhojabz6.yaml
+    digest: 841c8a751f5f37de01d0ece7a7d08735cc52014e624ed78b7bcede71d876afb5
 - route_id: ROUTE-EFD78BECD2CAFD2890638E78C79E0ABCA47CB5E0C70EC9B3D602EC12FF762AFE
   selector:
     capability: implementation
@@ -644,8 +685,8 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-EFD78BECD2CAFD2890638E78C79E0ABCA47CB5E0C70EC9B3D602EC12FF762AFE.yaml
-    digest: 988b36526e4c38ef2e59b7544d0bc7eb4a5185719b3750b3f89e8696ec92daa9
+    path: .dev/ai-context/effective-rule-packets/r-57lyx3gszl6s.yaml
+    digest: 1bbc765e8758c0f046341a62259725ab01ece2d04bcf27fb731f0347b6d37938
 - route_id: ROUTE-FAD108B11C0B4A274C0B640D117F2D7EE22FA006DDA09A442DD9BF0E2DC6C0EF
   selector:
     capability: specification
@@ -668,6 +709,6 @@ routing:
   - TEST-MOCK-001
   reported_not_applicable_rule_ids: []
   packet:
-    path: .dev/ai-context/effective-rule-packets/ROUTE-FAD108B11C0B4A274C0B640D117F2D7EE22FA006DDA09A442DD9BF0E2DC6C0EF.yaml
-    digest: ddf4a8b6facddcef9c2e9cac92be265629b84d15b1e585974cff94f711e63d69
-target_state_digest: 3492e251b8c63f87adef32f7f83223bbbf8e0a8553e93747551c1bc743ff01bc
+    path: .dev/ai-context/effective-rule-packets/r-7liqrmi4bnfc.yaml
+    digest: 4d9798b0f40567d024bfd7a2151de59dd5694a8096132ad647f5a4c349c962b5
+target_state_digest: 355bdea6321744b6e6bb74e870b6e72d7730632850359d8455ddd14c0244629f

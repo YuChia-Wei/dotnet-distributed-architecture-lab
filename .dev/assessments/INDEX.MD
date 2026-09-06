@@ -9,6 +9,8 @@
 
 | Assessment | Title | Type | Owner | Status | Subject Commit | Updated | Report |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| [`ASM-20260907-001`](ASM-20260907-001/assessment.yaml) | v0.16.0 closeout evidence defect baseline | `ai-context-audit` | `ai-context-auditor` | `final` | `0a3fac7ce225802983249fcdb576cdf8ef40738e` | `2026-09-07T07:12:18+08:00` | [report](ASM-20260907-001/report.md) |
+| [`ASM-20260907-002`](ASM-20260907-002/assessment.yaml) | Independent verification of v0.16.0 closeout evidence repair | `ai-context-verification` | `ai-context-auditor` | `final` | `c53dc84050685761b801bb992fae6101828b01e2` | `2026-09-07T07:24:42+08:00` | [report](ASM-20260907-002/report.md) |
 | [`ASM-20260830-003`](ASM-20260830-003/assessment.yaml) | v0.15.1 six-file patch and final-transaction precondition verification | `ai-context-verification` | `ai-context-auditor` | `final` | `911b85f599e4f263aff2a6c68ac173d6ad6747bd` | `2026-08-30T22:36:06+08:00` | [report](ASM-20260830-003/report.md) |
 | [`ASM-20260830-002`](ASM-20260830-002/assessment.yaml) | v0.15.0 applied-state and closeout-precondition verification | `ai-context-verification` | `ai-context-auditor` | `final` | `85f1e3675a84b36f927e950e2c8c4ac86a0a0ced` | `2026-08-30T22:10:38+08:00` | [report](ASM-20260830-002/report.md) |
 | [`ASM-20260830-001`](ASM-20260830-001/assessment.yaml) | v0.14.0 upgrade checkpoint and performance-baseline verification | `ai-context-verification` | `ai-context-auditor` | `final` | `32140f52ffffd14dc235b310d386d6c1b3765e70` | `2026-08-30T20:21:40+08:00` | [report](ASM-20260830-001/report.md) |
@@ -28,4 +30,5 @@
 
 | Assessment | Title | Type | Owner | Status | Subject Commit | Updated | Report |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| [`ASM-20260906-001`](ASM-20260906-001/assessment.yaml) | v0.16.0 finalized AI-context and upgrade-operability verification | `ai-context-verification` | `ai-context-auditor` | `superseded` | `c0abe9c2ce288abf2b83edce1806fefb63b5886e` | `2026-09-07T07:28:13+08:00` | [report](ASM-20260906-001/report.md) |
 | [`ASM-20260813-007`](ASM-20260813-007/assessment.yaml) | Final v0.13.0 developer-impact and architecture-expectation assessment | `ai-context-verification` | `ai-context-auditor` | `superseded` | `46928f4379f57a7bec155056aacdf6dbcf070f81` | `2026-08-13T14:08:36+08:00` | [report](ASM-20260813-007/report.md) |

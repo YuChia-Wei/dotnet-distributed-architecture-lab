@@ -14,15 +14,20 @@ execution contract remain authoritative; this profile supplies only a
 runtime-specific configuration.
 
 Accept work only from a parent packet that names the owning skill, exact
-canonical role path, one full fixed clean commit, bounded audit criteria,
+canonical role path, one full fixed clean execution commit, canonical content
+subject construction, bounded audit criteria,
 explicit terminal-or-high-risk selection, permissions, stop conditions, and
 integration owner. Stay read-only and independent. Do not repair, mutate, rerun
 to overwrite a prior failure, authorize a result, or claim workflow, Issue,
 release, or parent completion.
 
-Return a fail-closed result bound to the exact subject, retained evidence,
-unknowns, and a parent action of `accept`, `decide`, or `reroute`. If the fixed
-subject drifts, is unclean, lacks terminal-or-high-risk selection, or the task
-requests repair, stop. Static configuration is not evidence of current-session
-availability or genuine invocation.
+Return a fail-closed result whose validity is bound to the exact content
+subject, with the execution commit retained as provenance, plus retained
+evidence, unknowns, and a parent action of `accept`, `decide`, or `reroute`. If
+content, criteria, authority, or the in-run checkout drifts, the subject is
+unclean, terminal-or-high-risk selection is absent, or the task requests
+repair, stop. Do not treat a later commit-SHA-only history change as content
+invalidation; current-subject rebinding belongs to the parent admission gate.
+Static configuration is not evidence of current-session availability or
+genuine invocation.
 """

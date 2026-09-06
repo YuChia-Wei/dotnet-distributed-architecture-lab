@@ -100,15 +100,15 @@ Workflow artifact 規則：
 
 ### Development Workflow Orchestration
 
-當軟體開發工作需要多階段規劃、開發 skill routing、sub-agent coordination、validation checkpoint 或 commit checkpoint 時，使用 `dev-workflow`。
+當軟體開發工作需要多階段規劃、開發 skill routing、sub-agent coordination、validation checkpoint 或 commit checkpoint 時，使用 `software-development-orchestrator`。
 
 該 skill 可以協調 downstream skills，但不應取代它們各自的專業責任。
 
-一般 AI context audit、文件治理或 repository initialization 不交給 `dev-workflow`；改由對應 owner skill 與其自有 workflow template 處理。
+一般 AI context audit、文件治理或 repository initialization 不交給 `software-development-orchestrator`；改由對應 owner skill 與其自有 workflow template 處理。歷史紀錄可保留已退役的 `dev-workflow` 識別碼。
 
 ### Repo Init / Template Adaptation
 
-當這套 framework 被複製到既有或全新目標 repository 後，第一個 skill 應使用 `repo-structure-sync`。
+當這套 framework 被複製到既有或全新目標 repository 後，第一個 skill 應使用 `ai-context-init`。
 
 該 skill 必須：
 
@@ -118,7 +118,7 @@ Workflow artifact 規則：
 4. 除非目標 repo 明確推翻，否則保留 framework-level collaboration rules；
 5. 移除或重寫來源 repo 專屬的 requirements、specs、operations docs、workflow artifacts 與 ADRs。
 
-以 `.ai/assets/skills/repo-structure-sync/references/migration-boundaries.md` 作為 authoritative migration boundary。
+以 `.ai/assets/skills/ai-context-init/references/migration-boundaries.md` 作為 authoritative migration boundary。歷史紀錄可保留已退役的 `repo-structure-sync` 識別碼。
 
 ### Code Review
 
@@ -155,10 +155,10 @@ Workflow artifact 規則：
 
 | 需求 | Skill |
 | --- | --- |
-| 多階段開發流程協調、workflow artifacts、skill routing、validation 與 commit checkpoint | `dev-workflow` |
+| 多階段開發流程協調、workflow artifacts、skill routing、validation 與 commit checkpoint | `software-development-orchestrator` |
 | 唯讀 AI context 健康度、漂移與結構分析；可選擇對話輸出或保存報告 | `ai-context-auditor` |
 | AI context cleanup、prompt boundary、language policy、wrapper sync | `ai-context-governance` |
-| 將此 framework 複製到目標 repo 後的第一次同步 | `repo-structure-sync` |
+| 將此 framework 複製到目標 repo 後的第一次同步 | `ai-context-init` |
 | .NET backend architecture design | `ddd-ca-hex-architect` |
 | GWT scenario 與 assertion design | `bdd-gwt-test-designer` |
 | .NET backend code review | `code-reviewer` |

@@ -2,6 +2,12 @@ schema_version: "1.0"
 document: ".dev/ai-context/effective-rules.yaml"
 purpose: "Target-owned, complete effective semantic rule state used to select freshness-validated task packets."
 source_repository_rule: "This schema and its template are framework assets. The framework source repository must not create a live .dev/ai-context/effective-rules.yaml instance."
+packet_storage:
+  current_scheme: "route-base32-60-v1"
+  emitted_path: ".dev/ai-context/effective-rule-packets/r-<12-lowercase-base32>.yaml"
+  identity_boundary: "routing[*].route_id retains the full ROUTE-<SHA256> semantic identity; packet.path is a deterministic storage locator only"
+  legacy_read_compatibility: ".dev/ai-context/effective-rule-packets/<full-route-id>.yaml remains readable only as one complete legacy layout"
+  authority: "routing[*].packet.path is the sole route-to-packet index; no index.yaml or directory-discovered authority exists"
 required:
   - schema_version
   - framework
@@ -112,13 +118,14 @@ routing:
     reported_not_applicable_rule_ids: "possibly empty, unique, ascending list exactly equal to the required_rule_ids whose matching rule_dispositions record has effective_disposition not-applicable"
     packet:
       required: [path, digest]
-      path: ".dev/ai-context/effective-rule-packets/<route_id>.yaml"
+      path: "current writes use .dev/ai-context/effective-rule-packets/r-<12-lowercase-base32>.yaml under route-base32-60-v1; complete legacy states may retain .dev/ai-context/effective-rule-packets/<full-route-id>.yaml until explicit regeneration"
       digest: "sha256 hex digest of the exact packet canonical bytes"
   constraints:
     - "The selector tuple is unique. canonical_json(selector) uses this schema's compact JSON canonicalization with no omitted selector fields; partial matches, wildcard matches, and skill-local discovery are forbidden."
     - "required_rule_ids are the complete exact set for the route and must resolve to valid explicit disposition and catalog records, including any rules reported not applicable."
     - "reported_not_applicable_rule_ids must equal the exact not-applicable subset of required_rule_ids; omissions, additions, duplicates, or reordering fail closed."
     - "The packet path and digest must resolve to a fresh packet whose request dimensions, loaded_rule_ids, target_state_digest, and catalog digests exactly match this record."
+    - "All routes use one layout: complete route-base32-60-v1 or complete legacy full-route-id. Mixed layouts, compact-key collisions, path mismatches, missing files, and orphan packet-root entries fail closed."
     - "packet.digest is verified derived packet metadata and is deliberately excluded from target_state_digest input. This breaks the digest dependency cycle: a packet may include target_state_digest while the state records that packet's digest."
 filesystem_safety:
   read_surfaces:

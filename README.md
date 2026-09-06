@@ -166,4 +166,4 @@ dotnet test MQArchLab.slnx
 - `.agents/skills/README.md`、`.claude/skills/README.md`：runtime wrappers
 - `.dev/guides/ai-collaboration-guides/README.MD`：human-facing 使用指南
 
-AI context 更新後若專案真相被來源 framework 覆蓋，使用 `repo-structure-sync` 依 repository evidence 重建，不得直接沿用來源 repo 的產品名稱、credentials、ports、domains 或 workflow records。
+AI context 更新後若專案真相被來源 framework 覆蓋，使用 `ai-context-init` 依 repository evidence 重建，不得直接沿用來源 repo 的產品名稱、credentials、ports、domains 或 workflow records。歷史紀錄中的 `repo-structure-sync` 名稱維持原樣。

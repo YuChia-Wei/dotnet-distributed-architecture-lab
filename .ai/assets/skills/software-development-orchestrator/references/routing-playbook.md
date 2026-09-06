@@ -32,6 +32,7 @@ If the active profile has no matching downstream skill, use `skill-discovery-pla
 | Bounded slice implementation | `implementation` | Code or document changes for a bounded slice, narrow validation. |
 | Local technical change | `local-change` | Local class, object, method, symbol, SQL/ORM, or direct-call-site changes and narrow validation. |
 | Execute target-selected tests | `test-execution` | Target-owned commands, exact outcomes, and environment or deferral evidence. |
+| Diagnose an observed failure or performance symptom | `diagnosis` | Hypotheses, falsification evidence, reproduction, causal conclusion and repair handoff. |
 | Code or artifact review | `review` | Findings, severity, evidence, residual risk. |
 | Compliance or coverage gate | `compliance-validation` | Coverage result, missing evidence, pass/fail gate. |
 
@@ -52,6 +53,7 @@ The current local profile maps slots to these concrete skills:
 | `test-design` | `bdd-gwt-test-designer` |
 | `implementation` | `slice-implementer` |
 | `local-change` | `local-change-implementer` |
+| `diagnosis` | `diagnostic-analyst` |
 | `review` | `code-reviewer` |
 | `compliance-validation` | `spec-compliance-validator` |
 
@@ -146,3 +148,5 @@ child invocation. If that route is unavailable but the parent can apply the
 same role contract inline, select `direct`; otherwise select `unavailable`.
 The existing `loaded_rule_ids` packet may be cited as an input source, without
 changing its semantics.
+
+An unexplained symptom routes to `diagnosis` before selecting a repair. A diagnosis does not approve implementation; the receiving implementer must resolve existing repair authorization.

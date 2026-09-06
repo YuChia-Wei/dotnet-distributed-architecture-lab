@@ -37,6 +37,7 @@ from ai_context_target_provenance import (
     TargetValidationError,
     framework_managed_ignore_message,
     git_ignore_rule,
+    validate_customizations,
 )
 
 
@@ -2715,10 +2716,11 @@ def validate_upgrade_remediation_decision(decision: dict, packet: dict) -> dict:
             raise ApplyError("upgrade remediation decision commit grammar adoption is invalid")
         if adoption.get("policy_id") != "git-commit-subject/v2":
             raise ApplyError("upgrade remediation decision commit grammar policy differs")
-        require_sha256(
-            adoption.get("legacy_history_tip"),
-            "upgrade remediation decision legacy history tip",
-        )
+        tip = adoption.get("legacy_history_tip")
+        if not isinstance(tip, str) or not re.fullmatch(r"[0-9a-f]{40}", tip):
+            raise ApplyError(
+                "upgrade remediation decision legacy history tip must be a lowercase 40-character Git SHA"
+            )
         require_sha256(
             adoption.get("incoming_policy_sha256"),
             "upgrade remediation decision incoming policy SHA-256",
@@ -6240,6 +6242,29 @@ def recover_transaction_locked(
     )
 
 
+def validate_upgrade_semantic_prestate(target: Path) -> None:
+    """Reject unresolved existing semantic authority before transaction writes."""
+    ledger = target / ".dev/ai-context/customizations.yaml"
+    if ledger.is_file():
+        document = load_yaml(ledger, "target semantic customizations")
+        entries = document.get("customizations")
+        if isinstance(entries, list) and any(
+            isinstance(item, dict) and item.get("disposition") == "unresolved"
+            for item in entries
+        ):
+            raise ApplyError("unresolved target semantic customizations block upgrade apply")
+        errors: list[str] = []
+        validate_customizations(ledger, errors, require_finalized=True)
+        if errors:
+            raise ApplyError("invalid target semantic customizations: " + "; ".join(errors))
+    provenance = target / ".dev/ai-context/provenance.yaml"
+    if provenance.is_file():
+        document = load_yaml(provenance, "target provenance")
+        reconciliation = document.get("reconciliation")
+        if isinstance(reconciliation, dict) and reconciliation.get("unresolved"):
+            raise ApplyError("unresolved target provenance reconciliation blocks upgrade apply")
+
+
 def _apply_plan_core(
     plan: dict,
     acknowledgements: set[str] | None = None,
@@ -6278,6 +6303,8 @@ def _apply_plan_core(
             require_write_authority=not rejected,
             route_operation_authorized=route_operation_authorized,
         )
+        if is_upgrade_plan(plan) and not rejected:
+            validate_upgrade_semantic_prestate(target)
         root, journal = prepare_transaction(
             target,
             plan,

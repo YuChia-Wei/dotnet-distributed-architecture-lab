@@ -32,7 +32,10 @@ If the base id already exists, append `-02`, `-03`, and so on. Do not infer sequ
 
 ## Checkpoint Handoff
 
-When the user requests merge or push before the AI-context workflow is complete:
+When the user requests merge or push before the AI-context workflow is complete,
+`in_progress` is not by itself a blocker. Proceed only after the transport is
+separately authorized, the required checkpoint is valid, and repository gates
+pass:
 
 - follow `.dev/standards/WORKFLOW-HANDOFF-POLICY.md`;
 - commit a coherent validated checkpoint;

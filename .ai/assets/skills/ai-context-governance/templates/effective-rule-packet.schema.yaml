@@ -1,7 +1,14 @@
 schema_version: "1.0"
-document: ".dev/ai-context/effective-rule-packets/<route_id>.yaml"
+document: ".dev/ai-context/effective-rule-packets/r-<12-lowercase-base32>.yaml"
 purpose: "Freshness-validated, task-scoped resolved semantics for one exact action request."
 source_repository_rule: "The framework source repository distributes this schema only. It must not create a live target packet."
+storage:
+  scheme: "route-base32-60-v1"
+  derivation: "Decode the 64 uppercase hexadecimal digits from the full ROUTE-<SHA256> identity to 32 digest bytes, RFC 4648 Base32 encode those exact bytes, strip padding, lowercase, take the first 12 characters, and use r-<key>.yaml."
+  identity: "The full ROUTE-<SHA256> value remains the sole semantic route identity; the compact filename is only a storage key."
+  authority: ".dev/ai-context/effective-rules.yaml is the sole machine-readable route-to-packet index; do not create an authoritative index.yaml or infer identity from directory enumeration."
+  collision: "Before any write, distinct route identities mapping to the same case-folded compact path fail closed. Do not add suffixes, extend one filename, allocate a number, or fall back to a legacy name."
+  legacy_read_compatibility: "A complete legacy layout using <full-route-id>.yaml remains readable. One effective state must use either the complete legacy layout or the complete compact layout; mixed layouts fail closed."
 required:
   - schema_version
   - packet_id
@@ -89,6 +96,8 @@ filesystem_safety:
     leaf: "must exist as a regular non-symlink file before it is read"
     ancestors: "every existing ancestor must be a regular non-symlink directory"
     traversal: "resolve only fixed repository-relative paths and the effective state's strict single-segment technology-profile slug matching ^[a-z0-9]+(?:[._-][a-z0-9]+)*$; never accept Windows trailing-dot/segment ambiguity or follow a symlink or traversal segment"
+    inventory: "the regular files directly under the packet root must exactly equal the paths declared by effective-rules.yaml; missing, orphan, nested, directory, or symlink entries fail closed"
+    windows_path_budget: "before initialization or finalization mutates any destination on Windows, the complete candidate packet set must fit the 259-character legacy absolute-path budget; diagnostics disclose lengths and remaining root budget, not the target path"
 fail_closed:
   conditions:
     - "missing packet, route, catalog, evidence, or required full normative statement"

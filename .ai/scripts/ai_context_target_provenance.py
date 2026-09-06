@@ -21,7 +21,9 @@ from ai_context_effective_rules import (
     EFFECTIVE_STATE_PATH,
     PROVENANCE_EFFECTIVE_RULES_LINKAGE,
     build_effective_state_and_packets,
+    compact_packet_path_for_route,
     is_profile_slug,
+    preflight_effective_packet_storage,
     validate_effective_rule_state,
     write_effective_state_and_packets,
 )
@@ -4994,6 +4996,8 @@ def finalize_context(
                 if upgrade_errors
                 else "upgrade finalization evidence is incomplete"
             )
+    if effective_state_candidate is not None:
+        preflight_effective_packet_storage(root, effective_state_candidate)
     context.mkdir(parents=True, exist_ok=True)
     temporary_paths: list[Path] = []
     try:
@@ -5137,6 +5141,8 @@ def initialize_context(
         raise TargetValidationError(
             "initialization requires no active legacy or component-aware authority"
         )
+    if effective_state_candidate is not None:
+        preflight_effective_packet_storage(root, effective_state_candidate)
     dev_root.mkdir(parents=True, exist_ok=True)
     candidate = Path(
         tempfile.mkdtemp(prefix=".ai-context.candidate.", dir=dev_root)
@@ -5184,7 +5190,7 @@ def initialize_context(
         written.append(EFFECTIVE_STATE_PATH)
         written.extend(
             sorted(
-                f".dev/ai-context/effective-rule-packets/{route['route_id']}.yaml"
+                compact_packet_path_for_route(route["route_id"])
                 for route in state["routing"]
             )
         )

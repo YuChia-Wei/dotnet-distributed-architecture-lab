@@ -1,0 +1,45 @@
+template_metadata:
+  template_id: "assessment-locator"
+  template_version: "1.0.0"
+  template_created_at: "2026-07-13T23:04:10+08:00"
+  template_updated_at: "2026-07-13T23:04:10+08:00"
+schema_version: "1.0"
+assessment_id: "ASM-20260907-002"
+commit_search_id: "ASM-20260907-002"
+assessment_type: "ai-context-verification"
+title: "Independent verification of v0.16.0 closeout evidence repair"
+owner_skill: "ai-context-auditor"
+status: "final"
+report: "report.md"
+artifact_branch: "codex/2026-09-06-ai-context-v0-16-0-upgrade"
+base_branch: "main"
+created_at: "2026-09-07T07:19:51+08:00"
+updated_at: "2026-09-07T07:24:42+08:00"
+template_source: ".dev/assessments/templates/assessment-locator-template.yaml"
+template_version: "1.0.0"
+report_template_source: ".ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md"
+report_template_version: "2.1.0"
+subject_ref:
+  repository: "dotnet-mq-arch-lab"
+  branch: "codex/2026-09-06-ai-context-v0-16-0-upgrade"
+  commit: "c53dc84050685761b801bb992fae6101828b01e2"
+scope:
+  included:
+    - "Target terminal gate, focused tests, manifest and README"
+    - "Corrective workflow, baseline assessment relations and retained historical evidence"
+    - "Sealed authority raw byte parity and bounded fixed-head target validation"
+  excluded:
+    - "src/**, tests/**, test/** and other product implementation"
+    - "Package apply, transaction mutation, authority regeneration and upstream full matrices"
+    - "Hosted actions, current integration admission and merge execution"
+relations:
+  supersedes: ["ASM-20260906-001"]
+  superseded_by: []
+  related_assessments: ["ASM-20260907-001"]
+  workflow_refs: ["2026-09-06-ai-context-v0-16-0-upgrade"]
+  backlog_refs: []
+  adr_refs: []
+resume:
+  last_completed_action: "Independent fixed-head repair audit passed; captured exact 52-test target gate evidence without tracked mutation."
+  next_action: "Parent persists transport evidence, reconciles lifecycle and obtains a fresh final-content audit before authorized local integration."
+  blockers: []

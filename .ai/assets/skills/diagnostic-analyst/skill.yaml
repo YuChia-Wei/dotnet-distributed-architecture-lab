@@ -1,0 +1,55 @@
+asset_id: "diagnostic-analyst"
+schema_version: "1.0"
+asset_type: "skill-spec"
+title: "Diagnostic Analyst"
+purpose: "Diagnose an observed failure or performance symptom through falsification, bounded reproduction, and evidence-backed causal isolation; hand off repair without inferring implementation authority."
+portability: "portable"
+audience: "agent-facing"
+source_of_truth: "canonical"
+capability_slots: [diagnosis]
+triggers:
+  - "diagnose an observed failure"
+  - "investigate a performance symptom"
+  - "root-cause analysis"
+  - "diagnostic-analyst"
+inputs:
+  - "Observed symptom, expected behavior, affected subject, environment, and permitted investigation scope"
+  - "Available logs, exact commands, hypotheses, and evidence with explicit limitations"
+outputs:
+  - "Symptom and hypothesis table with falsifying observation, method, strength, coverage, and result"
+  - "Minimal reproduction and controlled causal isolation, or an explicit unconfirmed/blocked outcome"
+  - "Root-cause conclusion, evidence references, repair handoff, and regression binding"
+constraints:
+  - "Prefer deterministic interception, counting, and complete enumeration over low-frequency sampling."
+  - "Sampling absence never proves nonexistence or falsifies a hypothesis. Limit every conclusion to the observed scope."
+  - "Confirm a root cause only with a reproduced symptom, deterministic bounded or complete evidence, and a controlled intervention that distinguishes the cause from alternatives."
+  - "Static inspection, correlation, elapsed time, a passing test, or a declared receipt alone does not confirm a root cause."
+  - "Run only authorized experiments; use disposable fixtures or declared ignored output, and stop before production or destructive mutation."
+  - "Diagnosis does not authorize repair, PR creation, push, merge, Issue mutation, or publication. Reuse explicit existing authorization only within its stated scope."
+  - "Preserve failed, blocked, and inconclusive observations; never rewrite historical incidents as newly executed evidence."
+  - "The record validator checks structure, evidence bytes, and inference prerequisites; independent review must assess causal meaning and the truth of reported execution."
+workflow:
+  - step: 1
+    description: "Bind symptom, subject, environment, permitted commands, write boundary, and stopping conditions."
+  - step: 2
+    description: "List competing hypotheses and define a falsifying observation, method, scope, and strength before testing."
+  - step: 3
+    description: "Execute the smallest permitted reproduction and deterministic observation; retain exact commands and evidence."
+  - step: 4
+    description: "Use a controlled intervention to isolate causation, validate the record, and report confirmed, unconfirmed, or blocked with limitations."
+  - step: 5
+    description: "Hand off the diagnosed scope and regression proposal to the appropriate owner; verify repair authorization separately."
+references:
+  - ".ai/assets/skills/diagnostic-analyst/references/diagnostic-contract.md"
+  - ".ai/assets/skills/diagnostic-analyst/references/output-contract.md"
+  - ".ai/assets/skills/diagnostic-analyst/scripts/validate-diagnostic-record.py"
+examples:
+  - ".dev/guides/ai-collaboration-guides/DIAGNOSTIC-ANALYST-SKILL-GUIDE.md"
+human_guide: ".dev/guides/ai-collaboration-guides/DIAGNOSTIC-ANALYST-SKILL-GUIDE.md"
+wrapper_targets: [claude, codex]
+wrapper_metadata:
+  claude:
+    wrapper_path: ".claude/skills/diagnostic-analyst/"
+  codex:
+    wrapper_path: ".agents/skills/diagnostic-analyst/"
+status: "active"

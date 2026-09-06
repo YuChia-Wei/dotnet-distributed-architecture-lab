@@ -23,3 +23,5 @@
 - Use `slice-implementer` when the work needs a bounded multi-file slice.
 - Use `ddd-ca-hex-architect` when the work needs architecture or domain-language decisions.
 - Use `code-reviewer` when the local change came from review findings and needs independent verification.
+
+For an unexplained observed symptom, use `diagnostic-analyst` to establish a bounded diagnosis before selecting a repair. A diagnostic handoff does not grant repair authorization.
