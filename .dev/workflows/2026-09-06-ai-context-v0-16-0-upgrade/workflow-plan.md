@@ -16,11 +16,11 @@
 - `branch`: `codex/2026-09-06-ai-context-v0-16-0-upgrade`
 - `base_branch`: `main`
 - `branch_segment`: `1`
-- `status`: `completed`
-- `current_phase`: `completed`
+- `status`: `in_progress`
+- `current_phase`: `closeout-evidence-correction`
 - `artifact_root`: `.dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade`
 - `created_at`: `2026-09-06T22:03:42+08:00`
-- `updated_at`: `2026-09-06T23:21:20+08:00`
+- `updated_at`: `2026-09-07T07:12:53+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#9`
@@ -71,6 +71,35 @@ The first no-write package plan contained 70 automatic operations (47 replacemen
 - After a valid terminal receipt finalizes provenance, transaction rollback is forbidden; the local workflow checkpoint becomes the repository recovery boundary.
 
 ## Resume Checkpoint
+
+### Current correction (2026-09-07)
+
+The owner authorized repair of the observed closeout defects and local merge
+of this branch into `main`. Issue #9 was read back OPEN; `main` and freshly
+fetched `origin/main` both remain at `f1a0298fdca0dafe1d653802006e60bc004a74a5`.
+Continue on this existing unmerged workflow branch. This authorization adds
+local integration only; push, PR, Issue closure and publication remain excluded.
+
+- Current task: `AICU-004-closeout-evidence-correction` (in progress).
+- Unique workflow state: repair the premature completion claim, preserve the
+  immutable finalized transaction, retain actual independent audit evidence,
+  and admit an exact clean local integration subject.
+- Baseline: `ASM-20260907-001`; preserve all earlier final reports and the old
+  delegation record as historical observations, not current certification.
+- Next action: finish the target-owned terminal gate and its focused negative
+  tests, checkpoint the repair, obtain an independent post-remediation audit,
+  persist its actual results, then audit the final clean integration commit.
+- Do not edit provenance, customizations, effective rules/packets, package
+  payload or the finalized Git-admin transaction. A present-day audit cannot
+  establish that a missing pre-finalization audit happened in the past.
+- Integration topology: `--no-ff`, because this branch is the upgrade and
+  recovery/checkpoint unit. Verify the merge tree against the reviewed head.
+
+### Superseded 2026-09-06 closeout statement
+
+The following is retained as the original statement. Its claims of independent
+completion and no local blockers are corrected by the current section and
+`reports/05-closeout-corrigendum.md`; it is not current resume authority.
 
 - Last completed action: finalized transaction `48d34abf53d7e8fc37bb8b51a9e3f128cac8954b62b71da1d094158d74255f22`, fixed the applied audit subject at `c0abe9c2ce288abf2b83edce1806fefb63b5886e`, persisted `ASM-20260906-001`, cleared the verified transient receipt, and passed the journal-only final target gate.
 - Current task: none; `AICU-001`, `AICU-002`, and `AICU-003` are complete.

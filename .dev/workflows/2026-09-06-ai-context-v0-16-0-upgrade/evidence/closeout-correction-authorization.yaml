@@ -1,0 +1,21 @@
+schema_version: "1.0"
+recorded_at: "2026-09-07T07:12:53+08:00"
+workflow_id: "2026-09-06-ai-context-v0-16-0-upgrade"
+source: "current owner conversation"
+request: "修正你看到的問題，然後我要把目前分支合併回 main"
+authorized:
+  - "Repair the confirmed target-owned closeout and audit-evidence defects."
+  - "Use independent read-only audit under the current session's available delegation mechanism."
+  - "Commit coherent repairs and locally merge the current branch into main."
+excluded: ["push", "pull request", "Issue closure", "publication", "upstream feature implementation"]
+work_item:
+  repository: "YuChia-Wei/dotnet-distributed-architecture-lab"
+  number: 9
+  observed_state: "OPEN"
+  read_command: "gh issue view 9 --repo YuChia-Wei/dotnet-distributed-architecture-lab --json number,title,state,body,url"
+integration_base: "f1a0298fdca0dafe1d653802006e60bc004a74a5"
+correction_baseline: "0a3fac7ce225802983249fcdb576cdf8ef40738e"
+historical_gap: "No retained pre-finalization independent audit evidence; new audit is present-day verification only."
+selection_owner: "ai-context-governance parent"
+selection_basis: "explicit terminal post-remediation and local integration gate"
+selection_note: "This is a governance repair, not a new upgrader run; no owner choice of an upgrader delegation mode is asserted."

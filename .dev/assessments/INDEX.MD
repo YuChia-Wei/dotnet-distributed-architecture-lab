@@ -9,6 +9,7 @@
 
 | Assessment | Title | Type | Owner | Status | Subject Commit | Updated | Report |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| [`ASM-20260907-001`](ASM-20260907-001/assessment.yaml) | v0.16.0 closeout evidence defect baseline | `ai-context-audit` | `ai-context-auditor` | `final` | `0a3fac7ce225802983249fcdb576cdf8ef40738e` | `2026-09-07T07:12:18+08:00` | [report](ASM-20260907-001/report.md) |
 | [`ASM-20260906-001`](ASM-20260906-001/assessment.yaml) | v0.16.0 finalized AI-context and upgrade-operability verification | `ai-context-verification` | `ai-context-auditor` | `final` | `c0abe9c2ce288abf2b83edce1806fefb63b5886e` | `2026-09-06T23:17:00+08:00` | [report](ASM-20260906-001/report.md) |
 | [`ASM-20260830-003`](ASM-20260830-003/assessment.yaml) | v0.15.1 six-file patch and final-transaction precondition verification | `ai-context-verification` | `ai-context-auditor` | `final` | `911b85f599e4f263aff2a6c68ac173d6ad6747bd` | `2026-08-30T22:36:06+08:00` | [report](ASM-20260830-003/report.md) |
 | [`ASM-20260830-002`](ASM-20260830-002/assessment.yaml) | v0.15.0 applied-state and closeout-precondition verification | `ai-context-verification` | `ai-context-auditor` | `final` | `85f1e3675a84b36f927e950e2c8c4ac86a0a0ced` | `2026-08-30T22:10:38+08:00` | [report](ASM-20260830-002/report.md) |

@@ -1,0 +1,37 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.1.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-27T09:52:09+08:00",
+  "task_id": "AICU-004-closeout-evidence-correction",
+  "workflow_id": "2026-09-06-ai-context-v0-16-0-upgrade",
+  "owner_skill": "ai-context-governance",
+  "status": "in_progress",
+  "created_at": "2026-09-07T07:12:53+08:00",
+  "updated_at": "2026-09-07T07:19:00+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-5.6-terra",
+  "reasoning_effort": "high",
+  "executor_setting_source": "configured default in user config; exact active runtime setting was unavailable",
+  "finding_ids": ["ASM-20260907-001#AIC-001", "ASM-20260907-001#AIC-002", "ASM-20260907-001#AIC-003"],
+  "scope": {
+    "target": "Correct local upgrade closeout evidence and enforce its declared terminal audit before owner-authorized local integration.",
+    "files": [".dev/ai-context/tooling/**", ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/**", ".dev/workflows/INDEX.MD", ".dev/assessments/**"],
+    "constraints": ["Keep sealed authorities and all package bytes unchanged", "Preserve historical incomplete and failed evidence", "Require genuine independent audit and exact full-tree admission"],
+    "non_goals": ["Package reapply or finalization", "Product source/test changes", "Upstream framework improvement implementation", "Push", "Pull request", "Issue closure", "Publication"]
+  },
+  "execution": {
+    "steps": ["Record baseline and explicit reopen", "Implement target-owned terminal evidence gate and regression tests", "Checkpoint repair and obtain independent verification", "Retain results and admit final exact clean subject", "Integrate with no-ff and verify target tree"],
+    "validation": ["Narrow terminal-evidence tests", "Target AI-context gate", "Fresh fixed-head independent audit", "Exact full-tree local admission", "Post-merge target gate"],
+    "last_completed_step": "Implemented target-owned terminal evidence enforcement; 18 new tests and all 52 downstream tests passed; staged target gate passed with pending audit disclosed.",
+    "next_action": "Commit the repair and obtain independent fixed-head post-remediation verification."
+  },
+  "results": {
+    "summary": "Correction in progress; earlier closeout certification is not accepted as current independent audit evidence.",
+    "files_changed": [],
+    "tests_run": ["52/52 downstream unit tests; 18 new terminal-evidence tests", "staged target AI-context gate passed; terminal audit remains pending"],
+    "finding_status": "partially-resolved",
+    "residual_risk": "Pre-finalization audit evidence was not retained; no retrospective certification is possible.",
+    "follow_up_needed": true
+  }
+}

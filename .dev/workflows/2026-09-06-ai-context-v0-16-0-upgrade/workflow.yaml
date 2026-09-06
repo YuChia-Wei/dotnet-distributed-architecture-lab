@@ -4,12 +4,12 @@ workflow_id: "2026-09-06-ai-context-v0-16-0-upgrade"
 workflow_kind: "ai-context-maintenance"
 title: "Upgrade installed AI collaboration framework from v0.15.1 to v0.16.0"
 owner_skill: "ai-context-governance"
-status: "completed"
-current_phase: "completed"
+status: "in_progress"
+current_phase: "closeout-evidence-correction"
 artifact_root: ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade"
 entrypoint: "workflow-plan.md"
 created_at: "2026-09-06T22:03:42+08:00"
-updated_at: "2026-09-06T23:21:20+08:00"
+updated_at: "2026-09-07T07:12:53+08:00"
 template_source: ".ai/assets/skills/ai-context-governance/templates/workflow-locator-template.yaml"
 template_version: "1.2.0"
 branch: "codex/2026-09-06-ai-context-v0-16-0-upgrade"
@@ -19,3 +19,11 @@ issue:
   repository: "YuChia-Wei/dotnet-distributed-architecture-lab"
   number: 9
   url: "https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/9"
+terminal_audit:
+  schema_version: "1.0"
+  required: true
+  historical_record:
+    path: ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/evidence/delegation-run.yaml"
+    sha256: "a1e7334acc0570a516d2c9d084435e8c0ea3bf4a744a9f7790f2b767a920f4c8"
+    disposition: "superseded-incomplete"
+  current_record: ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/evidence/terminal-audit-current.json"

@@ -24,6 +24,10 @@ checks:
     path: ".ai/scripts/validate-shell-assets.py"
     sha256: "0577bba24764db1aaa2ee697f734ca924401f73003d5e58f1e76607365c8d1f3"
     args: []
+  - id: "target-terminal-audit"
+    path: ".dev/ai-context/tooling/validate-target-terminal-audit.py"
+    sha256: "a46acb7144e4027820466dbc97f81bedac47e76bd69e7419d2304fe96bc9c64a"
+    args: []
 package_projection_defects:
   - id: "AICU-V016-TARGET-GATE-PROJECTION-001"
     status: "target-overlay-required"
