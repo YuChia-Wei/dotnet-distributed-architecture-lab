@@ -3,7 +3,7 @@
 This directory contains repository-owned validation behavior that must remain
 separate from byte-exact framework-managed paths.
 
-The v0.14 package receipt binds every selected framework path to the published
+The v0.16 package receipt binds every selected framework path to the published
 package SHA-256. Therefore target policy is composed here instead of editing
 `.ai/scripts/` or `.dev/standards/` after package installation.
 
@@ -23,19 +23,19 @@ Run the target gate with:
 python -B .dev/ai-context/tooling/validate-target-ai-context.py `
   --allow-unfinalized `
   --commit-range main..HEAD `
-  --workflow-id 2026-08-30-ai-context-v0-15-1-upgrade
+  --workflow-id 2026-09-06-ai-context-v0-16-0-upgrade
 ```
 
 After provenance and effective rules are finalized, omit
 `--allow-unfinalized` and add `--require-effective-rules`.
 
-The published v0.14 `check-all.sh`, `validate-ai-context.py`, and
-`validate-shell-assets.py` are not the target gate. The downstream package
-removes six formerly selected stock tests while the active Python and shell
-registries still retain source-only or removed references. The version-pinned
-applicability manifest records the exact package-native failures and keeps
-those checks outside the target pass claim. A target-owned projection runs the
-remaining package-applicable validators, 33 downstream tests, and the
+The published v0.16 `check-all.sh` and generic `validate-ai-context.py` are not
+the target gate because the downstream package intentionally omits source-only
+release assets still named by the combined validator. The repaired
+`validate-shell-assets.py` now passes and is promoted into the target gate. The
+version-pinned applicability manifest records the remaining package-native
+failure without claiming omitted source-only checks passed. A target-owned
+projection runs the package-applicable validators, 34 downstream tests, and the
 preserved prospective commit-policy overlay. During `--allow-unfinalized`, the
 gate also skips the provenance sub-check because the package transaction
 cannot bind its target-validation receipt until this command succeeds; the
@@ -45,13 +45,12 @@ inactive target choices. This overlay does not alter package bytes or
 synthesize omitted source assets to conceal them.
 
 The carried product-source projection contract and changed-path
-selection/evidence schema. The projection contract aligns with this target's
-authority boundary, but `AICU-V011-SELECTION-001` records that direct matches
-are marked selected before dependency expansion, causing the recursive helper
-to return before traversing declared dependencies. The new selector behavior
-also shipped without matching projected regression coverage. Changed-path
-profiles and reuse therefore remain inactive until a later exact package proves
-the defect resolved.
+selection/evidence schema align with this target's authority boundary.
+`AICU-V011-SELECTION-001` remains resolved through v0.16.0. The new dependency
+observation surface is lower-bound evidence only: an observed undeclared input
+may fail, while a declared but unobserved input does not authorize shrinking a
+profile. Changed-path profiles and evidence reuse remain inactive target choices
+until separately selected and validated.
 
 v0.13 removes the bundled analyzer/runtime-validation payload and replaces it
 with reference-only on-demand recipes. Those recipes remain `not-selected`:
