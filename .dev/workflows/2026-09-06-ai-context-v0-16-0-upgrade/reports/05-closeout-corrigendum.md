@@ -1,11 +1,13 @@
 # v0.16.0 Closeout Corrigendum
 
-- Created/updated: `2026-09-07T07:12:53+08:00`.
+- Created: `2026-09-07T07:12:53+08:00`.
+- Updated: `2026-09-07T07:28:13+08:00`.
 - Owner: `ai-context-governance`.
 - Workflow: `2026-09-06-ai-context-v0-16-0-upgrade`.
 - Corrected snapshot: `0a3fac7ce225802983249fcdb576cdf8ef40738e`.
 - Baseline assessment: `ASM-20260907-001`.
-- Status: correction in progress; no terminal acceptance yet.
+- Status: corrective content complete; actual independent verification retained
+  as `ASM-20260907-002`. Final integration admission remains a separate gate.
 
 ## Explicit correction
 
@@ -25,7 +27,8 @@ occurred. This historical sequence remains an explicitly disclosed limitation.
 Do not change sealed ledger/provenance bytes to make a later assessment look like
 the original prerequisite. Preserve the finalized transaction and add current
 governance evidence separately. The prior workflow completion was premature;
-the locator is explicitly reopened for `AICU-004-closeout-evidence-correction`.
+the locator was explicitly reopened for `AICU-004-closeout-evidence-correction`
+and completed only after the separate current verification was retained.
 
 ## Other clarified claims
 
@@ -64,3 +67,17 @@ Unchanged package apply and product surfaces do not need another upgrade or
 product test run. Run focused new gate tests and affected target validation.
 Upstream serializer/orchestration/performance/resume improvements remain outside
 this local correction, owned by the framework maintainer for separate scoping.
+
+## Current corrective outcome
+
+The fresh independent reviewer `/root/repair_audit` passed repair commit
+`c53dc84050685761b801bb992fae6101828b01e2` on `2026-09-07`, preserving all 29
+selected historical/authority files byte-for-byte. The target gate passed all
+52 tests and seven commits; the exact command, timestamps, exit code, output
+digest and genuine invocation are retained under `ASM-20260907-002/evidence/`.
+No new blocking finding was identified. The old assessment locator is now
+reciprocally superseded; its frozen report and the pending old run are unchanged.
+
+This repairs the present-day evidence and acceptance path, not the missing
+historical prerequisite. The final containing commit still needs a fresh
+independent audit and exact full-tree admission before local integration.

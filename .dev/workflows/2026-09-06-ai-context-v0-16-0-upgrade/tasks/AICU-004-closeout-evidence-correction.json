@@ -6,9 +6,9 @@
   "task_id": "AICU-004-closeout-evidence-correction",
   "workflow_id": "2026-09-06-ai-context-v0-16-0-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-09-07T07:12:53+08:00",
-  "updated_at": "2026-09-07T07:19:00+08:00",
+  "updated_at": "2026-09-07T07:28:13+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "gpt-5.6-terra",
   "reasoning_effort": "high",
@@ -21,16 +21,18 @@
     "non_goals": ["Package reapply or finalization", "Product source/test changes", "Upstream framework improvement implementation", "Push", "Pull request", "Issue closure", "Publication"]
   },
   "execution": {
-    "steps": ["Record baseline and explicit reopen", "Implement target-owned terminal evidence gate and regression tests", "Checkpoint repair and obtain independent verification", "Retain results and admit final exact clean subject", "Integrate with no-ff and verify target tree"],
-    "validation": ["Narrow terminal-evidence tests", "Target AI-context gate", "Fresh fixed-head independent audit", "Exact full-tree local admission", "Post-merge target gate"],
-    "last_completed_step": "Implemented target-owned terminal evidence enforcement; 18 new tests and all 52 downstream tests passed; staged target gate passed with pending audit disclosed.",
-    "next_action": "Commit the repair and obtain independent fixed-head post-remediation verification."
+    "steps": ["Record baseline and explicit reopen", "Implement target-owned terminal evidence gate and regression tests", "Checkpoint repair and obtain independent verification", "Retain results and reconcile corrective content lifecycle"],
+    "validation": ["Narrow terminal-evidence tests", "Target AI-context gate", "Fresh fixed-head independent repair audit", "Exact audit artifact hash comparison"],
+    "last_completed_step": "Retained actual independent ASM-20260907-002 verification of c53dc84, its 52-test exact command evidence and genuine invocation; reconciled the corrective content lifecycle.",
+    "next_action": "Parent delivery gate remains separate: commit evidence, independently audit/admit the final full tree, then execute authorized no-ff local merge and post-merge target validation.",
+    "role_execution_refs": [".dev/assessments/ASM-20260907-002/evidence/role-execution.json"],
+    "delivery_evidence_root": ".tmp/ai-context-closeout/final-audit/"
   },
   "results": {
-    "summary": "Correction in progress; earlier closeout certification is not accepted as current independent audit evidence.",
-    "files_changed": [],
-    "tests_run": ["52/52 downstream unit tests; 18 new terminal-evidence tests", "staged target AI-context gate passed; terminal audit remains pending"],
-    "finding_status": "partially-resolved",
+    "summary": "Three local closeout defects are resolved through enforcement, truthful historical correction and retained independent current evidence. This content closure does not claim that local integration has occurred.",
+    "files_changed": [".dev/ai-context/tooling/validate-target-terminal-audit.py", ".dev/ai-context/tooling/tests/test_target_terminal_audit.py", ".dev/ai-context/tooling/target-gate-manifest.yaml", ".dev/ai-context/tooling/README.md", ".dev/assessments/ASM-20260907-001/", ".dev/assessments/ASM-20260907-002/", ".dev/assessments/ASM-20260906-001/assessment.yaml", ".dev/assessments/INDEX.md", ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/", ".dev/workflows/INDEX.MD"],
+    "tests_run": ["52/52 downstream unit tests; 18 new terminal-evidence tests", "independent c53dc84 target gate passed: 52 tests, 17 assessments, seven commits; exact output retained", "all five independent transport artifacts copied with identical SHA-256"],
+    "finding_status": "resolved",
     "residual_risk": "Pre-finalization audit evidence was not retained; no retrospective certification is possible.",
     "follow_up_needed": true
   }

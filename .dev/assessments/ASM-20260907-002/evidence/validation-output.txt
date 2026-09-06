@@ -1,0 +1,76 @@
+==> C:\Users\h4227\AppData\Local\Programs\Python\Python313\python.exe -B .ai/scripts/validate-ai-context-target.py --require-effective-rules
+AI context target validation passed: 0 local CLI routes.
+Effective rule action readiness: ready.
+==> C:\Users\h4227\AppData\Local\Programs\Python\Python313\python.exe -B .ai/scripts/validate-workflow-artifacts.py
+Workflow artifact validation passed for 9 post-adoption workflow(s), 11 indexed workflow directories, and 1 backlog item(s).
+==> C:\Users\h4227\AppData\Local\Programs\Python\Python313\python.exe -B .ai/scripts/validate-dependency-versions.py
+Dependency/version consistency validation passed: source_mode=false, python_dependencies=0, managed_projects=0, nuget_dependencies=0.
+Online package currency and vulnerability status are advisory and are not asserted by this offline gate.
+==> C:\Users\h4227\AppData\Local\Programs\Python\Python313\python.exe -B .ai/scripts/validate-assessment-artifacts.py
+Assessment artifact validation passed for 17 assessment(s).
+==> C:\Users\h4227\AppData\Local\Programs\Python\Python313\python.exe -B .ai/scripts/validate-shell-assets.py
+Shell asset validation passed for 16 tracked asset(s): lifecycle={'active': 5, 'compatibility': 4, 'deprecated': 7}; roles={'active-orchestrator': 2, 'compatibility-entrypoint': 2, 'context-validator': 2, 'manual-advisory': 2, 'runtime-launcher': 1, 'transitional-helper': 7}.
+==> C:\Users\h4227\AppData\Local\Programs\Python\Python313\python.exe -B .dev/ai-context/tooling/validate-target-terminal-audit.py
+Target terminal audit: .dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/workflow.yaml: pending (workflow remains in_progress; no terminal acceptance)
+Target terminal audit: validated 1 explicitly selected workflow(s); no historical backfill
+==> C:\Users\h4227\AppData\Local\Programs\Python\Python313\python.exe -B -m unittest discover -s .dev/ai-context/tooling/tests -p test_*.py -v
+test_gwt_001_required_routes_and_references_are_complete (test_code_reviewer_routing_projection.CodeReviewerRoutingProjectionTests.test_gwt_001_required_routes_and_references_are_complete) ... ok
+test_gwt_002_routed_rules_bind_to_catalog_consumers (test_code_reviewer_routing_projection.CodeReviewerRoutingProjectionTests.test_gwt_002_routed_rules_bind_to_catalog_consumers) ... ok
+test_gwt_003_acceptance_fixtures_select_expected_routes_and_rules (test_code_reviewer_routing_projection.CodeReviewerRoutingProjectionTests.test_gwt_003_acceptance_fixtures_select_expected_routes_and_rules) ... ok
+test_gwt_004_skill_wrappers_and_root_guides_use_compact_entry (test_code_reviewer_routing_projection.CodeReviewerRoutingProjectionTests.test_gwt_004_skill_wrappers_and_root_guides_use_compact_entry) ... ok
+test_gwt_005_review_roles_do_not_require_shared_rule_bundles (test_code_reviewer_routing_projection.CodeReviewerRoutingProjectionTests.test_gwt_005_review_roles_do_not_require_shared_rule_bundles) ... ok
+test_gwt_006_compatibility_entries_route_without_duplicate_doctrine (test_code_reviewer_routing_projection.CodeReviewerRoutingProjectionTests.test_gwt_006_compatibility_entries_route_without_duplicate_doctrine) ... ok
+test_gwt_007_route_reference_graph_is_smaller_than_baseline (test_code_reviewer_routing_projection.CodeReviewerRoutingProjectionTests.test_gwt_007_route_reference_graph_is_smaller_than_baseline) ... ok
+test_gwt_001_framework_dependencies_are_v0160_pinned (test_downstream_package_projection.DownstreamPackageProjectionTests.test_gwt_001_framework_dependencies_are_v0160_pinned) ... ok
+test_gwt_002_generic_projection_failure_is_exact_and_excluded (test_downstream_package_projection.DownstreamPackageProjectionTests.test_gwt_002_generic_projection_failure_is_exact_and_excluded) ... ok
+test_gwt_003_entrypoint_projection_counts_remain_exact (test_downstream_package_projection.DownstreamPackageProjectionTests.test_gwt_003_entrypoint_projection_counts_remain_exact) ... ok
+test_gwt_004_removed_stock_checks_are_absent_and_not_selected (test_downstream_package_projection.DownstreamPackageProjectionTests.test_gwt_004_removed_stock_checks_are_absent_and_not_selected) ... ok
+test_gwt_005_semantic_lifecycle_and_target_validator_remain_present (test_downstream_package_projection.DownstreamPackageProjectionTests.test_gwt_005_semantic_lifecycle_and_target_validator_remain_present) ... ok
+test_gwt_006_validation_selection_resolution_is_exact (test_downstream_package_projection.DownstreamPackageProjectionTests.test_gwt_006_validation_selection_resolution_is_exact) ... ok
+test_gwt_001_all_thirteen_catalog_rules_have_explicit_verified_baselines (test_effective_rule_decisions.EffectiveRuleDecisionTests.test_gwt_001_all_thirteen_catalog_rules_have_explicit_verified_baselines) ... ok
+test_gwt_002_twenty_exact_routes_have_digest_ids_and_complete_rule_sets (test_effective_rule_decisions.EffectiveRuleDecisionTests.test_gwt_002_twenty_exact_routes_have_digest_ids_and_complete_rule_sets) ... ok
+test_gwt_003_bddfy_and_physical_delete_choices_are_not_hidden_as_exceptions (test_effective_rule_decisions.EffectiveRuleDecisionTests.test_gwt_003_bddfy_and_physical_delete_choices_are_not_hidden_as_exceptions) ... ok
+test_gwt_001_pre_finalization_route_avoids_receipt_cycle (test_target_gate_candidate_diagnostics.TargetGateCandidateDiagnosticTests.test_gwt_001_pre_finalization_route_avoids_receipt_cycle) ... ok
+test_gwt_002_final_route_restores_provenance_validation (test_target_gate_candidate_diagnostics.TargetGateCandidateDiagnosticTests.test_gwt_002_final_route_restores_provenance_validation) ... ok
+test_gwt_001_exact_exception_waives_only_missing_matching_trailer (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_001_exact_exception_waives_only_missing_matching_trailer) ... ok
+test_gwt_002_wrong_sha_does_not_receive_exception (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_002_wrong_sha_does_not_receive_exception) ... ok
+test_gwt_003_other_errors_remain_enforced_for_exact_sha (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_003_other_errors_remain_enforced_for_exact_sha) ... ok
+test_gwt_004_target_effective_boundary_preserves_legacy_signature (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_004_target_effective_boundary_preserves_legacy_signature) ... ok
+test_gwt_005_unknown_waiver_fails_closed (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_005_unknown_waiver_fails_closed) ... ok
+test_gwt_006_wrong_assessment_id_does_not_receive_exception (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_006_wrong_assessment_id_does_not_receive_exception) ... ok
+test_gwt_007_non_list_exception_collection_fails_closed (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_007_non_list_exception_collection_fails_closed) ... ok
+test_gwt_008_duplicate_exception_sha_fails_closed (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_008_duplicate_exception_sha_fails_closed) ... ok
+test_gwt_009_invalid_assessment_and_missing_evidence_fail_closed (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_009_invalid_assessment_and_missing_evidence_fail_closed) ... ok
+test_gwt_010_timezone_naive_boundary_fails_closed (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_010_timezone_naive_boundary_fails_closed) ... ok
+test_gwt_011_framework_dependency_hash_drift_fails_closed (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_011_framework_dependency_hash_drift_fails_closed) ... ok
+test_gwt_012_last_legacy_commit_accepts_pipe_meta_notation (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_012_last_legacy_commit_accepts_pipe_meta_notation) ... ok
+test_gwt_013_boundary_accepts_issue_only_subject (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_013_boundary_accepts_issue_only_subject) ... ok
+test_gwt_014_boundary_accepts_scope_only_subject (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_014_boundary_accepts_scope_only_subject) ... ok
+test_gwt_015_boundary_rejects_pipe_subject (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_015_boundary_rejects_pipe_subject) ... ok
+test_gwt_016_naive_subject_boundary_fails_closed (test_target_git_commit_policy.TargetGitCommitPolicyTests.test_gwt_016_naive_subject_boundary_fails_closed) ... ok
+test_admission_accepts_same_full_tree_after_sha_only_commit (test_target_terminal_audit.TargetTerminalAuditTests.test_admission_accepts_same_full_tree_after_sha_only_commit) ... ok
+test_admission_rejects_changed_full_tree_even_for_evidence (test_target_terminal_audit.TargetTerminalAuditTests.test_admission_rejects_changed_full_tree_even_for_evidence) ... ok
+test_admission_rejects_dirty_tracked_checkout (test_target_terminal_audit.TargetTerminalAuditTests.test_admission_rejects_dirty_tracked_checkout) ... ok
+test_admission_rejects_nonignored_untracked_files (test_target_terminal_audit.TargetTerminalAuditTests.test_admission_rejects_nonignored_untracked_files) ... ok
+test_authority_drift_cannot_be_hidden_by_repinning_current_bytes (test_target_terminal_audit.TargetTerminalAuditTests.test_authority_drift_cannot_be_hidden_by_repinning_current_bytes) ... ok
+test_criteria_must_preexist_in_reviewed_subject (test_target_terminal_audit.TargetTerminalAuditTests.test_criteria_must_preexist_in_reviewed_subject) ... ok
+test_default_scan_does_not_infer_historical_obligations (test_target_terminal_audit.TargetTerminalAuditTests.test_default_scan_does_not_infer_historical_obligations) ... ok
+test_empty_or_missing_identity_and_invocation_are_rejected (test_target_terminal_audit.TargetTerminalAuditTests.test_empty_or_missing_identity_and_invocation_are_rejected) ... ok
+test_failed_and_missing_report_are_rejected (test_target_terminal_audit.TargetTerminalAuditTests.test_failed_and_missing_report_are_rejected) ... ok
+test_history_cannot_be_replaced_or_silently_rewritten (test_target_terminal_audit.TargetTerminalAuditTests.test_history_cannot_be_replaced_or_silently_rewritten) ... ok
+test_invented_evidence_exclusion_and_duplicate_fields_fail_closed (test_target_terminal_audit.TargetTerminalAuditTests.test_invented_evidence_exclusion_and_duplicate_fields_fail_closed) ... ok
+test_invocation_shared_fields_and_report_reference_are_bound (test_target_terminal_audit.TargetTerminalAuditTests.test_invocation_shared_fields_and_report_reference_are_bound) ... ok
+test_pending_is_disclosed_only_while_in_progress (test_target_terminal_audit.TargetTerminalAuditTests.test_pending_is_disclosed_only_while_in_progress) ... ok
+test_raw_report_and_invocation_hash_drift_are_rejected (test_target_terminal_audit.TargetTerminalAuditTests.test_raw_report_and_invocation_hash_drift_are_rejected) ... ok
+test_reparse_point_is_rejected (test_target_terminal_audit.TargetTerminalAuditTests.test_reparse_point_is_rejected) ... ok
+test_retained_audit_does_not_claim_current_head (test_target_terminal_audit.TargetTerminalAuditTests.test_retained_audit_does_not_claim_current_head) ... ok
+test_subject_tree_and_nonexistent_commit_are_rejected (test_target_terminal_audit.TargetTerminalAuditTests.test_subject_tree_and_nonexistent_commit_are_rejected) ... ok
+test_unsafe_and_untracked_paths_are_rejected (test_target_terminal_audit.TargetTerminalAuditTests.test_unsafe_and_untracked_paths_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 52 tests in 19.100s
+
+OK
+==> C:\Users\h4227\AppData\Local\Programs\Python\Python313\python.exe -B .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py --range main..HEAD --workflow-id 2026-09-06-ai-context-v0-16-0-upgrade
+Target Git commit validation passed for 7 commit(s).
+Target AI context validation passed.

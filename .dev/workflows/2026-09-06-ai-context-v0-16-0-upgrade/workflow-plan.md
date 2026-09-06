@@ -16,11 +16,11 @@
 - `branch`: `codex/2026-09-06-ai-context-v0-16-0-upgrade`
 - `base_branch`: `main`
 - `branch_segment`: `1`
-- `status`: `in_progress`
-- `current_phase`: `closeout-evidence-correction`
+- `status`: `completed`
+- `current_phase`: `completed`
 - `artifact_root`: `.dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade`
 - `created_at`: `2026-09-06T22:03:42+08:00`
-- `updated_at`: `2026-09-07T07:12:53+08:00`
+- `updated_at`: `2026-09-07T07:28:13+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#9`
@@ -80,15 +80,23 @@ fetched `origin/main` both remain at `f1a0298fdca0dafe1d653802006e60bc004a74a5`.
 Continue on this existing unmerged workflow branch. This authorization adds
 local integration only; push, PR, Issue closure and publication remain excluded.
 
-- Current task: `AICU-004-closeout-evidence-correction` (in progress).
-- Unique workflow state: repair the premature completion claim, preserve the
-  immutable finalized transaction, retain actual independent audit evidence,
-  and admit an exact clean local integration subject.
+- Current task: none; `AICU-004-closeout-evidence-correction` completed its
+  corrective content and retained independent verification. Local integration
+  remains a separate parent delivery gate, not an already executed task step.
+- Unique workflow state: corrective closeout completed with actual independent
+  evidence; the finalized transaction and historical observations are preserved.
 - Baseline: `ASM-20260907-001`; preserve all earlier final reports and the old
   delegation record as historical observations, not current certification.
-- Next action: finish the target-owned terminal gate and its focused negative
-  tests, checkpoint the repair, obtain an independent post-remediation audit,
-  persist its actual results, then audit the final clean integration commit.
+- Verification: `ASM-20260907-002` passed on repair checkpoint `c53dc84`, with
+  52/52 tests and full command/invocation evidence retained byte-exactly.
+- Next delivery action: commit this evidence reconciliation, obtain a fresh
+  independent audit of that final complete tree, explicitly admit it, then
+  perform the authorized local no-ff merge and post-merge target validation.
+  Completion of corrective content is not current-HEAD integration admission.
+- Final runtime evidence location: `.tmp/ai-context-closeout/final-audit/`.
+  Its report, invocation, validation output and `receipt.json` stay outside the
+  tracked subject to avoid recursive evidence commits. This local evidence is
+  not carried by git clone; the canonical ASM-20260907-002 evidence is tracked.
 - Do not edit provenance, customizations, effective rules/packets, package
   payload or the finalized Git-admin transaction. A present-day audit cannot
   establish that a missing pre-finalization audit happened in the past.

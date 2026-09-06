@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "subject_commit": "c53dc84050685761b801bb992fae6101828b01e2",
+  "subject_tree": "c14b79f00edb7f069f8883e8a6bec2e397bb7e24",
+  "reviewer_id": "/root/repair_audit",
+  "invocation_id": "collaboration:/root/repair_audit:1",
+  "role_path": ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml",
+  "started_at": "2026-09-07T07:19:51+08:00",
+  "completed_at": "2026-09-07T07:24:42+08:00",
+  "evidence_refs": [
+    ".dev/assessments/ASM-20260907-002/report.md",
+    ".dev/assessments/ASM-20260907-002/evidence/validation-execution.json",
+    ".dev/assessments/ASM-20260907-002/evidence/validation-output.txt"
+  ]
+}

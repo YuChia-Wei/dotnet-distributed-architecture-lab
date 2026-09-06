@@ -1,4 +1,29 @@
 {
   "schema_version": "1.0",
-  "status": "pending"
+  "status": "passed",
+  "subject_commit": "c53dc84050685761b801bb992fae6101828b01e2",
+  "subject_tree": "c14b79f00edb7f069f8883e8a6bec2e397bb7e24",
+  "reviewer_id": "/root/repair_audit",
+  "invocation_id": "collaboration:/root/repair_audit:1",
+  "role_path": ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml",
+  "started_at": "2026-09-07T07:19:51+08:00",
+  "completed_at": "2026-09-07T07:24:42+08:00",
+  "criteria": {
+    "path": ".dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade/evidence/terminal-audit-criteria.md",
+    "sha256": "501b1108e6518cdbc861342dba2b288bd597278d610c97740e7e31d46adb4de2"
+  },
+  "report": {
+    "path": ".dev/assessments/ASM-20260907-002/report.md",
+    "sha256": "e1c8373f71d5344811a73f84543b8c1ec9f5d6a4864d76adc59ebe3a29cb2faf"
+  },
+  "invocation_evidence": {
+    "path": ".dev/assessments/ASM-20260907-002/evidence/invocation.json",
+    "sha256": "2b3b704696446faa52871dd772d9ad47b98186d499f4ddb6f60827b95db1252f"
+  },
+  "authority_hashes": {
+    ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml": "c5a25948c684eb00ab2bafc9f4cf9ad4ee2d353c3290dd9fb2f3a090274eea3e",
+    ".dev/ai-context/provenance.yaml": "cd670d11a2e369960d584a2525b3a1643fbf1798cc8650bfa59f1881201d9ded",
+    ".dev/ai-context/customizations.yaml": "3dede13649ee71a657a6af677ab2a119498a17662063ce8cd7d6ba38566953f6",
+    ".dev/ai-context/effective-rules.yaml": "264d19a4a81c11528761cd74e68c66b89f886531a1abdb05b9cf5fd65f51f503"
+  }
 }
