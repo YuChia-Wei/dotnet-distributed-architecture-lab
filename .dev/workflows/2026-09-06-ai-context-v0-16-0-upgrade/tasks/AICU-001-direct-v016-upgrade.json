@@ -8,7 +8,7 @@
   "owner_skill": "ai-context-governance",
   "status": "in_progress",
   "created_at": "2026-09-06T22:03:42+08:00",
-  "updated_at": "2026-09-06T22:11:53+08:00",
+  "updated_at": "2026-09-06T22:59:50+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "GPT-5",
   "reasoning_effort": "unspecified",
@@ -55,8 +55,8 @@
       "Target-owned AI-context gate",
       "Terminal receipt validation"
     ],
-    "last_completed_step": "Verified the original public v0.15.1 files manifest, generated a 70-operation no-conflict plan, and reconciled active target skill routes plus the validation-profile workflow binding.",
-    "next_action": "Commit the reconciliation checkpoint and regenerate the sealed no-write package plan from the new clean HEAD."
+    "last_completed_step": "Verified the 70-operation applied candidate with 34/34 target tests, proved the finalizer requires canonical candidate-document digests rather than raw JSON file digests, and terminally rolled back the sealed transaction without authority publication.",
+    "next_action": "Commit the canonical-authority correction checkpoint, regenerate the sealed plan from its clean HEAD, and apply with the corrected decision binding."
   },
   "results": {
     "summary": "",
@@ -65,10 +65,12 @@
       "v0.16.0 incoming package validation passed",
       "v0.15.1-to-v0.16.0 route resolution passed",
       "v0.15.1 baseline target gate passed with 34 tests",
-      "First v0.16.0 package plan classified 70 automatic operations with no conflicts"
+      "First v0.16.0 package plan classified 70 automatic operations with no conflicts",
+      "Applied v0.16.0 candidate target gate passed with 34 tests before canonical-authority binding correction",
+      "Both superseded v0.16.0 transactions completed durable rollback"
     ],
     "finding_status": "not-addressed",
-    "residual_risk": "The public tag commit and admitted package preparation commit are distinct by explicit source release policy; both identities must remain separately evidenced.",
+    "residual_risk": "The public tag commit and admitted package preparation commit are distinct by explicit source release policy, and the final decision must bind canonical candidate-document digests rather than raw file digests; both boundaries remain explicitly evidenced.",
     "follow_up_needed": true
   }
 }
