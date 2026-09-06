@@ -166,4 +166,4 @@ This repository currently has no active target-owned analyzer or runtime-validat
 - `.agents/skills/README.md` and `.claude/skills/README.md`: runtime wrappers
 - `.dev/guides/ai-collaboration-guides/README.MD`: human-facing usage guide
 
-If an AI context update causes project truth to be overwritten by source-framework content, use `repo-structure-sync` to rebuild it from repository evidence. Do not directly reuse the source repository's product names, credentials, ports, domains, or workflow records.
+If an AI context update causes project truth to be overwritten by source-framework content, use `ai-context-init` to rebuild it from repository evidence. Do not directly reuse the source repository's product names, credentials, ports, domains, or workflow records. Historical records retain the `repo-structure-sync` name.

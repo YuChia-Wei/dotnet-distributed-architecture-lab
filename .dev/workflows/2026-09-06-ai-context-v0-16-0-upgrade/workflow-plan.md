@@ -17,10 +17,10 @@
 - `base_branch`: `main`
 - `branch_segment`: `1`
 - `status`: `in_progress`
-- `current_phase`: `preflight`
+- `current_phase`: `reconciliation`
 - `artifact_root`: `.dev/workflows/2026-09-06-ai-context-v0-16-0-upgrade`
 - `created_at`: `2026-09-06T22:03:42+08:00`
-- `updated_at`: `2026-09-06T22:03:42+08:00`
+- `updated_at`: `2026-09-06T22:11:53+08:00`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-maintenance-workflow-plan-template.md`
 - `template_version`: `1.2.0`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#9`
@@ -53,6 +53,8 @@ The source release contract explicitly permits the public body to bind the final
 | `CUST-DOTNET-MQ-REPO-TRUTH` | `contract:target-repository-truth-boundary` | project naming, product facts and target-owned indexes | retain | repository-native target truth remains authoritative |
 | `CUST-DOTNET-MQ-EXECUTION-PROVENANCE-ADOPTION` | `rule:target-execution-provenance-adoption-boundary` | commit grammar and execution provenance | merge | preserve the existing prospective cutover and exact legacy waiver |
 
+The first no-write package plan contained 70 automatic operations (47 replacements, 17 additions and 6 removals), with no package-level reconciliation, ignored path or managed-state conflict. Target reconciliation is still required outside those framework-managed operations: the routine validation profile must point to this active workflow, and current target entry documents must route to `software-development-orchestrator` and `ai-context-init` before the old wrapper files are removed. Those target-owned changes are checkpointed before regenerating the sealed plan.
+
 ## Stages And Checkpoints
 
 1. Bind Issue #9, preserve the clean starting commit, validate the hosted release assets, incoming payload and direct route.
@@ -70,11 +72,11 @@ The source release contract explicitly permits the public body to bind the final
 
 ## Resume Checkpoint
 
-- Last completed action: Issue #9 was created and read back; hosted/admitted archive identity, sidecar, incoming validator, direct route and the existing v0.15.1 target gate all passed.
+- Last completed action: the first no-write plan proved 70 automatic operations and no package conflict; target-owned active skill routes and the validation-profile workflow binding were reconciled before final plan generation.
 - Current task: `AICU-001-direct-v016-upgrade`.
-- Exact next action: obtain and verify the original public v0.15.1 `metadata/files.yaml`, then generate the v0.16.0 package plan and remediation packet without target writes.
-- Validation already completed: public v0.16.0 Release read-back; ZIP/sidecar SHA-256; package validation (`650` files, `18` portable entrypoints); route resolver (`direct`, no diagnostics); baseline target gate (`34` target-owned tests).
-- Git state: dedicated local branch at clean starting commit; workflow artifacts are not yet checkpointed.
+- Exact next action: commit the target-owned reconciliation checkpoint, then regenerate the v0.16.0 package plan and remediation packet from the new clean HEAD.
+- Validation already completed: public v0.16.0 Release read-back; ZIP/sidecar SHA-256; package validation (`650` files, `18` portable entrypoints); route resolver (`direct`, no diagnostics); baseline target gate (`34` target-owned tests); first package plan (`70` automatic operations, no conflict).
+- Git state: preflight checkpoint `9ae814e7136c6644350b260dc49853744cb9b21c`; target-owned reconciliation is pending a second local checkpoint.
 - Branch history and checkpoint handoffs: segment 1 only; no push or merge handoff.
 - Blockers or unresolved decisions: none before planning; any planner reconciliation or identity conflict remains fail-closed until explicitly recorded.
 

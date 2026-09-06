@@ -133,7 +133,7 @@ validation:
       - .dev/ai-context/tooling/validate-target-ai-context.py
       - --allow-unfinalized
       - --workflow-id
-      - 2026-08-30-ai-context-v0-15-1-upgrade
+      - 2026-09-06-ai-context-v0-16-0-upgrade
     local:
       mode: manual
     ci:
