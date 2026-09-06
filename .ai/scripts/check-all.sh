@@ -314,10 +314,14 @@ input_owns_path() {
 is_global_invalidator() {
     case "$1" in
         .ai/scripts/validation-profile-registry.sh|.ai/scripts/check-all.sh|.ai/scripts/validation-evidence.py|\
+        .ai/scripts/validation_subject.py|.ai/assets/shared/validation-gate-classification.yaml|\
         .ai/scripts/validation_process_supervisor.py|\
         .ai/scripts/validate-validation-lifecycle.py|.ai/scripts/tests/test_validation_lifecycle.py|\
         .ai/assets/shared/VALIDATION-EVIDENCE-LIFECYCLE-CONTRACT.md|\
         .ai/assets/shared/validation-evidence-lifecycle.schema.yaml|\
+        .ai/scripts/observe-validation-dependencies.py|.ai/scripts/tests/test_validation_dependency_observation.py|\
+        .ai/assets/shared/VALIDATION-DEPENDENCY-OBSERVATION-CONTRACT.md|\
+        .ai/assets/shared/validation-dependency-observation.schema.yaml|\
         .ai/scripts/validate-agent-execution-guardrails.py|.ai/scripts/tests/test_agent_execution_guardrails.py|\
         .ai/assets/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md|\
         .ai/assets/shared/agent-execution-guardrails.schema.yaml|\
@@ -351,11 +355,16 @@ resolve_check_input_closure() {
         .ai/scripts/check-all.sh \
         .ai/scripts/validation-profile-registry.sh \
         .ai/scripts/validation-evidence.py \
+        .ai/scripts/validation_subject.py \
+        .ai/assets/shared/validation-gate-classification.yaml \
         .ai/scripts/python-entrypoints.json \
         .ai/scripts/python_prerequisites.py \
         .ai/scripts/validate-validation-lifecycle.py \
         .ai/assets/shared/VALIDATION-EVIDENCE-LIFECYCLE-CONTRACT.md \
         .ai/assets/shared/validation-evidence-lifecycle.schema.yaml \
+        .ai/scripts/observe-validation-dependencies.py \
+        .ai/assets/shared/VALIDATION-DEPENDENCY-OBSERVATION-CONTRACT.md \
+        .ai/assets/shared/validation-dependency-observation.schema.yaml \
         .ai/scripts/validate-agent-execution-guardrails.py \
         .ai/assets/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md \
         .ai/assets/shared/agent-execution-guardrails.schema.yaml; do
@@ -491,7 +500,7 @@ check_is_selected() {
 
 show_usage() {
     cat <<'EOF'
-Usage: ./check-all.sh [--profile <fast|pr|release|closeout|nightly-full>] [--base <sha> --head <sha>] [--verbose]
+Usage: ./check-all.sh [--profile <fast|pr|release|closeout|nightly-full>] [--base <sha> --head <sha>] [--subject-rebind-receipt <path>] [--verbose]
        ./check-all.sh --resolve-input-closure <check-id> [--subject <sha>]
 
 Profiles:
@@ -516,6 +525,7 @@ BASE_SHA=
 HEAD_SHA=
 RESOLVE_INPUT_CLOSURE_ID=
 RESOLVE_INPUT_CLOSURE_SUBJECT=
+SUBJECT_REBIND_RECEIPT_INPUT=
 while [ "$#" -gt 0 ]; do
     case "$1" in
         --profile)
@@ -567,6 +577,11 @@ while [ "$#" -gt 0 ]; do
             RESOLVE_INPUT_CLOSURE_SUBJECT=$2
             shift 2
             ;;
+        --subject-rebind-receipt)
+            [ "$#" -ge 2 ] && [ -z "$SUBJECT_REBIND_RECEIPT_INPUT" ] || { show_usage >&2; exit 2; }
+            SUBJECT_REBIND_RECEIPT_INPUT=$2
+            shift 2
+            ;;
         --help|-h)
             [ "$#" -eq 1 ] || { show_usage >&2; exit 2; }
             show_usage
@@ -581,7 +596,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 if [ -n "$RESOLVE_INPUT_CLOSURE_ID" ]; then
-    [ "$PROFILE_EXPLICIT" = false ] && [ "$VERBOSE" = false ] && [ -z "$BASE_SHA" ] && [ -z "$HEAD_SHA" ] || { show_usage >&2; exit 2; }
+    [ "$PROFILE_EXPLICIT" = false ] && [ "$VERBOSE" = false ] && [ -z "$BASE_SHA" ] && [ -z "$HEAD_SHA" ] && [ -z "$SUBJECT_REBIND_RECEIPT_INPUT" ] || { show_usage >&2; exit 2; }
     [ -n "${CHECK_DESCRIPTION[$RESOLVE_INPUT_CLOSURE_ID]:-}" ] || { echo "Unknown check id: $RESOLVE_INPUT_CLOSURE_ID" >&2; exit 2; }
     RESOLVE_INPUT_CLOSURE_SUBJECT=${RESOLVE_INPUT_CLOSURE_SUBJECT:-HEAD}
     git rev-parse --verify "$RESOLVE_INPUT_CLOSURE_SUBJECT^{commit}" >/dev/null 2>&1 || { echo "Unknown closure subject: $RESOLVE_INPUT_CLOSURE_SUBJECT" >&2; exit 2; }
@@ -602,6 +617,27 @@ fi
 
 if ! registry_has_profile "$PROFILE" || ! validate_profile_registry || ! prepare_profile_selection; then
     exit 2
+fi
+if [ -n "$SUBJECT_REBIND_RECEIPT_INPUT" ]; then
+    { [ "$PROFILE" = fast ] || [ "$PROFILE" = pr ]; } || {
+        echo "Subject rebind reuse is allowed only in fast or pr profiles." >&2
+        exit 2
+    }
+    path_is_safe "$SUBJECT_REBIND_RECEIPT_INPUT" || {
+        echo "Subject rebind receipt path is unsafe." >&2
+        exit 2
+    }
+    [ -f "$PROJECT_ROOT/$SUBJECT_REBIND_RECEIPT_INPUT" ] &&
+        [ ! -L "$PROJECT_ROOT/$SUBJECT_REBIND_RECEIPT_INPUT" ] || {
+        echo "Subject rebind receipt is missing." >&2
+        exit 2
+    }
+    git -C "$PROJECT_ROOT" check-ignore -q -- "$SUBJECT_REBIND_RECEIPT_INPUT" || {
+        echo "Subject rebind receipt must be inside an ignored evidence root." >&2
+        exit 2
+    }
+    discover_selection_root multi-hop-upgrade-transaction subject-rebind-receipt
+    expand_discovered_roots || exit 2
 fi
 
 # Resolve the existing Python contract across Windows Git Bash and POSIX hosts.
@@ -1087,11 +1123,16 @@ EVIDENCE_PREPARATION_SELECTION="$LOG_DIR/evidence-preparation-selection.tsv"
 EVIDENCE_EVENTS="$LOG_DIR/evidence-events.tsv"
 EVIDENCE_CHANGED_PATHS="$LOG_DIR/changed-paths.txt"
 EVIDENCE_SELECTION_COMPARISON="$LOG_DIR/selection-comparison.tsv"
+EVIDENCE_SUBJECT_REBIND_RECEIPT="$LOG_DIR/subject-rebind.receipt.json"
+EVIDENCE_MULTI_HOP_SUBJECT_MANIFEST="$LOG_DIR/multi-hop-upgrade-transaction.subject-manifest.json"
+EVIDENCE_MULTI_HOP_SUBJECT_CLOSURE="$LOG_DIR/multi-hop-upgrade-transaction.subject-closure.json"
+EVIDENCE_MULTI_HOP_SUBJECT_RUNTIME="$LOG_DIR/multi-hop-upgrade-transaction.subject-runtime.json"
 declare -A EVIDENCE_FINGERPRINT_BY_ID=()
 declare -A EVIDENCE_STANDARD_FINGERPRINT_BY_ID=()
 declare -A EVIDENCE_CACHE_HIT_BY_ID=()
 declare -A EVIDENCE_RECEIPT_HIT_BY_ID=()
 declare -A EVIDENCE_PRIOR_LOG_BY_ID=()
+declare -A EVIDENCE_SUBJECT_REBIND_BY_ID=()
 declare -A VALIDATOR_VERSION_BY_ID=()
 EVIDENCE_ENVIRONMENT_CLASS=linux-local
 if [ "${GITHUB_ACTIONS:-}" = true ]; then
@@ -1108,11 +1149,16 @@ if policy_fingerprint=$(
         --path "$REGISTRY_PATH" \
         --path "$SCRIPT_DIR/check-all.sh" \
         --path "$EVIDENCE_HELPER" \
+        --path "$SCRIPT_DIR/validation_subject.py" \
+        --path "$PROJECT_ROOT/.ai/assets/shared/validation-gate-classification.yaml" \
+        --path "$PROJECT_ROOT/.ai/assets/shared/VALIDATION-EVIDENCE-LIFECYCLE-CONTRACT.md" \
         --path "$SCRIPT_DIR/validation_process_supervisor.py" \
         --path "$SCRIPT_DIR/python-entrypoints.json" \
         --path "$SCRIPT_DIR/python_prerequisites.py" \
         --path "$SCRIPT_DIR/validate-validation-lifecycle.py" \
         --path "$PROJECT_ROOT/.ai/assets/shared/validation-evidence-lifecycle.schema.yaml" \
+        --path "$SCRIPT_DIR/observe-validation-dependencies.py" \
+        --path "$PROJECT_ROOT/.ai/assets/shared/validation-dependency-observation.schema.yaml" \
         --path "$SCRIPT_DIR/validate-agent-execution-guardrails.py" \
         --path "$PROJECT_ROOT/.ai/assets/shared/agent-execution-guardrails.schema.yaml" \
         2>/dev/null
@@ -1129,6 +1175,7 @@ EVIDENCE_INPUT_FINGERPRINT=
 EVIDENCE_CACHE_HIT=false
 EVIDENCE_RECEIPT_HIT=false
 EVIDENCE_PRIOR_LOG=
+EVIDENCE_SUBJECT_REBIND=
 
 record_runner_abort_failure() {
     if [ "$RUNNER_CANCELLED_BY_SIGNAL" = true ] && [ "$RUNNER_ABORT_FAILURE_RECORDED" = false ]; then
@@ -1151,12 +1198,14 @@ prepare_validation_evidence() {
     EVIDENCE_CACHE_HIT=${EVIDENCE_CACHE_HIT_BY_ID[$id]:-false}
     EVIDENCE_RECEIPT_HIT=${EVIDENCE_RECEIPT_HIT_BY_ID[$id]:-false}
     EVIDENCE_PRIOR_LOG=${EVIDENCE_PRIOR_LOG_BY_ID[$id]:-}
+    EVIDENCE_SUBJECT_REBIND=${EVIDENCE_SUBJECT_REBIND_BY_ID[$id]:-}
     [ -n "$EVIDENCE_INPUT_FINGERPRINT" ] || return 1
     return 0
 }
 
 prepare_all_validation_evidence() {
     local id version prepared line parse_line record fingerprint cache_hit prior_log rest tab_count row_count=0
+    local inspected_rebind expected_rebind
     local -A expected_ids=() seen_ids=()
     [ -f "$EVIDENCE_HELPER" ] || {
         echo "Validation evidence helper is missing: $EVIDENCE_HELPER" >&2
@@ -1237,6 +1286,7 @@ prepare_all_validation_evidence() {
         EVIDENCE_CACHE_HIT_BY_ID["$record"]=$cache_hit
         EVIDENCE_RECEIPT_HIT_BY_ID["$record"]=false
         EVIDENCE_PRIOR_LOG_BY_ID["$record"]=$prior_log
+        EVIDENCE_SUBJECT_REBIND_BY_ID["$record"]=
     done <<< "$prepared"
     [ "$row_count" -eq "${#CHECK_IDS[@]}" ] || {
         echo "Validation evidence preparation row count does not match the canonical registry" >&2
@@ -1257,6 +1307,29 @@ prepare_all_validation_evidence() {
             EVIDENCE_PRIOR_LOG_BY_ID["$id"]=
         done
     fi
+    if [ -n "$SUBJECT_REBIND_RECEIPT_INPUT" ]; then
+        [ ! -e "$EVIDENCE_SUBJECT_REBIND_RECEIPT" ] || {
+            echo "Subject rebind retained receipt unexpectedly predates this invocation." >&2
+            return 1
+        }
+        cp -- "$PROJECT_ROOT/$SUBJECT_REBIND_RECEIPT_INPUT" "$EVIDENCE_SUBJECT_REBIND_RECEIPT" || return 1
+        inspected_rebind=$(
+            "$PYTHON_EXECUTABLE" "$EVIDENCE_HELPER" inspect-subject-rebind \
+                --repo "$PROJECT_ROOT" \
+                --receipt "$EVIDENCE_SUBJECT_REBIND_RECEIPT" \
+                --expected-gate-id multi-hop-upgrade-transaction \
+                --profile "$PROFILE"
+        ) || return 1
+        expected_rebind=$(printf 'multi-hop-upgrade-transaction\t%s' "$PROFILE")
+        [ "$inspected_rebind" = "$expected_rebind" ] || {
+            echo "Subject rebind inspection returned an unexpected gate or profile." >&2
+            return 1
+        }
+        EVIDENCE_CACHE_HIT_BY_ID["multi-hop-upgrade-transaction"]=false
+        EVIDENCE_RECEIPT_HIT_BY_ID["multi-hop-upgrade-transaction"]=true
+        EVIDENCE_PRIOR_LOG_BY_ID["multi-hop-upgrade-transaction"]=$(repo_relative_artifact "$EVIDENCE_SUBJECT_REBIND_RECEIPT")
+        EVIDENCE_SUBJECT_REBIND_BY_ID["multi-hop-upgrade-transaction"]=$EVIDENCE_SUBJECT_REBIND_RECEIPT
+    fi
     for id in "${CHECK_IDS[@]}"; do
         [ -n "${EVIDENCE_FINGERPRINT_BY_ID[$id]:-}" ] || {
             echo "Validation evidence preparation omitted selected check: $id" >&2
@@ -1271,6 +1344,7 @@ prepare_nonreuse_validation_evidence() {
     EVIDENCE_CACHE_HIT=false
     EVIDENCE_RECEIPT_HIT=false
     EVIDENCE_PRIOR_LOG=
+    EVIDENCE_SUBJECT_REBIND=
     [ -n "$EVIDENCE_INPUT_FINGERPRINT" ]
 }
 
@@ -1309,7 +1383,11 @@ record_validation_evidence() {
     if [ "$include_result" != true ]; then
         result_path=
     elif [ "$disposition" = reused ] && [ "$EVIDENCE_RECEIPT_HIT" = true ]; then
-        result_path=$IMMUTABLE_HISTORY_PREPARATION_RESULT
+        if [ -n "$EVIDENCE_SUBJECT_REBIND" ]; then
+            result_path=$EVIDENCE_SUBJECT_REBIND
+        else
+            result_path=$IMMUTABLE_HISTORY_PREPARATION_RESULT
+        fi
     else
         result_path="${log_path%.log}.result.json"
     fi
@@ -1342,6 +1420,7 @@ record_not_selected_evidence() {
         EVIDENCE_INPUT_FINGERPRINT=${EVIDENCE_FINGERPRINT_BY_ID[$id]:-}
         EVIDENCE_CACHE_HIT=false
         EVIDENCE_RECEIPT_HIT=false
+        EVIDENCE_SUBJECT_REBIND=
         started_ms=$(now_millis)
         completed_ms=$started_ms
         record_validation_evidence "$id" "not-applicable" "not-selected" "$started_ms" "$completed_ms" "$log_path" || return 1
@@ -1709,7 +1788,7 @@ run_check() {
         disposition="not-executed"
     elif [ "$EVIDENCE_CACHE_HIT" = true ] || [ "$EVIDENCE_RECEIPT_HIT" = true ]; then
         printf 'Reused eligible validation evidence; source=%s; prior_log=%s\n' \
-            "$([ "$EVIDENCE_RECEIPT_HIT" = true ] && printf receipt || printf cache)" \
+            "$([ -n "$EVIDENCE_SUBJECT_REBIND" ] && printf subject-rebind || { [ "$EVIDENCE_RECEIPT_HIT" = true ] && printf receipt || printf cache; })" \
             "$EVIDENCE_PRIOR_LOG" >"$log_path"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
         REUSED_CHECKS=$((REUSED_CHECKS + 1))
@@ -2080,6 +2159,10 @@ run_source_repository_release_checks() {
         "AI Context Release State Fail-Closed Tests" \
         "required" "true" "true"
 
+    run_command_check "python .ai/scripts/tests/test_release_asset_identity.py -v" \
+        "Release Asset Identity Contract Tests" \
+        "required" "true" "true"
+
     run_command_check "python .ai/scripts/tests/test_prepare_ai_context_release.py -v" \
         "AI Context Release Preparation Fail-Closed Tests" \
         "required" "true" "true"
@@ -2090,6 +2173,10 @@ run_source_repository_release_checks() {
 
     run_command_check "python .ai/scripts/tests/test_ai_behavior_evaluation.py -v" \
         "AI Behavior Deterministic Evaluation" \
+        "required" "true" "true"
+
+    run_command_check "python .ai/scripts/validate-ai-behavior-evaluation.py fault-injection" \
+        "Incident-Derived Validator Fault Injection" \
         "required" "true" "true"
 
     run_command_check "python .ai/scripts/tests/test_ai_context_load_measurement.py -v" \
@@ -2198,6 +2285,10 @@ run_source_repository_governance_checks() {
         "Validation Lifecycle Fail-Closed Tests" \
         "required" "true" "true"
 
+    run_command_check "python .ai/scripts/tests/test_validation_dependency_observation.py -v" \
+        "Bounded Validation Dependency Observation" \
+        "required" "true" "true"
+
     run_command_check "python .ai/scripts/validate-agent-execution-guardrails.py" \
         "Agent Execution Guardrails Contract" \
         "required" "true" "true"
@@ -2301,6 +2392,14 @@ run_command_check "python .ai/assets/skills/software-development-orchestrator/sc
 
 run_command_check "python .ai/scripts/tests/test_skill_script_colocation.py -v" \
     "Canonical Skill Script Colocation Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/assets/skills/diagnostic-analyst/scripts/tests/test_diagnostic_contract.py -v" \
+    "Diagnostic Analyst Falsification Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_skill_retirement.py -v" \
+    "Skill Retirement Routing and Upgrade Tests" \
     "required" "true" "true"
 
 run_command_check "python .ai/scripts/tests/test_semantic_customization_lifecycle.py -v" \
@@ -2643,6 +2742,36 @@ if [ "$VALIDATION_ABORTED" = true ] || [ "$FAILED_CHECKS" -gt 0 ] ||
 elif [ "$BLOCKED_CHECKS" -gt 0 ]; then
     INVOCATION_OUTCOME=blocked
 fi
+EVIDENCE_MULTI_HOP_SUBJECT_MANIFEST_REF=
+if { [ "$PROFILE" = fast ] || [ "$PROFILE" = pr ]; } &&
+    [ "$INVOCATION_OUTCOME" = passed ] &&
+    [ -n "${SELECTED_CHECK_IDS[multi-hop-upgrade-transaction]:-}" ]; then
+    pilot_event=$(awk -F '\t' '$1 == "multi-hop-upgrade-transaction" { print $4 "\t" $5; count += 1 } END { if (count != 1) exit 2 }' "$EVIDENCE_EVENTS") || pilot_event=
+    if [ "$pilot_event" = $'passed\texecuted' ]; then
+        if [ -z "$(git -C "$PROJECT_ROOT" status --porcelain --untracked-files=normal 2>/dev/null)" ]; then
+            if ! EVIDENCE_MULTI_HOP_SUBJECT_MANIFEST_REF=$(repo_relative_artifact "$EVIDENCE_MULTI_HOP_SUBJECT_MANIFEST") ||
+                ! EVIDENCE_MULTI_HOP_SUBJECT_CLOSURE_REF=$(repo_relative_artifact "$EVIDENCE_MULTI_HOP_SUBJECT_CLOSURE") ||
+                ! EVIDENCE_MULTI_HOP_SUBJECT_RUNTIME_REF=$(repo_relative_artifact "$EVIDENCE_MULTI_HOP_SUBJECT_RUNTIME") ||
+                ! "$PYTHON_EXECUTABLE" "$EVIDENCE_HELPER" subject-manifest \
+                    --repo "$PROJECT_ROOT" \
+                    --gate-id multi-hop-upgrade-transaction \
+                    --profile "$PROFILE" \
+                    --output "$EVIDENCE_MULTI_HOP_SUBJECT_MANIFEST_REF" \
+                    --closure-output "$EVIDENCE_MULTI_HOP_SUBJECT_CLOSURE_REF" \
+                    --runtime-output "$EVIDENCE_MULTI_HOP_SUBJECT_RUNTIME_REF" \
+                    --source-evidence "$EVIDENCE_PATH_REF" >/dev/null; then
+                echo -e "${RED}✗ FAILED${NC}: executed pilot evidence could not be bound to a subject manifest"
+                FAILED_CHECKS=$((FAILED_CHECKS + 1))
+                REQUIRED_FAILED=$((REQUIRED_FAILED + 1))
+                FINALIZATION_FAILED=true
+                INVOCATION_OUTCOME=failed
+                EVIDENCE_MULTI_HOP_SUBJECT_MANIFEST_REF=
+            fi
+        else
+            echo -e "${YELLOW}⊘${NC} Subject manifest not generated: the pilot requires a clean HEAD for later reuse."
+        fi
+    fi
+fi
 seal_child_argv=(
     "$PYTHON_EXECUTABLE"
     .ai/scripts/validation-evidence.py
@@ -2685,6 +2814,9 @@ if [ "$IMMUTABLE_HISTORY_PREPARATION_ACTIVE" = true ]; then
         --preparation-python "$PYTHON_EXECUTABLE"
         --preparation-result "$IMMUTABLE_HISTORY_PREPARATION_RESULT_REF"
     )
+fi
+if [ -n "$EVIDENCE_MULTI_HOP_SUBJECT_MANIFEST_REF" ]; then
+    seal_child_argv+=(--subject-manifest "$EVIDENCE_MULTI_HOP_SUBJECT_MANIFEST_REF")
 fi
 record_runner_abort_failure
 if [ "$RUNNER_ABORT_FAILURE_RECORDED" = true ]; then

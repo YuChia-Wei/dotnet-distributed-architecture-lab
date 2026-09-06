@@ -14,6 +14,15 @@ bytes.
 
 ## Required Matrix Evidence
 
+Source releases from v0.16.0 require direct support for v0.6.0, v0.9.0 and
+the immediate previous governed package. Each must have one exact source-specific
+edge to the incoming archive, with actual target apply, semantic reconciliation,
+validation, finalization and recovery evidence. An intermediate release chain or
+an archive-only validator cannot establish this support. The general resolver
+retains historical multi-hop capability; source release admission enforces the
+prospective direct-only requirement. Retained origins are removed only through an
+explicit owner-approved versioned deprecation.
+
 The canonical contract is
 `.ai/assets/skills/ai-context-upgrader/templates/upgrade-route-matrix.schema.yaml`; start from
 `templates/upgrade-route-matrix.template.yaml`.

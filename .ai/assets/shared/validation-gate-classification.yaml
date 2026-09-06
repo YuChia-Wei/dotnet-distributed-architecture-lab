@@ -1,0 +1,153 @@
+schema_version: "validation-gate-classification/v1"
+authority_id: "validation-gate-classification"
+repository_identity: "runtime-worktree-digest/v1"
+sensitivities: [identity, input, environment, provider]
+reuse_eligibility_values: [pilot-approved, candidate-disabled, not-reusable]
+groups:
+  - group_id: "subject-digest-pilot"
+    sensitivities: [input, environment]
+    reuse_eligibility: "pilot-approved"
+    reusable_profiles: [fast, pr]
+    environment_contract: "multi-hop-upgrade-environment/v1"
+    gate_ids:
+      - "multi-hop-upgrade-transaction"
+    reason: "The owner approved one deterministic 360-second pilot after Issues 267 and 268 completed."
+  - group_id: "input-environment-candidates"
+    sensitivities: [input, environment]
+    reuse_eligibility: "candidate-disabled"
+    reusable_profiles: []
+    environment_contract: "baseline-runtime-platform/v1"
+    gate_ids:
+      - "agent-execution-guardrails-contract"
+      - "agent-execution-guardrails-tests"
+      - "ai-behavior-evaluation"
+      - "ai-context-language-policy"
+      - "ai-context-load-measurement"
+      - "ai-context-navigation"
+      - "ai-context-source-include-evidence"
+      - "ai-context-wrapper-metadata"
+      - "assessment-artifacts"
+      - "assessment-artifacts-tests"
+      - "code-review-routing-contract"
+      - "coding-standards-integrity"
+      - "coding-standards-structural"
+      - "dependency-versions"
+      - "dependency-versions-tests"
+      - "diagnostic-contract"
+      - "document-projection"
+      - "effective-rule-action-skill"
+      - "effective-rules"
+      - "engineering-guardrails-provider-contract"
+      - "file-disposition-manifest"
+      - "git-commit-policy"
+      - "github-workflow-contract"
+      - "governance-term-routing"
+      - "governance-workflow-contract"
+      - "immutable-history-validation-contract"
+      - "incident-fault-injection"
+      - "orchestrator-acceptance"
+      - "orchestrator-capability-contract"
+      - "package-apply"
+      - "payload-user-view"
+      - "profile-projection"
+      - "profile-registry-contract"
+      - "provider-role-package-projection"
+      - "python-source-entrypoints"
+      - "release-asset-identity"
+      - "release-notes-renderer"
+      - "release-preparation-tests"
+      - "release-state-tests"
+      - "repository-config-contract"
+      - "repository-config-contract-tests"
+      - "repository-identity-tests"
+      - "sdk-free-framework-contract"
+      - "semantic-customization-lifecycle"
+      - "semantic-customization-skill-contract"
+      - "shell-assets"
+      - "skill-retirement-tests"
+      - "skill-script-colocation"
+      - "skill-transition"
+      - "skill-transition-tests"
+      - "source-ai-context-version"
+      - "source-governance-manifest"
+      - "source-version-governance-tests"
+      - "target-ai-context-version"
+      - "terminal-issue-closure"
+      - "terminal-issue-closure-tests"
+      - "test-fixture-routing-contract"
+      - "upgrade-route-package-projection"
+      - "validation-dependency-observation-contract"
+      - "validation-evidence-contract"
+      - "validation-lifecycle-contract"
+      - "validation-lifecycle-tests"
+      - "validation-process-supervisor-contract"
+      - "workflow-artifacts"
+      - "workflow-handoff"
+      - "workflow-handoff-checkpoints"
+      - "workflow-implementation-contract"
+      - "workflow-lifecycle-contract"
+    reason: "The complete governed subject is not yet approved for reuse; the current cache policy remains unchanged."
+  - group_id: "fingerprint-candidates"
+    sensitivities: [input, environment]
+    reuse_eligibility: "candidate-disabled"
+    reusable_profiles: []
+    environment_contract: "baseline-runtime-platform/v1"
+    gate_ids:
+      - "package-full-matrix"
+      - "package-smoke"
+    reason: "Existing package fingerprints are useful but do not yet prove the complete governed subject."
+  - group_id: "identity-range-fresh"
+    sensitivities: [identity, input]
+    reuse_eligibility: "not-reusable"
+    reusable_profiles: []
+    environment_contract: null
+    gate_ids:
+      - "selected-git-commits"
+    reason: "The accepted behavior is explicitly bound to the current commit range."
+  - group_id: "validation-control-fresh"
+    sensitivities: [input, environment]
+    reuse_eligibility: "not-reusable"
+    reusable_profiles: []
+    environment_contract: "baseline-runtime-platform/v1"
+    gate_ids:
+      - "aggregate-runner-contract"
+      - "validation-evidence-exhaustive-contract"
+    reason: "The aggregate runner and exhaustive evidence mechanisms must exercise the reuse control surface itself."
+  - group_id: "unproven-local-fresh"
+    sensitivities: [input, environment]
+    reuse_eligibility: "not-reusable"
+    reusable_profiles: []
+    environment_contract: "baseline-runtime-platform/v1"
+    gate_ids:
+      - "adr-index-update"
+      - "spec-implementation"
+      - "template-synchronization"
+      - "test-di-compliance"
+    reason: "No complete target-owned or advisory-gate manifest is approved."
+  - group_id: "provider-closeout-fresh"
+    sensitivities: [identity, input, provider]
+    reuse_eligibility: "not-reusable"
+    reusable_profiles: []
+    environment_contract: null
+    gate_ids:
+      - "source-release-closeout-contract"
+    reason: "Local contract tests cannot replace live historical and provider verification."
+external_fresh_gates:
+  - gate_id: "actual-upgrade-evidence"
+    sensitivities: [identity, input, environment]
+    reason: "Actual Windows and Linux upgrade execution remains fresh until separately classified and approved."
+  - gate_id: "current-head-review-binding"
+    sensitivities: [input, provider]
+    reason: "Admission recomputes the current base/head content subject and binds an authenticated independent review without requiring commit-SHA equality."
+  - gate_id: "hosted-required-contexts"
+    sensitivities: [identity, environment, provider]
+    reason: "Every required hosted context must be present and terminal on the admitted head."
+  - gate_id: "live-merge-admission"
+    sensitivities: [identity, provider]
+    reason: "Mergeability, reviews, base, head, and body require live provider read-back."
+  - gate_id: "mutable-provider-state"
+    sensitivities: [provider]
+    reason: "Issue, Project, and other mutable provider state is never replaced by a local receipt."
+  - gate_id: "tag-release-binding"
+    sensitivities: [identity, provider]
+    reason: "Tag and Release identities require fresh immutable and provider binding."

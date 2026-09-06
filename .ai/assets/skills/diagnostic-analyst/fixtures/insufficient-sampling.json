@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "diagnostic_id": "synthetic-insufficient-sampling",
+  "symptom": {
+    "description": "Synthetic slow operation",
+    "expected": "One call per bounded operation",
+    "actual": "Three calls",
+    "scope": "Disposable synthetic fixture only"
+  },
+  "hypotheses": [
+    {
+      "id": "H1",
+      "claim": "Per-item invocation increases call count",
+      "falsifying_observation": "Full interception sees a constant invocation count across item counts",
+      "method": "sampling",
+      "falsification_strength": "sampling-limited",
+      "observation_scope": "Only one of three opportunities sampled",
+      "coverage": {
+        "expected_opportunities": 3,
+        "observed_opportunities": 1,
+        "complete": false
+      },
+      "result": "supported",
+      "observation": "One invocation sampled; remaining opportunities unknown",
+      "evidence_refs": [
+        "E1"
+      ]
+    }
+  ],
+  "minimal_reproduction": {
+    "status": "reproduced",
+    "command": "synthetic fixture baseline",
+    "environment": "Synthetic fixture, not incident execution",
+    "expected": "One call",
+    "actual": "Three calls",
+    "evidence_refs": [
+      "E1"
+    ]
+  },
+  "causal_isolation": {
+    "status": "isolated",
+    "baseline": "Three synthetic calls",
+    "intervention": "Synthetic batch path",
+    "actual": "One synthetic call",
+    "alternatives": "Fixed synthetic inputs; this fixture intentionally overclaims weak sampling",
+    "evidence_refs": [
+      "E1"
+    ]
+  },
+  "root_cause": {
+    "status": "confirmed",
+    "hypothesis_ids": [
+      "H1"
+    ],
+    "explanation": "Intentionally invalid: confirmation based only on sampling",
+    "limitations": "Synthetic negative fixture, no actual root-cause claim",
+    "evidence_refs": [
+      "E1"
+    ]
+  },
+  "repair_handoff": {
+    "owner_skill": "local-change-implementer",
+    "scope": "Proposed bounded call-site change; no execution",
+    "authorization_ref": null
+  },
+  "regression_binding": {
+    "status": "proposed",
+    "command": "Intercept all calls across two payload sizes",
+    "evidence_refs": []
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "path": "observation.txt",
+      "sha256": "bbcb07ef7ea680cf530ba3cf7cb9334778b7df10954a3100927e141b54fcc293"
+    }
+  ]
+}

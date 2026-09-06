@@ -1,7 +1,8 @@
-# Repo Structure Sync 相容入口
+# Repo Structure Sync 已退役識別碼
 
-`repo-structure-sync` 自 v0.6.0 起是 `ai-context-init` 的 deprecated
-compatibility identifier，且目前沒有預排移除版本。
+`repo-structure-sync` 自 v0.6.0 起為相容識別碼，於 v0.16.0 退役，
+不再提供 canonical skill spec 或 runtime wrapper。新請求使用此名稱時，
+應明確回報已退役並提示替代技能 `ai-context-init`，不可靜默轉送。
 
 新工作請使用
 [`AI-CONTEXT-INIT-SKILL-GUIDE.md`](AI-CONTEXT-INIT-SKILL-GUIDE.md)。

@@ -157,7 +157,7 @@ register_check provider-role-package-projection \
 register_check multi-hop-upgrade-transaction \
     "AI Context Multi-Hop Upgrade Transaction GWT Tests" required \
     "upgrade,transaction,tests" "fast pr release nightly-full" \
-    ".ai/assets/skills/ai-context-upgrader .ai/distribution/profiles/dotnet-backend.yaml .ai/scripts/ai_context_multi_hop_upgrade.py .ai/scripts/ai_context_package_apply.py .ai/scripts/ai_context_target_provenance.py .ai/scripts/ai_context_upgrade_routes.py .ai/scripts/tests/test_ai_context_multi_hop_upgrade.py" '' "python>=3.11 git" 360 io reuse-by-input portable \
+    ".ai/assets/skills/ai-context-upgrader .ai/distribution/profiles/dotnet-backend.yaml .ai/scripts/ai_context_multi_hop_upgrade.py .ai/scripts/ai_context_package_apply.py .ai/scripts/ai_context_target_provenance.py .ai/scripts/ai_context_upgrade_routes.py .ai/scripts/tests/test_ai_context_multi_hop_upgrade.py" '' "python>=3.11 git" 360 io no-reuse portable \
     "python .ai/scripts/tests/test_ai_context_multi_hop_upgrade.py -v" always
 register_check dependency-versions \
     "Offline Dependency And Version Consistency" required \
@@ -203,12 +203,12 @@ register_check test-fixture-routing-contract \
 register_check validation-evidence-contract \
     "Validation Execution Evidence Contract" required \
     "runner,evidence,tests" "fast pr release nightly-full" \
-    ".ai/scripts/validation-evidence.py .ai/scripts/tests/test_validation_evidence.py .ai/scripts/check-all.sh" validation-process-supervisor-contract "python>=3.11" 60 cpu reuse-by-input source \
+    ".ai/scripts/validation-evidence.py .ai/scripts/validation_subject.py .ai/scripts/tests/test_validation_evidence.py .ai/scripts/check-all.sh .ai/assets/shared/validation-gate-classification.yaml" validation-process-supervisor-contract "python>=3.11" 60 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_validation_evidence.py ValidationEvidenceRoutineContractGwtTests -v" always
 register_check validation-evidence-exhaustive-contract \
     "Validation Execution Evidence Exhaustive Contract" required \
     "runner,evidence,tests" "release nightly-full" \
-    ".ai/scripts/validation-evidence.py .ai/scripts/tests/test_validation_evidence.py .ai/scripts/check-all.sh" validation-evidence-contract "python>=3.11" 180 cpu no-reuse source \
+    ".ai/scripts/validation-evidence.py .ai/scripts/validation_subject.py .ai/scripts/tests/test_validation_evidence.py .ai/scripts/check-all.sh .ai/assets/shared/validation-gate-classification.yaml" validation-evidence-contract "python>=3.11" 180 cpu no-reuse source \
     "python .ai/scripts/tests/test_validation_evidence.py -v" always
 register_check validation-process-supervisor-contract \
     "Validation Process Supervisor Contract" required \
@@ -275,6 +275,11 @@ register_check release-state-tests \
     "release,tests" "release nightly-full" \
     ".ai/scripts/tests/test_ai_context_release_state.py .dev/releases" source-ai-context-version "python>=3.11 git" 90 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_ai_context_release_state.py -v" source-release
+register_check release-asset-identity \
+    "Release Asset Identity Contract Tests" required \
+    "release,tests" "fast pr release nightly-full" \
+    ".ai/scripts/release_asset_identity.py .ai/scripts/manage-release-asset-identity.py .ai/scripts/ai_context_package.py .ai/scripts/ai_context_package_identity.py .ai/scripts/tests/test_release_asset_identity.py .dev/workflows .github/workflows/package-candidate.yml .github/workflows/publish-release.yml" source-ai-context-version "python>=3.11 git" 60 cpu no-reuse source \
+    "python .ai/scripts/tests/test_release_asset_identity.py -v" source-release
 register_check release-preparation-tests \
     "AI Context Release Preparation Fail-Closed Tests" required \
     "release,tests" "release nightly-full" \
@@ -288,8 +293,13 @@ register_check release-notes-renderer \
 register_check ai-behavior-evaluation \
     "AI Behavior Deterministic Evaluation" required \
     "evaluation,release" "release nightly-full" \
-    ".ai/scripts/tests/test_ai_behavior_evaluation.py .ai" source-ai-context-version "python>=3.11" 90 cpu reuse-by-input source \
+    ".ai/scripts/tests/test_ai_behavior_evaluation.py .ai .dev/releases" source-ai-context-version "python>=3.11" 90 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_ai_behavior_evaluation.py -v" source-release
+register_check incident-fault-injection \
+    "Incident-Derived Validator Fault Injection" required \
+    "evaluation,release,validation" "release nightly-full" \
+    ".ai .dev/releases" ai-behavior-evaluation "python>=3.11 git" 90 cpu reuse-by-input source \
+    "python .ai/scripts/validate-ai-behavior-evaluation.py fault-injection" source-release
 register_check ai-context-load-measurement \
     "AI Context Load Measurement Contract" required \
     "evaluation,release" "release nightly-full" \
@@ -315,6 +325,16 @@ register_check skill-transition-tests \
     "skill,release" "release nightly-full" \
     ".ai/scripts/tests/test_skill_transition_contract.py .ai/assets/skills" skill-transition "python>=3.11" 60 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_skill_transition_contract.py -v" source-release
+register_check diagnostic-contract \
+    "Diagnostic Analyst Falsification Contract" required \
+    "skill,tests" "fast pr release nightly-full" \
+    ".ai/assets/skills/diagnostic-analyst .ai/assets/skills/software-development-orchestrator .ai/scripts/python_prerequisites.py .ai/scripts/python-entrypoints.json .ai/scripts/skill_identifier_lifecycle.py .ai/assets/skills/transitions .agents/skills/diagnostic-analyst .claude/skills/diagnostic-analyst" '' "python>=3.11" 60 cpu no-reuse source \
+    "python .ai/assets/skills/diagnostic-analyst/scripts/tests/test_diagnostic_contract.py -v" always
+register_check skill-retirement-tests \
+    "Skill Retirement Routing and Upgrade Tests" required \
+    "skill,tests" "fast pr release nightly-full" \
+    ".ai/scripts .ai/assets/skills .ai/distribution .ai/evaluation .agents/skills .claude/skills .dev/workflows/2026-07-24-v0-6-model-evaluation" '' "python>=3.11 git" 60 io no-reuse source \
+    "python .ai/scripts/tests/test_skill_retirement.py -v" always
 register_check effective-rules \
     "Effective Rule Packet Resolution and Consumer Parity Tests" required \
     "rules,release" "release nightly-full" \
@@ -333,13 +353,19 @@ register_check source-governance-manifest \
 register_check validation-lifecycle-contract \
     "Validation Freeze And Evidence Reuse Contract" required \
     "governance,validation,evidence" "fast pr release nightly-full" \
-    ".ai/assets/shared/VALIDATION-EVIDENCE-LIFECYCLE-CONTRACT.md .ai/assets/shared/validation-evidence-lifecycle.schema.yaml .ai/scripts/validate-validation-lifecycle.py .dev/standards/GITHUB-WORK-MANAGEMENT-POLICY.yaml" source-governance-manifest "python>=3.11" 60 cpu reuse-by-input source \
+    ".ai/assets/shared/VALIDATION-EVIDENCE-LIFECYCLE-CONTRACT.md .ai/assets/shared/validation-evidence-lifecycle.schema.yaml .ai/assets/shared/validation-gate-classification.yaml .ai/scripts/validation_subject.py .ai/scripts/validate-validation-lifecycle.py .dev/standards/GITHUB-WORK-MANAGEMENT-POLICY.yaml" source-governance-manifest "python>=3.11" 60 cpu reuse-by-input source \
     "python .ai/scripts/validate-validation-lifecycle.py" source-governance
 register_check validation-lifecycle-tests \
     "Validation Lifecycle Fail-Closed Tests" required \
     "governance,validation,evidence,tests" "fast pr release nightly-full" \
-    ".ai/scripts/tests/test_validation_lifecycle.py .ai/assets/shared/validation-evidence-lifecycle.schema.yaml .dev/standards/GITHUB-WORK-MANAGEMENT-POLICY.yaml" validation-lifecycle-contract "python>=3.11" 60 cpu reuse-by-input source \
+    ".ai/scripts/tests/test_validation_lifecycle.py .ai/scripts/tests/test_validation_subject_digest.py .ai/assets/shared/validation-evidence-lifecycle.schema.yaml .ai/assets/shared/validation-gate-classification.yaml .dev/standards/GITHUB-WORK-MANAGEMENT-POLICY.yaml" validation-lifecycle-contract "python>=3.11" 60 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_validation_lifecycle.py -v" source-governance
+register_check validation-dependency-observation-contract \
+    "Bounded Validation Dependency Observation" required \
+    "governance,validation,dependencies,tests" "fast pr release nightly-full" \
+    ".ai/assets/shared/VALIDATION-DEPENDENCY-OBSERVATION-CONTRACT.md .ai/assets/shared/validation-dependency-observation.schema.yaml .ai/scripts/observe-validation-dependencies.py .ai/scripts/tests/test_validation_dependency_observation.py .ai/scripts/tests/fixtures/validation-dependency-observation" validation-lifecycle-contract \
+    "python>=3.11 git" 60 cpu reuse-by-input source \
+    "python .ai/scripts/tests/test_validation_dependency_observation.py -v" source-governance
 register_check agent-execution-guardrails-contract \
     "Agent Execution Guardrails Contract" required \
     "governance,agents,evidence" "fast pr release nightly-full" \

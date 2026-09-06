@@ -12,7 +12,8 @@ protection rules, and permissions.
   edits.
 - Record the branch and base branch in the workflow locator and plan.
 - Commit coherent validated stages; a push or integration event before
-  completion is a checkpoint, not workflow closure.
+  completion is a checkpoint, not workflow closure, and `in_progress` is not
+  by itself an integration blocker.
 - After integration, verify the target branch separately and do not claim
   publication or release completion from integration alone.
 

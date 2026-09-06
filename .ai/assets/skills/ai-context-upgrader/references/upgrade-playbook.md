@@ -19,8 +19,9 @@ treat `kept`, `moved-to`, `merged-into`, and `retired` as incoming intent only.
 The projected disposition can improve path discovery, but it cannot establish
 the target's base bytes, ownership, local changes, or write authorization.
 
-Use `ai-context-init` if no initialization has occurred; the deprecated
-`repo-structure-sync` entry follows that contract during transition. If
+Use `ai-context-init` if no initialization has occurred. `repo-structure-sync`
+was retired in v0.16.0; reject new requests with the `ai-context-init`
+replacement diagnostic and preserve historical identifiers unchanged. If
 framework files exist but provenance is absent, stop automatic upgrade
 classification and produce an unresolved-provenance inventory. The user must
 identify a credible base or authorize a manual baseline reconciliation.

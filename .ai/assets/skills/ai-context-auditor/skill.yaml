@@ -43,7 +43,7 @@ constraints:
   - "Never overwrite a baseline report with post-remediation results."
   - "Use ASM-YYYYMMDD-NNN assessment ids and ISO 8601 timestamps with an explicit offset for durable audits."
   - "For a standalone durable audit, create or switch to its dedicated assessment branch before writing artifacts; when participating in a governance-owned lifecycle, use that workflow branch instead of creating a competing assessment branch."
-  - "Treat pre-completion integration or push as a checkpoint; select linear or merge-commit topology under the target branch policy instead of deriving it from assessment mode."
+  - "Treat pre-completion integration or push as a checkpoint without treating in_progress as an integration blocker; select linear or merge-commit topology under the target branch policy instead of deriving it from assessment mode."
   - "Use transient direct mode when the result stays in the conversation and there is no repository mutation, remediation, or durable report, even if the analysis has multiple passes or sub-agents."
   - "Treat report wording as durable only when the user asks to save, persist, land, or retain the assessment in the repository."
   - "For standalone durable audits, commit only assessment-owned locator, report, evidence, and assessment index updates; do not create a workflow solely for persistence or include changes to audited context."

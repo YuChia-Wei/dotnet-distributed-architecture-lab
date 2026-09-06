@@ -80,6 +80,9 @@ Workflow mode requires a dedicated branch, a locator, skill-owned tasks, exact
 validation outcomes, and a closeout that checks workflow completion separately
 from integration. A candidate record, detailed plan, provider event, pushed
 branch, or integrated change does not by itself prove workflow completion.
+An `in_progress` status is not by itself an integration blocker; the target's
+separate authorization, checkpoint, review, checks, permissions, and branch
+protection decide whether push or integration may proceed.
 
 Blocked, deferred, and not-applicable outcomes are not passed. Any provider or
 integration customization belongs to target-owned policy and must be preserved

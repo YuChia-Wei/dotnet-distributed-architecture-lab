@@ -14,6 +14,7 @@
 | `AI-SKILL-GUIDE-STANDARDS.md` | Human-facing skill-guide authoring rules. |
 | `BDD-GWT-TEST-DESIGNER-PAIR-GUIDE.md` | Test-design and implementation pairing. |
 | `BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md` | Given-When-Then test-design usage. |
+| `DIAGNOSTIC-ANALYST-SKILL-GUIDE.md` | Falsification-first diagnosis and historical incident examples. |
 | `DDD-CA-HEX-ARCHITECT-SKILL-GUIDE.md` | Architecture design and refactoring usage. |
 | `SOFTWARE-DEVELOPMENT-ORCHESTRATOR-SKILL-GUIDE.md` | Development workflow orchestration usage. |
 | `EXTERNAL-AI-DISCUSSION-ROUNDTRIP-GUIDE.md` | Bounded discussion packets and feedback intake for ChatGPT, Fable 5, and other external AI reviewers. |

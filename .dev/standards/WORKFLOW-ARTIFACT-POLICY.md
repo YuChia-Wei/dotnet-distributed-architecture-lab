@@ -50,6 +50,7 @@ For workflows created on or after 2026-07-11, `branch` and `base_branch` are als
 - Record push and merge handoff evidence in the plan or a skill-owned history field, including the resume source and action.
 - A push-only handoff normally keeps the same branch; a checkpoint merge starts the next branch segment from the updated target branch.
 - A checkpoint push or merge does not change `status` to `completed`; pending tasks and exact continuation instructions remain durable.
+- Conversely, `status: in_progress` does not block an otherwise authorized push, pull request, or merge. Transport and workflow completion are independent facts.
 - A historical active workflow without branch metadata must add branch metadata when it next resumes, after creating its continuation branch.
 
 ## Workflow ID
@@ -203,6 +204,12 @@ alias `workflow closeout` may be used inside this section, but it does not mean
 repository integration, assessment finality, release-source validation,
 hosted publication, or publication finalization. Evidence for any of those
 separate events remains with its own owner.
+
+A provider-only review, hosted check, admission, integration, or post-merge
+read-back that creates no remaining workflow-owned implementation task does not
+keep the workflow `in_progress`. Track that operation under its provider or
+terminal policy. Do not create a tracked evidence-sync commit merely to copy a
+later provider state into an already completed implementation workflow.
 
 ## Final and Derived Artifacts
 

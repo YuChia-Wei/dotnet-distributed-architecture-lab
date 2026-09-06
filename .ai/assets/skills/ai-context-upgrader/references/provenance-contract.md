@@ -15,6 +15,15 @@ reason `effective-rule-state-missing`; create no empty state or packet, and
 keep routine action work fail-closed until owner reconciliation. The readiness
 result is derived output, not a provenance authority field.
 
+Current effective-state publication uses `route-base32-60-v1` packet names:
+`r-` plus the first 12 lowercase RFC 4648 Base32 characters derived from the
+full route SHA-256, followed by `.yaml`. The full `ROUTE-<SHA256>` remains the
+semantic identity and `effective-rules.yaml` remains the sole index. Complete
+legacy full-route-id layouts remain readable. Ordinary package apply preserves
+them; only explicitly authorized effective-state regeneration or finalization
+may migrate them, with staged rollback and fail-closed recovery. Mixed layouts,
+collisions, path mismatches, and orphan packet files are invalid.
+
 `.dev/AI-CONTEXT-SOURCE.yaml` remains a schema-1 read-compatibility input for
 older targets. Migrate it to the grouped path before writing schema 2. Never
 retain both files as active authorities.
@@ -57,9 +66,9 @@ retain both files as active authorities.
   candidate remains invalid. Without that latter evidence, it returns
   derived action readiness as `action_ready: false`, `status: unresolved`, and
   reason `effective-rule-state-missing`, creates no empty effective-rule state
-  or packet, and awaits owner reconciliation. The deprecated
-  `repo-structure-sync` compatibility entry follows the same contract during
-  its transition. Incomplete credible-source evidence produces an unresolved
+  or packet, and awaits owner reconciliation. `repo-structure-sync` was retired
+  in v0.16.0; preserve its historical provenance values and use `ai-context-init`
+  for new initialization. Incomplete credible-source evidence produces an unresolved
   no-write result.
 - `ai-context-upgrader` reads it during planning and uses fail-closed staged
   finalization with rollback on in-process failure only after owner

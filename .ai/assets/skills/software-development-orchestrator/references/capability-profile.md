@@ -28,6 +28,7 @@ The core `software-development-orchestrator` skill should stay publishable. Repo
 | `test-design` | `bdd-gwt-test-designer` | The task needs Given-When-Then scenarios, assertion points, or test design notes. |
 | `implementation` | `slice-implementer` | A bounded implementation slice is ready, using exactly one command, query, reactor, or generic execution mode plus applicable intent overlays such as remediation. |
 | `local-change` | `local-change-implementer` | A local class, object, method, symbol, SQL/ORM, or direct-call-site technical change is ready. |
+| `diagnosis` | `diagnostic-analyst` | An observed failure or performance symptom needs falsification and reproduction before repair. |
 | `review` | `code-reviewer` | .NET backend code or dotnet-backend implementation guidance needs review. |
 | `compliance-validation` | `spec-compliance-validator` | Problem-frame workflows need a 100% coverage gate. |
 

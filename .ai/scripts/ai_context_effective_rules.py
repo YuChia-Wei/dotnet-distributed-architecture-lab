@@ -11,6 +11,7 @@ an alternate route.
 
 from __future__ import annotations
 
+import base64
 import copy
 import hashlib
 import json
@@ -28,6 +29,9 @@ RESOLVER_SCHEMA_VERSION = "1.0"
 APPLICABILITY_MODES = ("framework-source", "initialized-target")
 EFFECTIVE_STATE_PATH = ".dev/ai-context/effective-rules.yaml"
 PACKET_DIRECTORY = ".dev/ai-context/effective-rule-packets"
+PACKET_STORAGE_SCHEME = "route-base32-60-v1"
+PACKET_KEY_LENGTH = 12
+WINDOWS_LEGACY_MAX_PATH = 259
 SHARED_CATALOG_PATH = ".ai/assets/shared/governance/engineering-rule-catalog.yaml"
 PROVENANCE_PATH = ".dev/ai-context/provenance.yaml"
 CUSTOMIZATIONS_PATH = ".dev/ai-context/customizations.yaml"
@@ -50,6 +54,7 @@ SEMVER_TAG_RE = re.compile(r"^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$")
 PROFILE_SLUG_RE = re.compile(r"^[a-z0-9]+(?:[._-][a-z0-9]+)*$")
 STABLE_ID_RE = re.compile(r"^[A-Z][A-Z0-9]*(?:-[A-Z0-9][A-Z0-9]*)*-\d{3}$")
 ROUTE_ID_RE = re.compile(r"^ROUTE-[A-Z0-9][A-Z0-9._-]*$")
+DERIVED_ROUTE_ID_RE = re.compile(r"^ROUTE-[0-9A-F]{64}$")
 PACKET_ID_RE = re.compile(r"^PACKET-[A-Z0-9][A-Z0-9._-]*$")
 DISPOSITIONS = {
     "baseline-effective",
@@ -79,6 +84,65 @@ def _sha256_bytes(value: bytes) -> str:
 
 def _is_sha256(value: object) -> bool:
     return isinstance(value, str) and SHA256_RE.fullmatch(value) is not None
+
+
+def compact_packet_key_for_route(route_id: str) -> str:
+    """Return the lowercase 60-bit RFC 4648 Base32 storage key."""
+    if DERIVED_ROUTE_ID_RE.fullmatch(route_id) is None:
+        raise EffectiveRuleError("compact packet storage requires an exact ROUTE-SHA256 identity")
+    digest_bytes = bytes.fromhex(route_id.removeprefix("ROUTE-"))
+    encoded = base64.b32encode(digest_bytes).decode("ascii").rstrip("=").lower()
+    return encoded[:PACKET_KEY_LENGTH]
+
+
+def compact_packet_path_for_route(route_id: str) -> str:
+    return f"{PACKET_DIRECTORY}/r-{compact_packet_key_for_route(route_id)}.yaml"
+
+
+def legacy_packet_path_for_route(route_id: str) -> str:
+    return f"{PACKET_DIRECTORY}/{route_id}.yaml"
+
+
+def _packet_layout_for_route(route_id: str, packet_path: object) -> str:
+    if packet_path == compact_packet_path_for_route(route_id):
+        return PACKET_STORAGE_SCHEME
+    if packet_path == legacy_packet_path_for_route(route_id):
+        return "legacy-route-id-v1"
+    raise EffectiveRuleError("effective route packet path does not match its route identity")
+
+
+def _assert_unique_compact_packet_paths(route_ids: list[str]) -> None:
+    observed: dict[str, str] = {}
+    for route_id in route_ids:
+        packet_path = compact_packet_path_for_route(route_id)
+        collision_key = packet_path.casefold()
+        prior = observed.get(collision_key)
+        if prior is not None and prior != route_id:
+            raise EffectiveRuleError(
+                f"{PACKET_STORAGE_SCHEME} collision between distinct route identities"
+            )
+        observed[collision_key] = route_id
+
+
+def _preflight_packet_path_budget(
+    root: Path,
+    packet_paths: set[str],
+    *,
+    platform_name: str | None = None,
+) -> None:
+    """Fail before writes when Windows legacy path compatibility is impossible."""
+    if (os.name if platform_name is None else platform_name) != "nt":
+        return
+    for relative in sorted(packet_paths):
+        absolute_length = len(str(root / Path(*PurePosixPath(relative).parts)))
+        if absolute_length > WINDOWS_LEGACY_MAX_PATH:
+            relative_length = len(relative)
+            root_budget = WINDOWS_LEGACY_MAX_PATH - relative_length - 1
+            raise EffectiveRuleError(
+                "effective packet path exceeds the Windows legacy path budget "
+                f"(absolute_length={absolute_length}, relative_length={relative_length}, "
+                f"maximum={WINDOWS_LEGACY_MAX_PATH}, root_budget={root_budget})"
+            )
 
 
 def _safe_repo_reference(value: object) -> bool:
@@ -1272,6 +1336,7 @@ def _load_state_inputs(
     routes: dict[bytes, dict[str, Any]] = {}
     route_ids: set[str] = set()
     route_order: list[str] = []
+    packet_layouts: set[str] = set()
     for index, route in enumerate(routing):
         label = f"effective state routing[{index}]"
         if not isinstance(route, dict):
@@ -1309,14 +1374,13 @@ def _load_state_inputs(
                 f"{label}.reported_not_applicable_rule_ids does not exactly match the not-applicable subset"
             )
         packet = route.get("packet")
-        expected_packet_path = f"{PACKET_DIRECTORY}/{route_id}.yaml"
         if (
             not isinstance(packet, dict)
             or set(packet) != {"path", "digest"}
-            or packet.get("path") != expected_packet_path
             or not _is_sha256(packet.get("digest"))
         ):
             raise EffectiveRuleError(f"{label}.packet must name the exact route packet and digest")
+        packet_layouts.add(_packet_layout_for_route(route_id, packet.get("path")))
         key = _selector_key(selector)
         if key in routes:
             raise EffectiveRuleError(f"{label} duplicates an exact selector tuple")
@@ -1325,6 +1389,8 @@ def _load_state_inputs(
         routes[key] = {**route, "selector": selector}
     if route_order != sorted(route_order):
         raise EffectiveRuleError("effective state routing must be ascending by route_id")
+    if len(packet_layouts) != 1:
+        raise EffectiveRuleError("effective state must not mix compact and legacy packet layouts")
     if require_packets:
         for route in routes.values():
             _validate_packet(
@@ -1334,6 +1400,10 @@ def _load_state_inputs(
                 disposition_by_id,
                 route,
             )
+        _validate_packet_inventory(
+            root,
+            {route["packet"]["path"] for route in routes.values()},
+        )
     return state, catalogs, disposition_by_id, routes
 
 
@@ -1463,6 +1533,77 @@ def build_packet_candidate(
     return _build_packet_from_inputs(state, catalogs, dispositions, route, resolver_evidence)
 
 
+def preflight_effective_packet_storage(
+    root: Path,
+    state_candidate: dict[str, Any],
+) -> set[str]:
+    """Validate the complete storage namespace and path budget without writes."""
+    if not isinstance(state_candidate, dict):
+        raise EffectiveRuleError("effective-state candidate must be a mapping")
+    allowed = {
+        "schema_version",
+        "framework",
+        "rule_dispositions",
+        "routing",
+        "generated_at",
+    }
+    unknown = set(state_candidate) - allowed
+    if unknown:
+        raise EffectiveRuleError(
+            f"effective-state candidate has unsupported fields: {sorted(unknown)}"
+        )
+    if state_candidate.get("schema_version") != "1.0":
+        raise EffectiveRuleError("effective-state candidate has unsupported schema_version")
+    framework = state_candidate.get("framework")
+    if not isinstance(framework, dict) or set(framework) != {
+        "version",
+        "commit",
+        "selected_technology_profile",
+    }:
+        raise EffectiveRuleError(
+            "effective-state candidate framework must be complete and explicit"
+        )
+    profile = framework.get("selected_technology_profile")
+    if not is_profile_slug(profile):
+        raise EffectiveRuleError("effective-state candidate framework identity is invalid")
+    raw_routes = state_candidate.get("routing")
+    if not isinstance(raw_routes, list) or not raw_routes:
+        raise EffectiveRuleError("effective-state candidate requires explicit routing")
+    route_ids: list[str] = []
+    seen_selectors: set[bytes] = set()
+    for index, raw in enumerate(raw_routes):
+        label = f"effective-state candidate routing[{index}]"
+        if not isinstance(raw, dict) or not {
+            "selector",
+            "required_rule_ids",
+            "reported_not_applicable_rule_ids",
+        }.issubset(raw):
+            raise EffectiveRuleError(
+                f"{label} must declare selector, required_rule_ids, and reported_not_applicable_rule_ids"
+            )
+        if set(raw) - {
+            "route_id",
+            "selector",
+            "required_rule_ids",
+            "reported_not_applicable_rule_ids",
+        }:
+            raise EffectiveRuleError(f"{label} contains generated or unsupported fields")
+        selector = _validate_selector(raw["selector"], profile, label)
+        selector_key = _selector_key(selector)
+        if selector_key in seen_selectors:
+            raise EffectiveRuleError(f"{label} duplicates an exact selector tuple")
+        seen_selectors.add(selector_key)
+        route_id = route_id_for_selector(selector)
+        supplied_route_id = raw.get("route_id")
+        if supplied_route_id is not None and supplied_route_id != route_id:
+            raise EffectiveRuleError(f"{label}.route_id does not match its selector digest")
+        route_ids.append(route_id)
+    _assert_unique_compact_packet_paths(route_ids)
+    packet_paths = {compact_packet_path_for_route(route_id) for route_id in route_ids}
+    _preflight_packet_path_budget(root.resolve(), packet_paths)
+    return packet_paths
+
+
 def build_effective_state_and_packets(
     root: Path,
     state_candidate: dict[str, Any],
@@ -1476,6 +1617,7 @@ def build_effective_state_and_packets(
     disposition, route, applicability predicate, or baseline acceptance.
     """
     root = root.resolve()
+    preflight_effective_packet_storage(root, state_candidate)
     provenance, ledger, provenance_path, ledger_path = _validated_target_authorities(root)
     if not isinstance(state_candidate, dict):
         raise EffectiveRuleError("effective-state candidate must be a mapping")
@@ -1595,11 +1737,12 @@ def build_effective_state_and_packets(
                 "required_rule_ids": required_rule_ids,
                 "reported_not_applicable_rule_ids": reported_not_applicable,
                 "packet": {
-                    "path": f"{PACKET_DIRECTORY}/{route_id}.yaml",
+                    "path": compact_packet_path_for_route(route_id),
                     "digest": "0" * 64,
                 },
             }
         )
+    _assert_unique_compact_packet_paths([route["route_id"] for route in routes])
     ordered_dispositions = [dispositions[rule_id] for rule_id in sorted(dispositions)]
     routes.sort(key=lambda route: route["route_id"])
     state: dict[str, Any] = {
@@ -1643,6 +1786,60 @@ def build_effective_state_and_packets(
     return state, packets
 
 
+def _recoverable_current_packet_paths(root: Path) -> tuple[set[str], set[str]]:
+    """Read only internally bound current paths for migration or crash recovery.
+
+    Finalization may already have replaced provenance/customization authority
+    bytes before packet publication, so this deliberately verifies the old
+    state's own digest, selector identities, paths, and packet digests without
+    requiring those superseded authority digests to remain current.
+    """
+    state = _read_mapping(root, EFFECTIVE_STATE_PATH, "current effective state")
+    if state.get("schema_version") != "1.0" or state.get(
+        "target_state_digest"
+    ) != target_state_digest(state):
+        raise EffectiveRuleError("current effective state is not internally recoverable")
+    framework = state.get("framework")
+    profile = framework.get("selected_technology_profile") if isinstance(framework, dict) else None
+    if not is_profile_slug(profile):
+        raise EffectiveRuleError("current effective state profile is not internally recoverable")
+    routing = state.get("routing")
+    if not isinstance(routing, list) or not routing:
+        raise EffectiveRuleError("current effective routing is not internally recoverable")
+    current_paths: set[str] = set()
+    alternate_paths: set[str] = set()
+    layouts: set[str] = set()
+    for index, route in enumerate(routing):
+        label = f"current effective state routing[{index}]"
+        if not isinstance(route, dict):
+            raise EffectiveRuleError(f"{label} is not internally recoverable")
+        selector = _validate_selector(route.get("selector"), profile, label)
+        route_id = route.get("route_id")
+        packet = route.get("packet")
+        if route_id != route_id_for_selector(selector) or not isinstance(packet, dict):
+            raise EffectiveRuleError(f"{label} identity is not internally recoverable")
+        packet_path = packet.get("path")
+        layouts.add(_packet_layout_for_route(route_id, packet_path))
+        if packet_path in current_paths:
+            raise EffectiveRuleError("current effective packet paths are ambiguous")
+        packet_document = _read_mapping(root, packet_path, "current effective packet")
+        packet_digest_value = packet_document.get("packet_digest")
+        packet_request = packet_document.get("request")
+        if (
+            packet.get("digest") != packet_digest_value
+            or packet_digest_value != packet_digest(packet_document)
+            or not isinstance(packet_request, dict)
+            or packet_request.get("route_id") != route_id
+        ):
+            raise EffectiveRuleError(f"{label} packet is not internally recoverable")
+        current_paths.add(packet_path)
+        alternate_paths.add(compact_packet_path_for_route(route_id))
+        alternate_paths.add(legacy_packet_path_for_route(route_id))
+    if len(layouts) != 1:
+        raise EffectiveRuleError("current effective packet layout is mixed")
+    return current_paths, alternate_paths
+
+
 def write_effective_state_and_packets(
     root: Path,
     state: dict[str, Any],
@@ -1659,24 +1856,47 @@ def write_effective_state_and_packets(
     routing = state.get("routing")
     if not isinstance(routing, list) or not routing:
         raise EffectiveRuleError("effective state must contain complete routing before publish")
-    expected_paths = {
+    route_ids = [route.get("route_id") for route in routing if isinstance(route, dict)]
+    if len(route_ids) != len(routing) or not all(isinstance(route_id, str) for route_id in route_ids):
+        raise EffectiveRuleError("effective state routing must declare every route identity")
+    _assert_unique_compact_packet_paths(route_ids)
+    expected_paths = {compact_packet_path_for_route(route_id) for route_id in route_ids}
+    declared_paths = {
         route.get("packet", {}).get("path")
         for route in routing
         if isinstance(route, dict) and isinstance(route.get("packet"), dict)
     }
     if (
-        None in expected_paths
-        or not all(isinstance(path, str) and path.startswith(f"{PACKET_DIRECTORY}/") for path in expected_paths)
+        declared_paths != expected_paths
         or set(packets) != expected_paths
         or not all(isinstance(packet, dict) for packet in packets.values())
     ):
-        raise EffectiveRuleError("effective packet set must exactly match declared routing paths")
+        raise EffectiveRuleError(
+            f"effective packet set must use {PACKET_STORAGE_SCHEME} and exactly match declared routing paths"
+        )
+    if state.get("target_state_digest") != target_state_digest(state):
+        raise EffectiveRuleError("effective state digest mismatch")
+    _preflight_packet_path_budget(root, expected_paths)
     context = root / ".dev/ai-context"
     if context.is_symlink() or (context.exists() and not context.is_dir()):
         raise EffectiveRuleError("target effective-state directory must be a regular directory")
+    state_path = root / Path(*PurePosixPath(EFFECTIVE_STATE_PATH).parts)
+    current_paths: set[str] = set()
+    recovery_paths: set[str] = set(expected_paths)
+    if state_path.is_file():
+        current_paths, current_recovery_paths = _recoverable_current_packet_paths(root)
+        recovery_paths.update(current_recovery_paths)
+    observed_paths = _packet_directory_inventory(root)
+    unexpected_paths = observed_paths - recovery_paths - current_paths
+    if unexpected_paths:
+        raise EffectiveRuleError(
+            "effective packet root contains files outside the current and candidate authorities "
+            f"(unexpected={len(unexpected_paths)})"
+        )
+    obsolete_paths = observed_paths - expected_paths
     documents: dict[str, dict[str, Any]] = {EFFECTIVE_STATE_PATH: state, **packets}
     destinations: dict[str, Path] = {}
-    for relative in documents:
+    for relative in set(documents) | obsolete_paths:
         if not _safe_target_path(relative) or relative != EFFECTIVE_STATE_PATH and not relative.startswith(f"{PACKET_DIRECTORY}/"):
             raise EffectiveRuleError(f"unsafe target-effective document path: {relative!r}")
         _reject_unsafe_parent_chain(root, relative)
@@ -1714,6 +1934,8 @@ def write_effective_state_and_packets(
             destination = destinations[relative]
             destination.parent.mkdir(parents=True, exist_ok=True)
             os.replace(temporary[relative], destination)
+        for relative in sorted(obsolete_paths):
+            destinations[relative].unlink()
         errors = validate_effective_rule_state(root, require_packets=True)
         if errors:
             raise EffectiveRuleError("; ".join(errors))
@@ -1852,6 +2074,31 @@ def _validate_packet(
     if packet.get("packet_digest") != actual_digest or route["packet"]["digest"] != actual_digest:
         raise EffectiveRuleError(f"{packet_path}: packet digest mismatch")
     return packet
+
+
+def _packet_directory_inventory(root: Path) -> set[str]:
+    packet_root = root / Path(*PurePosixPath(PACKET_DIRECTORY).parts)
+    if packet_root.is_symlink() or packet_root.exists() and not packet_root.is_dir():
+        raise EffectiveRuleError("effective packet root must be a regular directory")
+    if not packet_root.exists():
+        return set()
+    inventory: set[str] = set()
+    for entry in packet_root.iterdir():
+        if entry.is_symlink() or not entry.is_file():
+            raise EffectiveRuleError("effective packet root contains a non-regular entry")
+        inventory.add(f"{PACKET_DIRECTORY}/{entry.name}")
+    return inventory
+
+
+def _validate_packet_inventory(root: Path, expected_paths: set[str]) -> None:
+    observed_paths = _packet_directory_inventory(root)
+    if observed_paths != expected_paths:
+        missing_count = len(expected_paths - observed_paths)
+        unexpected_count = len(observed_paths - expected_paths)
+        raise EffectiveRuleError(
+            "effective packet inventory does not exactly match effective-rules.yaml "
+            f"(missing={missing_count}, unexpected={unexpected_count})"
+        )
 
 
 def validate_effective_rule_state(root: Path, *, require_packets: bool = True) -> list[str]:

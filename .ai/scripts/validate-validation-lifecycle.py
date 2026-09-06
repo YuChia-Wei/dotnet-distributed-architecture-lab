@@ -22,6 +22,17 @@ guard_direct_entrypoint(".ai/scripts/validate-validation-lifecycle.py")
 
 import yaml
 
+from validation_subject import (
+    CLASSIFICATION_SCHEMA,
+    MANIFEST_SCHEMA,
+    REBIND_SCHEMA,
+    REQUIRED_FRESH_GATES,
+    SubjectError,
+    load_classification_authority,
+    validate_rebind_receipt as validate_subject_rebind_receipt,
+    validate_subject_manifest_file,
+)
+
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_PATH = ROOT / ".ai/assets/shared/validation-evidence-lifecycle.schema.yaml"
 PROVIDER_POLICY = ROOT / ".dev/standards/GITHUB-WORK-MANAGEMENT-POLICY.yaml"
@@ -92,12 +103,56 @@ def validate_schema(schema: dict[str, Any]) -> None:
     classes = mapping(schema.get("evidence_classes"), "schema.evidence_classes")
     if list(classes) != ["identity-sensitive", "input-sensitive", "environment-sensitive", "provider-sensitive"]:
         raise LifecycleError("validation evidence taxonomy is invalid")
+    commit_identity = mapping(schema.get("commit_identity"), "schema.commit_identity")
+    if commit_identity != {
+        "permitted_roles": [
+            "immutable-execution-locator",
+            "git-range-selector",
+            "provider-association",
+            "provenance",
+        ],
+        "forbidden_validity_key": "commit-sha",
+        "history_only_change": "content-subject-rebind",
+    }:
+        raise LifecycleError("commit identity boundary is invalid")
     if schema.get("audit_dispositions") != ["re-executed", "reused-with-proof", "blocked", "deferred", "not-applicable"]:
         raise LifecycleError("audit dispositions are invalid")
+    classification = mapping(schema.get("gate_classification"), "schema.gate_classification")
+    if (
+        classification.get("schema_version") != CLASSIFICATION_SCHEMA
+        or classification.get("authority_path") != ".ai/assets/shared/validation-gate-classification.yaml"
+        or classification.get("registry_coverage") != "exact"
+    ):
+        raise LifecycleError("gate classification schema is invalid")
+    manifest = mapping(schema.get("subject_manifest"), "schema.subject_manifest")
+    if (
+        manifest.get("schema_version") != MANIFEST_SCHEMA
+        or manifest.get("identity_schema_version") != "subject-identity/v1"
+        or manifest.get("required_components")
+        != ["classification", "tracked_closure", "invocation", "authority", "runtime", "environment"]
+    ):
+        raise LifecycleError("subject manifest schema is invalid")
+    rebind = mapping(schema.get("subject_rebind"), "schema.subject_rebind")
+    if (
+        rebind.get("schema_version") != REBIND_SCHEMA
+        or rebind.get("record_type") != "subject-evidence-rebind"
+        or rebind.get("required_fresh_gates") != REQUIRED_FRESH_GATES
+        or rebind.get("append_only") is not True
+    ):
+        raise LifecycleError("subject rebind schema is invalid")
+    review = mapping(schema.get("independent_review"), "schema.independent_review")
+    if review != {
+        "schema_version": "2.0",
+        "record_type": "content-addressed-validation-audit",
+        "subject_schema_version": "independent-review-subject/v1",
+        "validity_key": "subject-digest",
+        "provenance_excluded_from_subject_digest": True,
+    }:
+        raise LifecycleError("independent review schema is invalid")
     receipt = mapping(schema.get("reuse_receipt"), "schema.reuse_receipt")
     if receipt.get("authority_dimensions") != ["runner", "manifest", "resolver", "policy", "configuration"]:
         raise LifecycleError("reuse authority dimensions are invalid")
-    if receipt.get("required_fresh_gates") != ["exact-head-independent-audit", "hosted-required-contexts", "live-merge-admission"]:
+    if receipt.get("required_fresh_gates") != ["current-head-review-binding", "hosted-required-contexts", "live-merge-admission"]:
         raise LifecycleError("fresh non-reusable gates are invalid")
 
 
@@ -306,9 +361,33 @@ def validate_freeze(record: dict[str, Any]) -> None:
 
 
 def validate_audit(record: dict[str, Any], schema: dict[str, Any]) -> None:
-    exact_keys(record, {"schema_version", "record_type", "subject_sha", "gates"}, "audit")
-    if record["schema_version"] != "1.0" or record["record_type"] != "exact-head-validation-audit" or not SHA_RE.fullmatch(str(record["subject_sha"])):
+    exact_keys(record, {"schema_version", "record_type", "provenance", "subject", "gates"}, "audit")
+    review_schema = schema["independent_review"]
+    if (
+        record["schema_version"] != review_schema["schema_version"]
+        or record["record_type"] != review_schema["record_type"]
+    ):
         raise LifecycleError("audit identity is invalid")
+    provenance = mapping(record["provenance"], "audit.provenance")
+    exact_keys(provenance, {"base_sha", "head_sha"}, "audit.provenance")
+    if not all(SHA_RE.fullmatch(str(provenance.get(field, ""))) for field in provenance):
+        raise LifecycleError("audit provenance commit SHAs are invalid")
+    subject = mapping(record["subject"], "audit.subject")
+    exact_keys(
+        subject,
+        {"schema_version", "repository_id", "base_tree", "head_tree", "subject_digest"},
+        "audit.subject",
+    )
+    subject_core = {key: value for key, value in subject.items() if key != "subject_digest"}
+    if (
+        subject.get("schema_version") != review_schema["subject_schema_version"]
+        or not isinstance(subject.get("repository_id"), str)
+        or not subject["repository_id"]
+        or not all(SHA_RE.fullmatch(str(subject.get(field, ""))) for field in ("base_tree", "head_tree"))
+        or digest(subject.get("subject_digest"), "audit.subject.subject_digest")
+        != canonical_digest(subject_core)
+    ):
+        raise LifecycleError("audit content subject is invalid")
     gates = record["gates"]
     if not isinstance(gates, list) or not gates:
         raise LifecycleError("audit gates must be non-empty")
@@ -356,10 +435,14 @@ def main() -> int:
     group.add_argument("--freeze-record", type=Path)
     group.add_argument("--audit-record", type=Path)
     group.add_argument("--required-contexts", type=Path)
+    group.add_argument("--subject-manifest", type=Path)
+    group.add_argument("--current-subject-manifest", type=Path)
+    group.add_argument("--subject-rebind", type=Path)
     args = parser.parse_args()
     try:
         schema = mapping(yaml.safe_load(SCHEMA_PATH.read_text(encoding="utf-8")), "schema")
         validate_schema(schema)
+        load_classification_authority(ROOT)
         if args.reuse_receipt:
             validate_reuse_receipt(load_record(args.reuse_receipt), schema)
         elif args.freeze_record:
@@ -369,7 +452,13 @@ def main() -> int:
         elif args.required_contexts:
             provider = mapping(yaml.safe_load(PROVIDER_POLICY.read_text(encoding="utf-8")), "provider policy")
             validate_required_contexts(load_record(args.required_contexts), provider, schema)
-    except (LifecycleError, OSError, UnicodeDecodeError, yaml.YAMLError) as exc:
+        elif args.subject_manifest:
+            validate_subject_manifest_file(ROOT, args.subject_manifest, fresh=False)
+        elif args.current_subject_manifest:
+            validate_subject_manifest_file(ROOT, args.current_subject_manifest, fresh=True)
+        elif args.subject_rebind:
+            validate_subject_rebind_receipt(load_record(args.subject_rebind))
+    except (LifecycleError, SubjectError, OSError, UnicodeDecodeError, yaml.YAMLError) as exc:
         print(f"Validation lifecycle failed closed: {exc}")
         return 1
     print("Validation lifecycle contract passed.")

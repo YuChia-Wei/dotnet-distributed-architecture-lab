@@ -73,7 +73,7 @@ constraints:
 - Do not store runtime workflow artifacts under .ai/assets/skills, .agents/skills, .claude/skills, generated folders, or temporary locations.
 - Preserve user decisions, explicit constraints, branch rules, commit policy, and validation expectations.
 - Create or switch to a dedicated workflow branch before creating development workflow artifacts or making material workflow edits; never use main as the active workflow branch.
-- Treat a requested pre-completion push or integration as a checkpoint and keep pending workflow state active; select linear or merge-commit topology under the target branch policy instead of deriving it from workflow mode.
+- Treat a requested pre-completion push or integration as a checkpoint and keep pending workflow state active without treating in_progress as an integration blocker; select linear or merge-commit topology under the target branch policy instead of deriving it from workflow mode.
 - Before creating separate workflows for multiple approved work items, evaluate delivery cohesion across outcome, branch, validation, reviewer and approval boundary, release horizon, and atomic rollback; one cohesive delivery may bind multiple work-item identifiers.
 - Treat one task or fewer than three substantive tasks as a workflow-value review signal, never as a reason to invent validation or closeout tasks.
 - Activate from high-level software-development intent; do not require the user to name this skill or downstream skills, and do not derive lifecycle stages from skill names alone.

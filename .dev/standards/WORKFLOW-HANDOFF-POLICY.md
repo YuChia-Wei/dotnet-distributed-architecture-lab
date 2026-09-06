@@ -30,6 +30,11 @@ Create or refresh a checkpoint before:
 - handing off framework version candidate validation, tag validation,
   publication validation, or hosted finalization validation work.
 
+This checkpoint requirement does not prohibit integration of an `in_progress`
+workflow. It preserves a resumable state before the separately authorized
+push or merge; repository review, checks, permissions, and branch protection
+still decide whether integration is allowed.
+
 The checkpoint is not workflow completion. Keep the workflow and unfinished
 task active unless their own completion contracts are satisfied.
 

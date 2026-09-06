@@ -49,7 +49,7 @@ constraints:
   - "Do not overwrite or copy the baseline assessment report during remediation"
   - "Use workflow ids in YYYY-MM-DD-topic[-NN] form and ISO 8601 timestamps with an explicit offset"
   - "Create or switch to a dedicated workflow branch before workflow artifacts or material AI-context edits; do not use main as the active workflow branch"
-  - "Treat pre-completion integration or push as a checkpoint and preserve active/pending state; select linear or merge-commit topology under the target branch policy instead of deriving it from workflow mode"
+  - "Treat pre-completion integration or push as a checkpoint and preserve active/pending state without treating in_progress as an integration blocker; select linear or merge-commit topology under the target branch policy instead of deriving it from workflow mode"
   - "Treat optional indexes, code graphs, MCP servers, IDE indexes, and semantic search only as discovery accelerators; verify material context decisions with repository-native evidence under AICTX-EVIDENCE-001."
   - "Require WORKFLOW-HANDOFF-POLICY for cross-model, runtime, host, machine, or fresh-session continuation; never normalize provider-native Git attribution without real provider fixtures."
   - "Own `.dev/ai-context/customizations.yaml`; identify capability, rule, or contract before supporting paths and follow the shared semantic customization lifecycle."

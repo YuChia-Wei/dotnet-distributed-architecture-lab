@@ -30,7 +30,11 @@ customization, effective-state, or packet truth.
   projections. A packet retains each full effective normative statement, its
   baseline catalog binding, and the complete matching target disposition
   record; it may be consumed only while its state and catalog inputs remain
-  fresh.
+  fresh. Current publication uses the deterministic `route-base32-60-v1`
+  storage key `r-<12 lowercase RFC 4648 Base32 characters>.yaml`, derived from
+  the first 60 bits of the full route SHA-256. The full `ROUTE-<SHA256>` remains
+  the semantic identity and `effective-rules.yaml` remains the only packet
+  index.
 - Requirement, ADR, and workflow records justify decisions.
 - Target enterprise test and permission policies remain target-owned truth
   unless they change framework behavior, in which case record the semantic
@@ -80,9 +84,14 @@ customization, effective-state, or packet truth.
 7. **Finalize**: after the approved reconciliation and both audit records satisfy
    the finalization gate, publish the finalized target authorities, regenerate
    affected packets, and publish the completed target-effective state last.
+   Validate the complete compact-key namespace, collisions, and Windows path
+   budget before initialization or finalization mutates any destination.
    Validate the resulting provenance, ledger, state, and packets. In-process
    failure restores the prior authority/state bytes and leaves the candidate
-   migration unresolved; crash-mixed state remains fail-closed.
+   migration unresolved; crash-mixed state remains fail-closed. This explicit
+   regeneration/finalization boundary may migrate one complete legacy
+   full-route-id packet layout to `route-base32-60-v1`. Ordinary package apply
+   preserves target-owned packet names and never performs that migration.
 
 ## Fail-Closed Rules
 
