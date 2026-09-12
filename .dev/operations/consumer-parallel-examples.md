@@ -87,6 +87,10 @@ Invoke-RestMethod -Method Post http://localhost:8888/api/products/diagnostics/pa
 
 ## NuGet 遷移注意事項
 
-Wolverine 與四個相關 transport／runtime 套件統一為 `6.36.0`；六個 host 明確參考 `WolverineFx.RuntimeCompilation`，以支援既有動態 handler 產生。Microsoft 套件更新至 `10.0.12`，`Microsoft.OpenApi` 保留相容的 `2.12.2`，因為 ASP.NET Core 10 的相依範圍小於 3.0。
+Wolverine 與四個相關 transport／runtime 套件統一為 `6.36.0`；六個 host 明確參考 `WolverineFx.RuntimeCompilation`，以支援既有動態 handler 產生。Inventory 預留流程的既有 scoped factory 另以 `AlwaysUseServiceLocationFor<IInventoryReservationOutbox>()` 在 PostgreSQL 組態中明確允許解析；其他型別維持 Wolverine 6 預設的 `ServiceLocationPolicy.NotAllowed`。這項修正由真實 Kafka 庫存預留 E2E 的失敗定位，參考 [官方逐型別 allow-list 說明](https://wolverinefx.net/guide/codegen#allow-list-for-service-location)。
+
+Microsoft 套件更新至 `10.0.12`，`Microsoft.OpenApi` 保留相容的 `2.12.2`，因為 ASP.NET Core 10 的相依範圍小於 3.0。
 
 五個測試專案改用 xUnit v3 `4.0.0` 的 `xunit.v3.mtp-off` 與 VSTest adapter，避免切換 .NET 10 既有 test runner。OTel Process 使用目前的 `1.18.0-rc.1`；RabbitMQ.Client.OpenTelemetry 保留 `1.0.0-rc.2`，兩者尚無可採用的 stable 版本。完整升級矩陣與驗證摘要位於本次 workflow 的 `evidence/`。
+
+間接相依性維持其直接套件所解析的版本，未額外增加強制版本參照。`--outdated --include-transitive` 在目前 CLI 對預發行來源回傳 `Sequence contains no matching element`；納入 `--include-prerelease` 後可完成盤點。該報告含預發行候選，不能據此宣稱所有間接相依性均為最新 stable。
