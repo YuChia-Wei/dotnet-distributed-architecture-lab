@@ -1,0 +1,322 @@
+{
+  "schema_version": "1.0",
+  "record_type": "acceptance-evidence-ledger",
+  "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+  "entries": [
+    {
+      "acceptance_id": "NUGET-REGRESSION",
+      "issue": 10,
+      "requires_actual_execution": true,
+      "evidence_kind": "actual-execution",
+      "command": "docker compose -p mqarchlab-pr5-integration -f docker-compose/docker-compose.yml -f docker-compose/docker-compose.override.yml -f docker-compose/docker-compose.verification.yml --profile verification run --rm --no-deps regression-tests",
+      "profile": "mqarchlab-pr5-integration",
+      "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "outcome": "passed",
+      "evidence_refs": [
+        "ignored:artifacts/nuget-consumer/compose-regression-final.log"
+      ],
+      "evidence_sha256": "178db73a830aefd3ec372cf055e35850a40463e96aa87c79208fbdc7d1ab310c",
+      "execution_receipt_ref": "ignored:artifacts/nuget-consumer/compose-regression-final-receipt.json",
+      "execution_receipt_file_sha256": "d52b9e7ad66a9955c9e086ffacc743bf3f9d9d41e841347f60338b6846d04745",
+      "execution_receipt": {
+        "schema_version": "1.0",
+        "record_type": "terminal-command-execution",
+        "producer": "local-command-runner",
+        "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+        "command": "docker compose -p mqarchlab-pr5-integration -f docker-compose/docker-compose.yml -f docker-compose/docker-compose.override.yml -f docker-compose/docker-compose.verification.yml --profile verification run --rm --no-deps regression-tests",
+        "profile": "mqarchlab-pr5-integration",
+        "started_at": "2026-09-12T06:39:43.055245+00:00",
+        "completed_at": "2026-09-12T06:40:03.534863+00:00",
+        "duration_seconds": 20.48,
+        "executed": true,
+        "synthetic": false,
+        "outcome": "passed",
+        "exit_code": 0,
+        "evidence_refs": [
+          "ignored:artifacts/nuget-consumer/compose-regression-final.log"
+        ],
+        "evidence_sha256": "178db73a830aefd3ec372cf055e35850a40463e96aa87c79208fbdc7d1ab310c",
+        "receipt_sha256": "103df5c1ae2e2ded2338bee0f024263666063beb1543f5a7dc8f5573e0c92b3f"
+      }
+    },
+    {
+      "acceptance_id": "NUGET-VULNERABLE",
+      "issue": 10,
+      "requires_actual_execution": true,
+      "evidence_kind": "actual-execution",
+      "command": "dotnet list MQArchLab.slnx package --vulnerable --include-transitive --format json --no-restore",
+      "profile": "nuget.org/net10.0",
+      "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "outcome": "passed",
+      "evidence_refs": [
+        "ignored:artifacts/nuget-consumer/nuget-vulnerable.log"
+      ],
+      "evidence_sha256": "06a1b718ddc548e962eaf72602595dc40e274826c34f26e828ba9db4eca3830b",
+      "execution_receipt_ref": "ignored:artifacts/nuget-consumer/nuget-vulnerable-receipt.json",
+      "execution_receipt_file_sha256": "0cb0d8f62a6e1b0495aa8dee3e8f1d6f6779a48318d9394e679310c60e0794df",
+      "execution_receipt": {
+        "schema_version": "1.0",
+        "record_type": "terminal-command-execution",
+        "producer": "local-command-runner",
+        "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+        "command": "dotnet list MQArchLab.slnx package --vulnerable --include-transitive --format json --no-restore",
+        "profile": "nuget.org/net10.0",
+        "started_at": "2026-09-12T06:36:14.578605+00:00",
+        "completed_at": "2026-09-12T06:36:56.442763+00:00",
+        "duration_seconds": 41.864,
+        "executed": true,
+        "synthetic": false,
+        "outcome": "passed",
+        "exit_code": 0,
+        "evidence_refs": [
+          "ignored:artifacts/nuget-consumer/nuget-vulnerable.log"
+        ],
+        "evidence_sha256": "06a1b718ddc548e962eaf72602595dc40e274826c34f26e828ba9db4eca3830b",
+        "receipt_sha256": "10a3c10268a98c115190973e2a530deb1859ad870980929e613b51087ca71e27"
+      }
+    },
+    {
+      "acceptance_id": "NUGET-DEPRECATED",
+      "issue": 10,
+      "requires_actual_execution": true,
+      "evidence_kind": "actual-execution",
+      "command": "dotnet list MQArchLab.slnx package --deprecated --include-transitive --format json --no-restore",
+      "profile": "nuget.org/net10.0",
+      "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "outcome": "passed",
+      "evidence_refs": [
+        "ignored:artifacts/nuget-consumer/nuget-deprecated.log"
+      ],
+      "evidence_sha256": "38b421419eaf49a87d6a0ceb2e9fd6edd8c577767a60c516f877b37d58602965",
+      "execution_receipt_ref": "ignored:artifacts/nuget-consumer/nuget-deprecated-receipt.json",
+      "execution_receipt_file_sha256": "e60f35a6dc68e42dbd4abfcf54f75c247f70c66e459e7c9255addc0c3fb50fe6",
+      "execution_receipt": {
+        "schema_version": "1.0",
+        "record_type": "terminal-command-execution",
+        "producer": "local-command-runner",
+        "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+        "command": "dotnet list MQArchLab.slnx package --deprecated --include-transitive --format json --no-restore",
+        "profile": "nuget.org/net10.0",
+        "started_at": "2026-09-12T06:36:56.665786+00:00",
+        "completed_at": "2026-09-12T06:37:22.188983+00:00",
+        "duration_seconds": 25.523,
+        "executed": true,
+        "synthetic": false,
+        "outcome": "passed",
+        "exit_code": 0,
+        "evidence_refs": [
+          "ignored:artifacts/nuget-consumer/nuget-deprecated.log"
+        ],
+        "evidence_sha256": "38b421419eaf49a87d6a0ceb2e9fd6edd8c577767a60c516f877b37d58602965",
+        "receipt_sha256": "a1b8b0a3b173b2fb2e6f489af981bcdb731ab8ff7dcdf4ef0919cd4b8efe025d"
+      }
+    },
+    {
+      "acceptance_id": "MQ-WHENALL",
+      "issue": 11,
+      "requires_actual_execution": true,
+      "evidence_kind": "actual-execution",
+      "command": "pwsh -NoProfile -File docker-compose/scripts/Test-ParallelWork.ps1",
+      "profile": "mqarchlab-pr5-integration",
+      "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "outcome": "passed",
+      "evidence_refs": [
+        "ignored:artifacts/nuget-consumer/compose-parallel-e2e-final.log"
+      ],
+      "evidence_sha256": "1780553c2a819a94535e80cf79cc8ed938e6a48a8e083fea102b72a084b9043b",
+      "execution_receipt_ref": "ignored:artifacts/nuget-consumer/compose-parallel-e2e-final-receipt.json",
+      "execution_receipt_file_sha256": "27bb16602eac634aa256c871136101e6623b26ffa76f902d48b2b20dfe5427a5",
+      "execution_receipt": {
+        "schema_version": "1.0",
+        "record_type": "terminal-command-execution",
+        "producer": "local-command-runner",
+        "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+        "command": "pwsh -NoProfile -File docker-compose/scripts/Test-ParallelWork.ps1",
+        "profile": "mqarchlab-pr5-integration",
+        "started_at": "2026-09-12T06:38:32.878643+00:00",
+        "completed_at": "2026-09-12T06:38:39.135634+00:00",
+        "duration_seconds": 6.257,
+        "executed": true,
+        "synthetic": false,
+        "outcome": "passed",
+        "exit_code": 0,
+        "evidence_refs": [
+          "ignored:artifacts/nuget-consumer/compose-parallel-e2e-final.log"
+        ],
+        "evidence_sha256": "1780553c2a819a94535e80cf79cc8ed938e6a48a8e083fea102b72a084b9043b",
+        "receipt_sha256": "f383fece9034310ad32ada29b7ed987688bb1e2d99b44ff7cb7c3e595b204870"
+      }
+    },
+    {
+      "acceptance_id": "MQ-TWO-HANDLERS",
+      "issue": 11,
+      "requires_actual_execution": true,
+      "evidence_kind": "actual-execution",
+      "command": "pwsh -NoProfile -File docker-compose/scripts/Test-ParallelWork.ps1",
+      "profile": "mqarchlab-pr5-integration",
+      "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "outcome": "passed",
+      "evidence_refs": [
+        "ignored:artifacts/nuget-consumer/compose-parallel-e2e-final.log"
+      ],
+      "evidence_sha256": "1780553c2a819a94535e80cf79cc8ed938e6a48a8e083fea102b72a084b9043b",
+      "execution_receipt_ref": "ignored:artifacts/nuget-consumer/compose-parallel-e2e-final-receipt.json",
+      "execution_receipt_file_sha256": "27bb16602eac634aa256c871136101e6623b26ffa76f902d48b2b20dfe5427a5",
+      "execution_receipt": {
+        "schema_version": "1.0",
+        "record_type": "terminal-command-execution",
+        "producer": "local-command-runner",
+        "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+        "command": "pwsh -NoProfile -File docker-compose/scripts/Test-ParallelWork.ps1",
+        "profile": "mqarchlab-pr5-integration",
+        "started_at": "2026-09-12T06:38:32.878643+00:00",
+        "completed_at": "2026-09-12T06:38:39.135634+00:00",
+        "duration_seconds": 6.257,
+        "executed": true,
+        "synthetic": false,
+        "outcome": "passed",
+        "exit_code": 0,
+        "evidence_refs": [
+          "ignored:artifacts/nuget-consumer/compose-parallel-e2e-final.log"
+        ],
+        "evidence_sha256": "1780553c2a819a94535e80cf79cc8ed938e6a48a8e083fea102b72a084b9043b",
+        "receipt_sha256": "f383fece9034310ad32ada29b7ed987688bb1e2d99b44ff7cb7c3e595b204870"
+      }
+    },
+    {
+      "acceptance_id": "MQ-RETRY-ISOLATION",
+      "issue": 11,
+      "requires_actual_execution": true,
+      "evidence_kind": "actual-execution",
+      "command": "docker compose -p mqarchlab-pr5-integration -f docker-compose/docker-compose.yml -f docker-compose/docker-compose.override.yml -f docker-compose/docker-compose.verification.yml --profile verification run --rm --no-deps regression-tests",
+      "profile": "mqarchlab-pr5-integration",
+      "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "outcome": "passed",
+      "evidence_refs": [
+        "ignored:artifacts/nuget-consumer/compose-regression-final.log"
+      ],
+      "evidence_sha256": "178db73a830aefd3ec372cf055e35850a40463e96aa87c79208fbdc7d1ab310c",
+      "execution_receipt_ref": "ignored:artifacts/nuget-consumer/compose-regression-final-receipt.json",
+      "execution_receipt_file_sha256": "d52b9e7ad66a9955c9e086ffacc743bf3f9d9d41e841347f60338b6846d04745",
+      "execution_receipt": {
+        "schema_version": "1.0",
+        "record_type": "terminal-command-execution",
+        "producer": "local-command-runner",
+        "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+        "command": "docker compose -p mqarchlab-pr5-integration -f docker-compose/docker-compose.yml -f docker-compose/docker-compose.override.yml -f docker-compose/docker-compose.verification.yml --profile verification run --rm --no-deps regression-tests",
+        "profile": "mqarchlab-pr5-integration",
+        "started_at": "2026-09-12T06:39:43.055245+00:00",
+        "completed_at": "2026-09-12T06:40:03.534863+00:00",
+        "duration_seconds": 20.48,
+        "executed": true,
+        "synthetic": false,
+        "outcome": "passed",
+        "exit_code": 0,
+        "evidence_refs": [
+          "ignored:artifacts/nuget-consumer/compose-regression-final.log"
+        ],
+        "evidence_sha256": "178db73a830aefd3ec372cf055e35850a40463e96aa87c79208fbdc7d1ab310c",
+        "receipt_sha256": "103df5c1ae2e2ded2338bee0f024263666063beb1543f5a7dc8f5573e0c92b3f"
+      }
+    },
+    {
+      "acceptance_id": "COMMERCE-REGRESSION",
+      "issue": 10,
+      "requires_actual_execution": true,
+      "evidence_kind": "actual-execution",
+      "command": "pwsh -NoProfile -File docker-compose/scripts/Test-CommerceFlow.ps1",
+      "profile": "mqarchlab-pr5-integration",
+      "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "outcome": "passed",
+      "evidence_refs": [
+        "ignored:artifacts/nuget-consumer/compose-commerce-e2e-fixed.log"
+      ],
+      "evidence_sha256": "44220904864795d0da2ebe1f9b1a9a3183f9a3feb4db1c3fdf3aec6762dad6e7",
+      "execution_receipt_ref": "ignored:artifacts/nuget-consumer/compose-commerce-e2e-fixed-receipt.json",
+      "execution_receipt_file_sha256": "25d19310fb93ec15e19b8ef78b834b95e58c1de8de1f396728b2c3e8dcb2fe98",
+      "execution_receipt": {
+        "schema_version": "1.0",
+        "record_type": "terminal-command-execution",
+        "producer": "local-command-runner",
+        "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+        "command": "pwsh -NoProfile -File docker-compose/scripts/Test-CommerceFlow.ps1",
+        "profile": "mqarchlab-pr5-integration",
+        "started_at": "2026-09-12T06:36:58.670951+00:00",
+        "completed_at": "2026-09-12T06:37:03.757149+00:00",
+        "duration_seconds": 5.086,
+        "executed": true,
+        "synthetic": false,
+        "outcome": "passed",
+        "exit_code": 0,
+        "evidence_refs": [
+          "ignored:artifacts/nuget-consumer/compose-commerce-e2e-fixed.log"
+        ],
+        "evidence_sha256": "44220904864795d0da2ebe1f9b1a9a3183f9a3feb4db1c3fdf3aec6762dad6e7",
+        "receipt_sha256": "5e7d2b002bd4b9c40faff25c44ccf98976a783c893b0618c14d19d083171a474"
+      }
+    },
+    {
+      "acceptance_id": "NUGET-MATRIX",
+      "issue": 10,
+      "requires_actual_execution": false,
+      "evidence_kind": "document",
+      "command": "Compare all 27 product/test project PackageReference declarations with the migration matrix",
+      "profile": "net10.0",
+      "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "outcome": "passed",
+      "evidence_refs": [
+        "tracked:.dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/package-matrix.json"
+      ],
+      "evidence_sha256": "3b47d92fc67da2fdf05dd5951a05aae874e4bfcbbd77c2fe62433a0129f02e7f",
+      "execution_receipt_ref": null,
+      "execution_receipt_file_sha256": null,
+      "execution_receipt": null
+    }
+  ],
+  "human_report": {
+    "entries": [
+      {
+        "acceptance_id": "NUGET-REGRESSION",
+        "outcome": "passed",
+        "evidence_sha256": "178db73a830aefd3ec372cf055e35850a40463e96aa87c79208fbdc7d1ab310c"
+      },
+      {
+        "acceptance_id": "NUGET-VULNERABLE",
+        "outcome": "passed",
+        "evidence_sha256": "06a1b718ddc548e962eaf72602595dc40e274826c34f26e828ba9db4eca3830b"
+      },
+      {
+        "acceptance_id": "NUGET-DEPRECATED",
+        "outcome": "passed",
+        "evidence_sha256": "38b421419eaf49a87d6a0ceb2e9fd6edd8c577767a60c516f877b37d58602965"
+      },
+      {
+        "acceptance_id": "MQ-WHENALL",
+        "outcome": "passed",
+        "evidence_sha256": "1780553c2a819a94535e80cf79cc8ed938e6a48a8e083fea102b72a084b9043b"
+      },
+      {
+        "acceptance_id": "MQ-TWO-HANDLERS",
+        "outcome": "passed",
+        "evidence_sha256": "1780553c2a819a94535e80cf79cc8ed938e6a48a8e083fea102b72a084b9043b"
+      },
+      {
+        "acceptance_id": "MQ-RETRY-ISOLATION",
+        "outcome": "passed",
+        "evidence_sha256": "178db73a830aefd3ec372cf055e35850a40463e96aa87c79208fbdc7d1ab310c"
+      },
+      {
+        "acceptance_id": "COMMERCE-REGRESSION",
+        "outcome": "passed",
+        "evidence_sha256": "44220904864795d0da2ebe1f9b1a9a3183f9a3feb4db1c3fdf3aec6762dad6e7"
+      },
+      {
+        "acceptance_id": "NUGET-MATRIX",
+        "outcome": "passed",
+        "evidence_sha256": "3b47d92fc67da2fdf05dd5951a05aae874e4bfcbbd77c2fe62433a0129f02e7f"
+      }
+    ],
+    "report_sha256": "d935b5a9ec56f5977f277d9ffaa218fc1d454619f911c374cdf3870d049a12a6"
+  },
+  "ledger_sha256": "93f2865d9b46285d6eefd73320fb49074cc47c9d35e3bebd819af53d349a7447"
+}

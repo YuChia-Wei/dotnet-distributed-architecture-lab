@@ -7,9 +7,9 @@
   "task_id": "DEV-002",
   "owner_skill": "slice-implementer",
   "related_plan_id": "development-plan-2026-09-12-nuget-and-consumer-parallel-examples",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-09-12T13:52:33+08:00",
-  "updated_at": "2026-09-12T14:03:22+08:00",
+  "updated_at": "2026-09-12T14:41:50+08:00",
   "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
   "model": "gpt-6-astra",
   "reasoning_effort": "ultra",
@@ -17,7 +17,34 @@
   "scope": {
     "goal": "Demonstrate awaited parallel work with isolated scopes",
     "target": "GitHub Issue #11",
-    "files": [],
+    "files": [
+      "docker-compose/scripts/Test-ParallelWork.ps1",
+      "src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Diagnostics/WhenAllWorkRequested.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/IParallelAuditWriter.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/IParallelStatisticsWriter.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/IRecordParallelStatisticsUseCase.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/IWriteParallelAuditUseCase.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/ParallelWorkInput.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/RecordParallelStatisticsUseCase.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/WriteParallelAuditUseCase.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/DemoParallelAuditWriter.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/DemoParallelStatisticsWriter.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/ParallelWorkConfiguration.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/ParallelWorkScope.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/ParallelWorkStore.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/WhenAllWorkHandler.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/ITriggerParallelWorkProbeUseCase.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/ParallelWorkProbeMode.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/ParallelWorkProbeOptions.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/TriggerParallelWorkProbeInput.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/TriggerParallelWorkProbeOutput.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/TriggerParallelWorkProbeUseCase.cs",
+      "src/Product/Presentation/SaleProducts.WebApi/Controllers/ConsumerParallelDiagnosticsController.cs",
+      "src/Product/Presentation/SaleProducts.WebApi/Models/Responses/ParallelWorkProbeResponse.cs",
+      "tests/SaleProducts.Tests/ParallelWorkProbeState.cs",
+      "tests/SaleProducts.Tests/TriggerParallelWorkProbeTests.cs",
+      "tests/SaleProducts.Tests/WhenAllWorkHandlerTests.cs"
+    ],
     "constraints": [
       "Preserve net10.0 and existing production messaging topology",
       "Parent is the sole tracked writer",
@@ -376,7 +403,7 @@
         },
         "final_integration_owner": {
           "owner": "/root",
-          "decision": "pending",
+          "decision": "accepted",
           "evidence_refs": [
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
@@ -603,7 +630,7 @@
         },
         "final_integration_owner": {
           "owner": "/root",
-          "decision": "pending",
+          "decision": "accepted",
           "evidence_refs": [
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
@@ -824,7 +851,7 @@
         },
         "final_integration_owner": {
           "owner": "/root",
-          "decision": "pending",
+          "decision": "accepted",
           "evidence_refs": [
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
@@ -963,7 +990,7 @@
         },
         "final_integration_owner": {
           "owner": "/root",
-          "decision": "pending",
+          "decision": "accepted",
           "evidence_refs": [
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
@@ -1274,7 +1301,7 @@
         },
         "final_integration_owner": {
           "owner": "/root",
-          "decision": "pending",
+          "decision": "accepted",
           "evidence_refs": [
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
             ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
@@ -1379,18 +1406,155 @@
     "deferred_items": []
   },
   "results": {
-    "summary": "Implementation is ready for final Compose verification; no completion claim yet.",
-    "files_changed": [],
-    "approval_evidence": [],
-    "test_execution": [],
-    "role_execution_aggregation": [],
+    "summary": "WhenAll example, independent scopes, cancellation/synchronous failure tests and actual Kafka E2E completed.",
+    "files_changed": [
+      "docker-compose/scripts/Test-ParallelWork.ps1",
+      "src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Diagnostics/WhenAllWorkRequested.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/IParallelAuditWriter.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/IParallelStatisticsWriter.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/IRecordParallelStatisticsUseCase.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/IWriteParallelAuditUseCase.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/ParallelWorkInput.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/RecordParallelStatisticsUseCase.cs",
+      "src/Order/DomainCore/SaleOrders.Applications/Diagnostics/WriteParallelAuditUseCase.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/DemoParallelAuditWriter.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/DemoParallelStatisticsWriter.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/ParallelWorkConfiguration.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/ParallelWorkScope.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/ParallelWorkStore.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/WhenAllWorkHandler.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/ITriggerParallelWorkProbeUseCase.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/ParallelWorkProbeMode.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/ParallelWorkProbeOptions.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/TriggerParallelWorkProbeInput.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/TriggerParallelWorkProbeOutput.cs",
+      "src/Product/DomainCore/SaleProducts.Applications/UseCases/TriggerParallelWorkProbeUseCase.cs",
+      "src/Product/Presentation/SaleProducts.WebApi/Controllers/ConsumerParallelDiagnosticsController.cs",
+      "src/Product/Presentation/SaleProducts.WebApi/Models/Responses/ParallelWorkProbeResponse.cs",
+      "tests/SaleProducts.Tests/ParallelWorkProbeState.cs",
+      "tests/SaleProducts.Tests/TriggerParallelWorkProbeTests.cs",
+      "tests/SaleProducts.Tests/WhenAllWorkHandlerTests.cs"
+    ],
+    "approval_evidence": [
+      "2026-09-12 user authorization for online Issues, implementation and existing Compose regression/E2E."
+    ],
+    "test_execution": [
+      {
+        "level": "unit",
+        "provider": "target-profile-commands",
+        "working_directory": ".",
+        "profile": "mqarchlab-pr5-integration",
+        "outcome": "passed",
+        "evidence": [
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/acceptance-ledger.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/compose-test-summary.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+        ]
+      },
+      {
+        "level": "integration",
+        "provider": "target-profile-commands",
+        "working_directory": ".",
+        "profile": "mqarchlab-pr5-integration",
+        "outcome": "passed",
+        "evidence": [
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/acceptance-ledger.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/compose-test-summary.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+        ]
+      },
+      {
+        "level": "e2e",
+        "provider": "target-profile-commands",
+        "working_directory": ".",
+        "profile": "mqarchlab-pr5-integration",
+        "outcome": "passed",
+        "evidence": [
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/acceptance-ledger.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/compose-test-summary.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+        ]
+      }
+    ],
+    "role_execution_aggregation": [
+      {
+        "role_execution_id": "DEV-002-command-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-query-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-reactor-sub-agent-01",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-aggregate-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-controller-sub-agent-01",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-outbox-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-profile-config-sub-agent-01",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-usecase-test-sub-agent-01",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-aggregate-test-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-controller-test-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-reactor-test-sub-agent-01",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-002-mutation-testing-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      }
+    ],
     "spec_compliance": {
       "outcome": "not-applicable",
       "coverage_percent": null,
       "evidence": []
     },
-    "validation_evidence": [],
-    "commits": [],
-    "follow_up_needed": false
+    "validation_evidence": [
+      ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/acceptance-ledger.json",
+      ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/compose-test-summary.json",
+      ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+    ],
+    "commits": [
+      "81a2936506d461bcda04f74be1eb9d41d35a0a33",
+      "135456809b5bae75c2ae052a4533ec903e903216",
+      "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "containing-commit"
+    ],
+    "follow_up_needed": false,
+    "finding_status": "addressed"
   }
 }
