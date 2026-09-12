@@ -7,14 +7,14 @@
 | Area | Current choice | Evidence-backed version / status |
 | --- | --- | --- |
 | SDK / Runtime | .NET / C# | SDK `10.0.302` with `latestMajor` roll-forward; product target `net10.0` |
-| Web API | ASP.NET Core + OpenAPI + Scalar | ASP.NET Core packages `10.0.7`; Scalar `2.14.3` |
-| Messaging | WolverineFx | `5.32.1` |
+| Web API | ASP.NET Core + OpenAPI + Scalar | ASP.NET Core packages `10.0.12`; Scalar `2.17.3`; Microsoft.OpenApi `2.12.2` (ASP.NET Core 10 requires `<3.0.0`) |
+| Messaging | WolverineFx | `6.36.0`; six hosts reference RuntimeCompilation for dynamic handler generation |
 | Canonical broker | Apache Kafka | Compose image `apache/kafka:4.0.0`; selected for event-driven verification and keyed partition ordering |
-| Deferred compatibility broker | RabbitMQ | Wolverine RabbitMQ `5.32.1`; logical listeners exist, Compose service is disabled, and exchange/per-consumer queue/binding/DLQ verification remains pending |
-| Persistence | Dapper + Npgsql | Dapper `2.1.72`; Npgsql `10.0.2` |
+| Deferred compatibility broker | RabbitMQ | Wolverine RabbitMQ `6.36.0`; logical listeners exist, Compose service is disabled, and exchange/per-consumer queue/binding/DLQ verification remains pending |
+| Persistence | Dapper + Npgsql | Dapper `2.1.79`; Npgsql `10.0.3` |
 | Database | PostgreSQL | Compose image `postgres:16.15-alpine` |
-| Testing | xUnit + Moq/NSubstitute + Shouldly | xUnit `2.9.3`; test-double package is selected per project; Shouldly `4.3.0` |
-| Observability | OpenTelemetry + Grafana stack | OTel SDK `1.15.x`; Collector Contrib `0.159.0`; Grafana `13.2.1`; Tempo `2.10.7`; Loki `3.7.7`; Prometheus `3.14.0` |
+| Testing | xUnit + Moq/NSubstitute + Shouldly | xUnit v3 `4.0.0` (`xunit.v3.mtp-off`, VSTest); test-double package is selected per project; Shouldly `4.3.0` |
+| Observability | OpenTelemetry + Grafana stack | OTel SDK `1.18.0`; Process instrumentation `1.18.0-rc.1`; Collector Contrib `0.159.0`; Grafana `13.2.1`; Tempo `2.10.7`; Loki `3.7.7`; Prometheus `3.14.0` |
 | Containers | Docker / Docker Compose | host Dockerfiles plus `docker-compose/docker-compose.yml` |
 
 ## Architecture Requirements
@@ -45,7 +45,7 @@
 
 ## Testing Requirements
 
-- Product and domain tests use xUnit.
+- Product and domain tests use xUnit v3 with the VSTest adapter. The verification Compose profile runs all five test projects and explicitly enables Kafka/PostgreSQL integration tests.
 - Test doubles use Moq or NSubstitute according to the owning test project; do not introduce a shared mutable base fixture.
 - Assertions use Shouldly where referenced by the test project.
 - Product tests and architecture-tool tests are separate validation surfaces because the `tools/` projects are not in `MQArchLab.slnx`.

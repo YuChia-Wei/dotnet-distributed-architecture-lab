@@ -18,15 +18,17 @@ The repository also maintains a reusable AI collaboration context. Product truth
 
 Cross-context contracts are located under `src/BC-Contracts/`. The inventory reservation flow between Orders and Inventory collaborates through Wolverine request/reply and MQ channels; integration events are published through the topic/queue owned by each context.
 
+See [Task.WhenAll / two external-event handlers](.dev/operations/consumer-parallel-examples.md) (Consumer parallel examples); includes the existing Compose regression and E2E commands.
+
 ## Technology Stack
 
 - .NET SDK `10.0.302` (`global.json` permits `latestMajor` roll-forward), with `net10.0` as the primary target framework
 - ASP.NET Core Web API and Scalar OpenAPI UI
-- WolverineFx `5.32.1`
+- WolverineFx `6.36.0`
 - Kafka (the canonical broker; enabled in Docker Compose, with producer-selected partition keys used to verify per-business-entity ordering)
 - RabbitMQ (a deferred compatibility profile; its Compose service is commented out, current shared queues are not broadcast topology, and migration or dual deployment requires a separate evaluation)
-- PostgreSQL `16.15-alpine`, Dapper `2.1.72`, and Npgsql `10.0.2`
-- xUnit `2.9.3`, Moq, and Shouldly
+- PostgreSQL `16.15-alpine`, Dapper `2.1.79`, and Npgsql `10.0.3`
+- xUnit v3 `4.0.0` (`xunit.v3.mtp-off` / VSTest), Moq, and Shouldly
 - OpenTelemetry Collector Contrib `0.159.0`, Prometheus `3.14.0`, Tempo `2.10.7`, Loki `3.7.7`, and Grafana `13.2.1`
 
 For exact versions and evidence paths, see [.dev/project-config.yaml](.dev/project-config.yaml) and [.dev/requirement/TECH-STACK-REQUIREMENTS.MD](.dev/requirement/TECH-STACK-REQUIREMENTS.MD).
@@ -94,7 +96,7 @@ The adjacent source comment also retains this fully disabled example, but it is 
 // options.Durability.NodeAssignmentHealthCheckTracingEnabled = false;
 ```
 
-Both settings have been available since WolverineFx `5.9.0`, work with this project's `5.32.1`, and remain available in Wolverine `6.x`. With `DurabilityMode.Solo`, Wolverine `5.39.5` and `6.19.0` had a known issue where the sampling period did not suppress the recurring trace. This Compose topology uses the default Balanced mode and is not affected by that Solo-mode issue.
+Both settings have been available since WolverineFx `5.9.0`, work with this project's `6.36.0`, and remain available in Wolverine `6.x`. With `DurabilityMode.Solo`, Wolverine `5.39.5` and `6.19.0` had a known issue where the sampling period did not suppress the recurring trace. This Compose topology uses the default Balanced mode and is not affected by that Solo-mode issue.
 
 ### Verify Wolverine Consumer Exception Handling
 

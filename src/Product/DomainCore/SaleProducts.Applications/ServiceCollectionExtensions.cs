@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGetAllProductsUseCase, GetAllProductsUseCase>();
         services.AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>();
         services.AddScoped<ITriggerConsumerExceptionPolicyProbeUseCase, TriggerConsumerExceptionPolicyProbeUseCase>();
+        services.AddScoped<ITriggerParallelWorkProbeUseCase, TriggerParallelWorkProbeUseCase>();
         return services;
     }
 }

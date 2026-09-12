@@ -1,0 +1,56 @@
+{
+  "subject_sha": "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+  "project": "mqarchlab-pr5-integration",
+  "results": [
+    {
+      "assembly": "InventoryControl.Tests.dll",
+      "total": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0,
+      "artifact": "artifacts/nuget-consumer/compose-tests/_00a726cb9d4d_2026-09-12_06_39_47_net10.0.trx",
+      "sha256": "cf51d47bea16173d253d24bc44ae03d5adce1f78e2fa1f6ff21924d7765afa5c"
+    },
+    {
+      "assembly": "SaleOrders.Domains.Tests.dll",
+      "total": 13,
+      "passed": 13,
+      "failed": 0,
+      "notExecuted": 0,
+      "artifact": "artifacts/nuget-consumer/compose-tests/_00a726cb9d4d_2026-09-12_06_39_52_net10.0.trx",
+      "sha256": "847084a273e50d30fc045a1ac708c5fff8fa2888ae439c806ea6e9d2660ad314"
+    },
+    {
+      "assembly": "SaleOrders.Tests.dll",
+      "total": 11,
+      "passed": 11,
+      "failed": 0,
+      "notExecuted": 0,
+      "artifact": "artifacts/nuget-consumer/compose-tests/_00a726cb9d4d_2026-09-12_06_39_53_net10.0.trx",
+      "sha256": "1064fa1c3b24292a4b3178ec0b35dfe8d8c9af9d1d5f87cb559c9b60bec49c26"
+    },
+    {
+      "assembly": "SaleProducts.Domains.Tests.dll",
+      "total": 9,
+      "passed": 9,
+      "failed": 0,
+      "notExecuted": 0,
+      "artifact": "artifacts/nuget-consumer/compose-tests/_00a726cb9d4d_2026-09-12_06_39_55_net10.0.trx",
+      "sha256": "8797f3f90d2ef06b7ae057026400da11eebe5e4763b7a73dba3ee72c3846ea72"
+    },
+    {
+      "assembly": "SaleProducts.Tests.dll",
+      "total": 26,
+      "passed": 26,
+      "failed": 0,
+      "notExecuted": 0,
+      "artifact": "artifacts/nuget-consumer/compose-tests/_00a726cb9d4d_2026-09-12_06_39_57_net10.0.trx",
+      "sha256": "60a527019f4d9788369681b3f58efdbeb12df24c1bfc9f70665adb0d858b8a26"
+    }
+  ],
+  "totals": {
+    "passed": 92,
+    "failed": 0,
+    "skipped": 0
+  }
+}

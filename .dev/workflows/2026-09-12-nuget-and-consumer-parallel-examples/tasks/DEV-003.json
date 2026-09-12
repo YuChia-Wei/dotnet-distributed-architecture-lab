@@ -1,0 +1,1889 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-09-12-nuget-and-consumer-parallel-examples",
+  "task_id": "DEV-003",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-09-12-nuget-and-consumer-parallel-examples",
+  "status": "completed",
+  "created_at": "2026-09-12T13:52:33+08:00",
+  "updated_at": "2026-09-12T14:41:50+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "ultra",
+  "workflow_locator": ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow.yaml",
+  "scope": {
+    "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+    "target": "GitHub Issue #11",
+    "files": [
+      "src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Diagnostics/IndependentWorkRequested.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/IndependentAuditHandler.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/IndependentStatisticsHandler.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/ParallelWorkConfiguration.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Program.cs",
+      "tests/SaleProducts.Tests/KafkaParallelFactAttribute.cs",
+      "tests/SaleProducts.Tests/KafkaParallelFixture.cs",
+      "tests/SaleProducts.Tests/KafkaParallelWorkTests.cs"
+    ],
+    "constraints": [
+      "Preserve net10.0 and existing production messaging topology",
+      "Parent is the sole tracked writer"
+    ],
+    "non_goals": [
+      "push",
+      "PR",
+      "merge",
+      "release"
+    ]
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [],
+    "architecture_decisions": [],
+    "user_constraints": [
+      "User authorized online Issues and local implementation on 2026-09-12.",
+      "Both examples receive original external MQ events; distinct handlers must not require a derived memory event.",
+      "Regression and E2E use existing Docker Compose project mqarchlab-pr5-integration.",
+      "Stop the extra Kafka container; preserve existing Compose volumes."
+    ]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "Implementation of the Issue-bound local change; satisfied by explicit user authorization.",
+      "authorization_source": [
+        "https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/11",
+        "2026-09-12 explicit user authorization"
+      ],
+      "pending_decision": ""
+    },
+    "implementation_contract": {
+      "intent": "feature",
+      "execution_mode": "reactor",
+      "overlays": [],
+      "authorization_source": [
+        "https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/11",
+        "2026-09-12 explicit user authorization"
+      ],
+      "normative_truth": [
+        ".dev/ARCHITECTURE.md",
+        ".dev/requirement/TECH-STACK-REQUIREMENTS.MD"
+      ],
+      "finding_evidence": [],
+      "subject_revision": "57b1f2150b6f306e8d784fb6d81133ebc7d7437b",
+      "acceptance_criteria": [
+        "Dispatch one original external MQ event to two independent Wolverine handlers",
+        "Actual Kafka delivery reaches both handlers with isolated retry; no derived local event"
+      ]
+    },
+    "test_execution_contract": null,
+    "role_execution_records": [
+      {
+        "role_execution_id": "DEV-003-command-sub-agent-01",
+        "role_asset_id": "command-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-query-sub-agent-01",
+        "role_asset_id": "query-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-reactor-sub-agent-01",
+        "role_asset_id": "reactor-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/reactor-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "applies",
+          "reason": "The bounded slice selects reactor as its exactly one primary execution mode."
+        },
+        "selection": {
+          "disposition": "direct",
+          "reason": "Root applies the bounded contract inline; research agents own no tracked files.",
+          "delegation_evaluation": {
+            "safety_gates": {
+              "applicable_role": true,
+              "current_session_runtime_support_verified": true,
+              "bounded_input_output_permissions_stop": true,
+              "approval_security_credential_boundaries_satisfied": true,
+              "disjoint_mutation_scope": true,
+              "named_parent_and_final_integration_owner": true
+            },
+            "material_value_triggers": [],
+            "cost_failure_retry_risk": {
+              "result": "favors-direct",
+              "reason": "Small coupled files share composition and contracts; inline implementation avoids overlapping writers."
+            }
+          }
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [
+            ".ai/assets/sub-agent-role-prompts/reactor-sub-agent/references/implementation-playbook.md",
+            ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md",
+            ".ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md",
+            ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"
+          ],
+          "constraints": [
+            "Reactors handle event data, not domain entities",
+            "Use WolverineFx message handlers for event processing",
+            "No direct cross-aggregate repository query"
+          ],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": {
+          "kind": "parent-inline",
+          "identity": "/root",
+          "runtime_support_verified": true
+        },
+        "invocation_evidence": null,
+        "output": {
+          "expected": [
+            "Bounded implementation and validation notes"
+          ],
+          "returned": [
+            "Implemented original-event adapters, ports, tests or opt-in configuration for the selected role."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [
+          {
+            "number": 1,
+            "disposition": "direct",
+            "executor": {
+              "kind": "parent-inline",
+              "identity": "/root",
+              "runtime_support_verified": true
+            },
+            "invocation_evidence": null,
+            "outcome": "completed",
+            "correctable_failure": false,
+            "material_state_change": "",
+            "authorization_source": [],
+            "evidence_refs": [
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+            ]
+          }
+        ],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-aggregate-sub-agent-01",
+        "role_asset_id": "aggregate-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/aggregate-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-controller-sub-agent-01",
+        "role_asset_id": "controller-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/controller-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-outbox-sub-agent-01",
+        "role_asset_id": "outbox-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-profile-config-sub-agent-01",
+        "role_asset_id": "profile-config-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/profile-config-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-usecase-test-sub-agent-01",
+        "role_asset_id": "usecase-test-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-aggregate-test-sub-agent-01",
+        "role_asset_id": "aggregate-test-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/aggregate-test-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-controller-test-sub-agent-01",
+        "role_asset_id": "controller-test-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/controller-test-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-reactor-test-sub-agent-01",
+        "role_asset_id": "reactor-test-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/reactor-test-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "applies",
+          "reason": "The selected slice includes concrete reactor test implementation; a test-only slice uses generic as its one primary execution mode, while BDD design and test execution remain separate."
+        },
+        "selection": {
+          "disposition": "direct",
+          "reason": "Root applies the bounded contract inline; research agents own no tracked files.",
+          "delegation_evaluation": {
+            "safety_gates": {
+              "applicable_role": true,
+              "current_session_runtime_support_verified": true,
+              "bounded_input_output_permissions_stop": true,
+              "approval_security_credential_boundaries_satisfied": true,
+              "disjoint_mutation_scope": true,
+              "named_parent_and_final_integration_owner": true
+            },
+            "material_value_triggers": [],
+            "cost_failure_retry_risk": {
+              "result": "favors-direct",
+              "reason": "Small coupled files share composition and contracts; inline implementation avoids overlapping writers."
+            }
+          }
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [
+            ".ai/assets/sub-agent-role-prompts/reactor-test-sub-agent/references/test-playbook.md",
+            ".ai/assets/sub-agent-role-prompts/reactor-test-sub-agent/references/test-generation-guidance.md",
+            ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md",
+            ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md",
+            ".ai/assets/skills/bdd-gwt-test-designer/skill.yaml"
+          ],
+          "constraints": [
+            "Always verify event handling and side effects explicitly",
+            "No BaseTestClass",
+            "Async verification must be explicit and reliable"
+          ],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": {
+          "kind": "parent-inline",
+          "identity": "/root",
+          "runtime_support_verified": true
+        },
+        "invocation_evidence": null,
+        "output": {
+          "expected": [
+            "Bounded implementation and validation notes"
+          ],
+          "returned": [
+            "Implemented original-event adapters, ports, tests or opt-in configuration for the selected role."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [
+          {
+            "number": 1,
+            "disposition": "direct",
+            "executor": {
+              "kind": "parent-inline",
+              "identity": "/root",
+              "runtime_support_verified": true
+            },
+            "invocation_evidence": null,
+            "outcome": "completed",
+            "correctable_failure": false,
+            "material_state_change": "",
+            "authorization_source": [],
+            "evidence_refs": [
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+            ]
+          }
+        ],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "DEV-003-mutation-testing-sub-agent-01",
+        "role_asset_id": "mutation-testing-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/mutation-testing-sub-agent/sub-agent.yaml",
+        "owning_skill": "slice-implementer",
+        "stage_id": "DEV-003",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No implementation shape for this binding in the bounded task."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Scope does not select this shape.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Dispatch one original external MQ event to two independent Wolverine handlers",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "Not applicable to this task."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "REVIEW-code-review-sub-agent",
+        "role_asset_id": "code-review-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml",
+        "owning_skill": "code-reviewer",
+        "stage_id": "DEV-003-review",
+        "applicability": {
+          "result": "applies",
+          "reason": "A .NET code-review scope is selected."
+        },
+        "selection": {
+          "disposition": "direct",
+          "reason": "Parent executes selected review routes inline.",
+          "delegation_evaluation": {
+            "safety_gates": {
+              "applicable_role": true,
+              "current_session_runtime_support_verified": true,
+              "bounded_input_output_permissions_stop": true,
+              "approval_security_credential_boundaries_satisfied": true,
+              "disjoint_mutation_scope": true,
+              "named_parent_and_final_integration_owner": true
+            },
+            "material_value_triggers": [],
+            "cost_failure_retry_risk": {
+              "result": "favors-direct",
+              "reason": "Small coupled files share composition and contracts; inline implementation avoids overlapping writers."
+            }
+          }
+        },
+        "input_envelope": {
+          "goal": "Review the bounded NuGet migration and external-event examples.",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".ai/assets/skills/code-reviewer/references/review-routing.yaml",
+            "artifacts/nuget-consumer/review-rules.yaml",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/controller-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/reactor-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md"
+          ],
+          "mandatory_references": [
+            ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-playbook.md",
+            ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-prompt.md",
+            ".ai/assets/skills/code-reviewer/references/review-routing.yaml",
+            ".ai/assets/skills/code-reviewer/skill.yaml"
+          ],
+          "constraints": [
+            "Do not redefine target architecture",
+            "Do not silently approve code without checklist comparison",
+            "Always separate findings from summary",
+            "Do not load unselected file-type standards or broad shared review summaries"
+          ],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": {
+          "kind": "parent-inline",
+          "identity": "/root",
+          "runtime_support_verified": true
+        },
+        "invocation_evidence": null,
+        "output": {
+          "expected": [
+            "Evidence-backed review findings and selected checklist comparison"
+          ],
+          "returned": [
+            "No unresolved findings in selected scope; 8 applicable checks passed."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+          ],
+          "bounded": true
+        },
+        "attempts": [
+          {
+            "number": 1,
+            "disposition": "direct",
+            "executor": {
+              "kind": "parent-inline",
+              "identity": "/root",
+              "runtime_support_verified": true
+            },
+            "invocation_evidence": null,
+            "outcome": "completed",
+            "correctable_failure": false,
+            "material_state_change": "",
+            "authorization_source": [],
+            "evidence_refs": [
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+            ]
+          }
+        ],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "REVIEW-aggregate-code-review-sub-agent",
+        "role_asset_id": "aggregate-code-review-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/sub-agent.yaml",
+        "owning_skill": "code-reviewer",
+        "stage_id": "DEV-003-review",
+        "applicability": {
+          "result": "does-not-apply",
+          "reason": "No aggregate or event-sourced behavior changed."
+        },
+        "selection": {
+          "disposition": "not-applicable",
+          "reason": "Outside reviewed scope.",
+          "delegation_evaluation": null
+        },
+        "input_envelope": {
+          "goal": "Review the bounded NuGet migration and external-event examples.",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".ai/assets/skills/code-reviewer/references/review-routing.yaml",
+            "artifacts/nuget-consumer/review-rules.yaml",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/controller-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/reactor-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md"
+          ],
+          "mandatory_references": [],
+          "constraints": [],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": null,
+        "invocation_evidence": null,
+        "output": {
+          "expected": [],
+          "returned": [
+            "No aggregate review needed."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+          ],
+          "bounded": true
+        },
+        "attempts": [],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "REVIEW-controller-code-review-sub-agent",
+        "role_asset_id": "controller-code-review-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/sub-agent.yaml",
+        "owning_skill": "code-reviewer",
+        "stage_id": "DEV-003-review",
+        "applicability": {
+          "result": "applies",
+          "reason": "The selected code-review scope includes an ASP.NET Core controller, endpoint, DTO boundary, or HTTP semantics."
+        },
+        "selection": {
+          "disposition": "direct",
+          "reason": "Parent executes selected review routes inline.",
+          "delegation_evaluation": {
+            "safety_gates": {
+              "applicable_role": true,
+              "current_session_runtime_support_verified": true,
+              "bounded_input_output_permissions_stop": true,
+              "approval_security_credential_boundaries_satisfied": true,
+              "disjoint_mutation_scope": true,
+              "named_parent_and_final_integration_owner": true
+            },
+            "material_value_triggers": [],
+            "cost_failure_retry_risk": {
+              "result": "favors-direct",
+              "reason": "Small coupled files share composition and contracts; inline implementation avoids overlapping writers."
+            }
+          }
+        },
+        "input_envelope": {
+          "goal": "Review the bounded NuGet migration and external-event examples.",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".ai/assets/skills/code-reviewer/references/review-routing.yaml",
+            "artifacts/nuget-consumer/review-rules.yaml",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/controller-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/reactor-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md"
+          ],
+          "mandatory_references": [
+            ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/references/review-playbook.md",
+            ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/references/review-prompt.md",
+            ".ai/assets/skills/code-reviewer/references/review-routing.yaml",
+            ".ai/assets/skills/code-reviewer/skill.yaml"
+          ],
+          "constraints": [
+            "Controllers must remain thin",
+            "Business logic must not live in controllers",
+            "HTTP status and input validation semantics must be explicit",
+            "Do not load test standards unless controller tests or test-quality findings are in scope"
+          ],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": {
+          "kind": "parent-inline",
+          "identity": "/root",
+          "runtime_support_verified": true
+        },
+        "invocation_evidence": null,
+        "output": {
+          "expected": [
+            "Evidence-backed review findings and selected checklist comparison"
+          ],
+          "returned": [
+            "No unresolved findings in selected scope; 8 applicable checks passed."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+          ],
+          "bounded": true
+        },
+        "attempts": [
+          {
+            "number": 1,
+            "disposition": "direct",
+            "executor": {
+              "kind": "parent-inline",
+              "identity": "/root",
+              "runtime_support_verified": true
+            },
+            "invocation_evidence": null,
+            "outcome": "completed",
+            "correctable_failure": false,
+            "material_state_change": "",
+            "authorization_source": [],
+            "evidence_refs": [
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+            ]
+          }
+        ],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      },
+      {
+        "role_execution_id": "REVIEW-reactor-code-review-sub-agent",
+        "role_asset_id": "reactor-code-review-sub-agent",
+        "role_path": ".ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml",
+        "owning_skill": "code-reviewer",
+        "stage_id": "DEV-003-review",
+        "applicability": {
+          "result": "applies",
+          "reason": "The selected code-review scope includes reactor event handling, DI registration, or cross-aggregate integration behavior."
+        },
+        "selection": {
+          "disposition": "direct",
+          "reason": "Parent executes selected review routes inline.",
+          "delegation_evaluation": {
+            "safety_gates": {
+              "applicable_role": true,
+              "current_session_runtime_support_verified": true,
+              "bounded_input_output_permissions_stop": true,
+              "approval_security_credential_boundaries_satisfied": true,
+              "disjoint_mutation_scope": true,
+              "named_parent_and_final_integration_owner": true
+            },
+            "material_value_triggers": [],
+            "cost_failure_retry_risk": {
+              "result": "favors-direct",
+              "reason": "Small coupled files share composition and contracts; inline implementation avoids overlapping writers."
+            }
+          }
+        },
+        "input_envelope": {
+          "goal": "Review the bounded NuGet migration and external-event examples.",
+          "scope": [
+            "src/",
+            "tests/",
+            "docker-compose/"
+          ],
+          "non_goals": [
+            "push",
+            "merge",
+            "release"
+          ],
+          "source_refs": [
+            ".ai/assets/skills/code-reviewer/references/review-routing.yaml",
+            "artifacts/nuget-consumer/review-rules.yaml",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/controller-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/reactor-standards.md",
+            ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md"
+          ],
+          "mandatory_references": [
+            ".ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/references/review-playbook.md",
+            ".ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/references/review-prompt.md",
+            ".ai/assets/skills/code-reviewer/references/review-routing.yaml",
+            ".ai/assets/skills/code-reviewer/skill.yaml"
+          ],
+          "constraints": [
+            "Reactor must handle the correct event types",
+            "Reactor must not rely on forbidden cross-aggregate repository querying",
+            "Unhandled exceptions and missing registration are review failures",
+            "Do not infer target DI or retry technology that the target did not select"
+          ],
+          "stop_conditions": [
+            "Escalate changes to business topology or persistent delivery guarantees."
+          ]
+        },
+        "permissions": {
+          "read_scope": [
+            "src/",
+            "tests/",
+            "docker-compose/",
+            ".dev/",
+            ".ai/"
+          ],
+          "write_scope": [],
+          "external_actions": [],
+          "secret_handling": "no-secret-values"
+        },
+        "executor": {
+          "kind": "parent-inline",
+          "identity": "/root",
+          "runtime_support_verified": true
+        },
+        "invocation_evidence": null,
+        "output": {
+          "expected": [
+            "Evidence-backed review findings and selected checklist comparison"
+          ],
+          "returned": [
+            "No unresolved findings in selected scope; 8 applicable checks passed."
+          ],
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+          ],
+          "bounded": true
+        },
+        "attempts": [
+          {
+            "number": 1,
+            "disposition": "direct",
+            "executor": {
+              "kind": "parent-inline",
+              "identity": "/root",
+              "runtime_support_verified": true
+            },
+            "invocation_evidence": null,
+            "outcome": "completed",
+            "correctable_failure": false,
+            "material_state_change": "",
+            "authorization_source": [],
+            "evidence_refs": [
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+              ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+            ]
+          }
+        ],
+        "fallback": {
+          "considered": false,
+          "reason": "Not needed",
+          "resulting_disposition": null,
+          "inline_contract_evidence": {
+            "same_role_path_and_mandatory_references": false,
+            "bounded_input_output_permissions_stop": false,
+            "approval_security_credential_boundaries_satisfied": false,
+            "disjoint_mutation_scope": false,
+            "named_parent_and_final_integration_owner": false,
+            "current_inline_support_verified": false,
+            "evidence_refs": []
+          }
+        },
+        "final_integration_owner": {
+          "owner": "/root",
+          "decision": "accepted",
+          "evidence_refs": [
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/workflow-plan.md",
+            ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/rules-reactor-csharp-production.yaml"
+          ]
+        }
+      }
+    ],
+    "spec_compliance": {
+      "selected": false,
+      "activation_source": [],
+      "expected_outcome": "not-applicable"
+    },
+    "steps": [],
+    "validation": [],
+    "commit_checkpoint": "coherent-batch: dependency migration, two runnable examples and Compose verification",
+    "deferred_items": []
+  },
+  "results": {
+    "summary": "Original external event dispatched to two distinct handlers in one Consumer; actual Kafka tests verify independent retry and replay; Compose E2E confirms real route and overlap.",
+    "files_changed": [
+      "src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Diagnostics/IndependentWorkRequested.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/IndependentAuditHandler.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/IndependentStatisticsHandler.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Diagnostics/ParallelWorkConfiguration.cs",
+      "src/Order/Presentation/SaleOrders.Consumer/Program.cs",
+      "tests/SaleProducts.Tests/KafkaParallelFactAttribute.cs",
+      "tests/SaleProducts.Tests/KafkaParallelFixture.cs",
+      "tests/SaleProducts.Tests/KafkaParallelWorkTests.cs"
+    ],
+    "approval_evidence": [
+      "2026-09-12 user authorization for online Issues, implementation and existing Compose regression/E2E."
+    ],
+    "test_execution": [
+      {
+        "level": "unit",
+        "provider": "target-profile-commands",
+        "working_directory": ".",
+        "profile": "mqarchlab-pr5-integration",
+        "outcome": "passed",
+        "evidence": [
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/acceptance-ledger.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/compose-test-summary.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+        ]
+      },
+      {
+        "level": "integration",
+        "provider": "target-profile-commands",
+        "working_directory": ".",
+        "profile": "mqarchlab-pr5-integration",
+        "outcome": "passed",
+        "evidence": [
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/acceptance-ledger.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/compose-test-summary.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+        ]
+      },
+      {
+        "level": "e2e",
+        "provider": "target-profile-commands",
+        "working_directory": ".",
+        "profile": "mqarchlab-pr5-integration",
+        "outcome": "passed",
+        "evidence": [
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/acceptance-ledger.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/compose-test-summary.json",
+          ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+        ]
+      }
+    ],
+    "role_execution_aggregation": [
+      {
+        "role_execution_id": "DEV-003-command-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-query-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-reactor-sub-agent-01",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-aggregate-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-controller-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-outbox-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-profile-config-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-usecase-test-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-aggregate-test-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-controller-test-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-reactor-test-sub-agent-01",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "DEV-003-mutation-testing-sub-agent-01",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "REVIEW-code-review-sub-agent",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "REVIEW-aggregate-code-review-sub-agent",
+        "disposition": "not-applicable",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "REVIEW-controller-code-review-sub-agent",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      },
+      {
+        "role_execution_id": "REVIEW-reactor-code-review-sub-agent",
+        "disposition": "direct",
+        "integration_decision": "accepted"
+      }
+    ],
+    "spec_compliance": {
+      "outcome": "not-applicable",
+      "coverage_percent": null,
+      "evidence": []
+    },
+    "validation_evidence": [
+      ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/acceptance-ledger.json",
+      ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/evidence/compose-test-summary.json",
+      ".dev/workflows/2026-09-12-nuget-and-consumer-parallel-examples/review-report.md"
+    ],
+    "commits": [
+      "81a2936506d461bcda04f74be1eb9d41d35a0a33",
+      "135456809b5bae75c2ae052a4533ec903e903216",
+      "3f2f93dcde8faede6704a0b44ce1a575ea729634",
+      "containing-commit"
+    ],
+    "follow_up_needed": false,
+    "finding_status": "addressed"
+  }
+}

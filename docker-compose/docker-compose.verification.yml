@@ -1,0 +1,19 @@
+services:
+  product-api:
+    environment:
+      Diagnostics__ParallelWork__Enabled: "true"
+
+  regression-tests:
+    profiles: [verification]
+    build:
+      context: ..
+      dockerfile: docker-compose/Dockerfile.tests
+    environment:
+      RUN_EXTERNAL_INTEGRATION_TESTS: "true"
+      PARALLEL_TEST_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      INVENTORY_TEST_POSTGRES_CONNECTION_STRING: Host=postgres-inventory;Port=5432;Database=inventory_db;Username=user;Password=password
+    volumes:
+      - ../artifacts/nuget-consumer/compose-tests:/results
+    depends_on:
+      - kafka
+      - postgres-inventory

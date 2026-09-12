@@ -1,0 +1,313 @@
+{
+  "Microsoft.Extensions.Configuration.Abstractions": {
+    "from": "10.0.7",
+    "to": "10.0.12",
+    "files": [
+      "src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj",
+      "src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj",
+      "src/Product/DomainCore/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj"
+    ]
+  },
+  "Microsoft.Extensions.DependencyInjection.Abstractions": {
+    "from": "10.0.7",
+    "to": "10.0.12",
+    "files": [
+      "src/Inventory/DomainCore/InventoryControl.Applications/InventoryControl.Applications.csproj",
+      "src/Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj",
+      "src/Product/DomainCore/SaleProducts.Applications/SaleProducts.Applications.csproj",
+      "src/Product/DomainCore/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj"
+    ]
+  },
+  "Microsoft.Extensions.Logging.Abstractions": {
+    "from": "10.0.7",
+    "to": "10.0.12",
+    "files": [
+      "src/Inventory/DomainCore/InventoryControl.Applications/InventoryControl.Applications.csproj",
+      "src/Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj"
+    ]
+  },
+  "Dapper": {
+    "from": "2.1.72",
+    "to": "2.1.79",
+    "files": [
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj",
+      "src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj",
+      "src/Product/DomainCore/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj"
+    ]
+  },
+  "Npgsql": {
+    "from": "10.0.2",
+    "to": "10.0.3",
+    "files": [
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj",
+      "src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj",
+      "src/Product/DomainCore/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj",
+      "tests/InventoryControl.Tests/InventoryControl.Tests.csproj"
+    ]
+  },
+  "WolverineFx": {
+    "from": "5.32.1",
+    "to": "6.36.0",
+    "files": [
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj",
+      "src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj",
+      "src/Product/DomainCore/SaleProducts.Applications/SaleProducts.Applications.csproj",
+      "tests/InventoryControl.Tests/InventoryControl.Tests.csproj",
+      "tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj",
+      "tests/SaleOrders.Tests/SaleOrders.Tests.csproj",
+      "tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj",
+      "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+    ]
+  },
+  "Confluent.Kafka.Extensions.OpenTelemetry": {
+    "from": "0.4.0",
+    "to": "0.4.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "RabbitMQ.Client.OpenTelemetry": {
+    "from": "1.0.0-rc.2",
+    "to": "1.0.0-rc.2",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "WolverineFx.Kafka": {
+    "from": "5.32.1",
+    "to": "6.36.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "WolverineFx.RabbitMQ": {
+    "from": "5.32.1",
+    "to": "6.36.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "OpenTelemetry.Extensions.Hosting": {
+    "from": "1.15.3",
+    "to": "1.18.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
+    "from": "1.15.3",
+    "to": "1.18.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "OpenTelemetry.Instrumentation.Http": {
+    "from": "1.15.1",
+    "to": "1.18.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "OpenTelemetry.Instrumentation.Runtime": {
+    "from": "1.15.1",
+    "to": "1.18.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "OpenTelemetry.Instrumentation.Process": {
+    "from": "1.15.1-beta.1",
+    "to": "1.18.0-rc.1",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "Microsoft.AspNetCore.OpenApi": {
+    "from": "10.0.7",
+    "to": "10.0.12",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "Microsoft.OpenApi": {
+    "from": "2.7.5",
+    "to": "2.12.2",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "Scalar.AspNetCore": {
+    "from": "2.14.3",
+    "to": "2.17.3",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "WolverineFx.Postgresql": {
+    "from": "5.32.1",
+    "to": "6.36.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj"
+    ]
+  },
+  "OpenTelemetry.Instrumentation.AspNetCore": {
+    "from": "1.15.2",
+    "to": "1.18.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ]
+  },
+  "Microsoft.Extensions.Http": {
+    "from": "10.0.7",
+    "to": "10.0.12",
+    "files": [
+      "src/Product/DomainCore/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj"
+    ]
+  },
+  "coverlet.collector": {
+    "from": "10.0.0",
+    "to": "10.0.1",
+    "files": [
+      "tests/InventoryControl.Tests/InventoryControl.Tests.csproj",
+      "tests/SaleOrders.Tests/SaleOrders.Tests.csproj",
+      "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+    ]
+  },
+  "Microsoft.NET.Test.Sdk": {
+    "from": "18.4.0",
+    "to": "18.10.0",
+    "files": [
+      "tests/InventoryControl.Tests/InventoryControl.Tests.csproj",
+      "tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj",
+      "tests/SaleOrders.Tests/SaleOrders.Tests.csproj",
+      "tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj",
+      "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+    ]
+  },
+  "NSubstitute": {
+    "from": "5.3.0",
+    "to": "6.2.0",
+    "files": [
+      "tests/InventoryControl.Tests/InventoryControl.Tests.csproj",
+      "tests/SaleOrders.Tests/SaleOrders.Tests.csproj"
+    ]
+  },
+  "Shouldly": {
+    "from": "4.3.0",
+    "to": "4.3.0",
+    "files": [
+      "tests/InventoryControl.Tests/InventoryControl.Tests.csproj",
+      "tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj",
+      "tests/SaleOrders.Tests/SaleOrders.Tests.csproj",
+      "tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj",
+      "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+    ]
+  },
+  "xunit.runner.visualstudio": {
+    "from": "3.1.5",
+    "to": "4.0.0",
+    "files": [
+      "tests/InventoryControl.Tests/InventoryControl.Tests.csproj",
+      "tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj",
+      "tests/SaleOrders.Tests/SaleOrders.Tests.csproj",
+      "tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj",
+      "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+    ]
+  },
+  "Microsoft.AspNetCore.Mvc.Testing": {
+    "from": "10.0.7",
+    "to": "10.0.12",
+    "files": [
+      "tests/SaleOrders.Tests/SaleOrders.Tests.csproj",
+      "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+    ]
+  },
+  "Moq": {
+    "from": "4.20.72",
+    "to": "4.20.72",
+    "files": [
+      "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+    ]
+  },
+  "xunit.v3.mtp-off": {
+    "from": "2.9.3",
+    "to": "4.0.0",
+    "files": [
+      "tests/InventoryControl.Tests/InventoryControl.Tests.csproj",
+      "tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj",
+      "tests/SaleOrders.Tests/SaleOrders.Tests.csproj",
+      "tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj",
+      "tests/SaleProducts.Tests/SaleProducts.Tests.csproj"
+    ],
+    "fromPackage": "xunit",
+    "note": "Replacement: xUnit v3 4.0.0 with the existing .NET 10 VSTest runner."
+  },
+  "WolverineFx.RuntimeCompilation": {
+    "from": null,
+    "to": "6.36.0",
+    "files": [
+      "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj",
+      "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj",
+      "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj",
+      "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj",
+      "src/Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj",
+      "src/Product/Presentation/SaleProducts.WebApi/SaleProducts.WebApi.csproj"
+    ],
+    "note": "New reference on all six hosts for Dynamic handler compilation."
+  }
+}

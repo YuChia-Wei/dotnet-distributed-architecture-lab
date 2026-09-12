@@ -1,0 +1,10 @@
+**/bin
+**/obj
+**/TestResults
+.git
+.ai
+.agents
+.claude
+.codex
+.dev
+artifacts
