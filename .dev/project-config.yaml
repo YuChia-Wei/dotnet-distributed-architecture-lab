@@ -181,6 +181,8 @@ messaging:
     - WolverineFx 6.36.0
     - WolverineFx.Kafka 6.36.0
     - WolverineFx.RabbitMQ 6.36.0
+    - WolverineFx.Postgresql 6.36.0
+    - WolverineFx.RuntimeCompilation 6.36.0
   topologyDocuments:
     - .dev/operations/event-catalog.md
     - .dev/operations/mq-topology.md

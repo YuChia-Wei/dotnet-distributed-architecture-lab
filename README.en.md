@@ -28,7 +28,7 @@ See [Task.WhenAll / two external-event handlers](.dev/operations/consumer-parall
 - Kafka (the canonical broker; enabled in Docker Compose, with producer-selected partition keys used to verify per-business-entity ordering)
 - RabbitMQ (a deferred compatibility profile; its Compose service is commented out, current shared queues are not broadcast topology, and migration or dual deployment requires a separate evaluation)
 - PostgreSQL `16.15-alpine`, Dapper `2.1.79`, and Npgsql `10.0.3`
-- xUnit `2.9.3`, Moq, and Shouldly
+- xUnit v3 `4.0.0` (`xunit.v3.mtp-off` / VSTest), Moq, and Shouldly
 - OpenTelemetry Collector Contrib `0.159.0`, Prometheus `3.14.0`, Tempo `2.10.7`, Loki `3.7.7`, and Grafana `13.2.1`
 
 For exact versions and evidence paths, see [.dev/project-config.yaml](.dev/project-config.yaml) and [.dev/requirement/TECH-STACK-REQUIREMENTS.MD](.dev/requirement/TECH-STACK-REQUIREMENTS.MD).

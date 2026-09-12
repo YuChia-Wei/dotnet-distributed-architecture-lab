@@ -28,7 +28,7 @@ Repository 同時維護一套可重用的 AI collaboration context；產品真�
 - Kafka（canonical broker；目前 Docker Compose 啟用，並以 producer-selected partition key 驗證同一業務實體的順序消費）
 - RabbitMQ（deferred compatibility profile；Compose service 預設註解，目前共享 queue 不是廣播拓撲，是否轉換或同步部署需另行評估）
 - PostgreSQL `16.15-alpine`、Dapper `2.1.79`、Npgsql `10.0.3`
-- xUnit `2.9.3`、Moq、Shouldly
+- xUnit v3 `4.0.0` (`xunit.v3.mtp-off` / VSTest)、Moq/NSubstitute、Shouldly
 - OpenTelemetry Collector Contrib `0.159.0`、Prometheus `3.14.0`、Tempo `2.10.7`、Loki `3.7.7`、Grafana `13.2.1`
 
 精確版本與證據路徑見 [.dev/project-config.yaml](.dev/project-config.yaml) 與 [.dev/requirement/TECH-STACK-REQUIREMENTS.MD](.dev/requirement/TECH-STACK-REQUIREMENTS.MD)。

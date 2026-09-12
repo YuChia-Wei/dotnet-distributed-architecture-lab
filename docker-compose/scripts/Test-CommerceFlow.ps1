@@ -28,12 +28,12 @@ $remaining = Invoke-RestMethod "$BaseUri/api/inventory/product/$productId"
 Assert-Value $remaining.availableQuantity 8 'Kafka reservation result'
 $readOrder = Invoke-RestMethod "$BaseUri/api/orders/$orderId"
 Assert-Value $readOrder.orderId $orderId 'Order readback'
-$null = Send-Json Patch "/api/orders/$orderId/ship" @{ reason='Compose regression shipment' }
-$null = Send-Json Patch "/api/orders/$orderId/deliver" @{ reason='Compose regression delivery' }
+Send-Json Patch "/api/orders/$orderId/ship" @{ reason='Compose regression shipment' } | Out-Null
+Send-Json Patch "/api/orders/$orderId/deliver" @{ reason='Compose regression delivery' } | Out-Null
 $cancelRequest = @{ operationId=[Guid]::NewGuid().ToString(); orderDate=[DateTimeOffset]::UtcNow.ToString('o'); totalAmount=20; productId=$productId; productName=$name; quantity=1 }
 $cancelOrder = Send-Json Post '/api/orders' $cancelRequest
 Assert-Value $cancelOrder.isSuccess $true 'Cancellable order placement'
-$null = Send-Json Patch "/api/orders/$($cancelOrder.value.orderId)/cancel" @{ reason='Compose regression cancellation' }
+Send-Json Patch "/api/orders/$($cancelOrder.value.orderId)/cancel" @{ reason='Compose regression cancellation' } | Out-Null
 $beforeRejected = Invoke-RestMethod "$BaseUri/api/inventory/product/$productId"
 $rejectedOperationId = [Guid]::NewGuid().ToString()
 $rejectedRequest = @{ operationId=$rejectedOperationId; orderDate=[DateTimeOffset]::UtcNow.ToString('o'); totalAmount=2000; productId=$productId; productName=$name; quantity=100 }
@@ -43,6 +43,6 @@ if ($rejected.Content -notmatch 'Inventory is not enough') { throw "Unexpected r
 $afterRejected = Invoke-RestMethod "$BaseUri/api/inventory/product/$productId"
 Assert-Value $afterRejected.availableQuantity $beforeRejected.availableQuantity 'Rejected order preserves stock'
 $resolvedOutput = Join-Path $repoRoot $OutputPath
-$null = New-Item -ItemType Directory -Force (Split-Path $resolvedOutput)
+New-Item -ItemType Directory -Force (Split-Path $resolvedOutput) | Out-Null
 [ordered]@{ observedAt=[DateTimeOffset]::UtcNow.ToString('o'); outcome='passed'; productId=$productId; operationId=$operationId; deliveredOrderId=$orderId; cancelledOrderId=$cancelOrder.value.orderId; rejectedOperationId=$rejectedOperationId; stockAfterReservation=8; stockAfterRejection=$afterRejected.availableQuantity; checks=@('Product create/read','Inventory seed/read','Kafka stock reservation','Order read','Ship and deliver','Cancel','Insufficient stock rejection') } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $resolvedOutput -Encoding utf8
 Write-Output "Compose commerce E2E passed: $resolvedOutput"

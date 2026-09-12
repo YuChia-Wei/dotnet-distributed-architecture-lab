@@ -7,9 +7,14 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $composeFiles = @('-p', $ProjectName, '-f', "$repoRoot/docker-compose/docker-compose.yml", '-f', "$repoRoot/docker-compose/docker-compose.override.yml", '-f', "$repoRoot/docker-compose/docker-compose.verification.yml")
 $results = @()
+foreach ($invalidPath in @('Unsupported', 'WhenAll?probeId=00000000-0000-0000-0000-000000000000')) {
+    $invalid = Invoke-WebRequest -Method Post -Uri "$BaseUri/api/products/diagnostics/parallel-work/$invalidPath" -SkipHttpErrorCheck -TimeoutSec 20
+    if ([int]$invalid.StatusCode -ne 400) { throw 'Invalid diagnostics input was not rejected.' }
+}
 foreach ($mode in @('WhenAll', 'IndependentHandlers')) {
     $startedAt = [DateTimeOffset]::UtcNow.ToString('o')
-    $response = Invoke-RestMethod -Method Post -Uri "$BaseUri/api/products/diagnostics/parallel-work/$mode" -TimeoutSec 20
+    $response = Invoke-RestMethod -Method Post -Uri "$BaseUri/api/products/diagnostics/parallel-work/$mode" -StatusCodeVariable publicationStatus -TimeoutSec 20
+    if ($publicationStatus -ne 202 -or $response.topic -ne 'products.integration.events' -or $response.consumer -ne 'orders-consumer') { throw 'Unexpected publication response.' }
     $probeId = $response.probeId
     if (!$probeId) { throw 'Publication did not return a probe identifier.' }
     $deadline = [DateTimeOffset]::UtcNow.AddSeconds(30)
@@ -28,7 +33,7 @@ foreach ($mode in @('WhenAll', 'IndependentHandlers')) {
     $firstCompletion = [Array]::IndexOf($logs, $completed[0])
     if ([Array]::IndexOf($logs, $starts[0]) -ge $firstCompletion -or [Array]::IndexOf($logs, $starts[1]) -ge $firstCompletion) { throw "$mode did not overlap." }
     $replayStart = [DateTimeOffset]::UtcNow.ToString('o')
-    $null = Invoke-RestMethod -Method Post -Uri "$BaseUri/api/products/diagnostics/parallel-work/$mode`?probeId=$probeId" -TimeoutSec 20
+    Invoke-RestMethod -Method Post -Uri "$BaseUri/api/products/diagnostics/parallel-work/$mode`?probeId=$probeId" -TimeoutSec 20 | Out-Null
     $deadline = [DateTimeOffset]::UtcNow.AddSeconds(30)
     do {
         $replay = @(& docker compose @composeFiles logs --no-color --since $replayStart orders-consumer 2>&1 | ForEach-Object { "$_" } | Where-Object { $_.Contains($probeId) -and $_ -match 'completed.*applied=False' })
@@ -40,6 +45,6 @@ foreach ($mode in @('WhenAll', 'IndependentHandlers')) {
     $results += [ordered]@{ mode = $mode; probeId = $probeId; topic = $response.topic; consumer = $response.consumer; scopeIds = $scopeIds; overlap = $true; replayDeduplicated = $true; execution = $logs; replay = $replay }
 }
 $resolvedOutput = Join-Path $repoRoot $OutputPath
-$null = New-Item -ItemType Directory -Force (Split-Path $resolvedOutput)
+New-Item -ItemType Directory -Force (Split-Path $resolvedOutput) | Out-Null
 [ordered]@{ project = $ProjectName; observedAt = [DateTimeOffset]::UtcNow.ToString('o'); outcome = 'passed'; results = $results } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $resolvedOutput -Encoding utf8
 Write-Output "Compose parallel E2E passed: $resolvedOutput"
