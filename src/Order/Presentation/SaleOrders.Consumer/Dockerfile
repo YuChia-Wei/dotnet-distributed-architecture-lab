@@ -6,6 +6,13 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj", "Order/Presentation/SaleOrders.Consumer/"]
+COPY ["Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj", "Order/DomainCore/SaleOrders.Applications/"]
+COPY ["Order/DomainCore/SaleOrders.Domains/SaleOrders.Domains.csproj", "Order/DomainCore/SaleOrders.Domains/"]
+COPY ["BuildingBlocks/Lab.BuildingBlocks.Application/Lab.BuildingBlocks.Application.csproj", "BuildingBlocks/Lab.BuildingBlocks.Application/"]
+COPY ["BuildingBlocks/Lab.BuildingBlocks.Domains/Lab.BuildingBlocks.Domains.csproj", "BuildingBlocks/Lab.BuildingBlocks.Domains/"]
+COPY ["BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
+COPY ["BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj", "BC-Contracts/Lab.BoundedContextContracts.Orders/"]
+COPY ["BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj", "BC-Contracts/Lab.BoundedContextContracts.Inventory/"]
 RUN dotnet restore "Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj"
 COPY . .
 WORKDIR "Order/Presentation/SaleOrders.Consumer"

@@ -70,6 +70,8 @@ builder.Services.AddOpenApi();
 
 // domain core DI
 builder.Services.AddApplicationServices();
+builder.Services.AddSingleton(new ParallelWorkProbeOptions(
+    builder.Configuration.GetValue<bool>(ParallelWorkProbeOptions.EnabledConfigurationKey)));
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddSingleton(new ConsumerExceptionPolicyProbeOptions(
     builder.Configuration.GetValue<bool>(ConsumerExceptionPolicyProbeOptions.EnabledConfigurationKey)));

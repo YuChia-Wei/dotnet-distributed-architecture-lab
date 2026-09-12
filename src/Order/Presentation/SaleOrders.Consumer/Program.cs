@@ -9,6 +9,7 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using SaleOrders.Consumer.Messaging;
+using SaleOrders.Consumer.Diagnostics;
 using Wolverine;
 using Wolverine.Kafka;
 using Wolverine.RabbitMQ;
@@ -22,6 +23,7 @@ var messaging = MessagingTransportOptions.FromConfiguration(configuration);
 var builder = Host.CreateDefaultBuilder(args)
                   .ConfigureServices((ctx, services) =>
                   {
+                      services.AddParallelWorkExamples();
                       services.AddOpenTelemetry()
                               .WithLogging(loggerProviderBuilder =>
                               {
@@ -58,6 +60,7 @@ var builder = Host.CreateDefaultBuilder(args)
                   .UseWolverine(opts =>
                   {
                       ConsumerFailurePolicy.Configure(opts);
+                      opts.ConfigureParallelWorkExamples();
 
                       if (messaging.Profile == MessagingTransportProfile.InMemory)
                       {

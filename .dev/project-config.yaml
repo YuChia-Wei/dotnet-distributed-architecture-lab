@@ -164,8 +164,8 @@ persistence:
   providers:
     - PostgreSQL 16
   libraries:
-    - Dapper 2.1.72
-    - Npgsql 10.0.2
+    - Dapper 2.1.79
+    - Npgsql 10.0.3
   connectionStringSources:
     - docker-compose/docker-compose.yml
     - src/Product/Presentation/SaleProducts.WebApi/appsettings.json
@@ -178,9 +178,9 @@ messaging:
     - name: RabbitMQ
       status: partial-disabled-compose-profile
   libraries:
-    - WolverineFx 5.32.1
-    - WolverineFx.Kafka 5.32.1
-    - WolverineFx.RabbitMQ 5.32.1
+    - WolverineFx 6.36.0
+    - WolverineFx.Kafka 6.36.0
+    - WolverineFx.RabbitMQ 6.36.0
   topologyDocuments:
     - .dev/operations/event-catalog.md
     - .dev/operations/mq-topology.md
@@ -195,7 +195,7 @@ technologySelections:
       - tests/InventoryControl.Tests/InventoryControl.Tests.csproj
     reason: Existing bounded-context test projects use different established mocking libraries.
   - slot: testing.bdd-runner
-    value: plain xUnit with Given-When-Then semantics
+    value: plain xUnit v3 with Given-When-Then semantics (VSTest, xunit.v3.mtp-off)
     status: selected
     source: explicit-target-decision
     evidence:

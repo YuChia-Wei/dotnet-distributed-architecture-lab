@@ -18,14 +18,16 @@ Repository 同時維護一套可重用的 AI collaboration context；產品真�
 
 跨 context contracts 位於 `src/BC-Contracts/`。Orders 與 Inventory 的庫存預留流程透過 Wolverine request/reply 與 MQ channels 協作；integration events 透過各 context 擁有的 topic/queue 發布。
 
+[Consumer 並行範例](.dev/operations/consumer-parallel-examples.md) 說明 Task.WhenAll、同一外部事件觸發兩個獨立 handler，以及既有 Compose 的回歸與 E2E 指令。
+
 ## 技術棧
 
 - .NET SDK `10.0.302`（`global.json` 允許 `latestMajor` roll-forward）、主要 target framework `net10.0`
 - ASP.NET Core Web API、Scalar OpenAPI UI
-- WolverineFx `5.32.1`
+- WolverineFx `6.36.0`
 - Kafka（canonical broker；目前 Docker Compose 啟用，並以 producer-selected partition key 驗證同一業務實體的順序消費）
 - RabbitMQ（deferred compatibility profile；Compose service 預設註解，目前共享 queue 不是廣播拓撲，是否轉換或同步部署需另行評估）
-- PostgreSQL `16.15-alpine`、Dapper `2.1.72`、Npgsql `10.0.2`
+- PostgreSQL `16.15-alpine`、Dapper `2.1.79`、Npgsql `10.0.3`
 - xUnit `2.9.3`、Moq、Shouldly
 - OpenTelemetry Collector Contrib `0.159.0`、Prometheus `3.14.0`、Tempo `2.10.7`、Loki `3.7.7`、Grafana `13.2.1`
 
@@ -94,7 +96,7 @@ options.Durability.NodeAssignmentHealthCheckTraceSamplingPeriod = TimeSpan.FromM
 // options.Durability.NodeAssignmentHealthCheckTracingEnabled = false;
 ```
 
-這兩個設定 API 自 WolverineFx `5.9.0` 起提供，適用於本專案的 `5.32.1`，並仍存在於 Wolverine `6.x`。若使用 `DurabilityMode.Solo`，Wolverine `5.39.5` 與 `6.19.0` 曾有取樣週期無法抑制 recurring trace 的已知問題；本 Compose 使用預設的 Balanced mode，不受該 Solo-mode 問題影響。
+這兩個設定 API 自 WolverineFx `5.9.0` 起提供，適用於本專案的 `6.36.0`，並仍存在於 Wolverine `6.x`。若使用 `DurabilityMode.Solo`，Wolverine `5.39.5` 與 `6.19.0` 曾有取樣週期無法抑制 recurring trace 的已知問題；本 Compose 使用預設的 Balanced mode，不受該 Solo-mode 問題影響。
 
 ### 驗證 Wolverine Consumer 例外處理
 

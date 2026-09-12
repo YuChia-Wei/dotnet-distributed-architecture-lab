@@ -1,0 +1,70 @@
+schema_version: '1.0'
+packet_id: PACKET-428ED7672C907E2255712D506CE3FC57DA2E1275B84D74061BF0A97D5290B8AC
+request:
+  route_id: ROUTE-E3B4869DC90073EEDA02B8105FB8EE99866C4CF93C5E3FC852258480BEDE8566
+  capability: implementation
+  execution_mode: reactor
+  technology_profile: dotnet-backend
+  file_type: csharp-production
+baseline:
+  framework_version: v0.16.0
+  framework_commit: 4d1a5c7d039618f007784679d9968c357347272b
+  selected_technology_profile: dotnet-backend
+target_state:
+  path: .dev/ai-context/effective-rules.yaml
+  digest: 355bdea6321744b6e6bb74e870b6e72d7730632850359d8455ddd14c0244629f
+loaded_rule_ids:
+- AGGREGATE-ES-001
+- AICTX-EVIDENCE-001
+- ARCH-UOW-001
+- ASSESSMENT-ARTIFACT-001
+- CONTRACT-SEMANTICS-001
+- DELETE-PURGE-001
+- DELETE-SOFT-001
+- MAP-EVENTS-001
+- PROJECT-GRAMMAR-001
+- TECH-SELECT-001
+- TEST-BDDFY-001
+- TEST-GWT-001
+- TEST-MOCK-001
+freshness:
+  status: verified
+  verified_inputs:
+    target_state_digest: 355bdea6321744b6e6bb74e870b6e72d7730632850359d8455ddd14c0244629f
+    catalog_digests:
+    - catalog_id: selected-profile
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      digest: acb85d42090f446b290bf01a79752b79ebe203919d301202984831bf4d81a9cb
+    - catalog_id: shared
+      path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
+      digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
+packet_digest: 841c8a751f5f37de01d0ece7a7d08735cc52014e624ed78b7bcede71d876afb5
+rules:
+- rule_id: AGGREGATE-ES-001
+  normative_statement_digest: 262144bbec5431033e252c4c128025a5563f13f2d6c5610e86d51f7c19b4e4a3
+- rule_id: AICTX-EVIDENCE-001
+  normative_statement_digest: 659101967c605eb6e1216fa5e49767ebc8fc7ef534af293310c708c4f09980b4
+- rule_id: ARCH-UOW-001
+  normative_statement_digest: 05eb3e1e98a560e35e0ecee16d77514544445467263cd169633a798cf7ef8be1
+- rule_id: ASSESSMENT-ARTIFACT-001
+  normative_statement_digest: cb7c812fb432bc3ccf3058ed7cba810373da5ebee1834a7f878d6a08a1a81d86
+- rule_id: CONTRACT-SEMANTICS-001
+  normative_statement_digest: 45292a7bbc1fc9e6d4e845aa660681efda68e0e2394cecf1c6c2c76ebf3814f7
+- rule_id: DELETE-PURGE-001
+  normative_statement_digest: 7d8e43950811aa96c6cfc12f811deb9c8d13739989d4611176e5d0e4754c165e
+- rule_id: DELETE-SOFT-001
+  normative_statement_digest: 5e5370bef9fae1d46a6df8518ab380422368a25d7bb0ca00affc1af3f726cfa7
+- rule_id: MAP-EVENTS-001
+  normative_statement_digest: 1a3c010a5f2e863bcf60c7ddc333a23c7d96705e8c758bb4a89fa9cae111c01c
+- rule_id: PROJECT-GRAMMAR-001
+  normative_statement_digest: 128cc7e3a4315baa4ac69fbc944e11297eaaedef745de742350ebe522130f69c
+- rule_id: TECH-SELECT-001
+  normative_statement_digest: efc4cbc1e80c87926adf01295b444eec42895db9f2b0789ef18c6a9a7c2964c0
+- rule_id: TEST-BDDFY-001
+  normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+- rule_id: TEST-GWT-001
+  normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+- rule_id: TEST-MOCK-001
+  normative_statement_digest: 8ff4679c135e2de0f7a370317da2da76ee4a5bf7ca6ef076dc85d0aaeed23503
+note: Resolver output consumed before implementation; canonical rule statements remain
+  owned by the target effective packets.
