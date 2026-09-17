@@ -20,3 +20,11 @@ dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --filter 
 The target database must already contain `InventoryItems`, `InventoryReservationOperations`, and `InventoryIntegrationOutbox`; apply both Inventory migrations documented in `.dev/operations/mq-topology.md` for an existing volume. The opted-in profile covers reservation concurrency plus ordinary stock/outbox atomic commit and expected-stock concurrency. Without the opt-in, all such tests are reported as skipped and remain non-passing external evidence.
 
 Without both environment variables, the external test is skipped. A skipped external test is not passing evidence for PostgreSQL locking, reservation/outbox atomicity, or rollback behavior; release or reconstruction gates that require this evidence remain open until an opted-in run passes.
+
+The separate [EF Core + Wolverine sample](../samples/EfCoreWolverine/README.md) uses
+`EF_SAMPLE_POSTGRES`, `EF_SAMPLE_KAFKA`, and the same
+`RUN_EXTERNAL_INTEGRATION_TESTS=true` opt-in. Its tests exercise real Kafka delivery,
+EF/Wolverine transaction enrollment, rollback after SQL flush, inbox redelivery
+deduplication, and PostgreSQL optimistic concurrency. Use the sample's dedicated
+Compose database; the fixture owns only its seeded rows, unique message schema,
+topics and consumer groups.

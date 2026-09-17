@@ -20,6 +20,8 @@ Cross-context contracts are located under `src/BC-Contracts/`. The inventory res
 
 See [Task.WhenAll / two external-event handlers](.dev/operations/consumer-parallel-examples.md) (Consumer parallel examples); includes the existing Compose regression and E2E commands.
 
+The [EF Core + Wolverine transaction sample](samples/EfCoreWolverine/README.md) demonstrates an aggregate repository, use case, native inbox/outbox, and shared transaction, with dedicated PostgreSQL/Kafka setup and run commands.
+
 ## Technology Stack
 
 - .NET SDK `10.0.302` (`global.json` permits `latestMajor` roll-forward), with `net10.0` as the primary target framework

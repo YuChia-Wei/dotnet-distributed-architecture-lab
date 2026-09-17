@@ -30,6 +30,7 @@
 
 - Write-side repositories use parameterized Dapper/Npgsql access.
 - Query repositories currently use Dapper/Npgsql in product source; EF Core is not a product runtime dependency.
+- `samples/EfCoreWolverine/` is an owner-requested parallel example using EF Core `10.0.12`, Npgsql EF provider `10.0.3`, and Wolverine EF integration `6.36.0`; this selection is scoped to the sample and does not migrate product repositories.
 - The Orders event-sourcing repository is a context-specific capability and must not be assumed for Product or Inventory.
 - Orders and every Inventory event-producing stock command write state plus source-outbox intent in one local transaction. Inventory declares this through capability-specific outbox ports; generic Unit of Work and transaction lifecycle types remain private Infrastructure details, and the relay is a separate adapter.
 - Other Inventory stock commands still persist then publish directly; do not generalize the reservation implementation until a separate slice adopts and tests it.

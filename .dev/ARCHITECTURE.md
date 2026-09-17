@@ -65,6 +65,14 @@ Current use cases include product create/update/delete/query, order place/ship/d
 - Source-outbox relays are Infrastructure adapters: they do not decide event meaning. They publish the producer-created contract with stable delivery metadata and bounded retry/park behavior.
 - Product source projects do not currently reference EF Core; the retired target validation tooling is no longer part of the active repository.
 
+`samples/EfCoreWolverine/` is an isolated EF Core + Wolverine example that reuses
+`InventoryItem` and the aggregate repository port. Its Application, Infrastructure,
+and Host projects demonstrate an Eager transaction around a thin Kafka Handler and
+Use Case. The scoped EF repository and outgoing publisher participate in Wolverine's
+native inbox/outbox transaction; the repository does not commit. PostgreSQL `xmin`
+provides concurrency control. This sample has its own schemas/topics and does not
+replace the product Dapper adapters. See its README for setup and validation limits.
+
 ## Messaging And Integration
 
 - WolverineFx is the messaging abstraction used by APIs and consumers.
@@ -88,7 +96,7 @@ The repository defines six product hosts:
 
 ## Tests And Validation Boundary
 
-- `MQArchLab.slnx` includes five xUnit test projects for Products, Orders, and Inventory.
+- `MQArchLab.slnx` includes five product xUnit test projects and one EF Core/Wolverine sample test project.
 - `InventoryControl.Tests` owns Inventory command/reservation tests. Its real PostgreSQL checks are explicitly opt-in and skipped during ordinary test runs.
 - The target-owned analyzer and runtime-validation projects were retired by the owner-approved v0.9 AI-context upgrade and are absent from the repository and solution.
 - v0.13 removed the former bundled mechanical-validation provider. The remaining `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/` assets are reference-only recipes; they are not selected, activated, or wired into the target solution or build.

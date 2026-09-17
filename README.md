@@ -20,6 +20,8 @@ Repository 同時維護一套可重用的 AI collaboration context；產品真�
 
 [Consumer 並行範例](.dev/operations/consumer-parallel-examples.md) 說明 Task.WhenAll、同一外部事件觸發兩個獨立 handler，以及既有 Compose 的回歸與 E2E 指令。
 
+[EF Core + Wolverine 交易範例](samples/EfCoreWolverine/README.md) 示範 Aggregate Repository、Use Case、原生 inbox／outbox 與共同交易，附獨立 PostgreSQL／Kafka 環境及操作指令。
+
 ## 技術棧
 
 - .NET SDK `10.0.302`（`global.json` 允許 `latestMajor` roll-forward）、主要 target framework `net10.0`
@@ -44,6 +46,7 @@ src/
   Order/              Orders bounded context
   Inventory/          Inventory bounded context
 tests/                 產品與 domain tests
+samples/               可獨立執行的技術整合範例
 docker-compose/        本機服務與 observability topology
 sql-script/            PostgreSQL 初始化腳本
 .dev/                  專案知識、requirements、specs、operations 與 workflows
