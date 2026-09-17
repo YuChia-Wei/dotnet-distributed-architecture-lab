@@ -254,7 +254,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-abqhkw5zpxg6.yaml
-    digest: 7bcd8324d7dcf00c77e7c6d5a04d902df0555db02a35991bdee54a1a669386a4
+    digest: bb72abb7a965520c747aff3f8f11e0380f5d3330a49aefbaf05d1a2ec3160d9a
 - route_id: ROUTE-0CB791EB64099FC942CC9EF435809DB1E757848F558735D7D1417D83E22CAD3A
   selector:
     capability: specification
@@ -278,7 +278,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-bs3zd23ebgp4.yaml
-    digest: 7e297cc4b75a0eea605f34aa84ca01099b74237113d0b88ed22598a5f7e6de80
+    digest: cf8db203c872af704517710166a4c1654f39b4231d583115c91a0f91f2e16012
 - route_id: ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C
   selector:
     capability: local-change
@@ -302,7 +302,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-d7nezibej3hx.yaml
-    digest: d072256c5f83f8d6a885a1e2fed85245093046596fa97f9a53082566eaba435f
+    digest: 8160bd512f679cd04e2e092a1078652984afa2b21dc23d614744d316a49da822
 - route_id: ROUTE-3EE85C82323D6A52F24B406E8F1271F5ED88DDE38EAC1044F0BF971061FFE0C4
   selector:
     capability: implementation
@@ -326,7 +326,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-h3ufzarshvvf.yaml
-    digest: 59345281cb1c2fb0302f5fd20995d5f0a8bced7084ce114e812b29e1aa3b1811
+    digest: bc32c5bc21e8b02f24111f3961d6a6be896bd4adac22412ed50e9dd01ea65bcc
 - route_id: ROUTE-44441057FC3C725F5861E2149944CFB7EFDD0C5F890831C4208291A5B2371222
   selector:
     capability: review
@@ -350,7 +350,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-ircbav74hrzf.yaml
-    digest: 91df4f398c18a7e504ced273b4f5954375a7b91fcdad98598429e2365a567e92
+    digest: e22b7bbf4427949dcee4e15106708a882af3be09302bf0c478678bb06be88ab0
 - route_id: ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7
   selector:
     capability: local-change
@@ -374,7 +374,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-kecjn7mge6bb.yaml
-    digest: 7df487b1113a6f51bcee037e2c91b643a6774dcce595035d183703a9a0781338
+    digest: b542ba2fdd35f733c6a58665f4121d436aa4ac7611808cd7df205cd42eec1622
 - route_id: ROUTE-5376A2F088F0C2FB915830EEC987D1391E96AFDDE1208E4E68B362FE4D3A612E
   selector:
     capability: problem-framing
@@ -398,7 +398,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-kn3kf4ei6dbp.yaml
-    digest: df4c53786a0468652bd8b312e3cd5da11c1594afa50453a018fc09849fde7b7a
+    digest: b9f8c1cd5ef5ddfb5ed9211f48a14fd44fbd7b85deeef009252a8df165d1bfbc
 - route_id: ROUTE-595016B570726DB08342680D2195648944D898511253100E88AEA1B9E66957D5
   selector:
     capability: test-design
@@ -422,7 +422,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-lfibnnlqojw3.yaml
-    digest: 6dd8728b2fb7d7a31f8074dd459ffc304d56f589e52ffdcd99484255c2b33b4b
+    digest: 50f796870ff6e88fe86365f9d3a04d53d2e1783dba68de44ca9a8e9f3204d3bb
 - route_id: ROUTE-5FD9FBA84BFD386D5D5F3C8AC8B16EF6332DEA1D48EC5DBF6AA6B096D0828604
   selector:
     capability: review
@@ -446,7 +446,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-l7m7xkcl7u4g.yaml
-    digest: 650eb156a35d913876d0730f063dc442817d1ea202b09854d5df77275f01eaeb
+    digest: 8ff1d73ba8195f49ca7fd64cf8c26435a5fc894660c026ab70d940870f23d27e
 - route_id: ROUTE-6793F2C32C4BF62763380BCF5CD83D284C40AB2401A5BB42904823E7F28BE96C
   selector:
     capability: architecture
@@ -470,7 +470,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-m6j7fqzmjp3c.yaml
-    digest: f7d58540da1ac39ab8dfadd7d1e16e0ee049c33576abc233e533956d4b33a995
+    digest: aac7be47235c9a795a0dc1699e867c5111476dd97f5d2646846cc86dd9a371ec
 - route_id: ROUTE-69320ED2F30633AA22DD3E91C72210D14A955614F1B4269844ED8EAC0274491C
   selector:
     capability: local-change
@@ -494,7 +494,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-neza5uxtayz2.yaml
-    digest: 9a0c90180dfcab0f24392d50f08298ae786e438b7fd8970821487e98815b9a99
+    digest: 215f2fc6018e8bdb6ed7f0d4ae3be8d6874f0be9aaae843cf1b087dc7a53dc54
 - route_id: ROUTE-7C1C8C42DEAF9D889A157FA97FA2E5390CDCD0FD5509103DA4DA1A65CB2A85BE
   selector:
     capability: requirements
@@ -518,7 +518,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-pqoiyqw6v6oy.yaml
-    digest: 3b6217392c6c0e5c9ab08793f40b6ef730017add86a87c6bbfae5c92338d01c0
+    digest: dc31760fdf8a728306a92f82173c5f92b380a56d243826e398da65610c4e9fcb
 - route_id: ROUTE-8691EB94D951D12620A830D430E1934E0E228CE6B1342F65673ADBD57C484333
   selector:
     capability: test-design
@@ -542,7 +542,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-q2i6xfgzkhis.yaml
-    digest: 1e212f66994f82ebaf53c3ad3aececd83ba1dcdf6b8719a19ea263b5a9f3de8e
+    digest: f9a76a86e9b787b21f25442c576b08d8fe518b720abaf5a4b8b2ccbc24b1ae36
 - route_id: ROUTE-86B49603D837372BA200420228174C1CF61333171CE8D96FCFF63ABD07BB796D
   selector:
     capability: compliance-validation
@@ -566,7 +566,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-q22jma6yg43s.yaml
-    digest: 67686d96b2da49e9102ae6c69edd05e239c301c8a5d3ee6485b96394d2fc028f
+    digest: eb53d9761b002a8e7c85102bd722abce0a325e9e53a347cf3e09fa1d70a3b50a
 - route_id: ROUTE-88F8297799ABD7C258348FA6072DFE56306800798EACEB7529FAC1509F304A15
   selector:
     capability: local-change
@@ -590,7 +590,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-rd4cs54zvpl4.yaml
-    digest: 69c48537550e89b4dbb738aced8bfdadac3b0a2ae20fe791ac7fda885ea6faba
+    digest: db3bec513afd04560b44d2427851a81f62f5123b90e16b3086049b0970e7e680
 - route_id: ROUTE-93389630E2EAEBD1C926310D5932AA0DB31893A1FC0108457AE8E9B63B44E356
   selector:
     capability: local-change
@@ -614,7 +614,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-sm4jmmhc5lv5.yaml
-    digest: f65fcabbdb14bcf8650c07b71010a06bb52c1215c4a673d83a66bdab798e4f26
+    digest: 213b855ff55b9500afaf6fb1efedfaa17991c6a5b49eafe40b93281bb217bfb1
 - route_id: ROUTE-DF0E762322A527898C635F453332C4FD4607EFC0A01AE6AFFA49D799E70BAB18
   selector:
     capability: implementation
@@ -638,7 +638,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-34hhmizcuuty.yaml
-    digest: f7fa0f1f236cf47ed6d4f8e84f740ae588bce5f3c6eaa589e7a2097045a57e44
+    digest: cdd794b96412a9e6822e552b4682f8f473ea4e6b0f61d85a35750a5c1c706ea9
 - route_id: ROUTE-E3B4869DC90073EEDA02B8105FB8EE99866C4CF93C5E3FC852258480BEDE8566
   selector:
     capability: implementation
@@ -662,7 +662,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-4o2inhojabz6.yaml
-    digest: 4a577802520b9e30ec6a3de3ed08e0e8e9e8a19f8b78d143903e8a8e4947a456
+    digest: 67f55253a2cab77279ba3c399ead8368fb16d10146e492764e260fbe2b8429b8
 - route_id: ROUTE-EFD78BECD2CAFD2890638E78C79E0ABCA47CB5E0C70EC9B3D602EC12FF762AFE
   selector:
     capability: implementation
@@ -686,7 +686,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-57lyx3gszl6s.yaml
-    digest: 095745b7540ef6f4a54adc716fda64f79fa1d0d32219c0ce5d177d8a1cfa3ad5
+    digest: 5e7375b6bc4f87da4cc9dc9ae2e01e1755b356284dd37d1560a3e55d3a7324e9
 - route_id: ROUTE-FAD108B11C0B4A274C0B640D117F2D7EE22FA006DDA09A442DD9BF0E2DC6C0EF
   selector:
     capability: specification
@@ -710,5 +710,5 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-7liqrmi4bnfc.yaml
-    digest: cea2172a64ec053a4700ea760f9c0692daf76d9bf983db0251dfab28b362da0e
+    digest: 953052bba5dc01b817498e9276c15f2015013a2ad77900f42bbbac6eb0b102c2
 target_state_digest: 57a3f551589bd293fb8e2c4b77b93b570b6c48ac464a01038983f2ccbc6b1fd7

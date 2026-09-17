@@ -5,6 +5,8 @@ resolver:
   evidence:
   - .dev/ai-context/local/v018-trial-evidence/reconciliation.md
   - .dev/ai-context/local/v018-trial-evidence/report-03.md
+  - AGENTS.md
+  - AGENTS.zh-TW.md
 request:
   route_id: ROUTE-93389630E2EAEBD1C926310D5932AA0DB31893A1FC0108457AE8E9B63B44E356
   capability: local-change
@@ -736,4 +738,4 @@ freshness:
     - catalog_id: shared
       path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
       digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
-packet_digest: f65fcabbdb14bcf8650c07b71010a06bb52c1215c4a673d83a66bdab798e4f26
+packet_digest: 213b855ff55b9500afaf6fb1efedfaa17991c6a5b49eafe40b93281bb217bfb1
