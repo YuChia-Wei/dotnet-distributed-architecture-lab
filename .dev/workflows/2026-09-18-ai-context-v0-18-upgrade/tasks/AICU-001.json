@@ -1,0 +1,45 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.1.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-27T09:52:09+08:00",
+  "task_id": "AICU-001",
+  "workflow_id": "2026-09-18-ai-context-v0-18-upgrade",
+  "owner_skill": "ai-context-governance",
+  "status": "in_progress",
+  "created_at": "2026-09-18T06:21:54+08:00",
+  "updated_at": "2026-09-18T06:21:54+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "ultra",
+  "finding_ids": [],
+  "scope": {
+    "target": "Preserve target truth while preparing and validating the v0.18.0 framework upgrade",
+    "files": [],
+    "constraints": [
+      "Original sample branch and checkout remain unchanged.",
+      "Draft state is not finalized provenance or merge authorization."
+    ],
+    "non_goals": [
+      "No product behavior changes.",
+      "No framework publication or PR merge."
+    ]
+  },
+  "execution": {
+    "steps": [],
+    "validation": [],
+    "last_completed_step": "Applied v0.17 prerequisite and reviewed target-gate reconciliation retained as an unfinalized checkpoint.",
+    "next_action": "Complete isolated correct-authority replay, then v0.18 adoption and final target verification."
+  },
+  "results": {
+    "summary": "Draft upgrade checkpoint; installed provenance remains v0.16.0.",
+    "files_changed": [],
+    "tests_run": [],
+    "finding_status": "not-addressed",
+    "residual_risk": "No finalized v0.17/v0.18 authority or final target acceptance is claimed.",
+    "follow_up_needed": true
+  },
+  "github_issue_refs": [
+    "#12"
+  ]
+}
