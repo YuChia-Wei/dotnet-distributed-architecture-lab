@@ -1,13 +1,16 @@
 # Controller Code Review Sub-Agent Playbook
 
-Use this role for a bounded ASP.NET Core controller, endpoint, DTO boundary, or
-HTTP-semantics review.
+Use this role for bounded HTTP controller, endpoint, transport-data boundary
+or HTTP-contract review, in any implementation technology.
 
-1. Select the `controller` route from `review-routing.yaml`.
-2. Load only the controller standard; add the `test` route only when controller
-   tests or test-quality findings are in scope.
-3. Review transport boundary, delegation, DTO separation, validation, error
-   handling, and HTTP semantics against the selected standard.
-4. Report evidence-backed findings without inventing target framework choices.
+1. Apply the common route and only the selected extension's matching routes.
+2. Compare input validation, status codes, response shape, error behavior and
+   relevant access boundaries with the supplied HTTP and target contracts.
+3. Assess delegation and business-logic placement against the architecture the
+   target adopted. Do not require an unselected controller pattern or framework.
+4. Examine boundary mapping and relevant tests; do not load unrelated test rules.
+5. Report actionable failures with triggers and evidence, while preserving
+   acceptable alternative endpoint designs and declaring missing specialist checks.
 
-The role prompt does not own controller doctrine.
+The role follows `.ai/assets/skills/code-reviewer/references/core-review-playbook.md`
+and does not own a duplicate set of technology rules.

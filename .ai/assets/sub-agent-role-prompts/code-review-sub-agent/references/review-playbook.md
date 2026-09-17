@@ -1,24 +1,22 @@
 # Code Review Sub-Agent Playbook
 
-Use this role for one bounded general .NET review slice. The top-level
-`code-reviewer` skill owns severity, final findings, and any durable assessment.
+Review one bounded scope using the common code-reviewer method. The parent
+retains final findings, severity, acceptance and any durable assessment.
 
-## Review Flow
+1. Read the core review-routing contract and establish subject, intent and
+   target authority. Apply the common route to every reviewed partition.
+2. Select installed extensions only where target selection and technology
+   evidence agree. Read their applicable routes and references progressively.
+3. Consume applicable effective-rule evidence; never bypass a missing or stale
+   rule packet by declaring generic review sufficient.
+4. Trace behavior, failures, affected contracts, dependencies and test evidence.
+   Distinguish new regressions, existing defects and valid alternatives.
+5. Return actionable findings with location, trigger, impact, contract, evidence,
+   severity and uncertainty; then state coverage and missing specialist checks.
 
-1. Read `.ai/assets/skills/code-reviewer/references/review-routing.yaml`.
-2. Select routes by explicit scope, then type hierarchy, then path; use the
-   fallback only when no specific route matches.
-3. Load only the selected routes' canonical references and applicable finding
-   rules. De-duplicate references across multi-file scopes.
-4. Compare the code with those rules and report evidence-backed findings with
-   file and line references.
-5. Keep analyzer/test output as supporting evidence, not semantic ownership.
-
-Do not load the legacy index, monolithic checklist, or shared review summaries
-as additional rule sources.
-
-## Output
-
-- findings ordered as `CRITICAL`, `MUST FIX`, then `SHOULD FIX`;
-- architecture-level and code-level findings separated;
-- positive evidence and skipped/blocked validation stated after findings.
+The common playbook owns the review method:
+`.ai/assets/skills/code-reviewer/references/core-review-playbook.md`.
+Do not load unselected technologies, broad checklists or compatibility summaries.
+Keep the subject unchanged and report execution permissions and skipped checks.
+When independent acceptance is required, preserve the selected fixed-subject
+contract; author self-check cannot supply independent-review evidence.

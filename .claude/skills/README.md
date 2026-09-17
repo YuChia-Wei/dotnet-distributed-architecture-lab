@@ -25,7 +25,7 @@ This directory contains Claude-compatible skill wrappers.
 - `ai-context-init`
 - `ai-context-upgrader`
 - `bdd-gwt-test-designer`
-- `code-reviewer` (`dotnet-backend` selected; unavailable in the core-only view)
+- `code-reviewer` (common core in every selection; .NET checks require the selected extension)
 - `diagnostic-analyst`
 - `ddd-ca-hex-architect`
 - `local-change-implementer`

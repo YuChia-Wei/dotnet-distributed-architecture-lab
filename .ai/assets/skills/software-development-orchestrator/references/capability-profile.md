@@ -24,13 +24,20 @@ The core `software-development-orchestrator` skill should stay publishable. Repo
 | `requirements` | `requirement-author` | Rough notes, stakeholder inputs, or code facts need to become `.dev/requirement/`-aligned requirement docs. |
 | `specification` | `spec-author` | Requirement truth needs to become retained specs under `.dev/specs/`. |
 | `problem-framing` | `problem-frame-author` | Requirement, spec, code, or tests need a first problem-frame draft. |
-| `architecture` | `ddd-ca-hex-architect` | The task needs DDD, Clean Architecture, CQRS, ports/adapters, bounded context, aggregate, or .NET backend architecture direction. |
-| `test-design` | `bdd-gwt-test-designer` | The task needs Given-When-Then scenarios, assertion points, or test design notes. |
+| `architecture` | `ddd-ca-hex-architect` | Design or review architecture artifacts using DDD/CA/HEX methods; concrete technology follows target selection. |
+| `test-design` | `bdd-gwt-test-designer` | Design or review Given-When-Then scenario artifacts, assertion points and test levels. |
 | `implementation` | `slice-implementer` | A bounded implementation slice is ready, using exactly one command, query, reactor, or generic execution mode plus applicable intent overlays such as remediation. |
 | `local-change` | `local-change-implementer` | A local class, object, method, symbol, SQL/ORM, or direct-call-site technical change is ready. |
 | `diagnosis` | `diagnostic-analyst` | An observed failure or performance symptom needs falsification and reproduction before repair. |
-| `review` | `code-reviewer` | .NET backend code or dotnet-backend implementation guidance needs review. |
+| `review` | `code-reviewer` | Executable code or implementation guidance needs common review plus applicable target-selected technology checks. |
 | `compliance-validation` | `spec-compliance-validator` | Problem-frame workflows need a 100% coverage gate. |
+
+The requested output artifact resolves overlapping authoring inputs; the
+primary target, dependency radius and accepted semantic decisions resolve local
+versus slice implementation. See [authoring boundaries](../../../shared/AUTHORING-BOUNDARY-CONTRACT.md)
+and [implementation scope](../../../shared/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md).
+The machine slot mappings remain unchanged; these rules guide language-level
+selection and do not claim a new deterministic natural-language router.
 
 ## Test Execution Capability Contract
 

@@ -2,7 +2,7 @@ asset_id: "controller-code-review-sub-agent"
 schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Controller Code Review Sub-Agent"
-purpose: "Define the delegated reviewer role for ASP.NET Core controllers, DTO mapping boundaries, and HTTP semantics."
+purpose: "Review HTTP controllers, endpoints, transport-data boundaries and HTTP semantics against target contracts and selected technology rules."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
@@ -22,13 +22,13 @@ outputs:
   - "HTTP semantics and DTO-boundary issues"
   - "controller test coverage notes"
 constraints:
-  - "Controllers must remain thin"
-  - "Business logic must not live in controllers"
+  - "Remain read-only, preserve the reviewed subject and report missing specialist coverage"
+  - "Assess controller responsibilities and business-logic placement against the target-selected architecture"
   - "HTTP status and input validation semantics must be explicit"
   - "Do not load test standards unless controller tests or test-quality findings are in scope"
 workflow:
   - step: 1
-    description: "Select the controller route and any explicit test route from review-routing.yaml"
+    description: "Apply the common route and any matching installed extension routes for the HTTP or test scope"
   - step: 2
     description: "Review controller thinness, DTO mapping, and HTTP semantics"
   - step: 3
@@ -41,7 +41,8 @@ references:
 routing:
   contract_path: ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
   reference_loading: "selected-route-only"
-  supported_route_ids: ["controller", "test"]
+  supported_route_ids: ["common"]
+  extension_routes: "selected-extension-contract"
 examples:
   - ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/references/review-playbook.md"
   - ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/references/review-prompt.md"

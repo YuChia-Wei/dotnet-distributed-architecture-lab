@@ -14,6 +14,11 @@ Generate aggregate-level tests (not use case tests).
 - No BaseTestClass
 - Resolve the target `testing.mocking` selection; use NSubstitute by default
 - Verify event serialization/deserialization
+- Consume `.ai/assets/shared/GWT-TEST-HANDOFF-CONTRACT.md` and return concrete
+  scenario/data-row-to-test/step/assertion mappings with honest execution status.
+- Apply the canonical .NET step-method responsibilities, including visible
+  scenario data and isolated result state. Keep the runnable step-method
+  example's use-case fixture separate from this role's aggregate test level.
 
 ## Output Location
 `src/tests/Domain/<Aggregate>/`
