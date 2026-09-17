@@ -3,7 +3,7 @@
 This directory contains repository-owned validation behavior that must remain
 separate from byte-exact framework-managed paths.
 
-The v0.16 package receipt binds every selected framework path to the published
+The v0.17 package receipt binds every selected framework path to the published
 package SHA-256. Therefore target policy is composed here instead of editing
 `.ai/scripts/` or `.dev/standards/` after package installation.
 
@@ -23,13 +23,13 @@ Run the target gate with:
 python -B .dev/ai-context/tooling/validate-target-ai-context.py `
   --allow-unfinalized `
   --commit-range main..HEAD `
-  --workflow-id 2026-09-06-ai-context-v0-16-0-upgrade
+  --workflow-id 2026-09-18-ai-context-v0-17-0-disposable-upgrade
 ```
 
 After provenance and effective rules are finalized, omit
 `--allow-unfinalized` and add `--require-effective-rules`.
 
-The published v0.16 `check-all.sh` and generic `validate-ai-context.py` are not
+The published v0.17 `check-all.sh` and generic `validate-ai-context.py` are not
 the target gate because the downstream package intentionally omits source-only
 release assets still named by the combined validator. The repaired
 `validate-shell-assets.py` now passes and is promoted into the target gate. The
@@ -46,7 +46,7 @@ synthesize omitted source assets to conceal them.
 
 The carried product-source projection contract and changed-path
 selection/evidence schema align with this target's authority boundary.
-`AICU-V011-SELECTION-001` remains resolved through v0.16.0. The new dependency
+`AICU-V011-SELECTION-001` remains resolved through v0.17.0. The new dependency
 observation surface is lower-bound evidence only: an observed undeclared input
 may fail, while a declared but unobserved input does not authorize shrinking a
 profile. Changed-path profiles and evidence reuse remain inactive target choices

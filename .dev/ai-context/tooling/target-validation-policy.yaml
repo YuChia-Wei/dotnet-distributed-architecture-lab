@@ -2,7 +2,7 @@ schema_version: "1.1"
 package_policy:
   path: ".dev/standards/GIT-COMMIT-POLICY.yaml"
   expected_schema_version: "1.3"
-  sha256: "f1cb257fefdaff2699b6c87022aa6ed08061979ba86003f07a32c4522e1b6783"
+  sha256: "a933d39f4f2f082c1bffc43bb8ec8f8b6d7686ef9bd9597f7c90937d8f1c60ea"
 package_validator:
   path: ".ai/scripts/validate-git-commits.py"
   sha256: "05504513d224d93e9847cb7fb7234f5281a29fc3c97b1e90b880242c0b87c747"

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the explicit v0.16.0 downstream package applicability boundary."""
+"""Validate the explicit v0.17.0 downstream package applicability boundary."""
 
 from __future__ import annotations
 
@@ -34,10 +34,10 @@ class DownstreamPackageProjectionTests(unittest.TestCase):
             if record["id"] == "AICU-V011-SELECTION-001"
         )
 
-    def test_gwt_001_framework_dependencies_are_v0160_pinned(self) -> None:
-        self.assertEqual("v0.16.0", self.manifest["framework_version"])
+    def test_gwt_001_framework_dependencies_are_v0170_pinned(self) -> None:
+        self.assertEqual("v0.17.0", self.manifest["framework_version"])
         self.assertEqual(
-            "4d1a5c7d039618f007784679d9968c357347272b",
+            "8eed3960f19c57050c8e8a8e1ecedbc3004aabc2",
             self.manifest["framework_commit"],
         )
         for record in self.manifest["checks"]:
@@ -99,7 +99,7 @@ class DownstreamPackageProjectionTests(unittest.TestCase):
     def test_gwt_006_validation_selection_resolution_is_exact(self) -> None:
         self.assertEqual("resolved-upstream", self.selection["status"])
         self.assertEqual("v0.15.0", self.selection["resolved_in"])
-        self.assertEqual("v0.16.0", self.selection["verified_through"])
+        self.assertEqual("v0.17.0", self.selection["verified_through"])
         for key in ("selector", "evidence_helper"):
             record = self.selection[key]
             self.assertEqual(record["sha256"], digest(ROOT / record["path"]))
