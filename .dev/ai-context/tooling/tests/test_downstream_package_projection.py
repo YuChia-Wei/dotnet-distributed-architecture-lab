@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the explicit v0.17.0 downstream package applicability boundary."""
+"""Validate the explicit v0.18.0 downstream package applicability boundary."""
 
 from __future__ import annotations
 
@@ -34,10 +34,10 @@ class DownstreamPackageProjectionTests(unittest.TestCase):
             if record["id"] == "AICU-V011-SELECTION-001"
         )
 
-    def test_gwt_001_framework_dependencies_are_v0170_pinned(self) -> None:
-        self.assertEqual("v0.17.0", self.manifest["framework_version"])
+    def test_gwt_001_framework_dependencies_are_v0180_pinned(self) -> None:
+        self.assertEqual("v0.18.0", self.manifest["framework_version"])
         self.assertEqual(
-            "8eed3960f19c57050c8e8a8e1ecedbc3004aabc2",
+            "eaba751b71872e085f8ffd1b8a0fbbefa554f379",
             self.manifest["framework_commit"],
         )
         for record in self.manifest["checks"]:

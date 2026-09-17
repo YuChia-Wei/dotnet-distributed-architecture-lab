@@ -1,0 +1,77 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.1.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-27T09:52:09+08:00",
+  "task_id": "AICU-001-preapply-gate-reconciliation",
+  "workflow_id": "2026-09-18-ai-context-v0-18-0-trial",
+  "owner_skill": "ai-context-governance",
+  "status": "in_progress",
+  "created_at": "2026-09-18T07:55:33+08:00",
+  "updated_at": "2026-09-18T07:56:32+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-5.6-terra",
+  "reasoning_effort": "xhigh",
+  "finding_ids": [
+    "AICU-V016-TARGET-GATE-PROJECTION-001"
+  ],
+  "scope": {
+    "target": "Rebind the prospective v0.18.0 package identity and preserve the target-owned gate reconciliation before package planning.",
+    "files": [
+      ".dev/ai-context/tooling/target-gate-manifest.yaml",
+      ".dev/ai-context/tooling/validate-target-ai-context.py",
+      ".dev/ai-context/tooling/tests/test_downstream_package_projection.py",
+      ".dev/ai-context/effective-rules.yaml",
+      ".dev/ai-context/effective-rule-packets/**",
+      ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/**",
+      ".dev/workflows/INDEX.MD"
+    ],
+    "constraints": [
+      "Verify candidate08 metadata, ZIP, projected validator and registry bytes before rebinding.",
+      "Regenerate through the installed canonical effective-rule builder without changing dispositions, selectors, or packet content.",
+      "Keep current v0.17 provenance and customizations unchanged until a canonical package apply and finalization path authorizes them."
+    ],
+    "non_goals": [
+      "Apply the v0.18 package.",
+      "Create or admit a terminal receipt.",
+      "Finalize provenance or customizations.",
+      "Run the unapplied v0.18 full projection suite.",
+      "Modify product source or tests.",
+      "Commit, push, merge, change Issue state, or publish."
+    ]
+  },
+  "execution": {
+    "steps": [
+      "Verify candidate08 package identity and projection applicability counts.",
+      "Rebind target-owned prospective gate metadata and workflow identity.",
+      "Regenerate the existing effective state and packets with the installed canonical builder.",
+      "Run narrow preapply manifest, workflow, and current-v0.17 readiness checks."
+    ],
+    "validation": [
+      "Candidate08 archive SHA-256, source commit, validator digest, registry digest, and 20/25/25 counts.",
+      "Canonical effective-state regeneration preserves 13 rule dispositions and 20 route packets.",
+      "Workflow artifact validation and current-v0.17 target readiness validation."
+    ],
+    "last_completed_step": "Candidate08 identity was rebound and canonical regeneration preserved the existing target state.",
+    "next_action": "Root must seal the canonical package plan and apply path; an independent content-subject audit and actual terminal receipt remain required before finalization."
+  },
+  "results": {
+    "summary": "Prospective preapply reconciliation is prepared for candidate08. No package apply, receipt admission, or provenance finalization has occurred.",
+    "files_changed": [
+      ".dev/ai-context/tooling/**",
+      ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/**",
+      ".dev/workflows/INDEX.MD"
+    ],
+    "tests_run": [
+      "Candidate08 package metadata source commit eaba751b71872e085f8ffd1b8a0fbbefa554f379 and ZIP SHA-256 3a8f7d753b0f45dde2e9f77e43b3f7dbc87f8fb69c1231b2d2463245c1e4d5d2 verified.",
+      "Candidate08 projected generic validator and Python-entrypoint registry digests verified as 0bf9147efce76d5a58dc91386f9d71f793defea65af3c7bc2244b411a3f6fe47 and 79b03cf9876170e2d4f0e6f9291e774bcbfa61847d6423a86406c39fb6ece233; counts 20/25/25.",
+      "Installed canonical effective-rule builder reproduced 13 dispositions, 20 routes, and 20 packet documents exactly; target state digest remains 57a3f551589bd293fb8e2c4b77b93b570b6c48ac464a01038983f2ccbc6b1fd7.",
+      "validate-ai-context-target.py --require-effective-rules passed against the current v0.17 target.",
+      "validate-workflow-artifacts.py passed after the in-progress task was recorded.",
+      "21 focused target-terminal-audit tests passed; no full v0.18 target suite was executed before apply."
+    ],
+    "finding_status": "in-progress",
+    "residual_risk": "The candidate remains a prospective input until a canonical plan applies exact package bytes and later independent audit plus actual receipt evidence are validated.",
+    "follow_up_needed": true
+  }
+}

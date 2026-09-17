@@ -1,6 +1,6 @@
 schema_version: "1.0"
-framework_version: "v0.17.0"
-framework_commit: "8eed3960f19c57050c8e8a8e1ecedbc3004aabc2"
+framework_version: "v0.18.0"
+framework_commit: "eaba751b71872e085f8ffd1b8a0fbbefa554f379"
 unfinalized_target_diagnostics:
   - "effective state catalogs[0] is stale"
 checks:
@@ -26,21 +26,21 @@ checks:
     args: []
   - id: "target-terminal-audit"
     path: ".dev/ai-context/tooling/validate-target-terminal-audit.py"
-    sha256: "a46acb7144e4027820466dbc97f81bedac47e76bd69e7419d2304fe96bc9c64a"
+    sha256: "a6f6e012e709856b6cc5949bbcc649c33e5d160e93b4a27213b4feb5c00150f1"
     args: []
 package_projection_defects:
   - id: "AICU-V016-TARGET-GATE-PROJECTION-001"
     status: "target-overlay-required"
-    observed_through: "v0.17.0"
-    framework_commit: "8eed3960f19c57050c8e8a8e1ecedbc3004aabc2"
+    observed_through: "v0.18.0"
+    framework_commit: "eaba751b71872e085f8ffd1b8a0fbbefa554f379"
     generic_validator:
       path: ".ai/scripts/validate-ai-context.py"
-      sha256: "05db9e16513c6cbb3325523e2eb3ca99f9290a48055184d1bb3b0b7d5e0f18d5"
+      sha256: "0bf9147efce76d5a58dc91386f9d71f793defea65af3c7bc2244b411a3f6fe47"
       outcome: "blocked-by-package-projection"
     python_entrypoints:
       path: ".ai/scripts/python-entrypoints.json"
-      sha256: "819f635f0102413957b6e8c37561ca16a7e324ea901154b2552f2c40c6375b55"
-      portable_count: 18
+      sha256: "79b03cf9876170e2d4f0e6f9291e774bcbfa61847d6423a86406c39fb6ece233"
+      portable_count: 20
       source_only_count: 25
       missing_source_only_count: 25
       target_available_source_only_paths: []
@@ -62,7 +62,7 @@ package_projection_defects:
     disposition: >-
       Keep the generic validator and removed source-only stock tests outside the
       downstream target gate. Promote the repaired shell-assets validator, pin the
-      exact v0.17 evidence, run the remaining package-applicable validators plus
+      exact v0.18 evidence, run the remaining package-applicable validators plus
       target-owned projection tests, and do not report excluded checks as passed.
   - id: "AICU-V010-PROJECTION-001"
     status: "blocked-by-package-projection"
