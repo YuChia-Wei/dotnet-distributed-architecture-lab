@@ -66,6 +66,14 @@ class DownstreamPackageProjectionTests(unittest.TestCase):
             record["missing_source_only_count"],
             sum(not (ROOT / item["path"]).is_file() for item in source_only),
         )
+        present_source_only = {
+            item["path"] for item in source_only if (ROOT / item["path"]).is_file()
+        }
+        self.assertEqual(
+            set(record["target_available_source_only_paths"]),
+            present_source_only,
+        )
+        self.assertEqual(set(), present_source_only)
         for item in portable:
             with self.subTest(path=item["path"]):
                 self.assertTrue((ROOT / item["path"]).is_file())

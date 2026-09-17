@@ -43,8 +43,7 @@ package_projection_defects:
       portable_count: 18
       source_only_count: 25
       missing_source_only_count: 25
-      target_available_source_only_paths:
-        - ".ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py"
+      target_available_source_only_paths: []
     shell_assets:
       path: ".ai/scripts/shell-assets.yaml"
       sha256: "a7575627d5966ac9945d76358e845a37a11eaacf0ad5f54f58b98c43efddeece"
