@@ -14,8 +14,8 @@ This document is the canonical English agent-facing root collaboration guide. `A
 
 ## Default Execution Principles
 
-- Do not invent project truth. State material assumptions, uncertainty, and tradeoffs. Ask only when an unresolved direction materially affects the outcome.
-- Implement the smallest coherent change that satisfies the defined acceptance criteria. Avoid speculative features, abstractions, and context.
+- Do not invent project truth, authorization, execution, or validation. State material assumptions, uncertainty, and tradeoffs. Ask only when an unresolved direction materially affects the outcome.
+- Implement the smallest coherent change that satisfies the accepted scope and verifiable completion criteria. Avoid speculative features, abstractions, and context.
 - Touch only files required by the task. Avoid unrelated cleanup, and remove artifacts introduced by your own changes.
 - Establish verifiable completion criteria before execution. Iterate until they pass, or report concrete blockers and any skipped validation.
 
@@ -33,11 +33,17 @@ Treat `MQArchLab.slnx`, `global.json`, `*.csproj`, `src/`, `tests/`, and `docker
 
 ## Quick Start for AI Agents
 
-1. Read `README.md`, `.dev/ARCHITECTURE.md`, and `.dev/project-config.yaml` to understand the product and repository structure.
-2. Use `MQArchLab.slnx`, project files, and `docker-compose/docker-compose.yml` to verify runtime or package facts.
-3. Read `.dev/standards/AI-CONTEXT-BOUNDARY.md` and `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md` before moving or rewriting AI context.
-4. Use `.ai/assets/skills/README.MD` as the canonical skill registry.
+1. Start with the request, current Git/worktree state, this file, and explicitly named artifacts.
+2. Read `README.md`, `.dev/ARCHITECTURE.md`, and `.dev/project-config.yaml` when the task needs product or repository facts; use `MQArchLab.slnx`, project files, and `docker-compose/docker-compose.yml` to verify runtime or package facts.
+3. Use `.ai/assets/skills/README.MD` as the canonical skill registry and expand only for the active task or phase.
+4. Read `.dev/standards/AI-CONTEXT-BOUNDARY.md` and `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md` before moving or rewriting AI context.
 5. Use `.dev/guides/ai-collaboration-guides/README.MD` for human-facing skill and workflow guides, and `.ai/INDEX.MD` for agent-facing AI asset navigation.
+
+## CLI Execution Routing
+
+After higher-priority policy selects cross-boundary CLI execution, follow
+`.ai/assets/shared/CLI-EXECUTION-ROUTING-CONTRACT.md`. Do not create or update
+the ignored `.dev/ai-context/local/cli-execution-routing.yaml` implicitly.
 
 ## Mandatory Workflows
 

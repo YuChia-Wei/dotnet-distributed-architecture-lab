@@ -112,8 +112,8 @@ var repository = _services.GetRequiredService<IAggregateRepository<Product, Prod
 ```csharp
 public sealed class TestProfileFixture : IAsyncLifetime
 {
-    public Task InitializeAsync() => Task.CompletedTask;
-    public Task DisposeAsync() => Task.CompletedTask;
+    public ValueTask InitializeAsync() => ValueTask.CompletedTask;
+    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }
 ```
 
