@@ -1,0 +1,79 @@
+schema_version: "1.0"
+fixture_kind: "controlled-review-inputs"
+purpose: "Inputs for actual skill exercises; these are not production adoption or test-execution evidence."
+execution_contract:
+  operation: "review the supplied snippets and contracts without changing them"
+  execution_permissions: "read-only; no code execution, dependency installation or external access"
+  catalog_checks: "Use applicable adopted catalog rules only. Missing or stale authority cannot be replaced with defaults."
+cases:
+  - case_id: "core-python-defect"
+    selected_components: [software-development-core, ai-context-lifecycle-core]
+    architecture: "No DDD, CQRS or event-sourcing method is selected."
+    specialist_requirement: "none"
+    request: "Review the pagination helper. It must return an empty list for empty input and preserve all input elements in order."
+    sources:
+      - path: "pagination.py"
+        content: |
+          def copy_items(items):
+              result = []
+              for index in range(len(items) + 1):
+                  result.append(items[index])
+              return result
+  - case_id: "core-valid-alternative"
+    selected_components: [software-development-core, ai-context-lifecycle-core]
+    architecture: "A small procedural Python module is the accepted design. No framework or mocking library is required."
+    specialist_requirement: "none"
+    request: "Review this helper against its contract: return a new list containing the original values in reverse order, leaving the input unchanged."
+    sources:
+      - path: "reverse_values.py"
+        content: |
+          def reversed_copy(values):
+              return list(reversed(values))
+  - case_id: "dotnet-defect"
+    selected_components: [software-development-core, ai-context-lifecycle-core, dotnet-backend]
+    architecture: "This is a utility method, not an aggregate. DDD, CQRS and event sourcing are not adopted for this scope."
+    specialist_requirement: "dotnet-backend"
+    request: "Review the method. It must copy every integer, preserve order, return an empty list for empty input and reject null input."
+    sources:
+      - path: "src/Utilities/CopyValues.cs"
+        content: |
+          public static List<int> CopyValues(IReadOnlyList<int> values)
+          {
+              ArgumentNullException.ThrowIfNull(values);
+              var result = new List<int>();
+              for (var index = 0; index <= values.Count; index++)
+                  result.Add(values[index]);
+              return result;
+          }
+  - case_id: "mixed-technologies"
+    selected_components: [software-development-core, ai-context-lifecycle-core, dotnet-backend]
+    architecture: "The .NET method supplies a Boolean value. The TypeScript function must preserve false, true, and absence as distinct states. No domain architecture is selected."
+    specialist_requirement: "dotnet-backend for the C# partition; no TypeScript extension is installed"
+    request: "Review both snippets. Report findings and coverage separately for each technology."
+    sources:
+      - path: "src/Flags/FlagValue.cs"
+        content: |
+          public static bool Identity(bool value) => value;
+      - path: "client/flagValue.ts"
+        content: |
+          export function flagValue(value?: boolean): boolean | undefined {
+            return value || undefined;
+          }
+  - case_id: "missing-required-extension"
+    selected_components: [software-development-core, ai-context-lifecycle-core]
+    architecture: "The target requires a specialist .NET review before acceptance."
+    specialist_requirement: "dotnet-backend, currently not installed"
+    request: "Review the method and state whether the required review gate can pass with this installation."
+    sources:
+      - path: "src/Utilities/IsPositive.cs"
+        content: |
+          public static bool IsPositive(int value) => value > 0;
+  - case_id: "unknown-contract"
+    selected_components: [software-development-core, ai-context-lifecycle-core]
+    architecture: "No domain contract or specialist extension is supplied for this DSL."
+    specialist_requirement: "unknown"
+    request: "Review the intent-sensitive policy. The allowed threshold and the meaning of the operator are not documented."
+    sources:
+      - path: "policy.dsl"
+        content: |
+          accept balance ~= 40

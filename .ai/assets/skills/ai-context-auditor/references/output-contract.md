@@ -25,7 +25,7 @@ Create the durable Markdown report from:
 Destination:
 
 ```text
-.dev/assessments/<ASM-YYYYMMDD-NNN>/report.md
+.dev/assessments/<ASM-YYYYMMDD-HH-xxx>/report.md
 ```
 
 Use `.dev/assessments/<assessment-id>/assessment.yaml` as the stable locator and update `.dev/assessments/INDEX.MD`. Do not create workflow artifacts solely because the assessment is persisted.

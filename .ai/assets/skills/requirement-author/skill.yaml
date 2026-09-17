@@ -2,7 +2,7 @@ schema_version: '1.0'
 asset_id: requirement-author
 asset_type: skill-spec
 title: Requirement Author
-purpose: Draft or normalize repository requirement documents from rough notes, existing requirement files, codebase facts, ADRs, or stakeholder inputs so they match the .dev/requirement structure.
+purpose: Draft or normalize requirement markdown with stakeholder intent, business rules and acceptance criteria. Select by requested artifact, preserve source authority, and hand off only for a distinct required output.
 portability: repo-portable
 audience: agent-facing
 source_of_truth: canonical
@@ -14,6 +14,7 @@ triggers:
 - normalize requirement
 - convert notes to requirement
 inputs:
+- requested output artifact and existing authoring/implementation authorization boundary
 - rough notes, requirement drafts, or codebase context
 - topic or bounded-context scope
 - optional ADR or architecture references
@@ -22,6 +23,8 @@ outputs:
 - explicit assumptions and missing information
 - recommended output path under .dev/requirement/
 constraints:
+- Select the requested artifact through AUTHORING-BOUNDARY-CONTRACT; preserve explicit skill choices and resolve conflicts before authoring.
+- Carry source bindings and open decisions without adding an unrequested authoring stage or implementation authority.
 - Follow .dev/requirement/REQUIREMENT-GUIDE.MD
 - Do not silently invent stakeholder-confirmed facts
 - Stop at requirement quality; do not jump straight into use-case JSON specs
@@ -33,6 +36,7 @@ workflow:
 - step: 3
   description: Mark assumptions, gaps, and recommended next handoff
 references:
+- .ai/assets/shared/AUTHORING-BOUNDARY-CONTRACT.md
 - .ai/assets/skills/requirement-author/references/authoring-playbook.md
 - .ai/assets/skills/requirement-author/references/output-contract.md
 - .ai/assets/skills/requirement-author/references/source-truth-rules.md

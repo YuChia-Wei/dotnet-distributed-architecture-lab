@@ -2,7 +2,7 @@ asset_id: slice-implementer
 schema_version: '1.0'
 asset_type: skill-spec
 title: Slice Implementer
-purpose: Implement one bounded implementation slice from requirements, specs, architecture decisions, review findings, or workflow tasks without redefining the architecture direction.
+purpose: Implement one bounded command, query, reactor or generic slice under accepted architecture. Retain slice ownership for internal local edits and hand off only for a concrete missing decision or separable useful subtask.
 portability: repo-portable
 audience: agent-facing
 source_of_truth: canonical
@@ -27,6 +27,7 @@ outputs:
 - explicit handoff if architecture, local change, test design, review, or compliance work remains
 - one provider-neutral role_execution record for every considered role binding, handed to the orchestrator without transferring slice ownership
 constraints:
+- Select scope and necessary handoffs through IMPLEMENTATION-SCOPE-ROUTING-CONTRACT; file count alone does not determine the owner.
 - Do not redefine architecture direction mid-slice
 - Do not silently broaden the agreed slice
 - 'Select exactly one execution mode reference: command, query, reactor, or generic'
@@ -117,6 +118,7 @@ workflow:
 - step: 4
   description: Validate, record touched files and role_execution, aggregate no synthetic child evidence, and hand off remaining architecture, testing, review, or compliance work
 references:
+- .ai/assets/shared/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md
 - .ai/assets/skills/slice-implementer/references/input-contract.md
 - .ai/assets/skills/slice-implementer/references/execution-playbook.md
 - .ai/assets/skills/slice-implementer/references/role-execution.md

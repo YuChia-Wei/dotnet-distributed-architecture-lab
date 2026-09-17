@@ -20,7 +20,9 @@
 
 ## Handoff
 
-- Use `slice-implementer` when the work needs a bounded multi-file slice.
+- Use `slice-implementer` when the work is a coordinated bounded behavior/refactoring
+  goal or introduces a type within an accepted design. Multiple direct call-site
+  files alone do not require a slice. Apply the shared implementation scope contract.
 - Use `ddd-ca-hex-architect` when the work needs architecture or domain-language decisions.
 - Use `code-reviewer` when the local change came from review findings and needs independent verification.
 

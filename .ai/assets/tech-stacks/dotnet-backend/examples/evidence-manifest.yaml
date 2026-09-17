@@ -1,7 +1,7 @@
 schema_version: "1.0"
 manifest_id: "DOTNET-EXAMPLES-EVIDENCE-001"
 schema: ".ai/assets/tech-stacks/dotnet-backend/examples/evidence-schema.yaml"
-updated_at: "2026-08-10T00:43:11+08:00"
+updated_at: "2026-09-10T21:38:00+08:00"
 default_tier: "historical"
 default_claim: "Unclassified legacy provenance; not active or copy-ready guidance."
 default_reason: "Legacy material defaults downward until explicit evidence supports promotion."
@@ -35,6 +35,17 @@ entries:
     validators: []
     build_commands: []
     test_commands: []
+  - path: "bdd-step-methods/"
+    tier: "executable-tested"
+    claim: "Bounded paired BDDfy and plain-xUnit step-method projects with five executable cases each."
+    reason: "Both projects compiled and their five expected cases passed; the source workflow retains initial failure and corrected execution evidence. This does not establish downstream adoption."
+    validators: []
+    build_commands:
+      - "dotnet build .ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/DefaultBddfy/DefaultBddfy.csproj"
+      - "dotnet build .ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/PlainXunit/PlainXunit.csproj"
+    test_commands:
+      - "dotnet test .ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/DefaultBddfy/DefaultBddfy.csproj --no-build"
+      - "dotnet test .ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/PlainXunit/PlainXunit.csproj --no-build"
   - path: "contract/"
     tier: "reference-only"
     claim: "Design-by-Contract semantics and illustrative implementation shapes."

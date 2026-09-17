@@ -2,7 +2,7 @@ asset_id: spec-author
 schema_version: '1.0'
 asset_type: skill-spec
 title: Spec Author
-purpose: Draft or normalize repository production specs and test specs from requirements, existing specs, or codebase facts so they align with .dev/specs structure and schema rules.
+purpose: Draft or normalize a selected production, entity, adapter or formal test specification while preserving its schema and source binding. Scenario wording alone does not change the requested document type.
 portability: repo-portable
 audience: agent-facing
 source_of_truth: canonical
@@ -14,6 +14,7 @@ triggers:
 - normalize spec
 - convert requirement to spec
 inputs:
+- requested output artifact and existing authoring/implementation authorization boundary
 - requirement files or summaries
 - existing spec drafts or code references
 - target aggregate or use case
@@ -22,6 +23,8 @@ outputs:
 - recommended file path under .dev/specs/
 - assumptions and missing fields
 constraints:
+- Select the requested artifact through AUTHORING-BOUNDARY-CONTRACT; preserve explicit skill choices and resolve conflicts before authoring.
+- Carry source bindings and open decisions without adding an unrequested authoring stage or implementation authority.
 - Follow .dev/specs/SPEC-GUIDE.MD and .dev/specs/SPEC-ORGANIZATION-GUIDE.MD
 - Do not invent aggregate ownership when architecture boundaries are unclear
 - Separate production specs from test specs
@@ -33,6 +36,7 @@ workflow:
 - step: 3
   description: Recommend the correct output path and next handoff
 references:
+- .ai/assets/shared/AUTHORING-BOUNDARY-CONTRACT.md
 - .ai/assets/skills/spec-author/references/authoring-playbook.md
 - .ai/assets/skills/spec-author/references/output-contract.md
 - .ai/assets/skills/spec-author/references/type-selection.md

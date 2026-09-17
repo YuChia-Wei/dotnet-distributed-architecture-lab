@@ -1,9 +1,10 @@
 schema_version: '1.0'
-packet_id: PACKET-271ADF6872CFDB35C87BAE7274734F2A106E294D96DADC9D8DB6FEC64DE8CFAC
+packet_id: PACKET-4879930D1F7EF66F388D103AA76331FF3371DE625BA2DC4C344B5DCBFB1F1E06
 resolver:
   version: '1.0'
   evidence:
-  - .dev/assessments/ASM-20260906-001/report.md
+  - .dev/ai-context/local/v018-trial-evidence/reconciliation.md
+  - .dev/ai-context/local/v018-trial-evidence/report-03.md
 request:
   route_id: ROUTE-44441057FC3C725F5861E2149944CFB7EFDD0C5F890831C4208291A5B2371222
   capability: review
@@ -11,16 +12,16 @@ request:
   technology_profile: dotnet-backend
   file_type: dotnet-mixed-review
 baseline:
-  framework_version: v0.16.0
-  framework_commit: 4d1a5c7d039618f007784679d9968c357347272b
+  framework_version: v0.17.0
+  framework_commit: 8eed3960f19c57050c8e8a8e1ecedbc3004aabc2
   selected_technology_profile: dotnet-backend
 target_state:
   path: .dev/ai-context/effective-rules.yaml
-  digest: 355bdea6321744b6e6bb74e870b6e72d7730632850359d8455ddd14c0244629f
+  digest: 57a3f551589bd293fb8e2c4b77b93b570b6c48ac464a01038983f2ccbc6b1fd7
 catalogs:
 - catalog_id: selected-profile
   path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
-  digest: acb85d42090f446b290bf01a79752b79ebe203919d301202984831bf4d81a9cb
+  digest: 586701351c97fffa2ece421c4eabd4acbdce315b34e5845b497f968967f7c3d4
 - catalog_id: shared
   path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
   digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
@@ -513,7 +514,7 @@ rules:
   catalog_id: selected-profile
   catalog_selector:
     rule_id: TEST-BDDFY-001
-  catalog_normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+  catalog_normative_statement_digest: 81fa3b215c6677225c3fdca9a4aca1a8237bd10558c0d7a1d6bfbc5dddedb199
   effective_disposition: baseline-effective
   normative_statement: "### 3. Use GWT; Default to BDDfy\n\n**Mandatory**: All tests\
     \ must use Given-When-Then semantics and recognizable step names. Arrange-Act-Assert\
@@ -523,37 +524,62 @@ rules:
     \ When requirements directly provide a `.feature` file, its design or production\
     \ is explicitly requested, or the target profile has adopted a runner, create\
     \ or maintain it according to the [Gherkin Feature Storage Guide](../../../../../../.dev/specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD).\
-    \ Otherwise, express the scenario directly as a GWT-style C# test.\n\n```csharp\n\
-    // ✅ Correct: BDDfy + Gherkin style\npublic class CreateProductUseCaseTests\n\
-    {\n    private CreateProductInput _input = null!;\n    private CreateProductOutput\
-    \ _output = null!;\n    private readonly IAggregateRepository<Product, ProductId>\
-    \ _repository;\n    private readonly CreateProductUseCase _useCase;\n\n    public\
-    \ CreateProductUseCaseTests()\n    {\n        _repository = Substitute.For<IAggregateRepository<Product,\
-    \ ProductId>>();\n        var unitOfWork = Substitute.For<IUnitOfWork>();\n  \
-    \      var publisher = Substitute.For<IProductEventPublisher>();\n        _useCase\
-    \ = new CreateProductUseCase(_repository, unitOfWork, publisher);\n    }\n\n \
-    \   [Fact]\n    public void Should_create_product_successfully_when_input_is_valid()\n\
-    \    {\n        this.Given(x => x.GivenAValidProductCreationInput())\n       \
-    \     .When(x => x.WhenTheUseCaseIsExecuted())\n            .Then(x => x.ThenTheProductShouldBeCreated())\n\
-    \            .And(x => x.ThenTheOutputShouldContainTheProductId())\n         \
-    \   .BDDfy();\n    }\n\n    private void GivenAValidProductCreationInput()\n \
-    \   {\n        _input = new CreateProductInput(\n            Guid.NewGuid().ToString(),\n\
-    \            \"Test Product\",\n            \"user-123\"\n        );\n    }\n\n\
-    \    private async Task WhenTheUseCaseIsExecuted()\n    {\n        _output = await\
-    \ _useCase.ExecuteAsync(_input, CancellationToken.None);\n    }\n\n    private\
-    \ void ThenTheProductShouldBeCreated()\n    {\n        _repository.Received(1).SaveAsync(Arg.Any<Product>(),\
-    \ Arg.Any<CancellationToken>());\n    }\n\n    private void ThenTheOutputShouldContainTheProductId()\n\
-    \    {\n        _output.ProductId.Should().NotBeNull();\n    }\n}\n\n// ❌ Incorrect:\
-    \ replaces the Use Case business-flow test with a delivery Command and Handler\n\
-    [Fact]\npublic async Task TestCreateProduct()  // Incorrect name\n{\n    // Arrange\n\
-    \    var command = new CreateProductCommand(...);\n\n    // Act\n    var result\
-    \ = await _handler.Handle(command, CancellationToken.None);\n\n    // Tests only\
-    \ the adapter and does not directly protect Use Case orchestration.\n}\n```\n\n\
-    Handler adapter tests must remain separate and narrow: verify only Command-to-Input\
-    \ mapping, exactly one\nUse Case invocation, and delivery-specific failure mapping.\
-    \ A Handler test that mocks a\nRepository must not duplicate responsibility for\
-    \ business-flow testing.\n\n---\n"
-  normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+    \ Otherwise, express the scenario directly as a GWT-style C# test.\n\n#### Step\
+    \ Methods And Scenario Readability\n\nFor scenario-style unit, Use Case and integration\
+    \ tests, the test method must\nread as Given/When/Then step calls, directly or\
+    \ through the selected fluent\nrunner. Give methods behavior-specific names such\
+    \ as `GivenMonthlyBudget`,\n`WhenQueryingBudget` and `ThenAmountShouldBe`; comments\
+    \ or generic `Setup`,\n`Execute` and `Check` methods alone do not satisfy this\
+    \ form. Preserve the\ncompact exception-contract form explicitly permitted in\
+    \ section 5; it still\nneeds an observable exception assertion and source traceability.\n\
+    \n| Step | Responsibility | Must not substitute for |\n| --- | --- | --- |\n|\
+    \ Given | Establish the scenario's data/state and controlled dependency responses.\
+    \ Put reusable construction mechanics in helpers. | The primary action or the\
+    \ scenario's outcome assertions. Fixture guards may fail fast but are not Then\
+    \ coverage. |\n| When | Execute the real subject's primary behavior once per scenario/data\
+    \ row and capture its result, state or exception. An intentional multi-operation\
+    \ behavior must be explicit in the design. | A mock of the subject, a fabricated\
+    \ result, or a hidden repeat of the action during verification. |\n| Then / And\
+    \ | Assert each specified observable value, relation, state, event or exception\
+    \ against the result of that When. | Re-executing the subject, calculating the\
+    \ expected answer using its algorithm, or merely checking that no exception occurred\
+    \ when a value is specified. |\n\nKeep material inputs and expected values visible\
+    \ in the scenario method or its\nexplicitly bound theory row. A business-named\
+    \ builder may encapsulate irrelevant\ndefaults; it must not hide the values that\
+    \ distinguish scenarios. Use fresh\nper-test state, instance fixtures with isolated\
+    \ scenario state, or explicit\narguments/results. Avoid static mutable scenario\
+    \ fields and test-order coupling.\nA result field must distinguish \"not executed\"\
+    \ from a legitimate default result\n(for example, nullable captured data with\
+    \ a Then assertion that it is present).\n\nFor asynchronous behavior, await the\
+    \ step to completion using the selected\nrunner's supported Task API. Do not use\
+    \ `async void`, fire-and-forget actions,\n`.Wait()` or `.Result`. Capture expected\
+    \ exceptions during When (for example\nwith xUnit `Record.ExceptionAsync`) and\
+    \ assert the required type and relevant\ndetails during Then; do not swallow exceptions\
+    \ to make the test green. A bounded\neventual assertion may wait for an observable\
+    \ asynchronous outcome, but must not\nrepeat the command/query that caused it.\n\
+    \nUse the [GWT handoff contract](../../../../shared/GWT-TEST-HANDOFF-CONTRACT.md)\n\
+    to preserve scenario/data-row IDs, source/AC bindings and every Then-to-assertion\n\
+    mapping. Parameterized cases are valid when each row remains identifiable and\n\
+    uses the same behavior and assertion responsibilities. A generated report,\nmethod-name\
+    \ match, successful build or passing run alone cannot prove that the\nscenario\
+    \ was implemented faithfully.\n\n#### Default BDDfy Form\n\nThis excerpt's fixture\
+    \ and step implementations are in the\n[runnable step-method example](../../examples/bdd-step-methods/README.md).\n\
+    It exposes the behavior-bearing data while keeping mechanics inside steps.\n\n\
+    ```csharp\n[Fact]\npublic void Should_return_zero_when_query_month_has_no_budget()\n\
+    {\n    this.Given(x => x.GivenMonthlyBudget(\"202102\", 28m))\n        .When(x\
+    \ => x.WhenQueryingBudget(\n            new DateOnly(2021, 1, 1), new DateOnly(2021,\
+    \ 1, 2)))\n        .Then(x => x.ThenAmountShouldBe(0m))\n        .BDDfy();\n}\n\
+    ```\n\n#### Explicit Plain-xUnit Opt-Out Form\n\nThe same example includes a separately\
+    \ selected BDDfy opt-out. Opting out of\nthe package preserves method responsibilities\
+    \ and GWT semantics.\n\n```csharp\n[Fact]\npublic async Task Should_return_zero_when_query_month_has_no_budget()\n\
+    {\n    GivenMonthlyBudget(\"202102\", 28m);\n    var actual = await WhenQueryingBudget(\n\
+    \        new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2));\n    ThenAmountShouldBe(actual,\
+    \ 0m);\n}\n```\n\nTest the concrete Use Case directly for business-flow behavior\
+    \ and mock its\noutbound ports. Handler adapter tests remain separate and narrow:\
+    \ verify only\nCommand-to-Input mapping, exactly one Use Case invocation, and\
+    \ delivery-specific\nfailure mapping. A Handler test that mocks a Repository must\
+    \ not duplicate\nresponsibility for business-flow testing.\n\n---\n"
+  normative_statement_digest: 81fa3b215c6677225c3fdca9a4aca1a8237bd10558c0d7a1d6bfbc5dddedb199
   disposition_record:
     applicability: The dotnet-backend profile applies and the target explicitly selects
       the baseline-permitted plain-xUnit branch with mandatory GWT semantics.
@@ -577,7 +603,7 @@ rules:
   catalog_id: selected-profile
   catalog_selector:
     rule_id: TEST-GWT-001
-  catalog_normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+  catalog_normative_statement_digest: 81fa3b215c6677225c3fdca9a4aca1a8237bd10558c0d7a1d6bfbc5dddedb199
   effective_disposition: baseline-effective
   normative_statement: "### 3. Use GWT; Default to BDDfy\n\n**Mandatory**: All tests\
     \ must use Given-When-Then semantics and recognizable step names. Arrange-Act-Assert\
@@ -587,37 +613,62 @@ rules:
     \ When requirements directly provide a `.feature` file, its design or production\
     \ is explicitly requested, or the target profile has adopted a runner, create\
     \ or maintain it according to the [Gherkin Feature Storage Guide](../../../../../../.dev/specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD).\
-    \ Otherwise, express the scenario directly as a GWT-style C# test.\n\n```csharp\n\
-    // ✅ Correct: BDDfy + Gherkin style\npublic class CreateProductUseCaseTests\n\
-    {\n    private CreateProductInput _input = null!;\n    private CreateProductOutput\
-    \ _output = null!;\n    private readonly IAggregateRepository<Product, ProductId>\
-    \ _repository;\n    private readonly CreateProductUseCase _useCase;\n\n    public\
-    \ CreateProductUseCaseTests()\n    {\n        _repository = Substitute.For<IAggregateRepository<Product,\
-    \ ProductId>>();\n        var unitOfWork = Substitute.For<IUnitOfWork>();\n  \
-    \      var publisher = Substitute.For<IProductEventPublisher>();\n        _useCase\
-    \ = new CreateProductUseCase(_repository, unitOfWork, publisher);\n    }\n\n \
-    \   [Fact]\n    public void Should_create_product_successfully_when_input_is_valid()\n\
-    \    {\n        this.Given(x => x.GivenAValidProductCreationInput())\n       \
-    \     .When(x => x.WhenTheUseCaseIsExecuted())\n            .Then(x => x.ThenTheProductShouldBeCreated())\n\
-    \            .And(x => x.ThenTheOutputShouldContainTheProductId())\n         \
-    \   .BDDfy();\n    }\n\n    private void GivenAValidProductCreationInput()\n \
-    \   {\n        _input = new CreateProductInput(\n            Guid.NewGuid().ToString(),\n\
-    \            \"Test Product\",\n            \"user-123\"\n        );\n    }\n\n\
-    \    private async Task WhenTheUseCaseIsExecuted()\n    {\n        _output = await\
-    \ _useCase.ExecuteAsync(_input, CancellationToken.None);\n    }\n\n    private\
-    \ void ThenTheProductShouldBeCreated()\n    {\n        _repository.Received(1).SaveAsync(Arg.Any<Product>(),\
-    \ Arg.Any<CancellationToken>());\n    }\n\n    private void ThenTheOutputShouldContainTheProductId()\n\
-    \    {\n        _output.ProductId.Should().NotBeNull();\n    }\n}\n\n// ❌ Incorrect:\
-    \ replaces the Use Case business-flow test with a delivery Command and Handler\n\
-    [Fact]\npublic async Task TestCreateProduct()  // Incorrect name\n{\n    // Arrange\n\
-    \    var command = new CreateProductCommand(...);\n\n    // Act\n    var result\
-    \ = await _handler.Handle(command, CancellationToken.None);\n\n    // Tests only\
-    \ the adapter and does not directly protect Use Case orchestration.\n}\n```\n\n\
-    Handler adapter tests must remain separate and narrow: verify only Command-to-Input\
-    \ mapping, exactly one\nUse Case invocation, and delivery-specific failure mapping.\
-    \ A Handler test that mocks a\nRepository must not duplicate responsibility for\
-    \ business-flow testing.\n\n---\n"
-  normative_statement_digest: f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693
+    \ Otherwise, express the scenario directly as a GWT-style C# test.\n\n#### Step\
+    \ Methods And Scenario Readability\n\nFor scenario-style unit, Use Case and integration\
+    \ tests, the test method must\nread as Given/When/Then step calls, directly or\
+    \ through the selected fluent\nrunner. Give methods behavior-specific names such\
+    \ as `GivenMonthlyBudget`,\n`WhenQueryingBudget` and `ThenAmountShouldBe`; comments\
+    \ or generic `Setup`,\n`Execute` and `Check` methods alone do not satisfy this\
+    \ form. Preserve the\ncompact exception-contract form explicitly permitted in\
+    \ section 5; it still\nneeds an observable exception assertion and source traceability.\n\
+    \n| Step | Responsibility | Must not substitute for |\n| --- | --- | --- |\n|\
+    \ Given | Establish the scenario's data/state and controlled dependency responses.\
+    \ Put reusable construction mechanics in helpers. | The primary action or the\
+    \ scenario's outcome assertions. Fixture guards may fail fast but are not Then\
+    \ coverage. |\n| When | Execute the real subject's primary behavior once per scenario/data\
+    \ row and capture its result, state or exception. An intentional multi-operation\
+    \ behavior must be explicit in the design. | A mock of the subject, a fabricated\
+    \ result, or a hidden repeat of the action during verification. |\n| Then / And\
+    \ | Assert each specified observable value, relation, state, event or exception\
+    \ against the result of that When. | Re-executing the subject, calculating the\
+    \ expected answer using its algorithm, or merely checking that no exception occurred\
+    \ when a value is specified. |\n\nKeep material inputs and expected values visible\
+    \ in the scenario method or its\nexplicitly bound theory row. A business-named\
+    \ builder may encapsulate irrelevant\ndefaults; it must not hide the values that\
+    \ distinguish scenarios. Use fresh\nper-test state, instance fixtures with isolated\
+    \ scenario state, or explicit\narguments/results. Avoid static mutable scenario\
+    \ fields and test-order coupling.\nA result field must distinguish \"not executed\"\
+    \ from a legitimate default result\n(for example, nullable captured data with\
+    \ a Then assertion that it is present).\n\nFor asynchronous behavior, await the\
+    \ step to completion using the selected\nrunner's supported Task API. Do not use\
+    \ `async void`, fire-and-forget actions,\n`.Wait()` or `.Result`. Capture expected\
+    \ exceptions during When (for example\nwith xUnit `Record.ExceptionAsync`) and\
+    \ assert the required type and relevant\ndetails during Then; do not swallow exceptions\
+    \ to make the test green. A bounded\neventual assertion may wait for an observable\
+    \ asynchronous outcome, but must not\nrepeat the command/query that caused it.\n\
+    \nUse the [GWT handoff contract](../../../../shared/GWT-TEST-HANDOFF-CONTRACT.md)\n\
+    to preserve scenario/data-row IDs, source/AC bindings and every Then-to-assertion\n\
+    mapping. Parameterized cases are valid when each row remains identifiable and\n\
+    uses the same behavior and assertion responsibilities. A generated report,\nmethod-name\
+    \ match, successful build or passing run alone cannot prove that the\nscenario\
+    \ was implemented faithfully.\n\n#### Default BDDfy Form\n\nThis excerpt's fixture\
+    \ and step implementations are in the\n[runnable step-method example](../../examples/bdd-step-methods/README.md).\n\
+    It exposes the behavior-bearing data while keeping mechanics inside steps.\n\n\
+    ```csharp\n[Fact]\npublic void Should_return_zero_when_query_month_has_no_budget()\n\
+    {\n    this.Given(x => x.GivenMonthlyBudget(\"202102\", 28m))\n        .When(x\
+    \ => x.WhenQueryingBudget(\n            new DateOnly(2021, 1, 1), new DateOnly(2021,\
+    \ 1, 2)))\n        .Then(x => x.ThenAmountShouldBe(0m))\n        .BDDfy();\n}\n\
+    ```\n\n#### Explicit Plain-xUnit Opt-Out Form\n\nThe same example includes a separately\
+    \ selected BDDfy opt-out. Opting out of\nthe package preserves method responsibilities\
+    \ and GWT semantics.\n\n```csharp\n[Fact]\npublic async Task Should_return_zero_when_query_month_has_no_budget()\n\
+    {\n    GivenMonthlyBudget(\"202102\", 28m);\n    var actual = await WhenQueryingBudget(\n\
+    \        new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2));\n    ThenAmountShouldBe(actual,\
+    \ 0m);\n}\n```\n\nTest the concrete Use Case directly for business-flow behavior\
+    \ and mock its\noutbound ports. Handler adapter tests remain separate and narrow:\
+    \ verify only\nCommand-to-Input mapping, exactly one Use Case invocation, and\
+    \ delivery-specific\nfailure mapping. A Handler test that mocks a Repository must\
+    \ not duplicate\nresponsibility for business-flow testing.\n\n---\n"
+  normative_statement_digest: 81fa3b215c6677225c3fdca9a4aca1a8237bd10558c0d7a1d6bfbc5dddedb199
   disposition_record:
     applicability: New and modified tests use recognizable Given-When-Then semantics
       regardless of the selected runner.
@@ -677,12 +728,12 @@ rules:
 freshness:
   status: verified
   verified_inputs:
-    target_state_digest: 355bdea6321744b6e6bb74e870b6e72d7730632850359d8455ddd14c0244629f
+    target_state_digest: 57a3f551589bd293fb8e2c4b77b93b570b6c48ac464a01038983f2ccbc6b1fd7
     catalog_digests:
     - catalog_id: selected-profile
       path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
-      digest: acb85d42090f446b290bf01a79752b79ebe203919d301202984831bf4d81a9cb
+      digest: 586701351c97fffa2ece421c4eabd4acbdce315b34e5845b497f968967f7c3d4
     - catalog_id: shared
       path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
       digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
-packet_digest: f784e5b6bd869a209b3334ced7e1c73f39700f5f1e15734be1b515394bb8205c
+packet_digest: 91df4f398c18a7e504ced273b4f5954375a7b91fcdad98598429e2365a567e92
