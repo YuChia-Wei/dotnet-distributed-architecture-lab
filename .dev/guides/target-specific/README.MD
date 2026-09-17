@@ -17,6 +17,6 @@ facts.
 
 Evidence: disposable candidate starting commit
 `ed27f6b7c63fdb45dfa9a8e6ff010b4be63b4045`; v0.17.0 package plan
-`../../../../../../upgrade-v017/lab-candidate-upgrade-plan.yaml`; parent-authorized
+`../../../../../upgrade-v017/lab-candidate-upgrade-plan.yaml`; parent-authorized
 v0.16-to-v0.17 reconciliation on 2026-09-18. The original lab checkout is not
 an upgrade target for this trial.
