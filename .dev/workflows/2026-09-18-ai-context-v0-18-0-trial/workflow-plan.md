@@ -12,21 +12,21 @@
 - `workflow_id`: `2026-09-18-ai-context-v0-18-0-trial`
 - `workflow_kind`: `ai-context-maintenance`
 - `owner_skill`: `ai-context-governance`
-- `branch`: `codex/2026-09-18-v018-trial-04`
+- `branch`: `codex/2026-09-18-v018-trial-05`
 - `base_branch`: `main`
 - `status`: `in_progress`
-- `current_phase`: `preapply-selector-discovery-and-source-identity-rebind`
+- `current_phase`: `preapply-candidate09-version-expectation-corrected`
 - `artifact_root`: `.dev/workflows/2026-09-18-ai-context-v0-18-0-trial`
 - `created_at`: `2026-09-18T07:53:09+08:00`
-- `updated_at`: `2026-09-18T08:49:09+08:00`
+- `updated_at`: `2026-09-18T09:07:01+08:00`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#12`
 
 ## Scope And Checkpoint
 
 This workflow prepares a user-authorized, ephemeral v0.18.0 target trial. The
 fresh isolated checkpoint is commit
-`6d91126670a4702d1831636b5892e637e5d8431f` on
-`codex/2026-09-18-v018-trial-04`. It is a preapply checkpoint: it does not
+`39006e686ab00d0a2af67b525065d92be34de4c9` on
+`codex/2026-09-18-v018-trial-05`. It is a preapply checkpoint: it does not
 apply a package, change provenance, customizations, effective rules or packets,
 finalize a transaction, or claim adoption or release readiness.
 
@@ -34,9 +34,16 @@ Candidate08 source-package finalization succeeded. A prior pre-finalization
 55-test target run retained two errors; it is historical non-passing evidence,
 and no individual pass count is inferred from that aggregate. Candidate09 ZIP
 and tar package validation passed. Its exact source identity is now pinned as
-`d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3` while candidate08 evidence remains historical only. This
-checkpoint does not project either candidate into a target transaction. No
-rebind, plan, or apply operation has run.
+`d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3` while candidate08 evidence remains historical only.
+
+Candidate09 attempt10 ran 55 selected target tests: 54 passed and one failed; it is non-passing. `test_downstream_package_projection.py` still expected the historical
+`eaba751b71872e085f8ffd1b8a0fbbefa554f379` source identity although the
+current target-gate manifest already pins candidate09
+`d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3`. Attempt10 is non-passing and
+produced no receipt. This isolated correction updates only that test expectation;
+all manifest hashes, target selections, and target authority remain unchanged.
+A fresh trial remains required after the correction and parent identity-consistency
+precheck. No rebind, plan, or apply operation has run.
 
 The completed v0.16.0 workflow retains its immutable audit record unchanged.
 That record verifies authority bytes in its reviewed Git subject only and is not
@@ -80,20 +87,26 @@ or establishes a cost saving.
 
 ## Current Task
 
-- `AICU-001-preapply-gate-reconciliation` remains in progress. Candidate09 source
-  identity is pinned; parent validation and commit of this checkpoint come next.
+- `AICU-001-preapply-gate-reconciliation` remains in progress. Attempt10 retained
+  55 test results (54 passed, one failed) because the projection test pinned the
+  superseded candidate08 commit. The corrected GWT001 candidate-identity assertion passes.
+- The complete projection module remains non-passing before package apply: GWT002
+  and GWT003 compare the still-v0.17 installed validator and registry bytes with
+  candidate09 manifest hashes. They are not repaired or reused as a preapply pass.
 - The metadata work unit did not select or validate a review route. Existing
   target selectors remain unchanged; actual corrected model consumption is a
   separate usability acceptance after the new candidate is installed.
 
 ## Required Next Actions
 
-1. Validate and commit this preapply checkpoint.
+1. Validate and commit the scoped candidate09 version-expectation correction.
 2. Under the existing owner authorization, create and validate the fresh canonical
    plan, review its prospective authority decision, and apply candidate09.
-3. Bind the actual target-validation receipt, independently audit the immutable
-   content projection, then canonically finalize and archive the terminal receipt.
-4. Run the same bounded Terra/Luna task using exact target selector discovery.
+3. Run the actual selected target suite and bind its target-validation receipt;
+   attempt10 remains historical non-passing evidence.
+4. Independently audit the immutable content projection, then canonically
+   finalize and archive the terminal receipt.
+5. Run the same bounded Terra/Luna task using exact target selector discovery.
 
 Historical receipts and limited model observations remain evidence of their own
 subjects and do not replace the new transaction's gates.

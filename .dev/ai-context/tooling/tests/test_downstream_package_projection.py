@@ -37,7 +37,7 @@ class DownstreamPackageProjectionTests(unittest.TestCase):
     def test_gwt_001_framework_dependencies_are_v0180_pinned(self) -> None:
         self.assertEqual("v0.18.0", self.manifest["framework_version"])
         self.assertEqual(
-            "eaba751b71872e085f8ffd1b8a0fbbefa554f379",
+            "d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3",
             self.manifest["framework_commit"],
         )
         for record in self.manifest["checks"]:

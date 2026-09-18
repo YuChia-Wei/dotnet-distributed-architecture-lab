@@ -8,7 +8,7 @@
   "owner_skill": "ai-context-governance",
   "status": "in_progress",
   "created_at": "2026-09-18T07:55:33+08:00",
-  "updated_at": "2026-09-18T08:52:19+08:00",
+  "updated_at": "2026-09-18T09:07:01+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "gpt-5.6-terra",
   "reasoning_effort": "xhigh",
@@ -16,53 +16,75 @@
     "AICU-V016-TARGET-GATE-PROJECTION-001"
   ],
   "scope": {
-    "target": "Pin candidate09 in the isolated target gate and record the completed candidate08 and limited model observations before a fresh canonical package plan.",
+    "target": "Retain candidate09 attempt10 as non-passing, correct its stale exact source identity expectation to the existing target-gate manifest pin, and prepare one fresh trial.",
     "files": [
-      ".dev/ai-context/tooling/target-gate-manifest.yaml",
+      ".dev/ai-context/tooling/tests/test_downstream_package_projection.py",
       ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/**",
       ".dev/workflows/INDEX.MD"
     ],
     "constraints": [
-      "Pin target-gate-manifest.yaml framework_commit to d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3 while preserving its existing validator hashes, registry counts, shell-assets hash, and defect declarations.",
-      "Preserve customizations, provenance, effective rules, effective-rule packets, product source, and target test code byte-for-byte.",
-      "Record failed selector guesses without selecting a route, creating a plan, applying a package, or claiming validation, receipt, or savings evidence."
+      "Correct only the hard-coded candidate identity expectation to d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3; preserve every remaining assertion, manifest hash, target selection, and authority byte.",
+      "Retain attempt10 as a 55-test run with 54 passed and one failure; it is non-passing and produced no receipt.",
+      "Do not create a plan, apply a package, change provenance or effective state, or claim candidate admission."
     ],
     "non_goals": [
       "Alter the package manifest or framework identity.",
       "Apply, finalize, roll back, or plan a package transaction.",
-      "Run target tests or validation.",
-      "Modify product source, target tests, provenance, customizations, effective state, or packets.",
+      "Run the full 55-test target suite or broader validation.",
+      "Modify product source, provenance, customizations, effective state, or packets.",
       "Commit, push, merge, change Issue state, or publish."
     ]
   },
   "execution": {
     "checkpoint": {
-      "branch": "codex/2026-09-18-v018-trial-04",
-      "preapply_commit": "6d91126670a4702d1831636b5892e637e5d8431f",
+      "branch": "codex/2026-09-18-v018-trial-05",
+      "preapply_commit": "39006e686ab00d0a2af67b525065d92be34de4c9",
       "manifest_framework_commit": "d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3",
-      "source_identity_status": "parent-supplied-candidate09-commit-pinned",
+      "source_identity_status": "candidate09-manifest-pin-corrected-focused-test-passed",
       "validator_registry_shell_assets": "Git blobs unchanged from candidate08 to candidate09"
     },
     "steps": [
-      "Record the fresh isolated preapply checkpoint and preserve target-owned bytes.",
-      "Pin the parent-supplied candidate09 source commit in the exact manifest projections without changing validator, registry, shell-assets, count, or defect fields.",
-      "Retain model selector-discovery failures without retrying or selecting a route.",
-      "Await root canonical validation and then canonical selector discovery before any plan or apply action."
+      "Retain the failed attempt10 as non-passing target-suite evidence with no receipt.",
+      "Correct only the stale hard-coded candidate08 source identity expectation to the existing candidate09 manifest pin.",
+      "Run the affected pinned-dependency test before a fresh target trial.",
+      "Await parent identity-consistency precheck and commit before any plan or apply action."
     ],
-    "validation": [],
-    "last_completed_step": "Recorded trial-04 preapply metadata, both non-passing model selector observations, and the parent-supplied candidate09 source commit. No target operation or validation command ran in this checkpoint.",
-    "next_action": "Parent validates and commits this preapply checkpoint, then continues the already-authorized fresh canonical package plan/apply, target receipt and independent audit. Actual corrected model consumption follows finalization."
+    "validation": [
+      {
+        "command": "py -3 -B .dev/ai-context/tooling/tests/test_downstream_package_projection.py -v",
+        "outcome": "failed",
+        "evidence": "Preapply module result: GWT002 validator SHA-256 expected 0bf9147efce76d5a58dc91386f9d71f793defea65af3c7bc2244b411a3f6fe47 but installed v0.17 byte digest was 05db9e16513c6cbb3325523e2eb3ca99f9290a48055184d1bb3b0b7d5e0f18d5; GWT003 registry expected 79b03cf9876170e2d4f0e6f9291e774bcbfa61847d6423a86406c39fb6ece233 but installed v0.17 byte digest was 819f635f0102413957b6e8c37561ca16a7e324ea901154b2552f2c40c6375b55. This preapply failure is not a candidate09 admission result."
+      },
+      {
+        "command": "py -3 -B .dev/ai-context/tooling/tests/test_downstream_package_projection.py DownstreamPackageProjectionTests.test_gwt_001_framework_dependencies_are_v0180_pinned -v",
+        "outcome": "passed",
+        "evidence": "GWT001 confirms the corrected expected candidate09 framework commit matches target-gate-manifest.yaml."
+      }
+    ],
+    "last_completed_step": "Retained attempt10 as 55 target tests with 54 passed and one failure, changed only the stale candidate identity expectation to the existing d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3 manifest pin, and passed the affected GWT001 assertion.",
+    "next_action": "Root performs candidate-identity consistency precheck, review, and commit; a fresh target trial remains required. The complete projection module must run only when its manifest hashes and installed package bytes share the same subject."
   },
   "results": {
-    "summary": "Candidate08 isolated target finalization and its earlier two-error pre-finalization run remain historical evidence. Candidate09 ZIP/tar package validation passed, and this clean trial-04 preapply checkpoint pins only its supplied source commit while recording Terra and Luna candidate01 selector-discovery failures without target execution.",
+    "summary": "Candidate08 evidence remains historical. Candidate09 attempt10 ran 55 selected target tests with 54 passed and one failure, so it is non-passing: test_downstream_package_projection.py expected the superseded eaba751 source identity instead of the existing d336430 target-gate manifest pin. The exact expectation correction passes GWT001. The complete projection module remains non-passing before package apply because two checks compare installed v0.17 bytes with candidate09 manifest hashes; no receipt or target transaction was created.",
     "files_changed": [
-      ".dev/ai-context/tooling/target-gate-manifest.yaml",
+      ".dev/ai-context/tooling/tests/test_downstream_package_projection.py",
       ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/workflow.yaml",
       ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/workflow-plan.md",
       ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/tasks/AICU-001-preapply-gate-reconciliation.json",
       ".dev/workflows/INDEX.MD"
     ],
-    "tests_run": [],
+    "tests_run": [
+      {
+        "command": "py -3 -B .dev/ai-context/tooling/tests/test_downstream_package_projection.py -v",
+        "outcome": "failed",
+        "evidence": "Preapply module result: GWT002 validator SHA-256 expected 0bf9147efce76d5a58dc91386f9d71f793defea65af3c7bc2244b411a3f6fe47 but installed v0.17 byte digest was 05db9e16513c6cbb3325523e2eb3ca99f9290a48055184d1bb3b0b7d5e0f18d5; GWT003 registry expected 79b03cf9876170e2d4f0e6f9291e774bcbfa61847d6423a86406c39fb6ece233 but installed v0.17 byte digest was 819f635f0102413957b6e8c37561ca16a7e324ea901154b2552f2c40c6375b55. This preapply failure is not a candidate09 admission result."
+      },
+      {
+        "command": "py -3 -B .dev/ai-context/tooling/tests/test_downstream_package_projection.py DownstreamPackageProjectionTests.test_gwt_001_framework_dependencies_are_v0180_pinned -v",
+        "outcome": "passed",
+        "evidence": "GWT001 confirms the corrected expected candidate09 framework commit matches target-gate-manifest.yaml."
+      }
+    ],
     "historical_observations": [
       "Candidate08 source-package finalization succeeded; it is not a receipt or apply result for this fresh preapply clone.",
       "A prior pre-finalization 55-test target run retained two errors. It is non-passing historical evidence, and no individual pass count is inferred from the aggregate.",
@@ -71,10 +93,12 @@
       "Terra candidate01 guessed code-reviewer/review/csharp and stopped before catalog checks.",
       "Luna candidate01 guessed code-review/direct/dotnet-backend/cs and stopped before catalog checks.",
       "The ready target routes review/direct/csharp-review and dotnet-mixed-review are recorded for later canonical discovery; neither is selected here.",
-      "No savings are accepted from either model observation."
+      "No savings are accepted from either model observation.",
+      "Candidate09 attempt10 ran 55 selected target tests with 54 passed and one failed projection test because its hard-coded expected source identity remained eaba751b71872e085f8ffd1b8a0fbbefa554f379 while target-gate-manifest.yaml pinned d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3; it produced no receipt.",
+      "After the expectation correction, only GWT001 passed in the preapply clone. The full projection module still failed GWT002 and GWT003 because its candidate09 hashes intentionally do not match the preapply clone's installed v0.17 validator and registry bytes."
     ],
     "finding_status": "partially-addressed",
-    "residual_risk": "Canonical selector-discovery guidance has not been consumed. Route selection, package planning, target validation, receipt admission, and finalization remain outside this metadata checkpoint.",
+    "residual_risk": "The corrected GWT001 does not admit candidate09. Attempt10 and the preapply full-module run are non-passing; a fresh full target trial, package planning, target validation, receipt admission, and finalization remain required after parent identity-consistency precheck.",
     "follow_up_needed": true
   }
 }
