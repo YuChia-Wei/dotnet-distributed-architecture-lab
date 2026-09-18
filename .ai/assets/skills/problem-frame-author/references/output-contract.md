@@ -13,11 +13,7 @@ Return the result in this order:
    - `acceptance.yaml` or `requirements/*.yaml`
 5. Inferred items
 6. Open questions
-7. Source bindings (reference/revision or section, source ID and approval/observation status)
-8. Recommended next skill only for a distinct needed output or decision; otherwise none
-
-Keep the selected frame schemas and file set intact. Shared handoff notes do not
-add arbitrary schema fields or create an automatic requirement/spec pipeline.
+7. Recommended next skill
 
 ## Quality Bar
 

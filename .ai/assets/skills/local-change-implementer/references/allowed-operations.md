@@ -12,12 +12,9 @@ This skill is optimized for local technical changes.
 - simplify one local object interaction
 - update direct call sites
 
-## Outside Local Scope
+## Requires Architect Or Slice Review First
 
-Use `../../../shared/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md` for selection.
-The following operations cannot execute in the local skill. A settled, accepted
-design can enter a bounded slice directly; architecture work is needed only
-for an actual missing or changed decision:
+These operations are out of scope and should first be reviewed by `ddd-ca-hex-architect` or planned as a `slice-implementer` task:
 
 - extract class
 - extract interface
@@ -43,8 +40,4 @@ Do not expand into:
 - broad namespace/package restructuring;
 - architecture boundary changes;
 - large cross-cutting rename campaigns;
-- introducing new classes or interfaces, including when their design was already
-  reviewed; implementation belongs to a bounded slice.
-
-The primary target, direct call sites and immediate tests may span several
-files inside the allowed module/radius. That file count alone is not expansion.
+- introducing new classes or interfaces without prior architecture review.

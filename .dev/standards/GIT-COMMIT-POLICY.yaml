@@ -27,9 +27,8 @@ workflow:
     - Validation
     - Workflow
   require_identity_match: true
-# A positive delimiter avoids partial matches before Unicode combining marks.
 assessment:
-  subject_id_pattern: '\bASM-[0-9]{8}-(?:(?:[01][0-9]|2[0-3])-[a-z0-9]{3}|[0-9]{3})(?=$|[\s\]\[(){}<>`.,;:!?/#"\x27\uFF0C\u3002\uFF1B\uFF1A\uFF01\uFF1F\u3001\uFF08\uFF09\u3010\u3011\u300A\u300B\u300C\u300D\u300E\u300F])'
+  subject_id_pattern: 'ASM-[0-9]{8}-[0-9]{3}'
   trailer: Assessment-Id
 ai_signature:
   trailer: Co-Authored-By

@@ -2,38 +2,33 @@ asset_id: ddd-ca-hex-architect
 schema_version: '1.0'
 asset_type: skill-spec
 title: DDD CA HEX Architect
-purpose: Design or review architecture artifacts using DDD, Clean Architecture and Hexagonal methods, with concrete technology and integration conventions selected from target authority.
+purpose: Design and refactor architecture in this repository using DDD, Clean Architecture, CQRS, MQ-first integration, and a Hexagonal Architecture view of ports and adapters.
 portability: repo-portable
 audience: agent-facing
 source_of_truth: canonical
 capability_slots:
 - architecture
 triggers:
-- review architecture design
 - architect
 - DDD
 - CA
 - Hexagonal
 - HEX
 inputs:
-- requested design/review mode and fixed artifact identity for review
 - bounded context or module problem statement
 - aggregate or use case scope
 - repo rules, ADRs, or integration constraints
 outputs:
-- 'in review mode: read-only findings, evidence, impact, uncertainty, coverage and handoff'
 - architecture decisions
 - layer and adapter placement
 - contract and persistence impact
 - files, prompts, and ADRs to update
 constraints:
-- Review mode preserves the fixed submitted artifact; authorized revision is a separate design action.
-- Distinguish author self-check from evidenced independent review; do not claim specification compliance.
-- Preserve applicable target architecture and integration rules; do not impose unselected language, framework, broker, ORM, DI or test tooling.
+- Cross-BC communication must stay MQ-only
 - Do not redefine repo architecture rules mid-flight
 workflow:
 - step: 1
-  description: Select design or review, identify source authority and fix the reviewed subject before analysis.
+  description: Frame the design problem and classify the scope
 - step: 2
   description: Apply DDD, CA, and HEX lenses together
 - step: 3
@@ -41,10 +36,8 @@ workflow:
 - step: 4
   description: Load only the smallest relevant prompt/reference subset
 - step: 5
-  description: Return design decisions, placement and risks in design mode, or criterion-backed findings and handoff in review mode.
+  description: Return architect-grade decisions, placement, impact, and risks
 references:
-- .ai/assets/shared/ARTIFACT-DESIGN-REVIEW-CONTRACT.md
-- .ai/assets/skills/ddd-ca-hex-architect/references/review-criteria.md
 - .ai/assets/skills/ddd-ca-hex-architect/references/source-map.md
 - .ai/assets/skills/ddd-ca-hex-architect/references/architecture-playbook.md
 - .ai/assets/skills/ddd-ca-hex-architect/references/design-deliverables.md
@@ -60,27 +53,11 @@ wrapper_metadata:
     wrapper_path: .claude/skills/ddd-ca-hex-architect/
   codex:
     wrapper_path: .agents/skills/ddd-ca-hex-architect/
-modes:
-  design:
-    trigger: Create or explicitly revise an artifact.
-    artifact_mutation: only-with-existing-user-authorization
-  review:
-    trigger: Assess an existing fixed artifact.
-    artifact_mutation: forbidden
-    output: findings-and-handoff
-technology_selection:
-  contract_path_template: .ai/assets/tech-stacks/<profile>/design/design-routing.yaml
-  shipped_extensions:
-  - dotnet-backend
-  route: architecture
-  preflight: Explicit target selection, installed component identity, scope applicability and freshness-verified effective rules are required before loading the selected route.
-  unavailable: Report missing specialist coverage and preserve required gates; do not infer a profile from a file suffix.
 status: active
 effective_rule_consumption:
   applies_when:
-  - The skill designs or reviews architecture against applicable adopted engineering catalog rules, including selected technology conventions.
+  - The skill designs or refactors bounded-context, aggregate, port, adapter, contract, or integration architecture.
   excludes:
-  - Common method observations against supplied requirements do not claim verification of unresolved catalog rules or satisfy a required technology gate.
   - Requirement or specification intake, implementation execution, or a handoff that does not make an architecture decision.
   resolver: .ai/scripts/resolve-effective-rule-packet.py
   applicability:

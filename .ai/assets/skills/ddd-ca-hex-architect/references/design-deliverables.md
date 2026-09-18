@@ -1,9 +1,6 @@
 # Design Deliverables
 
-Use these shapes for `design`, scaled to the requested scope. Trace decisions to
-requirement/AC IDs, record assumptions, alternatives, quality constraints and
-observable acceptance. For `review`, use the shared artifact design/review
-contract and `review-criteria.md`; leave the submitted design unchanged.
+Use these output shapes when the user asks for architecture work rather than raw implementation.
 
 ## New Bounded Context
 
@@ -12,7 +9,7 @@ Return:
 2. Ubiquitous language and key aggregates
 3. Inbound ports and primary use cases
 4. Outbound ports and required adapters
-5. BC contracts and integrations selected by the target
+5. BC contracts and MQ events
 6. Project/folder placement
 7. Docs to add or update
 
@@ -55,8 +52,7 @@ Return:
 
 ## Required Quality Checks
 
-- Check the design against the target's supplied architecture, requirements and quality constraints; report missing authority explicitly.
-- Load only applicable adopted rules through the source map and effective-rule contract.
-- Apply the review criteria as an author self-check and label it accordingly; it does not satisfy independent review.
-- Hand accepted decisions to the next owning skill with source IDs, open questions and existing authorization. Do not claim specification compliance or implementation completion.
+- Check the design against `.dev/ARCHITECTURE.md`.
+- Check the design against `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`.
+- Read the matching standards, guides, and architecture docs that now hold the canonical rules.
 - If the design affects code generation or review workflows, map the result back to `.ai/assets/` rather than inventing an isolated parallel standard.

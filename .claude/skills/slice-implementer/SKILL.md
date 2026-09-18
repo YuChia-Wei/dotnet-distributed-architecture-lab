@@ -1,6 +1,6 @@
 ---
 name: slice-implementer
-description: Implement one bounded command, query, reactor or generic slice under accepted architecture. Retain slice ownership for internal local edits and hand off only for a concrete missing decision or separable useful subtask.
+description: Implement one bounded implementation slice from requirements, specs, architecture decisions, review findings, or workflow tasks using exactly one command, query, reactor, or generic execution mode plus optional overlays such as remediation, without redefining architecture direction.
 ---
 
 # Slice Implementer
@@ -13,7 +13,6 @@ This is a thin Claude-compatible wrapper.
 - Spec: `.ai/assets/skills/slice-implementer/skill.yaml`
 - Human Guide: `.dev/guides/ai-collaboration-guides/SLICE-IMPLEMENTER-SKILL-GUIDE.md`
 - References:
-  - `.ai/assets/shared/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md`
   - `.ai/assets/skills/slice-implementer/references/input-contract.md`
   - `.ai/assets/skills/slice-implementer/references/execution-playbook.md`
   - `.ai/assets/skills/slice-implementer/references/role-execution.md`

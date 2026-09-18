@@ -2125,7 +2125,6 @@ run_source_repository_release_checks() {
             "AI Context Version Governance Fail-Closed Tests" \
             "AI Context Packaging GWT Tests" \
             "AI Context Release State Fail-Closed Tests" \
-            "Release Asset Identity Contract Tests" \
             "AI Context Release Preparation Fail-Closed Tests" \
             "AI Context Release Renderer Fail-Closed Tests" \
             "AI Behavior Deterministic Evaluation" \
@@ -2253,7 +2252,6 @@ run_source_repository_governance_checks() {
             "Source Governance Manifest Registry" \
             "Validation Freeze And Evidence Reuse Contract" \
             "Validation Lifecycle Fail-Closed Tests" \
-            "Bounded Validation Dependency Observation" \
             "Agent Execution Guardrails Contract" \
             "Agent Execution Guardrails Fail-Closed Tests" \
             "Terminal Issue Closure Contract" \

@@ -10,7 +10,7 @@ Record the repository identity, audit reason, requested focus, included context 
 - Durable assessment mode applies when the user asks to save, persist, land, or retain the report in the repository without authorizing remediation. It requires the repository assessment locator, auditor-owned report, assessment index update, and dedicated assessment branch, while audited surfaces remain read-only.
 - Authorized remediation is not an auditor mode; hand it to `ai-context-governance` for the normal remediation lifecycle.
 
-For a standalone durable audit, allocate an `ASM-YYYYMMDD-HH-xxx` ID and create or switch to the dedicated assessment branch before writing `assessment.yaml` or `report.md`. Record the assessed subject revision separately from the artifact branch. Follow `.dev/standards/ASSESSMENT-ARTIFACT-POLICY.md` and `.dev/TEAM-GIT-FLOW-RULES.MD`. When the audit is part of an authorized governance workflow, use the workflow branch and create the assessment under `.dev/assessments/` without opening a competing branch.
+For a standalone durable audit, allocate an `ASM-YYYYMMDD-NNN` ID and create or switch to the dedicated assessment branch before writing `assessment.yaml` or `report.md`. Record the assessed subject revision separately from the artifact branch. Follow `.dev/standards/ASSESSMENT-ARTIFACT-POLICY.md` and `.dev/TEAM-GIT-FLOW-RULES.MD`. When the audit is part of an authorized governance workflow, use the workflow branch and create the assessment under `.dev/assessments/` without opening a competing branch.
 
 Read deeper `AGENTS.*` files before auditing a governed subtree. Keep the audited context read-only. If remediation is separately authorized, hand the findings to `ai-context-governance`; do not expand the auditor into an implementer.
 
@@ -85,12 +85,12 @@ Compare confirmed findings, findings added by repo policies, downgraded or defer
 For durable mode, create the locator from the repository assessment template and the report from the auditor template. In transient mode, present the same evidence discipline and comparison in the conversation without creating repository artifacts.
 
 ```text
-.dev/assessments/<ASM-YYYYMMDD-HH-xxx>/
+.dev/assessments/<ASM-YYYYMMDD-NNN>/
   assessment.yaml
   report.md
 ```
 
-Use the local creation date/hour and an independent three-character lowercase ASCII alphanumeric suffix under the assessment policy. Keep existing legacy IDs unchanged; reselect a suffix when the proposed ID is already present locally. Keep the assessment ID, directory, locator, report metadata, commit subject, and `Assessment-Id` trailer synchronized.
+Use the next unused assessment sequence for the local creation date. Keep the assessment ID, directory, locator, report metadata, commit subject, and `Assessment-Id` trailer synchronized.
 
 Write both baseline audits and independent post-remediation verification as separate assessments. A verification assessment links the baseline assessment and governance workflow; it never replaces the baseline report.
 

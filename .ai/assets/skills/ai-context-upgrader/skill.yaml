@@ -16,7 +16,7 @@ inputs:
   - "target `.dev/ai-context/provenance.yaml`, legacy `.dev/AI-CONTEXT-SOURCE.yaml`, or an explicit unresolved-provenance decision"
   - "target `.dev/ai-context/customizations.yaml` when provenance schema 2 is active"
   - "requested published framework version"
-  - "trusted package inventories and recorded base identity for three-way discovery; source Git trees are optional evidence only when deliberately available and are not a downstream prerequisite"
+  - "Git-accessible previous and requested framework trees"
   - "current target repository state and target-owned overrides"
 outputs:
   - "a read-only evidence-bound route result for immediate-predecessor, v0.9.0, and v0.6.0 support before any target mutation"

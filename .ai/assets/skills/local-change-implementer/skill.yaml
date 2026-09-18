@@ -2,7 +2,7 @@ asset_id: local-change-implementer
 schema_version: '1.0'
 asset_type: skill-spec
 title: Local Change Implementer
-purpose: Execute one local technical target and operation, including direct call sites and immediate tests in the allowed radius. File count alone does not expand scope; new types and semantic boundaries require another owner.
+purpose: Execute one local class, object, method, symbol, SQL/ORM, or direct-call-site technical change without introducing new architecture boundaries or broadening into a slice.
 portability: repo-portable
 audience: agent-facing
 source_of_truth: canonical
@@ -24,7 +24,6 @@ outputs:
 - behavior compatibility notes
 - handoff if a larger slice or architecture decision is required
 constraints:
-- Select scope and necessary handoffs through IMPLEMENTATION-SCOPE-ROUTING-CONTRACT; file count alone does not determine the owner.
 - Do not introduce a new class or interface
 - Do not expand into architecture redesign or stage planning
 - Do not change domain language, DTO/API/event names, dependency direction, or module boundaries
@@ -37,7 +36,6 @@ workflow:
 - step: 3
   description: Update direct usage sites and validate the narrowest meaningful scope
 references:
-- .ai/assets/shared/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md
 - .ai/assets/skills/local-change-implementer/references/allowed-operations.md
 - .ai/assets/skills/local-change-implementer/references/execution-rules.md
 - .ai/assets/skills/local-change-implementer/references/skill-boundaries.md

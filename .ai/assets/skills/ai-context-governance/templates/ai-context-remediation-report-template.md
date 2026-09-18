@@ -3,9 +3,9 @@
 ## Template Metadata
 
 - `template_id`: `ai-context-governance-remediation-report`
-- `template_version`: `2.0.1`
+- `template_version`: `2.0.0`
 - `created_at`: `2026-07-10T18:22:49+08:00`
-- `updated_at`: `2026-09-12T11:58:27+08:00`
+- `updated_at`: `2026-07-13T23:11:56+08:00`
 
 ## Report Metadata
 
@@ -16,9 +16,9 @@
 - `created_at`: `<ISO-8601-with-offset>`
 - `updated_at`: `<ISO-8601-with-offset>`
 - `template_source`: `.ai/assets/skills/ai-context-governance/templates/ai-context-remediation-report-template.md`
-- `template_version`: `2.0.1`
-- `baseline_assessment`: `<assessment-id>`
-- `verification_assessment`: `<assessment-id>`
+- `template_version`: `2.0.0`
+- `baseline_assessment`: `<ASM-YYYYMMDD-NNN>`
+- `verification_assessment`: `<ASM-YYYYMMDD-NNN>`
 
 ## Remediation Summary
 

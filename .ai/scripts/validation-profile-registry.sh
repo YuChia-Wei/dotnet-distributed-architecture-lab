@@ -253,7 +253,7 @@ register_check spec-implementation \
 register_check sdk-free-framework-contract \
     "SDK-Free Framework Contract" required \
     "portability,release" "fast pr release nightly-full" \
-    ".ai/scripts/tests/test_sdk_free_framework_contract.py .ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation .ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods **.[cC][sS][pP][rR][oO][jJ] **.[sS][lL][nN] **.[sS][lL][nN][xX] global.json .github/workflows/portable-gates.yml" '' "python>=3.11 git" 30 cpu reuse-by-input source \
+    ".ai/scripts/tests/test_sdk_free_framework_contract.py .ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation .github/workflows/portable-gates.yml" '' "python>=3.11 git" 30 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_sdk_free_framework_contract.py -v" source-release
 register_check engineering-guardrails-provider-contract \
     "Engineering Guardrails Provider Contract" required \
@@ -273,7 +273,7 @@ register_check package-full-matrix \
 register_check release-state-tests \
     "AI Context Release State Fail-Closed Tests" required \
     "release,tests" "release nightly-full" \
-    ".ai/scripts/tests/test_ai_context_release_state.py .ai/scripts/validate-ai-context-release-state.py .github/scripts/validate-v016-direct-upgrades.py .github/scripts/validate-v017-direct-upgrades.py .dev/releases" source-ai-context-version "python>=3.11 git" 90 cpu reuse-by-input source \
+    ".ai/scripts/tests/test_ai_context_release_state.py .dev/releases" source-ai-context-version "python>=3.11 git" 90 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_ai_context_release_state.py -v" source-release
 register_check release-asset-identity \
     "Release Asset Identity Contract Tests" required \

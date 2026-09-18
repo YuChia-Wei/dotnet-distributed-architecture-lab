@@ -3,11 +3,6 @@
 This template uses BDDfy and xUnit while preserving Rule-based grouping and
 Given/When/Then semantics through naming and fluent steps.
 
-For a standalone project with complete step bodies, explicit data-row and
-assertion mappings, use the [runnable step-method example](../bdd-step-methods/README.md).
-The host-dependent snippet below remains reference-only; it is not a compiled
-fixture. The canonical test standard and target-owned choices take precedence.
-
 ## Core Rules
 
 - Every use case must have at least one BDD scenario.
@@ -51,10 +46,10 @@ public sealed class CreatePlanTests : IClassFixture<TestHostFixture>
         _state.Output = await useCase.ExecuteAsync(input);
     }
 
-    async Task Then_the_plan_is_persisted()
+    void Then_the_plan_is_persisted()
     {
         var repo = _scope.ServiceProvider.GetRequiredService<IAggregateRepository<Plan, PlanId>>();
-        var saved = await repo.FindByIdAsync(PlanId.ValueOf(_state.Output!.Id));
+        var saved = repo.FindByIdAsync(PlanId.ValueOf(_state.Output!.Id)).Result;
         Assert.NotNull(saved);
     }
 }

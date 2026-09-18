@@ -3,13 +3,13 @@
 ## Template Metadata
 
 - `template_id`: `ai-context-auditor-report`
-- `template_version`: `2.2.0`
+- `template_version`: `2.1.0`
 - `created_at`: `2026-07-10T18:22:49+08:00`
-- `updated_at`: `2026-09-12T11:58:27+08:00`
+- `updated_at`: `2026-07-15T08:39:00+08:00`
 
 ## Metadata
 
-- `assessment_id`: `<ASM-YYYYMMDD-HH-xxx>`
+- `assessment_id`: `<ASM-YYYYMMDD-NNN>`
 - `assessment_type`: `ai-context-audit | ai-context-verification`
 - `owner_skill`: `ai-context-auditor`
 - `status`: `draft | final`
@@ -17,7 +17,7 @@
 - `created_at`: `<ISO-8601-with-offset>`
 - `updated_at`: `<ISO-8601-with-offset>`
 - `template_source`: `.ai/assets/skills/ai-context-auditor/templates/ai-context-audit-report-template.md`
-- `template_version`: `2.2.0`
+- `template_version`: `2.1.0`
 - `repository`:
 - `subject_branch`:
 - `subject_commit`:

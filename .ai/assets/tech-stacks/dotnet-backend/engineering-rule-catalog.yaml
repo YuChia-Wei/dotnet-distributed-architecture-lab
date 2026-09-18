@@ -11,7 +11,7 @@ ordering:
   array_contents: "retain declared source order"
 catalog_digest:
   algorithm: "sha256"
-  value: "586701351c97fffa2ece421c4eabd4acbdce315b34e5845b497f968967f7c3d4"
+  value: "acb85d42090f446b290bf01a79752b79ebe203919d301202984831bf4d81a9cb"
   canonicalization: "UTF-8 encoding of compact JSON with Unicode preserved, object keys sorted by Unicode code point, array order preserved, and exactly one terminal LF; the complete catalog_digest field is excluded from the input."
 selector_contract:
   capability_execution_mode_file_type: "unconstrained-by-source with an empty values list means no narrower source-backed predicate is declared; a resolver must not invent one or use it as a default fallback."
@@ -50,7 +50,7 @@ rules:
           values: []
     override_policy: "not-applicable"
     decision_evidence: ["target Aggregate architecture or persistence profile"]
-    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md", ".ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md", ".ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD", ".ai/assets/skills/code-reviewer/references/review-routing.yaml"]
     status: "active"
     source_file_sha256: "9844e261741fd6fcdf8c0489516c2b4be8ad8bb8074463c7e35942631c2dabd9"
     normative_text_sha256: "262144bbec5431033e252c4c128025a5563f13f2d6c5610e86d51f7c19b4e4a3"
@@ -140,7 +140,7 @@ rules:
           values: []
     override_policy: "explicit-target-decision"
     decision_evidence: ["named all-or-nothing invariant", "documented same-bounded-context consistency decision"]
-    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml"]
     status: "active"
     source_file_sha256: "bd3cb7fc48bbe7fb8c725f10d4baf2a31f24d4ac22aa29422d7d586daf1556a3"
     normative_text_sha256: "05eb3e1e98a560e35e0ecee16d77514544445467263cd169633a798cf7ef8be1"
@@ -220,7 +220,7 @@ rules:
           values: []
     override_policy: "forbidden"
     decision_evidence: null
-    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md", ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md", ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml"]
     status: "active"
     source_file_sha256: "3ab132dc92cf0120a488358f23abdbb90731a98556e71cff34a85cae4425eabc"
     normative_text_sha256: "45292a7bbc1fc9e6d4e845aa660681efda68e0e2394cecf1c6c2c76ebf3814f7"
@@ -263,7 +263,7 @@ rules:
           values: []
     override_policy: "not-applicable"
     decision_evidence: ["authorization, retention, legal, audit, and cleanup policy"]
-    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml"]
     status: "active"
     source_file_sha256: "dbcb817922af4ff243d8fab09bcdc3d1085dcd88f599ef39e65801b55772f626"
     normative_text_sha256: "7d8e43950811aa96c6cfc12f811deb9c8d13739989d4611176e5d0e4754c165e"
@@ -309,7 +309,7 @@ rules:
           values: []
     override_policy: "explicit-target-decision"
     decision_evidence: [".dev/project-config.yaml architecture capability selection", "target repository requirements or architecture decision"]
-    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml"]
     status: "active"
     source_file_sha256: "04763da8d53e4a5921c82d216f4143676d7881350d9e87a39ffb950b45859bc0"
     normative_text_sha256: "5e5370bef9fae1d46a6df8518ab380422368a25d7bb0ca00affc1af3f726cfa7"
@@ -382,7 +382,7 @@ rules:
           values: []
     override_policy: "forbidden"
     decision_evidence: null
-    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml"]
     status: "active"
     source_file_sha256: "7cf69343dcaa73f12f2dff85549f1627548301d2c72b3bd6c81d6cf2313225b6"
     normative_text_sha256: "1a3c010a5f2e863bcf60c7ddc333a23c7d96705e8c758bb4a89fa9cae111c01c"
@@ -490,10 +490,10 @@ rules:
           values: []
     override_policy: "explicit-target-decision"
     decision_evidence: ["target repository collaboration guidance", "target repository package and test configuration"]
-    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml"]
     status: "active"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
-    normative_text_sha256: "81fa3b215c6677225c3fdca9a4aca1a8237bd10558c0d7a1d6bfbc5dddedb199"
+    source_file_sha256: "c1b1a007f44176191fd59e38f2f5b7f1ff4673ca894a7f51b0b65fa697eab9d0"
+    normative_text_sha256: "f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693"
     normative_text: |
       ### 3. Use GWT; Default to BDDfy
 
@@ -501,87 +501,77 @@ rules:
 
       `.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../../../../../../.dev/specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
 
-      #### Step Methods And Scenario Readability
-
-      For scenario-style unit, Use Case and integration tests, the test method must
-      read as Given/When/Then step calls, directly or through the selected fluent
-      runner. Give methods behavior-specific names such as `GivenMonthlyBudget`,
-      `WhenQueryingBudget` and `ThenAmountShouldBe`; comments or generic `Setup`,
-      `Execute` and `Check` methods alone do not satisfy this form. Preserve the
-      compact exception-contract form explicitly permitted in section 5; it still
-      needs an observable exception assertion and source traceability.
-
-      | Step | Responsibility | Must not substitute for |
-      | --- | --- | --- |
-      | Given | Establish the scenario's data/state and controlled dependency responses. Put reusable construction mechanics in helpers. | The primary action or the scenario's outcome assertions. Fixture guards may fail fast but are not Then coverage. |
-      | When | Execute the real subject's primary behavior once per scenario/data row and capture its result, state or exception. An intentional multi-operation behavior must be explicit in the design. | A mock of the subject, a fabricated result, or a hidden repeat of the action during verification. |
-      | Then / And | Assert each specified observable value, relation, state, event or exception against the result of that When. | Re-executing the subject, calculating the expected answer using its algorithm, or merely checking that no exception occurred when a value is specified. |
-
-      Keep material inputs and expected values visible in the scenario method or its
-      explicitly bound theory row. A business-named builder may encapsulate irrelevant
-      defaults; it must not hide the values that distinguish scenarios. Use fresh
-      per-test state, instance fixtures with isolated scenario state, or explicit
-      arguments/results. Avoid static mutable scenario fields and test-order coupling.
-      A result field must distinguish "not executed" from a legitimate default result
-      (for example, nullable captured data with a Then assertion that it is present).
-
-      For asynchronous behavior, await the step to completion using the selected
-      runner's supported Task API. Do not use `async void`, fire-and-forget actions,
-      `.Wait()` or `.Result`. Capture expected exceptions during When (for example
-      with xUnit `Record.ExceptionAsync`) and assert the required type and relevant
-      details during Then; do not swallow exceptions to make the test green. A bounded
-      eventual assertion may wait for an observable asynchronous outcome, but must not
-      repeat the command/query that caused it.
-
-      Use the [GWT handoff contract](../../../../shared/GWT-TEST-HANDOFF-CONTRACT.md)
-      to preserve scenario/data-row IDs, source/AC bindings and every Then-to-assertion
-      mapping. Parameterized cases are valid when each row remains identifiable and
-      uses the same behavior and assertion responsibilities. A generated report,
-      method-name match, successful build or passing run alone cannot prove that the
-      scenario was implemented faithfully.
-
-      #### Default BDDfy Form
-
-      This excerpt's fixture and step implementations are in the
-      [runnable step-method example](../../examples/bdd-step-methods/README.md).
-      It exposes the behavior-bearing data while keeping mechanics inside steps.
-
       ```csharp
-      [Fact]
-      public void Should_return_zero_when_query_month_has_no_budget()
+      // ✅ Correct: BDDfy + Gherkin style
+      public class CreateProductUseCaseTests
       {
-          this.Given(x => x.GivenMonthlyBudget("202102", 28m))
-              .When(x => x.WhenQueryingBudget(
-                  new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2)))
-              .Then(x => x.ThenAmountShouldBe(0m))
-              .BDDfy();
+          private CreateProductInput _input = null!;
+          private CreateProductOutput _output = null!;
+          private readonly IAggregateRepository<Product, ProductId> _repository;
+          private readonly CreateProductUseCase _useCase;
+
+          public CreateProductUseCaseTests()
+          {
+              _repository = Substitute.For<IAggregateRepository<Product, ProductId>>();
+              var unitOfWork = Substitute.For<IUnitOfWork>();
+              var publisher = Substitute.For<IProductEventPublisher>();
+              _useCase = new CreateProductUseCase(_repository, unitOfWork, publisher);
+          }
+
+          [Fact]
+          public void Should_create_product_successfully_when_input_is_valid()
+          {
+              this.Given(x => x.GivenAValidProductCreationInput())
+                  .When(x => x.WhenTheUseCaseIsExecuted())
+                  .Then(x => x.ThenTheProductShouldBeCreated())
+                  .And(x => x.ThenTheOutputShouldContainTheProductId())
+                  .BDDfy();
+          }
+
+          private void GivenAValidProductCreationInput()
+          {
+              _input = new CreateProductInput(
+                  Guid.NewGuid().ToString(),
+                  "Test Product",
+                  "user-123"
+              );
+          }
+
+          private async Task WhenTheUseCaseIsExecuted()
+          {
+              _output = await _useCase.ExecuteAsync(_input, CancellationToken.None);
+          }
+
+          private void ThenTheProductShouldBeCreated()
+          {
+              _repository.Received(1).SaveAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>());
+          }
+
+          private void ThenTheOutputShouldContainTheProductId()
+          {
+              _output.ProductId.Should().NotBeNull();
+          }
+      }
+
+      // ❌ Incorrect: replaces the Use Case business-flow test with a delivery Command and Handler
+      [Fact]
+      public async Task TestCreateProduct()  // Incorrect name
+      {
+          // Arrange
+          var command = new CreateProductCommand(...);
+
+          // Act
+          var result = await _handler.Handle(command, CancellationToken.None);
+
+          // Tests only the adapter and does not directly protect Use Case orchestration.
       }
       ```
 
-      #### Explicit Plain-xUnit Opt-Out Form
-
-      The same example includes a separately selected BDDfy opt-out. Opting out of
-      the package preserves method responsibilities and GWT semantics.
-
-      ```csharp
-      [Fact]
-      public async Task Should_return_zero_when_query_month_has_no_budget()
-      {
-          GivenMonthlyBudget("202102", 28m);
-          var actual = await WhenQueryingBudget(
-              new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2));
-          ThenAmountShouldBe(actual, 0m);
-      }
-      ```
-
-      Test the concrete Use Case directly for business-flow behavior and mock its
-      outbound ports. Handler adapter tests remain separate and narrow: verify only
-      Command-to-Input mapping, exactly one Use Case invocation, and delivery-specific
-      failure mapping. A Handler test that mocks a Repository must not duplicate
-      responsibility for business-flow testing.
+      Handler adapter tests must remain separate and narrow: verify only Command-to-Input mapping, exactly one
+      Use Case invocation, and delivery-specific failure mapping. A Handler test that mocks a
+      Repository must not duplicate responsibility for business-flow testing.
 
       ---
-
   - rule_id: "TEST-GWT-001"
     kind: "normative-rule"
     semantic_owner:
@@ -613,10 +603,10 @@ rules:
           values: []
     override_policy: "forbidden"
     decision_evidence: null
-    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml"]
     status: "active"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
-    normative_text_sha256: "81fa3b215c6677225c3fdca9a4aca1a8237bd10558c0d7a1d6bfbc5dddedb199"
+    source_file_sha256: "c1b1a007f44176191fd59e38f2f5b7f1ff4673ca894a7f51b0b65fa697eab9d0"
+    normative_text_sha256: "f74384cd191b1efab60eadba7e3703eff38c03d76bf6cdbb6fa388e1cc9e5693"
     normative_text: |
       ### 3. Use GWT; Default to BDDfy
 
@@ -624,87 +614,77 @@ rules:
 
       `.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../../../../../../.dev/specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
 
-      #### Step Methods And Scenario Readability
-
-      For scenario-style unit, Use Case and integration tests, the test method must
-      read as Given/When/Then step calls, directly or through the selected fluent
-      runner. Give methods behavior-specific names such as `GivenMonthlyBudget`,
-      `WhenQueryingBudget` and `ThenAmountShouldBe`; comments or generic `Setup`,
-      `Execute` and `Check` methods alone do not satisfy this form. Preserve the
-      compact exception-contract form explicitly permitted in section 5; it still
-      needs an observable exception assertion and source traceability.
-
-      | Step | Responsibility | Must not substitute for |
-      | --- | --- | --- |
-      | Given | Establish the scenario's data/state and controlled dependency responses. Put reusable construction mechanics in helpers. | The primary action or the scenario's outcome assertions. Fixture guards may fail fast but are not Then coverage. |
-      | When | Execute the real subject's primary behavior once per scenario/data row and capture its result, state or exception. An intentional multi-operation behavior must be explicit in the design. | A mock of the subject, a fabricated result, or a hidden repeat of the action during verification. |
-      | Then / And | Assert each specified observable value, relation, state, event or exception against the result of that When. | Re-executing the subject, calculating the expected answer using its algorithm, or merely checking that no exception occurred when a value is specified. |
-
-      Keep material inputs and expected values visible in the scenario method or its
-      explicitly bound theory row. A business-named builder may encapsulate irrelevant
-      defaults; it must not hide the values that distinguish scenarios. Use fresh
-      per-test state, instance fixtures with isolated scenario state, or explicit
-      arguments/results. Avoid static mutable scenario fields and test-order coupling.
-      A result field must distinguish "not executed" from a legitimate default result
-      (for example, nullable captured data with a Then assertion that it is present).
-
-      For asynchronous behavior, await the step to completion using the selected
-      runner's supported Task API. Do not use `async void`, fire-and-forget actions,
-      `.Wait()` or `.Result`. Capture expected exceptions during When (for example
-      with xUnit `Record.ExceptionAsync`) and assert the required type and relevant
-      details during Then; do not swallow exceptions to make the test green. A bounded
-      eventual assertion may wait for an observable asynchronous outcome, but must not
-      repeat the command/query that caused it.
-
-      Use the [GWT handoff contract](../../../../shared/GWT-TEST-HANDOFF-CONTRACT.md)
-      to preserve scenario/data-row IDs, source/AC bindings and every Then-to-assertion
-      mapping. Parameterized cases are valid when each row remains identifiable and
-      uses the same behavior and assertion responsibilities. A generated report,
-      method-name match, successful build or passing run alone cannot prove that the
-      scenario was implemented faithfully.
-
-      #### Default BDDfy Form
-
-      This excerpt's fixture and step implementations are in the
-      [runnable step-method example](../../examples/bdd-step-methods/README.md).
-      It exposes the behavior-bearing data while keeping mechanics inside steps.
-
       ```csharp
-      [Fact]
-      public void Should_return_zero_when_query_month_has_no_budget()
+      // ✅ Correct: BDDfy + Gherkin style
+      public class CreateProductUseCaseTests
       {
-          this.Given(x => x.GivenMonthlyBudget("202102", 28m))
-              .When(x => x.WhenQueryingBudget(
-                  new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2)))
-              .Then(x => x.ThenAmountShouldBe(0m))
-              .BDDfy();
+          private CreateProductInput _input = null!;
+          private CreateProductOutput _output = null!;
+          private readonly IAggregateRepository<Product, ProductId> _repository;
+          private readonly CreateProductUseCase _useCase;
+
+          public CreateProductUseCaseTests()
+          {
+              _repository = Substitute.For<IAggregateRepository<Product, ProductId>>();
+              var unitOfWork = Substitute.For<IUnitOfWork>();
+              var publisher = Substitute.For<IProductEventPublisher>();
+              _useCase = new CreateProductUseCase(_repository, unitOfWork, publisher);
+          }
+
+          [Fact]
+          public void Should_create_product_successfully_when_input_is_valid()
+          {
+              this.Given(x => x.GivenAValidProductCreationInput())
+                  .When(x => x.WhenTheUseCaseIsExecuted())
+                  .Then(x => x.ThenTheProductShouldBeCreated())
+                  .And(x => x.ThenTheOutputShouldContainTheProductId())
+                  .BDDfy();
+          }
+
+          private void GivenAValidProductCreationInput()
+          {
+              _input = new CreateProductInput(
+                  Guid.NewGuid().ToString(),
+                  "Test Product",
+                  "user-123"
+              );
+          }
+
+          private async Task WhenTheUseCaseIsExecuted()
+          {
+              _output = await _useCase.ExecuteAsync(_input, CancellationToken.None);
+          }
+
+          private void ThenTheProductShouldBeCreated()
+          {
+              _repository.Received(1).SaveAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>());
+          }
+
+          private void ThenTheOutputShouldContainTheProductId()
+          {
+              _output.ProductId.Should().NotBeNull();
+          }
+      }
+
+      // ❌ Incorrect: replaces the Use Case business-flow test with a delivery Command and Handler
+      [Fact]
+      public async Task TestCreateProduct()  // Incorrect name
+      {
+          // Arrange
+          var command = new CreateProductCommand(...);
+
+          // Act
+          var result = await _handler.Handle(command, CancellationToken.None);
+
+          // Tests only the adapter and does not directly protect Use Case orchestration.
       }
       ```
 
-      #### Explicit Plain-xUnit Opt-Out Form
-
-      The same example includes a separately selected BDDfy opt-out. Opting out of
-      the package preserves method responsibilities and GWT semantics.
-
-      ```csharp
-      [Fact]
-      public async Task Should_return_zero_when_query_month_has_no_budget()
-      {
-          GivenMonthlyBudget("202102", 28m);
-          var actual = await WhenQueryingBudget(
-              new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2));
-          ThenAmountShouldBe(actual, 0m);
-      }
-      ```
-
-      Test the concrete Use Case directly for business-flow behavior and mock its
-      outbound ports. Handler adapter tests remain separate and narrow: verify only
-      Command-to-Input mapping, exactly one Use Case invocation, and delivery-specific
-      failure mapping. A Handler test that mocks a Repository must not duplicate
-      responsibility for business-flow testing.
+      Handler adapter tests must remain separate and narrow: verify only Command-to-Input mapping, exactly one
+      Use Case invocation, and delivery-specific failure mapping. A Handler test that mocks a
+      Repository must not duplicate responsibility for business-flow testing.
 
       ---
-
   - rule_id: "TEST-MOCK-001"
     kind: "normative-rule"
     semantic_owner:
@@ -736,9 +716,9 @@ rules:
           values: []
     override_policy: "explicit-target-decision"
     decision_evidence: [".dev/project-config.yaml technologySelections slot testing.mocking", "target repository test packages and configuration", "target repository collaboration or technology requirements"]
-    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml"]
     status: "active"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "c1b1a007f44176191fd59e38f2f5b7f1ff4673ca894a7f51b0b65fa697eab9d0"
     normative_text_sha256: "8ff4679c135e2de0f7a370317da2da76ee4a5bf7ca6ef076dc85d0aaeed23503"
     normative_text: |
       ### 6. Mocking Library Selection
@@ -775,7 +755,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md"
     migration_provenance:
       legacy_path: ".dev/standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "2e4b0d969f72c0296b83114fc6f6536e58245ed1f5e09a60cfc304bc1eeecb60"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -783,7 +763,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD"
     migration_provenance:
       legacy_path: ".dev/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "12a263b623c280d16dea2b2b6b58d55470e6ce84ea9d206de79f6b67376806e1"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -791,7 +771,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/anti-patterns.md"
     migration_provenance:
       legacy_path: ".dev/standards/anti-patterns.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "28f547761975c7f3160eac6f7374a870d1ab6cf9d4a2de3a7bc98982f1e2827e"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -799,7 +779,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/best-practices.md"
     migration_provenance:
       legacy_path: ".dev/standards/best-practices.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "958d8d060f85a43d34cd7295cf00a9def5c839d786051180689aa8d631f43ada"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -807,7 +787,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/coding-guide.md"
     migration_provenance:
       legacy_path: ".dev/standards/coding-guide.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "7413fa8ca91f3c016470d5c7524d7f993e91a99ad476f31de15d27da5158801f"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -815,7 +795,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md"
     migration_provenance:
       legacy_path: ".dev/standards/coding-standards.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "818d474a6d998605778e7c0a4bb3cecf0898b996cb3c6d8d6420e199b436e028"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -823,7 +803,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/controller-standards.md"
     migration_provenance:
       legacy_path: ".dev/standards/coding-standards/controller-standards.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "e9c179ec45c01af9eb7c0e84d1c8797432cb1d5ab30202030dd5bb441608125f"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -831,7 +811,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/profile-configuration-standards.md"
     migration_provenance:
       legacy_path: ".dev/standards/coding-standards/profile-configuration-standards.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "5fe6fd1bc79c3143622683ac71daf8b1f876b0ac71ad43d9e1817daaf4a632a9"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -839,7 +819,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/projection-standards.md"
     migration_provenance:
       legacy_path: ".dev/standards/coding-standards/projection-standards.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "e7016eba7ae63efa4c279f2e4288f12aa26f2d7a377bcd13a9c4a93f62a3d907"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -847,7 +827,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/reactor-standards.md"
     migration_provenance:
       legacy_path: ".dev/standards/coding-standards/reactor-standards.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "fbc2b998b7db8de8bce8250580d003da45b1a220249836e82bd61a6d8d479d64"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."
@@ -855,7 +835,7 @@ unpacketized_documents:
       path: ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/repository-standards.md"
     migration_provenance:
       legacy_path: ".dev/standards/coding-standards/repository-standards.md"
-    source_file_sha256: "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d"
+    source_file_sha256: "27c9b257b344271f4a0aeb7ad5fdd27340f020d4cfae795138e90dce1f38a65a"
     packet_state: "identity-allocation-required"
     resolver_disposition: "unpacketized-fail-closed"
     reason: "The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive a path-based ID or packet it."

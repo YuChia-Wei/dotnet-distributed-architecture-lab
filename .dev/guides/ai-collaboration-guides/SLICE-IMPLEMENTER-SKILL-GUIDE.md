@@ -24,7 +24,7 @@
 - 把多個不相關 slice 混成一輪
 - 取代 code review
 - 取代 BDD / GWT test design
-- 把原本只有一個局部操作的獨立請求擴張成 slice；已選定的 slice 可以自行完成其內部局部修改
+- 取代 local-change-implementer 做很細的 class/object/symbol 調整
 
 ## Execution Mode 怎麼選
 
@@ -52,9 +52,7 @@ Finding 應使用穩定 reference，例如 `<assessment-id>#<finding-id>`。Work
 
 ## 和 Local Change 的關係
 
-`slice-implementer` 可以在隔離或清晰度有幫助時，把可分離的局部子任務交給
-`local-change-implementer`。這不是每個方法或檔案都必須執行的交接；
-整個 slice 的目標與驗收責任仍由原 owner 保留。
+`slice-implementer` 可以把 slice 內的局部技術變更交給 `local-change-implementer`。
 
 例子：
 
@@ -62,9 +60,7 @@ Finding 應使用穩定 reference，例如 `<assessment-id>#<finding-id>`。Work
 - 其中一個步驟只是整理 `CsvParser.ParseRows`；
 - 這個局部步驟可以交給 `local-change-implementer`。
 
-抽 class/interface 超出 local-change 的範圍，但已核准且有明確邊界的設計
-可直接由 slice 實作。只有責任、dependency direction、domain language 或
-相容性仍未決定或發生變更時，才交回 architecture；不要重問已涵蓋範圍的授權。
+若局部變更需要抽 class、抽 interface、改 dependency direction 或 domain language，應停止並回到 architecture review 或 slice planning。
 
 ## Prompt 範本
 

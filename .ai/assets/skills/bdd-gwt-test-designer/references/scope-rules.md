@@ -14,7 +14,7 @@ Use `bdd-gwt-test-designer` when the main task is to design or review test scena
 
 ## Out of Scope
 
-- generating final executable test code in any language or framework
+- generating the final xUnit/BDDfy test class
 - fixing test infrastructure
 - changing production code to make tests pass
 - using Gherkin `.feature` files as the default output
