@@ -8,7 +8,7 @@
   "owner_skill": "ai-context-governance",
   "status": "in_progress",
   "created_at": "2026-09-18T07:55:33+08:00",
-  "updated_at": "2026-09-18T07:56:32+08:00",
+  "updated_at": "2026-09-18T08:05:37+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "gpt-5.6-terra",
   "reasoning_effort": "xhigh",
@@ -24,12 +24,14 @@
       ".dev/ai-context/effective-rules.yaml",
       ".dev/ai-context/effective-rule-packets/**",
       ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/**",
-      ".dev/workflows/INDEX.MD"
+      ".dev/workflows/INDEX.MD",
+      ".dev/ai-context/tooling/tests/test_code_reviewer_routing_projection.py"
     ],
     "constraints": [
       "Verify candidate08 metadata, ZIP, projected validator and registry bytes before rebinding.",
       "Regenerate through the installed canonical effective-rule builder without changing dispositions, selectors, or packet content.",
-      "Keep current v0.17 provenance and customizations unchanged until a canonical package apply and finalization path authorizes them."
+      "Keep current v0.17 provenance and customizations unchanged until a canonical package apply and finalization path authorizes them.",
+      "Keep the target projection test bound to code-reviewer role_asset_id values; do not hard-code shared or private role paths."
     ],
     "non_goals": [
       "Apply the v0.18 package.",
@@ -45,22 +47,25 @@
       "Verify candidate08 package identity and projection applicability counts.",
       "Rebind target-owned prospective gate metadata and workflow identity.",
       "Regenerate the existing effective state and packets with the installed canonical builder.",
-      "Run narrow preapply manifest, workflow, and current-v0.17 readiness checks."
+      "Run narrow preapply manifest, workflow, and current-v0.17 readiness checks.",
+      "Correct role-path projection through the installed code-reviewer skill bindings and verify candidate08 path closure."
     ],
     "validation": [
       "Candidate08 archive SHA-256, source commit, validator digest, registry digest, and 20/25/25 counts.",
       "Canonical effective-state regeneration preserves 13 rule dispositions and 20 route packets.",
-      "Workflow artifact validation and current-v0.17 target readiness validation."
+      "Workflow artifact validation and current-v0.17 target readiness validation.",
+      "Focused code-reviewer projection test on the current v0.17 target and static candidate08 moved-role path closure."
     ],
-    "last_completed_step": "Candidate08 identity was rebound and canonical regeneration preserved the existing target state.",
-    "next_action": "Root must seal the canonical package plan and apply path; an independent content-subject audit and actual terminal receipt remain required before finalization."
+    "last_completed_step": "Derived the four code-review role paths from code-reviewer role_bindings by role_asset_id; the focused v0.17 projection test and candidate08 closure checks pass.",
+    "next_action": "Root reviews this bounded target test correction before any canonical package plan, apply, independent audit, receipt, or finalization action."
   },
   "results": {
-    "summary": "Prospective preapply reconciliation is prepared for candidate08. No package apply, receipt admission, or provenance finalization has occurred.",
+    "summary": "Candidate08 preapply reconciliation remains in progress. The historic 55-test suite retained 53 passes and two role-path projection failures with no receipt; the bounded correction now passes focused validation and candidate08 static closure.",
     "files_changed": [
       ".dev/ai-context/tooling/**",
       ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/**",
-      ".dev/workflows/INDEX.MD"
+      ".dev/workflows/INDEX.MD",
+      ".dev/ai-context/tooling/tests/test_code_reviewer_routing_projection.py"
     ],
     "tests_run": [
       "Candidate08 package metadata source commit eaba751b71872e085f8ffd1b8a0fbbefa554f379 and ZIP SHA-256 3a8f7d753b0f45dde2e9f77e43b3f7dbc87f8fb69c1231b2d2463245c1e4d5d2 verified.",
@@ -68,10 +73,13 @@
       "Installed canonical effective-rule builder reproduced 13 dispositions, 20 routes, and 20 packet documents exactly; target state digest remains 57a3f551589bd293fb8e2c4b77b93b570b6c48ac464a01038983f2ccbc6b1fd7.",
       "validate-ai-context-target.py --require-effective-rules passed against the current v0.17 target.",
       "validate-workflow-artifacts.py passed after the in-progress task was recorded.",
-      "21 focused target-terminal-audit tests passed; no full v0.18 target suite was executed before apply."
+      "21 focused target-terminal-audit tests passed; no full v0.18 target suite was executed before apply.",
+      "Candidate08 actual target suite: 55 tests, 53 passed, 2 failed (gwt005 and gwt007) only because code-reviewer role paths were hard-coded to pre-v0.18 shared locations; no passing receipt was produced.",
+      "Focused test: py -3 -B -m unittest discover -s .dev/ai-context/tooling/tests -p test_code_reviewer_routing_projection.py -v; 7 passed.",
+      "Static candidate08 closure: four code-review bindings and all 17 moved role paths exist; zero target AI-context literal references remain."
     ],
     "finding_status": "in-progress",
-    "residual_risk": "The candidate remains a prospective input until a canonical plan applies exact package bytes and later independent audit plus actual receipt evidence are validated.",
+    "residual_risk": "No target suite receipt passes until the bounded role-path correction is validated after the package is applied. Package apply, provenance finalization, independent audit, and terminal receipt admission remain separate pending actions.",
     "follow_up_needed": true
   }
 }

@@ -12,21 +12,22 @@
 - `workflow_id`: `2026-09-18-ai-context-v0-18-0-trial`
 - `workflow_kind`: `ai-context-maintenance`
 - `owner_skill`: `ai-context-governance`
-- `branch`: `codex/2026-09-18-v018-trial-02`
+- `branch`: `codex/2026-09-18-v018-trial-03`
 - `base_branch`: `main`
 - `status`: `in_progress`
-- `current_phase`: `preapply-gate-reconciliation`
+- `current_phase`: `preapply-target-projection-correction`
 - `artifact_root`: `.dev/workflows/2026-09-18-ai-context-v0-18-0-trial`
 - `created_at`: `2026-09-18T07:53:09+08:00`
-- `updated_at`: `2026-09-18T07:56:32+08:00`
+- `updated_at`: `2026-09-18T08:05:37+08:00`
 - `online_issue`: `YuChia-Wei/dotnet-distributed-architecture-lab#12`
 
 ## Scope And Baseline
 
 This workflow prepares target-owned gate reconciliation for a user-authorized,
-ephemeral v0.18.0 trial. The clean target baseline is commit
-`4507aecb7f2132abf7ec7f1b41aabc7f1aa35ed5` on
-`codex/2026-09-18-v018-trial-02`. It does not apply a package, change
+ephemeral v0.18.0 trial. The original preapply target baseline is commit
+`4507aecb7f2132abf7ec7f1b41aabc7f1aa35ed5`; the bounded projection-correction
+checkout is commit `aac22bd892aec0edd6ef6ae4a7451790fe0548cb` on
+`codex/2026-09-18-v018-trial-03`. It does not apply a package, change
 provenance, customizations, effective rules or packets, finalize a transaction,
 or claim adoption or release readiness.
 
@@ -56,7 +57,17 @@ and Python-entrypoint digests, this table, and the static commit assertion in
 
 ## Current Task
 
-- `AICU-001-preapply-gate-reconciliation` remains in progress while the root seals the canonical package plan.
+- `AICU-001-preapply-gate-reconciliation` remains in progress while the target-owned role-path projection test is corrected and the root seals the canonical package plan.
+
+## Current Target-Suite Evidence
+
+Candidate08 target validation ran 55 tests: 53 passed and exactly two failed:
+`test_gwt_005_review_roles_do_not_require_shared_rule_bundles` and
+`test_gwt_007_route_reference_graph_is_smaller_than_baseline`. Both loaded
+hard-coded shared code-review role paths that candidate08 relocates into the
+owning `code-reviewer` skill. No passing receipt exists. The correction derives
+these four paths from the installed skill's `role_bindings` by stable
+`role_asset_id`; it does not change role semantics, rule bundles, or reference-graph assertions. The focused seven-test projection suite and candidate08 static closure now pass; this does not replace the failed 55-test run or create a receipt.
 
 ## Required Next Actions
 
