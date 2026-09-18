@@ -28,13 +28,6 @@
 - 跨 module 或跨 aggregate 的變更
 - 規劃一個完整 slice
 
-## 多檔案與交接判斷
-
-判斷依據是單一技術目標、操作與允許的依賴範圍，不是檔案數。
-同一模組內的 private symbol 與三個直接呼叫點仍可由 local-change 處理。
-新增 class/interface 一律交給 bounded slice；如果責任、相依方向與相容性
-已經核准，就不需要重新做一次架構決策。
-
 ## 必須停止並升級的情況
 
 如果執行中發現需要：

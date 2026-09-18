@@ -6,8 +6,7 @@ Turn rough notes, existing drafts, or codebase facts into a requirement document
 
 ## Workflow
 
-1. Identify the requested requirement artifact, topic and intended scope using
-   `../../../shared/AUTHORING-BOUNDARY-CONTRACT.md`. Do not select from input format alone.
+1. Identify the topic and intended scope.
 2. Read `.dev/requirement/REQUIREMENT-GUIDE.MD`.
 3. Draft these sections:
    - Metadata

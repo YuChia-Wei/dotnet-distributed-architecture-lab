@@ -32,7 +32,7 @@ from ai_context_effective_rules import (
 VERSION_RE = re.compile(r"^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 CUSTOMIZATION_ID_RE = re.compile(r"^CUST-[A-Z0-9][A-Z0-9._-]*$")
-ASSESSMENT_ID_RE = re.compile(r"^ASM-[0-9]{8}-(?:(?:[01][0-9]|2[0-3])-[a-z0-9]{3}|[0-9]{3})$")
+ASSESSMENT_ID_RE = re.compile(r"^ASM-\d{8}-\d{3}$")
 SUBJECT_KINDS = {"capability", "rule", "contract"}
 RELATIONSHIPS = {"extends", "replaces", "deviates", "target-only"}
 EQUIVALENCE = {"absent", "partial", "equivalent-candidate", "conflicting"}

@@ -2,7 +2,7 @@ asset_id: "code-review-sub-agent"
 schema_version: "1.1"
 asset_type: "sub-agent-role-prompt"
 title: "Code Review Sub-Agent"
-purpose: "Perform bounded technology-neutral code review with the common review method, applicable installed extensions and target-owned rules."
+purpose: "Define the delegated reviewer role for general .NET code review against DDD, Clean Architecture, CQRS, Event Sourcing, and repository testing rules."
 portability: "repo-portable"
 audience: "agent-facing"
 wrapper_targets: []
@@ -23,16 +23,14 @@ outputs:
   - "positive findings and follow-up notes"
 constraints:
   - "Do not redefine target architecture"
-  - "Do not silently approve code without comparing behavior, contracts and evidence"
-  - "Remain read-only and report specialist coverage that was unavailable or not performed"
-  - "Do not impose unselected architecture or technology conventions"
+  - "Do not silently approve code without checklist comparison"
   - "Always separate findings from summary"
   - "Do not load unselected file-type standards or broad shared review summaries"
 workflow:
   - step: 1
-    description: "Use the common review-routing.yaml to select the common route and applicable installed extensions; load only their references"
+    description: "Use review-routing.yaml to classify the scope and load only selected canonical references"
   - step: 2
-    description: "Trace behavior, failure paths, dependencies and tests against supplied contracts and applicable target rules"
+    description: "Check structural, behavioral, and testing compliance against repository rules"
   - step: 3
     description: "Produce delegated review findings with severity and file references"
 references:
@@ -43,8 +41,7 @@ references:
 routing:
   contract_path: ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
   reference_loading: "selected-route-only"
-  supported_route_ids: ["common"]
-  extension_routes: "selected-extension-contract"
+  supported_route_ids: ["aggregate", "domain-event", "entity", "value-object", "use-case", "handler", "repository", "controller", "mapper", "projection", "reactor", "outbox", "test", "general-csharp"]
 examples:
   - ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-playbook.md"
   - ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-prompt.md"

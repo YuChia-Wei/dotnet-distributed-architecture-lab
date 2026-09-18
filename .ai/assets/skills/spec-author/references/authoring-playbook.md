@@ -6,8 +6,7 @@ Turn requirement truth into repository-aligned specs under `.dev/specs/`.
 
 ## Workflow
 
-1. Confirm the selected spec artifact using
-   `../../../shared/AUTHORING-BOUNDARY-CONTRACT.md`, then read `.dev/specs/SPEC-GUIDE.MD`.
+1. Read `.dev/specs/SPEC-GUIDE.MD`.
 2. Read `.dev/specs/SPEC-ORGANIZATION-GUIDE.MD`.
 3. Decide the target spec type:
    - use case spec

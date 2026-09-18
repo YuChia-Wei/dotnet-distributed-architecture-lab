@@ -3,20 +3,20 @@
 ## Template Metadata
 
 - `template_id`: `code-review-assessment-report`
-- `template_version`: `1.1.0`
+- `template_version`: `1.0.0`
 - `created_at`: `2026-07-13T23:22:03+08:00`
-- `updated_at`: `2026-09-12T11:58:27+08:00`
+- `updated_at`: `2026-07-13T23:22:03+08:00`
 
 ## Metadata
 
-- `assessment_id`: `<ASM-YYYYMMDD-HH-xxx>`
+- `assessment_id`: `<ASM-YYYYMMDD-NNN>`
 - `assessment_type`: `code-review | code-review-verification`
 - `owner_skill`: `code-reviewer`
 - `status`: `draft | final`
 - `created_at`: `<ISO-8601-with-offset>`
 - `updated_at`: `<ISO-8601-with-offset>`
 - `template_source`: `.ai/assets/skills/code-reviewer/templates/code-review-assessment-report-template.md`
-- `template_version`: `1.1.0`
+- `template_version`: `1.0.0`
 - `repository`:
 - `subject_branch`:
 - `subject_commit`: `<40-character-Git-SHA>`
@@ -25,7 +25,7 @@
 
 ## Executive Summary
 
-- Optional score and target-requested rubric: `/10` or `N/A`
+- Overall score: `/10` or `N/A`
 - Decision: `pass | pass-with-followups | remediation-recommended | blocking-findings`
 - Highest severity:
 - Primary strengths:
@@ -49,9 +49,6 @@
 
 ## Methodology And Evidence
 
-- Common route and extensions selected:
-- Target technology/architecture selection evidence:
-- Unavailable specialist coverage and required gates:
 - File types and checklists selected:
 - Repository standards loaded:
 - Analyzer, architecture-test, or test evidence:
@@ -62,8 +59,8 @@
 
 | Area | Score | Evidence / Notes |
 | --- | ---: | --- |
-| Behavior and contract compatibility |  |  |
-| Adopted architecture and dependency boundaries |  |  |
+| Domain and architecture boundaries |  |  |
+| CQRS and dependency direction |  |  |
 | Implementation correctness |  |  |
 | Test design and coverage |  |  |
 | Maintainability |  |  |

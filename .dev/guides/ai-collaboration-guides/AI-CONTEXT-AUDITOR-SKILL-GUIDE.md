@@ -57,7 +57,7 @@ Requirements:
 - then apply repository governance skills and policies;
 - compare both passes;
 - exclude src and tests;
-- allocate an ASM-YYYYMMDD-HH-xxx assessment ID;
+- allocate an ASM-YYYYMMDD-NNN assessment ID;
 - save the report under .dev/assessments/<assessment-id>/report.md;
 - do not remediate findings; hand authorized remediation to ai-context-governance.
 ```
@@ -67,13 +67,13 @@ Requirements:
 Standalone audit 預設使用：
 
 ```text
-.dev/assessments/<ASM-YYYYMMDD-HH-xxx>/assessment.yaml
-.dev/assessments/<ASM-YYYYMMDD-HH-xxx>/report.md
+.dev/assessments/<ASM-YYYYMMDD-NNN>/assessment.yaml
+.dev/assessments/<ASM-YYYYMMDD-NNN>/report.md
 ```
 
 若 governance workflow 要求修正後複檢，建立新的 verification assessment，不可覆寫 baseline。Assessment locator 記錄 baseline、workflow 與 verification 關係。
 
-Assessment id 使用 `ASM-YYYYMMDD-HH-xxx`；日期與小時對應建立時間及其時差，尾碼固定三碼小寫英數字，優先每份評估獨立產生亂碼；在既有可見資料中發現重複時重取即可。既有 `ASM-YYYYMMDD-NNN` 保持有效，不重新命名，也不新增預約或配置服務。所有 generated artifacts 使用帶 offset 的 ISO 8601 `created_at`、`updated_at`，並記錄 locator 與 report 的 `template_source`、`template_version`。
+Assessment id 使用 `ASM-YYYYMMDD-NNN`；同日依目前未使用的三位序號配置。所有 generated artifacts 使用帶 offset 的 ISO 8601 `created_at`、`updated_at`，並記錄 locator 與 report 的 `template_source`、`template_version`。
 
 Standalone audit 先建立 `codex/assessment/<lowercase-assessment-id>` 或 runtime 對應 branch，再建立 locator/report。Commit 僅包含 assessment-owned artifacts 與 assessment index，不得混入 audited context 修正。Draft locator 的 resume 欄位負責中斷續作。若 audit 已屬於授權中的 governance workflow，使用該 workflow branch，不另外建立 assessment branch。
 

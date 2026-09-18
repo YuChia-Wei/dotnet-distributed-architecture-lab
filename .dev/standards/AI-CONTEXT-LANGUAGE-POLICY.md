@@ -4,7 +4,7 @@ This policy defines the default language for AI-facing and human-facing document
 
 ## Goals
 
-- Keep agent-facing execution context concise, consistent, and easy to maintain.
+- Keep agent-facing execution context concise and cheap to read.
 - Keep human-facing project knowledge approachable for Traditional Chinese Taiwan readers.
 - Avoid translation sprawl by limiting bilingual files to stable entry points.
 
@@ -12,7 +12,7 @@ This policy defines the default language for AI-facing and human-facing document
 
 | Document Class | Default Language | Reason |
 | --- | --- | --- |
-| `.ai/**` | English | One canonical language keeps execution wording and shared assets consistent. |
+| `.ai/**` | English | Agent-facing context should minimize token cost and ambiguity. |
 | `.agents/**` | English | Runtime wrappers are agent-facing. |
 | `.claude/**` | English | Runtime wrappers are agent-facing. |
 | `.dev/specs/**` | English | Specs are structured execution truth used heavily by agents. |
@@ -24,8 +24,6 @@ This policy defines the default language for AI-facing and human-facing document
 | `.dev/operations/**` | Traditional Chinese Taiwan or English | Operations docs are human-facing project truth, but schemas and tables may use English terms. |
 | `.dev/workflows/**/tasks/*.json` | English | Task JSON is machine-readable workflow state. |
 | `.dev/workflows/**/workflow-plan.md` | English preferred | Plans are handoff artifacts used by agents and humans. |
-
-Language choice is a consistency and maintenance default, not a claim that English universally uses fewer tokens or improves every model. Reduce unnecessary loading and duplicated instructions regardless of language.
 
 ## Bilingual Entry Files
 

@@ -1,7 +1,8 @@
-# Controller Code Review Sub-Agent Prompt
+# Controller Code Review Sub-Agent Prompt (.NET)
 
-Review only the supplied controller scope under the common review method.
-Use the target contracts and selected extension routes; do not infer architecture
-or technology from this role name. Follow the role playbook, preserve the subject,
-and return findings with location, trigger, impact, evidence, severity and
-uncertainty. Report unperformed specialist checks and required gates explicitly.
+Review the bounded controller/endpoint scope using the canonical `controller`
+route. Apply target-selected framework details only when repository evidence
+selects them. Load test rules only for an explicit test scope or test finding.
+
+Return severity-ranked findings with path, line, selected canonical reference,
+evidence, and concise remediation direction. Do not implement fixes.

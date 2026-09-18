@@ -116,11 +116,3 @@ Return:
 - MQ / API / aggregate 責任不清
 
 先交給 `ddd-ca-hex-architect`，再回來整理 requirement。
-
-## 作者技能的分工與交接
-
-依要求產出的文件選擇 owner：需求 markdown、正式 production/test spec、
-CBF/SWF file set 各自保留原契約。正式 test spec 內含 GWT 不代表要改成
-scenario-only 工作；code-only problem-frame 回推必須標示 observed/inferred。
-交接保留來源 ID、版本或段落、已核准決策與未決問題，不強制重寫前一份文件
-或加入未要求的階段。完成草稿不等於實作、測試執行或規格合規已通過。

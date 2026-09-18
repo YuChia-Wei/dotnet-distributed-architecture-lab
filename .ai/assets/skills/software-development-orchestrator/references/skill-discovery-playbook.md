@@ -58,12 +58,12 @@ Use these hints only when structured metadata is unavailable.
 | requirement, user story, stakeholder input, acceptance need | `requirements` |
 | spec, behavior contract, acceptance criteria, JSON spec | `specification` |
 | problem frame, CBF, SWF, phenomena, workpiece | `problem-framing` |
-| architecture artifact design/review, DDD, Clean Architecture, CQRS, bounded context, aggregate, port, adapter | `architecture` |
-| BDD/GWT scenario artifact design/review, Given-When-Then, scenario, assertion | `test-design` |
+| architecture, DDD, Clean Architecture, CQRS, bounded context, aggregate, port, adapter | `architecture` |
+| BDD, GWT, Given-When-Then, scenario, assertion | `test-design` |
 | implement, command handler, query handler, reactor, use case | `implementation` |
 | refactor, staged change, extract, rename, local cleanup | `refactoring` |
 | unit test, integration test, E2E, browser, Playwright, test runner | `test-execution` provider candidate; separate evaluation required |
-| executable code or implementation-guidance review, findings, severity, risk | `review`; prefer the artifact owner's design/review mode for architecture or scenario artifacts |
+| review, findings, severity, risk, checklist | `review` |
 | compliance, coverage gate, validator, pass/fail | `compliance-validation` |
 
 ## Conflict Rules

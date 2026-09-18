@@ -53,7 +53,7 @@
 - 需要驗證一輪實作後是否收斂
 
 一般 review 預設只在對話中回傳，不建立 artifact。若明確要求保存大型或正式
-code review，使用 `.dev/assessments/<ASM-YYYYMMDD-HH-xxx>/`，並將被審查的 Git
+code review，使用 `.dev/assessments/<ASM-YYYYMMDD-NNN>/`，並將被審查的 Git
 revision 固定在 assessment locator。Finding 在報告內使用 `CR-NNN`，跨文件引用
 使用 `<assessment-id>#<finding-id>`。保存報告不代表已授權修正；後續 remediation
 交給 `software-development-orchestrator`、`slice-implementer` 或 `local-change-implementer`。

@@ -19,7 +19,7 @@ guard_direct_entrypoint(".ai/scripts/validate-assessment-artifacts.py")
 import yaml
 
 
-ID_RE = re.compile(r"^ASM-([0-9]{8})-(?:([01][0-9]|2[0-3])-[a-z0-9]{3}|[0-9]{3})$")
+ID_RE = re.compile(r"^ASM-(\d{8})-(\d{3})$")
 SHA_RE = re.compile(r"^[0-9a-fA-F]{40}$")
 TIMESTAMP_RE = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$"
@@ -62,7 +62,7 @@ RELATION_KEYS = {
     "adr_refs",
 }
 INDEX_ROW = re.compile(
-    r"^\| \[`(ASM-[0-9]{8}-(?:(?:[01][0-9]|2[0-3])-[a-z0-9]{3}|[0-9]{3}))`\]\(([^)]+/assessment\.yaml)\) "
+    r"^\| \[`(ASM-\d{8}-\d{3})`\]\(([^)]+/assessment\.yaml)\) "
     r"\| (.*?) \| `([^`]+)` \| `([^`]+)` \| `([^`]+)` "
     r"\| `([0-9a-fA-F]{40})` \| `([^`]+)` \| \[report\]\(([^)]+/report\.md)\) \|$"
 )
@@ -160,10 +160,7 @@ def validate_assessments(root: Path) -> tuple[list[str], int]:
     for directory in directories:
         label = str(directory.relative_to(root))
         if not ID_RE.fullmatch(directory.name):
-            errors.append(
-                f"{label}: assessment directory must match ASM-YYYYMMDD-HH-xxx "
-                "(three lowercase ASCII alphanumeric characters) or legacy ASM-YYYYMMDD-NNN"
-            )
+            errors.append(f"{label}: assessment directory must match ASM-YYYYMMDD-NNN")
             continue
         locator_path = directory / "assessment.yaml"
         if not locator_path.is_file():
@@ -192,8 +189,6 @@ def validate_assessments(root: Path) -> tuple[list[str], int]:
             errors.append(f"{label}: updated_at is earlier than created_at")
         if match and created and created.strftime("%Y%m%d") != match.group(1):
             errors.append(f"{label}: assessment ID date must match created_at local date")
-        if match and created and match.group(2) is not None and created.strftime("%H") != match.group(2):
-            errors.append(f"{label}: assessment ID hour must match created_at local hour")
 
         for key in ("assessment_type", "title", "owner_skill", "artifact_branch", "base_branch", "template_version", "report_template_version"):
             non_empty_string(locator.get(key), f"{label} {key}", errors)

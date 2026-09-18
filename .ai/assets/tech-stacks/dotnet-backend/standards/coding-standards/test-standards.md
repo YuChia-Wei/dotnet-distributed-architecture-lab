@@ -91,84 +91,75 @@ public class CreateProductUseCaseTests
 
 `.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../../../../../../.dev/specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
 
-#### Step Methods And Scenario Readability
-
-For scenario-style unit, Use Case and integration tests, the test method must
-read as Given/When/Then step calls, directly or through the selected fluent
-runner. Give methods behavior-specific names such as `GivenMonthlyBudget`,
-`WhenQueryingBudget` and `ThenAmountShouldBe`; comments or generic `Setup`,
-`Execute` and `Check` methods alone do not satisfy this form. Preserve the
-compact exception-contract form explicitly permitted in section 5; it still
-needs an observable exception assertion and source traceability.
-
-| Step | Responsibility | Must not substitute for |
-| --- | --- | --- |
-| Given | Establish the scenario's data/state and controlled dependency responses. Put reusable construction mechanics in helpers. | The primary action or the scenario's outcome assertions. Fixture guards may fail fast but are not Then coverage. |
-| When | Execute the real subject's primary behavior once per scenario/data row and capture its result, state or exception. An intentional multi-operation behavior must be explicit in the design. | A mock of the subject, a fabricated result, or a hidden repeat of the action during verification. |
-| Then / And | Assert each specified observable value, relation, state, event or exception against the result of that When. | Re-executing the subject, calculating the expected answer using its algorithm, or merely checking that no exception occurred when a value is specified. |
-
-Keep material inputs and expected values visible in the scenario method or its
-explicitly bound theory row. A business-named builder may encapsulate irrelevant
-defaults; it must not hide the values that distinguish scenarios. Use fresh
-per-test state, instance fixtures with isolated scenario state, or explicit
-arguments/results. Avoid static mutable scenario fields and test-order coupling.
-A result field must distinguish "not executed" from a legitimate default result
-(for example, nullable captured data with a Then assertion that it is present).
-
-For asynchronous behavior, await the step to completion using the selected
-runner's supported Task API. Do not use `async void`, fire-and-forget actions,
-`.Wait()` or `.Result`. Capture expected exceptions during When (for example
-with xUnit `Record.ExceptionAsync`) and assert the required type and relevant
-details during Then; do not swallow exceptions to make the test green. A bounded
-eventual assertion may wait for an observable asynchronous outcome, but must not
-repeat the command/query that caused it.
-
-Use the [GWT handoff contract](../../../../shared/GWT-TEST-HANDOFF-CONTRACT.md)
-to preserve scenario/data-row IDs, source/AC bindings and every Then-to-assertion
-mapping. Parameterized cases are valid when each row remains identifiable and
-uses the same behavior and assertion responsibilities. A generated report,
-method-name match, successful build or passing run alone cannot prove that the
-scenario was implemented faithfully.
-
-#### Default BDDfy Form
-
-This excerpt's fixture and step implementations are in the
-[runnable step-method example](../../examples/bdd-step-methods/README.md).
-It exposes the behavior-bearing data while keeping mechanics inside steps.
-
 ```csharp
-[Fact]
-public void Should_return_zero_when_query_month_has_no_budget()
+// ✅ Correct: BDDfy + Gherkin style
+public class CreateProductUseCaseTests
 {
-    this.Given(x => x.GivenMonthlyBudget("202102", 28m))
-        .When(x => x.WhenQueryingBudget(
-            new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2)))
-        .Then(x => x.ThenAmountShouldBe(0m))
-        .BDDfy();
+    private CreateProductInput _input = null!;
+    private CreateProductOutput _output = null!;
+    private readonly IAggregateRepository<Product, ProductId> _repository;
+    private readonly CreateProductUseCase _useCase;
+
+    public CreateProductUseCaseTests()
+    {
+        _repository = Substitute.For<IAggregateRepository<Product, ProductId>>();
+        var unitOfWork = Substitute.For<IUnitOfWork>();
+        var publisher = Substitute.For<IProductEventPublisher>();
+        _useCase = new CreateProductUseCase(_repository, unitOfWork, publisher);
+    }
+
+    [Fact]
+    public void Should_create_product_successfully_when_input_is_valid()
+    {
+        this.Given(x => x.GivenAValidProductCreationInput())
+            .When(x => x.WhenTheUseCaseIsExecuted())
+            .Then(x => x.ThenTheProductShouldBeCreated())
+            .And(x => x.ThenTheOutputShouldContainTheProductId())
+            .BDDfy();
+    }
+
+    private void GivenAValidProductCreationInput()
+    {
+        _input = new CreateProductInput(
+            Guid.NewGuid().ToString(),
+            "Test Product",
+            "user-123"
+        );
+    }
+
+    private async Task WhenTheUseCaseIsExecuted()
+    {
+        _output = await _useCase.ExecuteAsync(_input, CancellationToken.None);
+    }
+
+    private void ThenTheProductShouldBeCreated()
+    {
+        _repository.Received(1).SaveAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>());
+    }
+
+    private void ThenTheOutputShouldContainTheProductId()
+    {
+        _output.ProductId.Should().NotBeNull();
+    }
+}
+
+// ❌ Incorrect: replaces the Use Case business-flow test with a delivery Command and Handler
+[Fact]
+public async Task TestCreateProduct()  // Incorrect name
+{
+    // Arrange
+    var command = new CreateProductCommand(...);
+    
+    // Act
+    var result = await _handler.Handle(command, CancellationToken.None);
+    
+    // Tests only the adapter and does not directly protect Use Case orchestration.
 }
 ```
 
-#### Explicit Plain-xUnit Opt-Out Form
-
-The same example includes a separately selected BDDfy opt-out. Opting out of
-the package preserves method responsibilities and GWT semantics.
-
-```csharp
-[Fact]
-public async Task Should_return_zero_when_query_month_has_no_budget()
-{
-    GivenMonthlyBudget("202102", 28m);
-    var actual = await WhenQueryingBudget(
-        new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2));
-    ThenAmountShouldBe(actual, 0m);
-}
-```
-
-Test the concrete Use Case directly for business-flow behavior and mock its
-outbound ports. Handler adapter tests remain separate and narrow: verify only
-Command-to-Input mapping, exactly one Use Case invocation, and delivery-specific
-failure mapping. A Handler test that mocks a Repository must not duplicate
-responsibility for business-flow testing.
+Handler adapter tests must remain separate and narrow: verify only Command-to-Input mapping, exactly one
+Use Case invocation, and delivery-specific failure mapping. A Handler test that mocks a
+Repository must not duplicate responsibility for business-flow testing.
 
 ---
 

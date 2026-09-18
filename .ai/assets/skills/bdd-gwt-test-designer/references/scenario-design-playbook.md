@@ -7,15 +7,12 @@
 - each important Then should correspond to an explicit assertion
 - use And only when it keeps the flow readable
 - keep setup facts in Given, not in Then
-- use the shared GWT handoff contract to preserve scenario/data-row identity,
-  concrete inputs, expected-value sources and explicit unknowns for implementation
 
 ## Repository Alignment
 
-- preserve Given-When-Then scenario structure; do not replace this skill's scenario output with Arrange-Act-Assert (3A)
-- select testing conventions from explicit target decisions and applicable installed profile rules; the common skill does not select a runner, mocking library or DI API
-- use `technology_selection` from the skill spec to load only the selected profile's test-design route after effective-rule preflight; the .NET route retains its xUnit/BDDfy defaults and explicit opt-out semantics
-- distinguish confirmed requirement behavior from reverse-engineered current behavior; conflicts require a decision, not a silent requirement rewrite
+- testing stack defaults to xUnit + BDDfy; a target team may explicitly opt out of the BDDfy package
+- Given-When-Then structure and naming remain mandatory for unit, use-case, and integration tests after an opt-out; Arrange-Act-Assert (3A) is not an alternative
+- no BaseTestClass
 - `.feature` files are planned/optional rather than mandatory. Default output remains scenario notes; design a `.feature` artifact when one is supplied or explicitly requested, or when the target profile selects a feature runner
 - do not infer or select a feature runner/package
 - when a requirement contains multiple acceptance criteria, map each AC to one or more scenarios
@@ -27,8 +24,6 @@
 3. Define the single When trigger
 4. Split expected results into explicit Then items
 5. Add negative or boundary variants only when behavior changes
-6. Map source AC IDs to scenarios and identify observable assertions and controllable preconditions
-7. Explain why the selected test level supplies the required evidence; a mock cannot establish a real integration result
 
 ## Test Level Hints
 

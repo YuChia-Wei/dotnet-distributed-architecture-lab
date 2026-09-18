@@ -27,22 +27,20 @@ Rules:
 
 ### `AGENTS.md`
 
-Use `.ai/assets/skills/ai-context-init/templates/public-root/AGENTS.md` only as the installation seed. In a target guide, `Repository-Specific Context` is the primary replacement zone. If an existing guide uses another structure, identify its equivalent target-owned area before editing; do not replace the whole guide with the seed.
+Update:
 
-Write concise, evidence-backed facts in that zone:
+- quick-start wording if the repo's architecture entry docs changed
+- stack rules that describe the current codebase
+- file and directory index entries tied to actual repo structure
+- skill/index references that help future agents navigate the copied repo
 
-- repository identity and purpose;
-- essential entry paths and constraints that affect work;
-- applicable stack facts without copied source-repository assumptions;
-- target-owned setup, build, test, and validation commands with their working directories and known prerequisites.
+Preserve:
 
-Leave unsupported facts unresolved. Distinguish commands discovered in configuration from commands actually executed successfully. Prefer stable entry links over a full directory, skill, or rule catalog.
+- collaboration precedence
+- mandatory workflow rules unless the user explicitly changes them
+- skill routing rules that are framework-level rather than target-project-specific
 
-Outside the replacement zone, make only minimal evidence-backed navigation or quick-start adjustments when target entry paths or applicable routes differ. Keep loading task- and phase-specific; do not introduce unconditional README, architecture, index, or policy preloading.
-
-Preserve portable collaboration precedence, existing user authorization, workflow and validation safeguards, framework skill routing, and target-owned rules unless an explicit user decision changes them. Do not treat a seed rewrite as permission to weaken these boundaries. Reuse authorization already granted for the same action and scope; ordinary implementation choices are not new approval checkpoints.
-
-Keep detailed workflow, CLI consent, and commit mechanics with their canonical owners and link to them only when applicable. Keep English canonical for consistent execution wording. After the target-specific English rewrite is final, optionally derive `AGENTS.zh-TW.md` through the low-cost `context-translator` role with structural and normative parity. Do not copy a pretranslated root template.
+Use `.ai/assets/skills/ai-context-init/templates/public-root/AGENTS.md` only as the installation seed. After the target-specific English rewrite is final, optionally derive `AGENTS.zh-TW.md` through the low-cost `context-translator` role. Do not copy a pretranslated root template.
 
 ### `.gitignore`
 

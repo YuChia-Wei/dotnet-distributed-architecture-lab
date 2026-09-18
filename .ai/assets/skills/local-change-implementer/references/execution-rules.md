@@ -16,8 +16,4 @@
 - Prefer local consistency over broad cleanup.
 - Do not combine multiple independent change goals in one run.
 - If the requested change starts affecting architecture boundaries, redirect to `slice-implementer` or `ddd-ca-hex-architect`.
-- If the requested change introduces a new type, stop local implementation. Use
-  a bounded slice when its design is accepted; request architecture work only
-  for unresolved or changed responsibility, dependency or semantic decisions.
-- Carry existing authorization and normative sources through the handoff; do
-  not request the same approval again when it already covers the receiving work.
+- If the requested change requires introducing a new type, stop and redirect instead of improvising the design.

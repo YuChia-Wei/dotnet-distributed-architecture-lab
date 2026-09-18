@@ -22,14 +22,13 @@ outputs:
   - "event handling and DI registration issues"
   - "cross-aggregate boundary notes"
 constraints:
-  - "Remain read-only, preserve the reviewed subject and report missing specialist coverage"
   - "Reactor must handle the correct event types"
-  - "Compare cross-aggregate access with the target-selected boundary contract"
-  - "Assess exception propagation and registration against the target retry and subscription contracts"
+  - "Reactor must not rely on forbidden cross-aggregate repository querying"
+  - "Unhandled exceptions and missing registration are review failures"
   - "Do not infer target DI or retry technology that the target did not select"
 workflow:
   - step: 1
-    description: "Apply the common route and any matching installed extension routes for the event-handler or test scope"
+    description: "Select the reactor route and any explicit domain-event or test route from review-routing.yaml"
   - step: 2
     description: "Review event handling correctness, registration, and side-effect boundaries"
   - step: 3
@@ -42,8 +41,7 @@ references:
 routing:
   contract_path: ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
   reference_loading: "selected-route-only"
-  supported_route_ids: ["common"]
-  extension_routes: "selected-extension-contract"
+  supported_route_ids: ["reactor", "domain-event", "test"]
 examples:
   - ".ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/references/review-playbook.md"
   - ".ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/references/review-prompt.md"

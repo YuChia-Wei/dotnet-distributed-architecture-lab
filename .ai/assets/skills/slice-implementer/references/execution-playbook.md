@@ -2,12 +2,6 @@
 
 This file defines how to implement one safe bounded implementation slice.
 
-For selected GWT test implementation in any slice mode, consume
-`.ai/assets/shared/GWT-TEST-HANDOFF-CONTRACT.md`. Preserve the supplied scenario
-and data-row identities, expected outcomes and test level, and return the
-implemented test/step/assertion mapping. Do not require a new BDD design stage
-when the available source already supplies that input.
-
 ## Slice Template
 
 1. Restate the slice goal and intent.

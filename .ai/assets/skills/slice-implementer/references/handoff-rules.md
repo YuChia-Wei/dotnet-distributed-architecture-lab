@@ -1,29 +1,23 @@
 # Slice Implementer Handoff Rules
 
-Use `../../../shared/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md` to distinguish
-a necessary owner handoff from an optional local subtask. A selected slice
-retains ownership for its authorized internal edits and validation.
+Use explicit handoff instead of continuing when a slice uncovers work outside its boundary.
 
 ## Hand Off To Architecture
 
 Use `ddd-ca-hex-architect` when:
 
 - bounded context or aggregate boundary is unclear;
-- the responsibility, compatibility or dependency decision for an abstraction,
-  interface, port or adapter is missing or changes;
+- new abstraction, interface, port, adapter, or dependency direction is needed;
 - command/query/reactor ownership is disputed;
 - domain language changes affect business meaning.
 
 ## Hand Off To Local Change
 
-If the entire request is one local target/operation, select
-`local-change-implementer` directly. Within an already selected slice, a bounded
-local subtask is optional when isolation or clarity makes it useful and the role
-execution contract permits it. Do not hand off every internal method or file,
-repeat accepted decisions, or transfer the overall slice acceptance owner.
+Use `local-change-implementer` when:
 
-The local subtask must remain within direct call sites and its allowed radius,
-with no new type, public contract or architecture boundary.
+- the slice contains one local class/object/symbol technical edit;
+- the change is limited to direct call sites;
+- no new class/interface or architecture boundary is needed.
 
 ## Hand Off To Test Design
 
@@ -39,8 +33,7 @@ separate capability.
 
 ## Hand Off To Review Or Compliance
 
-Use `code-reviewer` for implementation review through the common core and
-target-selected technology extensions; missing specialist coverage stays explicit.
+Use `code-reviewer` for .NET backend review findings.
 Use `spec-compliance-validator` when problem-frame compliance must be gated.
 
 For remediation, the implementer records finding dispositions and evidence but

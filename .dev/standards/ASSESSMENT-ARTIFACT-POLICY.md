@@ -72,44 +72,24 @@ compatibility exception; new immutable originals must use the convention.
 
 ## Assessment Identity
 
-Use this format for new assessments:
+Use:
 
 ```text
-ASM-YYYYMMDD-HH-xxx
+ASM-YYYYMMDD-NNN
 ```
 
-- `YYYYMMDD` and `HH` are the local date and 24-hour clock hour (`00`–`23`)
-  when the assessment locator is created, using the offset in `created_at`.
-- `xxx` is exactly three lowercase ASCII letters or digits (`a-z`, `0-9`),
-  giving 46,656 possible suffixes per hour. The complete ID is 19 characters.
-  Prefer an independently generated random suffix for each assessment; do not
-  allocate the next same-day sequence. For example, generate only the suffix
-  with `python -c "import secrets,string; print(''.join(secrets.choice(string.ascii_lowercase+string.digits) for _ in range(3)))"`.
-- A three-character evidence or work SHA prefix is also allowed when it
-  distinguishes this assessment. Separate assessments of the same HEAD or
-  evidence in the same hour must use independent random suffixes instead of
-  deterministically reusing that SHA prefix.
-- Inspect the assessment locators and index already available locally. If the
-  proposed ID is present, choose another suffix. This reduces collisions for
-  low-concurrency work; it does not promise collision-free distributed allocation.
-  No remote refresh, reservation branch, lock service, active-branch graph scan,
-  or new allocation/recovery tool is required to create an ID.
-- Existing `ASM-YYYYMMDD-NNN` identities remain valid for historical artifacts
-  and references. Do not rename them or reinterpret their numeric suffix as an
-  hour. New templates use the short-hour format; validators accept both formats.
+- `YYYYMMDD` is the local calendar date when the assessment locator is created.
+- `NNN` is the next unused three-digit sequence for that date, starting at
+  `001` and determined from tracked assessment locators and the index.
 - The directory name, `assessment_id`, and `commit_search_id` must match exactly.
 - IDs are globally unique within the repository and path-safe.
 - Do not reuse an ID from a final, superseded, withdrawn, merged, or published
   assessment.
-- If an unpublished ID collision is found during ordinary validation or
-  integration, choose a new suffix and synchronize its directory, locator,
-  report, index, relationships and commit subject/trailers before sharing.
-  Preserve the existing shared ID. This is a bounded correction, not a new
-  atomic reallocation framework.
+- Before allocation, refresh the intended integration branch and inspect current
+  assessment IDs. If an unpublished branch collides, reallocate and update the
+  unpublished artifact and commit message before sharing it.
 - After an assessment is pushed or merged, its ID is immutable. Corrections use
   an addendum or successor assessment.
-- Once created, the ID remains fixed across later evidence updates, execution,
-  amend and rebase; neither its hour nor suffix tracks a changing HEAD.
 
 ## Locator Contract
 
@@ -182,13 +162,13 @@ Assessment creation and material assessment-update commit subjects must contain
 the stable ID immediately after the normal commit prefix:
 
 ```text
-docs(assessment): [ASM-20260912-14-a7c] add AI context health assessment
+docs(assessment): [ASM-20260713-001] add AI context health assessment
 ```
 
 Add this trailer before any required `Co-Authored-By` trailers:
 
 ```text
-Assessment-Id: ASM-20260912-14-a7c
+Assessment-Id: ASM-20260713-001
 Co-Authored-By: <AI runtime> (<model>, <reasoning_effort>) <noreply@provider-domain>
 ```
 
@@ -197,7 +177,7 @@ reference one or more assessments with repeatable `Assessment-Id` trailers even
 when the subject does not contain the ID. Search history with:
 
 ```text
-git log --all --grep='ASM-20260912-14-a7c'
+git log --all --grep='ASM-20260713-001'
 ```
 
 The ID remains stable across amend, rebase, cherry-pick, or repository migration

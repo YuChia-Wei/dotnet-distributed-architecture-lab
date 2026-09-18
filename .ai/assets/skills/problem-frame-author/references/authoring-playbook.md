@@ -7,14 +7,9 @@ Turn existing requirement/spec truth into a first validator-ready problem-frame 
 ## Required Inputs
 
 - target use case name
-- available requirement/spec sources and their authority status, or an explicitly
-  requested observed/inferred recovery from bounded code and tests
+- requirement files
+- spec files
 - optional code/tests for gap filling
-
-Use `../../../shared/AUTHORING-BOUNDARY-CONTRACT.md` to confirm the requested
-CBF/SWF artifact. Code-only recovery does not require fabricating requirement
-or spec documents; missing normative intent remains an open question and
-cannot support a compliance claim.
 
 ## Workflow
 
@@ -31,15 +26,12 @@ cannot support a compliance claim.
    - authority boundaries
    - timeout / retry / duplicate rules
    - acceptance scenarios
-4. Draft `machine/use-case.yaml`, the selected domain file, `frame.yaml`, `machine/machine.yaml`, then the selected acceptance or requirement files. Use only the branch selected in step 2:
-
-   | Frame type | Domain file | Acceptance or requirement files |
-   | --- | --- | --- |
-   | `CBF` | `controlled-domain/aggregate.yaml` | `acceptance.yaml` |
-   | `SWF` | `workpiece/aggregate.yaml` | `requirements/*.yaml` |
-
-   Do not create the other frame type's files unless a separate frame has been explicitly selected.
-
+4. Draft files in this order:
+   - `machine/use-case.yaml`
+   - `controlled-domain/aggregate.yaml`
+   - `frame.yaml`
+   - `machine/machine.yaml`
+   - `acceptance.yaml`
 5. Mark every inferred item as inferred.
 6. End with open questions and the next handoff.
 
