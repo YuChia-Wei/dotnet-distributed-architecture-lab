@@ -1,6 +1,6 @@
 schema_version: "1.0"
 framework_version: "v0.18.0"
-framework_commit: "eaba751b71872e085f8ffd1b8a0fbbefa554f379"
+framework_commit: "d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3"
 unfinalized_target_diagnostics:
   - "effective state catalogs[0] is stale"
 checks:
@@ -32,7 +32,7 @@ package_projection_defects:
   - id: "AICU-V016-TARGET-GATE-PROJECTION-001"
     status: "target-overlay-required"
     observed_through: "v0.18.0"
-    framework_commit: "eaba751b71872e085f8ffd1b8a0fbbefa554f379"
+    framework_commit: "d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3"
     generic_validator:
       path: ".ai/scripts/validate-ai-context.py"
       sha256: "0bf9147efce76d5a58dc91386f9d71f793defea65af3c7bc2244b411a3f6fe47"

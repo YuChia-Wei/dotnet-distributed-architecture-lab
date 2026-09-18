@@ -8,7 +8,7 @@
   "owner_skill": "ai-context-governance",
   "status": "in_progress",
   "created_at": "2026-09-18T07:55:33+08:00",
-  "updated_at": "2026-09-18T08:05:37+08:00",
+  "updated_at": "2026-09-18T08:52:19+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "gpt-5.6-terra",
   "reasoning_effort": "xhigh",
@@ -16,70 +16,65 @@
     "AICU-V016-TARGET-GATE-PROJECTION-001"
   ],
   "scope": {
-    "target": "Rebind the prospective v0.18.0 package identity and preserve the target-owned gate reconciliation before package planning.",
+    "target": "Pin candidate09 in the isolated target gate and record the completed candidate08 and limited model observations before a fresh canonical package plan.",
     "files": [
       ".dev/ai-context/tooling/target-gate-manifest.yaml",
-      ".dev/ai-context/tooling/validate-target-ai-context.py",
-      ".dev/ai-context/tooling/tests/test_downstream_package_projection.py",
-      ".dev/ai-context/effective-rules.yaml",
-      ".dev/ai-context/effective-rule-packets/**",
       ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/**",
-      ".dev/workflows/INDEX.MD",
-      ".dev/ai-context/tooling/tests/test_code_reviewer_routing_projection.py"
+      ".dev/workflows/INDEX.MD"
     ],
     "constraints": [
-      "Verify candidate08 metadata, ZIP, projected validator and registry bytes before rebinding.",
-      "Regenerate through the installed canonical effective-rule builder without changing dispositions, selectors, or packet content.",
-      "Keep current v0.17 provenance and customizations unchanged until a canonical package apply and finalization path authorizes them.",
-      "Keep the target projection test bound to code-reviewer role_asset_id values; do not hard-code shared or private role paths."
+      "Pin target-gate-manifest.yaml framework_commit to d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3 while preserving its existing validator hashes, registry counts, shell-assets hash, and defect declarations.",
+      "Preserve customizations, provenance, effective rules, effective-rule packets, product source, and target test code byte-for-byte.",
+      "Record failed selector guesses without selecting a route, creating a plan, applying a package, or claiming validation, receipt, or savings evidence."
     ],
     "non_goals": [
-      "Apply the v0.18 package.",
-      "Create or admit a terminal receipt.",
-      "Finalize provenance or customizations.",
-      "Run the unapplied v0.18 full projection suite.",
-      "Modify product source or tests.",
+      "Alter the package manifest or framework identity.",
+      "Apply, finalize, roll back, or plan a package transaction.",
+      "Run target tests or validation.",
+      "Modify product source, target tests, provenance, customizations, effective state, or packets.",
       "Commit, push, merge, change Issue state, or publish."
     ]
   },
   "execution": {
+    "checkpoint": {
+      "branch": "codex/2026-09-18-v018-trial-04",
+      "preapply_commit": "6d91126670a4702d1831636b5892e637e5d8431f",
+      "manifest_framework_commit": "d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3",
+      "source_identity_status": "parent-supplied-candidate09-commit-pinned",
+      "validator_registry_shell_assets": "Git blobs unchanged from candidate08 to candidate09"
+    },
     "steps": [
-      "Verify candidate08 package identity and projection applicability counts.",
-      "Rebind target-owned prospective gate metadata and workflow identity.",
-      "Regenerate the existing effective state and packets with the installed canonical builder.",
-      "Run narrow preapply manifest, workflow, and current-v0.17 readiness checks.",
-      "Correct role-path projection through the installed code-reviewer skill bindings and verify candidate08 path closure."
+      "Record the fresh isolated preapply checkpoint and preserve target-owned bytes.",
+      "Pin the parent-supplied candidate09 source commit in the exact manifest projections without changing validator, registry, shell-assets, count, or defect fields.",
+      "Retain model selector-discovery failures without retrying or selecting a route.",
+      "Await root canonical validation and then canonical selector discovery before any plan or apply action."
     ],
-    "validation": [
-      "Candidate08 archive SHA-256, source commit, validator digest, registry digest, and 20/25/25 counts.",
-      "Canonical effective-state regeneration preserves 13 rule dispositions and 20 route packets.",
-      "Workflow artifact validation and current-v0.17 target readiness validation.",
-      "Focused code-reviewer projection test on the current v0.17 target and static candidate08 moved-role path closure."
-    ],
-    "last_completed_step": "Derived the four code-review role paths from code-reviewer role_bindings by role_asset_id; the focused v0.17 projection test and candidate08 closure checks pass.",
-    "next_action": "Root reviews this bounded target test correction before any canonical package plan, apply, independent audit, receipt, or finalization action."
+    "validation": [],
+    "last_completed_step": "Recorded trial-04 preapply metadata, both non-passing model selector observations, and the parent-supplied candidate09 source commit. No target operation or validation command ran in this checkpoint.",
+    "next_action": "Parent validates and commits this preapply checkpoint, then continues the already-authorized fresh canonical package plan/apply, target receipt and independent audit. Actual corrected model consumption follows finalization."
   },
   "results": {
-    "summary": "Candidate08 preapply reconciliation remains in progress. The historic 55-test suite retained 53 passes and two role-path projection failures with no receipt; the bounded correction now passes focused validation and candidate08 static closure.",
+    "summary": "Candidate08 isolated target finalization and its earlier two-error pre-finalization run remain historical evidence. Candidate09 ZIP/tar package validation passed, and this clean trial-04 preapply checkpoint pins only its supplied source commit while recording Terra and Luna candidate01 selector-discovery failures without target execution.",
     "files_changed": [
-      ".dev/ai-context/tooling/**",
-      ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/**",
-      ".dev/workflows/INDEX.MD",
-      ".dev/ai-context/tooling/tests/test_code_reviewer_routing_projection.py"
+      ".dev/ai-context/tooling/target-gate-manifest.yaml",
+      ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/workflow.yaml",
+      ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/workflow-plan.md",
+      ".dev/workflows/2026-09-18-ai-context-v0-18-0-trial/tasks/AICU-001-preapply-gate-reconciliation.json",
+      ".dev/workflows/INDEX.MD"
     ],
-    "tests_run": [
-      "Candidate08 package metadata source commit eaba751b71872e085f8ffd1b8a0fbbefa554f379 and ZIP SHA-256 3a8f7d753b0f45dde2e9f77e43b3f7dbc87f8fb69c1231b2d2463245c1e4d5d2 verified.",
-      "Candidate08 projected generic validator and Python-entrypoint registry digests verified as 0bf9147efce76d5a58dc91386f9d71f793defea65af3c7bc2244b411a3f6fe47 and 79b03cf9876170e2d4f0e6f9291e774bcbfa61847d6423a86406c39fb6ece233; counts 20/25/25.",
-      "Installed canonical effective-rule builder reproduced 13 dispositions, 20 routes, and 20 packet documents exactly; target state digest remains 57a3f551589bd293fb8e2c4b77b93b570b6c48ac464a01038983f2ccbc6b1fd7.",
-      "validate-ai-context-target.py --require-effective-rules passed against the current v0.17 target.",
-      "validate-workflow-artifacts.py passed after the in-progress task was recorded.",
-      "21 focused target-terminal-audit tests passed; no full v0.18 target suite was executed before apply.",
-      "Candidate08 actual target suite: 55 tests, 53 passed, 2 failed (gwt005 and gwt007) only because code-reviewer role paths were hard-coded to pre-v0.18 shared locations; no passing receipt was produced.",
-      "Focused test: py -3 -B -m unittest discover -s .dev/ai-context/tooling/tests -p test_code_reviewer_routing_projection.py -v; 7 passed.",
-      "Static candidate08 closure: four code-review bindings and all 17 moved role paths exist; zero target AI-context literal references remain."
+    "tests_run": [],
+    "historical_observations": [
+      "Candidate08 source-package finalization succeeded; it is not a receipt or apply result for this fresh preapply clone.",
+      "A prior pre-finalization 55-test target run retained two errors. It is non-passing historical evidence, and no individual pass count is inferred from the aggregate.",
+      "Candidate09 ZIP/tar package validation passed; this checkpoint records only the supplied source commit, not an inferred archive digest.",
+      "The generic validator, Python entrypoint registry, and shell-assets Git blobs are identical between candidate08 and candidate09; existing manifest hashes, counts, and defect declarations remain unchanged.",
+      "Terra candidate01 guessed code-reviewer/review/csharp and stopped before catalog checks.",
+      "Luna candidate01 guessed code-review/direct/dotnet-backend/cs and stopped before catalog checks.",
+      "The ready target routes review/direct/csharp-review and dotnet-mixed-review are recorded for later canonical discovery; neither is selected here.",
+      "No savings are accepted from either model observation."
     ],
-    "finding_status": "in-progress",
-    "residual_risk": "No target suite receipt passes until the bounded role-path correction is validated after the package is applied. Package apply, provenance finalization, independent audit, and terminal receipt admission remain separate pending actions.",
+    "finding_status": "partially-addressed",
+    "residual_risk": "Canonical selector-discovery guidance has not been consumed. Route selection, package planning, target validation, receipt admission, and finalization remain outside this metadata checkpoint.",
     "follow_up_needed": true
   }
 }
