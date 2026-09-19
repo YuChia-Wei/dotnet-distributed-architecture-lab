@@ -22,7 +22,7 @@ outputs:
 - authoring extraction sheet
 - validator-ready problem-frame draft
 - open questions and inferred items
-- one provider-neutral role_execution record for the considered problem-frame role binding, handed to the orchestrator without transferring framing ownership
+- when the full execution contract applies, one provider-neutral role_execution record for the considered problem-frame role binding, handed to the orchestrator without transferring framing ownership
 constraints:
 - Select the requested artifact through AUTHORING-BOUNDARY-CONTRACT; preserve explicit skill choices and resolve conflicts before authoring.
 - Carry source bindings and open decisions without adding an unrequested authoring stage or implementation authority.
@@ -30,7 +30,7 @@ constraints:
 - Mark inferred items explicitly when the source documents do not state them
 - Do not claim 100% validator compliance from drafting alone
 role_bindings:
-- role_path: .ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/problem-frame-author/roles/problem-frame-sub-agent/sub-agent.yaml
   role_asset_id: problem-frame-sub-agent
   expected_role_status: active
   binding_kind: primary
@@ -44,7 +44,7 @@ workflow:
 - step: 3
   description: Draft the file set for the selected CBF or SWF frame type, following references/authoring-playbook.md and references/output-contract.md.
 - step: 4
-  description: List open questions, inferred items, next skill handoff, and the skill-owned role_execution record for orchestrator aggregation
+  description: List open questions, inferred items, necessary handoff, and execution evidence at the tier selected by ROLE-EXECUTION-CONTRACT
 references:
 - .ai/assets/shared/AUTHORING-BOUNDARY-CONTRACT.md
 - .ai/assets/skills/problem-frame-author/references/authoring-playbook.md

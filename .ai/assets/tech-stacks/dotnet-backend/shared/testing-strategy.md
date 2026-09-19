@@ -1,8 +1,18 @@
 # Testing Strategy (Dotnet)
 
+## Transactional Messaging Evidence
+
+When a target selects transactional messaging, use the behavior and evidence
+contract in [Transactional Messaging Standards](../standards/coding-standards/transactional-messaging-standards.md).
+Unit and generated-pipeline tests may exercise local contracts, but they do not
+prove a real local transaction, durable inbox/outbox completion, or external
+delivery. Keep any integration evidence bound to its actual subject, environment,
+instrumentation, and observed window.
+
 Agent-loading projection of the canonical [Test Coding Standards](../standards/coding-standards/test-standards.md).
 
-Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`.
+Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`,
+`MESSAGING-TX-001`.
 
 ## Execution Summary
 - **Framework**: xUnit

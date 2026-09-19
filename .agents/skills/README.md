@@ -14,7 +14,7 @@ This directory contains the current repo-local skill wrappers for Codex and comp
 ## Usage
 
 1. Start with `.ai/assets/skills/README.MD` for the complete canonical skill registry.
-2. Read the matching `skill.yaml` for purpose, inputs, outputs, constraints, wrapper targets, and human guide.
+2. For `code-reviewer` and `local-change-implementer`, execute the generated `SKILL.md` entry directly and expand only applicable references. Read the full `skill.yaml` only for metadata, maintenance, or discrepancy resolution. Other skills retain their canonical-entry loading contract.
 3. Use `.agents/skills/<skill>/SKILL.md` only when the current runtime needs a local wrapper entry.
 
 ## Available Wrappers
@@ -43,4 +43,4 @@ This directory contains the current repo-local skill wrappers for Codex and comp
 - A wrapper must not become the source of truth for skill rules.
 - Add or update the canonical spec before adding or updating a runtime wrapper.
 - If the canonical spec and wrapper conflict, follow `.ai/assets/skills/`.
-- Each wrapper `SKILL.md` should only keep canonical spec links, human guide links, reference links, and runtime-specific metadata.
+- Each wrapper keeps canonical links and runtime discovery metadata. The selected generated entries may project canonical `runtime_entry` instructions with source identity and exact parity validation; never maintain those instructions independently.

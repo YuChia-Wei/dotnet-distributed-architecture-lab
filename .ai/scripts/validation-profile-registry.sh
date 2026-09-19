@@ -230,6 +230,11 @@ register_check code-review-routing-contract \
     "context,review,tests" "fast pr release nightly-full" \
     ".ai/assets/skills/code-reviewer .ai/assets/sub-agent-role-prompts .ai/assets/tech-stacks/dotnet-backend .ai/scripts/tests/test_code_reviewer_routing_contract.py" coding-standards-integrity "python>=3.11" 60 cpu reuse-by-input portable \
     "python .ai/scripts/tests/test_code_reviewer_routing_contract.py -v" always
+register_check runtime-skill-entry-contract \
+    "Generated Runtime Skill Entry Contract" required \
+    "context,package,tests" "fast pr release nightly-full" \
+    ".ai/scripts/generate-runtime-skill-entries.py .ai/scripts/runtime_skill_entries.py .ai/scripts/ai_context_package.py .ai/scripts/tests/test_runtime_skill_entries.py .ai/distribution/profiles .ai/assets/skills/code-reviewer .ai/assets/skills/local-change-implementer .agents/skills/code-reviewer .agents/skills/local-change-implementer .claude/skills/code-reviewer .claude/skills/local-change-implementer" '' "python>=3.11" 30 cpu no-reuse portable \
+    "python .ai/scripts/tests/test_runtime_skill_entries.py -v" always
 register_check profile-projection \
     "Profile Projection Contract" required \
     "package,tests" "fast pr release nightly-full" \
@@ -273,7 +278,7 @@ register_check package-full-matrix \
 register_check release-state-tests \
     "AI Context Release State Fail-Closed Tests" required \
     "release,tests" "release nightly-full" \
-    ".ai/scripts/tests/test_ai_context_release_state.py .ai/scripts/validate-ai-context-release-state.py .github/scripts/validate-v016-direct-upgrades.py .github/scripts/validate-v017-direct-upgrades.py .dev/releases" source-ai-context-version "python>=3.11 git" 90 cpu reuse-by-input source \
+    ".ai/scripts/tests/test_ai_context_release_state.py .ai/scripts/validate-ai-context-release-state.py .github/scripts/validate-v016-direct-upgrades.py .github/scripts/validate-v017-direct-upgrades.py .github/scripts/validate-v018-direct-upgrades.py .dev/releases" source-ai-context-version "python>=3.11 git" 90 cpu reuse-by-input source \
     "python .ai/scripts/tests/test_ai_context_release_state.py -v" source-release
 register_check release-asset-identity \
     "Release Asset Identity Contract Tests" required \

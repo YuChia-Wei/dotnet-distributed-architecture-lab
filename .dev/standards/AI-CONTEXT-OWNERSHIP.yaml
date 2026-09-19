@@ -507,6 +507,29 @@ rules:
       - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
       - .ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml
     status: active
+  - rule_id: MESSAGING-TX-001
+    domain: transactional-message-boundary
+    strength: profile-default
+    canonical_path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/transactional-messaging-standards.md
+    canonical_anchor: "## Transaction Contract"
+    catalog_selector:
+      rule_id: MESSAGING-TX-001
+    catalog_projection:
+      path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+      selector:
+        rule_id: MESSAGING-TX-001
+    scope: dotnet-backend
+    applicability: a message consumer requires atomic local business state, durable outgoing intent, and successful incoming-processing completion
+    override_policy: explicit-target-decision
+    decision_evidence:
+      - target architecture decision
+      - selected store/runtime enrollment evidence
+      - deduplication and error-disposition policy
+    derived_consumers:
+      - .ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md
+      - .ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml
+      - .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
+    status: active
   - rule_id: MAP-EVENTS-001
     domain: mapper-event-lifecycle
     strength: invariant

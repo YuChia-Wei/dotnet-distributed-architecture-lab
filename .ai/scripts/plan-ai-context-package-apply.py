@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plan, apply, resume, or roll back an extracted AI context package."""
+"""Plan, apply, recover, or archive an extracted AI context package receipt."""
 
 from __future__ import annotations
 
@@ -22,6 +22,7 @@ import yaml
 
 from ai_context_package_apply import (
     ApplyError,
+    archive_finalized_receipt,
     apply_plan,
     atomic_write_bytes,
     build_plan,
@@ -103,6 +104,14 @@ def main() -> int:
     lifecycle.add_argument("--resume", metavar="TRANSACTION_ID")
     lifecycle.add_argument("--rollback", metavar="TRANSACTION_ID")
     lifecycle.add_argument(
+        "--archive-finalized-receipt",
+        metavar="TRANSACTION_ID",
+        help=(
+            "Archive and clear a direct finalized pending receipt only after "
+            "terminal and current-authority evidence verifies."
+        ),
+    )
+    lifecycle.add_argument(
         "--record-target-validation-receipt",
         metavar="TRANSACTION_ID",
         help=(
@@ -143,6 +152,7 @@ def main() -> int:
         if (
             args.resume
             or args.rollback
+            or args.archive_finalized_receipt
             or args.record_target_validation_receipt
         ):
             if (
@@ -158,6 +168,27 @@ def main() -> int:
                 raise ApplyError(
                     "recovery cannot change the sealed plan, decision, selection, or acknowledgements"
                 )
+            if args.archive_finalized_receipt:
+                if args.package_root is not None:
+                    raise ApplyError(
+                        "archiving a finalized receipt does not accept --package-root"
+                    )
+                if args.target_validation_receipt is not None:
+                    raise ApplyError(
+                        "--target-validation-receipt requires --record-target-validation-receipt"
+                    )
+                result = archive_finalized_receipt(
+                    args.target_root,
+                    args.archive_finalized_receipt,
+                    boundary_hook,
+                )
+                print(
+                    yaml.safe_dump(
+                        {"finalized_receipt_archive": result}, sort_keys=False
+                    ),
+                    end="",
+                )
+                return 0
             if args.record_target_validation_receipt:
                 if args.package_root is not None:
                     raise ApplyError(

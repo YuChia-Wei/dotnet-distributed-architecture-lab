@@ -2541,6 +2541,10 @@ run_command_check "python .ai/scripts/tests/test_code_reviewer_routing_contract.
     "Code Reviewer Routing Contract" \
     "required" "true" "true"
 
+run_command_check "python .ai/scripts/tests/test_runtime_skill_entries.py -v" \
+    "Generated Runtime Skill Entry Contract" \
+    "required" "true" "true"
+
 run_command_check "python .ai/scripts/tests/test_profile_projection_contract.py -v" \
     "Profile Projection Contract" \
     "required" "true" "true"

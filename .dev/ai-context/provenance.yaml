@@ -6,14 +6,14 @@ template_metadata:
 schema_version: '2.0'
 source:
   repository: https://github.com/YuChia-Wei/ai-collaboration-framework
-  release_id: REL-v0.17.0
-  version: v0.17.0
-  tag: v0.17.0
-  commit: 8eed3960f19c57050c8e8a8e1ecedbc3004aabc2
+  release_id: REL-v0.18.0
+  version: v0.18.0
+  tag: v0.18.0
+  commit: 0e5fbfc4a4a69ecd9da543751d53edfd311f93fb
 installation:
   initialized_by: ai-context-upgrader
   imported_at: '2026-07-13T20:42:19+08:00'
-  last_upgraded_at: '2026-09-18T06:33:59+08:00'
+  last_upgraded_at: '2026-09-19T20:05:39.0773821+08:00'
 selection:
   mandatory_components:
   - software-development-core
@@ -30,18 +30,18 @@ customizations:
   schema_version: '1.0'
 previous_source:
   repository: https://github.com/YuChia-Wei/ai-collaboration-framework
-  release_id: REL-v0.16.0
-  version: v0.16.0
-  tag: v0.16.0
-  commit: 4d1a5c7d039618f007784679d9968c357347272b
+  release_id: REL-v0.17.0
+  version: v0.17.0
+  tag: v0.17.0
+  commit: 8eed3960f19c57050c8e8a8e1ecedbc3004aabc2
 reconciliation:
   unresolved: []
 last_migration:
   status: completed
-  from_version: v0.16.0
-  to_version: v0.17.0
-  completed_at: '2026-09-18T06:33:59+08:00'
-  evidence: .dev/ai-context/local/v018-trial-evidence/finalization-evidence.md
+  from_version: v0.17.0
+  to_version: v0.18.0
+  completed_at: '2026-09-19T20:05:39.0773821+08:00'
+  evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/finalization-evidence.md
 effective_rules:
   state: .dev/ai-context/effective-rules.yaml
   packets_root: .dev/ai-context/effective-rule-packets/

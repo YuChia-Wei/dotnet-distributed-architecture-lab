@@ -1,10 +1,10 @@
 schema_version: '1.0'
-packet_id: PACKET-699795E0906CE2920636E0FBE9CAF0E74B2487545DFD4FA8A9F77CB3F019ACCB
+packet_id: PACKET-ED37D4E3F3F9E0177FB0E6DC5D6A6B503F2D4EA1925A179BC045715ED222FED2
 resolver:
   version: '1.0'
   evidence:
-  - .dev/ai-context/local/v018-trial-evidence/reconciliation.md
-  - .dev/ai-context/local/v018-trial-evidence/report-03.md
+  - .dev/ai-context/local/v018-candidate11-attempt14-evidence/prospective-decision.json
+  - .dev/ai-context/local/v018-candidate11-attempt14-evidence/reconciliation.md
   - AGENTS.md
   - AGENTS.zh-TW.md
 request:
@@ -14,16 +14,16 @@ request:
   technology_profile: dotnet-backend
   file_type: csharp-production
 baseline:
-  framework_version: v0.17.0
-  framework_commit: 8eed3960f19c57050c8e8a8e1ecedbc3004aabc2
+  framework_version: v0.18.0
+  framework_commit: 0e5fbfc4a4a69ecd9da543751d53edfd311f93fb
   selected_technology_profile: dotnet-backend
 target_state:
   path: .dev/ai-context/effective-rules.yaml
-  digest: 57a3f551589bd293fb8e2c4b77b93b570b6c48ac464a01038983f2ccbc6b1fd7
+  digest: 14633a5ddb29560264230fc3bb4343020eb8018a0171eede4c8f7d11feafd43f
 catalogs:
 - catalog_id: selected-profile
   path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
-  digest: 586701351c97fffa2ece421c4eabd4acbdce315b34e5845b497f968967f7c3d4
+  digest: ce49222006353b9eefdc5dee18d8ec5887c918a9569d3c23d988fe557110c952
 - catalog_id: shared
   path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
   digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
@@ -36,6 +36,7 @@ loaded_rule_ids:
 - DELETE-PURGE-001
 - DELETE-SOFT-001
 - MAP-EVENTS-001
+- MESSAGING-TX-001
 - PROJECT-GRAMMAR-001
 - TECH-SELECT-001
 - TEST-BDDFY-001
@@ -171,7 +172,7 @@ rules:
   catalog_id: selected-profile
   catalog_selector:
     rule_id: ARCH-UOW-001
-  catalog_normative_statement_digest: 05eb3e1e98a560e35e0ecee16d77514544445467263cd169633a798cf7ef8be1
+  catalog_normative_statement_digest: 0bc2ba0f84e5a4faed68487721b1ac9b501a68e8ad714225da143ef6abaa6ee8
   effective_disposition: baseline-effective
   normative_statement: "### 7. Strong Consistency MUST Be Explicit\n\nOne command\
     \ changes one Aggregate by default. Events and eventual consistency are\nthe default\
@@ -199,9 +200,17 @@ rules:
     \ dependency.\n- MUST NOT span bounded contexts with one transaction; cross-bounded-context\n\
     \  coordination uses integration events and eventual consistency.\n- A Repository\
     \ participating in a Unit of Work MUST NOT commit independently.\n- A Handler\
-    \ MUST NOT introduce a transaction or commit after the Use Case.\n- Pending Domain\
-    \ Events may be acknowledged or cleared only after a successful commit.\n"
-  normative_statement_digest: 05eb3e1e98a560e35e0ecee16d77514544445467263cd169633a798cf7ef8be1
+    \ MUST NOT introduce a transaction or commit after the Use Case. A\n  selected\
+    \ runtime pipeline or middleware may enroll and complete the processing\n  transaction\
+    \ outside the Handler; it does not make the Handler a transaction owner.\n- Pending\
+    \ Domain Events may be acknowledged or cleared only after a successful commit.\n\
+    \nFor a selected transactional message path, the Use Case declares and\norchestrates\
+    \ the required local consistency; the selected Unit of Work or\nverified runtime\
+    \ pipeline physically completes it. This does not make\n`IUnitOfWork` a default\
+    \ Use Case dependency and does not weaken the\nmulti-Aggregate, same-bounded-context\
+    \ exception above. See\n[Transactional Messaging Standards](transactional-messaging-standards.md)\
+    \ for\nthe single completion-owner, inbox/outbox, and adapter contract.\n"
+  normative_statement_digest: 0bc2ba0f84e5a4faed68487721b1ac9b501a68e8ad714225da143ef6abaa6ee8
   disposition_record:
     applicability: Command use cases persist aggregates, use explicit local transactions
       for aggregate/outbox consistency, and message across bounded contexts.
@@ -431,6 +440,48 @@ rules:
     - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
     - tests/SaleOrders.Domains.Tests/OrderTests.cs
     rule_id: MAP-EVENTS-001
+- rule_id: MESSAGING-TX-001
+  catalog_id: selected-profile
+  catalog_selector:
+    rule_id: MESSAGING-TX-001
+  catalog_normative_statement_digest: 9d6358ad89a2fadaa9ff2ebba69d2cb9728500751c921609d41a42efe5383b7a
+  effective_disposition: baseline-effective
+  normative_statement: "## Transaction Contract\n\nFor a selected transactional message\
+    \ path:\n\n1. The Application Use Case declares the required local consistency\
+    \ and\n   orchestrates Aggregate behavior and outbound ports.\n2. Exactly one\
+    \ selected component physically completes the local transaction:\n   an explicit\
+    \ Unit of Work **or** a verified runtime transaction pipeline.\n   Repositories,\
+    \ message adapters, and decorators participate; they do not add\n   an independent\
+    \ commit path.\n3. When the selected store and runtime contract support enrollment,\
+    \ commit\n   Aggregate state, durable outgoing intent, and successful incoming-processing\n\
+    \   completion in that one local transaction.\n4. Persisting an incoming envelope\
+    \ or claiming broker delivery is distinct from\n   successful business processing.\
+    \ Initial durable receipt must not be reported\n   as completed processing.\n\n\
+    The contract is local. It does not make an external broker, HTTP API, file\nsystem,\
+    \ or another database part of the transaction, and it does not provide\nend-to-end\
+    \ exactly-once delivery. External effects are represented by durable\nintent and\
+    \ remain retryable after the local commit.\n\nInbox and outbox records are technical\
+    \ persistence with operational semantics;\nthey are not Domain Aggregates merely\
+    \ to fit a Repository shape. A target may\nuse conditional updates, uniqueness\
+    \ constraints, claimed states, and\ncapability-specific adapters. It must define\
+    \ the relevant concurrency behavior.\n"
+  normative_statement_digest: 9d6358ad89a2fadaa9ff2ebba69d2cb9728500751c921609d41a42efe5383b7a
+  disposition_record:
+    rule_id: MESSAGING-TX-001
+    effective_disposition: baseline-effective
+    applicability: a message consumer requires atomic local business state, durable
+      outgoing intent, and successful incoming-processing completion
+    evidence: &id001
+    - samples/EfCoreWolverine/EfCoreWolverine.Host/DecreaseStockHandler.cs
+    - samples/EfCoreWolverine/EfCoreWolverine.Host/SampleHost.cs
+    - samples/EfCoreWolverine/EfCoreWolverine.Infrastructure/EfInventoryRepository.cs
+    - .dev/ARCHITECTURE.md
+    - .dev/project-config.yaml
+    baseline_acceptance:
+      explicit: true
+      verification:
+        status: verified
+        evidence: *id001
 - rule_id: PROJECT-GRAMMAR-001
   catalog_id: selected-profile
   catalog_selector:
@@ -730,12 +781,12 @@ rules:
 freshness:
   status: verified
   verified_inputs:
-    target_state_digest: 57a3f551589bd293fb8e2c4b77b93b570b6c48ac464a01038983f2ccbc6b1fd7
+    target_state_digest: 14633a5ddb29560264230fc3bb4343020eb8018a0171eede4c8f7d11feafd43f
     catalog_digests:
     - catalog_id: selected-profile
       path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
-      digest: 586701351c97fffa2ece421c4eabd4acbdce315b34e5845b497f968967f7c3d4
+      digest: ce49222006353b9eefdc5dee18d8ec5887c918a9569d3c23d988fe557110c952
     - catalog_id: shared
       path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
       digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
-packet_digest: 5e7375b6bc4f87da4cc9dc9ae2e01e1755b356284dd37d1560a3e55d3a7324e9
+packet_digest: 1565a6bacbf02635572854397b841f964d44628bafd0b57b67c7abdb19eded8f

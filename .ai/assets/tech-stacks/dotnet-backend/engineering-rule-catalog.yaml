@@ -11,7 +11,7 @@ ordering:
   array_contents: "retain declared source order"
 catalog_digest:
   algorithm: "sha256"
-  value: "586701351c97fffa2ece421c4eabd4acbdce315b34e5845b497f968967f7c3d4"
+  value: "ce49222006353b9eefdc5dee18d8ec5887c918a9569d3c23d988fe557110c952"
   canonicalization: "UTF-8 encoding of compact JSON with Unicode preserved, object keys sorted by Unicode code point, array order preserved, and exactly one terminal LF; the complete catalog_digest field is excluded from the input."
 selector_contract:
   capability_execution_mode_file_type: "unconstrained-by-source with an empty values list means no narrower source-backed predicate is declared; a resolver must not invent one or use it as a default fallback."
@@ -142,8 +142,8 @@ rules:
     decision_evidence: ["named all-or-nothing invariant", "documented same-bounded-context consistency decision"]
     derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"]
     status: "active"
-    source_file_sha256: "bd3cb7fc48bbe7fb8c725f10d4baf2a31f24d4ac22aa29422d7d586daf1556a3"
-    normative_text_sha256: "05eb3e1e98a560e35e0ecee16d77514544445467263cd169633a798cf7ef8be1"
+    source_file_sha256: "3f69354497aa9c2e875b43788dc1d8c9d418c98122bf1276c9d069bdea1b4030"
+    normative_text_sha256: "0bc2ba0f84e5a4faed68487721b1ac9b501a68e8ad714225da143ef6abaa6ee8"
     normative_text: |
       ### 7. Strong Consistency MUST Be Explicit
 
@@ -187,8 +187,18 @@ rules:
       - MUST NOT span bounded contexts with one transaction; cross-bounded-context
         coordination uses integration events and eventual consistency.
       - A Repository participating in a Unit of Work MUST NOT commit independently.
-      - A Handler MUST NOT introduce a transaction or commit after the Use Case.
+      - A Handler MUST NOT introduce a transaction or commit after the Use Case. A
+        selected runtime pipeline or middleware may enroll and complete the processing
+        transaction outside the Handler; it does not make the Handler a transaction owner.
       - Pending Domain Events may be acknowledged or cleared only after a successful commit.
+
+      For a selected transactional message path, the Use Case declares and
+      orchestrates the required local consistency; the selected Unit of Work or
+      verified runtime pipeline physically completes it. This does not make
+      `IUnitOfWork` a default Use Case dependency and does not weaken the
+      multi-Aggregate, same-bounded-context exception above. See
+      [Transactional Messaging Standards](transactional-messaging-standards.md) for
+      the single completion-owner, inbox/outbox, and adapter contract.
   - rule_id: "CONTRACT-SEMANTICS-001"
     kind: "normative-rule"
     semantic_owner:
@@ -397,6 +407,69 @@ rules:
       - State-based fallback reconstruction follows the same rule; constructor side effects must not escape as pending events.
 
       ---
+  - rule_id: "MESSAGING-TX-001"
+    kind: "normative-rule"
+    semantic_owner:
+      path: ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/transactional-messaging-standards.md"
+      anchor: "## Transaction Contract"
+    catalog_projection:
+      path: ".ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml"
+      selector:
+        rule_id: "MESSAGING-TX-001"
+    migration_provenance:
+      legacy_path: null
+    domain: "transactional-message-boundary"
+    strength: "profile-default"
+    scope: "dotnet-backend"
+    applicability:
+      text: "a message consumer requires atomic local business state, durable outgoing intent, and successful incoming-processing completion"
+      selectors:
+        capability:
+          state: "unconstrained-by-source"
+          values: []
+        execution_mode:
+          state: "unconstrained-by-source"
+          values: []
+        technology_profile:
+          state: "fixed-profile"
+          values: ["dotnet-backend"]
+        file_type:
+          state: "unconstrained-by-source"
+          values: []
+    override_policy: "explicit-target-decision"
+    decision_evidence: ["target architecture decision", "selected store/runtime enrollment evidence", "deduplication and error-disposition policy"]
+    derived_consumers: [".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml", ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"]
+    status: "active"
+    source_file_sha256: "2596901c1a7bc94f3f28db00eff2c3d75fb6a27cf0a210d8f6852fd430b1baa7"
+    normative_text_sha256: "9d6358ad89a2fadaa9ff2ebba69d2cb9728500751c921609d41a42efe5383b7a"
+    normative_text: |
+      ## Transaction Contract
+
+      For a selected transactional message path:
+
+      1. The Application Use Case declares the required local consistency and
+         orchestrates Aggregate behavior and outbound ports.
+      2. Exactly one selected component physically completes the local transaction:
+         an explicit Unit of Work **or** a verified runtime transaction pipeline.
+         Repositories, message adapters, and decorators participate; they do not add
+         an independent commit path.
+      3. When the selected store and runtime contract support enrollment, commit
+         Aggregate state, durable outgoing intent, and successful incoming-processing
+         completion in that one local transaction.
+      4. Persisting an incoming envelope or claiming broker delivery is distinct from
+         successful business processing. Initial durable receipt must not be reported
+         as completed processing.
+
+      The contract is local. It does not make an external broker, HTTP API, file
+      system, or another database part of the transaction, and it does not provide
+      end-to-end exactly-once delivery. External effects are represented by durable
+      intent and remain retryable after the local commit.
+
+      Inbox and outbox records are technical persistence with operational semantics;
+      they are not Domain Aggregates merely to fit a Repository shape. A target may
+      use conditional updates, uniqueness constraints, claimed states, and
+      capability-specific adapters. It must define the relevant concurrency behavior.
+
   - rule_id: "PROJECT-GRAMMAR-001"
     kind: "normative-rule"
     semantic_owner:

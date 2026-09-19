@@ -10,4 +10,8 @@ routes:
     references:
       - .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md
       - .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
+  transactional-messaging:
+    references:
+      - .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/transactional-messaging-standards.md
+      - .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
 loading: "Choose the applicable route, then only the relevant standards. Consume effective rules first; preserve explicit target decisions and compatibility aliases."

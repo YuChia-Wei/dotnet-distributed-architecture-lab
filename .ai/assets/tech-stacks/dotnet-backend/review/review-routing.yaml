@@ -108,6 +108,9 @@ routes:
       - finding_tag: "unit-of-work"
         applies_when: "The use case owns an explicitly selected transaction boundary."
         rule_ids: ["ARCH-UOW-001"]
+      - finding_tag: "transactional-message"
+        applies_when: "A message-triggered use case declares local state, outgoing intent, incoming completion, deduplication, or transaction-pipeline behavior."
+        rule_ids: ["MESSAGING-TX-001"]
 
   - route_id: "handler"
     priority: 85
@@ -116,7 +119,10 @@ routes:
       type_signals: ["*CommandHandler", "*QueryHandler"]
     canonical_references:
       - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md"
-    finding_rules: []
+    finding_rules:
+      - finding_tag: "transactional-message"
+        applies_when: "The handler's message processing, runtime transaction pipeline, completion, retry, or deduplication behavior is under review."
+        rule_ids: ["MESSAGING-TX-001"]
 
   - route_id: "repository"
     priority: 85
@@ -129,6 +135,9 @@ routes:
       - finding_tag: "unit-of-work"
         applies_when: "Transaction ownership or commit behavior is under review."
         rule_ids: ["ARCH-UOW-001"]
+      - finding_tag: "transactional-message"
+        applies_when: "The repository participates in message-path state, durable outgoing intent, incoming completion, or DbContext transaction enrollment."
+        rule_ids: ["MESSAGING-TX-001"]
       - finding_tag: "soft-delete"
         applies_when: "The target selected soft delete."
         rule_ids: ["DELETE-SOFT-001"]
@@ -173,7 +182,10 @@ routes:
       type_signals: ["IReactor<T>"]
     canonical_references:
       - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/reactor-standards.md"
-    finding_rules: []
+    finding_rules:
+      - finding_tag: "transactional-message"
+        applies_when: "The reactor handles message delivery, outgoing intent, retry, deduplication, or processing completion."
+        rule_ids: ["MESSAGING-TX-001"]
 
   - route_id: "outbox"
     priority: 75
@@ -182,10 +194,14 @@ routes:
       type_signals: ["OutboxData", "OutboxMessage"]
     canonical_references:
       - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/mapper-standards.md"
+      - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/transactional-messaging-standards.md"
     finding_rules:
       - finding_tag: "domain-event-mapping"
         applies_when: "Domain events or event metadata are serialized into or reconstructed from outbox data."
         rule_ids: ["MAP-EVENTS-001"]
+      - finding_tag: "transactional-message"
+        applies_when: "Inbox/outbox ownership, completion, deduplication, transaction enrollment, or delivery evidence is under review."
+        rule_ids: ["MESSAGING-TX-001"]
 
   - route_id: "test"
     priority: 70
@@ -202,6 +218,9 @@ routes:
       - finding_tag: "mocking-selection"
         applies_when: "A mocking library or mock behavior is under review."
         rule_ids: ["TEST-MOCK-001"]
+      - finding_tag: "transactional-message"
+        applies_when: "A test claims transactional message success, rollback, duplicate/replay, concurrency, retry, recovery, or delivery behavior."
+        rule_ids: ["MESSAGING-TX-001"]
 
   - route_id: "general-csharp"
     priority: 1
@@ -210,7 +229,10 @@ routes:
       type_signals: []
     canonical_references:
       - ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md"
-    finding_rules: []
+    finding_rules:
+      - finding_tag: "transactional-message"
+        applies_when: "The code configures, publishes, dispatches, or observes message delivery, native inbox/outbox facilities, or transaction-pipeline behavior."
+        rule_ids: ["MESSAGING-TX-001"]
 
 compatibility:
   migration_window: "v0.13.x"

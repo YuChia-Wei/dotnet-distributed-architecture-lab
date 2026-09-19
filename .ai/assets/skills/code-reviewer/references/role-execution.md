@@ -1,9 +1,12 @@
 # Code Reviewer Role Execution
 
-For every review-role binding considered, `code-reviewer` produces the
-provider-neutral `role_execution` record defined by
-`.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`. Bindings prove static reachability, not that a
-reviewer ran; the record supplies runtime evidence without transferring review
+For terminal, high-risk, or external acceptance reviews, `code-reviewer`
+produces the provider-neutral `role_execution` record defined by
+`.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md` for every considered review-role
+binding. For a routine direct review, record only material applicable bindings
+and state the coverage limitation for unselected bindings; do not fabricate or
+require a full per-role record. Bindings prove static reachability, not that a
+reviewer ran; a record supplies runtime evidence without transferring review
 judgment or finding ownership to the orchestrator.
 
 The canonical route selector is
@@ -20,8 +23,15 @@ modify its provider or effective-state semantics.
 
 ## Record And Selection
 
-Evaluate each binding against the actual reviewed scope. A nonmatching binding
-uses `applicability.result: does-not-apply`,
+Classify the review before creating role evidence. Ordinary same-runtime direct
+reviews follow the proportionate execution envelope in
+`.ai/assets/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md`: they keep only the
+material role applicability and coverage notes needed for the review. The full
+record applies only to a terminal, high-risk, or external acceptance path.
+Unknown classification selects the full record.
+
+For a full record, evaluate each binding against the actual reviewed scope. A
+nonmatching binding uses `applicability.result: does-not-apply`,
 `selection.disposition: not-applicable`, and
 `selection.delegation_evaluation: null`. For a matching binding, retain the
 binding `role_asset_id` and exact `role_path`; load that manifest plus every
@@ -32,7 +42,7 @@ conditions. Populate the bounded reviewed scope,
 selected-route source references, constraints, actual permissions, expected and
 returned review output, and the parent in `final_integration_owner`.
 
-Applicable roles default to `direct`. Record
+Applicable roles in a full record default to `direct`. Record
 `selection.delegation_evaluation` and allow `delegated` only when all of these
 are true: `applicable_role`, `current_session_runtime_support_verified`,
 `bounded_input_output_permissions_stop`,
@@ -53,7 +63,7 @@ result.
 
 ## Attempts, Fallback, And Aggregation
 
-When execution occurs, record attempts in the same record with their own
+When full-record execution occurs, record attempts in the same record with their own
 disposition, executor, and invocation evidence. Attempt 2 is permitted only
 for a correctable first failure after a material state change; attempt 3 or
 later requires fresh owner or workflow authorization. Not-applicable and

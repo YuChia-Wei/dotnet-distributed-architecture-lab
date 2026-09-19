@@ -189,6 +189,13 @@ Domain Event lifecycle:
 5. Acknowledge/clear pending events only after a successful commit.
 6. Preserve retry and optimistic-concurrency semantics on failure.
 
+For a selected transactional message path, this Aggregate + Outbox sequence is
+extended by successful incoming-processing completion in the same supported
+local transaction. Initial durable receipt is a separate lifecycle boundary.
+`SaveAsync` and adapter-level `SaveChangesAsync` may register or flush work; the
+one selected Unit of Work or verified runtime pipeline owns completion. See
+[Transactional Messaging Standards](transactional-messaging-standards.md).
+
 ## Target-specific Aggregate Batch Capability
 
 Portable building blocks do not publish a mandatory `IAggregateBatchRepository`.

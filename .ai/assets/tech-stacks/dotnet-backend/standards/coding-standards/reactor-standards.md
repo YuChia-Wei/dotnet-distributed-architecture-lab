@@ -95,6 +95,11 @@ At minimum, account for:
 
 External I/O, read-model updates, and notifications should be protected against duplicate processing.
 
+When a Reactor participates in a selected transactional message path, define
+the envelope deduplication scope, retention, and replay behavior separately from
+business-operation idempotency. See
+[Transactional Messaging Standards](transactional-messaging-standards.md).
+
 ---
 
 ## 🎯 Recommended Responsibility Boundary

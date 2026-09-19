@@ -73,7 +73,8 @@ evidence 時委派給 worker；它不是預設必定 delegated 的 runtime 宣�
 
 canonical source：
 
-- `.ai/assets/sub-agent-role-prompts/<sub-agent-id>/`
+- shared role：`.ai/assets/sub-agent-role-prompts/<sub-agent-id>/`
+- private role：`.ai/assets/skills/<skill-id>/roles/<sub-agent-id>/`
 
 ## 3. Shared / Supporting Material
 

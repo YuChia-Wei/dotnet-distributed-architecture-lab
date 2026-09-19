@@ -40,6 +40,34 @@ cases:
     expected_route: "reactor"
     expected_rule_ids: []
 
+  - case_id: "message-use-case"
+    path: "src/Inventory/Application/UseCases/ReserveStockUseCase.cs"
+    type_signals: ["IReserveStockUseCase"]
+    finding_tags: ["transactional-message"]
+    expected_route: "use-case"
+    expected_rule_ids: ["MESSAGING-TX-001"]
+
+  - case_id: "message-handler"
+    path: "src/Inventory/Application/StockEventHandler.cs"
+    type_signals: ["StockEventCommandHandler"]
+    finding_tags: ["transactional-message"]
+    expected_route: "handler"
+    expected_rule_ids: ["MESSAGING-TX-001"]
+
+  - case_id: "message-repository"
+    path: "src/Inventory/Infrastructure/Repositories/StockRepository.cs"
+    type_signals: []
+    finding_tags: ["transactional-message"]
+    expected_route: "repository"
+    expected_rule_ids: ["MESSAGING-TX-001"]
+
+  - case_id: "message-reactor"
+    path: "src/Inventory/Application/Reactors/StockEventReactor.cs"
+    type_signals: ["IReactor<T>"]
+    finding_tags: ["transactional-message"]
+    expected_route: "reactor"
+    expected_rule_ids: ["MESSAGING-TX-001"]
+
   - case_id: "event-mapping"
     path: "src/Sales/Infrastructure/Mappers/OrderMapper.cs"
     type_signals: ["OrderMapper"]
@@ -54,9 +82,23 @@ cases:
     expected_route: "test"
     expected_rule_ids: ["TEST-GWT-001", "TEST-BDDFY-001"]
 
+  - case_id: "transactional-message-test"
+    path: "tests/Inventory/StockMessageProcessingTests.cs"
+    type_signals: ["FactAttribute"]
+    finding_tags: ["transactional-message"]
+    expected_route: "test"
+    expected_rule_ids: ["MESSAGING-TX-001"]
+
   - case_id: "unknown-csharp-fallback"
     path: "src/Support/Clock.cs"
     type_signals: []
     finding_tags: []
     expected_route: "general-csharp"
     expected_rule_ids: []
+
+  - case_id: "transactional-message-host-configuration"
+    path: "samples/SampleHost/Program.cs"
+    type_signals: []
+    finding_tags: ["transactional-message"]
+    expected_route: "general-csharp"
+    expected_rule_ids: ["MESSAGING-TX-001"]

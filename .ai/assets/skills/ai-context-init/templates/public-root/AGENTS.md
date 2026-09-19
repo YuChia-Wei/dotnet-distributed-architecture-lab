@@ -12,7 +12,7 @@ This is the canonical English collaboration guide for AI agents and humans in th
 ## Progressive Context Loading
 
 1. Start with the request, current Git/worktree state, this file, and explicitly named artifacts.
-2. When a skill applies, use `.ai/assets/skills/README.MD` to select one owning route and load its canonical entry. Runtime wrappers remain thin adapters.
+2. When a skill applies, use `.ai/assets/skills/README.MD` to select one owning route and load its canonical entry. Execute a generated runtime entry directly; reload the full source only for metadata, maintenance, or discrepancy resolution.
 3. Expand only for the current task or phase. Read `.dev/standards/WORKFLOW-GATE-POLICY.md` when multi-stage or source-of-truth work requires a mode decision.
 4. Use `.ai/INDEX.MD` and `.dev/INDEX.md` for navigation when needed. Load README, architecture, configuration, or additional policies only when relevant; do not preload whole catalogs.
 5. Keep target-specific facts outside reusable framework assets and verify material conclusions against current repository evidence.
@@ -25,6 +25,7 @@ This is the canonical English collaboration guide for AI agents and humans in th
 - Resolve target-owned commands and working directories before validation. Run required gates and the narrowest meaningful checks; broaden or repeat only for new changes, failures, or unresolved risks.
 - Record skipped, failed, and blocked checks truthfully. Do not claim completion while required gates fail or remain unverified.
 - Follow `.dev/standards/GIT-COMMIT-POLICY.md` before AI-assisted commits.
+- For delegation, select the evidence tier in `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`. Routine bounded work keeps actual invocation/results and one tracked writer per worktree; full records remain required for terminal/high-risk, external validation and adoption operations.
 
 ## CLI Execution Routing
 

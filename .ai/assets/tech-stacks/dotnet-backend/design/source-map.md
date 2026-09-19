@@ -13,9 +13,9 @@ Use this file to map a user request to the smallest useful subset of the repo's 
 ## Prompt Families
 
 ### Aggregate and Domain
-- `.ai/assets/sub-agent-role-prompts/aggregate-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/aggregate-test-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/aggregate-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/aggregate-test-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/code-reviewer/roles/aggregate-code-review-sub-agent/sub-agent.yaml`
 - `.ai/assets/tech-stacks/dotnet-backend/shared/domain-rules.md`
 - `.ai/assets/tech-stacks/dotnet-backend/shared/dto-conventions.md`
 
@@ -26,9 +26,9 @@ Use for:
 - domain event modeling
 
 ### Application: Command and Query
-- `.ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/query-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml`
 - `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
 - `.ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md`
 
@@ -39,9 +39,9 @@ Use for:
 - write/read separation
 
 ### Integration and Consistency
-- `.ai/assets/sub-agent-role-prompts/reactor-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/profile-config-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/reactor-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/outbox-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/profile-config-sub-agent/sub-agent.yaml`
 
 Use for:
 - cross-aggregate consistency
@@ -50,17 +50,17 @@ Use for:
 - environment/profile isolation
 
 ### API Boundary
-- `.ai/assets/sub-agent-role-prompts/controller-sub-agent/references/implementation-guidance.md`
-- `.ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/controller-test-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/controller-sub-agent/references/implementation-guidance.md`
+- `.ai/assets/skills/code-reviewer/roles/controller-code-review-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/controller-test-sub-agent/sub-agent.yaml`
 
 Use for:
 - API contract shape
 - controller boundary rules
 
 ### Quality Gates
-- `.ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/code-reviewer/roles/code-review-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/code-reviewer/roles/reactor-code-review-sub-agent/sub-agent.yaml`
 - `.ai/assets/skills/code-reviewer/references/review-routing.yaml`
 - `.ai/assets/skills/spec-compliance-validator/references/spec-compliance-rules.md`
 - `.ai/assets/skills/spec-compliance-validator/references/test-validation-steps.md`

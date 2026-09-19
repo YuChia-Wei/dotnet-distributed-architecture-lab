@@ -2,7 +2,7 @@ asset_id: local-change-implementer
 schema_version: '1.0'
 asset_type: skill-spec
 title: Local Change Implementer
-purpose: Execute one local technical target and operation, including direct call sites and immediate tests in the allowed radius. File count alone does not expand scope; new types and semantic boundaries require another owner.
+purpose: Execute one local technical target and operation, including direct call sites and immediate tests in the allowed radius. File count alone does not expand scope; a private implementation helper type may remain local only when its semantic impact stays inside the accepted target and radius.
 portability: repo-portable
 audience: agent-facing
 source_of_truth: canonical
@@ -25,7 +25,7 @@ outputs:
 - handoff if a larger slice or architecture decision is required
 constraints:
 - Select scope and necessary handoffs through IMPLEMENTATION-SCOPE-ROUTING-CONTRACT; file count alone does not determine the owner.
-- Do not introduce a new class or interface
+- A private implementation helper type may remain local only when it preserves the accepted target, radius, behavior, responsibility, dependency direction, lifetime, and transaction boundary.
 - Do not expand into architecture redesign or stage planning
 - Do not change domain language, DTO/API/event names, dependency direction, or module boundaries
 - Stop and hand off when the change no longer fits local scope
@@ -52,6 +52,42 @@ wrapper_metadata:
     wrapper_path: .claude/skills/local-change-implementer/
   codex:
     wrapper_path: .agents/skills/local-change-implementer/
+runtime_entry:
+  format_version: '1.0'
+  execution_authority: canonical-runtime-entry
+  summary: Use for one accepted local technical target and operation, including direct call sites and immediate tests inside its allowed radius.
+  steps:
+  - Confirm the primary target, one local operation, accepted behavior, direct call sites, immediate tests, and allowed dependency radius. Judge scope by semantic impact, not file count.
+  - Select one applicability mode declared by the effective-rule-consumption authority, then consume its freshness-verified task-scoped effective-rule packet before applying applicable catalog or profile rules. Stop if that route is unresolved.
+  - Apply the smallest coherent local change and update only its direct usage sites and immediate tests when necessary. Preserve existing authorization; do not widen it.
+  - Run the narrowest meaningful validation for the changed behavior and report compatibility, touched radius, and any prevented expansion.
+  conditional_expansion:
+  - when: Always before choosing the implementation owner.
+    read:
+    - .ai/assets/shared/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md
+    why: Classify the change by target, radius, and semantic impact.
+  - when: Before an applicable catalog or profile rule is judged.
+    use:
+    - Run `.ai/scripts/resolve-effective-rule-packet.py --help` only when its supported interface is needed; otherwise use the request-authorized resolver invocation.
+    read:
+    - the selected freshness-verified task-scoped effective-rule packet
+    why: Select the applicability mode explicitly and consume only fresh task-scoped effective-rule evidence.
+  - when: The local operation, direct-call-site radius, or handoff boundary needs detail.
+    read:
+    - .ai/assets/skills/local-change-implementer/references/allowed-operations.md
+    - .ai/assets/skills/local-change-implementer/references/execution-rules.md
+    - .ai/assets/skills/local-change-implementer/references/skill-boundaries.md
+    why: Use the canonical local-operation and handoff boundaries without inventing a broader scope.
+  stop_conditions:
+  - Route to `slice-implementer` when the change requires a public contract/domain type or changes responsibility, dependency direction, lifetime, transaction boundary, or coordinated behavior.
+  - Route to `ddd-ca-hex-architect` when a responsibility, module/aggregate boundary, dependency direction, domain-language, compatibility, lifetime, or transaction decision is missing or changes.
+  - A private implementation helper type may remain local only when it keeps the accepted target, radius, behavior, responsibility, dependency direction, lifetime, and transaction boundary unchanged.
+  - Do not use a file count, a line count, or the mere existence of a new type as the handoff trigger.
+  output:
+  - local change result and files affected
+  - dependency radius touched and behavior compatibility notes
+  - narrow validation performed or explicitly skipped
+  - required handoff or remaining uncertainty
 status: active
 effective_rule_consumption:
   applies_when:

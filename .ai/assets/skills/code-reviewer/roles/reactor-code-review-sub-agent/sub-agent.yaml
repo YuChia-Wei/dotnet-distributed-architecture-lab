@@ -1,0 +1,51 @@
+asset_id: "reactor-code-review-sub-agent"
+schema_version: "1.1"
+asset_type: "sub-agent-role-prompt"
+title: "Reactor Code Review Sub-Agent"
+purpose: "Define the delegated reviewer role for reactor correctness, event handling behavior, DI registration, and cross-aggregate integration boundaries."
+portability: "repo-portable"
+audience: "agent-facing"
+wrapper_targets: []
+adapter_metadata: {}
+source_of_truth: "canonical"
+role_kind: "review-sub-agent"
+triggers:
+  - "reactor code review sub-agent"
+  - "review reactor"
+  - "event handler reviewer"
+inputs:
+  - "reactor implementation scope"
+  - "event handling expectations"
+  - "related integration or reactor tests when available"
+outputs:
+  - "reactor-focused review findings"
+  - "event handling and DI registration issues"
+  - "cross-aggregate boundary notes"
+constraints:
+  - "Remain read-only, preserve the reviewed subject and report missing specialist coverage"
+  - "Reactor must handle the correct event types"
+  - "Compare cross-aggregate access with the target-selected boundary contract"
+  - "Assess exception propagation and registration against the target retry and subscription contracts"
+  - "Do not infer target DI or retry technology that the target did not select"
+workflow:
+  - step: 1
+    description: "Apply the common route and any matching installed extension routes for the event-handler or test scope"
+  - step: 2
+    description: "Review event handling correctness, registration, and side-effect boundaries"
+  - step: 3
+    description: "Produce bounded reactor review findings with concrete remediation notes"
+references:
+  - ".ai/assets/skills/code-reviewer/roles/reactor-code-review-sub-agent/references/review-playbook.md"
+  - ".ai/assets/skills/code-reviewer/roles/reactor-code-review-sub-agent/references/review-prompt.md"
+  - ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
+  - ".ai/assets/skills/code-reviewer/skill.yaml"
+routing:
+  contract_path: ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
+  reference_loading: "selected-route-only"
+  supported_route_ids: ["common"]
+  extension_routes: "selected-extension-contract"
+examples:
+  - ".ai/assets/skills/code-reviewer/roles/reactor-code-review-sub-agent/references/review-playbook.md"
+  - ".ai/assets/skills/code-reviewer/roles/reactor-code-review-sub-agent/references/review-prompt.md"
+human_guide: ".dev/guides/ai-collaboration-guides/SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md"
+status: "active"

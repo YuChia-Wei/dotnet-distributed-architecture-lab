@@ -10,7 +10,7 @@ import re
 import subprocess
 import sys
 from datetime import datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 import yaml
@@ -129,6 +129,34 @@ def tracked_path(value: Any, name: str) -> Path:
     return resolved
 
 
+def canonical_role_path(value: str) -> bool:
+    """Accept only a shared role or a role private to its owning skill."""
+    candidate = PurePosixPath(value)
+    parts = candidate.parts
+    forbidden = "\\\\<>*?[]{}"
+    if value != candidate.as_posix() or any(part in {".", ".."} for part in parts):
+        return False
+    if value != candidate.as_posix() or any(part in {".", ".."} for part in parts):
+        return False
+    if value != candidate.as_posix() or any(part in {".", ".."} for part in parts):
+        return False
+    if any(any(character in part for character in forbidden) for part in parts):
+        return False
+    return (
+        len(parts) == 5
+        and parts[:3] == (".ai", "assets", "sub-agent-role-prompts")
+        and bool(parts[3])
+        and parts[4] == "sub-agent.yaml"
+    ) or (
+        len(parts) == 7
+        and parts[:3] == (".ai", "assets", "skills")
+        and bool(parts[3])
+        and parts[4] == "roles"
+        and bool(parts[5])
+        and parts[6] == "sub-agent.yaml"
+    )
+
+
 def iso_with_offset(value: Any, name: str) -> None:
     if not isinstance(value, str):
         raise GuardrailError(f"{name} must be ISO 8601 with an offset")
@@ -185,8 +213,18 @@ def validate_packet(record: dict[str, Any], schema: dict[str, Any]) -> None:
         raise GuardrailError("execution_kind is invalid")
     role = mapping(record["role"], "role")
     exact_keys(role, {"path", "applicability", "reason"}, "role")
-    if not string(role["path"], "role.path").startswith(".ai/assets/sub-agent-role-prompts/") or not role["path"].endswith("/sub-agent.yaml"):
+    role_reference = string(role["path"], "role.path")
+    if not canonical_role_path(role_reference):
         raise GuardrailError("role.path must be canonical")
+    role_parts = PurePosixPath(role_reference).parts
+    if role_parts[:3] == (".ai", "assets", "skills") and role_parts[3] != owning_skill:
+        raise GuardrailError("private role.path must belong to owning_skill")
+    role_parts = PurePosixPath(role_reference).parts
+    if role_parts[:3] == (".ai", "assets", "skills") and role_parts[3] != owning_skill:
+        raise GuardrailError("private role.path must belong to owning_skill")
+    role_parts = PurePosixPath(role_reference).parts
+    if role_parts[:3] == (".ai", "assets", "skills") and role_parts[3] != owning_skill:
+        raise GuardrailError("private role.path must belong to owning_skill")
     role_path = tracked_path(role["path"], "role.path")
     role_asset = mapping(yaml.safe_load(role_path.read_text(encoding="utf-8")), "role asset")
     if role_asset.get("asset_type") != "sub-agent-role-prompt" or role_asset.get("source_of_truth") != "canonical" or role_asset.get("status") != "active":
@@ -416,7 +454,10 @@ def validate_evidence(record: dict[str, Any], schema: dict[str, Any]) -> None:
 
 
 def validate_retry(record: dict[str, Any], schema: dict[str, Any]) -> None:
-    exact_keys(record, {"schema_version", "record_type", "attempt", "failure", "prior_failure_sha256", "material_state_change_sha256", "prior_authorization_sha256", "new_authorizations", "decision", "retry_sha256"}, "retry")
+    required = {"schema_version", "record_type", "attempt", "failure", "prior_failure_sha256", "material_state_change_sha256", "prior_authorization_sha256", "new_authorizations", "decision", "retry_sha256"}
+    optional = {"retry_subject_sha"}
+    if set(record) not in {frozenset(required), frozenset(required | optional)}:
+        raise GuardrailError(f"retry keys must be exactly {sorted(required)} or {sorted(required | optional)}")
     if record["schema_version"] != schema["schema_version"] or record["record_type"] != schema["record_types"]["retry"]:
         raise GuardrailError("retry schema identity is invalid")
     if not isinstance(record["attempt"], int) or record["attempt"] < 1 or record["decision"] not in schema["retry_decisions"]:
@@ -428,6 +469,9 @@ def validate_retry(record: dict[str, Any], schema: dict[str, Any]) -> None:
     strings(failure["diagnostic_codes"], "diagnostic_codes", empty=True)
     if not isinstance(failure["command_sha256"], str) or not SHA256.fullmatch(failure["command_sha256"]) or not isinstance(failure["subject_sha"], str) or not SHA40.fullmatch(failure["subject_sha"]):
         raise GuardrailError("failure identity is invalid")
+    retry_subject = record.get("retry_subject_sha", failure["subject_sha"])
+    if not isinstance(retry_subject, str) or not SHA40.fullmatch(retry_subject):
+        raise GuardrailError("retry_subject_sha is invalid")
     for field in ("prior_failure_sha256", "material_state_change_sha256"):
         if record[field] is not None and (not isinstance(record[field], str) or not SHA256.fullmatch(record[field])):
             raise GuardrailError(f"{field} is invalid")
@@ -440,7 +484,7 @@ def validate_retry(record: dict[str, Any], schema: dict[str, Any]) -> None:
     for authorization_value in authorizations:
         authorization = mapping(authorization_value, "new_authorization")
         exact_keys(authorization, {"ref", "attempt", "subject_sha", "prior_failure_sha256", "decision", "consumed_by_packet_id", "authorization_sha256"}, "new_authorization")
-        if not string(authorization["ref"], "new_authorization.ref").startswith(("workflow:", "issue:")) or authorization["attempt"] != record["attempt"] or authorization["subject_sha"] != failure["subject_sha"] or authorization["prior_failure_sha256"] != record["prior_failure_sha256"] or authorization["decision"] != "authorize-retry" or not string(authorization["consumed_by_packet_id"], "new_authorization.consumed_by_packet_id"):
+        if not string(authorization["ref"], "new_authorization.ref").startswith(("workflow:", "issue:")) or authorization["attempt"] != record["attempt"] or authorization["subject_sha"] != retry_subject or authorization["prior_failure_sha256"] != record["prior_failure_sha256"] or authorization["decision"] != "authorize-retry" or not string(authorization["consumed_by_packet_id"], "new_authorization.consumed_by_packet_id"):
             raise GuardrailError("new authorization is not bound to this retry")
         persisted = load_workflow_authorization(authorization["ref"], "new_authorization.ref")
         if persisted["attempt"] != authorization["attempt"] or persisted["subject_sha"] != authorization["subject_sha"] or persisted["prior_failure_sha256"] != authorization["prior_failure_sha256"] or persisted["decision"] != authorization["decision"] or persisted["consumed_by_packet_id"] != authorization["consumed_by_packet_id"] or persisted["authorization_sha256"] != authorization["authorization_sha256"]:
@@ -448,6 +492,8 @@ def validate_retry(record: dict[str, Any], schema: dict[str, Any]) -> None:
         if authorization["authorization_sha256"] == record["prior_authorization_sha256"] or authorization["authorization_sha256"] in authorization_digests:
             raise GuardrailError("retry authorization must be new")
         authorization_digests.add(authorization["authorization_sha256"])
+    if retry_subject != failure["subject_sha"] and record["material_state_change_sha256"] is None:
+        raise GuardrailError("retry subject change requires material state change")
     if record["decision"] == "retry" and record["attempt"] >= 2 and record["material_state_change_sha256"] is None:
         raise GuardrailError("retry without material state change is forbidden")
     if record["decision"] == "retry" and record["attempt"] >= 3 and not authorizations:

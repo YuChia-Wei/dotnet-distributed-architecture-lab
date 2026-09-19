@@ -7,8 +7,8 @@ semantic authority. File count alone does not decide local versus slice scope.
 
 | Situation | Route | Required boundary |
 | --- | --- | --- |
-| One technical target and operation, including its direct call sites and immediate tests in the allowed module/radius | `local-change-implementer` | No new class/interface, architecture boundary, public contract or domain-language change. Several files can remain one local change. |
-| One accepted behavior/refactoring goal that needs coordinated implementation steps or a new type within a settled design | `slice-implementer` | Select one command/query/reactor/generic mode; do not reopen an already settled architecture decision merely because a type is added. |
+| One technical target and operation, including its direct call sites and immediate tests in the allowed module/radius | `local-change-implementer` | A private implementation helper type may remain local only when it keeps the accepted target, radius, behavior, responsibility, dependency direction, lifetime, and transaction boundary unchanged. Public contract or domain-language change routes onward. Several files can remain one local change. |
+| One accepted behavior/refactoring goal that needs coordinated implementation steps or a public, responsibility-changing, dependency/lifetime/transaction-affecting type | `slice-implementer` | Select one command/query/reactor/generic mode; do not reopen an already settled architecture decision merely because a type is added. |
 | Missing or changed responsibility, module/aggregate boundary, dependency direction or business-language decision | `ddd-ca-hex-architect` | Stop the dependent implementation and resolve that decision; a prior unrelated approval is insufficient. |
 | Unexplained failure or performance symptom without a bounded causal finding | `diagnostic-analyst` | Diagnosis does not grant repair authority. |
 | Several independent behavior goals or work whose needed tasks cannot yet be bounded | `software-development-orchestrator` | Bound and sequence the work before implementing it as if it were one slice. |
@@ -25,12 +25,13 @@ Do not infer a safe local change from "small", "rename" or a line-count estimate
 Public DTO/API/event or ubiquitous-language renames require the appropriate
 accepted semantic/compatibility decision; they are not local symbol renames.
 
-Class/interface extraction is always outside `local-change-implementer`.
-If the architecture and compatibility decision is already accepted and the
-implementation is bounded, use a slice, normally `generic`. Ask for architecture
-work only when an actual decision is missing or changes. Likewise, an authorized
-test-only implementation uses the existing generic slice and applicable test
-binding; complete scenario input need not be designed again.
+Use `slice-implementer` for a public, responsibility-changing, dependency,
+lifetime, or transaction-affecting type. A private implementation helper type
+can stay local only when its semantic impact remains inside the accepted target
+and radius. Ask for architecture work only when an actual decision is missing
+or changes. Likewise, an authorized test-only implementation uses the existing
+generic slice and applicable test binding; complete scenario input need not be
+designed again.
 
 ## Ownership And Handoff
 

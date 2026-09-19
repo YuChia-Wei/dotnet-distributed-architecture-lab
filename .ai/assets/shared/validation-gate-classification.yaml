@@ -60,6 +60,7 @@ groups:
       - "repository-config-contract"
       - "repository-config-contract-tests"
       - "repository-identity-tests"
+      - "runtime-skill-entry-contract"
       - "sdk-free-framework-contract"
       - "semantic-customization-lifecycle"
       - "semantic-customization-skill-contract"
