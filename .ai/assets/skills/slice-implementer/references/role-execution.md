@@ -1,5 +1,16 @@
 # Slice Implementer Role Execution
 
+## Execution Evidence Applicability
+
+Select the execution tier through `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`
+before applying this document's role-record procedures. Ordinary same-runtime
+work uses its bounded envelope and actual invocation/result; it does not need
+full per-binding records, including records for unselected roles. References
+below to complete `role_execution` records apply only when the full contract or
+an explicit acceptance requirement selects them. Required role semantics,
+permissions, scope, retry limits and final integration ownership still apply.
+Routine evidence never satisfies terminal/high-risk or actual-execution gates.
+
 `role_bindings` establishes static reachability only. For every binding
 considered by a bounded slice, this skill owns one provider-neutral
 `role_execution` record. Follow the field contract in

@@ -7,6 +7,13 @@ configuration, or effective-state semantics.
 
 ## Ownership and Use
 
+- First apply the proportionate-execution classification in
+  `AGENT-EXECUTION-GUARDRAILS-CONTRACT.md`. Its routine bounded envelope is
+  sufficient for ordinary execution, including an applicable canonical role.
+  Load that role's necessary instructions, retain its scope and ownership, and
+  record the actual result; the full record below is required only by the full
+  execution tier or an explicit acceptance contract. Do not manufacture records
+  for unselected roles or an inline action merely to resemble delegation.
 - The owning skill evaluates its own canonical binding and produces each
   `role_execution` record.
 - The role contract at `role_path` and its mandatory references remain the
@@ -80,7 +87,7 @@ Every record has these top-level fields:
 ```yaml
 role_execution_id: "<stage>-<role>-01"
 role_asset_id: "<canonical-role-id>"
-role_path: ".ai/assets/sub-agent-role-prompts/<role-id>/sub-agent.yaml"
+role_path: "<canonical shared or owning-skill-private sub-agent.yaml path>"
 owning_skill: "<canonical-skill-id>"
 stage_id: "<bounded-stage-id>"
 applicability:
@@ -220,7 +227,7 @@ trigger: those are delegation gates, not prerequisites for the direct default.
 ```yaml
 role_execution_id: "implementation-command-01"
 role_asset_id: "command-sub-agent"
-role_path: ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+role_path: ".ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml"
 owning_skill: "slice-implementer"
 stage_id: "implementation"
 applicability: { result: "applies", reason: "selected primary command mode" }
@@ -242,7 +249,7 @@ input_envelope:
   scope: ["src/Orders/CreateOrderUseCase.cs"]
   non_goals: ["architecture redesign"]
   source_refs: ["REQ-17", "SPEC-17"]
-  mandatory_references: [".ai/assets/sub-agent-role-prompts/command-sub-agent/references/implementation-playbook.md"]
+  mandatory_references: [".ai/assets/skills/slice-implementer/roles/command-sub-agent/references/implementation-playbook.md"]
   constraints: ["existing architecture rules"]
   stop_conditions: ["return when implementation and narrow validation are complete"]
 permissions: { read_scope: ["src/Orders"], write_scope: ["src/Orders/CreateOrderUseCase.cs"], external_actions: [], secret_handling: "no-secret-values" }

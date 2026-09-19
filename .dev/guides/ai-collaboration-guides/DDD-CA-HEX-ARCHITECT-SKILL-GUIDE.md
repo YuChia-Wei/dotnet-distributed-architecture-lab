@@ -2,6 +2,20 @@
 
 本文件說明如何從使用者角度呼叫 `ddd-ca-hex-architect` skill。
 
+## Design 與 Review
+
+要求設計或已授權修訂時使用 `design`；檢查既有架構 artifact 時使用 `review`。
+Review 固定版本，逐項對照需求與品質限制，檢查責任／資料／交易邊界、取捨、
+失敗復原、演進及可測試性，回傳 findings、依據、影響與不確定性，保留原文。
+缺少需求或決策時明確記錄，不自行補成通過。修訂另由 design 動作承接。
+
+DDD／CA／HEX 是本 skill 的方法；語言、broker、ORM、DI 與測試套件依 target
+選擇。以下 MQ 範例只適用於已採用相關整合規則的目標。作者自檢須標示
+self-check；獨立 review 另需作者關係與固定版本證據，不以重跑 skill 代替。
+
+例如：「用 `ddd-ca-hex-architect` review 這份架構提案，對照列出的需求，說明
+缺陷、有效替代方案與資訊缺口，不修訂 artifact，也不宣稱 spec compliance。」
+
 ## 這個 Skill 可以做什麼
 
 適合用在下列工作：

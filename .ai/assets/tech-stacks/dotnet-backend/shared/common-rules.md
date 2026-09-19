@@ -4,7 +4,7 @@ This file is an agent-loading projection. Normative ownership and precedence are
 defined by [AI Context Rule Ownership](../../../../../.dev/standards/AI-CONTEXT-OWNERSHIP.md).
 
 Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`,
-`TECH-SELECT-001`, `ARCH-UOW-001`,
+`TECH-SELECT-001`, `ARCH-UOW-001`, `MESSAGING-TX-001`,
 `MAP-EVENTS-001`, `DELETE-SOFT-001`, `DELETE-PURGE-001`,
 `CONTRACT-SEMANTICS-001`, `PROJECT-GRAMMAR-001`.
 
@@ -44,6 +44,10 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`,
   and invokes one Use Case.
 - Keep Wolverine conditional. Use Cases depend on project-owned outbound event
   publisher ports, never directly on `IMessageBus` or another Use Case.
+- For a selected transactional message path, use one physical completion owner;
+  commit local Aggregate state, durable outgoing intent, and successful
+  incoming-processing completion together only when the selected store/runtime
+  contract supports it. Initial receipt is not processing completion.
 - Default query endpoints to query Use Cases. Direct Query Repository/Service
   access is only an explicitly selected pure-query exception.
 - Use explicit error handling and return typed results.

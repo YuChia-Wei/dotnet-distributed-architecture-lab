@@ -75,8 +75,8 @@ def no_links(path: Path) -> None:
         fail(f"evidence is not a regular file: {path}")
 
 
-def safe_file(root: Path, value: object, *, tracked: bool) -> Path:
-    value = text(value, "evidence path")
+def safe_relative_path(value: object, label: str = "evidence path") -> tuple[str, list[str]]:
+    value = text(value, label)
     parts = value.split("/")
     if (
         any(character in value for character in '\\:\x00"<>|?*[')
@@ -85,6 +85,11 @@ def safe_file(root: Path, value: object, *, tracked: bool) -> Path:
         or parts[0].lower() == ".git"
     ):
         fail(f"unsafe repository-relative path: {value}")
+    return value, parts
+
+
+def safe_file(root: Path, value: object, *, tracked: bool) -> Path:
+    value, parts = safe_relative_path(value)
     path = root.joinpath(*parts)
     no_links(path)
     if not path.resolve().is_relative_to(root.resolve()):
@@ -123,11 +128,18 @@ def read_json(data: bytes) -> object:
 
 
 def verify_subject_bytes(root: Path, commit: str, path: str, expected: str) -> None:
+    path, _ = safe_relative_path(path, "reviewed subject evidence path")
     if digest(git(root, "cat-file", "blob", f"{commit}:{path}")) != expected:
         fail(f"reviewed subject evidence hash mismatch: {path}")
 
 
-def validate_receipt(root: Path, receipt: object, *, tracked: bool = True) -> dict:
+def validate_receipt(
+    root: Path,
+    receipt: object,
+    *,
+    tracked: bool = True,
+    require_current_authorities: bool = True,
+) -> dict:
     receipt = exact_fields(receipt, RECEIPT_FIELDS, "passed receipt")
     if receipt["schema_version"] != "1.0" or receipt["status"] != "passed":
         fail("terminal audit must have schema_version 1.0 and status passed")
@@ -168,7 +180,10 @@ def validate_receipt(root: Path, receipt: object, *, tracked: bool = True) -> di
     if not isinstance(authorities, dict) or ROLE_PATH not in authorities:
         fail("authority_hashes must pin the canonical role_path")
     for path, expected in authorities.items():
-        pin(root, {"path": path, "sha256": expected}, "authority", tracked=tracked)
+        if require_current_authorities:
+            pin(root, {"path": path, "sha256": expected}, "authority", tracked=tracked)
+        else:
+            safe_relative_path(path, "authority path")
         verify_subject_bytes(root, commit, path, expected)
     return receipt
 
@@ -199,7 +214,11 @@ def validate_workflow(root: Path, locator_path: str) -> str:
         return "pending (workflow remains in_progress; no terminal acceptance)"
     if locator.get("status") not in {"in_progress", "completed"}:
         fail("selected terminal_audit workflow status must be in_progress or completed")
-    validate_receipt(root, receipt)
+    validate_receipt(
+        root,
+        receipt,
+        require_current_authorities=locator.get("status") != "completed",
+    )
     return f"passed retained audit of {receipt['subject_commit']} (not current-HEAD admission)"
 
 
@@ -208,7 +227,12 @@ def admit(root: Path, receipt_path: Path) -> str:
     # written or excluded from the reviewed full tree to manufacture equality.
     path = receipt_path.absolute()
     no_links(path)
-    receipt = validate_receipt(root, read_json(path.read_bytes()), tracked=False)
+    receipt = validate_receipt(
+        root,
+        read_json(path.read_bytes()),
+        tracked=False,
+        require_current_authorities=True,
+    )
     if git(root, "status", "--porcelain=v1", "--untracked-files=all").strip():
         fail("admission requires a clean tracked checkout without non-ignored untracked files")
     current = git(root, "rev-parse", "--verify", "HEAD").decode().strip()

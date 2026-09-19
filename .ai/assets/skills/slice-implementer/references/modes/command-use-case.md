@@ -6,8 +6,8 @@ Use this mode when the slice implements one bounded command-side use case.
 
 - `.dev/ARCHITECTURE.md`
 - `.dev/requirement/TECH-STACK-REQUIREMENTS.MD`
-- `.ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`
-- `.ai/assets/sub-agent-role-prompts/command-sub-agent/references/implementation-playbook.md`
+- `.ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/command-sub-agent/references/implementation-playbook.md`
 - `.ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`
 
 ## Rules

@@ -1,6 +1,6 @@
 ---
 name: requirement-author
-description: Draft or normalize requirement documents for this repository from rough notes, existing requirement files, architecture references, or codebase facts. Use when Codex needs to turn unstructured problem statements into `.dev/requirement/`-aligned markdown without yet expanding into use-case specs.
+description: Draft or normalize requirement markdown with stakeholder intent, business rules and acceptance criteria. Select by requested artifact, preserve source authority, and hand off only for a distinct required output.
 ---
 
 # Requirement Author
@@ -13,6 +13,7 @@ This is a thin current-runtime wrapper.
 - Spec: `.ai/assets/skills/requirement-author/skill.yaml`
 - Human Guide: `.dev/guides/ai-collaboration-guides/REQUIREMENT-DESIGNER-PROMPT-GUIDE.md`
 - References:
+  - `.ai/assets/shared/AUTHORING-BOUNDARY-CONTRACT.md`
   - `.ai/assets/skills/requirement-author/references/authoring-playbook.md`
   - `.ai/assets/skills/requirement-author/references/output-contract.md`
   - `.ai/assets/skills/requirement-author/references/source-truth-rules.md`

@@ -18,6 +18,8 @@ This document is the canonical English agent-facing root collaboration guide. `A
 - Implement the smallest coherent change that satisfies the accepted scope and verifiable completion criteria. Avoid speculative features, abstractions, and context.
 - Touch only files required by the task. Avoid unrelated cleanup, and remove artifacts introduced by your own changes.
 - Establish verifiable completion criteria before execution. Iterate until they pass, or report concrete blockers and any skipped validation.
+- Continue ordinary reversible implementation and repair within existing authorization. Ask only for missing authority, material scope changes, or unresolved owner decisions.
+- For delegation, use the evidence tier selected by `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`. Routine bounded work retains actual invocation and results with one tracked writer per worktree; terminal, high-risk, external validation, and adoption operations retain their full evidence requirements.
 
 ## Repository Identity
 
@@ -35,7 +37,7 @@ Treat `MQArchLab.slnx`, `global.json`, `*.csproj`, `src/`, `tests/`, and `docker
 
 1. Start with the request, current Git/worktree state, this file, and explicitly named artifacts.
 2. Read `README.md`, `.dev/ARCHITECTURE.md`, and `.dev/project-config.yaml` when the task needs product or repository facts; use `MQArchLab.slnx`, project files, and `docker-compose/docker-compose.yml` to verify runtime or package facts.
-3. Use `.ai/assets/skills/README.MD` as the canonical skill registry and expand only for the active task or phase.
+3. Use `.ai/assets/skills/README.MD` as the canonical skill registry and expand only for the active task or phase. Execute an explicitly classified generated runtime entry directly; load its full canonical source only for metadata, maintenance, or discrepancy resolution.
 4. Read `.dev/standards/AI-CONTEXT-BOUNDARY.md` and `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md` before moving or rewriting AI context.
 5. Use `.dev/guides/ai-collaboration-guides/README.MD` for human-facing skill and workflow guides, and `.ai/INDEX.MD` for agent-facing AI asset navigation.
 
@@ -199,7 +201,7 @@ Use these boundaries:
 | `.ai/assets/skills/code-reviewer/references/review-routing.yaml` | Canonical .NET backend code review routing contract |
 | `.ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD` | .NET backend building block reference |
 | `.ai/assets/skills/` | Canonical skill specs |
-| `.ai/assets/sub-agent-role-prompts/` | Canonical sub-agent role prompts |
+| `.ai/assets/sub-agent-role-prompts/` | Shared canonical roles; skill-private roles live under their owning skill |
 | `.ai/scripts/` | Transitional AI workflow scripts, context governance checks, and local tool orchestration helpers |
 
 ### Project Knowledge and Governance (`.dev/`)
@@ -241,5 +243,5 @@ Use these boundaries:
 
 - Agent-facing context should prefer English unless the source material is inherently human-facing Traditional Chinese.
 - Human-facing guides and README content should prefer Traditional Chinese Taiwan usage.
-- Keep runtime wrappers thin and point them to canonical specs.
+- Keep runtime adapters thin. Generated runtime entries must remain synchronized projections of canonical skill content; they are never a second authority.
 - Prefer folder placement over per-file metadata for context classification.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the v0.17 common-core plus selected .NET review extension."""
+"""Validate the installed common-core plus selected .NET review extension."""
 
 from __future__ import annotations
 
@@ -24,19 +24,11 @@ SKILL_PATH = Path(".ai/assets/skills/code-reviewer/skill.yaml")
 CATALOG_PATH = Path(
     ".ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml"
 )
-ROLE_PATHS = {
-    "general": Path(
-        ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml"
-    ),
-    "aggregate": Path(
-        ".ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/sub-agent.yaml"
-    ),
-    "controller": Path(
-        ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/sub-agent.yaml"
-    ),
-    "reactor": Path(
-        ".ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml"
-    ),
+ROLE_ASSET_IDS = {
+    "general": "code-review-sub-agent",
+    "aggregate": "aggregate-code-review-sub-agent",
+    "controller": "controller-code-review-sub-agent",
+    "reactor": "reactor-code-review-sub-agent",
 }
 BASELINE_BYTES = {
     "top-level": 43_747,
@@ -57,6 +49,33 @@ FORBIDDEN_STATIC_REFERENCES = {
 
 def load_yaml(path: Path) -> dict:
     return yaml.safe_load((ROOT / path).read_text(encoding="utf-8"))
+
+
+def review_role_paths(skill: dict) -> dict[str, Path]:
+    bindings = skill.get("role_bindings")
+    if not isinstance(bindings, list):
+        raise AssertionError("code-reviewer skill must declare role_bindings")
+    paths_by_asset: dict[str, str] = {}
+    required_assets = set(ROLE_ASSET_IDS.values())
+    for binding in bindings:
+        if not isinstance(binding, dict):
+            continue
+        asset_id = binding.get("role_asset_id")
+        if asset_id not in required_assets:
+            continue
+        role_path = binding.get("role_path")
+        if not isinstance(role_path, str) or not role_path:
+            raise AssertionError(f"review role binding has no role_path: {asset_id}")
+        if asset_id in paths_by_asset:
+            raise AssertionError(f"duplicate review role binding: {asset_id}")
+        paths_by_asset[asset_id] = role_path
+    missing = sorted(required_assets - set(paths_by_asset))
+    if missing:
+        raise AssertionError(f"missing review role bindings: {missing}")
+    return {
+        role_name: Path(paths_by_asset[asset_id])
+        for role_name, asset_id in ROLE_ASSET_IDS.items()
+    }
 
 
 def route_map(routing_path: Path = EXTENSION_ROUTING_PATH) -> dict[str, dict]:
@@ -221,7 +240,8 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
         route_ids = set(route_map(ROUTING_PATH))
         self.assertEqual({"common"}, route_ids)
         routing_path = str(ROUTING_PATH).replace("\\", "/")
-        for role_name, role_path in ROLE_PATHS.items():
+        role_paths = review_role_paths(load_yaml(SKILL_PATH))
+        for role_name, role_path in role_paths.items():
             manifest = load_yaml(role_path)
             references = set(manifest["references"])
             with self.subTest(role=role_name):
@@ -264,7 +284,8 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
             EXTENSION_ROUTING_PATH,
         }
         routes = route_map()
-        general_role = expanded_references(ROLE_PATHS["general"])
+        role_paths = review_role_paths(skill)
+        general_role = expanded_references(role_paths["general"])
         measured = {
             "top-level": total_bytes(top_level),
             "general": total_bytes(
@@ -280,7 +301,7 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
             measured[role_name] = total_bytes(
                 top_level
                 | general_role
-                | expanded_references(ROLE_PATHS[role_name])
+                | expanded_references(role_paths[role_name])
                 | {
                     Path(path)
                     for path in routes[role_name]["canonical_references"]

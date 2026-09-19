@@ -167,9 +167,9 @@ dotnet test
 ### Option 1: Use spec documents (recommended)
 1. Create a use case spec in the target repository spec area confirmed by `ai-context-init`
 2. Implement with TDD using canonical sub-agent assets:
-   - `.ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml`
-   - `.ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml`
-   - `.ai/assets/sub-agent-role-prompts/aggregate-sub-agent/sub-agent.yaml`
+   - `.ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml`
+   - `.ai/assets/skills/slice-implementer/roles/query-sub-agent/sub-agent.yaml`
+   - `.ai/assets/skills/slice-implementer/roles/aggregate-sub-agent/sub-agent.yaml`
 
 ### Option 2: Describe requirements directly
 Provide the operation, inputs, outputs, business rules, and required events.
@@ -185,7 +185,7 @@ Common workflows:
 - outbox-sub-agent
 - mutation-testing-sub-agent
 
-Canonical delegated sub-agent definitions are under `.ai/assets/sub-agent-role-prompts/`.
+Shared delegated sub-agent definitions are under `.ai/assets/sub-agent-role-prompts/`; private definitions are under the owning skill's `roles/` directory.
 Shared explanatory materials, examples, and reusable rule fragments are under `.ai/assets/shared/`.
 
 ## FAQ

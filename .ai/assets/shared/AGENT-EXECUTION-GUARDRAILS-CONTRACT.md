@@ -8,9 +8,40 @@ that cannot be upgraded from a synthetic substitute. It complements, rather
 than replaces, `ROLE-EXECUTION-CONTRACT.md` and the external-task terminal
 transport contract.
 
+## Proportionate execution
+
+Classify the actual operation before constructing evidence. Ordinary same-runtime
+work may use the bounded envelope below when it is neither a terminal/high-risk
+verification nor an external or long-running validation command. It must not
+mutate providers, credentials, publication state or target adoption state.
+
+- Name the owning skill, goal, allowed reads/writes, non-goals, input sources,
+  expected output, stop conditions, retry budget and parent integration owner.
+- Select and load an applicable canonical role when one exists. A runtime
+  execution profile is not a role; an owning skill may delegate a bounded unit
+  without inventing a role when no canonical binding applies.
+- Read-only workers may run together. For local edits, name exactly one tracked
+  writer for the worktree and keep the parent and other workers read-only until
+  it returns. Disjoint filenames do not authorize concurrent tracked writers.
+- Record the actual invocation and returned result in the conversation or owning
+  task. Do not create a sealed packet, lease, full role record or acceptance
+  ledger solely for ordinary analysis or a local edit.
+- Recheck the relevant input and diff on return. A routine result is supporting
+  evidence, never a terminal audit, release admission or actual-execution receipt.
+
+Use the full contract below for terminal/high-risk review, external or long-running
+validation, publication/adoption operations, or work requiring a frozen snapshot
+across execution boundaries. Unknown classification selects the full contract.
+These are agent-dispatch requirements. Direct owner execution still follows its
+adoption or publication evidence contract; it does not fabricate a delegated
+role or invocation solely to perform an authorized local operation.
+The distinction changes evidence overhead, not authorization, semantics, runtime
+permissions, truthful reporting or required validation. Retry after a failure
+still requires a material state change; attempt three needs new authorization.
+
 ## Pre-dispatch packet
 
-Every delegated, external, or fixed-head execution must validate one
+Every execution selected for the full contract must validate one
 `agent-execution-packet` before dispatch. The packet identifies the owning
 skill, canonical role path and applicability, exact repository SHA, complete
 argv and working directory, permissions, ignored artifact roots, terminal
@@ -74,8 +105,12 @@ requires a material state-change digest. Attempt three or later additionally
 requires fresh owner or workflow authorization. Repeating an unchanged failure
 is a stopped attempt, not new validation.
 Fresh authorizations are individually sealed and bind the exact attempt,
-subject, prior failure, and authorize-retry decision; their digests must differ
-from prior authorization.
+intended retry subject, prior failure, and authorize-retry decision; their
+digests must differ from prior authorization. A retry record may carry an
+optional `retry_subject_sha` when a new immutable execution subject differs
+from the historical failure subject. It must be a full Git SHA and requires a
+material state-change digest. Without that field, the failure subject remains
+the intended retry subject for legacy records.
 Attempt-three packets and retry records load the referenced workflow-local
 authorization, validate its canonical seal, and require its attempt, subject,
 prior failure, and single consuming packet identity to match. A prefix or an

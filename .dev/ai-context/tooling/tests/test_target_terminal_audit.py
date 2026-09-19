@@ -113,8 +113,28 @@ class TargetTerminalAuditTests(unittest.TestCase):
         self.locator["status"] = "completed"
         self.write_locator()
         self.commit("persist terminal outcome after reviewed subject")
+        self.write(GATE.ROLE_PATH, "current authority changed after audit\n")
+        self.commit("change authority after reviewed subject")
         self.assertNotEqual(self.subject, self.run_git("rev-parse", "HEAD"))
         self.assertIn("not current-HEAD admission", GATE.validate_workflow(self.root, WORKFLOW))
+
+    def test_completed_retained_audit_rejects_tampered_subject_authority_pin(self) -> None:
+        self.write_json(RECEIPT, self.receipt)
+        self.locator["status"] = "completed"
+        self.write_locator()
+        self.commit("persist terminal outcome after reviewed subject")
+        self.receipt["authority_hashes"][GATE.ROLE_PATH] = "0" * 64
+        self.write_json(RECEIPT, self.receipt)
+        self.commit("tamper retained audit authority pin")
+        with self.assertRaisesRegex(ValueError, "reviewed subject evidence hash mismatch"):
+            GATE.validate_workflow(self.root, WORKFLOW)
+
+    def test_in_progress_workflow_rejects_current_authority_drift(self) -> None:
+        self.write_json(RECEIPT, self.receipt)
+        self.commit("persist current audit record")
+        self.write(GATE.ROLE_PATH, "changed current authority\n")
+        with self.assertRaisesRegex(ValueError, "authority hash mismatch"):
+            GATE.validate_workflow(self.root, WORKFLOW)
 
     def test_pending_is_disclosed_only_while_in_progress(self) -> None:
         self.assertIn("pending", GATE.validate_workflow(self.root, WORKFLOW))
@@ -215,6 +235,12 @@ class TargetTerminalAuditTests(unittest.TestCase):
         self.run_git("add", "--", "new-evidence.md")
         self.run_git("-c", "core.hooksPath=", "commit", "--no-verify", "-qm", "changed tree")
         with self.assertRaisesRegex(ValueError, "full tree differs"):
+            GATE.admit(self.root, receipt)
+
+    def test_admission_rejects_current_authority_drift(self) -> None:
+        receipt = self.prepare_admission()
+        self.write(GATE.ROLE_PATH, "changed current authority\n")
+        with self.assertRaisesRegex(ValueError, "authority hash mismatch"):
             GATE.admit(self.root, receipt)
 
     def test_admission_rejects_dirty_tracked_checkout(self) -> None:

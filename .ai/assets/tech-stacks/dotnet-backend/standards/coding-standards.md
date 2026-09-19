@@ -52,7 +52,12 @@ It preserves the design intent of DDD, Clean Architecture, CQRS, and Event Sourc
 - `DomainEventData` rules
 - replay and duplicate-delivery considerations
 
-### 10. [Profile / Environment Configuration Standards](./coding-standards/profile-configuration-standards.md)
+### 10. [Transactional Messaging Standards](./coding-standards/transactional-messaging-standards.md)
+- Local transaction ownership, inbox/outbox lifecycle, and message reliability
+- Conditional EF Core and Wolverine adapter guidance
+- Evidence boundaries for observable transactional behavior
+
+### 11. [Profile / Environment Configuration Standards](./coding-standards/profile-configuration-standards.md)
 - `DOTNET_ENVIRONMENT` / `ASPNETCORE_ENVIRONMENT` rules
 - `appsettings.{Environment}.json` naming and override behavior
 - InMemory/Outbox profile-specific DI constraints
@@ -171,11 +176,12 @@ Full rules:
 - Control profiles with `appsettings.*.json`
 - Follow [Profile / Environment Configuration Standards](./coding-standards/profile-configuration-standards.md) for profile naming, loading, DI branches, and profile-specific infrastructure rules
 
-### ⚠ Outbox / Inbox Pattern
-- A Use Case depends on a project-owned event-publisher port
-- When the target repository selects WolverineFx, an Infrastructure adapter may use its Outbox mechanism for reliable event publication
-- If an Inbox Pattern is introduced, the Consumer side should follow the same convention
-- Transaction boundary: state changes during command handling must align with the persistence consistency strategy
+### ⚠ Transactional Messaging
+- A Use Case depends on a project-owned event-publisher port.
+- When the target selects a transactional message path, follow the
+  [Transactional Messaging Standards](./coding-standards/transactional-messaging-standards.md).
+- WolverineFx remains a target-selected conditional adapter; it is not a
+  portable Application dependency or a required provider.
 
 ## Automated Checks
 
