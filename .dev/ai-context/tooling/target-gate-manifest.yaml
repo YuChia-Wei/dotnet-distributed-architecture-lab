@@ -1,6 +1,6 @@
 schema_version: "1.0"
 framework_version: "v0.18.0"
-framework_commit: "d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3"
+framework_commit: "0e5fbfc4a4a69ecd9da543751d53edfd311f93fb"
 unfinalized_target_diagnostics:
   - "effective state catalogs[0] is stale"
 checks:
@@ -14,7 +14,7 @@ checks:
     args: []
   - id: "dependency-versions"
     path: ".ai/scripts/validate-dependency-versions.py"
-    sha256: "c0b62745845bf4c463e85bee16195000ed32daae519230812cfe0f9fe133f405"
+    sha256: "85ef2d8fac5b66a59076f1613c92d64a9e0061c1f19ca4f740f71c60b6441853"
     args: []
   - id: "assessment-artifacts"
     path: ".ai/scripts/validate-assessment-artifacts.py"
@@ -145,6 +145,12 @@ package_projection_defects:
       Pin the exact stock failure, run the target-owned GWT1-GWT7 projection,
       and keep GWT8 not-applicable because it validates source release payload
       construction rather than the installed downstream context.
+current_validation_selection:
+  framework_version: "v0.18.0"
+  framework_commit: "0e5fbfc4a4a69ecd9da543751d53edfd311f93fb"
+  selector:
+    path: ".ai/scripts/check-all.sh"
+    sha256: "24c8ac79f9e2d8d3af5fa8a1cf536334a207821506108c1cc782a378e7ee0ef6"
 validation_selection_defects:
   - id: "AICU-V011-SELECTION-001"
     status: "resolved-upstream"
