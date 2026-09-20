@@ -1,22 +1,22 @@
 schema_version: '1.0'
 framework:
-  commit: 4d1a5c7d039618f007784679d9968c357347272b
+  version: v0.18.0
+  commit: 0e5fbfc4a4a69ecd9da543751d53edfd311f93fb
   selected_technology_profile: dotnet-backend
-  version: v0.16.0
 catalogs:
 - catalog_id: selected-profile
   path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
-  digest: acb85d42090f446b290bf01a79752b79ebe203919d301202984831bf4d81a9cb
+  digest: ce49222006353b9eefdc5dee18d8ec5887c918a9569d3c23d988fe557110c952
 - catalog_id: shared
   path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
   digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
 target_authorities:
   provenance:
     path: .dev/ai-context/provenance.yaml
-    digest: cd670d11a2e369960d584a2525b3a1643fbf1798cc8650bfa59f1881201d9ded
+    digest: 74ec3e47518a393d481c9dacb6daa2aebba63deb0f84f0bbd5a018ad04cdb7ee
   customizations:
     path: .dev/ai-context/customizations.yaml
-    digest: 3dede13649ee71a657a6af677ab2a119498a17662063ce8cd7d6ba38566953f6
+    digest: 8ce7e56185a9d6bd9e9291ea60d22971dd6d418de6835c12d424ec9e61d96ab5
 rule_dispositions:
 - applicability: Orders adopts event sourcing and reconstructs Order by replaying
     persisted domain events through EsAggregateRoot behavior.
@@ -150,6 +150,21 @@ rule_dispositions:
   - src/Order/DomainCore/SaleOrders.Infrastructure/Applications/Repositories/OrderEventSourcingRepository.cs
   - tests/SaleOrders.Domains.Tests/OrderTests.cs
   rule_id: MAP-EVENTS-001
+- rule_id: MESSAGING-TX-001
+  effective_disposition: baseline-effective
+  applicability: a message consumer requires atomic local business state, durable
+    outgoing intent, and successful incoming-processing completion
+  evidence: &id001
+  - samples/EfCoreWolverine/EfCoreWolverine.Host/DecreaseStockHandler.cs
+  - samples/EfCoreWolverine/EfCoreWolverine.Host/SampleHost.cs
+  - samples/EfCoreWolverine/EfCoreWolverine.Infrastructure/EfInventoryRepository.cs
+  - .dev/ARCHITECTURE.md
+  - .dev/project-config.yaml
+  baseline_acceptance:
+    explicit: true
+    verification:
+      status: verified
+      evidence: *id001
 - applicability: The target adopts the conditional slnx navigation profile with bounded
     context DomainCore and Presentation solution folders.
   baseline_acceptance:
@@ -246,6 +261,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -254,7 +270,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-abqhkw5zpxg6.yaml
-    digest: 30c8902ab8b09282cdcc8a5f73cd94bedb38c82703d8139008e1d74fdca0e345
+    digest: 93805fd00408859025fee91103776ad75239cc62064a74fe87cefd85323a778a
 - route_id: ROUTE-0CB791EB64099FC942CC9EF435809DB1E757848F558735D7D1417D83E22CAD3A
   selector:
     capability: specification
@@ -270,6 +286,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -278,7 +295,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-bs3zd23ebgp4.yaml
-    digest: 6afa7676345e2b0ce23f64fb40dd004a78fd42529df0e46bcf2ddc94c3ce5d88
+    digest: e3f32777337755afb725255e09bd87a2e4391a5a49c78351b764819685177019
 - route_id: ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C
   selector:
     capability: local-change
@@ -294,6 +311,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -302,7 +320,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-d7nezibej3hx.yaml
-    digest: 9ae43942f150cd1a8484ead00e9f8b08e0c45a041b0b0e256104ba95033b998e
+    digest: 5089d4e614a1019ce58b5fe649b1898b71b5b9763fc3eae26171b97715cada11
 - route_id: ROUTE-3EE85C82323D6A52F24B406E8F1271F5ED88DDE38EAC1044F0BF971061FFE0C4
   selector:
     capability: implementation
@@ -318,6 +336,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -326,7 +345,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-h3ufzarshvvf.yaml
-    digest: 4b96bb9e7ab5c5e2967868bbf16a59679b9e917d02d66add6f395c1e3529bb04
+    digest: 9d609368fbae40901e5e16a2be3d784593aaa5c33182a7fcd3744c857972bfd0
 - route_id: ROUTE-44441057FC3C725F5861E2149944CFB7EFDD0C5F890831C4208291A5B2371222
   selector:
     capability: review
@@ -342,6 +361,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -350,7 +370,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-ircbav74hrzf.yaml
-    digest: f784e5b6bd869a209b3334ced7e1c73f39700f5f1e15734be1b515394bb8205c
+    digest: 893b66b268aa1a6968785004d6469152eb3df9507da581193b89eb3c6601b0a2
 - route_id: ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7
   selector:
     capability: local-change
@@ -366,6 +386,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -374,7 +395,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-kecjn7mge6bb.yaml
-    digest: 982f7b3e9a914fc846c46db230889e3b8f0ca1e07b74baaa8f67f7d6c39537fc
+    digest: 07f118dfd46757a0e224c58a3c2e9b8f36bf9db267ea4636a53f25d287b0d9e1
 - route_id: ROUTE-5376A2F088F0C2FB915830EEC987D1391E96AFDDE1208E4E68B362FE4D3A612E
   selector:
     capability: problem-framing
@@ -390,6 +411,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -398,7 +420,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-kn3kf4ei6dbp.yaml
-    digest: 5c7f5001af95005b97f044cbdc5b8e638de1bc1440d41c4777a419ba346768aa
+    digest: e13e8398720b6645020ddb4f5fd3c05f10b01d9930f8fd5f0d1c224486320c58
 - route_id: ROUTE-595016B570726DB08342680D2195648944D898511253100E88AEA1B9E66957D5
   selector:
     capability: test-design
@@ -414,6 +436,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -422,7 +445,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-lfibnnlqojw3.yaml
-    digest: 7110ab29860985ce41e257ee507cb9816eb9656819e65894555903ae84d99089
+    digest: 7a36a9cbd24168a48783baa4de6a31aedf677b686c4ea83b6c9b4770a322ed2d
 - route_id: ROUTE-5FD9FBA84BFD386D5D5F3C8AC8B16EF6332DEA1D48EC5DBF6AA6B096D0828604
   selector:
     capability: review
@@ -438,6 +461,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -446,7 +470,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-l7m7xkcl7u4g.yaml
-    digest: c37e5256ea446c27e697bbec4b487933c20db1eb64c9cbe1aa718e29a3adda31
+    digest: f491f95b0f3b4ff4067ce6dfc699323e18ba1ae4fc8a1fccbbc9bc435b887d33
 - route_id: ROUTE-6793F2C32C4BF62763380BCF5CD83D284C40AB2401A5BB42904823E7F28BE96C
   selector:
     capability: architecture
@@ -462,6 +486,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -470,7 +495,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-m6j7fqzmjp3c.yaml
-    digest: c6fa229552c389a0fbebbcc2d6c4a63e820d2c6082b312a8517f7040e9f05d89
+    digest: 9acff028948546b32054a4dae862ea34475c01fcdb61e5aa1f5be1ea95a59ed8
 - route_id: ROUTE-69320ED2F30633AA22DD3E91C72210D14A955614F1B4269844ED8EAC0274491C
   selector:
     capability: local-change
@@ -486,6 +511,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -494,7 +520,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-neza5uxtayz2.yaml
-    digest: 15cd815632a5c1c2a0e4d963306add634ca9a9f667002cf9c35d41a4c5ece0be
+    digest: 6152a1cf586592b2db8cfc1c1ae255247f35ca3a2c61c35314245c42ca876865
 - route_id: ROUTE-7C1C8C42DEAF9D889A157FA97FA2E5390CDCD0FD5509103DA4DA1A65CB2A85BE
   selector:
     capability: requirements
@@ -510,6 +536,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -518,7 +545,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-pqoiyqw6v6oy.yaml
-    digest: 899b60446bfe65c202c790cd03995e78ef364d8e4bcdd41a4c6b40c9880448d2
+    digest: 59eae6b744e3efb9c2751385a68db900c9f1a099accefb46a34d0bf7f1e4fdb8
 - route_id: ROUTE-8691EB94D951D12620A830D430E1934E0E228CE6B1342F65673ADBD57C484333
   selector:
     capability: test-design
@@ -534,6 +561,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -542,7 +570,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-q2i6xfgzkhis.yaml
-    digest: a0eb69a240197db00037848e1ea04ac2257a9230283915738cf2a3c1e763bd20
+    digest: f3b0c0ac4fd389c87b5adcb9b68a180dccf5ff48b8ceaf3b0a79dc55b772a5b9
 - route_id: ROUTE-86B49603D837372BA200420228174C1CF61333171CE8D96FCFF63ABD07BB796D
   selector:
     capability: compliance-validation
@@ -558,6 +586,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -566,7 +595,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-q22jma6yg43s.yaml
-    digest: 6f228d3fcdcc85eeea3a484d97c094965b17115ff94c0c1583a60337bdb575ec
+    digest: 0b2dfd7cc6ea3ea57ce4ae942fb8191c85428597764a5e44eb10a1dbe6c1efb5
 - route_id: ROUTE-88F8297799ABD7C258348FA6072DFE56306800798EACEB7529FAC1509F304A15
   selector:
     capability: local-change
@@ -582,6 +611,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -590,7 +620,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-rd4cs54zvpl4.yaml
-    digest: 9e590465a0c18cde4f2d80fb13f8a768dd6e8ef15046e30d48d48b0301bd05de
+    digest: 10d89d967d21004b38c424fc94a5cf322310c5d0263789a1059c4773a0180b5d
 - route_id: ROUTE-93389630E2EAEBD1C926310D5932AA0DB31893A1FC0108457AE8E9B63B44E356
   selector:
     capability: local-change
@@ -606,6 +636,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -614,7 +645,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-sm4jmmhc5lv5.yaml
-    digest: 71dbc5d1d0c224b160831491426fc59aec7951bc29bbd1183d67b15a1654e5a4
+    digest: 88a231d5cbe63ffd19b2dc3159cd27d5e7d2ecd3e06e72ddf57d65981944b3a9
 - route_id: ROUTE-DF0E762322A527898C635F453332C4FD4607EFC0A01AE6AFFA49D799E70BAB18
   selector:
     capability: implementation
@@ -630,6 +661,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -638,7 +670,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-34hhmizcuuty.yaml
-    digest: 1a79e61a54aa7aecbace8f2d44ce318d2cb87ebe4ff2f79656088b3ff0d64f5c
+    digest: 664d8dffe79c87cd140e81161dbc1db786114ce3a1c25675ea0383208d537619
 - route_id: ROUTE-E3B4869DC90073EEDA02B8105FB8EE99866C4CF93C5E3FC852258480BEDE8566
   selector:
     capability: implementation
@@ -654,6 +686,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -662,7 +695,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-4o2inhojabz6.yaml
-    digest: 841c8a751f5f37de01d0ece7a7d08735cc52014e624ed78b7bcede71d876afb5
+    digest: c7f6ac6d0ddac060acb8cb7b36401cf91706b70df83ee6d589ff59623b209d8c
 - route_id: ROUTE-EFD78BECD2CAFD2890638E78C79E0ABCA47CB5E0C70EC9B3D602EC12FF762AFE
   selector:
     capability: implementation
@@ -678,6 +711,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -686,7 +720,7 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-57lyx3gszl6s.yaml
-    digest: 1bbc765e8758c0f046341a62259725ab01ece2d04bcf27fb731f0347b6d37938
+    digest: ebe0154bf005a73c1e0da7db118c220c049546f7bf993f5fba77e846c7711085
 - route_id: ROUTE-FAD108B11C0B4A274C0B640D117F2D7EE22FA006DDA09A442DD9BF0E2DC6C0EF
   selector:
     capability: specification
@@ -702,6 +736,7 @@ routing:
   - DELETE-PURGE-001
   - DELETE-SOFT-001
   - MAP-EVENTS-001
+  - MESSAGING-TX-001
   - PROJECT-GRAMMAR-001
   - TECH-SELECT-001
   - TEST-BDDFY-001
@@ -710,5 +745,6 @@ routing:
   reported_not_applicable_rule_ids: []
   packet:
     path: .dev/ai-context/effective-rule-packets/r-7liqrmi4bnfc.yaml
-    digest: 4d9798b0f40567d024bfd7a2151de59dd5694a8096132ad647f5a4c349c962b5
-target_state_digest: 355bdea6321744b6e6bb74e870b6e72d7730632850359d8455ddd14c0244629f
+    digest: b63bddbcc2cf1783d9bbdacb4d5a2ee7bd1034e7411a6a91df818f10726411fc
+generated_at: '2026-09-20T12:09:14+08:00'
+target_state_digest: 4efe16734e1ea19be82586b5514eb1a960b878a2ecf4ad43e2d643a72e21cd7d

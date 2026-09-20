@@ -14,10 +14,12 @@
 
 ## 預設執行原則
 
-- 不得捏造專案事實。明確說明會影響結果的假設、不確定性與取捨。只有在尚未決定的方向會實質影響成果時，才詢問使用者。
-- 實作符合既定驗收條件的最小且完整一致的變更。避免推測性的功能、抽象設計與 context。
+- 不得捏造專案事實、授權、執行或驗證。明確說明會影響結果的假設、不確定性與取捨。只有在尚未決定的方向會實質影響成果時，才詢問使用者。
+- 實作符合已接受範圍與可驗證完成條件的最小且完整一致的變更。避免推測性的功能、抽象設計與 context。
 - 僅修改任務所需的檔案。避免無關的清理，並移除自身變更所引入的 artifacts。
 - 執行前先建立可驗證的完成條件。反覆修正直到條件通過；否則應回報具體阻礙與任何略過的 validation。
+- 在既有授權範圍內持續執行一般可逆的實作與修復。只有缺少授權、範圍實質改變或 owner 決策尚未解決時才詢問。
+- 委派工作依 `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md` 選定的證據層級執行。一般有界工作保留實際 invocation 與結果，且每個 worktree 只有一名 tracked writer；terminal、高風險、外部驗證與採用操作仍須保留完整證據。
 
 ## Repository 定位
 
@@ -33,11 +35,17 @@
 
 ## AI Agents 快速開始
 
-1. 閱讀 `README.md`、`.dev/ARCHITECTURE.md` 與 `.dev/project-config.yaml` 以理解產品和 repository structure。
-2. 使用 `MQArchLab.slnx`、project files 與 `docker-compose/docker-compose.yml` 驗證 runtime 或 package facts。
-3. 在移動或重寫 AI context 前，先閱讀 `.dev/standards/AI-CONTEXT-BOUNDARY.md` 與 `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`。
-4. 使用 `.ai/assets/skills/README.MD` 作為 canonical skill registry。
+1. 從請求、目前 Git/worktree 狀態、本檔與明確指出的 artifacts 開始。
+2. 當任務需要產品或 repository facts 時，閱讀 `README.md`、`.dev/ARCHITECTURE.md` 與 `.dev/project-config.yaml`；使用 `MQArchLab.slnx`、project files 與 `docker-compose/docker-compose.yml` 驗證 runtime 或 package facts。
+3. 使用 `.ai/assets/skills/README.MD` 作為 canonical skill registry，且只為目前任務或階段擴展內容。明確分類為 generated 的 runtime entry 可直接執行；只有查閱 metadata、維護或釐清不一致時，才載入完整 canonical source。
+4. 在移動或重寫 AI context 前，先閱讀 `.dev/standards/AI-CONTEXT-BOUNDARY.md` 與 `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`。
 5. 使用 `.dev/guides/ai-collaboration-guides/README.MD` 查閱 human-facing guides，並使用 `.ai/INDEX.MD` 瀏覽 agent-facing AI assets。
+
+## CLI 執行路由
+
+當較高優先順序的政策選擇跨邊界 CLI 執行時，遵循
+`.ai/assets/shared/CLI-EXECUTION-ROUTING-CONTRACT.md`。不得隱含建立或更新
+被忽略的 `.dev/ai-context/local/cli-execution-routing.yaml`。
 
 ## 必要工作流程
 
@@ -192,7 +200,7 @@ Workflow artifact 規則：
 | `.ai/assets/skills/code-reviewer/references/review-routing.yaml` | Canonical .NET backend code review routing contract |
 | `.ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD` | .NET backend building block reference |
 | `.ai/assets/skills/` | Canonical skill specs |
-| `.ai/assets/sub-agent-role-prompts/` | Canonical sub-agent role prompts |
+| `.ai/assets/sub-agent-role-prompts/` | 共用 canonical roles；skill 私有 roles 放在其所屬 skill 內 |
 | `.ai/scripts/` | 過渡期 AI workflow scripts、context governance checks 與本機工具 orchestration helpers |
 
 ### Project Knowledge and Governance (`.dev/`)
@@ -234,5 +242,5 @@ Workflow artifact 規則：
 
 - Agent-facing context 應優先使用英文，除非來源材料本質上就是 human-facing 繁體中文。
 - Human-facing guides 與 README content 應優先使用繁體中文台灣用語。
-- Runtime wrappers 應保持輕量，並指向 canonical specs。
+- Runtime adapters 應保持輕量。Generated runtime entries 必須維持為 canonical skill content 的同步投影，不得成為第二套權威。
 - Context 分類優先使用資料夾位置，而不是每個檔案各自加 metadata。

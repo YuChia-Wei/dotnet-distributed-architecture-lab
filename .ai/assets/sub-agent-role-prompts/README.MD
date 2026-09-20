@@ -4,8 +4,15 @@ This directory contains canonical owning-skill bounded role contracts.
 
 ## Purpose
 
-Use `.ai/assets/sub-agent-role-prompts/` for worker-role prompts and optional
-delegation templates that an owning skill can use for bounded work.
+Use `.ai/assets/sub-agent-role-prompts/` only for shared worker-role prompts
+and optional delegation templates that more than one owning skill can use for
+bounded work. Put a role private to one owning skill in
+`.ai/assets/skills/<skill-id>/roles/<role-id>/`.
+
+General shared roles remain here even when only one skill currently binds them:
+`context-translator`, `fixed-head-independent-auditor`,
+`semantic-governance-analyst`, `mechanical-evidence-worker`,
+`reconciliation-worker`, and `evidence-report-synthesizer`.
 
 ## Usage
 
@@ -29,7 +36,9 @@ Top-level skills belong under `.ai/assets/skills/`; sub-agent role prompts are n
 
 ## Boundary
 
-- Keep role definitions and role-specific references here.
+- Keep shared role definitions and role-specific references here.
+- Keep skill-private role definitions and references beside their owning skill
+  under `skills/<skill-id>/roles/`.
 - Keep shared reusable rules under `.ai/assets/shared/` or the relevant tech-stack profile.
 - Keep human-facing taxonomy and usage guidance under `.dev/guides/ai-collaboration-guides/`.
 - Keep runtime wrappers outside this directory.

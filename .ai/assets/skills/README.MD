@@ -9,11 +9,18 @@ Use `.ai/assets/skills/` as the source of truth for top-level skills. Runtime wr
 ## Usage
 
 Each skill should keep its canonical entry in `skill.yaml`, with optional
-`references/`, `prompts/`, `examples/`, and `scripts/` when needed. Put an
+`references/`, `prompts/`, `examples/`, `roles/`, and `scripts/` when needed. Put an
 executable or contract test under `scripts/` only when exactly one canonical
 skill owns its behavior. Keep multi-skill, provider, release, package, workflow,
 and source-repository-wide automation under `.ai/scripts/`; retain published
 legacy command paths only as explicit thin compatibility entrypoints.
+
+For `code-reviewer` and `local-change-implementer`, the canonical
+`runtime_entry` is projected into the runtime's `SKILL.md`. Execute that
+generated entry directly and expand only its applicable references; reading the
+complete `skill.yaml` again is required only to inspect metadata, change the
+skill, or resolve a discrepancy. The generator verifies parity and package
+assembly regenerates the entry from the final projected canonical payload.
 
 The canonical skill registry currently includes:
 
@@ -22,16 +29,16 @@ The canonical skill registry currently includes:
 - `ai-context-auditor`
 - `ai-context-init`
 - `ai-context-upgrader`
-- `bdd-gwt-test-designer`
-- `code-reviewer` (`dotnet-backend` selected; unavailable in the core-only view)
+- `bdd-gwt-test-designer` (design and read-only artifact review; concrete tooling follows target selection)
+- `code-reviewer` (common core in every selection; .NET review extends it when `dotnet-backend` is selected)
 - `diagnostic-analyst`
-- `ddd-ca-hex-architect`
-- `local-change-implementer`
-- `problem-frame-author`
-- `requirement-author`
-- `slice-implementer`
+- `ddd-ca-hex-architect` (design and read-only artifact review; concrete tooling follows target selection)
+- `local-change-implementer` (one technical target and its bounded direct usage, independent of file count)
+- `problem-frame-author` (selected CBF/SWF file set with source bindings)
+- `requirement-author` (requirement markdown and explicit stakeholder authority)
+- `slice-implementer` (one coordinated implementation goal under accepted architecture)
 - `software-development-orchestrator`
-- `spec-author`
+- `spec-author` (selected production/entity/adapter/formal test spec; preserve the requested document type)
 - `spec-compliance-validator`
 
 ## Retired Identifiers
@@ -63,4 +70,7 @@ edge or publication; the selected release must still supply its verified route.
 
 ## Boundary
 
-Do not put runtime-specific metadata, full wrapper instructions, or human-facing tutorial content here. Put runtime wrappers under their runtime directories and human-facing guides under `.dev/guides/`.
+Keep portable execution instructions, including `runtime_entry`, here. Put
+runtime-specific discovery metadata and generated projections under runtime
+directories, and human-facing tutorials under `.dev/guides/`. A projection must
+not introduce independently maintained instructions.

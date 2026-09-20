@@ -1,0 +1,19 @@
+# Reactor Test Generation Prompt (Dotnet)
+
+## Mandatory References
+- `.ai/assets/skills/slice-implementer/roles/reactor-test-sub-agent/sub-agent.yaml`
+- `../assets/skills/bdd-gwt-test-designer/skill.yaml`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
+- `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md`
+
+Generate reactor tests using xUnit with mandatory Given-When-Then structure and naming. BDDfy is the default profile; an explicit team opt-out permits plain xUnit GWT, not 3A. No BaseTestClass.
+
+## Rules
+- Follow the GWT mapping rules in .ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md
+- Resolve the target `testing.mocking` selection; use NSubstitute by default
+- Verify event handling and side effects
+- Async verification required
+- Each then/and condition must map to an explicit assertion step
+
+## Output Structure
+`src/tests/Application/<Aggregate>/Reactors/`

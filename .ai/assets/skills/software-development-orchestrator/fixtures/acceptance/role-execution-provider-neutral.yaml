@@ -7,19 +7,19 @@ defaults:
     scope: [".dev/workflows/example"]
     non_goals: ["Do not redefine architecture or ownership."]
     source_refs: ["work-item:SAR94-002", "loaded-rule-packet:opaque"]
-    mandatory_references: [".ai/assets/sub-agent-role-prompts/command-sub-agent/references/implementation-playbook.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md", ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"]
+    mandatory_references: [".ai/assets/skills/slice-implementer/roles/command-sub-agent/references/implementation-playbook.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md", ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md"]
     constraints: ["Preserve the owning skill's canonical contract."]
     stop_conditions: ["Return to the parent when the bounded output and its evidence are complete."]
   usecase_test_input_envelope: &usecase_test_input_envelope
     <<: *command_input_envelope
-    mandatory_references: [".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-playbook.md", ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/references/test-generation-guidance.md", ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/skills/bdd-gwt-test-designer/skill.yaml"]
+    mandatory_references: [".ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/references/test-playbook.md", ".ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/references/test-generation-guidance.md", ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md", ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md", ".ai/assets/skills/bdd-gwt-test-designer/skill.yaml"]
   problem_frame_input_envelope: &problem_frame_input_envelope
     <<: *command_input_envelope
-    mandatory_references: [".ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/references/authoring-playbook.md", ".ai/assets/skills/problem-frame-author/references/output-contract.md", ".dev/problem-frames/README.MD"]
+    mandatory_references: [".ai/assets/skills/problem-frame-author/roles/problem-frame-sub-agent/references/authoring-playbook.md", ".ai/assets/skills/problem-frame-author/references/output-contract.md", ".dev/problem-frames/README.MD"]
   code_review_input_envelope: &code_review_input_envelope
     <<: *command_input_envelope
     source_refs: ["work-item:SAR94-002", "loaded-rule-packet:opaque", "review-route:general-csharp"]
-    mandatory_references: [".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-playbook.md", ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/references/review-prompt.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml", ".ai/assets/skills/code-reviewer/skill.yaml"]
+    mandatory_references: [".ai/assets/skills/code-reviewer/roles/code-review-sub-agent/references/review-playbook.md", ".ai/assets/skills/code-reviewer/roles/code-review-sub-agent/references/review-prompt.md", ".ai/assets/skills/code-reviewer/references/review-routing.yaml", ".ai/assets/skills/code-reviewer/skill.yaml"]
   permissions: &permissions
     read_scope: [".dev/workflows/example"]
     write_scope: [".dev/workflows/example"]
@@ -73,7 +73,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-DIRECT-001"
       role_asset_id: "command-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "implementation-small-direct"
       applicability: { result: "applies", reason: "One approved bounded command implementation change applies." }
@@ -92,7 +92,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-DELEGATED-001"
       role_asset_id: "usecase-test-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "concrete-test-delegated"
       applicability: { result: "applies", reason: "The approved behavior needs isolated concrete use-case test implementation." }
@@ -120,7 +120,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-INLINE-001"
       role_asset_id: "command-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "implementation-inline-no-child-runtime"
       applicability: { result: "applies", reason: "The selected command primary mode applies to this bounded implementation." }
@@ -139,7 +139,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-UNAVAILABLE-001"
       role_asset_id: "problem-frame-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/problem-frame-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/problem-frame-author/roles/problem-frame-sub-agent/sub-agent.yaml"
       owning_skill: "problem-frame-author"
       stage_id: "mandatory-problem-frame"
       applicability: { result: "applies", reason: "The problem frame is mandatory before implementation." }
@@ -158,7 +158,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-NOT-APPLICABLE-001"
       role_asset_id: "usecase-test-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "concrete-test-nonmatch"
       applicability: { result: "does-not-apply", reason: "The work is a documentation-only correction with no concrete test implementation change." }
@@ -177,7 +177,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-RETRY-001"
       role_asset_id: "command-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "implementation-retry"
       applicability: { result: "applies", reason: "The selected command primary mode applies to this bounded implementation." }
@@ -198,7 +198,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-FALLBACK-DIRECT-001"
       role_asset_id: "code-review-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/code-reviewer/roles/code-review-sub-agent/sub-agent.yaml"
       owning_skill: "code-reviewer"
       stage_id: "review-fallback-direct"
       applicability: { result: "applies", reason: "The bounded change requires review." }
@@ -230,7 +230,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-FALLBACK-UNAVAILABLE-001"
       role_asset_id: "code-review-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/code-reviewer/roles/code-review-sub-agent/sub-agent.yaml"
       owning_skill: "code-reviewer"
       stage_id: "review-fallback-unavailable"
       applicability: { result: "applies", reason: "The bounded change requires review." }
@@ -257,7 +257,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-HANDOFF-IMPLEMENTATION-001"
       role_asset_id: "usecase-test-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "implementation-from-test-design"
       applicability: { result: "applies", reason: "Approved BDD design output identifies bounded concrete use-case test implementation." }
@@ -276,7 +276,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-NO-FAKE-INVOCATION-001"
       role_asset_id: "command-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "direct-without-child"
       applicability: { result: "applies", reason: "The selected command primary mode applies to this bounded command implementation." }
@@ -296,7 +296,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-INVALID-DELEGATED-001"
       role_asset_id: "usecase-test-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "invalid-delegation"
       applicability: { result: "applies", reason: "Test design applies." }
@@ -316,7 +316,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-INVALID-RETRY-001"
       role_asset_id: "command-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "invalid-retry"
       applicability: { result: "applies", reason: "The selected command primary mode applies." }
@@ -338,7 +338,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-INVALID-THIRD-ATTEMPT-001"
       role_asset_id: "command-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "invalid-third-attempt"
       applicability: { result: "applies", reason: "The selected command primary mode applies." }
@@ -361,7 +361,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-INVALID-THIRD-ATTEMPT-002"
       role_asset_id: "command-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "invalid-reused-third-attempt-authorization"
       applicability: { result: "applies", reason: "The selected command primary mode applies." }
@@ -384,7 +384,7 @@ scenarios:
     role_execution:
       role_execution_id: "SAR94-002-INVALID-DIRECT-INVOCATION-001"
       role_asset_id: "command-sub-agent"
-      role_path: ".ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml"
+      role_path: ".ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml"
       owning_skill: "slice-implementer"
       stage_id: "invalid-direct-invocation"
       applicability: { result: "applies", reason: "A bounded implementation change applies." }

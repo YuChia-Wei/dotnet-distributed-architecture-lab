@@ -1,6 +1,6 @@
 schema_version: "1.0"
-framework_version: "v0.16.0"
-framework_commit: "4d1a5c7d039618f007784679d9968c357347272b"
+framework_version: "v0.18.0"
+framework_commit: "0e5fbfc4a4a69ecd9da543751d53edfd311f93fb"
 unfinalized_target_diagnostics:
   - "effective state catalogs[0] is stale"
 checks:
@@ -14,11 +14,11 @@ checks:
     args: []
   - id: "dependency-versions"
     path: ".ai/scripts/validate-dependency-versions.py"
-    sha256: "c0b62745845bf4c463e85bee16195000ed32daae519230812cfe0f9fe133f405"
+    sha256: "85ef2d8fac5b66a59076f1613c92d64a9e0061c1f19ca4f740f71c60b6441853"
     args: []
   - id: "assessment-artifacts"
     path: ".ai/scripts/validate-assessment-artifacts.py"
-    sha256: "a24fe8d300ce016a2c30b0b1b92eb451d7289b0bf0c38ec16b005751c8d7b401"
+    sha256: "cc2bd3dab36df48f359203946a7f3654dfa20fd6dd2228926fc8926f0945b907"
     args: []
   - id: "shell-assets"
     path: ".ai/scripts/validate-shell-assets.py"
@@ -26,25 +26,24 @@ checks:
     args: []
   - id: "target-terminal-audit"
     path: ".dev/ai-context/tooling/validate-target-terminal-audit.py"
-    sha256: "a46acb7144e4027820466dbc97f81bedac47e76bd69e7419d2304fe96bc9c64a"
+    sha256: "a6f6e012e709856b6cc5949bbcc649c33e5d160e93b4a27213b4feb5c00150f1"
     args: []
 package_projection_defects:
   - id: "AICU-V016-TARGET-GATE-PROJECTION-001"
     status: "target-overlay-required"
-    observed_through: "v0.16.0"
-    framework_commit: "4d1a5c7d039618f007784679d9968c357347272b"
+    observed_through: "v0.18.0"
+    framework_commit: "d3364303d55d1f3b8e67c720b04c1d3b34b1d4f3"
     generic_validator:
       path: ".ai/scripts/validate-ai-context.py"
-      sha256: "05db9e16513c6cbb3325523e2eb3ca99f9290a48055184d1bb3b0b7d5e0f18d5"
+      sha256: "0bf9147efce76d5a58dc91386f9d71f793defea65af3c7bc2244b411a3f6fe47"
       outcome: "blocked-by-package-projection"
     python_entrypoints:
       path: ".ai/scripts/python-entrypoints.json"
-      sha256: "819f635f0102413957b6e8c37561ca16a7e324ea901154b2552f2c40c6375b55"
-      portable_count: 18
+      sha256: "79b03cf9876170e2d4f0e6f9291e774bcbfa61847d6423a86406c39fb6ece233"
+      portable_count: 20
       source_only_count: 25
-      missing_source_only_count: 24
-      target_available_source_only_paths:
-        - ".ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py"
+      missing_source_only_count: 25
+      target_available_source_only_paths: []
     shell_assets:
       path: ".ai/scripts/shell-assets.yaml"
       sha256: "a7575627d5966ac9945d76358e845a37a11eaacf0ad5f54f58b98c43efddeece"
@@ -63,7 +62,7 @@ package_projection_defects:
     disposition: >-
       Keep the generic validator and removed source-only stock tests outside the
       downstream target gate. Promote the repaired shell-assets validator, pin the
-      exact v0.16 evidence, run the remaining package-applicable validators plus
+      exact v0.18 evidence, run the remaining package-applicable validators plus
       target-owned projection tests, and do not report excluded checks as passed.
   - id: "AICU-V010-PROJECTION-001"
     status: "blocked-by-package-projection"
@@ -146,28 +145,34 @@ package_projection_defects:
       Pin the exact stock failure, run the target-owned GWT1-GWT7 projection,
       and keep GWT8 not-applicable because it validates source release payload
       construction rather than the installed downstream context.
+current_validation_selection:
+  framework_version: "v0.18.0"
+  framework_commit: "0e5fbfc4a4a69ecd9da543751d53edfd311f93fb"
+  selector:
+    path: ".ai/scripts/check-all.sh"
+    sha256: "24c8ac79f9e2d8d3af5fa8a1cf536334a207821506108c1cc782a378e7ee0ef6"
 validation_selection_defects:
   - id: "AICU-V011-SELECTION-001"
     status: "resolved-upstream"
     resolved_in: "v0.15.0"
-    verified_through: "v0.16.0"
+    verified_through: "v0.17.0"
     selector:
       path: ".ai/scripts/check-all.sh"
-      sha256: "5856c0e0ee1eec62bb6c810c416b2819179754863ab63f9b010f446f8791cb35"
+      sha256: "e450486466e3dcb70507b797c6186db448ab1ffe9c908f6df609f018c3b49ed6"
     evidence_helper:
       path: ".ai/scripts/validation-evidence.py"
       sha256: "7b6301d388d5694aa8e0189bce55c13c8e92bad5c67d4b20a21cc60783a05c28"
     product_source_contract:
       path: ".ai/assets/shared/PRODUCT-SOURCE-PROJECTION-CONTRACT.md"
-      sha256: "70286a75c2feadb9c1b5a833a208b7fbec78bdc8dd3447fb06e1cd26cc9b0084"
+      sha256: "d530c6e0a5fdcc55c5ab4685df820f91187fc245d2d018e9b51f7b79ab4f524c"
     finding: >-
       Changed-path matching records discovered roots before a separate dependency
-      expansion pass. v0.16.0 retains that resolved behavior and adds explicit
+      expansion pass. v0.17.0 retains that resolved behavior and adds explicit
       validation-dependency observation and lifecycle enforcement.
     disposition: >-
       Retain the target-owned full applicable gate as local policy, while no
       longer classifying upstream dependency expansion as blocked. Pin the
-      exact v0.16.0 selector and evidence-helper bytes in the target projection.
+      exact v0.17.0 selector and evidence-helper bytes in the target projection.
 commit_policy_defects:
   - id: "AICU-V012-COMMIT-CUTOVER-001"
     status: "target-overlay-required"

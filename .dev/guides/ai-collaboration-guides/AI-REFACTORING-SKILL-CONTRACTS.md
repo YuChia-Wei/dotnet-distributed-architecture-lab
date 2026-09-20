@@ -192,7 +192,7 @@ implementer 至少要知道：
 
 ### Slice -> Local Change
 
-`local-change-implementer` 只接收可局部處理的技術變更。若需要新增 class/interface、改 domain language、改 DTO/API/event 名稱、或跨 module boundary，必須回到 `slice-implementer` 或 `ddd-ca-hex-architect`。
+`local-change-implementer` 只接收可局部處理的技術變更。private implementation helper type 可保留在 local scope，前提是 accepted target/radius、behavior、責任、dependency direction、lifetime 與 transaction boundary 都不變。公開 contract/domain 或責任、dependency/lifetime/transaction 會受影響的 class/interface、改 domain language、改 DTO/API/event 名稱、或跨 module boundary，必須回到 `slice-implementer` 或 `ddd-ca-hex-architect`。
 
 ## Contract 最小化原則
 

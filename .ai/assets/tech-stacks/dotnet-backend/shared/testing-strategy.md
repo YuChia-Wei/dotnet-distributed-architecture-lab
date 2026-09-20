@@ -1,8 +1,18 @@
 # Testing Strategy (Dotnet)
 
+## Transactional Messaging Evidence
+
+When a target selects transactional messaging, use the behavior and evidence
+contract in [Transactional Messaging Standards](../standards/coding-standards/transactional-messaging-standards.md).
+Unit and generated-pipeline tests may exercise local contracts, but they do not
+prove a real local transaction, durable inbox/outbox completion, or external
+delivery. Keep any integration evidence bound to its actual subject, environment,
+instrumentation, and observed window.
+
 Agent-loading projection of the canonical [Test Coding Standards](../standards/coding-standards/test-standards.md).
 
-Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`.
+Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`,
+`MESSAGING-TX-001`.
 
 ## Execution Summary
 - **Framework**: xUnit
@@ -17,6 +27,11 @@ Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`, `TECH-SELECT-001`.
 - Do not hardcode environment/profile inside test classes
 - Use fixtures/collections to switch profiles
 - Use Given/When/Then step methods or fluent chains. Under the default profile, use BDDfy; when the team opts out, preserve the same explicit GWT structure in plain xUnit.
+- Apply the canonical standard's step-method responsibilities, visible scenario
+  data, isolated state, async/exception handling and explicit Then assertions.
+  Preserve the mapping in `.ai/assets/shared/GWT-TEST-HANDOFF-CONTRACT.md`.
+  The runnable `examples/bdd-step-methods/` reference demonstrates both profiles;
+  method names, comments and passing tests alone do not establish scenario fidelity.
 - Verify domain events with async-safe assertions (e.g., Eventually/Retry helpers)
 
 ## Profile Switching Pattern (xUnit)

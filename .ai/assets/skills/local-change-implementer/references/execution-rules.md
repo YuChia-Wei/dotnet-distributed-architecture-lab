@@ -16,4 +16,11 @@
 - Prefer local consistency over broad cleanup.
 - Do not combine multiple independent change goals in one run.
 - If the requested change starts affecting architecture boundaries, redirect to `slice-implementer` or `ddd-ca-hex-architect`.
-- If the requested change requires introducing a new type, stop and redirect instead of improvising the design.
+- A private implementation helper type may remain local only when it preserves
+  the accepted target, radius, behavior, responsibility, dependency direction,
+  lifetime, and transaction boundary. Route a public, responsibility-changing,
+  dependency/lifetime/transaction-affecting type to a bounded slice; request
+  architecture work only for unresolved or changed responsibility, dependency,
+  lifetime, transaction, or semantic decisions.
+- Carry existing authorization and normative sources through the handoff; do
+  not request the same approval again when it already covers the receiving work.

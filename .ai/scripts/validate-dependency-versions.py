@@ -151,6 +151,7 @@ def validate_python_entrypoint_registry(root: Path, errors: list[str]) -> dict[s
             f"{REGISTRY_PATH.as_posix()}: every entrypoint must have exactly one supported dependency profile"
         )
     expected_exit_two = {
+        ".ai/assets/skills/ai-context-upgrader/scripts/run-target-validation.py",
         ".ai/scripts/plan-ai-context-package-apply.py",
         ".ai/scripts/validate-immutable-history.py",
     }

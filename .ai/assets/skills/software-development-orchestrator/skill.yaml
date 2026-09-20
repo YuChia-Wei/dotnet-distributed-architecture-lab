@@ -60,7 +60,7 @@ outputs:
 constraints:
 - Do not claim standalone fallback output has the same quality as a matching downstream specialist skill or project-specific standard.
 - Do not replace downstream development skills; delegate requirement, specification, problem framing, architecture, test design, implementation, review, and compliance work to the matching local skill when the profile provides one.
-- For an applicable canonical sub-agent role, require the owning skill to produce the shared role_execution record; aggregate it by stage without taking domain ownership or inventing child invocation evidence.
+- Select the proportionate execution tier before requesting role evidence; require full role_execution records only for the full contract or explicit acceptance requirement, and aggregate actual returned evidence without taking domain ownership or inventing child invocation evidence.
 - Before delegated, external, or fixed-head execution, require the owning skill to validate the shared agent execution packet; bind external dispatch to that packet, hold an exclusive worktree snapshot lease for tracked writes, and preserve its integration owner and stop/retry boundaries.
 - Default to direct inline role execution. Select delegated only when every shared safety gate passes, at least one material-value trigger exists, cost/failure/retry risk supports delegation, and genuine invocation evidence is available.
 - If delegation is unsupported or fails, select direct when the shared inline-parity contract can be satisfied; otherwise record unavailable. Preserve attempt continuity and require new owner or workflow authorization for attempt three or later.

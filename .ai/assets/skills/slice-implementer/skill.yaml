@@ -2,7 +2,7 @@ asset_id: slice-implementer
 schema_version: '1.0'
 asset_type: skill-spec
 title: Slice Implementer
-purpose: Implement one bounded implementation slice from requirements, specs, architecture decisions, review findings, or workflow tasks without redefining the architecture direction.
+purpose: Implement one bounded command, query, reactor or generic slice under accepted architecture. Retain slice ownership for internal local edits and hand off only for a concrete missing decision or separable useful subtask.
 portability: repo-portable
 audience: agent-facing
 source_of_truth: canonical
@@ -25,8 +25,9 @@ outputs:
 - intent, execution mode, overlays, and reference paths used
 - touched files and validation notes
 - explicit handoff if architecture, local change, test design, review, or compliance work remains
-- one provider-neutral role_execution record for every considered role binding, handed to the orchestrator without transferring slice ownership
+- when the full execution contract applies, one provider-neutral role_execution record for every considered role binding, handed to the orchestrator without transferring slice ownership
 constraints:
+- Select scope and necessary handoffs through IMPLEMENTATION-SCOPE-ROUTING-CONTRACT; file count alone does not determine the owner.
 - Do not redefine architecture direction mid-slice
 - Do not silently broaden the agreed slice
 - 'Select exactly one execution mode reference: command, query, reactor, or generic'
@@ -35,73 +36,73 @@ constraints:
 - Delegate local class/object/symbol technical edits to local-change-implementer when useful
 - Stop and hand off when bounded context, aggregate boundary, dependency direction, or domain language is unclear
 role_bindings:
-- role_path: .ai/assets/sub-agent-role-prompts/command-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml
   role_asset_id: command-sub-agent
   expected_role_status: active
   binding_kind: primary
   applicability: The bounded slice selects command as its exactly one primary execution mode.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/query-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/query-sub-agent/sub-agent.yaml
   role_asset_id: query-sub-agent
   expected_role_status: active
   binding_kind: primary
   applicability: The bounded slice selects query as its exactly one primary execution mode.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/reactor-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/reactor-sub-agent/sub-agent.yaml
   role_asset_id: reactor-sub-agent
   expected_role_status: active
   binding_kind: primary
   applicability: The bounded slice selects reactor as its exactly one primary execution mode.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/aggregate-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/aggregate-sub-agent/sub-agent.yaml
   role_asset_id: aggregate-sub-agent
   expected_role_status: active
   binding_kind: conditional
   applicability: The selected slice needs an aggregate or event-sourced domain implementation shape without replacing its one primary execution mode.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/controller-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/controller-sub-agent/sub-agent.yaml
   role_asset_id: controller-sub-agent
   expected_role_status: active
   binding_kind: conditional
   applicability: The selected slice needs an ASP.NET Core controller or endpoint implementation shape without replacing its one primary execution mode.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/outbox-sub-agent/sub-agent.yaml
   role_asset_id: outbox-sub-agent
   expected_role_status: active
   binding_kind: conditional
   applicability: The selected slice needs outbox persistence or publishing work without replacing its one primary execution mode.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/profile-config-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/profile-config-sub-agent/sub-agent.yaml
   role_asset_id: profile-config-sub-agent
   expected_role_status: active
   binding_kind: conditional
   applicability: The selected slice needs environment-profile or appsettings configuration work without replacing its one primary execution mode.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml
   role_asset_id: usecase-test-sub-agent
   expected_role_status: active
   binding_kind: conditional
   applicability: The selected slice includes concrete use-case test implementation; a test-only slice uses generic as its one primary execution mode, while BDD design and test execution remain separate.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/aggregate-test-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/aggregate-test-sub-agent/sub-agent.yaml
   role_asset_id: aggregate-test-sub-agent
   expected_role_status: active
   binding_kind: conditional
   applicability: The selected slice includes concrete aggregate test implementation; a test-only slice uses generic as its one primary execution mode, while BDD design and test execution remain separate.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/controller-test-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/controller-test-sub-agent/sub-agent.yaml
   role_asset_id: controller-test-sub-agent
   expected_role_status: active
   binding_kind: conditional
   applicability: The selected slice includes concrete controller or API test implementation; a test-only slice uses generic as its one primary execution mode, while BDD design and test execution remain separate.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/reactor-test-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/reactor-test-sub-agent/sub-agent.yaml
   role_asset_id: reactor-test-sub-agent
   expected_role_status: active
   binding_kind: conditional
   applicability: The selected slice includes concrete reactor test implementation; a test-only slice uses generic as its one primary execution mode, while BDD design and test execution remain separate.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/mutation-testing-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/slice-implementer/roles/mutation-testing-sub-agent/sub-agent.yaml
   role_asset_id: mutation-testing-sub-agent
   expected_role_status: active
   binding_kind: conditional
@@ -117,6 +118,7 @@ workflow:
 - step: 4
   description: Validate, record touched files and role_execution, aggregate no synthetic child evidence, and hand off remaining architecture, testing, review, or compliance work
 references:
+- .ai/assets/shared/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md
 - .ai/assets/skills/slice-implementer/references/input-contract.md
 - .ai/assets/skills/slice-implementer/references/execution-playbook.md
 - .ai/assets/skills/slice-implementer/references/role-execution.md

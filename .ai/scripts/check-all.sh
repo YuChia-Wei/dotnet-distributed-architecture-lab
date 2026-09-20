@@ -2125,6 +2125,7 @@ run_source_repository_release_checks() {
             "AI Context Version Governance Fail-Closed Tests" \
             "AI Context Packaging GWT Tests" \
             "AI Context Release State Fail-Closed Tests" \
+            "Release Asset Identity Contract Tests" \
             "AI Context Release Preparation Fail-Closed Tests" \
             "AI Context Release Renderer Fail-Closed Tests" \
             "AI Behavior Deterministic Evaluation" \
@@ -2252,6 +2253,7 @@ run_source_repository_governance_checks() {
             "Source Governance Manifest Registry" \
             "Validation Freeze And Evidence Reuse Contract" \
             "Validation Lifecycle Fail-Closed Tests" \
+            "Bounded Validation Dependency Observation" \
             "Agent Execution Guardrails Contract" \
             "Agent Execution Guardrails Fail-Closed Tests" \
             "Terminal Issue Closure Contract" \
@@ -2537,6 +2539,10 @@ run_command_check "python .ai/scripts/tests/test_coding_standards_integrity_cont
 
 run_command_check "python .ai/scripts/tests/test_code_reviewer_routing_contract.py -v" \
     "Code Reviewer Routing Contract" \
+    "required" "true" "true"
+
+run_command_check "python .ai/scripts/tests/test_runtime_skill_entries.py -v" \
+    "Generated Runtime Skill Entry Contract" \
     "required" "true" "true"
 
 run_command_check "python .ai/scripts/tests/test_profile_projection_contract.py -v" \
