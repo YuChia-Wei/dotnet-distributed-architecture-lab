@@ -1,0 +1,48 @@
+schema_version: pr13-candidate11-attempt14-adoption-decision/v1
+scope: evidence-pointer-rebind-only
+authority_ref: "owner:2026-09-20-v018-publication-and-pr13-integration"
+candidate:
+  original_build_commit: 0e5fbfc4a4a69ecd9da543751d53edfd311f93fb
+  archive_sha256: 51c550f974ab32581f1b02d4966bd84e6e5ac76bb7bd6b77fd5da2ce9ef84070
+published_release:
+  repository: "YuChia-Wei/ai-collaboration-framework"
+  tag: "v0.18.0"
+  annotated_tag_object: "cc7db483baa37d301056ec236706718fccdecb1f"
+  published_source_commit: "284bf9f2b0ab76f28df1bbf355e3909de956d1bd"
+  asset_name: "ai-collaboration-framework-v0.18.0.zip"
+  asset_sha256: 51c550f974ab32581f1b02d4966bd84e6e5ac76bb7bd6b77fd5da2ce9ef84070
+  publication_receipt_sha256: 7866392b97f64bb40d58f873d71e643e872126092608ef2fd9525f8718abba7b
+  selected_input_projection_sha256: 57e1d102a7e59c1f26766a3fe2e8ef9a0dc1309ce35c438350a326c439abec10
+  payload_sha256: 4e570164a5e33d3e7b989aba59a69512fdd62b7c80f4228f1adf231144fb0b6f
+attempt14_inputs:
+  preapply_sha: f177731b63119257ba3a10c3ec5236aca9904d22
+  audit_commit: 43586065b014b241a5b81c1e442dfa60da13a15c
+  transaction_id: d7cd4592bd38778952b9261ff38b2aa30505ebfb7c46f5f7bd0965250033e990
+  target_validation_receipt_sha256: d97d5dafb6c45d82e5cc71f142c98f9b339e44d11abea2dd18197c99c21e8c7b
+  target_validation_packet_sha256: ce66f074b79e4a505356aaafc1877e3cea6874cc2ff5f1d1e07ef0240d6a7fd4
+  target_validation_decision_sha256: b1aff3fd539ffb14be70e4c9ff7abd2b32ad11875a3a1529ea58cac5f2a1b229
+  target_validation_profile_sha256: 300a330d430c7acc2e04965636948a4b4c97417590e9e3cf9f175c800b052fc8
+  target_validation_duration_seconds: 28.648711
+  audit_assessment_id: "ASM-20260919-20-mql"
+  audit_criteria_sha256: 5980f2dbcb77b5a044f15e667e3a84c2f3880a31ec8f7c8f16bcd2f4ff41bb78
+  audit_record_sha256: fb8ff0d7deda44aa457cec445a6e6617268edf2354b362da16758be272a97e25
+  audit_format_recovery_sha256: 2822ad7fd443e2f804de59e4dcd7160b9c2e97d6c31e51c2fd0bebbac8df38e2
+  finalization_evidence_sha256: 0bca4ef4ea1c4722b854ce0b49ca86056f081a240868c314f903fbe4b3f0bb21
+  native_finalization_summary_sha256: 6ab4b30f6c2b37bb0c5bcfde3f46f0be7120298df5d476f82d7b507a2b8195d0
+  native_terminal_receipt_sha256: 78cc9511372d09b9eab62b5add5d3b68fa44f92090f2c929cb461e8bfb943d3f
+evidence_document:
+  path: ".dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md"
+  git_blob: bb58c8e021df9e91ce5617a2eed72b761342da10
+declared_rebind_fields:
+  - provenance.last_migration.evidence
+  - CUST-DOTNET-MQ-GOVERNANCE.incoming.evidence
+  - CUST-DOTNET-MQ-VALIDATION.incoming.evidence
+  - CUST-DOTNET-MQ-REPO-TRUTH.incoming.evidence
+  - CUST-DOTNET-MQ-EXECUTION-PROVENANCE-ADOPTION.incoming.evidence
+  - CUST-DOTNET-MQ-GOVERNANCE.post_upgrade_audit.evidence
+  - CUST-DOTNET-MQ-VALIDATION.post_upgrade_audit.evidence
+  - CUST-DOTNET-MQ-REPO-TRUTH.post_upgrade_audit.evidence
+  - CUST-DOTNET-MQ-EXECUTION-PROVENANCE-ADOPTION.post_upgrade_audit.evidence
+limits:
+  - This decision does not state a final target commit, merge, or provider admission conclusion.
+  - Historical evidence is not relabeled as Candidate11 attempt14 evidence.

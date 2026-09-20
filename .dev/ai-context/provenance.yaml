@@ -41,7 +41,7 @@ last_migration:
   from_version: v0.17.0
   to_version: v0.18.0
   completed_at: '2026-09-19T20:05:39.0773821+08:00'
-  evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/finalization-evidence.md
+  evidence: .dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md
 effective_rules:
   state: .dev/ai-context/effective-rules.yaml
   packets_root: .dev/ai-context/effective-rule-packets/
