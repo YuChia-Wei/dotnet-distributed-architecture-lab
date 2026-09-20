@@ -1,5 +1,5 @@
 schema_version: '1.0'
-packet_id: PACKET-9054E5FC8FA5010763F506340F2D194482925E3DB865E6C2CA0DDF71C38D5935
+packet_id: PACKET-C78460B6228ACD367D30CDA9866B01BA4F250C13A5305AA21724C94013EF9A7B
 resolver:
   version: '1.0'
   evidence:
@@ -19,7 +19,7 @@ baseline:
   selected_technology_profile: dotnet-backend
 target_state:
   path: .dev/ai-context/effective-rules.yaml
-  digest: 14633a5ddb29560264230fc3bb4343020eb8018a0171eede4c8f7d11feafd43f
+  digest: 4efe16734e1ea19be82586b5514eb1a960b878a2ecf4ad43e2d643a72e21cd7d
 catalogs:
 - catalog_id: selected-profile
   path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
@@ -781,7 +781,7 @@ rules:
 freshness:
   status: verified
   verified_inputs:
-    target_state_digest: 14633a5ddb29560264230fc3bb4343020eb8018a0171eede4c8f7d11feafd43f
+    target_state_digest: 4efe16734e1ea19be82586b5514eb1a960b878a2ecf4ad43e2d643a72e21cd7d
     catalog_digests:
     - catalog_id: selected-profile
       path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
@@ -789,4 +789,4 @@ freshness:
     - catalog_id: shared
       path: .ai/assets/shared/governance/engineering-rule-catalog.yaml
       digest: f05c2b5d73737fa63e0830ff63e1be4c730b147d5eada083bb74480a489583a4
-packet_digest: 41cc7f92675aa990612f814bf7bac6d981dcc8b589566d3cf8de29c8fb131e0e
+packet_digest: 93805fd00408859025fee91103776ad75239cc62064a74fe87cefd85323a778a
