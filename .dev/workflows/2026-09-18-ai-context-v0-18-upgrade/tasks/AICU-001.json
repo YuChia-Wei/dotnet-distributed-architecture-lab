@@ -6,37 +6,53 @@
   "task_id": "AICU-001",
   "workflow_id": "2026-09-18-ai-context-v0-18-upgrade",
   "owner_skill": "ai-context-governance",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-09-18T06:21:54+08:00",
-  "updated_at": "2026-09-18T06:21:54+08:00",
+  "updated_at": "2026-09-20T11:56:05+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "gpt-6-astra",
   "reasoning_effort": "ultra",
   "finding_ids": [],
   "scope": {
-    "target": "Preserve target truth while preparing and validating the v0.18.0 framework upgrade",
+    "target": "Complete the owner-authorized Candidate11 v0.18.0 AI-context upgrade implementation while preserving target truth.",
     "files": [],
     "constraints": [
       "Original sample branch and checkout remain unchanged.",
-      "Draft state is not finalized provenance or merge authorization."
+      "Final target admission, fixed-head audit, provider review, and PR merge remain separate decisions."
     ],
     "non_goals": [
       "No product behavior changes.",
-      "No framework publication or PR merge."
+      "No source-framework publication or PR merge."
     ]
   },
   "execution": {
-    "steps": [],
-    "validation": [],
-    "last_completed_step": "Applied v0.17 prerequisite and reviewed target-gate reconciliation retained as an unfinalized checkpoint.",
-    "next_action": "Complete isolated correct-authority replay, then v0.18 adoption and final target verification."
+    "steps": [
+      "Bound Candidate11 archive identity to verified public v0.18.0 release evidence.",
+      "Recorded the public-release pointer rebind without changing customization identities or target validation selections.",
+      "Integrated the adoption evidence into the existing PR #13 branch."
+    ],
+    "validation": [
+      "Candidate11 attempt-14 target validation receipt d97d5dafb6c45d82e5cc71f142c98f9b339e44d11abea2dd18197c99c21e8c7b: passed.",
+      "Attempt-14 independent audit record fb8ff0d7deda44aa457cec445a6e6617268edf2354b362da16758be272a97e25: retained archived evidence.",
+      "Final target-owned gate and fresh fixed-head audit: pending external admission work."
+    ],
+    "last_completed_step": "Applied verified Candidate11 public-release evidence and completed the workflow-owned implementation projection.",
+    "next_action": "Run the final target-owned gate on the exact clean PR head, obtain a fresh fixed-head audit, then re-read PR review/check and branch-protection state before the separately authorized merge."
   },
   "results": {
-    "summary": "Draft upgrade checkpoint; installed provenance remains v0.16.0.",
-    "files_changed": [],
-    "tests_run": [],
-    "finding_status": "not-addressed",
-    "residual_risk": "No finalized v0.17/v0.18 authority or final target acceptance is claimed.",
+    "summary": "Candidate11 v0.18.0 content was finalized from the verified public equal-payload package while preserving CUST-DOTNET-MQ-GOVERNANCE, CUST-DOTNET-MQ-VALIDATION, CUST-DOTNET-MQ-REPO-TRUTH, and CUST-DOTNET-MQ-EXECUTION-PROVENANCE-ADOPTION.",
+    "files_changed": [
+      ".dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md",
+      ".dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-decision.yaml",
+      ".dev/ai-context/provenance.yaml",
+      ".dev/ai-context/customizations.yaml"
+    ],
+    "tests_run": [
+      "Attempt-14 target validation receipt: passed; final target-owned gate remains pending.",
+      "Attempt-14 independent audit: retained archived evidence; fresh fixed-head audit remains pending."
+    ],
+    "finding_status": "addressed",
+    "residual_risk": "The final target-owned gate, fresh fixed-head audit, PR review/check and branch-protection read-back, and authorized PR-to-sample merge remain pending. Hosted run 35487203277 remains failed from Project preflight and its follow-up Issue remains pending.",
     "follow_up_needed": true
   },
   "github_issue_refs": [
