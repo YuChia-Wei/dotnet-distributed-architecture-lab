@@ -62,12 +62,12 @@ customizations:
   incoming:
     version: v0.18.0
     status: partial
-    evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/reconciliation.md
+    evidence: .dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md
   disposition: merge
   post_upgrade_audit:
     assessment_id: ASM-20260919-20-mql
     status: verified
-    evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/audit-report.md
+    evidence: .dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md
   validation:
   - python -B .dev/ai-context/tooling/validate-target-ai-context.py --allow-unfinalized
     --workflow-id 2026-09-06-ai-context-v0-16-0-upgrade
@@ -137,12 +137,12 @@ customizations:
   incoming:
     version: v0.18.0
     status: conflicting
-    evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/reconciliation.md
+    evidence: .dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md
   disposition: merge
   post_upgrade_audit:
     assessment_id: ASM-20260919-20-mql
     status: verified
-    evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/audit-report.md
+    evidence: .dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md
   validation:
   - python -B .dev/ai-context/tooling/validate-target-ai-context.py --allow-unfinalized
     --workflow-id 2026-09-06-ai-context-v0-16-0-upgrade
@@ -219,12 +219,12 @@ customizations:
   incoming:
     version: v0.18.0
     status: conflicting
-    evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/reconciliation.md
+    evidence: .dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md
   disposition: retain
   post_upgrade_audit:
     assessment_id: ASM-20260919-20-mql
     status: verified
-    evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/audit-report.md
+    evidence: .dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md
   validation:
   - python -B .dev/ai-context/tooling/validate-target-ai-context.py --allow-unfinalized
     --workflow-id 2026-09-06-ai-context-v0-16-0-upgrade
@@ -289,12 +289,12 @@ customizations:
   incoming:
     version: v0.18.0
     status: conflicting
-    evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/reconciliation.md
+    evidence: .dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md
   disposition: merge
   post_upgrade_audit:
     assessment_id: ASM-20260919-20-mql
     status: verified
-    evidence: .dev/ai-context/local/v018-candidate11-attempt14-evidence/audit-report.md
+    evidence: .dev/ai-context/evidence/v0.18.0/pr13-candidate11-attempt14-adoption-evidence.md
   validation:
   - python -B .dev/ai-context/tooling/validate-target-ai-context.py --allow-unfinalized
     --workflow-id 2026-09-06-ai-context-v0-16-0-upgrade
