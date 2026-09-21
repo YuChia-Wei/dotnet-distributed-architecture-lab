@@ -20,7 +20,7 @@ scenarios:
     then:
       - "The stored success is returned with WasAlreadyProcessed true."
       - "Stock is not decremented again."
-      - "No second outbox row is added and delivery identity remains stable."
+      - "The stored outcome is returned without invoking the factory or staging another outbox row; any retained event keeps its original delivery identity."
     traces_to: { requirements: ["INV-006", "INT-003"], frame_concerns: ["FC2", "FC4"] }
     tests_anchor: "tests/InventoryControl.Tests/ReserveInventoryUseCaseTests.cs#given_a_successful_replay_when_committed_then_stock_and_outbox_are_not_duplicated"
   - id: SC3
@@ -102,3 +102,16 @@ scenarios:
       - "Successful relay marks the row published without creating a new logical message."
     traces_to: { requirements: ["INV-007", "INT-004"], frame_concerns: ["FC4", "FC6"] }
     tests_anchor: "tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs#given_the_same_claimed_row_when_publish_is_retried_then_delivery_identity_and_event_time_are_stable"
+  - id: SC10
+    title: "Replay a successful reservation after published-row retention"
+    given:
+      - "A reservation completed successfully and its outbox event was published."
+      - "PublishedForDays retention removed the expired published row while retaining the completed operation outcome."
+    when:
+      - "The same OperationId, ProductId, and Quantity are replayed, then the relay runs again."
+    then:
+      - "The original successful outcome is returned with WasAlreadyProcessed true."
+      - "Stock and the durable operation outcome remain unchanged."
+      - "No outbox row is recreated and the relay publishes no new event."
+    traces_to: { requirements: ["INV-005", "INV-007", "INV-010"], frame_concerns: ["FC2", "FC4"] }
+    tests_anchor: "tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs#given_a_published_reservation_was_purged_when_replayed_then_no_new_publication_is_staged"

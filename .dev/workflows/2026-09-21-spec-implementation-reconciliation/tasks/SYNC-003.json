@@ -1,0 +1,150 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-09-21-spec-implementation-reconciliation",
+  "task_id": "SYNC-003",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-09-21-spec-implementation-reconciliation",
+  "status": "in_progress",
+  "created_at": "2026-09-21T11:54:21+08:00",
+  "updated_at": "2026-09-21T11:58:58+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "workflow_locator": ".dev/workflows/2026-09-21-spec-implementation-reconciliation/workflow.yaml",
+  "scope": {
+    "goal": "Prevent successful Inventory reservation replay from staging another message after published outbox cleanup.",
+    "target": "Prevent successful Inventory reservation replay from staging another message after published outbox cleanup.",
+    "files": [
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories",
+      "tests/InventoryControl.Tests"
+    ],
+    "constraints": [
+      "Newer semantic authority wins; unresolved owner decisions stay explicit.",
+      "One tracked writer per worktree."
+    ],
+    "non_goals": [
+      "Whole-system reconstruction acceptance",
+      "Framework upgrades",
+      "Historical evidence rewriting"
+    ]
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [],
+    "architecture_decisions": [],
+    "user_constraints": [
+      "2026-09-21 owner authorizes fixing review inconsistencies, prefers newer authority, and requests one consolidated unresolved decision batch.",
+      "2026-09-21 owner applies recommendation R02: only first-time success stages; missing or legacy publication recovery remains explicit."
+    ]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "implementation",
+      "authorization_source": [
+        "2026-09-21 owner reply: 套用建議; decision R02 option A."
+      ],
+      "pending_decision": ""
+    },
+    "implementation_contract": {
+      "intent": "review-remediation",
+      "execution_mode": "generic",
+      "overlays": [
+        "remediation"
+      ],
+      "authorization_source": [
+        "2026-09-21 repair request"
+      ],
+      "normative_truth": [
+        ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json",
+        ".dev/workflows/2026-09-21-spec-implementation-reconciliation/decisions.md"
+      ],
+      "finding_evidence": [
+        "R02: replay recreates purged publication intent"
+      ],
+      "subject_revision": "1ddfe451f43b32eef2b2dce1cd46fe7dd4f8c2e7",
+      "acceptance_criteria": [
+        "AC4 in workflow-plan.md",
+        "Real PostgreSQL reserve/publish/cleanup/replay leaves one outcome, unchanged stock, zero outbox rows and no second publish."
+      ]
+    },
+    "test_execution_contract": null,
+    "role_execution_records": [],
+    "spec_compliance": {
+      "selected": false,
+      "activation_source": [],
+      "expected_outcome": "not-applicable"
+    },
+    "steps": [
+      "Compare semantic history and authoritative contracts.",
+      "Repair only the accepted bounded scope.",
+      "Run meaningful checks and record actual outcomes."
+    ],
+    "validation": [
+      "Broker-free replay factory regression",
+      "Opted-in Inventory PostgreSQL suite including combined retention/replay scenario"
+    ],
+    "commit_checkpoint": "One coherent validated checkpoint after settled repair and review.",
+    "deferred_items": []
+  },
+  "results": {
+    "summary": "Implemented first-success-only staging in PostgreSQL and InMemory adapters, a broker-free factory regression and two real PostgreSQL relay/replay scenarios. External execution remains pending on the frozen candidate.",
+    "finding_status": "implemented-awaiting-validation",
+    "files_changed": [
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/InMemoryInventoryReservationRepository.cs",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/InventoryOutboxWriter.cs",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/PostgresInventoryReservationRepository.cs",
+      "tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs",
+      "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs"
+    ],
+    "approval_evidence": [
+      "2026-09-21 owner accepted R02 option A."
+    ],
+    "test_execution": [
+      {
+        "executor": "/root/inventory_persistence_map",
+        "command": "dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-restore --filter \"FullyQualifiedName~InventoryReservationIdempotencyTests|FullyQualifiedName~ReserveInventoryUseCaseTests\" --logger \"console;verbosity=minimal\"",
+        "subject": "five-file uncommitted Inventory repair against 1ddfe451f43b32eef2b2dce1cd46fe7dd4f8c2e7",
+        "red": {
+          "passed": 16,
+          "failed": 1,
+          "skipped": 0,
+          "reason": "Replay invoked the successful-message factory once."
+        },
+        "green": {
+          "passed": 17,
+          "failed": 0,
+          "skipped": 0
+        },
+        "limitations": [
+          "No actual PostgreSQL or broker execution during implementation."
+        ]
+      }
+    ],
+    "role_execution_aggregation": [
+      {
+        "classification": "routine-bounded",
+        "executor": "/root/inventory_persistence_map",
+        "invocation": "Authorized follow-up as sole tracked writer of three Inventory source files and two direct test files; parent and peers read-only on tracked content.",
+        "result": "Five-file repair, narrow red/green test evidence and diff-check pass returned; writer released to /root.",
+        "final_integration_owner": "/root"
+      }
+    ],
+    "spec_compliance": {
+      "outcome": "not-applicable",
+      "coverage_percent": null,
+      "evidence": []
+    },
+    "validation_evidence": [
+      "Source diff inspected by /root; standalone PostgreSQL fixtures use unique schemas and never remove shared data."
+    ],
+    "commits": [
+      "containing-commit"
+    ],
+    "follow_up_needed": false
+  }
+}

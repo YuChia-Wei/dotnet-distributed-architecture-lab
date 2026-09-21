@@ -38,7 +38,7 @@ public sealed class InMemoryInventoryReservationRepository : IInventoryReservati
         try
         {
             var outcome = this.ReserveCore(operationId, productId, quantity);
-            if (outcome.IsSuccess)
+            if (outcome.IsSuccess && !outcome.WasAlreadyProcessed)
             {
                 var message = successfulMessageFactory(outcome)
                     ?? throw new InvalidOperationException("A successful reservation requires an outbox message.");

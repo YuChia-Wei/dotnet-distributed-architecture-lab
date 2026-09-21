@@ -19,9 +19,9 @@
 | R10 | Inventory retention 同時被描述為實作與 deferred | `6ad447c`（2026-08-27）已加入 RetainAll/PublishedForDays | 保留實作說明；deferred 僅指未實作的 archive/export policy |
 | R11 | 部分測試狀態、requirement ID 與工具清單過時 | 以目前測試內容、現存 requirement ID、已退役 tools 的目標決策為依據 | 僅更新實際覆蓋範圍與可解析的追溯；未執行/未實作項目繼續保留 |
 
-## 待決策 R02：Inventory 清理後重播
+## 已決策 R02：Inventory 清理後重播
 
-狀態：pending owner decision。
+狀態：2026-09-21 owner 回覆「套用建議」，核准選項 A。
 
 `07aeea9`（2026-08-27 08:59 +08）建立成功重播不新增 outbox 的保證；`6ad447c`（09:44 +08）新增有限期清理，同時保留原保證及依現有 row 防重的程式。`cc25513` 的 EF 改寫明示保留原行為，沒有決定清理後重播的語意。故不能僅憑較新的 EF 修改日期撤回原契約。
 
@@ -30,16 +30,16 @@
 
 必要驗證：真 PostgreSQL 完成 reserve、publish、age PublishedAt、有限期清理，再重播同一 operation；確認 stock、operation、outbox 與 publisher 結果。這個資料庫邊界不需要 Kafka。
 
-## 待決策 R07：PlaceOrder domain event 欄位
+## 已決策 R07：PlaceOrder domain event 欄位
 
-狀態：pending owner decision。
+狀態：2026-09-21 owner 回覆「套用建議」，核准選項 A。
 
-CBF 的 `Id`/`Status` 清單於 `9f3ddff`（2026-04-23）加入，後續回復與其他修改沒有重定義欄位。實作既有 `OrderId`、`OccurredOn`、`EventId`，沒有 `Status`。若它是較新的正式欄位契約，實作變更會影響已儲存的 event stream；若它是來源還原文件的抄寫錯誤，應修文件。較新的 ORD-002/ORD-006、production specs 與 persistence envelope 都沒有明定這個 domain event payload；integration event schema 也不能代替 domain event 契約，因此仍須 owner 裁決。
+CBF 的 `Id`/`Status` 清單於 `9f3ddff`（2026-04-23）加入，後續回復與其他修改沒有重定義欄位。實作既有 `OrderId`、`OccurredOn`、`EventId`，沒有 `Status`。若它是較新的正式欄位契約，實作變更會影響已儲存的 event stream；若它是來源還原文件的抄寫錯誤，應修文件。較新的 ORD-002/ORD-006、production specs 與 persistence envelope 都沒有明定這個 domain event payload；integration event schema 也不能代替 domain event 契約，因此交由 owner 裁決；owner 現已選擇保留程式格式並修正 CBF。
 
 - A（建議）：採現有程式 schema，將 CBF 的 domain_events.attributes 修為 OrderId、保留 OccurredOn/EventId、移除 Status，維持現有事件的序列化與重播。aggregate 的 semantic_tags Id/Status 不受影響。
 - B：採較新 CBF 的欄位意圖，調整 domain event 程式，先制定既存事件 JSON 的相容與遷移方式；不能僅改欄位後直接套用到既存資料。
 
-兩項決策集中於本紀錄；在回覆前不修改其依賴的業務行為或持久化事件格式。
+兩項建議均已獲明確授權。R02 實作為首次成功才呼叫訊息 factory 並 staging；重播只回傳持久化結果，即使原 row 已清理也不重建。R07 修正文件，既存 domain event 格式不變。
 
 ## 刻意保留的未完成範圍
 

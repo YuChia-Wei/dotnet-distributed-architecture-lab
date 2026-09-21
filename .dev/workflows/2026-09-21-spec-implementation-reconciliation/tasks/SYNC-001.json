@@ -7,9 +7,9 @@
   "task_id": "SYNC-001",
   "owner_skill": "spec-author",
   "related_plan_id": "development-plan-2026-09-21-spec-implementation-reconciliation",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-09-21T11:15:46+08:00",
-  "updated_at": "2026-09-21T11:29:37+08:00",
+  "updated_at": "2026-09-21T11:58:58+08:00",
   "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
   "model": "gpt-6-astra",
   "reasoning_effort": "medium",
@@ -47,7 +47,8 @@
       "status": "approved",
       "required_before": "specification",
       "authorization_source": [
-        "2026-09-21 repair request; work item #2"
+        "2026-09-21 repair request; work item #2",
+        "2026-09-21 owner reply: apply both recommendations R02 and R07."
       ],
       "pending_decision": ""
     },
@@ -66,19 +67,25 @@
     ],
     "validation": [],
     "commit_checkpoint": "One coherent validated checkpoint after settled repair and review.",
-    "deferred_items": [
-      "R02: select replay-after-retention contract before dependent behavior/spec repair.",
-      "R07: select OrderPlacedDomainEvent schema before dependent CBF or persisted-schema repair."
-    ]
+    "deferred_items": []
   },
   "results": {
-    "summary": "Reconciled 18 current requirement/specification/operations files and verified project/package/requirement parity. R02 retention replay and R07 domain-event schema remain pending owner decision; no dependent behavior or schema mutation.",
+    "summary": "Reconciled the settled 18-file checkpoint plus both owner-approved decisions: outcome-only Inventory replay across retention/missing rows, and the existing eight-field OrderPlacedDomainEvent CBF schema. Historical evidence and unrelated future gaps remain explicit.",
     "files_changed": [
+      ".dev/adr/ADR-005-inventory-outbox-application-boundary.md",
       ".dev/operations/context-map.md",
       ".dev/operations/event-catalog.md",
+      ".dev/operations/inventory-efcore.md",
       ".dev/operations/mq-topology.md",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/acceptance.yaml",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/controlled-domain/aggregate.yaml",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/machine/machine.yaml",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/machine/use-case.yaml",
+      ".dev/problem-frames/orders/cbf/place-order/controlled-domain/aggregate.yaml",
+      ".dev/project-config.yaml",
       ".dev/requirement/TECH-STACK-REQUIREMENTS.MD",
       ".dev/requirement/reconstructable-system-baseline.md",
+      ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json",
       ".dev/specs/reconstruction/coverage-matrix.md",
       ".dev/specs/reconstruction/persistence-contracts.json",
       ".dev/specs/reconstruction/project-manifest.json",
@@ -93,7 +100,9 @@
       ".dev/specs/tests/order/use-cases/get-order-details.test-spec.md",
       ".dev/specs/tests/product/use-cases/query-products.test-spec.md"
     ],
-    "approval_evidence": [],
+    "approval_evidence": [
+      "User: 套用建議; both recommended decisions in decisions.md accepted."
+    ],
     "test_execution": [],
     "role_execution_aggregation": [],
     "spec_compliance": {
@@ -105,9 +114,10 @@
       ".dev/workflows/2026-09-21-spec-implementation-reconciliation/evidence/checkpoint-verification.json"
     ],
     "commits": [
+      "1ddfe451f43b32eef2b2dce1cd46fe7dd4f8c2e7",
       "containing-commit"
     ],
-    "follow_up_needed": true,
-    "finding_status": "partially-addressed"
+    "follow_up_needed": false,
+    "finding_status": "addressed"
   }
 }

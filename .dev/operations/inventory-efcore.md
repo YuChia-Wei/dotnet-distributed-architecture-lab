@@ -17,7 +17,7 @@ Inventory 正式 runtime 使用 EF Core；Products 與 Orders 保留 Dapper。�
 
 一般查詢使用 EF Core LINQ；PostgreSQL row lock、operation claim 與 outbox lease 等並行語意使用參數化 EF SQL。更換 ORM 不改 API、事件內容或現有資料表名稱。
 
-庫存更新與 outgoing intent 由 `IInventoryStockOutbox` 的 adapter 在同一個 local transaction 完成。預留 adapter 將 OperationId、業務結果、庫存變更及 outbox 一起提交；相同 OperationId 和 payload 重送會重用原結果，payload 不同則拒絕。
+庫存更新與 outgoing intent 由 `IInventoryStockOutbox` 的 adapter 在同一個 local transaction 完成。預留 adapter 僅在新 operation 首次成功時呼叫 event factory，將 OperationId、業務結果、庫存變更及 outbox 一起提交；相同 OperationId 和 payload 重送只回傳原結果，不再 staging，payload 不同則拒絕。即使已發布 outbox row 被 retention 清除或 legacy operation 缺少 row，也不由一般重送補建；缺失資料須依 [MQ topology 的恢復邊界](mq-topology.md) 另行明確處理。
 
 Request scope 內參與操作的 adapters 使用同一個 DbContext。背景 relay 另外建立 scope；同一個 DbContext 不跨平行作業使用。Relay 只發送已提交記錄，保持穩定 message ID、partition key、重試、park 與 retention 行為。SQL commit 與 broker acknowledgement 不屬於同一個分散式交易，消費端仍須處理 at-least-once delivery。
 

@@ -17,8 +17,8 @@ preconditions:
 
 postconditions:
   - { id: POST1, description: "A successful new reservation decrements stock by quantity exactly once, returns the remaining stock, and commits one source-outbox row atomically." }
-  - { id: POST2, description: "The operation outcome is stable across matching replays." }
-  - { id: POST3, description: "A successful outcome stages ProductStockDecreasedIntegrationEvent with MessageId equal to OperationId and partition key equal to ProductId in N format; replay does not add a row." }
+  - { id: POST2, description: "Matching replay returns the durable operation outcome without factory invocation or outbox staging, including after published retention or when the outbox row is missing." }
+  - { id: POST3, description: "Only the first successful processing of a new operation stages ProductStockDecreasedIntegrationEvent with MessageId equal to OperationId and partition key equal to ProductId in N format; replay does not add a row; missing or legacy row recovery is a separate explicit repair." }
   - { id: POST4, description: "A business failure does not decrement stock or stage a success event." }
   - { id: POST5, description: "A reserve, stage, or commit failure leaves stock, operation outcome, and source outbox uncommitted." }
 

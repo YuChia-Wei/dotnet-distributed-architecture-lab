@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
 using System.Text.Json;
+using InventoryControl.Applications.Reservations;
+using InventoryControl.Domains;
 using InventoryControl.Infrastructure.Applications.Repositories;
 using InventoryControl.Infrastructure.BuildingBlocks;
 using InventoryControl.Infrastructure.Persistence;
@@ -57,6 +59,38 @@ public sealed class InventoryIntegrationOutboxRelayTests
         await using var services = GivenRelayServices(database, new RecordingPublisher());
         await WhenRelaying(services, new InventoryOutboxRelayOptions(false, InventoryOutboxRetentionMode.PublishedForDays, 7));
         await ThenRetentionShouldKeepRecentAndUnpublished(database, expiredId, recentId, parkedId);
+    }
+
+    /// <summary>R02：成功發布並依保留期限清理後，預留重播不得重建發布意圖。</summary>
+    [ExternalIntegrationFact]
+    [Trait("Category", "ExternalIntegration")]
+    public async Task given_a_published_reservation_was_purged_when_replayed_then_no_new_publication_is_staged()
+    {
+        await using var database = await InventoryPostgresDatabase.CreateAsync();
+        var reservation = await GivenCompletedReservation(database, initialStock: 5, quantity: 2);
+        var publisher = new RecordingPublisher();
+        await using var services = GivenRelayServices(database, publisher);
+        await GivenReservationWasPublishedAndPurged(database, services, publisher, reservation.Input.OperationId, retentionDays: 7);
+
+        var replay = await WhenReplayingReservationAndRelaying(database, services, reservation.Input);
+
+        await ThenReplayShouldNotStageOrPublish(database, publisher, reservation, replay, expectedStock: 3, expectedPublications: 1);
+    }
+
+    /// <summary>R02：已完成操作的訊息資料缺失時，重播不得自行補建訊息。</summary>
+    [ExternalIntegrationFact]
+    [Trait("Category", "ExternalIntegration")]
+    public async Task given_a_completed_reservation_has_no_outbox_row_when_replayed_then_no_recovery_publication_is_staged()
+    {
+        await using var database = await InventoryPostgresDatabase.CreateAsync();
+        var reservation = await GivenCompletedReservation(database, initialStock: 5, quantity: 2);
+        await GivenReservationOutboxRowIsMissing(database, reservation.Input.OperationId);
+        var publisher = new RecordingPublisher();
+        await using var services = GivenRelayServices(database, publisher);
+
+        var replay = await WhenReplayingReservationAndRelaying(database, services, reservation.Input);
+
+        await ThenReplayShouldNotStageOrPublish(database, publisher, reservation, replay, expectedStock: 3, expectedPublications: 0);
     }
 
     [ExternalIntegrationFact]
@@ -133,6 +167,87 @@ public sealed class InventoryIntegrationOutboxRelayTests
             .AddDbContext<InventoryDbContext>(options => options.UseNpgsql(database.ConnectionString))
             .AddSingleton<IIntegrationEventPublisher>(publisher)
             .BuildServiceProvider();
+
+    private static async Task<CompletedReservation> GivenCompletedReservation(
+        InventoryPostgresDatabase database, int initialStock, int quantity)
+    {
+        var item = new InventoryItem(Guid.CreateVersion7(), initialStock);
+        await using var context = database.CreateContext();
+        context.InventoryItems.Add(item);
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var input = new ReserveInventoryInput(Guid.CreateVersion7(), item.ProductId, quantity);
+        var outcome = await new ReserveInventoryUseCase(new PostgresInventoryReservationRepository(context))
+            .ExecuteAsync(input, TestContext.Current.CancellationToken);
+        outcome.IsSuccess.ShouldBeTrue();
+        outcome.WasAlreadyProcessed.ShouldBeFalse();
+        var operation = await context.ReservationOperations.AsNoTracking()
+            .SingleAsync(row => row.OperationId == input.OperationId, TestContext.Current.CancellationToken);
+        operation.CompletedAt.ShouldNotBeNull();
+        return new CompletedReservation(input, outcome, operation.CompletedAt.Value);
+    }
+
+    private static async Task GivenReservationWasPublishedAndPurged(InventoryPostgresDatabase database,
+        ServiceProvider services, RecordingPublisher publisher, Guid operationId, int retentionDays)
+    {
+        await WhenRelaying(services, cancellationToken: TestContext.Current.CancellationToken);
+        publisher.Deliveries.ShouldHaveSingleItem().MessageId.ShouldBe(operationId);
+        await using var context = database.CreateContext();
+        var row = await context.OutboxMessages.AsNoTracking()
+            .SingleAsync(message => message.Id == operationId, TestContext.Current.CancellationToken);
+        row.PublishedAt.ShouldNotBeNull();
+        var expiredAt = DateTime.UtcNow.AddDays(-retentionDays - 1);
+        (await context.OutboxMessages.Where(message => message.Id == operationId && message.PublishedAt != null)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(message => message.PublishedAt, expiredAt),
+                TestContext.Current.CancellationToken)).ShouldBe(1);
+        await WhenRelaying(services,
+            new InventoryOutboxRelayOptions(false, InventoryOutboxRetentionMode.PublishedForDays, retentionDays),
+            TestContext.Current.CancellationToken);
+        (await context.OutboxMessages.AnyAsync(message => message.Id == operationId,
+            TestContext.Current.CancellationToken)).ShouldBeFalse();
+        publisher.Deliveries.Count.ShouldBe(1);
+    }
+
+    private static async Task GivenReservationOutboxRowIsMissing(InventoryPostgresDatabase database, Guid operationId)
+    {
+        await using var context = database.CreateContext();
+        (await context.OutboxMessages.Where(message => message.Id == operationId)
+            .ExecuteDeleteAsync(TestContext.Current.CancellationToken)).ShouldBe(1);
+    }
+
+    private static async Task<(ReserveInventoryOutput Outcome, int StagedMessages)> WhenReplayingReservationAndRelaying(
+        InventoryPostgresDatabase database, ServiceProvider services, ReserveInventoryInput input)
+    {
+        await using var context = database.CreateContext();
+        var outcome = await new ReserveInventoryUseCase(new PostgresInventoryReservationRepository(context))
+            .ExecuteAsync(input, TestContext.Current.CancellationToken);
+        var stagedMessages = await context.OutboxMessages.CountAsync(TestContext.Current.CancellationToken);
+        await WhenRelaying(services, cancellationToken: TestContext.Current.CancellationToken);
+        return (outcome, stagedMessages);
+    }
+
+    private static async Task ThenReplayShouldNotStageOrPublish(InventoryPostgresDatabase database,
+        RecordingPublisher publisher, CompletedReservation original,
+        (ReserveInventoryOutput Outcome, int StagedMessages) replay, int expectedStock, int expectedPublications)
+    {
+        replay.Outcome.ShouldBe(original.Outcome with { WasAlreadyProcessed = true });
+        replay.StagedMessages.ShouldBe(0);
+        publisher.Deliveries.Count.ShouldBe(expectedPublications);
+        publisher.Messages.Count.ShouldBe(expectedPublications);
+        publisher.Deliveries.ShouldAllBe(delivery => delivery.MessageId == original.Input.OperationId);
+        await using var context = database.CreateContext();
+        (await context.InventoryItems.Where(item => item.ProductId == original.Input.ProductId)
+            .Select(item => item.Stock).SingleAsync(TestContext.Current.CancellationToken)).ShouldBe(expectedStock);
+        var operations = await context.ReservationOperations.AsNoTracking().ToListAsync(TestContext.Current.CancellationToken);
+        var operation = operations.ShouldHaveSingleItem();
+        operation.OperationId.ShouldBe(original.Input.OperationId);
+        operation.ProductId.ShouldBe(original.Input.ProductId);
+        operation.Quantity.ShouldBe(original.Input.Quantity);
+        operation.IsSuccess.ShouldBe(true);
+        operation.RemainingStock.ShouldBe(original.Outcome.RemainingStock);
+        operation.FailureReason.ShouldBeNull();
+        operation.CompletedAt.ShouldBe(original.CompletedAt);
+        (await context.OutboxMessages.CountAsync(TestContext.Current.CancellationToken)).ShouldBe(0);
+    }
 
     private static Task WhenRelaying(ServiceProvider services, InventoryOutboxRelayOptions? options = null, CancellationToken cancellationToken = default)
         => new InventoryIntegrationOutboxRelay(services.GetRequiredService<IServiceScopeFactory>(),
@@ -251,6 +366,8 @@ public sealed class InventoryIntegrationOutboxRelayTests
                 .SetProperty(message => message.LockedUntil, DateTime.UtcNow.AddMinutes(-1)));
         return row;
     }
+
+    private sealed record CompletedReservation(ReserveInventoryInput Input, ReserveInventoryOutput Outcome, DateTime CompletedAt);
 
     private sealed class RecordingPublisher(int failures = 0) : IIntegrationEventPublisher
     {

@@ -57,7 +57,8 @@ Known from current code:
 - `Messaging:Profile=InMemory` is the automated-test profile: external transports and Wolverine PostgreSQL persistence are not configured, local queues are used, and `Messaging:OutboxRelay:Enabled=false` disables database polling.
 - `Messaging:Profile` accepts only `InMemory`, `Kafka`, or `RabbitMq`. Kafka requires `Messaging:Kafka:ConnectionString`; RabbitMQ requires an absolute `amqp` or `amqps` URI at `Messaging:RabbitMq:ConnectionString`. Missing or unknown values fail during startup configuration.
 - Inventory reservation transient persistence failures retry after 100 ms, 500 ms, and 2 seconds, then move to Wolverine's error queue.
-- Reservation outcomes are keyed by the caller-provided stable operation ID. Successful replay reuses the same outbox row instead of publishing synchronously or creating a new logical identity.
+- Reservation outcomes are keyed by the caller-provided stable operation ID. Only first-time success invokes the event factory and stages an outbox row. Matching replay returns the durable outcome without staging, even after published retention or when a completed legacy operation has no row. Published-row cleanup does not clear the operation outcome.
+- A missing or legacy reservation outbox row requires a separate explicitly scoped recovery action after inspecting the durable outcome and delivery evidence. Ordinary reservation replay never recreates the row; no automatic repair command is implied.
 - Broker-specific physical error queue/topic naming remains implicit in Wolverine transport conventions and requires runtime verification.
 
 Current maintainer rule:

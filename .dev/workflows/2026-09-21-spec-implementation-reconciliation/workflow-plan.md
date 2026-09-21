@@ -9,7 +9,7 @@
 - `base_branch`: `main`
 - `status`: `in_progress`
 - `created_at`: `2026-09-21T11:15:46+08:00`
-- `updated_at`: `2026-09-21T11:29:37+08:00`
+- `updated_at`: `2026-09-21T11:58:58+08:00`
 - `template_source`: `.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
 - `template_version`: `1.4.0`
 - Work item: [#2](https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/2).
@@ -28,7 +28,7 @@ One workflow groups documentation reconciliation and the related executable mess
 
 - SYNC-001: `spec-author`, with `requirement-author` and `problem-frame-author` for the existing artifact types: reconcile current requirements, production/test specs, the selected CBF event shape, manifests and operations documentation.
 - SYNC-002: `slice-implementer`, generic remediation: repair the Orders source-outbox occurrence-time contract after temporal disposition, with focused serializer/relay tests.
-- Inventory replay after finite retention: hold only dependent behavior changes until the single owner decision is resolved; add the bounded implementation task if selected.
+- SYNC-003: `slice-implementer`, generic remediation: owner approved staging only on first-time reservation success. Keep PostgreSQL and InMemory adapters consistent and validate real PostgreSQL reserve/publish/cleanup/replay.
 - `code-reviewer`: independently inspect the final diff and acceptance evidence. Routine same-runtime discovery/implementation uses bounded invocation/results; full evidence applies to terminal or external validation only.
 
 ## Acceptance criteria
@@ -36,7 +36,7 @@ One workflow groups documentation reconciliation and the related executable mess
 - AC1: Every review finding has a source-bound temporal disposition or explicit unresolved owner question in `decisions.md`.
 - AC2: Current technology, project/dependency inventory, event shapes, queries, relay completion and test-status documentation agree with the selected authority.
 - AC3: Orders outbox reconstruction preserves original event occurrence time across serialization and retry, if confirmed as the newer contract; all four event types retain existing producer call sites and wire fields.
-- AC4: Inventory replay after cleanup has a selected contract and a meaningful combined persistence test, or remains explicitly pending owner decision without a completion claim.
+- AC4: Inventory replay after cleanup returns the durable outcome with no stock decrement, no factory invocation or outbox recreation, and no additional relay publication, proven by a combined real PostgreSQL scenario. Missing or legacy publication recovery requires an explicit recovery process.
 - AC5: Prior PostgreSQL/Kafka results remain dated and subject-bound; unexecuted Products/Orders database tests, intended quality uplifts and clean-room reconstructions remain non-passing where applicable.
 - AC6: Focused tests, structured-document checks, target governance, and independent diff review report actual outcomes; worktree and commit evidence remain truthful.
 
@@ -48,4 +48,4 @@ Long/full-matrix validation requires a clean immutable subject and the repositor
 
 ## Progress and next action
 
-Semantic history dispositions and the consolidated two owner decisions are recorded in [decisions.md](decisions.md). SYNC-002 is implemented and its focused red/green execution is recorded in the task. SYNC-001 remains active for settled document reconciliation and the unresolved R02/R07 choices. Continue from this branch; do not change dependent Inventory replay behavior or the persisted domain-event schema before the owner selects them. The [bounded verification record](evidence/checkpoint-verification.json) records 10 passing focused tests, document parity checks and an independent six-file review with no reportable findings. This is a partial checkpoint; final acceptance still requires the two owner decisions and their selected repairs/validation. Workflow completion and integration remain pending acceptance.
+The owner approved both recommendations on 2026-09-21 ("套用建議"); [decisions.md](decisions.md) records R02 and R07. The earlier settled repair is committed as `1ddfe451f43b32eef2b2dce1cd46fe7dd4f8c2e7` and its [bounded verification record](evidence/checkpoint-verification.json) remains historical evidence for those six source blobs. The selected docs and Inventory repair are implemented; 17 broker-free tests passed after one regression first failed. Pin the candidate and execute the Inventory PostgreSQL suite plus the focused Orders timestamp tests, then perform independent review and final validation before integration. Main integration and push are authorized by the session; preserve the meaningful workflow checkpoint using a `--no-ff` merge and verify remote main. Issue closeout and release are not selected.
