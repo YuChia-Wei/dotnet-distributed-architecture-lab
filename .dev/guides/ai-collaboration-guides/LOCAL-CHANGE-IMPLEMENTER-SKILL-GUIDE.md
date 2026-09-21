@@ -20,7 +20,7 @@
 
 不應該拿來做：
 
-- 抽 class
+- 改變公開合約、責任、dependency/lifetime/transaction 的 class
 - 抽 interface
 - 改 dependency direction
 - 改 bounded context / aggregate boundary
@@ -28,11 +28,21 @@
 - 跨 module 或跨 aggregate 的變更
 - 規劃一個完整 slice
 
+## 多檔案與交接判斷
+
+判斷依據是單一技術目標、操作與允許的依賴範圍，不是檔案數。
+同一模組內的 private symbol 與三個直接呼叫點仍可由 local-change 處理。
+private implementation helper type 可維持在 local change，但前提是仍在已接受的
+target 與 dependency radius 內，且不改變 behavior、責任、dependency direction、
+lifetime 或 transaction boundary。公開合約、domain、責任、dependency/lifetime/
+transaction 會受影響的 class/interface 交給 bounded slice；如果缺少或改變了決策，
+才需要重新做 architecture decision。
+
 ## 必須停止並升級的情況
 
 如果執行中發現需要：
 
-- 新 class 或 interface
+- 公開合約、domain、責任、dependency/lifetime/transaction 會受影響的 class 或 interface
 - 新 abstraction boundary
 - dependency direction 調整
 - domain language 變更
@@ -58,7 +68,7 @@ Allowed scope:
 - target and direct call sites only
 
 Constraints:
-- do not introduce new class or interface
+- a private implementation helper type may stay local only when target, radius, behavior, responsibility, dependency direction, lifetime, and transaction boundary stay unchanged
 - do not change architecture boundaries
 - stop and hand off if the change expands beyond local scope
 

@@ -1,5 +1,16 @@
 # Software Development Orchestrator Output Contract
 
+## Execution Evidence Applicability
+
+Select the execution tier through `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`
+before applying this document's role-record procedures. Ordinary same-runtime
+work uses its bounded envelope and actual invocation/result; it does not need
+full per-binding records, including records for unselected roles. References
+below to complete `role_execution` records apply only when the full contract or
+an explicit acceptance requirement selects them. Required role semantics,
+permissions, scope, retry limits and final integration ownership still apply.
+Routine evidence never satisfies terminal/high-risk or actual-execution gates.
+
 Use this output shape when reporting software-development workflow decisions, stage status, or final results.
 
 ## Planning Output

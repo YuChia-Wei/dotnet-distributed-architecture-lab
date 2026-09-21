@@ -219,4 +219,4 @@ aggregate contract explicitly requires that cleanup after replay.
 - `.ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`
 - `.ai/assets/tech-stacks/dotnet-backend/examples/outbox/README.md`
 - `.ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/Program.cs`
-- `.ai/assets/sub-agent-role-prompts/outbox-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/outbox-sub-agent/sub-agent.yaml`

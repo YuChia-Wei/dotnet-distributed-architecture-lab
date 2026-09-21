@@ -35,13 +35,13 @@
 依測試類型交給 delegated sub-agent workflow：
 
 - use case test:
-  - `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml`
+  - `.ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml`
 - aggregate test:
-  - `.ai/assets/sub-agent-role-prompts/aggregate-test-sub-agent/sub-agent.yaml`
+  - `.ai/assets/skills/slice-implementer/roles/aggregate-test-sub-agent/sub-agent.yaml`
 - reactor test:
-  - `.ai/assets/sub-agent-role-prompts/reactor-test-sub-agent/sub-agent.yaml`
+  - `.ai/assets/skills/slice-implementer/roles/reactor-test-sub-agent/sub-agent.yaml`
 - controller test:
-  - `.ai/assets/sub-agent-role-prompts/controller-test-sub-agent/sub-agent.yaml`
+  - `.ai/assets/skills/slice-implementer/roles/controller-test-sub-agent/sub-agent.yaml`
 
 ### 3. 最後做 review
 

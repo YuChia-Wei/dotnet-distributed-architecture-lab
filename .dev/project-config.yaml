@@ -23,7 +23,8 @@ dotnet:
   solutions:
     - path: MQArchLab.slnx
       productProjectCount: 22
-      testProjectCount: 5
+      sampleProjectCount: 3
+      testProjectCount: 6
   projects:
     - path: src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj
       kind: contract-library
@@ -79,9 +80,18 @@ dotnet:
       kind: test
     - path: tests/InventoryControl.Tests/InventoryControl.Tests.csproj
       kind: test
+    - path: samples/EfCoreWolverine/EfCoreWolverine.Application/EfCoreWolverine.Application.csproj
+      kind: application-library
+    - path: samples/EfCoreWolverine/EfCoreWolverine.Infrastructure/EfCoreWolverine.Infrastructure.csproj
+      kind: infrastructure-library
+    - path: samples/EfCoreWolverine/EfCoreWolverine.Host/EfCoreWolverine.Host.csproj
+      kind: consumer
+    - path: tests/EfCoreWolverine.Tests/EfCoreWolverine.Tests.csproj
+      kind: test
 sourceLayout:
   sourceRoots:
     - src
+    - samples
   testRoots:
     - tests
   executableProjects:
@@ -91,6 +101,7 @@ sourceLayout:
     - src/Order/Presentation/SaleOrders.Consumer
     - src/Inventory/Presentation/InventoryControl.WebApi
     - src/Inventory/Presentation/InventoryControl.Consumer
+    - samples/EfCoreWolverine/EfCoreWolverine.Host
   libraryProjects:
     - src/BC-Contracts
     - src/BuildingBlocks
@@ -98,6 +109,8 @@ sourceLayout:
     - src/Product/DomainCore
     - src/Order/DomainCore
     - src/Inventory/DomainCore
+    - samples/EfCoreWolverine/EfCoreWolverine.Application
+    - samples/EfCoreWolverine/EfCoreWolverine.Infrastructure
 runtimeHosts:
   - name: SaleProducts.WebApi
     type: aspnet-core-web-api
@@ -166,6 +179,8 @@ persistence:
   libraries:
     - Dapper 2.1.79
     - Npgsql 10.0.3
+    - EF Core 10.0.12 (Inventory and isolated sample)
+    - Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3 (Inventory and isolated sample)
   connectionStringSources:
     - docker-compose/docker-compose.yml
     - src/Product/Presentation/SaleProducts.WebApi/appsettings.json
@@ -220,12 +235,15 @@ technologySelections:
       Tests that require PostgreSQL, Kafka, RabbitMQ, or another out-of-process service
       must not add failure noise to ordinary deterministic test runs.
   - slot: persistence.orm
-    value: Dapper
+    value: EF Core for Inventory and the isolated Wolverine sample; Dapper for Products and Orders
     status: selected
-    source: repository-evidence
+    source: explicit-target-decision
     evidence:
       - src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj
-    reason: Product persistence uses Dapper; no active target project uses EF Core.
+      - src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj
+      - .dev/workflows/2026-09-21-inventory-efcore-integration/design.md
+      - samples/EfCoreWolverine/EfCoreWolverine.Infrastructure/EfCoreWolverine.Infrastructure.csproj
+    reason: On 2026-09-21 the owner selected Inventory as the EF Core practice context and retained Dapper in the other contexts; the native Wolverine sample remains a separate transaction reference.
   - slot: persistence.database
     value: PostgreSQL
     status: selected

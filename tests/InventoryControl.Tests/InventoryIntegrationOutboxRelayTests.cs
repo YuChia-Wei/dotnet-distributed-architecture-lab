@@ -1,381 +1,271 @@
-using System.Collections;
-using System.Data;
-using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
+using System.Collections.Concurrent;
+using System.Text.Json;
+using InventoryControl.Infrastructure.Applications.Repositories;
 using InventoryControl.Infrastructure.BuildingBlocks;
+using InventoryControl.Infrastructure.Persistence;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 using Lab.BuildingBlocks.Integrations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Shouldly;
 using Wolverine;
 
 namespace InventoryControl.Tests;
 
+/// <summary>AC5: actual EF/PostgreSQL claim, retry, parking, retention and stable delivery metadata.</summary>
 public sealed class InventoryIntegrationOutboxRelayTests
 {
     [Fact]
     public async Task given_a_stable_delivery_when_published_then_wolverine_metadata_matches_the_outbox_identity()
     {
-        // Given
+        var (publisher, capturedOptions) = GivenWolverinePublisher();
         var messageId = Guid.CreateVersion7();
         var partitionKey = Guid.CreateVersion7().ToString("N");
-        var capturedOptions = new List<DeliveryOptions>();
-        var messageBus = Substitute.For<IMessageBus>();
-        messageBus.PublishAsync(
-                Arg.Any<IIntegrationEvent>(),
-                Arg.Do<DeliveryOptions>(options => capturedOptions.Add(options)))
-            .Returns(ValueTask.CompletedTask);
-        var publisher = new IntegrationEventPublisher(
-            messageBus,
-            Substitute.For<Microsoft.Extensions.Logging.ILogger<IntegrationEventPublisher>>());
-        var message = new ProductStockDecreasedIntegrationEvent(
-            Guid.CreateVersion7(),
-            Guid.CreateVersion7(),
-            2,
-            3);
-
-        // When
-        await publisher.PublishAsync(message, new IntegrationMessageDelivery(messageId, partitionKey));
-
-        // Then
-        var options = capturedOptions.ShouldHaveSingleItem();
-        options.DeduplicationId.ShouldBe(messageId.ToString("N"));
-        options.PartitionKey.ShouldBe(partitionKey);
-        options.Headers["lab-message-id"].ShouldBe(messageId.ToString("D"));
+        await WhenPublishingDelivery(publisher, messageId, partitionKey);
+        ThenWolverineMetadataShouldMatch(capturedOptions, messageId, partitionKey);
     }
 
-    [Fact]
+    [ExternalIntegrationFact]
     public async Task given_the_same_claimed_row_when_publish_is_retried_then_delivery_identity_and_event_time_are_stable()
     {
-        // Given
-        var rowId = Guid.CreateVersion7();
-        var productId = Guid.CreateVersion7();
-        var inventoryItemId = Guid.CreateVersion7();
-        var occurredOn = new DateTime(2026, 8, 27, 0, 0, 0, DateTimeKind.Utc);
-        var partitionKey = productId.ToString("N");
-        var connection = new OutboxDbConnection(
-            rowId,
-            partitionKey,
-            nameof(ProductStockDecreasedIntegrationEvent),
-            $$"""{"InventoryItemId":"{{inventoryItemId}}","ProductId":"{{productId}}","DecreasedQuantity":2,"CurrentStock":3,"OccurredOn":"{{occurredOn:O}}"}""");
-        var publisher = new RetryRecordingPublisher();
-        var relay = CreateRelay(connection, publisher);
-
-        // When
-        await RelayBatchAsync(relay);
-        await RelayBatchAsync(relay);
-
-        // Then
-        publisher.Deliveries.Count.ShouldBe(2);
-        publisher.Deliveries.ShouldAllBe(delivery => delivery.MessageId == rowId);
-        publisher.Deliveries.ShouldAllBe(delivery => delivery.PartitionKey == partitionKey);
-        publisher.Messages.ShouldAllBe(message => message.OccurredOn == occurredOn);
-        connection.PublishedCount.ShouldBe(1);
-        connection.FailureCount.ShouldBe(1);
+        await using var database = await InventoryPostgresDatabase.CreateAsync();
+        var row = await GivenPendingMessage(database);
+        var publisher = new RecordingPublisher(failures: 1);
+        await using var services = GivenRelayServices(database, publisher);
+        await WhenRelayingWithRetry(database, services, row.Id);
+        await ThenRetriedDeliveryShouldBeStable(database, publisher, row);
     }
 
-    [Fact]
+    [ExternalIntegrationFact]
     public async Task given_five_transport_failures_when_relay_runs_again_then_the_row_is_parked_and_not_republished()
     {
-        // Given
-        var rowId = Guid.CreateVersion7();
-        var productId = Guid.CreateVersion7();
-        var connection = new OutboxDbConnection(
-            rowId,
-            productId.ToString("N"),
-            nameof(ProductStockDecreasedIntegrationEvent),
-            $$"""{"InventoryItemId":"{{Guid.CreateVersion7()}}","ProductId":"{{productId}}","DecreasedQuantity":1,"CurrentStock":2,"OccurredOn":"2026-08-27T00:00:00.0000000Z"}""");
-        var publisher = new AlwaysFailPublisher();
-        var relay = CreateRelay(connection, publisher);
+        await using var database = await InventoryPostgresDatabase.CreateAsync();
+        var row = await GivenPendingMessage(database);
+        var publisher = new RecordingPublisher(failures: 5);
+        await using var services = GivenRelayServices(database, publisher);
+        await WhenRelayingThroughFiveFailures(database, services, row.Id);
+        await ThenMessageShouldBeParked(database, publisher, row.Id);
+    }
 
-        // When
-        for (var attempt = 0; attempt < 6; attempt++)
+    [ExternalIntegrationFact]
+    public async Task given_finite_published_retention_when_relay_runs_then_only_expired_published_rows_are_pruned()
+    {
+        await using var database = await InventoryPostgresDatabase.CreateAsync();
+        var (expiredId, recentId, parkedId) = await GivenRetentionRows(database);
+        await using var services = GivenRelayServices(database, new RecordingPublisher());
+        await WhenRelaying(services, new InventoryOutboxRelayOptions(false, InventoryOutboxRetentionMode.PublishedForDays, 7));
+        await ThenRetentionShouldKeepRecentAndUnpublished(database, expiredId, recentId, parkedId);
+    }
+
+    [ExternalIntegrationFact]
+    public async Task given_one_pending_row_when_two_relays_claim_concurrently_then_only_one_lease_publishes_it()
+    {
+        await using var database = await InventoryPostgresDatabase.CreateAsync();
+        var row = await GivenPendingMessage(database);
+        var publisher = new RecordingPublisher();
+        await using var services = GivenRelayServices(database, publisher);
+        await WhenTwoRelaysRunConcurrently(services);
+        await ThenOneDeliveryShouldBePublished(database, publisher, row.Id);
+    }
+
+    [ExternalIntegrationFact]
+    public async Task given_a_cancelled_batch_when_relay_runs_then_no_message_is_claimed_or_published()
+    {
+        await using var database = await InventoryPostgresDatabase.CreateAsync();
+        var row = await GivenPendingMessage(database);
+        var publisher = new RecordingPublisher();
+        await using var services = GivenRelayServices(database, publisher);
+        var error = await WhenRelayingWithCancellation(services);
+        await ThenCancelledBatchShouldLeaveMessagePending(database, publisher, row.Id, error);
+    }
+
+    [ExternalIntegrationFact]
+    public async Task given_an_expired_lease_when_relay_recovers_then_original_delivery_identity_is_preserved()
+    {
+        await using var database = await InventoryPostgresDatabase.CreateAsync();
+        var row = await GivenExpiredLease(database);
+        var publisher = new RecordingPublisher();
+        await using var services = GivenRelayServices(database, publisher);
+        await WhenRelaying(services);
+        await ThenOneDeliveryShouldBePublished(database, publisher, row.Id);
+    }
+
+    private static (IntegrationEventPublisher Publisher, List<DeliveryOptions> Options) GivenWolverinePublisher()
+    {
+        var options = new List<DeliveryOptions>();
+        var bus = Substitute.For<IMessageBus>();
+        bus.PublishAsync(Arg.Any<IIntegrationEvent>(), Arg.Do<DeliveryOptions>(value => options.Add(value))).Returns(ValueTask.CompletedTask);
+        return (new IntegrationEventPublisher(bus, NullLogger<IntegrationEventPublisher>.Instance), options);
+    }
+
+    private static Task WhenPublishingDelivery(IntegrationEventPublisher publisher, Guid messageId, string partitionKey)
+        => publisher.PublishAsync(new ProductStockDecreasedIntegrationEvent(Guid.CreateVersion7(), Guid.CreateVersion7(), 2, 3),
+            new IntegrationMessageDelivery(messageId, partitionKey));
+
+    private static void ThenWolverineMetadataShouldMatch(List<DeliveryOptions> captured, Guid id, string partitionKey)
+    {
+        var options = captured.ShouldHaveSingleItem();
+        options.DeduplicationId.ShouldBe(id.ToString("N"));
+        options.PartitionKey.ShouldBe(partitionKey);
+        options.Headers["lab-message-id"].ShouldBe(id.ToString("D"));
+    }
+
+    private static async Task<InventoryOutboxRecord> GivenPendingMessage(InventoryPostgresDatabase database)
+    {
+        var productId = Guid.CreateVersion7();
+        var message = new ProductStockDecreasedIntegrationEvent(Guid.CreateVersion7(), productId, 2, 3);
+        var row = new InventoryOutboxRecord
         {
-            await RelayBatchAsync(relay);
+            Id = Guid.CreateVersion7(), PartitionKey = productId.ToString("N"), MessageType = message.GetType().Name,
+            Data = JsonSerializer.Serialize(message), OccurredOn = message.OccurredOn,
+            CreatedOn = DateTime.UtcNow.AddMinutes(-1), NextAttemptAt = DateTime.UtcNow.AddMinutes(-1)
+        };
+        await using var context = database.CreateContext();
+        context.OutboxMessages.Add(row);
+        await context.SaveChangesAsync();
+        return row;
+    }
+
+    private static ServiceProvider GivenRelayServices(InventoryPostgresDatabase database, RecordingPublisher publisher)
+        => new ServiceCollection()
+            .AddDbContext<InventoryDbContext>(options => options.UseNpgsql(database.ConnectionString))
+            .AddSingleton<IIntegrationEventPublisher>(publisher)
+            .BuildServiceProvider();
+
+    private static Task WhenRelaying(ServiceProvider services, InventoryOutboxRelayOptions? options = null, CancellationToken cancellationToken = default)
+        => new InventoryIntegrationOutboxRelay(services.GetRequiredService<IServiceScopeFactory>(),
+            options ?? new InventoryOutboxRelayOptions(false, InventoryOutboxRetentionMode.RetainAll, null),
+            NullLogger<InventoryIntegrationOutboxRelay>.Instance).RelayBatchAsync(cancellationToken);
+
+    private static async Task WhenRelayingWithRetry(InventoryPostgresDatabase database, ServiceProvider services, Guid id)
+    {
+        await WhenRelaying(services);
+        await MakeRetryDue(database, id);
+        await WhenRelaying(services);
+    }
+
+    private static async Task WhenRelayingThroughFiveFailures(InventoryPostgresDatabase database, ServiceProvider services, Guid id)
+    {
+        for (var attempt = 0; attempt < 5; attempt++)
+        {
+            await MakeRetryDue(database, id);
+            await WhenRelaying(services);
         }
 
-        // Then
-        publisher.Attempts.ShouldBe(5);
-        connection.FailureCount.ShouldBe(5);
-        connection.ParkedCount.ShouldBe(1);
+        await WhenRelaying(services);
     }
 
-    [Fact]
-    public async Task given_finite_published_retention_when_relay_runs_then_expired_published_rows_are_pruned()
+    private static Task WhenTwoRelaysRunConcurrently(ServiceProvider services)
+        => Task.WhenAll(WhenRelaying(services), WhenRelaying(services));
+
+    private static async Task<Exception?> WhenRelayingWithCancellation(ServiceProvider services)
     {
-        // Given
-        var productId = Guid.CreateVersion7();
-        var connection = new OutboxDbConnection(
-            Guid.CreateVersion7(),
-            productId.ToString("N"),
-            nameof(ProductStockIncreasedIntegrationEvent),
-            $$"""{"InventoryItemId":"{{Guid.CreateVersion7()}}","ProductId":"{{productId}}","IncreasedQuantity":1,"CurrentStock":3,"OccurredOn":"2026-08-27T00:00:00.0000000Z"}""");
-        var relay = CreateRelay(
-            connection,
-            new RetryRecordingPublisher(),
-            new InventoryOutboxRelayOptions(
-                true,
-                InventoryOutboxRetentionMode.PublishedForDays,
-                30));
-
-        // When
-        await RelayBatchAsync(relay);
-
-        // Then
-        connection.RetentionDeleteCount.ShouldBe(1);
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+        return await Record.ExceptionAsync(() => WhenRelaying(services, cancellationToken: cancellation.Token));
     }
 
-    private static object CreateRelay(
-        IDbConnection connection,
-        IIntegrationEventPublisher publisher,
-        InventoryOutboxRelayOptions? options = null)
+    private static async Task MakeRetryDue(InventoryPostgresDatabase database, Guid id)
     {
-        var relayType = typeof(IntegrationEventPublisher).Assembly.GetType(
-            "InventoryControl.Infrastructure.BuildingBlocks.InventoryIntegrationOutboxRelay",
-            throwOnError: true)!;
-        var services = new ServiceCollection()
-            .AddSingleton(connection)
-            .AddSingleton(publisher)
-            .BuildServiceProvider();
-        var scopeFactory = services.GetRequiredService<IServiceScopeFactory>();
-        var loggerType = typeof(Microsoft.Extensions.Logging.Abstractions.NullLogger<>).MakeGenericType(relayType);
-        var logger = loggerType.GetField("Instance", BindingFlags.Public | BindingFlags.Static)!.GetValue(null);
-
-        return Activator.CreateInstance(
-            relayType,
-            scopeFactory,
-            options ?? new InventoryOutboxRelayOptions(
-                false,
-                InventoryOutboxRetentionMode.RetainAll,
-                null),
-            logger)!;
+        await using var context = database.CreateContext();
+        await context.OutboxMessages.Where(row => row.Id == id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(row => row.NextAttemptAt, DateTime.UtcNow.AddMinutes(-1)));
     }
 
-    private static async Task RelayBatchAsync(object relay)
+    private static async Task ThenRetriedDeliveryShouldBeStable(InventoryPostgresDatabase database, RecordingPublisher publisher, InventoryOutboxRecord source)
     {
-        var method = relay.GetType().GetMethod("RelayBatchAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        await (Task)method.Invoke(relay, [CancellationToken.None])!;
+        var deliveries = publisher.Deliveries.ToArray();
+        deliveries.Length.ShouldBe(2);
+        deliveries.ShouldAllBe(delivery => delivery.MessageId == source.Id && delivery.PartitionKey == source.PartitionKey);
+        publisher.Messages.ShouldAllBe(message => message.OccurredOn == source.OccurredOn);
+        await using var context = database.CreateContext();
+        var row = await context.OutboxMessages.SingleAsync(message => message.Id == source.Id);
+        row.Attempts.ShouldBe(2);
+        row.PublishedAt.ShouldNotBeNull();
+        row.LastError.ShouldBeNull();
+        row.LockId.ShouldBeNull();
     }
 
-    private sealed class RetryRecordingPublisher : IIntegrationEventPublisher
+    private static async Task ThenMessageShouldBeParked(InventoryPostgresDatabase database, RecordingPublisher publisher, Guid id)
     {
-        public List<IIntegrationEvent> Messages { get; } = [];
-        public List<IntegrationMessageDelivery> Deliveries { get; } = [];
+        publisher.Deliveries.Count.ShouldBe(5);
+        await using var context = database.CreateContext();
+        var row = await context.OutboxMessages.SingleAsync(message => message.Id == id);
+        row.Attempts.ShouldBe(5);
+        row.ParkedAt.ShouldNotBeNull();
+        row.PublishedAt.ShouldBeNull();
+        row.LockId.ShouldBeNull();
+        row.LastError.ShouldNotBeNull();
+        row.LastError.Length.ShouldBeLessThanOrEqualTo(4000);
+    }
 
-        public Task PublishAsync(IIntegrationEvent integrationEvent)
-            => throw new NotSupportedException();
+    private static async Task<(Guid Expired, Guid Recent, Guid Parked)> GivenRetentionRows(InventoryPostgresDatabase database)
+    {
+        var expired = await GivenPendingMessage(database);
+        var recent = await GivenPendingMessage(database);
+        var parked = await GivenPendingMessage(database);
+        await using var context = database.CreateContext();
+        await context.OutboxMessages.Where(row => row.Id == expired.Id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(row => row.PublishedAt, DateTime.UtcNow.AddDays(-8)));
+        await context.OutboxMessages.Where(row => row.Id == recent.Id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(row => row.PublishedAt, DateTime.UtcNow.AddDays(-1)));
+        await context.OutboxMessages.Where(row => row.Id == parked.Id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(row => row.ParkedAt, DateTime.UtcNow.AddDays(-8)));
+        return (expired.Id, recent.Id, parked.Id);
+    }
+
+    private static async Task ThenRetentionShouldKeepRecentAndUnpublished(InventoryPostgresDatabase database, Guid expired, Guid recent, Guid parked)
+    {
+        await using var context = database.CreateContext();
+        (await context.OutboxMessages.AnyAsync(row => row.Id == expired)).ShouldBeFalse();
+        (await context.OutboxMessages.AnyAsync(row => row.Id == recent)).ShouldBeTrue();
+        (await context.OutboxMessages.AnyAsync(row => row.Id == parked)).ShouldBeTrue();
+    }
+
+    private static async Task ThenOneDeliveryShouldBePublished(InventoryPostgresDatabase database, RecordingPublisher publisher, Guid id)
+    {
+        publisher.Deliveries.ShouldHaveSingleItem().MessageId.ShouldBe(id);
+        await using var context = database.CreateContext();
+        (await context.OutboxMessages.SingleAsync(row => row.Id == id)).PublishedAt.ShouldNotBeNull();
+    }
+
+    private static async Task ThenCancelledBatchShouldLeaveMessagePending(InventoryPostgresDatabase database, RecordingPublisher publisher, Guid id, Exception? error)
+    {
+        error.ShouldBeAssignableTo<OperationCanceledException>();
+        publisher.Deliveries.ShouldBeEmpty();
+        await using var context = database.CreateContext();
+        var row = await context.OutboxMessages.SingleAsync(message => message.Id == id);
+        row.Attempts.ShouldBe(0);
+        row.LockId.ShouldBeNull();
+        row.PublishedAt.ShouldBeNull();
+    }
+
+    private static async Task<InventoryOutboxRecord> GivenExpiredLease(InventoryPostgresDatabase database)
+    {
+        var row = await GivenPendingMessage(database);
+        await using var context = database.CreateContext();
+        await context.OutboxMessages.Where(message => message.Id == row.Id)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(message => message.LockId, Guid.CreateVersion7())
+                .SetProperty(message => message.LockedUntil, DateTime.UtcNow.AddMinutes(-1)));
+        return row;
+    }
+
+    private sealed class RecordingPublisher(int failures = 0) : IIntegrationEventPublisher
+    {
+        private int attempts;
+        public ConcurrentQueue<IIntegrationEvent> Messages { get; } = new();
+        public ConcurrentQueue<IntegrationMessageDelivery> Deliveries { get; } = new();
+        public Task PublishAsync(IIntegrationEvent integrationEvent) => throw new NotSupportedException();
 
         public Task PublishAsync(IIntegrationEvent integrationEvent, IntegrationMessageDelivery delivery)
         {
-            this.Messages.Add(integrationEvent);
-            this.Deliveries.Add(delivery);
-            return this.Deliveries.Count == 1
+            this.Messages.Enqueue(integrationEvent);
+            this.Deliveries.Enqueue(delivery);
+            return Interlocked.Increment(ref this.attempts) <= failures
                 ? Task.FromException(new InvalidOperationException("Simulated transport failure."))
                 : Task.CompletedTask;
-        }
-    }
-
-    private sealed class AlwaysFailPublisher : IIntegrationEventPublisher
-    {
-        public int Attempts { get; private set; }
-
-        public Task PublishAsync(IIntegrationEvent integrationEvent)
-            => throw new NotSupportedException();
-
-        public Task PublishAsync(IIntegrationEvent integrationEvent, IntegrationMessageDelivery delivery)
-        {
-            this.Attempts++;
-            return Task.FromException(new InvalidOperationException("Simulated persistent transport failure."));
-        }
-    }
-
-    private sealed class OutboxDbConnection(
-        Guid rowId,
-        string partitionKey,
-        string messageType,
-        string data) : DbConnection
-    {
-        private ConnectionState state = ConnectionState.Closed;
-        private bool parked;
-
-        public int PublishedCount { get; private set; }
-        public int FailureCount { get; private set; }
-        public int ParkedCount { get; private set; }
-        public int RetentionDeleteCount { get; private set; }
-
-        [AllowNull]
-        public override string ConnectionString { get; set; } = string.Empty;
-
-        public override string Database => "inventory-tests";
-        public override string DataSource => "in-memory";
-        public override string ServerVersion => "1.0";
-        public override ConnectionState State => this.state;
-
-        public override void ChangeDatabase(string databaseName)
-        {
-        }
-
-        public override void Close() => this.state = ConnectionState.Closed;
-        public override void Open() => this.state = ConnectionState.Open;
-
-        protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
-            => throw new NotSupportedException();
-
-        protected override DbCommand CreateDbCommand()
-            => new OutboxDbCommand(this, this.CreateReader, this.RecordExecution);
-
-        private DbDataReader CreateReader()
-        {
-            var table = new DataTable();
-            table.Columns.Add("Id", typeof(Guid));
-            table.Columns.Add("PartitionKey", typeof(string));
-            table.Columns.Add("MessageType", typeof(string));
-            table.Columns.Add("Data", typeof(string));
-            table.Columns.Add("Attempts", typeof(int));
-            if (this.PublishedCount == 0 && !this.parked)
-            {
-                table.Rows.Add(rowId, partitionKey, messageType, data, this.FailureCount + 1);
-            }
-
-            return table.CreateDataReader();
-        }
-
-        private int RecordExecution(string commandText, DbParameterCollection parameters)
-        {
-            if (commandText.Contains("SET PublishedAt = NOW()", StringComparison.OrdinalIgnoreCase))
-            {
-                this.PublishedCount++;
-            }
-            else if (commandText.Contains("SET LockId = NULL", StringComparison.OrdinalIgnoreCase))
-            {
-                this.FailureCount++;
-                this.parked = parameters
-                    .Cast<DbParameter>()
-                    .Single(parameter => parameter.ParameterName == "IsParked")
-                    .Value is true;
-                if (this.parked)
-                {
-                    this.ParkedCount++;
-                }
-            }
-            else if (commandText.Contains("DELETE FROM InventoryIntegrationOutbox", StringComparison.OrdinalIgnoreCase))
-            {
-                this.RetentionDeleteCount++;
-            }
-
-            return 1;
-        }
-    }
-
-    private sealed class OutboxDbCommand(
-        DbConnection connection,
-        Func<DbDataReader> createReader,
-        Func<string, DbParameterCollection, int> recordExecution) : DbCommand
-    {
-        private readonly DbParameterCollection parameters = new TestDbParameterCollection();
-
-        [AllowNull]
-        public override string CommandText { get; set; } = string.Empty;
-        public override int CommandTimeout { get; set; }
-        public override CommandType CommandType { get; set; }
-        public override bool DesignTimeVisible { get; set; }
-        public override UpdateRowSource UpdatedRowSource { get; set; }
-
-        [AllowNull]
-        protected override DbConnection DbConnection { get; set; } = connection;
-        protected override DbParameterCollection DbParameterCollection => this.parameters;
-        protected override DbTransaction? DbTransaction { get; set; }
-
-        public override void Cancel()
-        {
-        }
-
-        public override int ExecuteNonQuery() => recordExecution(this.CommandText, this.parameters);
-        public override object? ExecuteScalar() => throw new NotSupportedException();
-        public override void Prepare()
-        {
-        }
-
-        protected override DbParameter CreateDbParameter() => new TestDbParameter();
-        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) => createReader();
-        public override Task<int> ExecuteNonQueryAsync(CancellationToken cancellationToken)
-            => Task.FromResult(recordExecution(this.CommandText, this.parameters));
-        protected override Task<DbDataReader> ExecuteDbDataReaderAsync(
-            CommandBehavior behavior,
-            CancellationToken cancellationToken)
-            => Task.FromResult(createReader());
-    }
-
-    private sealed class TestDbParameter : DbParameter
-    {
-        public override DbType DbType { get; set; }
-        public override ParameterDirection Direction { get; set; } = ParameterDirection.Input;
-        public override bool IsNullable { get; set; }
-        [AllowNull]
-        public override string ParameterName { get; set; } = string.Empty;
-        public override int Size { get; set; }
-        [AllowNull]
-        public override string SourceColumn { get; set; } = string.Empty;
-        public override bool SourceColumnNullMapping { get; set; }
-        public override object? Value { get; set; }
-        public override void ResetDbType()
-        {
-        }
-    }
-
-    private sealed class TestDbParameterCollection : DbParameterCollection
-    {
-        private readonly List<DbParameter> parameters = [];
-
-        public override int Count => this.parameters.Count;
-        public override object SyncRoot => ((ICollection)this.parameters).SyncRoot;
-
-        public override int Add(object value)
-        {
-            this.parameters.Add((DbParameter)value);
-            return this.parameters.Count - 1;
-        }
-
-        public override void AddRange(Array values)
-        {
-            foreach (var value in values)
-            {
-                this.Add(value!);
-            }
-        }
-
-        public override void Clear() => this.parameters.Clear();
-        public override bool Contains(object value) => this.parameters.Contains((DbParameter)value);
-        public override bool Contains(string value)
-            => this.parameters.Any(parameter => parameter.ParameterName == value);
-        public override void CopyTo(Array array, int index)
-            => ((ICollection)this.parameters).CopyTo(array, index);
-        public override IEnumerator GetEnumerator() => this.parameters.GetEnumerator();
-        public override int IndexOf(object value) => this.parameters.IndexOf((DbParameter)value);
-        public override int IndexOf(string parameterName)
-            => this.parameters.FindIndex(parameter => parameter.ParameterName == parameterName);
-        public override void Insert(int index, object value)
-            => this.parameters.Insert(index, (DbParameter)value);
-        public override void Remove(object value) => this.parameters.Remove((DbParameter)value);
-        public override void RemoveAt(int index) => this.parameters.RemoveAt(index);
-        public override void RemoveAt(string parameterName) => this.parameters.RemoveAt(this.IndexOf(parameterName));
-        protected override DbParameter GetParameter(int index) => this.parameters[index];
-        protected override DbParameter GetParameter(string parameterName)
-            => this.parameters[this.IndexOf(parameterName)];
-        protected override void SetParameter(int index, DbParameter value) => this.parameters[index] = value;
-
-        protected override void SetParameter(string parameterName, DbParameter value)
-        {
-            var index = this.IndexOf(parameterName);
-            if (index < 0)
-            {
-                this.parameters.Add(value);
-                return;
-            }
-
-            this.parameters[index] = value;
         }
     }
 }

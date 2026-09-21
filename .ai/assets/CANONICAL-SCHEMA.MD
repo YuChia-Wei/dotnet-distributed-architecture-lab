@@ -61,7 +61,7 @@ A `skill-spec` requires all common fields plus:
 | `workflow` | `workflow-step[]` | Ordered execution contract |
 Optional skill fields include `handoff_rules`, `runtime_notes`,
 `capability_slots`, `role_bindings`, `human_guide`, `workflow_artifacts`,
-`workflow_templates`, and `report_template`. When present, `handoff_rules` and
+`workflow_templates`, `report_template`, and `runtime_entry`. When present, `handoff_rules` and
 `runtime_notes` are `string[]`. Paths and wrapper metadata must not make a
 wrapper the canonical owner of the skill.
 
@@ -77,6 +77,14 @@ object with a required `wrapper_path` string. A wrapper path must:
 `runtime_wrapper_path` is a legacy, invalid key. Runtime-specific details may
 be added beside `wrapper_path`, but they do not replace it or weaken target
 parity.
+
+For the `code-reviewer` and `local-change-implementer` pilot, `runtime_entry`
+owns portable execution instructions. Its format version is `1.0` and execution
+authority is `canonical-runtime-entry`; it requires a summary, ordered steps,
+conditional expansion, stop conditions, and output. Runtime projections must
+match the deterministic renderer and identify the LF-normalized canonical
+source digest. Package assembly renders again from final projected source
+bytes, including only the applicability modes present in that payload.
 
 ### Owning-skill role bindings
 
@@ -99,9 +107,17 @@ Each `role_bindings` entry is an object with these required fields:
 | `applicability` | `string` | A non-empty declarative condition that states when the binding applies; it is not a runtime disposition and is not claimed to be fully machine-evaluable |
 | `load_obligation` | `enum` | `mandatory-when-applicable` |
 
+Shared role contracts live at
+`.ai/assets/sub-agent-role-prompts/<role-id>/sub-agent.yaml`. A role private to
+one skill lives at
+`.ai/assets/skills/<skill-id>/roles/<role-id>/sub-agent.yaml` and may be bound
+only by that skill. The named `role_path` must use one of these exact canonical
+locations.
+
 When a binding's applicability matches, the owning skill must read the exact
-role manifest and its mandatory references before using that role, then record
-the applicable runtime outcome as `direct`, `delegated`, or `unavailable` in
+role manifest and its mandatory references before using that role, then retain execution evidence at the tier selected by `ROLE-EXECUTION-CONTRACT.md`.
+When that tier requires a full record, record the applicable runtime outcome as
+`direct`, `delegated`, or `unavailable` in
 the separately owned execution record defined by
 `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`. The owning skill produces that
 record and the orchestrator aggregates it without taking domain ownership. A

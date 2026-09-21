@@ -1,45 +1,23 @@
 using System.Text.Json;
-using Dapper;
 using InventoryControl.Applications.Outbox;
-using Npgsql;
+using InventoryControl.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryControl.Infrastructure.Applications.Repositories;
 
 internal static class InventoryOutboxWriter
 {
-    private static readonly JsonSerializerOptions SerializerOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
+    internal static readonly JsonSerializerOptions SerializerOptions = new() { PropertyNameCaseInsensitive = true };
 
-    public static Task StageAsync(
-        NpgsqlConnection connection,
-        NpgsqlTransaction transaction,
-        InventoryOutboxMessage message,
-        CancellationToken cancellationToken)
+    /// <summary>Stages a stable message identity in the caller-owned transaction, including successful replays.</summary>
+    public static Task StageAsync(InventoryDbContext context, InventoryOutboxMessage message, CancellationToken cancellationToken)
     {
-        const string sql = """
-            INSERT INTO InventoryIntegrationOutbox
-                (Id, PartitionKey, MessageType, Data, OccurredOn)
-            VALUES
-                (@Id, @PartitionKey, @MessageType, @Data::jsonb, @OccurredOn)
-            ON CONFLICT (Id) DO NOTHING;
-            """;
-
-        return connection.ExecuteAsync(new CommandDefinition(
-            sql,
-            new
-            {
-                Id = message.Delivery.MessageId,
-                message.Delivery.PartitionKey,
-                MessageType = message.IntegrationEvent.GetType().Name,
-                Data = JsonSerializer.Serialize(
-                    message.IntegrationEvent,
-                    message.IntegrationEvent.GetType(),
-                    SerializerOptions),
-                message.IntegrationEvent.OccurredOn
-            },
-            transaction,
-            cancellationToken: cancellationToken));
+        var messageType = message.IntegrationEvent.GetType().Name;
+        var data = JsonSerializer.Serialize(message.IntegrationEvent, message.IntegrationEvent.GetType(), SerializerOptions);
+        return context.Database.ExecuteSqlAsync($"""
+            INSERT INTO inventoryintegrationoutbox (id, partitionkey, messagetype, data, occurredon)
+            VALUES ({message.Delivery.MessageId}, {message.Delivery.PartitionKey}, {messageType}, {data}::jsonb, {message.IntegrationEvent.OccurredOn})
+            ON CONFLICT (id) DO NOTHING;
+            """, cancellationToken);
     }
 }

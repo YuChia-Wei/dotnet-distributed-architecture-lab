@@ -2,11 +2,11 @@ asset_id: code-reviewer
 schema_version: '1.0'
 asset_type: skill-spec
 title: Code Reviewer
-purpose: Review .NET code in this repository for DDD, Clean Architecture, CQRS, and Event Sourcing compliance. This skill reviews, scores, and marks issues; it does not plan refactors or define target architecture.
+purpose: Review code and implementation guidance through a technology-neutral reasoning core, selected technology extensions and target-owned rules. Return evidence-backed findings without implementing fixes or defining target architecture.
 portability: repo-portable
 component_availability:
-  component_id: dotnet-backend
-  core_only: unavailable-not-selected
+  component_id: software-development-core
+  core_only: available
   dotnet_selected: available
 audience: agent-facing
 source_of_truth: canonical
@@ -18,54 +18,57 @@ triggers:
 - check this file
 inputs:
 - target file or reviewed scope
-- file-type and finding route selected from the canonical review-routing contract
+- intended behavior, target-owned rules and selected components or technology evidence
+- common route and applicable extension routes selected from the canonical review-routing contract
 outputs:
 - transient conversational review or standalone durable assessment
 - architecture-level findings
 - code-level findings
-- review scores
-- one provider-neutral role_execution record for every considered review-role binding, handed to the orchestrator without transferring review ownership
+- review coverage, selected extensions, limitations and optional target-requested scores
+- proportionate role applicability and execution evidence, with full provider-neutral role_execution records for terminal, high-risk, or external acceptance paths
 constraints:
 - Do not define target architecture
 - Do not output a staged refactoring plan
 - Preserve software engineering reasoning even when analyzer or test output is available
-- Treat .ai/scripts C# grep checks as transitional aids, not final semantic validation
+- Use tests, analyzers and searches as evidence, not a replacement for review reasoning
+- Do not apply unselected architecture methods or technology conventions
+- Report missing specialist coverage and preserve target-required review gates
 - Keep review read-only; route remediation to software-development-orchestrator or the appropriate implementer
-- Pin durable assessments to the reviewed Git revision and use ASM-YYYYMMDD-NNN#CR-NNN finding references
+- Pin durable assessments to the reviewed Git revision and use ASM-YYYYMMDD-HH-xxx#CR-NNN finding references
 - Load only the canonical standards selected by the file-type and finding route
 - Do not treat compatibility indexes, shared summaries, or role prompts as semantic owners
 role_bindings:
-- role_path: .ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/code-reviewer/roles/code-review-sub-agent/sub-agent.yaml
   role_asset_id: code-review-sub-agent
   expected_role_status: active
   binding_kind: primary
-  applicability: A .NET code-review scope is selected.
+  applicability: A bounded code or implementation-guidance review scope is selected, regardless of technology.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/code-reviewer/roles/aggregate-code-review-sub-agent/sub-agent.yaml
   role_asset_id: aggregate-code-review-sub-agent
   expected_role_status: active
   binding_kind: conditional
-  applicability: The selected code-review scope includes aggregate, event-sourcing, or domain-invariant behavior.
+  applicability: The target adopts aggregate or event-sourcing concepts for the selected scope, or domain-invariant behavior needs bounded review.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/code-reviewer/roles/controller-code-review-sub-agent/sub-agent.yaml
   role_asset_id: controller-code-review-sub-agent
   expected_role_status: active
   binding_kind: conditional
-  applicability: The selected code-review scope includes an ASP.NET Core controller, endpoint, DTO boundary, or HTTP semantics.
+  applicability: The selected scope includes an HTTP controller, endpoint, transport-data boundary or HTTP contract.
   load_obligation: mandatory-when-applicable
-- role_path: .ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml
+- role_path: .ai/assets/skills/code-reviewer/roles/reactor-code-review-sub-agent/sub-agent.yaml
   role_asset_id: reactor-code-review-sub-agent
   expected_role_status: active
   binding_kind: conditional
-  applicability: The selected code-review scope includes reactor event handling, DI registration, or cross-aggregate integration behavior.
+  applicability: The selected scope includes event handling, handler registration or adopted cross-aggregate integration boundaries.
   load_obligation: mandatory-when-applicable
 workflow:
 - step: 1
-  description: Complete any applicable effective-rule preflight, read review-routing.yaml, select every matching file-type route, and evaluate each review-role binding's applicability
+  description: Identify subject, intent and target authority; read review-routing.yaml, select the common route and matching installed extensions, and complete every applicable effective-rule preflight
 - step: 2
-  description: Load only the selected routes' canonical references, applicable finding rules, and matching role manifests; de-duplicate references and build a scoped checklist comparison
+  description: Load the common playbook plus selected extension and target rules; evaluate role applicability, de-duplicate references and record the review coverage
 - step: 3
-  description: After route and role selection, load the role-execution phase reference, execute directly by default or make an eligible bounded delegation, then separate architecture-level and code-level findings
+  description: Execute bounded review directly or through eligible delegation, tracing behavior, failures, compatibility and test evidence; separate findings from uncertainty and coverage gaps
 - step: 4
   description: After findings exist, load the output phase reference, return transient findings or persist an explicitly requested assessment, and hand role_execution records to the orchestrator for aggregation
 references:
@@ -83,12 +86,58 @@ wrapper_metadata:
     wrapper_path: .claude/skills/code-reviewer/
   codex:
     wrapper_path: .agents/skills/code-reviewer/
+runtime_entry:
+  format_version: '1.0'
+  execution_authority: canonical-runtime-entry
+  summary: Use for a bounded code or implementation-guidance review that returns evidence-backed findings and coverage limitations without applying remediation.
+  steps:
+  - Identify the reviewed subject, intended behavior, target authority, included and excluded paths, and whether the review is transient or explicitly durable.
+  - Read the common review route first. Select only target-selected installed extensions and matching reviewed partitions; do not infer a profile from a file suffix.
+  - Before judging catalog rules, select one applicability mode declared by the effective-rule-consumption authority and consume every applicable freshness-verified effective-rule packet. Preserve missing specialist coverage and unresolved authority as limitations.
+  - Review behavior, contracts, boundaries, compatibility, failures, tests, and relevant risks within the selected routes. Keep the review read-only and distinguish findings from uncertainty.
+  - Evaluate each applicable role binding. In a routine direct review, record only material applicable roles and state that unselected roles were not applicable; use full per-role execution records only for a terminal, high-risk, or external acceptance path.
+  - Load the output contract only when findings are ready to format or persistence is requested.
+  conditional_expansion:
+  - when: Always before reviewing.
+    read:
+    - .ai/assets/skills/code-reviewer/references/review-routing.yaml
+    why: The common route always applies and controls selective extension loading.
+  - when: After common and extension selection.
+    read:
+    - .ai/assets/skills/code-reviewer/references/core-review-playbook.md
+    - the selected extension contracts and target-owned rules
+    why: Review only the common and selected specialist semantics; report unavailable specialist coverage.
+  - when: Before judging applicable catalog rules.
+    use:
+    - Run `.ai/scripts/resolve-effective-rule-packet.py --help` only when its supported interface is needed; otherwise use the request-authorized resolver invocation.
+    read:
+    - the selected freshness-verified task-scoped effective-rule packet
+    why: Consume fresh task-scoped effective-rule evidence and never replace it with a framework default.
+  - when: A material role binding applies to the bounded review scope, or the review is terminal, high-risk, or external.
+    read:
+    - .ai/assets/skills/code-reviewer/references/role-execution.md
+    - the applicable canonical role manifest and every reference it declares
+    why: Use proportionate role evidence without transferring finding ownership.
+  - when: Findings are ready to format or a durable assessment is explicitly requested.
+    read:
+    - .ai/assets/skills/code-reviewer/references/output-contract.md
+    - .ai/assets/skills/code-reviewer/templates/code-review-assessment-report-template.md
+    why: Select transient or durable output without creating an unrequested assessment.
+  stop_conditions:
+  - Do not implement fixes, define target architecture, or output a staged refactoring plan. Route remediation to the appropriate authorized owner.
+  - Stop the affected specialist rule check when target authority, selected extension, or effective-rule packet is unresolved; report the coverage limitation instead of silently choosing a fallback.
+  - Do not treat tests, analyzers, compatibility summaries, or role prompts as replacements for review reasoning or canonical rule ownership.
+  output:
+  - transient findings or an explicitly requested durable assessment
+  - reviewed scope, selected routes, evidence, coverage, and limitations
+  - severity-ranked findings with trigger, impact, supporting evidence, and uncertainty
+  - read-only handoff recommendations and proportionate role execution evidence
 status: active
 effective_rule_consumption:
   applies_when:
-  - The skill reviews selected .NET backend code or dotnet-backend implementation guidance against applicable review rules.
+  - The skill reviews code or implementation guidance against applicable adopted engineering catalog rules, including selected technology extensions.
   excludes:
-  - Architecture design, remediation implementation, or an assessment locator operation that does not perform review analysis.
+  - Architecture design, remediation implementation, or an assessment locator operation that does not perform review analysis. Common reasoning against supplied behavior does not claim verification of unresolved catalog rules.
   resolver: .ai/scripts/resolve-effective-rule-packet.py
   applicability:
     selector: applicability_mode

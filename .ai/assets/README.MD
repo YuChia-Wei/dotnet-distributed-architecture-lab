@@ -13,7 +13,8 @@ Use the nearest index file when you need a catalog of files or directories. Keep
 ## Boundary
 
 - Keep canonical skill specs under `skills/`.
-- Keep delegated sub-agent role definitions under `sub-agent-role-prompts/`.
+- Keep shared delegated sub-agent role definitions under `sub-agent-role-prompts/`.
+- Keep skill-private delegated role definitions under `skills/<skill-id>/roles/`.
 - Keep universal shared materials under `shared/`.
 - Keep stack-specific reusable context under `tech-stacks/`.
 - Keep reusable asset templates under `templates/`.

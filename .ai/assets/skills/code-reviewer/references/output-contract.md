@@ -13,7 +13,7 @@ The review remains read-only even when it uses tests or analyzers as evidence.
 ## Standalone Durable Assessment Mode
 
 When the user asks to save a large or formal code review without authorizing
-remediation, allocate an `ASM-YYYYMMDD-NNN` assessment ID and create the locator
+remediation, allocate an `ASM-YYYYMMDD-HH-xxx` assessment ID and create the locator
 from `.dev/assessments/templates/assessment-locator-template.yaml`.
 
 Create the report from:
@@ -47,10 +47,16 @@ not implement fixes, define target architecture, or silently expand review scope
 ## Required Report Content
 
 Include assessment metadata, reviewed revision, included and excluded paths,
-checklist selection, evidence and limitations, scored summary, severity-ranked
+common-route and extension selection, target authority, evidence and limitations, optional rubric-based scores, severity-ranked
 architecture- and code-level findings, validation performed or skipped, and
 handoff recommendations. Categorize actionable issues using the repository's
 `CRITICAL`, `MUST FIX`, and `SHOULD FIX` review severities.
+
+Every finding states its trigger, impact, supporting contract/evidence and
+uncertainty. Record which technologies and methods were covered and which
+specialist checks were unavailable; a common review cannot discharge a required
+specialist gate. Scores are optional unless requested or target-required and
+must identify their rubric. Do not manufacture findings or a numeric score.
 
 The final response states whether the result was transient or durable, the
 reviewed revision, highest-priority findings, skipped validation, and the

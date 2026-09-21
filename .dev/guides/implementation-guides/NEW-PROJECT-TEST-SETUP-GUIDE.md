@@ -8,8 +8,6 @@ Set up the testing infrastructure for a new .NET project to support multi-profil
 2. WolverineFx and EF Core packages available
 3. A shared time provider (DateProvider/TimeProvider) is defined for deterministic tests
 
-此 repository 使用 xUnit v3 `4.0.0`，套件組合為 `xunit.v3.mtp-off`、`xunit.runner.visualstudio` 與 `Microsoft.NET.Test.Sdk`；測試專案設定 `OutputType=Exe`、`IsTestProject=true`，保留 .NET 10 的 VSTest 執行方式。
-
 ## Setup Steps
 
 ### Step 1: Create test fixtures (no base test class)
@@ -24,7 +22,7 @@ public sealed class TestProfileFixture : IAsyncLifetime
     public IServiceProvider Services { get; private set; } = default!;
     private readonly FakeEventListener _eventListener = new();
 
-    public ValueTask InitializeAsync()
+    public Task InitializeAsync()
     {
         var services = new ServiceCollection();
 
@@ -34,10 +32,10 @@ public sealed class TestProfileFixture : IAsyncLifetime
 
         services.AddSingleton(_eventListener);
         Services = services.BuildServiceProvider();
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 
-    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+    public Task DisposeAsync() => Task.CompletedTask;
 
     public Task AwaitEvents(int count)
     {
@@ -176,5 +174,5 @@ Do:
 
 ## Related Documents
 - `.dev/guides/design-guides/PROFILE-BASED-TESTING-GUIDE.md`
-- `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml`
+- `.ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml`
 - `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`

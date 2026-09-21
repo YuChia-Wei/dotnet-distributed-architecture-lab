@@ -20,6 +20,10 @@ Cross-context contracts are located under `src/BC-Contracts/`. The inventory res
 
 See [Task.WhenAll / two external-event handlers](.dev/operations/consumer-parallel-examples.md) (Consumer parallel examples); includes the existing Compose regression and E2E commands.
 
+Inventory uses **EF Core**, while Products and Orders retain **Dapper** as contrasting persistence examples. Existing Inventory tables, reservation idempotency and source-outbox transactions remain compatible. See the [Inventory EF Core guide](.dev/operations/inventory-efcore.md).
+
+The [EF Core + Wolverine transaction sample](samples/EfCoreWolverine/README.md) demonstrates an aggregate repository, use case, native inbox/outbox, and shared transaction, with dedicated PostgreSQL/Kafka setup and run commands.
+
 ## Technology Stack
 
 - .NET SDK `10.0.302` (`global.json` permits `latestMajor` roll-forward), with `net10.0` as the primary target framework
@@ -27,7 +31,7 @@ See [Task.WhenAll / two external-event handlers](.dev/operations/consumer-parall
 - WolverineFx `6.36.0`
 - Kafka (the canonical broker; enabled in Docker Compose, with producer-selected partition keys used to verify per-business-entity ordering)
 - RabbitMQ (a deferred compatibility profile; its Compose service is commented out, current shared queues are not broadcast topology, and migration or dual deployment requires a separate evaluation)
-- PostgreSQL `16.15-alpine`, Dapper `2.1.79`, and Npgsql `10.0.3`
+- PostgreSQL `16.15-alpine`, EF Core `10.0.12` (Inventory), Dapper `2.1.79` (Products/Orders), and Npgsql / Npgsql EF provider `10.0.3`
 - xUnit v3 `4.0.0` (`xunit.v3.mtp-off` / VSTest), Moq, and Shouldly
 - OpenTelemetry Collector Contrib `0.159.0`, Prometheus `3.14.0`, Tempo `2.10.7`, Loki `3.7.7`, and Grafana `13.2.1`
 

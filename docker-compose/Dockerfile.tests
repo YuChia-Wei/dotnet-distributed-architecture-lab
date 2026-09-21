@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0
 WORKDIR /workspace
 COPY MQArchLab.slnx global.json ./
 COPY src/ ./src/
+COPY samples/ ./samples/
 COPY tests/ ./tests/
 COPY docker-compose/sql-script/ ./docker-compose/sql-script/
 RUN dotnet restore MQArchLab.slnx --disable-parallel \

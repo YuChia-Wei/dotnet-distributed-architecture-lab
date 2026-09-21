@@ -1,8 +1,9 @@
-using System.Data;
 using System.Text.Json;
-using Dapper;
+using InventoryControl.Infrastructure.Applications.Repositories;
+using InventoryControl.Infrastructure.Persistence;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 using Lab.BuildingBlocks.Integrations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -18,11 +19,6 @@ internal sealed class InventoryIntegrationOutboxRelay(
     private const int MaxAttempts = 5;
     private const int MaxErrorLength = 4000;
     private const int LeaseSeconds = 30;
-
-    private static readonly JsonSerializerOptions SerializerOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
 
     private static readonly IReadOnlyDictionary<string, Type> MessageTypes =
         new Dictionary<string, Type>(StringComparer.Ordinal)
@@ -53,76 +49,44 @@ internal sealed class InventoryIntegrationOutboxRelay(
         }
     }
 
-    private async Task RelayBatchAsync(CancellationToken cancellationToken)
+    internal async Task RelayBatchAsync(CancellationToken cancellationToken)
     {
-        using var scope = scopeFactory.CreateScope();
-        var connection = scope.ServiceProvider.GetRequiredService<IDbConnection>();
+        await using var scope = scopeFactory.CreateAsyncScope();
+        var context = scope.ServiceProvider.GetRequiredService<InventoryDbContext>();
         var publisher = scope.ServiceProvider.GetRequiredService<IIntegrationEventPublisher>();
         var lockId = Guid.CreateVersion7();
 
-        if (connection.State != ConnectionState.Open)
-        {
-            connection.Open();
-        }
-
-        const string claimSql = """
+        await context.Database.ExecuteSqlAsync($"""
             WITH claimed AS (
-                SELECT Id
-                FROM InventoryIntegrationOutbox
-                WHERE PublishedAt IS NULL
-                  AND ParkedAt IS NULL
-                  AND NextAttemptAt <= NOW()
-                  AND (LockedUntil IS NULL OR LockedUntil < NOW())
-                ORDER BY NextAttemptAt, CreatedOn, Id
+                SELECT id FROM inventoryintegrationoutbox
+                WHERE publishedat IS NULL AND parkedat IS NULL AND nextattemptat <= NOW()
+                  AND (lockeduntil IS NULL OR lockeduntil < NOW())
+                ORDER BY nextattemptat, createdon, id
                 FOR UPDATE SKIP LOCKED
-                LIMIT @BatchSize
+                LIMIT {BatchSize}
             )
-            UPDATE InventoryIntegrationOutbox AS target
-            SET LockId = @LockId,
-                LockedUntil = NOW() + (@LeaseSeconds * INTERVAL '1 second'),
-                Attempts = Attempts + 1
-            FROM claimed
-            WHERE target.Id = claimed.Id
-            RETURNING target.Id,
-                      target.PartitionKey,
-                      target.MessageType,
-                      target.Data::text AS Data,
-                      target.Attempts;
-            """;
+            UPDATE inventoryintegrationoutbox AS target
+            SET lockid = {lockId}, lockeduntil = NOW() + ({LeaseSeconds} * INTERVAL '1 second'),
+                attempts = attempts + 1
+            FROM claimed WHERE target.id = claimed.id;
+            """, cancellationToken);
 
-        var rows = await connection.QueryAsync<OutboxRow>(new CommandDefinition(
-            claimSql,
-            new
-            {
-                BatchSize,
-                LockId = lockId,
-                LeaseSeconds
-            },
-            cancellationToken: cancellationToken));
-
+        var rows = await context.OutboxMessages.AsNoTracking()
+            .Where(row => row.LockId == lockId)
+            .OrderBy(row => row.NextAttemptAt).ThenBy(row => row.CreatedOn).ThenBy(row => row.Id)
+            .ToListAsync(cancellationToken);
         foreach (var row in rows)
         {
             cancellationToken.ThrowIfCancellationRequested();
             try
             {
-                var message = Deserialize(row);
-                await publisher.PublishAsync(
-                    message,
-                    new IntegrationMessageDelivery(row.Id, row.PartitionKey));
-
-                const string publishedSql = """
-                    UPDATE InventoryIntegrationOutbox
-                    SET PublishedAt = NOW(),
-                        LockId = NULL,
-                        LockedUntil = NULL,
-                        LastError = NULL
-                    WHERE Id = @Id
-                      AND LockId = @LockId;
-                    """;
-                await connection.ExecuteAsync(new CommandDefinition(
-                    publishedSql,
-                    new { row.Id, LockId = lockId },
-                    cancellationToken: cancellationToken));
+                await publisher.PublishAsync(Deserialize(row), new IntegrationMessageDelivery(row.Id, row.PartitionKey));
+                await context.OutboxMessages.Where(message => message.Id == row.Id && message.LockId == lockId)
+                    .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(message => message.PublishedAt, message => DateTime.UtcNow)
+                        .SetProperty(message => message.LockId, (Guid?)null)
+                        .SetProperty(message => message.LockedUntil, (DateTime?)null)
+                        .SetProperty(message => message.LastError, (string?)null), cancellationToken);
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
@@ -130,37 +94,21 @@ internal sealed class InventoryIntegrationOutboxRelay(
             }
             catch (Exception exception)
             {
-                await RecordFailureAsync(connection, row, lockId, exception, cancellationToken);
+                await this.RecordFailureAsync(context, row, lockId, exception, cancellationToken);
             }
         }
 
-        await this.ApplyRetentionAsync(connection, cancellationToken);
-    }
-
-    private Task ApplyRetentionAsync(IDbConnection connection, CancellationToken cancellationToken)
-    {
-        if (options.RetentionMode == InventoryOutboxRetentionMode.RetainAll)
+        if (options.RetentionMode == InventoryOutboxRetentionMode.PublishedForDays)
         {
-            return Task.CompletedTask;
+            var days = options.PublishedRetentionDays!.Value;
+            await context.OutboxMessages
+                .Where(message => message.PublishedAt != null && message.PublishedAt < DateTime.UtcNow.AddDays(-days))
+                .ExecuteDeleteAsync(cancellationToken);
         }
-
-        const string sql = """
-            DELETE FROM InventoryIntegrationOutbox
-            WHERE PublishedAt IS NOT NULL
-              AND PublishedAt < NOW() - (@PublishedRetentionDays * INTERVAL '1 day');
-            """;
-        return connection.ExecuteAsync(new CommandDefinition(
-            sql,
-            new { options.PublishedRetentionDays },
-            cancellationToken: cancellationToken));
     }
 
-    private async Task RecordFailureAsync(
-        IDbConnection connection,
-        OutboxRow row,
-        Guid lockId,
-        Exception exception,
-        CancellationToken cancellationToken)
+    private async Task RecordFailureAsync(InventoryDbContext context, InventoryOutboxRecord row, Guid lockId,
+        Exception exception, CancellationToken cancellationToken)
     {
         var isParked = row.Attempts >= MaxAttempts;
         var delaySeconds = Math.Min(60, 1 << Math.Min(row.Attempts, 6));
@@ -170,66 +118,34 @@ internal sealed class InventoryIntegrationOutboxRelay(
             error = error[..MaxErrorLength];
         }
 
-        const string failureSql = """
-            UPDATE InventoryIntegrationOutbox
-            SET LockId = NULL,
-                LockedUntil = NULL,
-                LastError = @LastError,
-                NextAttemptAt = CASE
-                    WHEN @IsParked THEN NextAttemptAt
-                    ELSE NOW() + (@DelaySeconds * INTERVAL '1 second')
-                END,
-                ParkedAt = CASE WHEN @IsParked THEN NOW() ELSE NULL END
-            WHERE Id = @Id
-              AND LockId = @LockId;
-            """;
-        await connection.ExecuteAsync(new CommandDefinition(
-            failureSql,
-            new
-            {
-                row.Id,
-                LockId = lockId,
-                LastError = error,
-                IsParked = isParked,
-                DelaySeconds = delaySeconds
-            },
-            cancellationToken: cancellationToken));
+        await context.OutboxMessages.Where(message => message.Id == row.Id && message.LockId == lockId)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(message => message.LockId, (Guid?)null)
+                .SetProperty(message => message.LockedUntil, (DateTime?)null)
+                .SetProperty(message => message.LastError, error)
+                .SetProperty(message => message.NextAttemptAt, message => isParked ? message.NextAttemptAt : DateTime.UtcNow.AddSeconds(delaySeconds))
+                .SetProperty(message => message.ParkedAt, message => isParked ? DateTime.UtcNow : (DateTime?)null), cancellationToken);
 
         if (isParked)
         {
-            logger.LogError(
-                exception,
-                "Parked Inventory outbox message {MessageId} after {Attempts} attempts.",
-                row.Id,
-                row.Attempts);
+            logger.LogError(exception, "Parked Inventory outbox message {MessageId} after {Attempts} attempts.", row.Id, row.Attempts);
         }
         else
         {
-            logger.LogWarning(
-                exception,
+            logger.LogWarning(exception,
                 "Inventory outbox message {MessageId} failed attempt {Attempts}; retrying in {DelaySeconds} seconds.",
-                row.Id,
-                row.Attempts,
-                delaySeconds);
+                row.Id, row.Attempts, delaySeconds);
         }
     }
 
-    private static IIntegrationEvent Deserialize(OutboxRow row)
+    private static IIntegrationEvent Deserialize(InventoryOutboxRecord row)
     {
         if (!MessageTypes.TryGetValue(row.MessageType, out var messageType))
         {
-            throw new InvalidOperationException(
-                $"Unsupported Inventory outbox message type '{row.MessageType}'.");
+            throw new InvalidOperationException($"Unsupported Inventory outbox message type '{row.MessageType}'.");
         }
 
-        return (IIntegrationEvent)(JsonSerializer.Deserialize(row.Data, messageType, SerializerOptions)
+        return (IIntegrationEvent)(JsonSerializer.Deserialize(row.Data, messageType, InventoryOutboxWriter.SerializerOptions)
             ?? throw new JsonException($"Could not deserialize Inventory outbox row {row.Id}."));
     }
-
-    private sealed record OutboxRow(
-        Guid Id,
-        string PartitionKey,
-        string MessageType,
-        string Data,
-        int Attempts);
 }

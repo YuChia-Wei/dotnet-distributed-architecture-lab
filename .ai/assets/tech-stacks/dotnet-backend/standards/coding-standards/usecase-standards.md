@@ -164,7 +164,7 @@ A Handler MUST NOT:
 
 - load or save an Aggregate;
 - depend on a Repository or Domain Service;
-- commit a transaction;
+- directly commit or create a transaction;
 - publish a business event or Command;
 - inject or orchestrate multiple Use Cases.
 
@@ -214,8 +214,18 @@ public sealed class CompleteReservationUseCase
 - MUST NOT span bounded contexts with one transaction; cross-bounded-context
   coordination uses integration events and eventual consistency.
 - A Repository participating in a Unit of Work MUST NOT commit independently.
-- A Handler MUST NOT introduce a transaction or commit after the Use Case.
+- A Handler MUST NOT introduce a transaction or commit after the Use Case. A
+  selected runtime pipeline or middleware may enroll and complete the processing
+  transaction outside the Handler; it does not make the Handler a transaction owner.
 - Pending Domain Events may be acknowledged or cleared only after a successful commit.
+
+For a selected transactional message path, the Use Case declares and
+orchestrates the required local consistency; the selected Unit of Work or
+verified runtime pipeline physically completes it. This does not make
+`IUnitOfWork` a default Use Case dependency and does not weaken the
+multi-Aggregate, same-bounded-context exception above. See
+[Transactional Messaging Standards](transactional-messaging-standards.md) for
+the single completion-owner, inbox/outbox, and adapter contract.
 
 ### 8. Event Publication Uses an Outbound Port
 
@@ -255,7 +265,8 @@ Case MUST NOT inject `IMessageBus` directly or publish Commands through the publ
 - [ ] Input/Output are separate from HTTP, MQ, and Wolverine/MediatR.
 - [ ] Dependencies are limited to Domain types and outbound ports.
 - [ ] There is no dependency on `IServiceProvider`, `IMessageBus`, or another Use Case.
-- [ ] The transaction and event lifecycle reside in the Use Case.
+- [ ] The Use Case declares and orchestrates the transaction and event lifecycle;
+      one selected Unit of Work or verified runtime pipeline completes it.
 - [ ] One command changes one Aggregate by default; other Aggregate effects use events.
 - [ ] `IUnitOfWork` is absent unless a documented, named all-or-nothing invariant
       satisfies every exceptional strong-consistency criterion above.

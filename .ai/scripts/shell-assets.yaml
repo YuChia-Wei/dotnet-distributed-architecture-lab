@@ -177,6 +177,7 @@ check_all_required_commands:
   - python .ai/scripts/tests/test_immutable_history_validation.py -v
   - python .ai/scripts/tests/test_coding_standards_integrity_contract.py -v
   - python .ai/scripts/tests/test_code_reviewer_routing_contract.py -v
+  - python .ai/scripts/tests/test_runtime_skill_entries.py -v
   - python .ai/scripts/tests/test_profile_projection_contract.py -v
   - python .ai/scripts/tests/test_document_projection_contract.py -v
   - python .ai/scripts/tests/test_ai_context_source_include_evidence.py -v

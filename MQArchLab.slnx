@@ -42,7 +42,15 @@
   <Folder Name="/Shared/">
     <Project Path="src/Shared/Lab.SharedKernel/Lab.SharedKernel.csproj" />
   </Folder>
+  <Folder Name="/Samples/EfCoreWolverine/DomainCore/">
+    <Project Path="samples/EfCoreWolverine/EfCoreWolverine.Application/EfCoreWolverine.Application.csproj" />
+    <Project Path="samples/EfCoreWolverine/EfCoreWolverine.Infrastructure/EfCoreWolverine.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Samples/EfCoreWolverine/Presentation/">
+    <Project Path="samples/EfCoreWolverine/EfCoreWolverine.Host/EfCoreWolverine.Host.csproj" />
+  </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/EfCoreWolverine.Tests/EfCoreWolverine.Tests.csproj" />
     <Project Path="tests/InventoryControl.Tests/InventoryControl.Tests.csproj" />
     <Project Path="tests/SaleOrders.Tests/SaleOrders.Tests.csproj" />
     <Project Path="tests/SaleProducts.Tests/SaleProducts.Tests.csproj" />

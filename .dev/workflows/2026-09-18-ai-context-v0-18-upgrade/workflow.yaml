@@ -1,0 +1,26 @@
+template_metadata:
+  template_id: ai-context-governance-workflow-locator
+  template_version: 1.2.0
+  created_at: '2026-07-10T18:22:49+08:00'
+  updated_at: '2026-07-15T08:36:00+08:00'
+workflow_id: 2026-09-18-ai-context-v0-18-upgrade
+schema_version: '1.0'
+lifecycle_contract: '1.0'
+workflow_kind: ai-context-maintenance
+title: Prepare AI collaboration framework v0.18.0 upgrade
+owner_skill: ai-context-governance
+status: completed
+current_phase: completed
+branch: codex/2026-09-18-ai-context-v0-18-upgrade
+base_branch: codex/2026-09-17-efcore-wolverine-sample
+artifact_root: .dev/workflows/2026-09-18-ai-context-v0-18-upgrade
+entrypoint: workflow-plan.md
+created_at: '2026-09-18T06:21:54+08:00'
+updated_at: '2026-09-20T11:56:05+08:00'
+template_source: .ai/assets/skills/ai-context-governance/templates/workflow-locator-template.yaml
+template_version: 1.2.0
+issue:
+  provider: github
+  repository: YuChia-Wei/dotnet-distributed-architecture-lab
+  number: 12
+  url: https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/12

@@ -37,7 +37,13 @@ from ai_context_target_provenance import (
     TargetValidationError,
     framework_managed_ignore_message,
     git_ignore_rule,
+    load_mapping,
+    validate_commit_subject_grammar_adoption_target,
     validate_customizations,
+    validate_effective_rule_state,
+    validate_manifest,
+    validate_terminal_receipt_invariant,
+    validate_upgrade_finalization_evidence,
 )
 
 
@@ -70,6 +76,7 @@ LEGACY_COMPONENT_SELECTION["providers"]["repo-backlog"]["enabled"] = True
 TARGET_EFFECTIVE_STATE_PATH = ".dev/ai-context/effective-rules.yaml"
 TARGET_EFFECTIVE_PACKET_DIRECTORY = ".dev/ai-context/effective-rule-packets"
 PENDING_RECEIPT_PATH = ".dev/AI-CONTEXT-APPLY-PENDING.yaml"
+FINALIZED_PENDING_RECEIPT_ARCHIVE_PATH = "finalized-pending-receipt.yaml"
 APPLY_PLAN_SCHEMA_VERSION = "2.2.0"
 PENDING_RECEIPT_SCHEMA_VERSION = "2.0.0"
 JOURNAL_SCHEMA_VERSION = "ai-context-package-apply-journal/v5"
@@ -283,6 +290,41 @@ class TargetGitSnapshot:
             remaining_dirty.discard(relative)
             self.worktree_inventory.pop(relative, None)
         self.dirty_paths = frozenset(remaining_dirty)
+
+    def accept_verified_prestate_restoration(
+        self, relative: str, expected: dict
+    ) -> bool:
+        """Advance one originally clean tracked path after sealed restoration."""
+        if (
+            expected.get("exists") is not True
+            or expected.get("tracked") is not True
+            or expected.get("dirty") is not False
+        ):
+            return False
+        path = self.root / Path(*PurePosixPath(relative).parts)
+        reject_symlink_boundary(self.root, relative)
+        if path.is_symlink() or is_reparse_point(path) or not path.is_file():
+            return False
+        if sha256_bytes(path.read_bytes()) != expected.get("sha256"):
+            return False
+        if self.tracked_mode(relative) != expected.get("mode"):
+            return False
+        if self.core_filemode and filesystem_mode(path) != expected.get("mode"):
+            return False
+        index_content = self.tracked_bytes(relative)
+        if (
+            index_content is None
+            or sha256_bytes(index_content) != expected.get("git_sha256")
+        ):
+            return False
+        current = worktree_inventory_entry(path)
+        if current is None:
+            return False
+        remaining_dirty = set(self.dirty_paths)
+        remaining_dirty.discard(relative)
+        self.dirty_paths = frozenset(remaining_dirty)
+        self.worktree_inventory[relative] = current
+        return True
 
 
 _ACTIVE_TARGET_GIT_SNAPSHOT: ContextVar[TargetGitSnapshot | None] = ContextVar(
@@ -5681,6 +5723,169 @@ def record_target_validation_receipt_locked(
     )
 
 
+def _read_finalized_receipt_archive(path: Path) -> bytes:
+    if path.is_symlink() or is_reparse_point(path) or not path.is_file():
+        raise ApplyError("finalized pending receipt archive must be a regular file")
+    try:
+        return path.read_bytes()
+    except OSError as exc:
+        raise ApplyError(f"cannot read finalized pending receipt archive: {exc}") from exc
+
+
+def _ensure_finalized_receipt_archive(
+    root: Path, pending_receipt: bytes
+) -> Path:
+    """Write one private receipt archive once, or prove its exact retry bytes."""
+    archive = root / FINALIZED_PENDING_RECEIPT_ARCHIVE_PATH
+    if archive.exists() or archive.is_symlink() or is_reparse_point(archive):
+        if _read_finalized_receipt_archive(archive) != pending_receipt:
+            raise ApplyError("finalized pending receipt archive differs from terminal evidence")
+        return archive
+    atomic_write_bytes(archive, pending_receipt, mode=0o600)
+    if _read_finalized_receipt_archive(archive) != pending_receipt:
+        raise ApplyError("finalized pending receipt archive differs after write")
+    return archive
+
+
+def _validate_current_finalized_target_state(target: Path, errors: list[str]) -> None:
+    """Validate current authority without reapplying the sealed plan-time HEAD gate."""
+    provenance = target / ".dev/ai-context/provenance.yaml"
+    legacy = target / ".dev/AI-CONTEXT-SOURCE.yaml"
+    if provenance.is_file() and legacy.is_file():
+        errors.append(
+            f"{target}: provenance.yaml and AI-CONTEXT-SOURCE.yaml cannot both be active"
+        )
+    if not provenance.is_file():
+        errors.append(f"{target}: expected .dev/ai-context/provenance.yaml")
+        return
+    validate_manifest(provenance, errors)
+    current_provenance = load_mapping(provenance, errors)
+    if current_provenance is not None:
+        validate_commit_subject_grammar_adoption_target(
+            target, current_provenance, str(provenance), errors
+        )
+    ledger = target / ".dev/ai-context/customizations.yaml"
+    if not ledger.is_file():
+        errors.append(f"{target}: provenance schema 2 requires customizations.yaml")
+    else:
+        validate_customizations(ledger, errors)
+    effective_state = target / TARGET_EFFECTIVE_STATE_PATH
+    if effective_state.is_file() and not effective_state.is_symlink():
+        errors.extend(validate_effective_rule_state(target, require_packets=True))
+    elif effective_state.is_symlink() or effective_state.exists():
+        errors.append(
+            f"{target}: target effective state path exists but is not a regular file"
+        )
+
+
+def _validated_direct_finalized_receipt_evidence(
+    target: Path, transaction_id: str
+) -> tuple[dict[str, object], Path, str]:
+    """Validate one direct terminal receipt before its root copy is cleared."""
+    errors: list[str] = []
+    evidence = validate_upgrade_finalization_evidence(
+        target,
+        None,
+        None,
+        errors,
+        transaction_id=transaction_id,
+        historical=True,
+    )
+    if evidence is not None:
+        if evidence.get("transaction_id") != transaction_id:
+            errors.append("finalized receipt transaction identity differs")
+        plan = evidence.get("plan")
+        if not isinstance(plan, dict):
+            errors.append("finalized receipt sealed plan is invalid")
+        elif route_checkpoint_context(plan) is not None:
+            errors.append(
+                "multi-hop child pending receipt must be cleared by the sealed route orchestrator"
+            )
+        journal = evidence.get("journal")
+        expected_pending_sha256 = evidence.get("pending_receipt_sha256")
+        if (
+            not isinstance(journal, dict)
+            or not isinstance(expected_pending_sha256, str)
+            or not re.fullmatch(r"[0-9a-f]{64}", expected_pending_sha256)
+            or journal.get("final_receipt_sha256") != expected_pending_sha256
+        ):
+            errors.append("finalized receipt journal pending receipt identity differs")
+        validate_terminal_receipt_invariant(
+            target, evidence, errors, require_current_authority=True
+        )
+    else:
+        expected_pending_sha256 = None
+    _validate_current_finalized_target_state(target, errors)
+    if errors or evidence is None or not isinstance(expected_pending_sha256, str):
+        raise ApplyError(
+            "direct finalized receipt cleanup requires complete terminal evidence: "
+            + "; ".join(errors or ["finalization evidence is unavailable"])
+        )
+    root = evidence.get("transaction")
+    if not isinstance(root, Path) or root != transaction_root(target, transaction_id):
+        raise ApplyError("finalized receipt transaction directory identity differs")
+    return evidence, root, expected_pending_sha256
+
+
+def archive_finalized_receipt(
+    target: Path,
+    transaction_id: str,
+    boundary_hook: Callable[[str, dict], None] | None = None,
+) -> dict:
+    """Archive and clear a direct finalized pending receipt without journal mutation."""
+    target = target.resolve()
+    transaction_root(target, transaction_id)
+    with transaction_lock(target):
+        receipt_path = recovery_receipt_path(target)
+        pending_present = receipt_path.exists()
+        _evidence, root, expected_pending_sha256 = (
+            _validated_direct_finalized_receipt_evidence(target, transaction_id)
+        )
+        archive = root / FINALIZED_PENDING_RECEIPT_ARCHIVE_PATH
+        if not pending_present:
+            if sha256_bytes(_read_finalized_receipt_archive(archive)) != expected_pending_sha256:
+                raise ApplyError(
+                    "finalized pending receipt archive digest differs from terminal evidence"
+                )
+            return {
+                "status": "already-archived-and-cleared",
+                "transaction_id": transaction_id,
+                "archive_path": FINALIZED_PENDING_RECEIPT_ARCHIVE_PATH,
+                "pending_receipt_sha256": expected_pending_sha256,
+            }
+
+        pending_receipt = _read_finalized_receipt_archive(receipt_path)
+        if sha256_bytes(pending_receipt) != expected_pending_sha256:
+            raise ApplyError("current pending receipt differs from terminal evidence")
+        archive = _ensure_finalized_receipt_archive(root, pending_receipt)
+        invoke_boundary(
+            boundary_hook,
+            "after_finalized_receipt_archive",
+            {
+                "transaction_id": transaction_id,
+                "archive_path": FINALIZED_PENDING_RECEIPT_ARCHIVE_PATH,
+            },
+        )
+        if (
+            sha256_bytes(_read_finalized_receipt_archive(archive))
+            != expected_pending_sha256
+        ):
+            raise ApplyError(
+                "finalized pending receipt archive digest differs from terminal evidence"
+            )
+        if _read_finalized_receipt_archive(receipt_path) != pending_receipt:
+            raise ApplyError("current pending receipt changed during archive cleanup")
+        durable_unlink(receipt_path, root)
+        if receipt_path.exists() or receipt_path.is_symlink() or is_reparse_point(receipt_path):
+            raise ApplyError("finalized pending receipt was not durably cleared")
+        return {
+            "status": "archived-and-cleared",
+            "transaction_id": transaction_id,
+            "archive_path": FINALIZED_PENDING_RECEIPT_ARCHIVE_PATH,
+            "pending_receipt_sha256": expected_pending_sha256,
+        }
+
+
 def clear_checkpointed_pending_receipt_locked(
     target: Path,
     transaction_id: str,
@@ -5979,6 +6184,9 @@ def rollback_loaded_transaction(
             )
         elif path.exists():
             durable_unlink(path, root)
+        snapshot = active_target_git_snapshot(target)
+        if snapshot is not None:
+            snapshot.accept_verified_prestate_restoration(relative, item["state"])
         invoke_boundary(hook, "after_rollback_restore", {"path": relative})
         append_progress_record(
             root,

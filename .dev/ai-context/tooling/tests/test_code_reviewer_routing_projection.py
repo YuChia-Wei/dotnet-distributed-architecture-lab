@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the downstream-applicable v0.13 code-review routing contract."""
+"""Validate the installed common-core plus selected .NET review extension."""
 
 from __future__ import annotations
 
@@ -14,26 +14,21 @@ ROOT = Path(__file__).resolve().parents[4]
 ROUTING_PATH = Path(
     ".ai/assets/skills/code-reviewer/references/review-routing.yaml"
 )
+EXTENSION_ROUTING_PATH = Path(
+    ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml"
+)
 FIXTURE_PATH = Path(
-    ".ai/assets/skills/code-reviewer/fixtures/review-routing-fixtures.yaml"
+    ".ai/assets/tech-stacks/dotnet-backend/review/review-routing-fixtures.yaml"
 )
 SKILL_PATH = Path(".ai/assets/skills/code-reviewer/skill.yaml")
 CATALOG_PATH = Path(
     ".ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml"
 )
-ROLE_PATHS = {
-    "general": Path(
-        ".ai/assets/sub-agent-role-prompts/code-review-sub-agent/sub-agent.yaml"
-    ),
-    "aggregate": Path(
-        ".ai/assets/sub-agent-role-prompts/aggregate-code-review-sub-agent/sub-agent.yaml"
-    ),
-    "controller": Path(
-        ".ai/assets/sub-agent-role-prompts/controller-code-review-sub-agent/sub-agent.yaml"
-    ),
-    "reactor": Path(
-        ".ai/assets/sub-agent-role-prompts/reactor-code-review-sub-agent/sub-agent.yaml"
-    ),
+ROLE_ASSET_IDS = {
+    "general": "code-review-sub-agent",
+    "aggregate": "aggregate-code-review-sub-agent",
+    "controller": "controller-code-review-sub-agent",
+    "reactor": "reactor-code-review-sub-agent",
 }
 BASELINE_BYTES = {
     "top-level": 43_747,
@@ -56,10 +51,37 @@ def load_yaml(path: Path) -> dict:
     return yaml.safe_load((ROOT / path).read_text(encoding="utf-8"))
 
 
-def route_map() -> dict[str, dict]:
+def review_role_paths(skill: dict) -> dict[str, Path]:
+    bindings = skill.get("role_bindings")
+    if not isinstance(bindings, list):
+        raise AssertionError("code-reviewer skill must declare role_bindings")
+    paths_by_asset: dict[str, str] = {}
+    required_assets = set(ROLE_ASSET_IDS.values())
+    for binding in bindings:
+        if not isinstance(binding, dict):
+            continue
+        asset_id = binding.get("role_asset_id")
+        if asset_id not in required_assets:
+            continue
+        role_path = binding.get("role_path")
+        if not isinstance(role_path, str) or not role_path:
+            raise AssertionError(f"review role binding has no role_path: {asset_id}")
+        if asset_id in paths_by_asset:
+            raise AssertionError(f"duplicate review role binding: {asset_id}")
+        paths_by_asset[asset_id] = role_path
+    missing = sorted(required_assets - set(paths_by_asset))
+    if missing:
+        raise AssertionError(f"missing review role bindings: {missing}")
+    return {
+        role_name: Path(paths_by_asset[asset_id])
+        for role_name, asset_id in ROLE_ASSET_IDS.items()
+    }
+
+
+def route_map(routing_path: Path = EXTENSION_ROUTING_PATH) -> dict[str, dict]:
     return {
         route["route_id"]: route
-        for route in load_yaml(ROUTING_PATH)["routes"]
+        for route in load_yaml(routing_path)["routes"]
     }
 
 
@@ -109,6 +131,13 @@ def total_bytes(paths: set[Path]) -> int:
 
 class CodeReviewerRoutingProjectionTests(unittest.TestCase):
     def test_gwt_001_required_routes_and_references_are_complete(self) -> None:
+        core = load_yaml(ROUTING_PATH)
+        self.assertEqual("common", core["selection"]["core_route"])
+        self.assertEqual(["common"], [route["route_id"] for route in core["routes"]])
+        self.assertEqual(
+            [".ai/assets/skills/code-reviewer/references/core-review-playbook.md"],
+            core["routes"][0]["canonical_references"],
+        )
         routes = route_map()
         self.assertEqual(
             {
@@ -126,7 +155,7 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
                     self.assertTrue((ROOT / reference).is_file(), reference)
 
     def test_gwt_002_routed_rules_bind_to_catalog_consumers(self) -> None:
-        routing = load_yaml(ROUTING_PATH)
+        routing = load_yaml(EXTENSION_ROUTING_PATH)
         catalog = load_yaml(CATALOG_PATH)
         catalog_rules = {rule["rule_id"]: rule for rule in catalog["rules"]}
         routed = {
@@ -137,7 +166,7 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
         }
         self.assertTrue(routed)
         self.assertTrue(routed.issubset(catalog_rules))
-        routing_path = str(ROUTING_PATH).replace("\\", "/")
+        routing_path = str(EXTENSION_ROUTING_PATH).replace("\\", "/")
         for rule_id in routed:
             with self.subTest(rule_id=rule_id):
                 self.assertIn(
@@ -146,9 +175,12 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
                 )
 
     def test_gwt_003_acceptance_fixtures_select_expected_routes_and_rules(self) -> None:
+        fixtures = load_yaml(FIXTURE_PATH)
+        self.assertEqual(str(ROUTING_PATH).replace("\\", "/"), fixtures["contract_path"])
         routes = route_map()
-        for case in load_yaml(FIXTURE_PATH)["cases"]:
+        for case in fixtures["cases"]:
             with self.subTest(case_id=case["case_id"]):
+                self.assertEqual("common", select_route(case, route_map(ROUTING_PATH)))
                 route_id = select_route(case, routes)
                 self.assertEqual(case["expected_route"], route_id)
                 rules = selected_rule_ids(routes[route_id], case["finding_tags"])
@@ -159,7 +191,7 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
 
         guardrails = " ".join(
             item["statement"]
-            for item in load_yaml(ROUTING_PATH)["semantic_guardrails"]
+            for item in load_yaml(EXTENSION_ROUTING_PATH)["semantic_guardrails"]
         ).lower()
         self.assertIn("do not reject a repository interface merely", guardrails)
         self.assertIn("only when", guardrails)
@@ -205,9 +237,11 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
                 )
 
     def test_gwt_005_review_roles_do_not_require_shared_rule_bundles(self) -> None:
-        route_ids = set(route_map())
+        route_ids = set(route_map(ROUTING_PATH))
+        self.assertEqual({"common"}, route_ids)
         routing_path = str(ROUTING_PATH).replace("\\", "/")
-        for role_name, role_path in ROLE_PATHS.items():
+        role_paths = review_role_paths(load_yaml(SKILL_PATH))
+        for role_name, role_path in role_paths.items():
             manifest = load_yaml(role_path)
             references = set(manifest["references"])
             with self.subTest(role=role_name):
@@ -217,22 +251,28 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
                     "selected-route-only",
                     manifest["routing"]["reference_loading"],
                 )
-                self.assertTrue(
-                    set(manifest["routing"]["supported_route_ids"]).issubset(
-                        route_ids
-                    )
-                )
+                self.assertEqual(route_ids, set(manifest["routing"]["supported_route_ids"]))
+                self.assertEqual("selected-extension-contract", manifest["routing"]["extension_routes"])
 
-    def test_gwt_006_compatibility_entries_route_without_duplicate_doctrine(self) -> None:
-        routing = load_yaml(ROUTING_PATH)
-        self.assertEqual("v0.13.x", routing["compatibility"]["migration_window"])
-        for entry in routing["compatibility"]["entries"]:
-            path = ROOT / entry
-            text = path.read_text(encoding="utf-8")
+    def test_gwt_006_selected_dotnet_extension_is_explicit_and_not_compatibility_doctrine(self) -> None:
+        core = load_yaml(ROUTING_PATH)
+        extension = load_yaml(EXTENSION_ROUTING_PATH)
+        project = load_yaml(Path(".dev/project-config.yaml"))
+        self.assertIn("dotnet-backend", set(project["technologyProfiles"]))
+        self.assertEqual(
+            {"dotnet-backend"},
+            {entry["component_id"] for entry in core["extensions"]},
+        )
+        self.assertEqual("dotnet-backend", extension["component_id"])
+        self.assertNotIn("compatibility", core)
+        self.assertEqual("v0.13.x", extension["compatibility"]["migration_window"])
+        for entry in extension["compatibility"]["entries"]:
+            entry_path = ROOT / entry
+            entry_text = entry_path.read_text(encoding="utf-8")
             with self.subTest(entry=entry):
-                self.assertIn("review-routing.yaml", text)
-                self.assertIn("v0.13.x", text)
-                self.assertLess(path.stat().st_size, 1_500)
+                self.assertIn("review-routing.yaml", entry_text)
+                self.assertIn("v0.13.x", entry_text)
+                self.assertLess(entry_path.stat().st_size, 1_500)
 
     def test_gwt_007_route_reference_graph_is_smaller_than_baseline(self) -> None:
         wrapper = Path(".agents/skills/code-reviewer/SKILL.md")
@@ -241,9 +281,11 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
             wrapper,
             SKILL_PATH,
             *(Path(path) for path in skill["references"]),
+            EXTENSION_ROUTING_PATH,
         }
         routes = route_map()
-        general_role = expanded_references(ROLE_PATHS["general"])
+        role_paths = review_role_paths(skill)
+        general_role = expanded_references(role_paths["general"])
         measured = {
             "top-level": total_bytes(top_level),
             "general": total_bytes(
@@ -259,7 +301,7 @@ class CodeReviewerRoutingProjectionTests(unittest.TestCase):
             measured[role_name] = total_bytes(
                 top_level
                 | general_role
-                | expanded_references(ROLE_PATHS[role_name])
+                | expanded_references(role_paths[role_name])
                 | {
                     Path(path)
                     for path in routes[role_name]["canonical_references"]
