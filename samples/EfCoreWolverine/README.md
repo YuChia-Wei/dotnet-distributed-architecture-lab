@@ -11,7 +11,7 @@
 5. [DecreaseStockHandler](EfCoreWolverine.Host/DecreaseStockHandler.cs)：薄 inbound adapter，只轉換輸入、呼叫 Use Case 與處理業務拒絕結果。
 6. [InventoryDbContext](EfCoreWolverine.Infrastructure/InventoryDbContext.cs) 與 [測試](../../tests/EfCoreWolverine.Tests/)：EF mapping、並行控制與驗證案例。
 
-`Application`、`Infrastructure`、`Host` 三個專案重用現有 `InventoryControl.Domains`、`IAggregateRepository<InventoryItem, Guid>` 與跨 BC integration event，不改寫原有 Dapper 路徑。
+`Application`、`Infrastructure`、`Host` 三個專案重用現有 `InventoryControl.Domains`、`IAggregateRepository<InventoryItem, Guid>` 與跨 BC integration event，正式 Inventory 已採用 EF Core；此獨立 sample 保留自己的 schemas/topics，用來對照原生 Wolverine 交易 pipeline 與正式 Inventory 的 capability-specific source outbox。Products／Orders 保留 Dapper，參見 [Inventory EF Core 指南](../../.dev/operations/inventory-efcore.md)。
 
 ## 交易由誰管理
 

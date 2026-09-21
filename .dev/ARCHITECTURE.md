@@ -59,11 +59,11 @@ Current use cases include product create/update/delete/query, order place/ship/d
 
 ## Persistence
 
-- Product and Inventory persistence use Dapper + Npgsql repositories with PostgreSQL.
+- Products uses Dapper + Npgsql; Inventory uses EF Core + the Npgsql provider. Both use PostgreSQL. Inventory is the EF Core practice bounded context; Products and Orders retain the contrasting Dapper paths.
 - Order includes both a Dapper domain repository and `OrderEventSourcingRepository`; event sourcing is an explicit Orders capability rather than a universal default.
 - Orders atomically commits domain events, read model state, and its source outbox. Inventory exposes capability-specific outbox ports rather than a generic Unit of Work: `IInventoryReservationOutbox` atomically commits reservation outcome/state/event, while `IInventoryStockOutbox` atomically commits decrease/increase/restock state and event with an expected-stock concurrency check. Database transaction/UoW mechanics remain private Infrastructure details.
 - Source-outbox relays are Infrastructure adapters: they do not decide event meaning. They publish the producer-created contract with stable delivery metadata and bounded retry/park behavior.
-- Product source projects do not currently reference EF Core; the retired target validation tooling is no longer part of the active repository.
+- Inventory Infrastructure owns the EF model and maps the existing lowercase PostgreSQL tables. SQL initialization and incremental migrations remain schema authority; the runtime does not recreate existing databases. The retired target validation tooling remains absent.
 
 `samples/EfCoreWolverine/` is an isolated EF Core + Wolverine example that reuses
 `InventoryItem` and the aggregate repository port. Its Application, Infrastructure,
@@ -71,7 +71,7 @@ and Host projects demonstrate an Eager transaction around a thin Kafka Handler a
 Use Case. The scoped EF repository and outgoing publisher participate in Wolverine's
 native inbox/outbox transaction; the repository does not commit. PostgreSQL `xmin`
 provides concurrency control. This sample has its own schemas/topics and does not
-replace the product Dapper adapters. See its README for setup and validation limits.
+replace Inventory's existing source-outbox completion owner. Inventory runtime now uses EF Core while preserving its capability-specific stock/reservation transactions; the sample separately demonstrates Wolverine's native inbox/outbox enrollment. See its README for setup and validation limits.
 
 ## Messaging And Integration
 

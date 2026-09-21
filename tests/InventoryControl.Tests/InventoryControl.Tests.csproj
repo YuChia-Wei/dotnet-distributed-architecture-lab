@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <Content Include="..\..\docker-compose\sql-script\create_inventoryitems_table.sql" Link="Schema\inventory.sql" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,130 @@
+{
+  "template_version": "1.5.0",
+  "workflow_id": "2026-09-21-inventory-efcore-integration",
+  "task_id": "INV-001",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-09-21-inventory-efcore-integration",
+  "status": "in_progress",
+  "created_at": "2026-09-21T08:53:07+08:00",
+  "updated_at": "2026-09-21T09:02:23+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "workflow_locator": ".dev/workflows/2026-09-21-inventory-efcore-integration/workflow.yaml",
+  "scope": {
+    "goal": "Replace Inventory runtime Dapper persistence with EF Core while preserving commerce contracts and stored data.",
+    "target": "Inventory persistence adapters and their DI, tests and operational docs",
+    "files": [
+      "src/Inventory/",
+      "tests/InventoryControl.Tests/",
+      "docker-compose/",
+      "README.md",
+      "README.en.md",
+      ".dev/ARCHITECTURE.md",
+      ".dev/project-config.yaml"
+    ],
+    "constraints": [
+      "One tracked writer at a time.",
+      "Keep existing tables and operation/outbox records compatible.",
+      "Keep Products and Orders Dapper.",
+      "Preserve existing Docker volumes."
+    ],
+    "non_goals": [
+      "Broker topology changes",
+      "Replacing Orders event sourcing",
+      "Framework release",
+      "Rewriting historical workflow evidence"
+    ]
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [],
+    "architecture_decisions": [
+      ".dev/workflows/2026-09-21-inventory-efcore-integration/design.md"
+    ],
+    "user_constraints": [
+      "2026-09-21 user authorizes Inventory EF Core, v0.18 integration, existing Docker verification and final main push."
+    ]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "implementation",
+      "authorization_source": [
+        "2026-09-21 user request; GitHub Issue #14"
+      ],
+      "pending_decision": ""
+    },
+    "implementation_contract": {
+      "intent": "refactor",
+      "execution_mode": "generic",
+      "overlays": [],
+      "authorization_source": [
+        "2026-09-21 user request; GitHub Issue #14"
+      ],
+      "normative_truth": [
+        ".dev/ARCHITECTURE.md",
+        ".dev/workflows/2026-09-21-inventory-efcore-integration/design.md",
+        ".dev/ai-context/effective-rules.yaml"
+      ],
+      "finding_evidence": [],
+      "subject_revision": "a27fdb313f054e522920cc39ff3e0a48bca1eb9d",
+      "non_goals": [
+        "Broker topology changes",
+        "Replacing Orders event sourcing",
+        "Framework release",
+        "Rewriting historical workflow evidence"
+      ],
+      "validation": [
+        "Inventory deterministic and real PostgreSQL tests",
+        "Compose commerce and Kafka regression",
+        "Target AI context and workflow checks"
+      ],
+      "acceptance_criteria": [
+        "AC1-AC7 in .dev/workflows/2026-09-21-inventory-efcore-integration/design.md"
+      ]
+    },
+    "test_execution_contract": null,
+    "role_execution_records": [],
+    "spec_compliance": {
+      "selected": false,
+      "activation_source": [],
+      "expected_outcome": "not-applicable"
+    },
+    "steps": [
+      "Implement EF Core mapping and persistence preserving transactions.",
+      "Test existing and new concurrency, rollback, DI and query cases.",
+      "Review, document and validate integration.",
+      "Merge to main and push after passing gates."
+    ],
+    "validation": [],
+    "commit_checkpoint": "coherent-batch: EF Core Inventory adapters, behavior tests and supporting docs; freeze before integration validation.",
+    "deferred_items": []
+  },
+  "results": {
+    "summary": "Inventory EF persistence implemented; focused tests 29 passed, 18 external skipped, 0 failed. Actual integration and review pending.",
+    "files_changed": [],
+    "approval_evidence": [],
+    "test_execution": [
+      {
+        "level": "unit",
+        "command": "dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-restore --verbosity minimal",
+        "outcome": "passed",
+        "passed": 29,
+        "failed": 0,
+        "skipped": 18,
+        "note": "External tests skipped, not passing PostgreSQL evidence."
+      }
+    ],
+    "role_execution_aggregation": [],
+    "spec_compliance": {
+      "outcome": "not-applicable",
+      "coverage_percent": null,
+      "evidence": []
+    },
+    "validation_evidence": [],
+    "commits": [],
+    "follow_up_needed": false
+  }
+}

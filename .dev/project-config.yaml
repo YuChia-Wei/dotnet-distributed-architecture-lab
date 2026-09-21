@@ -179,8 +179,8 @@ persistence:
   libraries:
     - Dapper 2.1.79
     - Npgsql 10.0.3
-    - EF Core 10.0.12 (isolated sample)
-    - Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3 (isolated sample)
+    - EF Core 10.0.12 (Inventory and isolated sample)
+    - Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3 (Inventory and isolated sample)
   connectionStringSources:
     - docker-compose/docker-compose.yml
     - src/Product/Presentation/SaleProducts.WebApi/appsettings.json
@@ -235,13 +235,15 @@ technologySelections:
       Tests that require PostgreSQL, Kafka, RabbitMQ, or another out-of-process service
       must not add failure noise to ordinary deterministic test runs.
   - slot: persistence.orm
-    value: Dapper for product paths; EF Core for the isolated Wolverine sample
+    value: EF Core for Inventory and the isolated Wolverine sample; Dapper for Products and Orders
     status: selected
-    source: repository-evidence
+    source: explicit-target-decision
     evidence:
       - src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj
+      - src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj
+      - .dev/workflows/2026-09-21-inventory-efcore-integration/design.md
       - samples/EfCoreWolverine/EfCoreWolverine.Infrastructure/EfCoreWolverine.Infrastructure.csproj
-    reason: Existing product persistence uses Dapper; the owner requested a parallel EF Core and Wolverine implementation example.
+    reason: On 2026-09-21 the owner selected Inventory as the EF Core practice context and retained Dapper in the other contexts; the native Wolverine sample remains a separate transaction reference.
   - slot: persistence.database
     value: PostgreSQL
     status: selected

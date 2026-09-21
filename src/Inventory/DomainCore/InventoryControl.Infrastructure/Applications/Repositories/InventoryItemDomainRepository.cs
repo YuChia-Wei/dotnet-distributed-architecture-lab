@@ -1,78 +1,61 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
-using Dapper;
-using InventoryControl.Applications.Repositories;
 using InventoryControl.Applications.Queries;
+using InventoryControl.Applications.Repositories;
 using InventoryControl.Domains;
+using InventoryControl.Infrastructure.Persistence;
 using Lab.BuildingBlocks.Application;
-using Lab.BuildingBlocks.Domains;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryControl.Infrastructure.Applications.Repositories;
 
-public class InventoryItemDomainRepository : IInventoryItemDomainRepository, IInventoryItemQueryRepository
+public sealed class InventoryItemDomainRepository(InventoryDbContext context, IDomainEventDispatcher dispatcher)
+    : IInventoryItemDomainRepository, IInventoryItemQueryRepository
 {
-    private readonly IDbConnection _dbConnection;
-    private readonly IDomainEventDispatcher _dispatcher;
+    public Task<InventoryItem?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        => context.InventoryItems.SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
 
-    public InventoryItemDomainRepository(IDbConnection dbConnection, IDomainEventDispatcher dispatcher)
-    {
-        this._dbConnection = dbConnection;
-        this._dispatcher = dispatcher;
-    }
-
-    public async Task<InventoryItem?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        const string sql = "SELECT * FROM InventoryItems WHERE Id = @Id";
-        return await this._dbConnection.QuerySingleOrDefaultAsync<InventoryItem>(sql, new
-        {
-            Id = id
-        });
-    }
-
-    public async Task<IEnumerable<InventoryItem>> FindByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
+    public Task<IEnumerable<InventoryItem>> FindByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+        => throw new NotImplementedException();
 
     public async Task SaveAsync(InventoryItem entity, CancellationToken cancellationToken = default)
     {
-        // 嘗試更新，若無影響列數則新增
-        const string updateSql = "UPDATE InventoryItems SET Stock = @Stock WHERE Id = @Id";
-        var affected = await this._dbConnection.ExecuteAsync(updateSql, entity);
-
-        if (affected == 0)
+        try
         {
-            const string insertSql =
-                "INSERT INTO InventoryItems (Id, ProductId, Stock) VALUES (@Id, @ProductId, @Stock)";
-            await this._dbConnection.ExecuteAsync(insertSql, entity);
+            if (context.Entry(entity).State == EntityState.Detached)
+            {
+                if (await context.InventoryItems.AnyAsync(item => item.Id == entity.Id, cancellationToken))
+                {
+                    context.InventoryItems.Attach(entity);
+                    context.Entry(entity).Property(item => item.Stock).IsModified = true;
+                }
+                else
+                {
+                    context.InventoryItems.Add(entity);
+                }
+            }
+
+            await context.SaveChangesAsync(cancellationToken);
+        }
+        catch
+        {
+            context.ChangeTracker.Clear();
+            throw;
         }
 
-        await this._dispatcher.DispatchAsync(entity.DomainEvents, cancellationToken);
+        await dispatcher.DispatchAsync(entity.DomainEvents, cancellationToken);
     }
 
-    public async Task SaveAllAsync(IEnumerable<InventoryItem> entities, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
+    public Task SaveAllAsync(IEnumerable<InventoryItem> entities, CancellationToken cancellationToken = default)
+        => throw new NotImplementedException();
 
     public async Task DeleteAsync(InventoryItem entity, CancellationToken cancellationToken = default)
     {
-        const string sql = "DELETE FROM InventoryItems WHERE Id = @Id";
-        await this._dbConnection.ExecuteAsync(sql, new
-        {
-            Id = entity.Id
-        });
+        await context.InventoryItems.Where(item => item.Id == entity.Id).ExecuteDeleteAsync(cancellationToken);
+        context.DetachInventoryItem(entity.Id);
     }
 
-    public async Task<InventoryItemReadModel?> FindByProductIdAsync(
-        Guid productId,
-        CancellationToken cancellationToken = default)
-    {
-        const string sql = "SELECT Id, ProductId, Stock FROM InventoryItems WHERE ProductId = @ProductId";
-        return await this._dbConnection.QuerySingleOrDefaultAsync<InventoryItemReadModel>(
-            new CommandDefinition(sql, new { ProductId = productId }, cancellationToken: cancellationToken));
-    }
+    public Task<InventoryItemReadModel?> FindByProductIdAsync(Guid productId, CancellationToken cancellationToken = default)
+        => context.InventoryItems.AsNoTracking()
+            .Where(item => item.ProductId == productId)
+            .Select(item => new InventoryItemReadModel(item.Id, item.ProductId, item.Stock))
+            .SingleOrDefaultAsync(cancellationToken);
 }

@@ -17,7 +17,7 @@ $env:INVENTORY_TEST_POSTGRES_CONNECTION_STRING = "Host=localhost;Port=5435;Datab
 dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --filter "Category=ExternalIntegration"
 ```
 
-The target database must already contain `InventoryItems`, `InventoryReservationOperations`, and `InventoryIntegrationOutbox`; apply both Inventory migrations documented in `.dev/operations/mq-topology.md` for an existing volume. The opted-in profile covers reservation concurrency plus ordinary stock/outbox atomic commit and expected-stock concurrency. Without the opt-in, all such tests are reported as skipped and remain non-passing external evidence.
+Inventory EF Core tests create a unique schema inside the selected PostgreSQL database, apply the checked-in Inventory initialization SQL to it and drop only that schema during cleanup. The test role therefore needs schema creation permission. Existing public tables and outbox rows are not test cleanup targets. Product hosts still require the migrations documented in `.dev/operations/mq-topology.md`. The opted-in profile covers EF mapping/query persistence, reservation replay and concurrency, stock/outbox atomicity and rollback, expected-stock conflicts, relay identity/retry/parking and retention. Without the opt-in, all such tests are reported as skipped and remain non-passing external evidence.
 
 Without both environment variables, the external test is skipped. A skipped external test is not passing evidence for PostgreSQL locking, reservation/outbox atomicity, or rollback behavior; release or reconstruction gates that require this evidence remain open until an opted-in run passes.
 

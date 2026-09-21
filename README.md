@@ -14,11 +14,13 @@ Repository 同時維護一套可重用的 AI collaboration context；產品真�
 | --- | --- | --- |
 | Products | 商品建立、查詢、更新與刪除 | `SaleProducts.WebApi`, `SaleProducts.Consumer` |
 | Orders | 訂單建立與 shipped/delivered/cancelled lifecycle | `SaleOrders.WebApi`, `SaleOrders.Consumer` |
-| Inventory | 商品庫存初始化、增加、扣減與補貨 | `InventoryControl.WebApi`, `InventoryControl.Consumer` |
+| Inventory | 商品庫存初始化、增加、扣減與補貨；EF Core 練習 context | `InventoryControl.WebApi`, `InventoryControl.Consumer` |
 
 跨 context contracts 位於 `src/BC-Contracts/`。Orders 與 Inventory 的庫存預留流程透過 Wolverine request/reply 與 MQ channels 協作；integration events 透過各 context 擁有的 topic/queue 發布。
 
 [Consumer 並行範例](.dev/operations/consumer-parallel-examples.md) 說明 Task.WhenAll、同一外部事件觸發兩個獨立 handler，以及既有 Compose 的回歸與 E2E 指令。
+
+Inventory 正式路徑使用 **EF Core**；Products 與 Orders 保留 **Dapper**，可對照兩種資料存取實作。Inventory 的既有資料表、庫存預留防重與 source outbox 交易保持相容。學習入口見 [Inventory EF Core 指南](.dev/operations/inventory-efcore.md)。
 
 [EF Core + Wolverine 交易範例](samples/EfCoreWolverine/README.md) 示範 Aggregate Repository、Use Case、原生 inbox／outbox 與共同交易，附獨立 PostgreSQL／Kafka 環境及操作指令。
 
@@ -29,7 +31,7 @@ Repository 同時維護一套可重用的 AI collaboration context；產品真�
 - WolverineFx `6.36.0`
 - Kafka（canonical broker；目前 Docker Compose 啟用，並以 producer-selected partition key 驗證同一業務實體的順序消費）
 - RabbitMQ（deferred compatibility profile；Compose service 預設註解，目前共享 queue 不是廣播拓撲，是否轉換或同步部署需另行評估）
-- PostgreSQL `16.15-alpine`、Dapper `2.1.79`、Npgsql `10.0.3`
+- PostgreSQL `16.15-alpine`、EF Core `10.0.12`（Inventory）、Dapper `2.1.79`（Products／Orders）、Npgsql／Npgsql EF provider `10.0.3`
 - xUnit v3 `4.0.0` (`xunit.v3.mtp-off` / VSTest)、Moq/NSubstitute、Shouldly
 - OpenTelemetry Collector Contrib `0.159.0`、Prometheus `3.14.0`、Tempo `2.10.7`、Loki `3.7.7`、Grafana `13.2.1`
 

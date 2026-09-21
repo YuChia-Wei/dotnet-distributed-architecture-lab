@@ -49,8 +49,8 @@ Known from current code:
 - `OrderIntegrationOutboxRelay` leases committed source-outbox rows, publishes them through Wolverine, and deletes them after publication. A crash after publication and before deletion can redeliver an event, so consumers must remain idempotent.
 - The source outbox row `Id` is reused as Wolverine `DeduplicationId` and the `lab-message-id` header on every relay attempt; `AggregateId` is supplied as the partition key.
 - Relay claims carry an owner token; failed rows back off per row and park after five attempts for manual inspection/replay.
-- `ReserveInventoryUseCase` passes a producer-owned success-event factory to `IInventoryReservationOutbox`; the PostgreSQL adapter privately owns the transaction that commits reservation state, outcome, and `InventoryIntegrationOutbox.Id = OperationId` once.
-- `DecreaseStock`, `IncreaseStock`, and `Restock` pass the mutated aggregate, expected prior stock, and producer-owned message to `IInventoryStockOutbox`. The PostgreSQL adapter updates only when the prior stock still matches and inserts the outbox row in the same transaction.
+- `ReserveInventoryUseCase` passes a producer-owned success-event factory to `IInventoryReservationOutbox`; the EF Core PostgreSQL adapter privately owns the transaction that commits reservation state, outcome, and `InventoryIntegrationOutbox.Id = OperationId` once.
+- `DecreaseStock`, `IncreaseStock`, and `Restock` pass the mutated aggregate, expected prior stock, and producer-owned message to `IInventoryStockOutbox`. The EF Core PostgreSQL adapter updates only when the prior stock still matches and inserts the outbox row in the same transaction.
 - `InventoryIntegrationOutboxRelay` supports decreased, increased, and returned events, uses the stored normalized ProductId partition key, preserves event occurrence time, marks `PublishedAt` after success, and parks after five failures. A crash after transport publication but before `PublishedAt` can redeliver, so consumers remain idempotent.
 - Published rows are retained without limit by default. Change only `Messaging:OutboxRelay:Retention:Mode` (`RetainAll` or `PublishedForDays`) and, for finite retention, a positive `Messaging:OutboxRelay:Retention:PublishedRetentionDays`. The finite policy never removes unpublished or parked rows.
 - `Messaging:Profile=InMemory` is the automated-test profile: external transports and Wolverine PostgreSQL persistence are not configured, local queues are used, and `Messaging:OutboxRelay:Enabled=false` disables database polling.
@@ -85,6 +85,10 @@ Get-Content -Raw docker-compose/sql-script/migrations/orders/20260714_0001_add_o
 ```
 
 The Orders runtime role also needs permission to create and use Wolverine's `wolverine_messages` schema during environment provisioning. Production deployments should apply reviewed Wolverine-generated schema changes with a migration-capable role instead of granting ongoing DDL permission to the application role.
+
+## Inventory EF Core Mapping
+
+Inventory Infrastructure uses EF Core for the existing source-outbox persistence contract. The SQL schema below remains authoritative; adopting EF Core does not rebuild or rename tables or migrate product messaging to the separate native Wolverine sample. See [the Inventory guide](inventory-efcore.md).
 
 ## Inventory Schema Upgrade
 
