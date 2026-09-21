@@ -7,7 +7,7 @@
 - `owner_skill`: `software-development-orchestrator`
 - `branch`: `codex/2026-09-21-inventory-efcore-integration`
 - `base_branch`: `main`
-- `status`: `active`
+- `status`: `completed`
 - `created_at`: `2026-09-21T08:53:07+08:00`
 - `updated_at`: `2026-09-21T08:53:07+08:00`
 - `template_source`: `.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
@@ -44,4 +44,12 @@ Parent is integration owner. Routine read-only discovery delegated to `/root/inv
 
 ## Progress and handoff
 
-Implementation completed by `/root/inventory_persistence_map`; parent resumes tracked-writer ownership. Focused Inventory tests: 29 passed, 18 external skipped, 0 failed. Earlier stale package assets and two xUnit ValueTask helper compile failures were corrected before this pass; the bounded mechanical follow-up was separately authorized by the parent under INV-001. External tests and review remain pending. Next: freeze the implementation and run actual Docker integration plus separate read-only review. Prior v0.18 outer-receipt waiver remains historical and is not reclassified as passing evidence.
+Implementation and selected verification complete; see the completion evidence below. Final integration uses the closeout commit after its fresh checks, followed by merge and remote read-back.
+
+## Completion evidence
+
+Updated: 2026-09-21T09:19:42+08:00. INV-001 implementation and verification completed. [Verification record](evidence/verification.json) retains actual command results, original failures and corrections. At `cc25513626d1dea72aba56a5ce4a9541f12cef65`: all 122 .NET tests passed (Inventory 47, native sample 16, remaining product/domain tests 59), zero failures/skips. Commerce and both parallel-work modes passed. Non-author reviewer `/root/inventory_review` found no CRITICAL, MUST FIX or SHOULD FIX issues within the declared source/test/design scope. Source inspection confirmed Products, Orders and SQL schema files unchanged.
+
+The first aggregate's product checks and target checks passed, but its commit-range command applied this workflow ID to inherited commits. Corrected target-owned commit checks passed 25 inherited/current commits and the one current-workflow commit separately. The failed aggregate is retained truthfully; a final frozen aggregate will use the corrected selection. The initial SDK cache and runner profile failures are retained, with material corrections documented.
+
+This completion closes implementation/verification work, not an unobserved Git/provider event. Integration remains the explicitly authorized next step: verify this closeout commit, merge `--no-ff` into up-to-date main, validate the merge identity and push/read back origin/main. Final command receipts stay in ignored artifacts so recording the result does not mutate the validated tree. Issue #14 closeout remains a separate tracking decision.

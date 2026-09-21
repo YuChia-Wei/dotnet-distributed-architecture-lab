@@ -4,9 +4,9 @@
   "task_id": "INV-001",
   "owner_skill": "slice-implementer",
   "related_plan_id": "development-plan-2026-09-21-inventory-efcore-integration",
-  "status": "in_progress",
+  "status": "completed",
   "created_at": "2026-09-21T08:53:07+08:00",
-  "updated_at": "2026-09-21T09:02:23+08:00",
+  "updated_at": "2026-09-21T09:19:42+08:00",
   "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
   "model": "gpt-6-astra",
   "reasoning_effort": "medium",
@@ -103,7 +103,7 @@
     "deferred_items": []
   },
   "results": {
-    "summary": "Inventory EF persistence implemented; focused tests 29 passed, 18 external skipped, 0 failed. Actual integration and review pending.",
+    "summary": "EF Core Inventory implemented and verified; 122/122 .NET tests, commerce and parallel E2E pass. No review findings. All target components pass after correcting inherited/current workflow commit ranges.",
     "files_changed": [],
     "approval_evidence": [],
     "test_execution": [
@@ -115,6 +115,16 @@
         "failed": 0,
         "skipped": 18,
         "note": "External tests skipped, not passing PostgreSQL evidence."
+      },
+      {
+        "level": "integration",
+        "outcome": "passed",
+        "subject": "cc25513626d1dea72aba56a5ce4a9541f12cef65",
+        "passed": 122,
+        "failed": 0,
+        "skipped": 0,
+        "environment": "existing mqarchlab-pr5-integration PostgreSQL/Kafka; SDK 10.0.401",
+        "evidence": ".dev/workflows/2026-09-21-inventory-efcore-integration/evidence/verification.json"
       }
     ],
     "role_execution_aggregation": [],
@@ -123,8 +133,13 @@
       "coverage_percent": null,
       "evidence": []
     },
-    "validation_evidence": [],
-    "commits": [],
-    "follow_up_needed": false
+    "validation_evidence": [
+      ".dev/workflows/2026-09-21-inventory-efcore-integration/evidence/verification.json"
+    ],
+    "commits": [
+      "cc25513626d1dea72aba56a5ce4a9541f12cef65"
+    ],
+    "follow_up_needed": false,
+    "finding_status": "not-applicable-no-review-findings"
   }
 }

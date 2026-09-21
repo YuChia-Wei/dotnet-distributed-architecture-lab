@@ -1,0 +1,193 @@
+{
+  "subject_commit": "cc25513626d1dea72aba56a5ce4a9541f12cef65",
+  "observed_at": "2026-09-21T09:19:42+08:00",
+  "tests": {
+    "dotnet_tests_total": 122,
+    "dotnet_tests_passed": 122,
+    "dotnet_tests_failed": 0,
+    "dotnet_tests_skipped": 0
+  },
+  "commands": [
+    {
+      "name": "build",
+      "subject": "cc25513626d1dea72aba56a5ce4a9541f12cef65",
+      "argv": [
+        "docker",
+        "compose",
+        "-p",
+        "mqarchlab-pr5-integration",
+        "-f",
+        "docker-compose/docker-compose.yml",
+        "-f",
+        "docker-compose/docker-compose.override.yml",
+        "-f",
+        "docker-compose/docker-compose.verification.yml",
+        "--profile",
+        "verification",
+        "build",
+        "inventory-api",
+        "regression-tests"
+      ],
+      "started_at": "2026-09-21T01:14:47.230234+00:00",
+      "completed_at": "2026-09-21T01:14:49.811981+00:00",
+      "duration_seconds": 2.582,
+      "exit_code": 0,
+      "output": "artifacts/inventory-efcore/validation-03-build.log"
+    },
+    {
+      "name": "start",
+      "subject": "cc25513626d1dea72aba56a5ce4a9541f12cef65",
+      "argv": [
+        "docker",
+        "compose",
+        "-p",
+        "mqarchlab-pr5-integration",
+        "-f",
+        "docker-compose/docker-compose.yml",
+        "-f",
+        "docker-compose/docker-compose.override.yml",
+        "-f",
+        "docker-compose/docker-compose.verification.yml",
+        "up",
+        "-d",
+        "--no-build"
+      ],
+      "started_at": "2026-09-21T01:14:49.812687+00:00",
+      "completed_at": "2026-09-21T01:14:50.438237+00:00",
+      "duration_seconds": 0.626,
+      "exit_code": 0,
+      "output": "artifacts/inventory-efcore/validation-03-start.log"
+    },
+    {
+      "name": "tests",
+      "subject": "cc25513626d1dea72aba56a5ce4a9541f12cef65",
+      "argv": [
+        "docker",
+        "compose",
+        "-p",
+        "mqarchlab-pr5-integration",
+        "-f",
+        "docker-compose/docker-compose.yml",
+        "-f",
+        "docker-compose/docker-compose.override.yml",
+        "-f",
+        "docker-compose/docker-compose.verification.yml",
+        "--profile",
+        "verification",
+        "run",
+        "--rm",
+        "--no-deps",
+        "-e",
+        "EF_SAMPLE_POSTGRES",
+        "-e",
+        "EF_SAMPLE_KAFKA",
+        "regression-tests"
+      ],
+      "started_at": "2026-09-21T01:14:51.159730+00:00",
+      "completed_at": "2026-09-21T01:15:39.444609+00:00",
+      "duration_seconds": 48.285,
+      "exit_code": 0,
+      "output": "artifacts/inventory-efcore/validation-03-tests.log"
+    },
+    {
+      "name": "commerce",
+      "subject": "cc25513626d1dea72aba56a5ce4a9541f12cef65",
+      "argv": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "docker-compose/scripts/Test-CommerceFlow.ps1",
+        "-OutputPath",
+        "artifacts/inventory-efcore/validation-03-commerce.json"
+      ],
+      "started_at": "2026-09-21T01:15:39.445297+00:00",
+      "completed_at": "2026-09-21T01:15:44.815046+00:00",
+      "duration_seconds": 5.37,
+      "exit_code": 0,
+      "output": "artifacts/inventory-efcore/validation-03-commerce.log"
+    },
+    {
+      "name": "parallel",
+      "subject": "cc25513626d1dea72aba56a5ce4a9541f12cef65",
+      "argv": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "docker-compose/scripts/Test-ParallelWork.ps1",
+        "-OutputPath",
+        "artifacts/inventory-efcore/validation-03-parallel.json"
+      ],
+      "started_at": "2026-09-21T01:15:44.815579+00:00",
+      "completed_at": "2026-09-21T01:15:53.239342+00:00",
+      "duration_seconds": 8.424,
+      "exit_code": 0,
+      "output": "artifacts/inventory-efcore/validation-03-parallel.log"
+    },
+    {
+      "name": "governance",
+      "subject": "cc25513626d1dea72aba56a5ce4a9541f12cef65",
+      "argv": [
+        "python",
+        "-B",
+        ".dev/ai-context/tooling/validate-target-ai-context.py",
+        "--require-effective-rules",
+        "--commit-range",
+        "main..HEAD",
+        "--workflow-id",
+        "2026-09-21-inventory-efcore-integration"
+      ],
+      "started_at": "2026-09-21T01:15:53.239908+00:00",
+      "completed_at": "2026-09-21T01:16:27.832992+00:00",
+      "duration_seconds": 34.593,
+      "exit_code": 1,
+      "output": "artifacts/inventory-efcore/validation-03-governance.log"
+    }
+  ],
+  "review": {
+    "reviewer": "/root/inventory_review",
+    "classification": "independent-review",
+    "scope": [
+      "Inventory Infrastructure diff",
+      "Inventory tests diff",
+      "accepted design"
+    ],
+    "finding_counts": {
+      "CRITICAL": 0,
+      "MUST FIX": 0,
+      "SHOULD FIX": 0
+    },
+    "report_ref": "artifacts/inventory-efcore/review-01-result.json",
+    "report_sha256": "107f6601f33bfb859a53c2e353bac2f84651b3deb07212722aac4f155c9e7716"
+  },
+  "governance_correction": {
+    "cause": "Full inherited range was incorrectly bound to the new workflow ID.",
+    "full_history_command": "python -B .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py --range main..HEAD",
+    "full_history_result": "passed: 25 commits",
+    "current_workflow_command": "python -B .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py --range a27fdb313f054e522920cc39ff3e0a48bca1eb9d..HEAD --workflow-id 2026-09-21-inventory-efcore-integration",
+    "current_workflow_result": "passed: 1 commit",
+    "other_target_checks": "passed, including 55 tooling tests; failed aggregate record preserved"
+  },
+  "prior_attempts": [
+    {
+      "attempt": 1,
+      "outcome": "failed",
+      "cause": "Cached SDK image 10.0.103 below global.json; refreshed and verified SDK 10.0.401."
+    },
+    {
+      "attempt": 2,
+      "outcome": "failed",
+      "cause": "Ignored runner omitted Compose verification profile during config lookup; corrected before attempt 3."
+    },
+    {
+      "attempt": 3,
+      "outcome": "failed-aggregate-with-passing-product-checks",
+      "cause": "Workflow range selection; corrected component commands passed without rewriting history."
+    }
+  ],
+  "limitations": [
+    "No end-to-end exactly-once guarantee",
+    "Representative concurrency and fault injection, not exhaustive process-crash or prolonged broker outage coverage",
+    "Current provider integration/push is a separate lifecycle step",
+    "Historical v0.18 outer receipt waiver remains historical, not a new pass"
+  ]
+}
