@@ -4,6 +4,7 @@
 
 - Version: `1.1-draft`
 - Date: `2026-08-27`
+- Last fact reconciliation: `2026-09-21` against `2ee6ee21cfe64da4b87b8c57b5a661b9b9a8f517`; original decisions and unresolved quality uplifts remain in force.
 - Owner: repository owner
 - Authoring workflow: `2026-08-26-reconstructable-system-specification`
 - Work item: GitHub Issue `#2`
@@ -61,7 +62,7 @@
 - `PRD-003` `preserve`: 更新產品沿用相同驗證，成功後更新欄位並產生 `ProductUpdated`。
 - `PRD-004` `preserve`: 刪除是 soft delete；已刪除產品不得由 write-side load 或 query-side read 回傳，且使用 optimistic version check。
 - `PRD-005` `compatibility`: 提供 create、update、delete、get-all、get-by-id HTTP/use-case 行為，契約詳見 `http-api-contracts.json` 與 domain use-case specs。
-- `PRD-006` `gap`: `products.integration.events` 目前只有 route，沒有由正式 Product use case 證實的 producer。重建不得自行發明 product integration event。
+- `PRD-006` `gap`: `products.integration.events` 已有可啟用的 diagnostic producer 與 Orders diagnostic handlers，但尚無正式 product business integration event。diagnostic examples 不補足 business reaction 缺口；重建不得自行發明 product integration event。
 
 ### ORD — Orders bounded context
 
@@ -81,9 +82,9 @@
 - `INV-004` `required`: decrease/increase/restock 先載入 aggregate、執行 domain behavior，再透過 `IInventoryStockOutbox` 將 stock mutation 與 producer-created integration event atomically commit；失敗不得留下其中任一半。`InitProductStock` 目前沒有對外 integration event，因此只需正常持久化，不得為形式一致虛構事件。
 - `INV-005` `required`: reservation 以 caller 提供的 `OperationId` 作 idempotency key。同 key 同 payload 必須重播原 outcome 且不得再次扣庫；同 key 不同 payload 必須回傳 terminal `OperationIdentityConflict`。
 - `INV-006` `required`: reservation claim、row lock、stock decrement、terminal outcome 與成功事件的 `InventoryIntegrationOutbox` row 必須在單一 PostgreSQL transaction 完成；任一 write/stage/commit 失敗時全部 rollback，且暫時性 store failure 必須可被 retry policy 辨識。
-- `INV-007` `required`: 成功 reservation 由 use case 建立 producer-owned stock-decreased integration event；source-outbox relay 以 `OperationId` 作 stable delivery/deduplication ID，以 `ProductId.ToString("N")` 作 Kafka partition key。相同 operation replay 不得建立第二個 outbox row。
+- `INV-007` `required`: 成功 reservation 由 use case 建立 producer-owned stock-decreased integration event；source-outbox relay 以 `OperationId` 作 stable delivery/deduplication ID，以 `ProductId.ToString("N")` 作 Kafka partition key。只有新 operation 首次成功時呼叫 event factory 並建立 outbox row。已完成 operation 的 matching replay 只回傳 durable outcome，不再呼叫 factory 或 staging；即使原 row 已由 published retention 清除或因 legacy／缺失狀態而不存在，也不得重新建立。缺失／legacy row 的恢復須經獨立、明確範圍的修復操作，不由一般 reservation replay 自動補建。
 - `INV-009` `required`: Application 依賴 outbox capability port，不公開 generic `IUnitOfWork` 或 database transaction lifecycle。Infrastructure 可在 adapter 內以 local transaction/UoW 實現 atomicity。只有未來單一 use case 同時修改多個 aggregate 且有具名 all-or-nothing invariant 時，才重新評估 generic UoW。
-- `INV-010` `required`: 已發布 Inventory outbox row 預設無期限保留；唯一正式調整位置是 `Messaging:OutboxRelay:Retention:Mode` 與 `Messaging:OutboxRelay:Retention:PublishedRetentionDays`。`RetainAll` 不清除；`PublishedForDays` 必須搭配正整數天數。parked/unpublished row 不受 published retention 清除。
+- `INV-010` `required`: 已發布 Inventory outbox row 預設無期限保留；唯一正式調整位置是 `Messaging:OutboxRelay:Retention:Mode` 與 `Messaging:OutboxRelay:Retention:PublishedRetentionDays`。`RetainAll` 不清除；`PublishedForDays` 必須搭配正整數天數。parked/unpublished row 不受 published retention 清除；此政策也不清除 `InventoryReservationOperations`，已完成 outcome 持續決定 replay 結果。
 - `INV-008` `compatibility`: inventory HTTP API 提供 initialize、get available quantity、increase、decrease、restock 行為。
 
 ### INT — Cross-context integration
@@ -120,11 +121,11 @@
 
 ## Constraints & Assumptions
 
-- Dapper + Npgsql + PostgreSQL、WolverineFx、Kafka、OpenTelemetry 為目前 canonical target selections；RabbitMQ 保留 compatibility profile，雙 broker 是 owner 指定的目標方向但尚未完成 routing/schema/runtime proof。不得弱化 producer ownership、ordering key、outbox atomicity 或 at-least-once 語意。
+- Products/Orders 使用 Dapper，Inventory 使用 EF Core；兩者皆透過 Npgsql 存取 PostgreSQL，並以 WolverineFx、Kafka、OpenTelemetry 為目前 canonical target selections；RabbitMQ 保留 compatibility profile，雙 broker 是 owner 指定的目標方向但尚未完成 routing/schema/runtime proof。不得弱化 producer ownership、ordering key、outbox atomicity 或 at-least-once 語意。
 - Orders event sourcing 是 context-specific，不得套用到 Products/Inventory。
 - Products soft delete 與 Orders event sourcing/outbox 是重建必要能力。
 - `SharedKernel` 目前為空 placeholder；不得從 BuildingBlocks 或任一 bounded context 猜測共享 domain concepts。
-- Consumer runtime 目前訂閱 channel，但缺少清楚 business handler ownership；重建需保留 host/topology compatibility，同時將無 handler 的訂閱列為 `gap`，不得宣稱已有業務效果。
+- Consumer runtime 目前訂閱 channel，Orders Consumer 已有 executable diagnostic handlers，但三個 Consumer hosts 仍缺少明確 business reaction ownership；重建需保留 host/topology 與 diagnostic compatibility，同時將未實作的 business reactions 列為 `gap`，不得以 diagnostics 宣稱已有業務效果。
 - Owner 已於 2026-08-27 核准 breaking correction：`ProductStockIncreasedIntegrationEvent.IncreasedQuantity` 與 `ProductStockReturnedIntegrationEvent.ReturnedQuantity` 是 normative names；舊的錯誤 `DecreasedQuantity` 名稱不保留為相容 alias。
 
 ## Domain / Business Rules
@@ -142,12 +143,12 @@
 
 | ID | Acceptance |
 | --- | --- |
-| `AC-001` | 從 `.dev/specs/reconstruction/README.MD` 開始，不讀原 source，能建立與 manifest 相符的 solution、27 個 active project（22 product + 5 tests）與六個 host。 |
+| `AC-001` | 從 `.dev/specs/reconstruction/README.MD` 開始，不讀原 source，能建立與 manifest 相符的 solution、31 個 active project（22 product + 3 EF Core/Wolverine sample + 6 tests，其中 5 個 product tests、1 個 sample tests）、六個 product host 與獨立 sample host。 |
 | `AC-002` | 重建後所有 project dependency direction 符合 blueprint，且 Domain projects 無 broker/database/Web dependency。 |
 | `AC-003` | HTTP contract tests覆蓋所有 15 個列出的 endpoints、success/error/not-found mapping。 |
 | `AC-004` | Domain/use-case oracles覆蓋三個 aggregates、16 個列出的 use cases 與同狀態/no-side-effect、validation、not-found paths。 |
 | `AC-005` | Orders event-store + read-model + source-outbox 原子性、optimistic concurrency、stable relay identity 與 park policy 均通過 tests。 |
-| `AC-006` | Inventory reservation replay/conflict/terminal-failure/cancellation，以及 decrease/increase/restock 的 state + outbox rollback、optimistic stock check、stable relay identity、retention 與 park policy scenarios 全部通過；real PostgreSQL atomicity check 不得以 skipped 代替。 |
+| `AC-006` | Inventory reservation replay/conflict/terminal-failure/cancellation，以及 decrease/increase/restock 的 state + outbox rollback、optimistic stock check、stable relay identity、retention 與 park policy scenarios 全部通過，包含 published row 清除後 replay 不重建 outbox、不再次發佈；real PostgreSQL atomicity check 不得以 skipped 代替。 |
 | `AC-007` | Kafka 與 InMemory profile 的必要 configuration、logical routes、Kafka partition ordering 與 actual broker smoke test 均通過；RabbitMQ 僅驗證已宣告的 compatibility surface，除非未來升格為 canonical profile。Blocked environment 不算 passed。 |
 | `AC-008` | 三個 database schema 能由 checked-in SQL/migrations 重建，schema constraints 與 persistence specs 一致。 |
 | `AC-009` | JSON specs/manifest 全部 parse；problem-frame selected scope 達成 100% spec compliance；所有未決項保持 `gap`/`deferred`。 |
@@ -156,13 +157,13 @@
 
 ## Decisions And Deferred Choices
 
-- `DEC-001`: Products 是否要正式生產 product integration events；目前只保留 route compatibility。
+- `DEC-001`: Products 是否要正式生產 business integration events；目前保留 route compatibility 與 diagnostic examples，不將 diagnostics 視為正式 product business events。
 - `DEC-002`: 無明確 business handler 的三個 Consumer hosts 應保留為 topology lab、補 handler，或退役。
 - `DEC-003` `resolved 2026-08-27`: 以 breaking correction 修正 Inventory increase/return quantity property；producer-owned normative names 分別為 `IncreasedQuantity` 與 `ReturnedQuantity`。
 - `DEC-004` `resolved direction / deferred implementation 2026-08-27`: 目標採 Kafka + RabbitMQ 雙廣播；RabbitMQ exchange/binding、每 consumer queue、broker-specific DLQ physical names、Wolverine destination routing 與 delivery-ledger migration 仍待 bounded implementation decision。
 - `DEC-005` `resolved provisionally 2026-08-27`: Kafka 為 canonical broker；RabbitMQ 不因「廣播」一詞自動成為較佳選擇，需以實際 consumer-group/exchange topology 再評估。
 - `DEC-006` `resolved 2026-08-27`: Inventory 採 capability-specific outbox ports；generic UoW/database transaction 保留在 Infrastructure adapter 內。`ReserveInventory` 使用 `IInventoryReservationOutbox`，decrease/increase/restock 使用 `IInventoryStockOutbox`；`InitProductStock` 因無對外事件不套用。
-- `DEC-007` `resolved 2026-08-27`: Inventory 已發布 outbox row 預設 `RetainAll`，正式調整路徑為 `Messaging:OutboxRelay:Retention:*`。
+- `DEC-007` `resolved 2026-08-27; clarified 2026-09-21`: Inventory 已發布 outbox row 預設 `RetainAll`，正式調整路徑為 `Messaging:OutboxRelay:Retention:*`。Owner 選定首次成功才 staging；durable outcome replay 不受 outbox retention 影響，也不補建缺失／legacy row，恢復須另行明確處理。
 - `DEC-008` `resolved 2026-08-27`: 原始 source deletion 是 owner-only 操作；clean-room 驗證只能建立不含 source 的 disposable copy，不得刪除原 repository source。
 
 ## References

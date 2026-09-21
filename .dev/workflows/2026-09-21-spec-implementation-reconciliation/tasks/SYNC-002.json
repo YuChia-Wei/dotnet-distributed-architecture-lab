@@ -1,0 +1,145 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-09-21-spec-implementation-reconciliation",
+  "task_id": "SYNC-002",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-09-21-spec-implementation-reconciliation",
+  "status": "completed",
+  "created_at": "2026-09-21T11:15:46+08:00",
+  "updated_at": "2026-09-21T11:29:37+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "workflow_locator": ".dev/workflows/2026-09-21-spec-implementation-reconciliation/workflow.yaml",
+  "scope": {
+    "goal": "Preserve Orders event occurrence time during outbox JSON reconstruction and retry.",
+    "target": "Preserve Orders event occurrence time during outbox JSON reconstruction and retry.",
+    "files": [
+      "src/BC-Contracts/Lab.BoundedContextContracts.Orders/IntegrationEvents",
+      "tests/SaleOrders.Tests"
+    ],
+    "constraints": [
+      "Newer semantic authority wins; unresolved owner decisions stay explicit.",
+      "One tracked writer per worktree."
+    ],
+    "non_goals": [
+      "Whole-system reconstruction acceptance",
+      "Framework upgrades",
+      "Historical evidence rewriting"
+    ]
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [],
+    "architecture_decisions": [],
+    "user_constraints": [
+      "2026-09-21 owner authorizes fixing review inconsistencies, prefers newer authority, and requests one consolidated unresolved decision batch."
+    ]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "implementation",
+      "authorization_source": [
+        "2026-09-21 repair request; work item #2"
+      ],
+      "pending_decision": ""
+    },
+    "implementation_contract": {
+      "intent": "review-remediation",
+      "execution_mode": "generic",
+      "overlays": [
+        "remediation"
+      ],
+      "authorization_source": [
+        "2026-09-21 repair request"
+      ],
+      "normative_truth": [
+        ".dev/specs/tests/order/integration/order-source-outbox.test-spec.md"
+      ],
+      "finding_evidence": [
+        "2026-09-21 conversational review: Orders occurrence time mismatch"
+      ],
+      "subject_revision": "2ee6ee21cfe64da4b87b8c57b5a661b9b9a8f517",
+      "acceptance_criteria": [
+        "AC3 in workflow-plan.md"
+      ]
+    },
+    "test_execution_contract": null,
+    "role_execution_records": [],
+    "spec_compliance": {
+      "selected": false,
+      "activation_source": [],
+      "expected_outcome": "not-applicable"
+    },
+    "steps": [
+      "Compare semantic history and authoritative contracts.",
+      "Repair only the accepted bounded scope.",
+      "Run meaningful checks and record actual outcomes."
+    ],
+    "validation": [],
+    "commit_checkpoint": "One coherent validated checkpoint after settled repair and review.",
+    "deferred_items": []
+  },
+  "results": {
+    "summary": "Preserve stored OccurredOn in all four Orders integration-event JSON constructors and across source-outbox retry; existing producer constructors and wire fields remain compatible.",
+    "files_changed": [
+      "src/BC-Contracts/Lab.BoundedContextContracts.Orders/IntegrationEvents/OrderPlaced.cs",
+      "src/BC-Contracts/Lab.BoundedContextContracts.Orders/IntegrationEvents/OrderCancelled.cs",
+      "src/BC-Contracts/Lab.BoundedContextContracts.Orders/IntegrationEvents/OrderShipped.cs",
+      "src/BC-Contracts/Lab.BoundedContextContracts.Orders/IntegrationEvents/OrderDelivered.cs",
+      "tests/SaleOrders.Tests/OrderIntegrationEventSerializationTests.cs",
+      "tests/SaleOrders.Tests/OrderIntegrationOutboxRelayTests.cs"
+    ],
+    "approval_evidence": [],
+    "test_execution": [
+      {
+        "command": "dotnet test tests/SaleOrders.Tests/SaleOrders.Tests.csproj --no-restore --filter \"FullyQualifiedName~OrderIntegrationEventSerializationTests|FullyQualifiedName~OrderIntegrationOutboxRelayTests\" --logger \"console;verbosity=minimal\"",
+        "executor": "/root/inventory_persistence_map",
+        "subject": "Uncommitted six-file Orders repair against 2ee6ee21cfe64da4b87b8c57b5a661b9b9a8f517",
+        "red": {
+          "passed": 5,
+          "failed": 5,
+          "skipped": 0,
+          "reason": "Stored event occurrence time was replaced by current UTC."
+        },
+        "green": {
+          "passed": 10,
+          "failed": 0,
+          "skipped": 0
+        },
+        "limitations": [
+          "Unit serialization and fake DB/publisher relay boundary; no live database or broker validation."
+        ]
+      }
+    ],
+    "role_execution_aggregation": [
+      {
+        "classification": "routine-bounded",
+        "executor": "/root/inventory_persistence_map",
+        "invocation": "Existing worker follow-up: sole tracked writer for four event contracts and direct tests; no docs, Inventory, commits or provider actions.",
+        "result": "Six-file repair delivered; focused red/green results returned; tracked writer released to /root.",
+        "final_integration_owner": "/root"
+      }
+    ],
+    "spec_compliance": {
+      "outcome": "not-applicable",
+      "coverage_percent": null,
+      "evidence": []
+    },
+    "validation_evidence": [
+      "git diff --check passed after the source repair.",
+      "Production and test effective-rule packets freshly verified by the implementation executor.",
+      ".dev/workflows/2026-09-21-spec-implementation-reconciliation/evidence/checkpoint-verification.json"
+    ],
+    "commits": [
+      "containing-commit"
+    ],
+    "follow_up_needed": false,
+    "finding_status": "addressed"
+  }
+}

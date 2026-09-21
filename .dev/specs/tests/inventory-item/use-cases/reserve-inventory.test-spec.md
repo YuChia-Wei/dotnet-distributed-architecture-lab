@@ -2,7 +2,7 @@
 
 ## Inputs Used
 
-- `INV-005`, `INV-006`, `INV-007`, and `INT-003` in `.dev/requirement/reconstructable-system-baseline.md`
+- `INV-005`, `INV-006`, `INV-007`, `INV-010`, and `INT-003` in `.dev/requirement/reconstructable-system-baseline.md`
 - `.dev/specs/domains/inventory-item/usecase/reserve-inventory.json`
 - `.dev/problem-frames/inventory/cbf/reserve-inventory/`
 - `tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs`
@@ -11,9 +11,9 @@
 
 ## Implementation Status
 
-- Status: `implemented-awaiting-external-execution`
+- Status: `implemented-partial`
 - Inventory owns its test project and has executable validation, replay, conflict, terminal/transient/outbox-stage failure, stable relay identity, cancellation, failure-policy, JSON-contract, and PostgreSQL concurrency/atomicity scenarios.
-- The PostgreSQL scenario is skipped by default and remains non-passing evidence until the explicit external profile runs successfully.
+- The explicit PostgreSQL profile passed reservation concurrency and rollback tests on 2026-09-21 at `edd18d70a94da99e0548de986227655ec102a145`. See [dated execution evidence](../../../reconstruction/coverage-matrix.md#observed-execution--2026-09-21). Default runs still skip external tests; neither a skip nor this historical run proves later source changes. The separately recorded 2026-09-21 reconciliation run below covers the newly selected replay-after-retention behavior.
 
 ## Scenario Set
 
@@ -29,7 +29,7 @@
 - Test level: `integration`
 - Given: an operation id has already completed successfully for the same product and quantity.
 - When: the same request is replayed.
-- Then: the stored outcome is returned with `WasAlreadyProcessed = true`; stock is not decremented again; no second outbox row is inserted and delivery identity remains stable.
+- Then: the stored outcome is returned with `WasAlreadyProcessed = true`; stock is not decremented again; the event factory is not invoked and no outbox row is staged. Any retained row keeps its original delivery identity.
 
 ### Scenario 3: reject operation identity conflict
 
@@ -80,10 +80,21 @@
 - When: the relay claims the same row again.
 - Then: both attempts use the same MessageId, partition key, payload, and OccurredOn; success sets `PublishedAt`, while five failures park the row.
 
+### Scenario 10: replay after published-row retention
+
+- Test level: `integration`
+- Requirements: `INV-005`, `INV-007`, `INV-010`; reconstruction `AC-006`; reservation CBF `SC10`.
+- Given: a successful reservation event was published, its expired published row was removed by `PublishedForDays`, and the completed operation outcome remains durable.
+- When: the identical operation request is replayed and the relay runs again.
+- Then: the original outcome returns with `WasAlreadyProcessed = true`; stock and operation history remain unchanged; no outbox row is recreated and no new event is published.
+- Test anchor: `tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs#given_a_published_reservation_was_purged_when_replayed_then_no_new_publication_is_staged`.
+- Execution status: passed with real PostgreSQL at `7a898901e9ace44b844847ad7a54008adb9950bc` on 2026-09-21; see [reconciliation verification](../../../../workflows/2026-09-21-spec-implementation-reconciliation/evidence/verification.json). This is subject-bound evidence, not a waiver for future changes.
+- Related missing/legacy-row case: a completed operation without an outbox row must also return only its stored outcome. Ordinary replay must not repair that row; recovery requires a separate explicitly scoped action. The executable anchor is `tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs#given_a_completed_reservation_has_no_outbox_row_when_replayed_then_no_recovery_publication_is_staged`; it also passed in the PostgreSQL run at `7a898901e9ace44b844847ad7a54008adb9950bc`.
+
 ## Assertion Notes
 
 - Assert each failure reason, stock value, durable operation row, outbox row count, commit call, message id, partition key, and retained event timestamp separately.
-- Scenario 7 and the real rollback half of Scenario 8 require a PostgreSQL fixture; an in-memory double cannot establish locking or database rollback semantics. Use the opt-in contract in `tests/README.md`.
+- Scenario 7, the real rollback half of Scenario 8, and Scenario 10 require a PostgreSQL fixture; an in-memory double cannot establish locking or database rollback semantics. Use the opt-in contract in `tests/README.md`.
 
 ## Recommended Test Spec Path
 
@@ -91,4 +102,4 @@
 
 ## Implementation and Execution Handoff
 
-The broker-free scenarios are implemented under `tests/InventoryControl.Tests/`. Real PostgreSQL execution remains a separate opt-in gate and skipped evidence is non-passing.
+Broker-free and opt-in PostgreSQL scenarios are implemented under `tests/InventoryControl.Tests/`. The dated external run is passing evidence for its pinned subject; future changed subjects still require explicit opt-in execution, and skipped evidence is non-passing.

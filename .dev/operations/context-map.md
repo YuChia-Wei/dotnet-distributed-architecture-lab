@@ -15,7 +15,7 @@ It is limited to relationships that can be traced back to:
 
 | Bounded Context | Core Responsibility | Primary Aggregates / Use Cases | Owned Contracts / Events |
 | --- | --- | --- | --- |
-| `Products` | Manage sellable product catalog data | `Product`, `CreateProduct`, `UpdateProduct`, `DeleteProduct` | has a configured `products.integration.events` route; current use cases do not confirm product integration-event publication |
+| `Products` | Manage sellable product catalog data | `Product`, `CreateProduct`, `UpdateProduct`, `DeleteProduct` | owns product catalog facts; `products.integration.events` currently carries enabled diagnostics, with business integration events deferred |
 | `Orders` | Manage order placement and lifecycle transitions | `Order`, `PlaceOrder`, `ShipOrder`, `DeliverOrder`, `CancelOrder` | owns `OrderPlaced`, `OrderShipped`, `OrderDelivered`, `OrderCancelled` |
 | `Inventory` | Manage available stock and stock adjustments | `InventoryItem`, `DecreaseStock`, `IncreaseStock`, `Restock` | owns `ReserveInventoryRequestContract` handling and stock integration events |
 
@@ -26,7 +26,8 @@ It is limited to relationships that can be traced back to:
 | `Orders` | `Inventory` | Reserve stock before confirming order placement | request/reply via `ReserveInventoryRequestContract` and `ReserveInventoryResponseContract` | request contract is owned in `BC-Contracts.Inventory`; `Orders` is caller, `Inventory` is handler | high; failed reservation blocks order placement |
 | `Orders` | external downstream consumers | propagate order lifecycle changes | canonical Kafka integration events on `orders.integration.events`; one consumer group per independent subscriber | `Orders` owns event semantics/schema; each consumer owns only its reaction and delivery policy | medium to high; downstream views may become stale if delivery fails |
 | `Inventory` | external downstream consumers | propagate stock changes | canonical Kafka integration events on `inventory.integration.events`; ProductId scopes partition ordering | `Inventory` owns event semantics/schema; each consumer owns only its reaction and delivery policy | high for downstream stock-dependent behaviors |
-| `Products` | external downstream consumers | configured product-change channel | `products.integration.events` route exists, but current use cases do not publish confirmed product integration events | future producer owns event semantics and schema | deferred; route configuration exists without a confirmed active producer |
+| `Products` | external downstream consumers | future product business-change channel | `products.integration.events` also carries implemented diagnostic examples; no formal product business event is confirmed | future business producer owns event semantics and schema | business events deferred |
+| `Products` diagnostic endpoints | `Orders Consumer` diagnostics | demonstrate parallel work and exception policy | enabled diagnostic messages on `products.integration.events` | shared diagnostic contracts and consumer example handlers; not a business reaction | diagnostic execution is documented in `consumer-parallel-examples.md` |
 | `Product Consumer` runtime | `Orders` events | receive order lifecycle stream | consumer listens to `orders.integration.events` | actual handler intent needs clarification | medium; listener exists but business ownership is still unclear |
 | `Inventory Consumer` runtime | `Orders` events | receive order lifecycle stream | consumer listens to `orders.integration.events` | actual handler intent needs clarification | medium; part of current runtime topology but not fully documented |
 

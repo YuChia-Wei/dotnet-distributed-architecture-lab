@@ -1,5 +1,7 @@
 using Lab.BuildingBlocks.Integrations;
 
+using System.Text.Json.Serialization;
+
 namespace Lab.BoundedContextContracts.Orders.IntegrationEvents;
 
 /// <summary>
@@ -13,10 +15,20 @@ public record OrderCancelled : IIntegrationEvent
     /// <param name="orderId">訂單識別碼</param>
     /// <param name="reason">狀態變更原因</param>
     public OrderCancelled(Guid orderId, string reason)
+        : this(orderId, reason, DateTime.UtcNow)
+    {
+    }
+
+    /// <summary>使用已儲存的發生時間重建訂單取消事件。</summary>
+    /// <param name="orderId">訂單識別碼。</param>
+    /// <param name="reason">狀態變更原因。</param>
+    /// <param name="occurredOn">原始事件發生時間。</param>
+    [JsonConstructor]
+    public OrderCancelled(Guid orderId, string reason, DateTime occurredOn)
     {
         this.OrderId = orderId;
         this.Reason = reason;
-        this.OccurredOn = DateTime.UtcNow;
+        this.OccurredOn = occurredOn;
     }
 
     /// <summary>

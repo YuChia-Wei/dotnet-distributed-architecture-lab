@@ -10,7 +10,7 @@
 ## Implementation Status
 
 - Status: `implemented-partial`
-- Each side has focused executable evidence; a broker-backed round trip across both hosts remains planned.
+- Focused tests exist on each side. A Kafka-backed commerce round trip passed success and insufficient-stock rejection on 2026-09-21 at `edd18d70a94da99e0548de986227655ec102a145`; see [dated execution evidence](../../reconstruction/coverage-matrix.md#observed-execution--2026-09-21). Duplicate broker-delivery, timeout, and RabbitMQ parity assertions remain separate gaps; that run does not prove later source changes.
 
 ## Scenario Set
 
@@ -60,4 +60,4 @@
 
 ## Implementation and Execution Handoff
 
-The workflow does not authorize broker-backed test implementation or execution.
+The historical Kafka commerce result is evidence for the pinned subject and exercised paths only. Execute the remaining scenarios explicitly before claiming the complete scenario set or RabbitMQ parity has passed.

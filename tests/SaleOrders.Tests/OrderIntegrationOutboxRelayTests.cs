@@ -16,31 +16,58 @@ namespace SaleOrders.Tests;
 /// <summary>Protects stable delivery identity across Orders outbox retries.</summary>
 public sealed class OrderIntegrationOutboxRelayTests
 {
-    /// <summary>A failed publish must not replace the source row identity on retry.</summary>
+    /// <summary>對應 source-outbox 情境 3：發佈重試保留原始事件內容、時間及投遞識別。</summary>
     [Fact]
     public async Task given_the_same_claimed_row_when_publish_is_retried_then_delivery_identity_is_stable()
     {
-        // Given
         var rowId = Guid.CreateVersion7();
         var aggregateId = Guid.CreateVersion7();
+        var occurredOn = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddTicks(1234567);
+        var (connection, publisher, relay) = GivenClaimedCancellationRow(rowId, aggregateId, occurredOn);
+
+        await WhenPublishIsRetried(relay);
+
+        ThenDeliveryIdentityAndPayloadAreStable(publisher, rowId, aggregateId, occurredOn);
+        ThenSuccessfulRowIsDeletedOnce(connection);
+    }
+
+    private static (OutboxDbConnection Connection, RetryRecordingPublisher Publisher, object Relay)
+        GivenClaimedCancellationRow(Guid rowId, Guid aggregateId, DateTime occurredOn)
+    {
         var connection = new OutboxDbConnection(
             rowId,
             aggregateId,
             nameof(OrderCancelled),
-            $$"""{"OrderId":"{{aggregateId}}","Reason":"customer request","OccurredOn":"2026-07-14T00:00:00Z"}""");
+            $$"""{"OrderId":"{{aggregateId}}","Reason":"customer request","OccurredOn":"{{occurredOn:O}}"}""");
         var publisher = new RetryRecordingPublisher();
-        var relay = CreateRelay(connection, publisher);
+        return (connection, publisher, CreateRelay(connection, publisher));
+    }
 
-        // When
+    private static async Task WhenPublishIsRetried(object relay)
+    {
         await RelayBatchAsync(relay);
         await RelayBatchAsync(relay);
+    }
 
-        // Then
+    private static void ThenDeliveryIdentityAndPayloadAreStable(
+        RetryRecordingPublisher publisher, Guid rowId, Guid aggregateId, DateTime occurredOn)
+    {
         publisher.Deliveries.Count.ShouldBe(2);
         publisher.Deliveries.ShouldAllBe(delivery => delivery.MessageId == rowId);
         publisher.Deliveries.ShouldAllBe(delivery => delivery.PartitionKey == aggregateId.ToString("D"));
-        connection.DeleteCount.ShouldBe(1);
+        publisher.Events.Count.ShouldBe(2);
+        foreach (var integrationEvent in publisher.Events)
+        {
+            var cancelled = integrationEvent.ShouldBeOfType<OrderCancelled>();
+            cancelled.OrderId.ShouldBe(aggregateId);
+            cancelled.Reason.ShouldBe("customer request");
+            cancelled.OccurredOn.ShouldBe(occurredOn);
+            cancelled.OccurredOn.Kind.ShouldBe(DateTimeKind.Utc);
+        }
     }
+
+    private static void ThenSuccessfulRowIsDeletedOnce(OutboxDbConnection connection)
+        => connection.DeleteCount.ShouldBe(1);
 
     /// <summary>The Wolverine adapter must preserve stable deduplication metadata.</summary>
     [Fact]
@@ -97,12 +124,15 @@ public sealed class OrderIntegrationOutboxRelayTests
     {
         public List<IntegrationMessageDelivery> Deliveries { get; } = [];
 
+        public List<IIntegrationEvent> Events { get; } = [];
+
         public Task PublishAsync(IIntegrationEvent integrationEvent)
             => throw new NotSupportedException();
 
         public Task PublishAsync(IIntegrationEvent integrationEvent, IntegrationMessageDelivery delivery)
         {
             this.Deliveries.Add(delivery);
+            this.Events.Add(integrationEvent);
             if (this.Deliveries.Count == 1)
             {
                 throw new InvalidOperationException("Simulated transport failure.");

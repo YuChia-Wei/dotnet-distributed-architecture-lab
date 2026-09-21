@@ -16,7 +16,7 @@ flowchart LR
   OrdersAPI -->|ReserveInventory request/reply| InventoryAPI
   OrdersAPI -->|orders.integration.events| Bus[(Canonical Kafka)]
   InventoryAPI -->|inventory.integration.events| Bus
-  ProductsAPI -. configured route only .-> Bus
+  ProductsAPI -. enabled diagnostics .-> Bus
   Bus --> ProductConsumer
   Bus --> OrderConsumer
   Bus --> InventoryConsumer
@@ -33,7 +33,7 @@ Cross-context arrows represent message contracts, never direct project/domain ca
 | Layer | Owns | May depend on | Must not depend on |
 | --- | --- | --- | --- |
 | Domain | aggregates, invariants, value/result objects, domain events | business-neutral Domain BuildingBlocks | Application, Infrastructure, Presentation, BC contracts, database, broker |
-| Application | use-case inbound ports, inputs/outputs, query/write/gateway/publisher outbound ports | Domain, Application/Integration BuildingBlocks, Published Language where collaboration is required | concrete Dapper/Npgsql/Wolverine/ASP.NET adapters |
+| Application | use-case inbound ports, inputs/outputs, query/write/gateway/publisher outbound ports | Domain, Application/Integration BuildingBlocks, Published Language where collaboration is required | concrete EF Core/Dapper/Npgsql/Wolverine/ASP.NET adapters |
 | Infrastructure | repositories, query adapters, gateways, source outbox, relay, broker publishers, DI modules | Application, Domain, BuildingBlocks, contracts, selected packages | Presentation business decisions |
 | Presentation | controllers, MQ handlers, host composition, transport DTO mapping, OpenAPI/telemetry | Application and composition-required Infrastructure | domain decisions or direct repository orchestration |
 
@@ -65,7 +65,7 @@ Cross-context arrows represent message contracts, never direct project/domain ca
 - Queries: GetAll, GetById.
 - Persistence: state-based PostgreSQL row with optimistic `Version` and `IsDeleted` marker.
 - Domain events: ProductCreated, ProductUpdated, ProductDeleted.
-- No product integration event is normative yet. Keep the configured route only for compatibility until `DEC-001` is resolved.
+- No product business integration event is normative yet. Preserve the configured route and its executable diagnostic examples; they do not resolve the business-event decision in `DEC-001`.
 
 ### Orders
 
@@ -106,11 +106,13 @@ The source outbox relay leases eligible rows, publishes with stable row ID and a
 
 ### Inventory
 
-Inventory commands that emit integration events use `IInventoryStockOutbox`, not direct publish-after-save. The Application use case loads and mutates one `InventoryItem`, creates the producer-owned event plus delivery metadata, and passes the mutated aggregate, expected pre-mutation stock, and message to the port. The PostgreSQL adapter updates with `WHERE Id = @Id AND Stock = @ExpectedStock`, inserts `InventoryIntegrationOutbox`, and commits once; zero updated rows is an optimistic-concurrency failure. Local database transaction/UoW types stay private to Infrastructure.
+Use EF Core with Npgsql against the existing Inventory SQL schema; Products and Orders retain Dapper. The separate `samples/EfCoreWolverine/` native Wolverine transaction sample is not the product persistence or messaging pipeline.
 
-`ReserveInventoryUseCase` calls `IInventoryReservationOutbox.ReserveAndStageAsync` with a producer-owned successful-message factory. The adapter inserts/claims `OperationId`, locks the product inventory row, calculates and stores the terminal outcome, invokes the factory only on success, stages `ProductStockDecreasedIntegrationEvent`, and commits once. Existing operation with identical payload returns the stored outcome and reuses the outbox row; payload mismatch returns conflict without mutation. A generic Application `IUnitOfWork` is intentionally absent because the current invariant spans one aggregate/capability plus its outbox, not multiple aggregates.
+Inventory commands that emit integration events use `IInventoryStockOutbox`, not direct publish-after-save. The Application use case loads and mutates one `InventoryItem`, creates the producer-owned event plus delivery metadata, and passes the mutated aggregate, expected pre-mutation stock, and message to the port. The EF Core PostgreSQL adapter performs a parameterized conditional update matching item ID and expected stock, inserts `InventoryIntegrationOutbox`, and commits once; zero updated rows is an optimistic-concurrency failure. Local database transaction/UoW types stay private to Infrastructure.
 
-The Inventory relay leases unpublished rows, deserializes decrease/increase/return events, publishes with the stored message ID and `PartitionKey = ProductId.ToString("N")`, and sets `PublishedAt`. Reservation message ID equals `OperationId`; other stock commands generate UUID v7. Failures back off per row and park after five attempts. `Messaging:OutboxRelay:Retention:Mode=RetainAll` is the default; `PublishedForDays` plus a positive `PublishedRetentionDays` explicitly enables pruning only of published rows. A publish-before-mark crash may redeliver; at-least-once remains normative.
+`ReserveInventoryUseCase` calls `IInventoryReservationOutbox.ReserveAndStageAsync` with a producer-owned successful-message factory. The adapter inserts/claims `OperationId`, locks the product inventory row, calculates and stores the terminal outcome, invokes the factory only for the first successful processing of a new operation, stages `ProductStockDecreasedIntegrationEvent`, and commits once. An existing operation with identical payload returns only its stored outcome; it does not invoke the factory or stage another outbox row, even if published retention has removed the row or a completed legacy operation has no row. Payload mismatch returns conflict without mutation. Missing or legacy outbox rows require a separate explicitly scoped recovery action after inspecting durable outcome and delivery evidence; ordinary reservation replay never reconstructs them. A generic Application `IUnitOfWork` is intentionally absent because the current invariant spans one aggregate/capability plus its outbox, not multiple aggregates.
+
+The Inventory relay leases unpublished rows, deserializes decrease/increase/return events, publishes with the stored message ID and `PartitionKey = ProductId.ToString("N")`, and sets `PublishedAt`. Reservation message ID equals `OperationId`; other stock commands generate UUID v7. Failures back off per row and park after five attempts. `Messaging:OutboxRelay:Retention:Mode=RetainAll` is the default; `PublishedForDays` plus a positive `PublishedRetentionDays` explicitly enables pruning only of published rows, while reservation operation outcomes remain durable. A successful operation can therefore have no retained outbox row after cleanup; matching replay still creates no outgoing intent. A publish-before-mark crash may redeliver; at-least-once remains normative.
 
 Kafka remains the current single canonical destination. Kafka + RabbitMQ dual broadcast is the owner-selected target direction, not a current runtime claim. Before enabling it, replace the single-row `PublishedAt` completion model with per-destination delivery records so Kafka and RabbitMQ can retry, park, and complete independently; configure RabbitMQ as exchange plus one queue per independent consumer.
 
@@ -145,8 +147,9 @@ API hosts enable controllers, OpenAPI + Scalar in Development, HTTPS redirection
 5. Each bounded-context Application project.
 6. Each bounded-context Infrastructure project.
 7. Six Presentation hosts.
-8. Five test projects, including an independently owned Inventory test surface; external-service checks are opt-in and skipped by default.
-9. Solution grouping, Dockerfiles, Compose, SQL/migrations, and validation scripts.
+8. Three separate EF Core/Wolverine sample projects: Application, Infrastructure, and Host, in dependency order.
+9. Six test projects: five product/domain projects, including Inventory, and one sample test project; external-service checks are opt-in and skipped by default.
+10. Solution grouping, Dockerfiles, Compose, SQL/migrations, and validation scripts.
 
 The exact project identities are in `project-manifest.json`.
 
@@ -155,7 +158,7 @@ The exact project identities are in `project-manifest.json`.
 - Apply positive/non-negative quantity and stock validation from `INV-003` even where the current implementation is incomplete.
 - Use the shared `MessagingTransportOptions` contract in Product hosts instead of legacy environment-name branching.
 - Give known not-found and validation outcomes explicit adapter mappings instead of allowing unhandled exceptions to define the HTTP contract.
-- Add Inventory domain/application/persistence/reservation tests.
+- Preserve the implemented Inventory application, contract, persistence, reservation, and PostgreSQL tests; complete direct initialize/query and remaining quantity-validation coverage. Historical external execution is recorded in `coverage-matrix.md` and does not waive future verification.
 - Use owner-approved `IncreasedQuantity` and `ReturnedQuantity` serialized names; do not retain the prior erroneous `DecreasedQuantity` aliases.
 - Preserve every Accepted ADR behavior and add failure-injection coverage for transaction/outbox boundaries.
 

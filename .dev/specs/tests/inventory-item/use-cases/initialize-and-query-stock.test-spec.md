@@ -2,14 +2,14 @@
 
 ## Inputs Used
 
-- `INV-001`, `INV-002`, `API-011`, and `API-012` in `.dev/requirement/reconstructable-system-baseline.md`
+- `INV-001`, `INV-002`, `INV-003`, `INV-008`, and `API-003` in `.dev/requirement/reconstructable-system-baseline.md`
 - `.dev/specs/domains/inventory-item/usecase/init-product-stock.json`
 - `.dev/specs/domains/inventory-item/usecase/get-available-quantity.json`
 
 ## Implementation Status
 
-- Status: `planned`
-- No independently owned Inventory test project currently covers these behaviors.
+- Status: `implemented-partial`
+- `tests/InventoryControl.Tests/InventoryEfPersistenceTests.cs` covers repository persistence and the available-quantity read projection. The 2026-09-21 commerce run at `edd18d70a94da99e0548de986227655ec102a145` passed Inventory seed/read; see [dated execution evidence](../../../reconstruction/coverage-matrix.md#observed-execution--2026-09-21). Direct initialize/query use-case validation and not-found assertions remain gaps.
 
 ## Scenario Set
 
@@ -43,7 +43,7 @@
 
 ## Assertion Notes
 
-- Persist-before-publish ordering must be verified explicitly.
+- Verify persistence and the absence of an invented initialization integration event; initialization has no publish-order contract.
 - Negative initialization is a `quality-uplift` scenario and should fail against current source until implemented.
 
 ## Recommended Test Spec Path

@@ -19,13 +19,19 @@ The owner also selected Kafka + RabbitMQ dual broadcast as a likely target and c
 ## Decision
 
 - Application depends on capability-specific outbox ports, not database transaction lifecycle or a generic Unit of Work.
-- `IInventoryReservationOutbox.ReserveAndStageAsync` owns the atomic reservation operation. `ReserveInventoryUseCase` supplies a factory that creates the producer-owned success event; Infrastructure invokes it only for a successful outcome and commits state, outcome, and outbox once.
+- `IInventoryReservationOutbox.ReserveAndStageAsync` owns the atomic reservation operation. `ReserveInventoryUseCase` supplies a factory that creates the producer-owned success event; Infrastructure invokes it only for the first successful processing of a new operation and commits state, outcome, and outbox once.
 - `IInventoryStockOutbox.SaveAndStageAsync` atomically updates one existing `InventoryItem` and inserts one producer-created message for `DecreaseStock`, `IncreaseStock`, or `Restock`. The expected pre-mutation stock is part of the port contract and PostgreSQL update predicate, so a concurrent change fails closed instead of being overwritten.
 - `InitProductStock` does not use the outbox because it has no specified outgoing integration event.
 - Infrastructure may implement either port with a local transaction or internal Unit of Work. Those types remain adapter-private.
 - The Inventory relay supports decreased, increased, and returned event types. It uses stored message identity and `ProductId.ToString("N")` partition key, retries with bounded backoff, and parks after five failures.
 - Published rows default to unlimited retention through `Messaging:OutboxRelay:Retention:Mode=RetainAll`. The only supported finite policy is `PublishedForDays` with a positive `Messaging:OutboxRelay:Retention:PublishedRetentionDays`. Unpublished and parked rows are not removed by this policy.
 - Kafka remains the implemented canonical destination. Dual Kafka + RabbitMQ broadcast is a target direction, not a present capability. Before activation, the single `PublishedAt` completion field must evolve to per-destination delivery state, and RabbitMQ must use an exchange with a separate queue per independent subscriber.
+
+## Replay And Retention Clarification — 2026-09-21
+
+The owner selected outcome-only replay for completed reservation operations. Matching replay does not invoke the event factory or stage an outbox row, including after published-row retention or when a completed legacy operation has no row. Retention removes published delivery evidence, not the durable reservation outcome; a successful operation may therefore have zero retained outbox rows after cleanup.
+
+Missing or legacy outbox row recovery requires a separate explicitly scoped repair after inspecting the outcome and delivery evidence. Ordinary reservation replay is not that repair mechanism. Relay retries of an existing row remain at-least-once; this decision does not promise exactly-once broker delivery.
 
 ## Why A Generic Unit Of Work Is Not Used
 

@@ -33,13 +33,14 @@ behavior:
 domain_events:
   - name: "SaleOrders.Domains.DomainEvents.OrderPlacedDomainEvent"
     attributes:
-      - "Id"
+      - "OrderId"
+      - "OrderDate"
+      - "TotalAmount"
       - "ProductId"
       - "ProductName"
       - "Quantity"
-      - "OrderDate"
-      - "TotalAmount"
-      - "Status"
+      - "OccurredOn"
+      - "EventId"
   - name: "Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderPlaced"
     attributes:
       - "OrderId"

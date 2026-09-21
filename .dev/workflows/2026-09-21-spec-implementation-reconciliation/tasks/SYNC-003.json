@@ -1,0 +1,211 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-09-21-spec-implementation-reconciliation",
+  "task_id": "SYNC-003",
+  "owner_skill": "slice-implementer",
+  "related_plan_id": "development-plan-2026-09-21-spec-implementation-reconciliation",
+  "status": "completed",
+  "created_at": "2026-09-21T11:54:21+08:00",
+  "updated_at": "2026-09-21T12:07:48+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "workflow_locator": ".dev/workflows/2026-09-21-spec-implementation-reconciliation/workflow.yaml",
+  "scope": {
+    "goal": "Prevent successful Inventory reservation replay from staging another message after published outbox cleanup.",
+    "target": "Prevent successful Inventory reservation replay from staging another message after published outbox cleanup.",
+    "files": [
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories",
+      "tests/InventoryControl.Tests"
+    ],
+    "constraints": [
+      "Newer semantic authority wins; unresolved owner decisions stay explicit.",
+      "One tracked writer per worktree."
+    ],
+    "non_goals": [
+      "Whole-system reconstruction acceptance",
+      "Framework upgrades",
+      "Historical evidence rewriting"
+    ]
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [],
+    "architecture_decisions": [],
+    "user_constraints": [
+      "2026-09-21 owner authorizes fixing review inconsistencies, prefers newer authority, and requests one consolidated unresolved decision batch.",
+      "2026-09-21 owner applies recommendation R02: only first-time success stages; missing or legacy publication recovery remains explicit."
+    ]
+  },
+  "execution": {
+    "capability_slot": "implementation",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "implementation",
+      "authorization_source": [
+        "2026-09-21 owner reply: 套用建議; decision R02 option A."
+      ],
+      "pending_decision": ""
+    },
+    "implementation_contract": {
+      "intent": "review-remediation",
+      "execution_mode": "generic",
+      "overlays": [
+        "remediation"
+      ],
+      "authorization_source": [
+        "2026-09-21 repair request"
+      ],
+      "normative_truth": [
+        ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json",
+        ".dev/workflows/2026-09-21-spec-implementation-reconciliation/decisions.md"
+      ],
+      "finding_evidence": [
+        "R02: replay recreates purged publication intent"
+      ],
+      "subject_revision": "1ddfe451f43b32eef2b2dce1cd46fe7dd4f8c2e7",
+      "acceptance_criteria": [
+        "AC4 in workflow-plan.md",
+        "Real PostgreSQL reserve/publish/cleanup/replay leaves one outcome, unchanged stock, zero outbox rows and no second publish."
+      ]
+    },
+    "test_execution_contract": null,
+    "role_execution_records": [],
+    "spec_compliance": {
+      "selected": false,
+      "activation_source": [],
+      "expected_outcome": "not-applicable"
+    },
+    "steps": [
+      "Compare semantic history and authoritative contracts.",
+      "Repair only the accepted bounded scope.",
+      "Run meaningful checks and record actual outcomes."
+    ],
+    "validation": [
+      "Broker-free replay factory regression",
+      "Opted-in Inventory PostgreSQL suite including combined retention/replay scenario"
+    ],
+    "commit_checkpoint": "One coherent validated checkpoint after settled repair and review.",
+    "deferred_items": []
+  },
+  "results": {
+    "summary": "Both adapters stage only first-time success. Inventory 50/50 and Orders focused 10/10 passed with zero skips on the named candidate; all 20 PostgreSQL scenarios including retention/missing-row replay passed. Independent review reported no findings.",
+    "finding_status": "addressed",
+    "files_changed": [
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/InMemoryInventoryReservationRepository.cs",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/InventoryOutboxWriter.cs",
+      "src/Inventory/DomainCore/InventoryControl.Infrastructure/Applications/Repositories/PostgresInventoryReservationRepository.cs",
+      "tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs",
+      "tests/InventoryControl.Tests/InventoryReservationIdempotencyTests.cs"
+    ],
+    "approval_evidence": [
+      "2026-09-21 owner accepted R02 option A."
+    ],
+    "test_execution": [
+      {
+        "executor": "/root/inventory_persistence_map",
+        "command": "dotnet test tests/InventoryControl.Tests/InventoryControl.Tests.csproj --no-restore --filter \"FullyQualifiedName~InventoryReservationIdempotencyTests|FullyQualifiedName~ReserveInventoryUseCaseTests\" --logger \"console;verbosity=minimal\"",
+        "subject": "five-file uncommitted Inventory repair against 1ddfe451f43b32eef2b2dce1cd46fe7dd4f8c2e7",
+        "red": {
+          "passed": 16,
+          "failed": 1,
+          "skipped": 0,
+          "reason": "Replay invoked the successful-message factory once."
+        },
+        "green": {
+          "passed": 17,
+          "failed": 0,
+          "skipped": 0
+        },
+        "limitations": [
+          "No actual PostgreSQL or broker execution during implementation."
+        ]
+      },
+      {
+        "executor": "/root/docker_validation",
+        "command": [
+          "python",
+          "artifacts/spec-sync/run-postgres-validation.py",
+          "postgres-validation-01",
+          "7a898901e9ace44b844847ad7a54008adb9950bc"
+        ],
+        "profile": "inventory-postgresql-and-orders-selected",
+        "started_at": "2026-09-21T04:03:50.763803+00:00",
+        "completed_at": "2026-09-21T04:04:42.750976+00:00",
+        "duration_seconds": 51.987,
+        "outcome": "passed",
+        "counts": {
+          "inventory_total": 50,
+          "inventory_passed": 50,
+          "inventory_failed": 0,
+          "inventory_skipped": 0,
+          "orders_total": 10,
+          "orders_passed": 10,
+          "orders_failed": 0,
+          "orders_skipped": 0,
+          "dotnet_tests_total": 60,
+          "dotnet_tests_passed": 60,
+          "dotnet_tests_failed": 0,
+          "dotnet_tests_skipped": 0
+        },
+        "postgres_scenarios": [
+          "given_a_row_created_with_existing_sql_when_queried_then_the_no_tracking_projection_preserves_its_values",
+          "given_a_new_inventory_item_when_repository_saves_then_a_fresh_context_can_query_it",
+          "given_the_same_claimed_row_when_publish_is_retried_then_delivery_identity_and_event_time_are_stable",
+          "given_five_transport_failures_when_relay_runs_again_then_the_row_is_parked_and_not_republished",
+          "given_finite_published_retention_when_relay_runs_then_only_expired_published_rows_are_pruned",
+          "given_a_published_reservation_was_purged_when_replayed_then_no_new_publication_is_staged",
+          "given_a_completed_reservation_has_no_outbox_row_when_replayed_then_no_recovery_publication_is_staged",
+          "given_one_pending_row_when_two_relays_claim_concurrently_then_only_one_lease_publishes_it",
+          "given_a_cancelled_batch_when_relay_runs_then_no_message_is_claimed_or_published",
+          "given_an_expired_lease_when_relay_recovers_then_original_delivery_identity_is_preserved",
+          "given_stock_for_only_one_request_when_two_reservations_run_concurrently_then_stock_and_outcomes_are_atomic",
+          "given_one_operation_when_duplicate_requests_run_concurrently_then_the_outcome_and_message_are_replayed_once",
+          "given_a_completed_operation_when_payload_changes_then_the_conflict_preserves_the_original_state",
+          "given_a_failed_operation_when_stock_changes_then_replay_preserves_the_terminal_outcome",
+          "given_invalid_outbox_metadata_when_reservation_staging_fails_then_stock_operation_and_message_roll_back",
+          "given_a_rolled_back_scope_when_the_operation_is_retried_then_only_the_retry_commits",
+          "given_a_stock_change_when_outbox_commit_succeeds_then_state_and_event_are_durable_together",
+          "given_a_concurrent_stock_change_when_outbox_commit_runs_then_it_fails_without_an_event_row",
+          "given_invalid_outbox_metadata_when_staging_fails_then_stock_rolls_back_and_the_scope_can_reload",
+          "given_a_tracked_stock_item_when_a_set_based_commit_succeeds_then_later_reads_see_current_state"
+        ]
+      }
+    ],
+    "role_execution_aggregation": [
+      {
+        "classification": "routine-bounded",
+        "executor": "/root/inventory_persistence_map",
+        "invocation": "Authorized follow-up as sole tracked writer of three Inventory source files and two direct test files; parent and peers read-only on tracked content.",
+        "result": "Five-file repair, narrow red/green test evidence and diff-check pass returned; writer released to /root.",
+        "final_integration_owner": "/root"
+      },
+      {
+        "classification": "full",
+        "executor": "/root/spec_sync_final_review",
+        "owning_skill": "code-reviewer",
+        "result_ref": "artifacts/spec-sync/spec-sync-review-01-result.json",
+        "result_sha256": "1d05f24fb08ea40862783d19dcc02a67cdc50a5cb8c627b96c316382e389491b",
+        "final_integration_owner": "/root",
+        "decision": "accept bounded static review; combine with separately validated actual execution"
+      }
+    ],
+    "spec_compliance": {
+      "outcome": "not-applicable",
+      "coverage_percent": null,
+      "evidence": []
+    },
+    "validation_evidence": [
+      "Source diff inspected by /root; standalone PostgreSQL fixtures use unique schemas and never remove shared data.",
+      ".dev/workflows/2026-09-21-spec-implementation-reconciliation/evidence/verification.json"
+    ],
+    "commits": [
+      "7a898901e9ace44b844847ad7a54008adb9950bc",
+      "containing-commit"
+    ],
+    "follow_up_needed": false
+  }
+}

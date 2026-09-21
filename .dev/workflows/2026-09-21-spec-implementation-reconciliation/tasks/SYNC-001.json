@@ -1,0 +1,125 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-09-21-spec-implementation-reconciliation",
+  "task_id": "SYNC-001",
+  "owner_skill": "spec-author",
+  "related_plan_id": "development-plan-2026-09-21-spec-implementation-reconciliation",
+  "status": "completed",
+  "created_at": "2026-09-21T11:15:46+08:00",
+  "updated_at": "2026-09-21T12:07:48+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "workflow_locator": ".dev/workflows/2026-09-21-spec-implementation-reconciliation/workflow.yaml",
+  "scope": {
+    "goal": "Reconcile current documentation using newer semantic authority.",
+    "target": "Reconcile current documentation using newer semantic authority.",
+    "files": [
+      ".dev/requirement",
+      ".dev/specs",
+      ".dev/problem-frames/orders/cbf/place-order",
+      ".dev/operations"
+    ],
+    "constraints": [
+      "Newer semantic authority wins; unresolved owner decisions stay explicit.",
+      "One tracked writer per worktree."
+    ],
+    "non_goals": [
+      "Whole-system reconstruction acceptance",
+      "Framework upgrades",
+      "Historical evidence rewriting"
+    ]
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [],
+    "architecture_decisions": [],
+    "user_constraints": [
+      "2026-09-21 owner authorizes fixing review inconsistencies, prefers newer authority, and requests one consolidated unresolved decision batch."
+    ]
+  },
+  "execution": {
+    "capability_slot": "specification",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "specification",
+      "authorization_source": [
+        "2026-09-21 repair request; work item #2",
+        "2026-09-21 owner reply: apply both recommendations R02 and R07."
+      ],
+      "pending_decision": ""
+    },
+    "implementation_contract": null,
+    "test_execution_contract": null,
+    "role_execution_records": [],
+    "spec_compliance": {
+      "selected": false,
+      "activation_source": [],
+      "expected_outcome": "not-applicable"
+    },
+    "steps": [
+      "Compare semantic history and authoritative contracts.",
+      "Repair only the accepted bounded scope.",
+      "Run meaningful checks and record actual outcomes."
+    ],
+    "validation": [],
+    "commit_checkpoint": "One coherent validated checkpoint after settled repair and review.",
+    "deferred_items": []
+  },
+  "results": {
+    "summary": "Reconciled the settled 18-file checkpoint plus both owner-approved decisions: outcome-only Inventory replay across retention/missing rows, and the existing eight-field OrderPlacedDomainEvent CBF schema. Historical evidence and unrelated future gaps remain explicit.",
+    "files_changed": [
+      ".dev/adr/ADR-005-inventory-outbox-application-boundary.md",
+      ".dev/operations/context-map.md",
+      ".dev/operations/event-catalog.md",
+      ".dev/operations/inventory-efcore.md",
+      ".dev/operations/mq-topology.md",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/acceptance.yaml",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/controlled-domain/aggregate.yaml",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/machine/machine.yaml",
+      ".dev/problem-frames/inventory/cbf/reserve-inventory/machine/use-case.yaml",
+      ".dev/problem-frames/orders/cbf/place-order/controlled-domain/aggregate.yaml",
+      ".dev/project-config.yaml",
+      ".dev/requirement/TECH-STACK-REQUIREMENTS.MD",
+      ".dev/requirement/reconstructable-system-baseline.md",
+      ".dev/specs/domains/inventory-item/usecase/reserve-inventory.json",
+      ".dev/specs/reconstruction/coverage-matrix.md",
+      ".dev/specs/reconstruction/persistence-contracts.json",
+      ".dev/specs/reconstruction/project-manifest.json",
+      ".dev/specs/reconstruction/runtime-contracts.json",
+      ".dev/specs/reconstruction/system-blueprint.md",
+      ".dev/specs/tests/cross-domain/order-inventory-reservation.test-spec.md",
+      ".dev/specs/tests/inventory-item/integration/inventory-stock-persistence-and-publication.test-spec.md",
+      ".dev/specs/tests/inventory-item/use-cases/initialize-and-query-stock.test-spec.md",
+      ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md",
+      ".dev/specs/tests/order/integration/order-source-outbox.test-spec.md",
+      ".dev/specs/tests/order/use-cases/cancel-order.test-spec.md",
+      ".dev/specs/tests/order/use-cases/get-order-details.test-spec.md",
+      ".dev/specs/tests/product/use-cases/query-products.test-spec.md"
+    ],
+    "approval_evidence": [
+      "User: 套用建議; both recommended decisions in decisions.md accepted."
+    ],
+    "test_execution": [],
+    "role_execution_aggregation": [],
+    "spec_compliance": {
+      "outcome": "not-applicable",
+      "coverage_percent": null,
+      "evidence": []
+    },
+    "validation_evidence": [
+      ".dev/workflows/2026-09-21-spec-implementation-reconciliation/evidence/checkpoint-verification.json",
+      ".dev/workflows/2026-09-21-spec-implementation-reconciliation/evidence/verification.json"
+    ],
+    "commits": [
+      "1ddfe451f43b32eef2b2dce1cd46fe7dd4f8c2e7",
+      "7a898901e9ace44b844847ad7a54008adb9950bc",
+      "containing-commit"
+    ],
+    "follow_up_needed": false,
+    "finding_status": "addressed"
+  }
+}

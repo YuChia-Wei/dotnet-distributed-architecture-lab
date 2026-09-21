@@ -29,7 +29,7 @@ public sealed class PostgresInventoryReservationRepository(InventoryDbContext co
                 ? await this.ReadExistingAsync(operationId, productId, quantity, cancellationToken)
                 : await this.ReserveAsync(operationId, productId, quantity, cancellationToken);
 
-            if (outcome.IsSuccess)
+            if (outcome.IsSuccess && !outcome.WasAlreadyProcessed)
             {
                 var message = successfulMessageFactory(outcome)
                     ?? throw new InvalidOperationException("A successful reservation requires an outbox message.");

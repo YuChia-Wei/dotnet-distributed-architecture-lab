@@ -48,7 +48,7 @@
 - Product and domain tests use xUnit v3 with the VSTest adapter. The verification Compose profile runs the solution test projects and explicitly enables Kafka/PostgreSQL integration tests.
 - Test doubles use Moq or NSubstitute according to the owning test project; do not introduce a shared mutable base fixture.
 - Assertions use Shouldly where referenced by the test project.
-- Product tests and architecture-tool tests are separate validation surfaces because the `tools/` projects are not in `MQArchLab.slnx`.
+- `MQArchLab.slnx` contains five product/domain test projects and one EF Core/Wolverine sample test project. The target-owned analyzer and runtime-validation projects are retired and absent; they are not a current validation surface.
 - `InventoryControl.Tests` owns Inventory application, contract, relay, idempotency, and opt-in PostgreSQL scenarios. External PostgreSQL/broker tests are skipped without explicit opt-in and skipped results are non-passing evidence.
 
 ## Version Ownership

@@ -7,7 +7,7 @@ Integration-focused verification for inventory persistence and outbound stock in
 ## Implementation Status
 
 - Status: `partially-implemented`
-- Broker-free Application/outbox contract anchors exist in `tests/InventoryControl.Tests/InventoryStockUseCaseTests.cs`. Real PostgreSQL atomic-commit and expected-stock concurrency anchors exist in `tests/InventoryControl.Tests/PostgresInventoryStockOutboxTests.cs`; they are opt-in external tests, and a skipped result is non-passing evidence.
+- Broker-free Application/outbox contract anchors exist in `tests/InventoryControl.Tests/InventoryStockUseCaseTests.cs`. Opt-in PostgreSQL atomic-commit, expected-stock concurrency, and invalid-message rollback anchors exist in `tests/InventoryControl.Tests/PostgresInventoryStockOutboxTests.cs`. They passed on 2026-09-21 at `edd18d70a94da99e0548de986227655ec102a145`; see [dated execution evidence](../../../reconstruction/coverage-matrix.md#observed-execution--2026-09-21). This historical result does not prove later source changes or every scenario variant; default skips remain non-passing evidence.
 
 ## Related Production Spec
 
