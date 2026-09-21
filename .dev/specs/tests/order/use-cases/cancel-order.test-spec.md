@@ -7,7 +7,7 @@ Application and integration-aware verification for `CancelOrder`.
 ## Implementation Status
 
 - Status: `partial`
-- Current tests cover successful cancellation and persistence; explicit integration-event and not-found assertions remain planned.
+- `tests/SaleOrders.Tests/CancelOrderTests.cs` covers successful state transition, `IOrderEventCommitter` staging of one `OrderCancelled` with its reason, and repeat-cancel no-op. Direct not-found assertions remain planned; a committer double is not broker-publication or PostgreSQL-atomicity proof.
 
 ## Related Production Spec
 
@@ -17,7 +17,7 @@ Application and integration-aware verification for `CancelOrder`.
 
 - Happy path: existing order is marked as cancelled
 - Failure path: target order does not exist
-- Integration path: successful cancellation publishes `OrderCancelled`
+- Integration path: successful cancellation stages `OrderCancelled` with state; the source-outbox relay publishes after commit
 
 ## Given-When-Then
 
@@ -29,8 +29,8 @@ Application and integration-aware verification for `CancelOrder`.
   - `ICancelOrderUseCase.ExecuteAsync` is invoked with `CancelOrderInput`
 - Then:
   - the order status becomes `Cancelled`
-  - persistence is performed
-  - an `OrderCancelled` integration event is published
+  - `IOrderEventCommitter` receives the order and one `OrderCancelled` event with the cancellation reason for atomic persistence
+  - the source-outbox relay owns subsequent publication
 
 ### Scenario 2: order does not exist
 
@@ -41,13 +41,13 @@ Application and integration-aware verification for `CancelOrder`.
 - Then:
   - the operation fails with `KeyNotFoundException` or equivalent not-found semantics
   - no status change is persisted
-  - no `OrderCancelled` integration event is published
+  - no success-event commit or `OrderCancelled` outbox staging occurs
 
 ## Assertions
 
-- repository load and save behavior
+- repository load and event-committer invocation
 - order status transition
-- integration event publication behavior
+- integration-event staging and reason, with relay publication verified separately
 - not-found failure semantics
 
 ## Test Level

@@ -2,15 +2,16 @@
 
 ## Inputs Used
 
-- `ORD-007`, `INT-004`, and `INT-005` in `.dev/requirement/reconstructable-system-baseline.md`
+- `ORD-005`, `ORD-006`, `INT-004`, `INT-005`, and `INT-006` in `.dev/requirement/reconstructable-system-baseline.md`
 - `.dev/specs/reconstruction/persistence-contracts.json`
 - `.dev/specs/reconstruction/message-contracts.json`
 - `tests/SaleOrders.Tests/OrderIntegrationOutboxRelayTests.cs`
+- `tests/SaleOrders.Tests/OrderIntegrationEventSerializationTests.cs`
 
 ## Implementation Status
 
 - Status: `implemented-partial`
-- Relay retry and delivered-row behavior have executable unit-level evidence; a real PostgreSQL atomicity fixture remains planned.
+- Relay retry identity, original occurrence time, payload preservation and successful-row deletion have unit-level test anchors. All four integration-event types have stored-JSON round-trip and existing producer-constructor tests. Real PostgreSQL atomicity and owner-token deletion checks remain integration-test gaps; a test double does not establish database rollback.
 
 ## Scenario Set
 
@@ -35,12 +36,12 @@
 - When: the relay retries.
 - Then: payload, message id, partition key, and occurrence time are unchanged; attempt metadata advances.
 
-### Scenario 4: mark delivered only after success
+### Scenario 4: delete the claimed row only after success
 
 - Test level: `integration`
-- Given: an undelivered row is publishable.
+- Given: an undelivered row is claimed with the relay's owner token.
 - When: Wolverine accepts the message.
-- Then: `DeliveredAt` is set once; subsequent batches do not republish that row.
+- Then: the relay deletes only the successfully published row whose id and owner token still match. Subsequent batches cannot claim the deleted row. A crash after publication but before deletion may redeliver with the same identity; at-least-once remains the contract.
 
 ## Assertion Notes
 

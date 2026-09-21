@@ -2,7 +2,7 @@
 
 ## Scope
 
-This catalog tracks integration events and request/reply contracts visible in `src/BC-Contracts/`. An `active` status requires a confirmed current producer or request/reply use; configured channels without a confirmed producer are described separately.
+This catalog tracks business integration events and request/reply contracts visible in `src/BC-Contracts/`. An `active` status requires a confirmed current producer or request/reply use. Diagnostic messages under `src/BuildingBlocks/Lab.BuildingBlocks.Integrations/Diagnostics/` are executable examples described separately; they do not establish business-event ownership.
 
 ## Event Index
 
@@ -82,7 +82,7 @@ This catalog tracks integration events and request/reply contracts visible in `s
 - Business meaning:
   - order lifecycle moved to shipped, delivered, or cancelled
 - Payload summary:
-  - `OrderId`, `OccurredOn`
+  - `OrderId`, `Reason`, `OccurredOn`
 - Producer responsibility:
   - publish after state transition is persisted
 - Consumer expectations:
@@ -149,7 +149,7 @@ These examples separate executable repository behavior from business reactions t
 | configured but contract gap | `OrderCancelled` to `InventoryControl.Consumer` | Orders owns cancellation fact and reason | Inventory could own compensation/restock, deduplication, and terminal failure handling | The current event lacks ProductId, quantity, or reservation correlation, so safe automatic restock cannot be reconstructed from it alone. The consumer must not guess; either a query/correlation design or producer-approved additive contract is required. |
 | external candidate | `ProductStockDecreasedIntegrationEvent` | Inventory owns the stock-change fact, quantity field, current stock, occurrence time, and ProductId ordering key | Search, availability, analytics, or notification consumers each own their own projection/reaction and idempotency | Independent consumers justify separate Kafka consumer groups or RabbitMQ queues. They do not justify changing the Inventory event to match one consumer's internal model. |
 
-Current `SaleProducts.Consumer` and `InventoryControl.Consumer` subscribe to `orders.integration.events`, and `SaleOrders.Consumer` subscribes to `products.integration.events`, but those Consumer projects contain no executable message handlers. Treat the subscription host/topology as compatibility evidence and the business reaction as a gap.
+Current `SaleProducts.Consumer` and `InventoryControl.Consumer` subscribe to `orders.integration.events`, and `SaleOrders.Consumer` subscribes to `products.integration.events`. Orders Consumer has executable diagnostic handlers: `WhenAllWorkHandler`, `IndependentAuditHandler`, `IndependentStatisticsHandler`, and `ConsumerExceptionPolicyProbeHandler`. Product diagnostic use cases publish the corresponding messages when enabled; see [consumer parallel examples](consumer-parallel-examples.md). These diagnostics demonstrate orchestration and delivery policies. Business reactions for the three consumer subscriptions remain a gap.
 
 ## Ownership and Versioning Rules
 
@@ -160,7 +160,7 @@ Current `SaleProducts.Consumer` and `InventoryControl.Consumer` subscribe to `or
 
 ## Deferred Items
 
-- `products.integration.events` is configured and has a listener, but current Product use cases do not confirm publication of a product integration event.
+- `products.integration.events` carries enabled diagnostic messages, but no current Product business use case establishes a normative product business integration event.
 - Legacy or unclear product stock deduction contracts need later review to decide whether they are active, deprecated, or obsolete.
 - Contract versioning and consumer replay procedures still need explicit runtime documentation; reservation correlation/replay is defined by `OperationId`.
 - Kafka + RabbitMQ dual broadcast is a target direction only. It requires destination-aware outbox completion and broker-specific fanout routing before this catalog may call it active.

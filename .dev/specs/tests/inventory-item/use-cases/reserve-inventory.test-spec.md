@@ -11,9 +11,9 @@
 
 ## Implementation Status
 
-- Status: `implemented-awaiting-external-execution`
+- Status: `implemented-partial`
 - Inventory owns its test project and has executable validation, replay, conflict, terminal/transient/outbox-stage failure, stable relay identity, cancellation, failure-policy, JSON-contract, and PostgreSQL concurrency/atomicity scenarios.
-- The PostgreSQL scenario is skipped by default and remains non-passing evidence until the explicit external profile runs successfully.
+- The explicit PostgreSQL profile passed reservation concurrency and rollback tests on 2026-09-21 at `edd18d70a94da99e0548de986227655ec102a145`. See [dated execution evidence](../../../reconstruction/coverage-matrix.md#observed-execution--2026-09-21). Default runs still skip external tests; neither a skip nor this historical run proves later source changes or untested replay-after-retention behavior.
 
 ## Scenario Set
 
@@ -91,4 +91,4 @@
 
 ## Implementation and Execution Handoff
 
-The broker-free scenarios are implemented under `tests/InventoryControl.Tests/`. Real PostgreSQL execution remains a separate opt-in gate and skipped evidence is non-passing.
+Broker-free and opt-in PostgreSQL scenarios are implemented under `tests/InventoryControl.Tests/`. The dated external run is passing evidence for its pinned subject; future changed subjects still require explicit opt-in execution, and skipped evidence is non-passing.

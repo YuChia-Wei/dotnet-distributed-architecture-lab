@@ -1,0 +1,113 @@
+{
+  "template_id": "software-development-orchestrator/development-workflow-task",
+  "template_version": "1.5.0",
+  "template_created_at": "2026-07-10T18:25:11+08:00",
+  "template_updated_at": "2026-08-05T02:12:00+08:00",
+  "workflow_id": "2026-09-21-spec-implementation-reconciliation",
+  "task_id": "SYNC-001",
+  "owner_skill": "spec-author",
+  "related_plan_id": "development-plan-2026-09-21-spec-implementation-reconciliation",
+  "status": "in_progress",
+  "created_at": "2026-09-21T11:15:46+08:00",
+  "updated_at": "2026-09-21T11:29:37+08:00",
+  "template_source": ".ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "workflow_locator": ".dev/workflows/2026-09-21-spec-implementation-reconciliation/workflow.yaml",
+  "scope": {
+    "goal": "Reconcile current documentation using newer semantic authority.",
+    "target": "Reconcile current documentation using newer semantic authority.",
+    "files": [
+      ".dev/requirement",
+      ".dev/specs",
+      ".dev/problem-frames/orders/cbf/place-order",
+      ".dev/operations"
+    ],
+    "constraints": [
+      "Newer semantic authority wins; unresolved owner decisions stay explicit.",
+      "One tracked writer per worktree."
+    ],
+    "non_goals": [
+      "Whole-system reconstruction acceptance",
+      "Framework upgrades",
+      "Historical evidence rewriting"
+    ]
+  },
+  "inputs": {
+    "requirements": [],
+    "specifications": [],
+    "architecture_decisions": [],
+    "user_constraints": [
+      "2026-09-21 owner authorizes fixing review inconsistencies, prefers newer authority, and requests one consolidated unresolved decision batch."
+    ]
+  },
+  "execution": {
+    "capability_slot": "specification",
+    "approval_contract": {
+      "status": "approved",
+      "required_before": "specification",
+      "authorization_source": [
+        "2026-09-21 repair request; work item #2"
+      ],
+      "pending_decision": ""
+    },
+    "implementation_contract": null,
+    "test_execution_contract": null,
+    "role_execution_records": [],
+    "spec_compliance": {
+      "selected": false,
+      "activation_source": [],
+      "expected_outcome": "not-applicable"
+    },
+    "steps": [
+      "Compare semantic history and authoritative contracts.",
+      "Repair only the accepted bounded scope.",
+      "Run meaningful checks and record actual outcomes."
+    ],
+    "validation": [],
+    "commit_checkpoint": "One coherent validated checkpoint after settled repair and review.",
+    "deferred_items": [
+      "R02: select replay-after-retention contract before dependent behavior/spec repair.",
+      "R07: select OrderPlacedDomainEvent schema before dependent CBF or persisted-schema repair."
+    ]
+  },
+  "results": {
+    "summary": "Reconciled 18 current requirement/specification/operations files and verified project/package/requirement parity. R02 retention replay and R07 domain-event schema remain pending owner decision; no dependent behavior or schema mutation.",
+    "files_changed": [
+      ".dev/operations/context-map.md",
+      ".dev/operations/event-catalog.md",
+      ".dev/operations/mq-topology.md",
+      ".dev/requirement/TECH-STACK-REQUIREMENTS.MD",
+      ".dev/requirement/reconstructable-system-baseline.md",
+      ".dev/specs/reconstruction/coverage-matrix.md",
+      ".dev/specs/reconstruction/persistence-contracts.json",
+      ".dev/specs/reconstruction/project-manifest.json",
+      ".dev/specs/reconstruction/runtime-contracts.json",
+      ".dev/specs/reconstruction/system-blueprint.md",
+      ".dev/specs/tests/cross-domain/order-inventory-reservation.test-spec.md",
+      ".dev/specs/tests/inventory-item/integration/inventory-stock-persistence-and-publication.test-spec.md",
+      ".dev/specs/tests/inventory-item/use-cases/initialize-and-query-stock.test-spec.md",
+      ".dev/specs/tests/inventory-item/use-cases/reserve-inventory.test-spec.md",
+      ".dev/specs/tests/order/integration/order-source-outbox.test-spec.md",
+      ".dev/specs/tests/order/use-cases/cancel-order.test-spec.md",
+      ".dev/specs/tests/order/use-cases/get-order-details.test-spec.md",
+      ".dev/specs/tests/product/use-cases/query-products.test-spec.md"
+    ],
+    "approval_evidence": [],
+    "test_execution": [],
+    "role_execution_aggregation": [],
+    "spec_compliance": {
+      "outcome": "not-applicable",
+      "coverage_percent": null,
+      "evidence": []
+    },
+    "validation_evidence": [
+      ".dev/workflows/2026-09-21-spec-implementation-reconciliation/evidence/checkpoint-verification.json"
+    ],
+    "commits": [
+      "containing-commit"
+    ],
+    "follow_up_needed": true,
+    "finding_status": "partially-addressed"
+  }
+}

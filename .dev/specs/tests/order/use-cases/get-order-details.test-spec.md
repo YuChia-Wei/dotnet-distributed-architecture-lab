@@ -2,7 +2,7 @@
 
 ## Inputs Used
 
-- `ORD-006` and `API-006` in `.dev/requirement/reconstructable-system-baseline.md`
+- `ORD-007`, `API-001`, `API-002`, and `API-003` in `.dev/requirement/reconstructable-system-baseline.md`
 - `.dev/specs/domains/order/usecase/get-order-details.json`
 - `tests/SaleOrders.Tests/GetOrderDetailsEndpointTests.cs`
 
@@ -18,14 +18,14 @@
 - Test level: `application`
 - Given: the query repository returns an order projection.
 - When: `IGetOrderDetailsUseCase.ExecuteAsync` runs.
-- Then: the result succeeds; id, product, quantity, date, amount, status, and reason match the projection.
+- Then: the non-null `OrderDetailsResponse` contains `OrderId` and exactly one `LineItems` entry with the projection's `ProductId` and `Quantity`. Date, amount, status, and reason are not fields required by this response contract.
 
 ### Scenario 2: return not found
 
 - Test level: `application`
 - Given: no projection exists for the id.
 - When: the query use case runs.
-- Then: the result is a typed failure/not-found; no placeholder order is synthesized.
+- Then: the result is `null`; no placeholder order or invented Result wrapper is synthesized.
 
 ### Scenario 3: preserve endpoint contract
 
@@ -37,7 +37,7 @@
 ## Assertion Notes
 
 - Each response field and status mapping needs an explicit assertion.
-- Add an endpoint not-found assertion once the quality-uplift error mapping is implemented.
+- Add the missing endpoint not-found assertion: a null use-case response maps to HTTP 404 under the existing `ORD-007` contract.
 
 ## Recommended Test Spec Path
 
@@ -45,4 +45,4 @@
 
 ## Implementation and Execution Handoff
 
-Only scenario design is authorized; current executable evidence is limited to the existing endpoint test.
+The found-response endpoint test is the current executable anchor. Direct query mapping, null-result, and endpoint-404 assertions remain explicit test gaps; this document does not claim they have executed.

@@ -18,12 +18,12 @@ It distinguishes between:
 | Kafka | `inventory.requests` | `SaleOrders.WebApi` | `InventoryControl.WebApi` | request/reply inventory reservation |
 | Kafka | `orders.outbound.replies` | Wolverine reply channel used by `Orders` | `SaleOrders.WebApi` | reply inbox for reservation flow |
 | Kafka | `inventory.integration.events` | `InventoryControl.WebApi` | downstream listeners | stock change integration stream |
-| Kafka | `products.integration.events` | configured by `SaleProducts.WebApi`; no confirmed current producer use case | `SaleOrders.Consumer` and possible downstream listeners | configured route, not a confirmed active product integration stream |
+| Kafka | `products.integration.events` | `SaleProducts.WebApi` diagnostic use cases when enabled; business events deferred | `SaleOrders.Consumer` and possible downstream listeners | diagnostic route; no confirmed product business integration stream |
 | RabbitMQ (deferred) | `orders.integration.events` | `SaleOrders.WebApi` | shared queue consumers | Current name implies competing consumers; fanout requires exchange plus one queue per independent subscriber |
 | RabbitMQ | `inventory.requests` | `SaleOrders.WebApi` | `InventoryControl.WebApi` | request/reply inventory reservation |
 | RabbitMQ | `orders.outbound.replies` | Wolverine reply channel used by `Orders` | `SaleOrders.WebApi` | reply inbox for reservation flow |
 | RabbitMQ (deferred) | `inventory.integration.events` | `InventoryControl.WebApi` | shared queue consumers | Current name implies competing consumers, not broadcast |
-| RabbitMQ | `products.integration.events` | configured by `SaleProducts.WebApi`; no confirmed current producer use case | `SaleOrders.Consumer` and possible downstream listeners | configured route, not a confirmed active product integration stream |
+| RabbitMQ | `products.integration.events` | `SaleProducts.WebApi` diagnostic use cases when enabled; business events deferred | `SaleOrders.Consumer` and possible downstream listeners | diagnostic route; no confirmed product business integration stream |
 
 ## Route Map
 
@@ -34,6 +34,7 @@ It distinguishes between:
 | `ReserveInventoryResponseContract` | `Inventory` | `orders.outbound.replies` or Wolverine reply path | `Orders` caller | used as reply path for reservation result |
 | `ProductStockDecreasedIntegrationEvent` from `ReserveInventory` or `DecreaseStock` | `Inventory` | `inventory.integration.events` | downstream listeners | producer-created event is atomically staged in `InventoryIntegrationOutbox`, then relayed |
 | `ProductStockIncreasedIntegrationEvent`, `ProductStockReturnedIntegrationEvent` | `Inventory` | `inventory.integration.events` | downstream listeners | state and producer-created event are atomically staged through `IInventoryStockOutbox`, then relayed |
+| `WhenAllWorkRequested`, `IndependentWorkRequested`, `ConsumerExceptionPolicyProbe` diagnostic messages | `Products` diagnostic endpoints | `products.integration.events` | `SaleOrders.Consumer` diagnostic handlers | enabled examples; parallel-work verification is recorded in `consumer-parallel-examples.md` |
 | future product integration events implementing `IIntegrationEvent` | `Products` | `products.integration.events` | downstream listeners | route is configured with durable outbox, but no current Product use case confirms publication |
 
 ## Retry / Dead-Letter Strategy
@@ -69,8 +70,8 @@ Current maintainer rule:
 
 ## Operational Risks
 
-- The native Orders and Inventory source outboxes close their code-level commit-to-enqueue gaps, but the external PostgreSQL failure-injection gate remains open until rollback and recovery run successfully.
-- Kafka and RabbitMQ both route reservation requests to `inventory.requests` and return responses through Wolverine's request reply endpoint (`orders.outbound.replies` on the Orders side). This topology still requires the maintainer's explicit broker runtime verification.
+- The native Orders and Inventory source outboxes close their code-level commit-to-enqueue gaps. Inventory PostgreSQL rollback/concurrency executed successfully on 2026-09-21 at `edd18d70a94da99e0548de986227655ec102a145`; see [the dated coverage evidence](../specs/reconstruction/coverage-matrix.md#observed-execution--2026-09-21). Orders PostgreSQL failure injection remains an open gate, and subsequent source changes require fresh evidence.
+- Kafka and RabbitMQ both route reservation requests to `inventory.requests` and return responses through Wolverine's request reply endpoint (`orders.outbound.replies` on the Orders side). The dated coverage evidence records a successful Kafka commerce reservation round trip; RabbitMQ runtime parity remains unverified.
 - RabbitMQ logical names are explicit, but the current shared queue configuration is competing-consumer topology. The dual-broadcast direction is authorized, but implementation is not: it still requires an exchange plus separate bound queues and a delivery ledger keyed by message plus destination. Reusing the current single `PublishedAt` would make partial Kafka/RabbitMQ success indistinguishable and is prohibited.
 - Product consumer currently listens to `orders.integration.events`, but the business purpose is not yet documented in a matching handler map.
 
@@ -104,7 +105,7 @@ Get-Content -Raw docker-compose/sql-script/migrations/inventory/20260827_0002_ad
 ```
 
 The Inventory runtime role needs permission to create and use Wolverine's `wolverine_messages` schema under Kafka and RabbitMQ profiles. Production deployments should apply reviewed schema changes with a migration-capable role.
-- The product event channel is configured on producer and consumer runtimes, but current Product use cases do not publish a confirmed product integration event.
+- The product event channel has enabled diagnostic producers and Orders diagnostic handlers. Product business integration events and consumer business reactions remain deferred.
 - Inventory and Products retain dual-profile code, but Kafka is canonical and RabbitMQ parity is not assumed. Runtime drift is a deferred compatibility risk.
 
 ## Deferred Items
@@ -114,4 +115,4 @@ The Inventory runtime role needs permission to create and use Wolverine's `wolve
 - broker-specific dead-letter queue/topic naming
 - replay procedures
 - confirmed consumer ownership matrix per channel
-- Inventory source-outbox retention/archive policy after `PublishedAt`
+- Inventory source-outbox archive/export procedures beyond the implemented `RetainAll` / `PublishedForDays` retention policy

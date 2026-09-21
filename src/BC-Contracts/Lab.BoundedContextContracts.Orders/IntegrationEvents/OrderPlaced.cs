@@ -1,5 +1,7 @@
 ﻿using Lab.BuildingBlocks.Integrations;
 
+using System.Text.Json.Serialization;
+
 namespace Lab.BoundedContextContracts.Orders.IntegrationEvents;
 
 /// <summary>
@@ -15,8 +17,20 @@ public record OrderPlaced : IIntegrationEvent
     /// <param name="productName">產品名稱</param>
     /// <param name="quantity">訂購數量</param>
     public OrderPlaced(Guid orderId, Guid productId, string productName, int quantity)
+        : this(orderId, productId, productName, quantity, DateTime.UtcNow)
     {
-        this.OccurredOn = DateTime.UtcNow;
+    }
+
+    /// <summary>使用已儲存的發生時間重建下單完成事件。</summary>
+    /// <param name="orderId">訂單識別碼。</param>
+    /// <param name="productId">產品識別碼。</param>
+    /// <param name="productName">產品名稱。</param>
+    /// <param name="quantity">訂購數量。</param>
+    /// <param name="occurredOn">原始事件發生時間。</param>
+    [JsonConstructor]
+    public OrderPlaced(Guid orderId, Guid productId, string productName, int quantity, DateTime occurredOn)
+    {
+        this.OccurredOn = occurredOn;
         this.OrderId = orderId;
         this.ProductId = productId;
         this.ProductName = productName;

@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "classification": "routine-bounded-checkpoint",
+  "recorded_at": "2026-09-21T11:29:37+08:00",
+  "base_commit": "2ee6ee21cfe64da4b87b8c57b5a661b9b9a8f517",
+  "subject": "Six Orders repair files identified by Git-filtered blob IDs; documentation assertions apply to the co-committed reconstruction files.",
+  "source_blobs": {
+    "src/BC-Contracts/Lab.BoundedContextContracts.Orders/IntegrationEvents/OrderPlaced.cs": "312dce798efec87765655ee838be803142d7e082",
+    "src/BC-Contracts/Lab.BoundedContextContracts.Orders/IntegrationEvents/OrderCancelled.cs": "3acec7f458f59c6e36d9665077e3b0f2fcba73af",
+    "src/BC-Contracts/Lab.BoundedContextContracts.Orders/IntegrationEvents/OrderShipped.cs": "0c26577989c22bd86ae4612ffb4e85a0fb4cdb1d",
+    "src/BC-Contracts/Lab.BoundedContextContracts.Orders/IntegrationEvents/OrderDelivered.cs": "43050c6ed8b0b2dc3b32567506eef02ea66f89a5",
+    "tests/SaleOrders.Tests/OrderIntegrationEventSerializationTests.cs": "70ac3bc57629e71c396c51541668231ddaf17487",
+    "tests/SaleOrders.Tests/OrderIntegrationOutboxRelayTests.cs": "b0153903873b98d93d102275dd68f989f965ce09"
+  },
+  "focused_test": {
+    "executor": "/root",
+    "command": "dotnet test tests/SaleOrders.Tests/SaleOrders.Tests.csproj --no-restore --filter \"FullyQualifiedName~OrderIntegrationEventSerializationTests|FullyQualifiedName~OrderIntegrationOutboxRelayTests\" --logger \"trx;LogFileName=orders-occurrence.trx\" --results-directory artifacts/spec-sync/test-results --logger \"console;verbosity=minimal\"",
+    "exit_code": 0,
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "times": {
+      "creation": "2026-09-21T11:26:34.0141669+08:00",
+      "queuing": "2026-09-21T11:26:34.0141677+08:00",
+      "start": "2026-09-21T11:26:32.4946710+08:00",
+      "finish": "2026-09-21T11:26:34.1432431+08:00"
+    },
+    "local_trx": "artifacts/spec-sync/test-results/orders-occurrence.trx",
+    "local_trx_sha256": "047af206641729740f00fe186ebad5b78b9f23d2a19991063aa5dfc515c8fbb5",
+    "scope": "Four event types: stored JSON round-trip and original producer constructor; real relay batches using fake database and publisher.",
+    "not_executed": [
+      "Real PostgreSQL",
+      "Kafka/RabbitMQ",
+      "Full solution matrix"
+    ]
+  },
+  "document_checks": {
+    "executor": "/root",
+    "command": "python -B artifacts/spec-sync/check-documents.py",
+    "exit_code": 0,
+    "checks": [
+      "Parse changed JSON/YAML",
+      "Manifest exact project set and count match solution",
+      "ProjectReference dependencies match every listed production/sample project",
+      "SDK matches global.json and sourceRevision resolves",
+      "Wolverine/Dapper/Npgsql/Scalar pins match owning csproj",
+      "Changed formal test-spec baseline IDs resolve"
+    ],
+    "project_counts": {
+      "product": 22,
+      "sample": 3,
+      "test": 6,
+      "total": 31
+    },
+    "corrected_check_attempt": "Initial helper used a consumer csproj without a direct WolverineFx reference; comparison corrected to the Orders Infrastructure owner. No product or validator requirement was weakened.",
+    "drafting_worker": "/root/docker_validation",
+    "worker_result": "18-file ignored patch, no tracked writes; JSON, dependency/requirement/link parity and historical artifact hashes verified. Parent reviewed and applied, then added current Orders timestamp test anchors."
+  },
+  "independent_review": {
+    "executor": "/root/inventory_review",
+    "final_integration_owner": "/root",
+    "invocation": "Read-only six-file code-reviewer checkpoint review against base commit; no implementation, commits, tests or provider actions permitted.",
+    "effective_rule_digest": "893b66b268aa1a6968785004d6469152eb3df9507da581193b89eb3c6601b0a2",
+    "effective_rule_freshness": "verified; resolver exit 0",
+    "routes": [
+      "common",
+      "general-csharp",
+      "outbox",
+      "test"
+    ],
+    "material_rules": [
+      "MAP-EVENTS-001",
+      "MESSAGING-TX-001",
+      "TEST-GWT-001",
+      "TEST-BDDFY-001"
+    ],
+    "material_roles": [
+      "code-review-sub-agent",
+      "reactor-code-review-sub-agent"
+    ],
+    "unselected_roles": "Aggregate and HTTP controller bindings do not apply to the six-file repair.",
+    "comparison": {
+      "stored_occurrence_time": "All four JsonConstructor overloads retain the stored value.",
+      "producer_compatibility": "Existing signatures still initialize current UTC.",
+      "wire_schema": "Existing names, types and fields unchanged; constructor parameters bind to properties.",
+      "retry": "First publish fails, second succeeds; payload/time/identity/key preserved and deletion occurs once.",
+      "test_quality": "Fixed historical timestamp with nonzero fractional seconds and full JSON comparison; real subject is exercised."
+    },
+    "findings": [],
+    "outcome": "No reportable CRITICAL, MUST FIX or SHOULD FIX findings.",
+    "limitation": "Static bounded review, not independent database/broker execution or whole-workflow terminal acceptance."
+  },
+  "limitations": [
+    "R02 and R07 remain pending owner decisions in decisions.md.",
+    "Historical edd18d7 integration evidence is not fresh execution of this checkpoint.",
+    "No 100 percent reconstruction or whole-system spec-compliance claim."
+  ]
+}

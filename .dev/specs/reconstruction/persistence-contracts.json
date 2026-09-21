@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "provider": { "database": "PostgreSQL 16", "driver": "Npgsql 10.0.2", "access": "Dapper 2.1.72", "sql": "parameterized" },
+  "provider": { "database": "PostgreSQL 16", "driver": "Npgsql 10.0.3", "access": "Products/Orders: Dapper 2.1.79; Inventory: EF Core 10.0.12 with Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3", "sql": "parameterized" },
   "databases": [
     {
       "name": "Products",

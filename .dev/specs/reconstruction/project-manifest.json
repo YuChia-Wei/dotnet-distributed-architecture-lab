@@ -1,16 +1,16 @@
 {
   "schemaVersion": "1.0",
   "subject": "source-independent reconstruction project graph",
-  "generator": "software-development-orchestrator workflow RECON-001",
-  "sourceRevision": "a4b0f09f06bdfca9d8ea4e3e7e57ad68102fb15e",
-  "generatedAt": "2026-08-26T20:25:13+08:00",
-  "scope": ["MQArchLab.slnx", "global.json", "src/**/*.csproj", "tests/**/*.csproj", "docker-compose/**", "directly verified code/configuration contracts"],
+  "generator": "spec-author factual reconciliation in 2026-09-21-spec-implementation-reconciliation",
+  "sourceRevision": "2ee6ee21cfe64da4b87b8c57b5a661b9b9a8f517",
+  "generatedAt": "2026-09-21T11:26:35+08:00",
+  "scope": ["MQArchLab.slnx", "global.json", "src/**/*.csproj", "samples/**/*.csproj", "tests/**/*.csproj", "docker-compose/**", "directly verified code/configuration contracts"],
   "exclusions": ["reusable examples under .ai/", "historical workflow evidence", "bin/ and obj/ build artifacts", "untracked local runtime state"],
   "reproduction": "Rebuild the project list from MQArchLab.slnx and verify every project reference against the matching csproj at sourceRevision; validate this JSON with ConvertFrom-Json.",
   "sdk": { "version": "10.0.302", "rollForward": "latestMajor", "allowPrerelease": true },
   "targetFramework": "net10.0",
   "solution": "MQArchLab.slnx",
-  "projectCounts": { "product": 22, "test": 5, "total": 27 },
+  "projectCounts": { "product": 22, "sample": 3, "test": 6, "total": 31 },
   "groups": [
     { "path": "/BC-Contracts/", "purpose": "Published Language" },
     { "path": "/BuildingBlocks/", "purpose": "business-neutral architecture contracts" },
@@ -21,7 +21,9 @@
     { "path": "/Inventory/DomainCore/", "purpose": "Inventory Domain, Application, Infrastructure" },
     { "path": "/Inventory/Presentation/", "purpose": "Inventory API and Consumer" },
     { "path": "/Shared/", "purpose": "empty Shared Kernel placeholder" },
-    { "path": "/tests/", "purpose": "product and domain verification" }
+    { "path": "/Samples/EfCoreWolverine/DomainCore/", "purpose": "separate EF Core/Wolverine sample Application and Infrastructure" },
+    { "path": "/Samples/EfCoreWolverine/Presentation/", "purpose": "separate EF Core/Wolverine sample host" },
+    { "path": "/tests/", "purpose": "five product/domain test projects and one sample test project" }
   ],
   "projects": [
     { "path": "src/BuildingBlocks/Lab.BuildingBlocks.Domains/Lab.BuildingBlocks.Domains.csproj", "kind": "domain-building-block", "dependsOn": [] },
@@ -40,14 +42,18 @@
     { "path": "src/Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj", "kind": "application", "boundedContext": "Orders", "dependsOn": ["SaleOrders.Domains", "Lab.BuildingBlocks.Application", "Lab.BuildingBlocks.Integrations", "Lab.BoundedContextContracts.Inventory", "Lab.BoundedContextContracts.Orders"] },
     { "path": "src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj", "kind": "infrastructure", "boundedContext": "Orders", "dependsOn": ["SaleOrders.Applications", "Lab.BuildingBlocks.Application", "Lab.BuildingBlocks.Integrations", "Lab.BoundedContextContracts.Inventory"] },
     { "path": "src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj", "kind": "web-api", "boundedContext": "Orders", "dependsOn": ["SaleOrders.Applications", "SaleOrders.Infrastructure"] },
-    { "path": "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj", "kind": "consumer", "boundedContext": "Orders", "dependsOn": ["Lab.BuildingBlocks.Integrations"] },
+    { "path": "src/Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj", "kind": "consumer", "boundedContext": "Orders", "dependsOn": ["Lab.BuildingBlocks.Integrations", "SaleOrders.Applications"] },
     { "path": "src/Inventory/DomainCore/InventoryControl.Domains/InventoryControl.Domains.csproj", "kind": "domain", "boundedContext": "Inventory", "dependsOn": ["Lab.BuildingBlocks.Domains"] },
     { "path": "src/Inventory/DomainCore/InventoryControl.Applications/InventoryControl.Applications.csproj", "kind": "application", "boundedContext": "Inventory", "dependsOn": ["InventoryControl.Domains", "Lab.BuildingBlocks.Application", "Lab.BuildingBlocks.Integrations", "Lab.BoundedContextContracts.Inventory", "Lab.BoundedContextContracts.Orders"] },
     { "path": "src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj", "kind": "infrastructure", "boundedContext": "Inventory", "dependsOn": ["InventoryControl.Applications", "Lab.BuildingBlocks.Application", "Lab.BuildingBlocks.Integrations"] },
     { "path": "src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj", "kind": "web-api", "boundedContext": "Inventory", "dependsOn": ["InventoryControl.Applications", "InventoryControl.Infrastructure"] },
-    { "path": "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj", "kind": "consumer", "boundedContext": "Inventory", "dependsOn": ["Lab.BuildingBlocks.Integrations", "Lab.BoundedContextContracts.Products"] }
+    { "path": "src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj", "kind": "consumer", "boundedContext": "Inventory", "dependsOn": ["Lab.BuildingBlocks.Integrations", "Lab.BoundedContextContracts.Products"] },
+    { "path": "samples/EfCoreWolverine/EfCoreWolverine.Application/EfCoreWolverine.Application.csproj", "kind": "sample-application", "dependsOn": ["InventoryControl.Domains", "Lab.BuildingBlocks.Application", "Lab.BoundedContextContracts.Inventory"] },
+    { "path": "samples/EfCoreWolverine/EfCoreWolverine.Infrastructure/EfCoreWolverine.Infrastructure.csproj", "kind": "sample-infrastructure", "dependsOn": ["EfCoreWolverine.Application"] },
+    { "path": "samples/EfCoreWolverine/EfCoreWolverine.Host/EfCoreWolverine.Host.csproj", "kind": "sample-host", "dependsOn": ["EfCoreWolverine.Infrastructure"] }
   ],
   "testProjects": [
+    { "path": "tests/EfCoreWolverine.Tests/EfCoreWolverine.Tests.csproj", "targets": ["separate EF Core/Wolverine transaction sample", "opt-in PostgreSQL and Kafka sample integration"] },
     { "path": "tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj", "targets": ["Product aggregate"] },
     { "path": "tests/SaleProducts.Tests/SaleProducts.Tests.csproj", "targets": ["Product use cases", "cross-context consumer compatibility"] },
     { "path": "tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj", "targets": ["Order event-sourced aggregate"] },
