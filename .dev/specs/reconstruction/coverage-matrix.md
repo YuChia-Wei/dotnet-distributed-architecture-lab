@@ -86,7 +86,7 @@ The authoritative request/response/status mapping is `http-api-contracts.json` a
 - Orders relay: stable logical identity, payload and original occurrence time across retries and duplicate publishes; all four integration-event types have JSON round-trip and producer-constructor compatibility tests.
 - Inventory commands: decrease success, insufficient/missing no side effects, increase, restock.
 - Inventory EF persistence: existing-schema mapping, scoped registrations, no-tracking read projection, new-item persistence, expected-stock concurrency, and state/outcome/outbox rollback in opt-in PostgreSQL tests.
-- Reservation: validation, replay, payload conflict, terminal failure replay, atomic in-memory staging, stage-failure no-commit, stable relay retry identity/timestamp, cancellation, and retry policy.
+- Reservation: validation, replay without reinvoking the message factory, payload conflict, terminal failure replay, atomic in-memory staging, stage-failure no-commit, stable relay retry identity/timestamp, cancellation, and retry policy. PostgreSQL scenarios also cover replay after published retention and a completed operation with a missing outbox row.
 - Inventory event contracts: corrected increase/return quantity JSON names and outbox occurrence-time round trip.
 - Messaging options: InMemory, missing Kafka connection, invalid RabbitMQ URI, unknown profile.
 
@@ -120,6 +120,12 @@ The local evidence bindings are below. These ignored artifacts may be absent fro
 | `artifacts/inventory-efcore/validation-04-test-summary.json` | `4769f0ae4110a46ee116e998ee5a9490ba92399bd6b46f005635ad9e256a0eaf` |
 | `artifacts/inventory-efcore/validation-04-commerce.json` | `3a2fd3b10af49dc58c48fa02d2235d75d12c82b1d5d5b20639aeb622e293d7d7` |
 | `artifacts/inventory-efcore/validation-04-parallel.json` | `ae4b5d7d8319738d70aa1794d8a6d48c75495c000b2f2fd01f90e970d7d79469` |
+
+## Reconciliation Execution — 2026-09-21
+
+Commit `7a898901e9ace44b844847ad7a54008adb9950bc` passed the Inventory project (**50 passed**) and the focused Orders serialization/relay set (**10 passed**), with **0 failed / 0 skipped**. All 20 Inventory PostgreSQL scenarios executed, including published retention followed by replay and a completed operation with a missing outbox row. Both retain the original stock/outcome and produce no new publication intent. The new broker-free regression separately proves that replay does not call the event factory.
+
+This run uses real PostgreSQL with controlled publisher fixtures; it is not new Kafka or whole-solution evidence. See the [subject-bound verification record](../../workflows/2026-09-21-spec-implementation-reconciliation/evidence/verification.json). The earlier commerce evidence and remaining clean-room/quality-uplift gaps retain their original scope.
 
 ## Readiness Rule
 

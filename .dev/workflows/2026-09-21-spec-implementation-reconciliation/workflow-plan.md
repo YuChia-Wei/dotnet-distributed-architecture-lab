@@ -7,9 +7,9 @@
 - `owner_skill`: `software-development-orchestrator`
 - `branch`: `codex/2026-09-21-spec-implementation-reconciliation`
 - `base_branch`: `main`
-- `status`: `in_progress`
+- `status`: `completed`
 - `created_at`: `2026-09-21T11:15:46+08:00`
-- `updated_at`: `2026-09-21T11:58:58+08:00`
+- `updated_at`: `2026-09-21T12:07:48+08:00`
 - `template_source`: `.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
 - `template_version`: `1.4.0`
 - Work item: [#2](https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/2).
@@ -46,6 +46,8 @@ Target routine policy is local `manual`, CI `unconfigured`; no implicit routine 
 
 Long/full-matrix validation requires a clean immutable subject and the repository's external-task contract. Narrow tests may run inline. Historical passing checks are not silently relabeled as current-head execution.
 
-## Progress and next action
+## Completion and delivery
 
-The owner approved both recommendations on 2026-09-21 ("套用建議"); [decisions.md](decisions.md) records R02 and R07. The earlier settled repair is committed as `1ddfe451f43b32eef2b2dce1cd46fe7dd4f8c2e7` and its [bounded verification record](evidence/checkpoint-verification.json) remains historical evidence for those six source blobs. The selected docs and Inventory repair are implemented; 17 broker-free tests passed after one regression first failed. Pin the candidate and execute the Inventory PostgreSQL suite plus the focused Orders timestamp tests, then perform independent review and final validation before integration. Main integration and push are authorized by the session; preserve the meaningful workflow checkpoint using a `--no-ff` merge and verify remote main. Issue closeout and release are not selected.
+Both owner-approved decisions and all selected repairs are complete. The [verification record](evidence/verification.json) binds the candidate commit, 50 Inventory tests (all 20 PostgreSQL scenarios executed), 10 Orders timestamp tests, independent review with no findings, document parity and 55 target-tooling tests. No test was skipped. Docker returned to its original stopped state with all persistent mounts preserved.
+
+The first checkpoint and this completion record retain their original subjects. Final frozen validation/review and integration receipts are ignored delivery overlays; they must not be relabeled as historical execution or written back into this record. Main delivery is authorized: after that non-mutating admission, merge this meaningful checkpoint branch with `--no-ff`, push main and read back the remote SHA. Issue closeout, release and whole-system reconstruction acceptance remain unselected.

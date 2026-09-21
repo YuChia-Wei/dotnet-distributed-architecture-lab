@@ -13,7 +13,7 @@
 
 - Status: `implemented-partial`
 - Inventory owns its test project and has executable validation, replay, conflict, terminal/transient/outbox-stage failure, stable relay identity, cancellation, failure-policy, JSON-contract, and PostgreSQL concurrency/atomicity scenarios.
-- The explicit PostgreSQL profile passed reservation concurrency and rollback tests on 2026-09-21 at `edd18d70a94da99e0548de986227655ec102a145`. See [dated execution evidence](../../../reconstruction/coverage-matrix.md#observed-execution--2026-09-21). Default runs still skip external tests; neither a skip nor this historical run proves later source changes or untested replay-after-retention behavior.
+- The explicit PostgreSQL profile passed reservation concurrency and rollback tests on 2026-09-21 at `edd18d70a94da99e0548de986227655ec102a145`. See [dated execution evidence](../../../reconstruction/coverage-matrix.md#observed-execution--2026-09-21). Default runs still skip external tests; neither a skip nor this historical run proves later source changes. The separately recorded 2026-09-21 reconciliation run below covers the newly selected replay-after-retention behavior.
 
 ## Scenario Set
 
@@ -88,8 +88,8 @@
 - When: the identical operation request is replayed and the relay runs again.
 - Then: the original outcome returns with `WasAlreadyProcessed = true`; stock and operation history remain unchanged; no outbox row is recreated and no new event is published.
 - Test anchor: `tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs#given_a_published_reservation_was_purged_when_replayed_then_no_new_publication_is_staged`.
-- Execution status: requires explicit PostgreSQL execution on the changed subject; the dated historical pass does not establish this new scenario.
-- Related missing/legacy-row case: a completed operation without an outbox row must also return only its stored outcome. Ordinary replay must not repair that row; recovery requires a separate explicitly scoped action. The executable anchor is `tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs#given_a_completed_reservation_has_no_outbox_row_when_replayed_then_no_recovery_publication_is_staged`; it also requires explicit PostgreSQL execution.
+- Execution status: passed with real PostgreSQL at `7a898901e9ace44b844847ad7a54008adb9950bc` on 2026-09-21; see [reconciliation verification](../../../../workflows/2026-09-21-spec-implementation-reconciliation/evidence/verification.json). This is subject-bound evidence, not a waiver for future changes.
+- Related missing/legacy-row case: a completed operation without an outbox row must also return only its stored outcome. Ordinary replay must not repair that row; recovery requires a separate explicitly scoped action. The executable anchor is `tests/InventoryControl.Tests/InventoryIntegrationOutboxRelayTests.cs#given_a_completed_reservation_has_no_outbox_row_when_replayed_then_no_recovery_publication_is_staged`; it also passed in the PostgreSQL run at `7a898901e9ace44b844847ad7a54008adb9950bc`.
 
 ## Assertion Notes
 

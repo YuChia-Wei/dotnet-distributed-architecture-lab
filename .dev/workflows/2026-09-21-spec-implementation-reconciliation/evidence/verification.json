@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "recorded_at": "2026-09-21T12:07:48+08:00",
+  "subject_sha": "7a898901e9ace44b844847ad7a54008adb9950bc",
+  "scope": "Selected specification/code reconciliation, not whole-system reconstruction acceptance or framework adoption.",
+  "owner_decisions": {
+    "R02": "Outcome-only replay; first-time success alone stages, including after cleanup or missing row.",
+    "R07": "Preserve existing OrderPlacedDomainEvent schema; correct CBF."
+  },
+  "test_execution": {
+    "executor": "/root/docker_validation",
+    "command": [
+      "python",
+      "artifacts/spec-sync/run-postgres-validation.py",
+      "postgres-validation-01",
+      "7a898901e9ace44b844847ad7a54008adb9950bc"
+    ],
+    "profile": "inventory-postgresql-and-orders-selected",
+    "started_at": "2026-09-21T04:03:50.763803+00:00",
+    "completed_at": "2026-09-21T04:04:42.750976+00:00",
+    "duration_seconds": 51.987,
+    "outcome": "passed",
+    "counts": {
+      "inventory_total": 50,
+      "inventory_passed": 50,
+      "inventory_failed": 0,
+      "inventory_skipped": 0,
+      "orders_total": 10,
+      "orders_passed": 10,
+      "orders_failed": 0,
+      "orders_skipped": 0,
+      "dotnet_tests_total": 60,
+      "dotnet_tests_passed": 60,
+      "dotnet_tests_failed": 0,
+      "dotnet_tests_skipped": 0
+    },
+    "postgres_scenarios": [
+      "given_a_row_created_with_existing_sql_when_queried_then_the_no_tracking_projection_preserves_its_values",
+      "given_a_new_inventory_item_when_repository_saves_then_a_fresh_context_can_query_it",
+      "given_the_same_claimed_row_when_publish_is_retried_then_delivery_identity_and_event_time_are_stable",
+      "given_five_transport_failures_when_relay_runs_again_then_the_row_is_parked_and_not_republished",
+      "given_finite_published_retention_when_relay_runs_then_only_expired_published_rows_are_pruned",
+      "given_a_published_reservation_was_purged_when_replayed_then_no_new_publication_is_staged",
+      "given_a_completed_reservation_has_no_outbox_row_when_replayed_then_no_recovery_publication_is_staged",
+      "given_one_pending_row_when_two_relays_claim_concurrently_then_only_one_lease_publishes_it",
+      "given_a_cancelled_batch_when_relay_runs_then_no_message_is_claimed_or_published",
+      "given_an_expired_lease_when_relay_recovers_then_original_delivery_identity_is_preserved",
+      "given_stock_for_only_one_request_when_two_reservations_run_concurrently_then_stock_and_outcomes_are_atomic",
+      "given_one_operation_when_duplicate_requests_run_concurrently_then_the_outcome_and_message_are_replayed_once",
+      "given_a_completed_operation_when_payload_changes_then_the_conflict_preserves_the_original_state",
+      "given_a_failed_operation_when_stock_changes_then_replay_preserves_the_terminal_outcome",
+      "given_invalid_outbox_metadata_when_reservation_staging_fails_then_stock_operation_and_message_roll_back",
+      "given_a_rolled_back_scope_when_the_operation_is_retried_then_only_the_retry_commits",
+      "given_a_stock_change_when_outbox_commit_succeeds_then_state_and_event_are_durable_together",
+      "given_a_concurrent_stock_change_when_outbox_commit_runs_then_it_fails_without_an_event_row",
+      "given_invalid_outbox_metadata_when_staging_fails_then_stock_rolls_back_and_the_scope_can_reload",
+      "given_a_tracked_stock_item_when_a_set_based_commit_succeeds_then_later_reads_see_current_state"
+    ]
+  },
+  "independent_review": {
+    "executor": "/root/spec_sync_final_review",
+    "decision": "pass",
+    "findings": [],
+    "subject": {
+      "schema_version": "independent-review-subject/v1",
+      "repository_id": "YuChia-Wei/dotnet-distributed-architecture-lab",
+      "base_tree": "dfbb0fafa2faabb80e1f0f89d090430af8054ec0",
+      "head_tree": "a97374e2379d858ad6cfc4e3a93fb2a255ef811e",
+      "subject_digest": "7d99cb1663e33a776124c6525cde79b99193b8802e8da7bac85e0c5d7d2ba3e1"
+    },
+    "role_records_ref": "artifacts/spec-sync/spec-sync-review-01-result.json",
+    "role_records_sha256": "1d05f24fb08ea40862783d19dcc02a67cdc50a5cb8c627b96c316382e389491b"
+  },
+  "environment": {
+    "all_17_stopped": true,
+    "original_mounts_preserved": true,
+    "original_volume_names": [
+      "08afe74378817febd0d62975facbb763ed2d37cb6b62a53da419fe49a75d3b55",
+      "17f0bc2eed0f2d026e6f74d65df0a891ce079021c53e692a4cb8d15fbcb1c629",
+      "1b94fcfb0627b46c16e2cd8ef2b3ede2aeebdaffb049c342ece175432616f381",
+      "mqarchlab-pr5-integration_kafka_data",
+      "mqarchlab-pr5-integration_postgres_inventory_data",
+      "mqarchlab-pr5-integration_postgres_order_data",
+      "mqarchlab-pr5-integration_postgres_product_data"
+    ]
+  },
+  "structured_checks": {
+    "outcome": "passed",
+    "project_counts": {
+      "product": 22,
+      "sample": 3,
+      "test": 6,
+      "total": 31
+    },
+    "checks": [
+      "Changed JSON/YAML parse",
+      "Manifest, dependency and SDK parity",
+      "Package pins match project files",
+      "Changed test-spec baseline references resolve"
+    ]
+  },
+  "target_gate": {
+    "command": "python -B .dev/ai-context/tooling/validate-target-ai-context.py --require-effective-rules --commit-range main..HEAD --workflow-id 2026-09-21-spec-implementation-reconciliation",
+    "outcome": "passed",
+    "tooling_tests": 55,
+    "validated_commits": 2,
+    "log_ref": "artifacts/spec-sync/candidate-target-gate.log",
+    "log_sha256": "6a74ab7e6451003e804004d9a070f589cbfd2e4b75dd2c3ea14818ade028e45a"
+  },
+  "evidence": [
+    {
+      "path": "artifacts/spec-sync/postgres-validation-01/runner-output.json",
+      "sha256": "dcc4f75ae733e0c452b4e16af47d50dd8531edbb427fbf1da779d8bd88255784"
+    },
+    {
+      "path": "artifacts/spec-sync/postgres-validation-01/runner-receipt.json",
+      "sha256": "bc501d8b8a4391de135b9f50ef2bd25b3af1c9d5ef669f9ac6fb5f6682d66228"
+    },
+    {
+      "path": "artifacts/spec-sync/postgres-validation-01/completion.json",
+      "sha256": "0151c29022b3a48380cbacb8d997fa7a121797a522ee6aa606f7687c430d0a6a"
+    },
+    {
+      "path": "artifacts/spec-sync/postgres-validation-01/completion-validation-receipt.json",
+      "sha256": "a7ebae1f8fba1e7a34ec84898529d1b3a34072184fafc276954d41744cb86bc6"
+    },
+    {
+      "path": "artifacts/spec-sync/postgres-validation-01-acceptance-ledger.json",
+      "sha256": "36513d78369709a80eeeffc9f4be7c5b5e3c02ca1b5fe5aa9033f046a9928079"
+    },
+    {
+      "path": "artifacts/spec-sync/spec-sync-review-01-result.json",
+      "sha256": "1d05f24fb08ea40862783d19dcc02a67cdc50a5cb8c627b96c316382e389491b"
+    },
+    {
+      "path": "artifacts/spec-sync/spec-sync-review-01-binding.json",
+      "sha256": "41edc4d216251685c7536858d2549989d26cced453c7fa1a88d350d487e22956"
+    }
+  ],
+  "limitations": [
+    "Evidence is retained for the named candidate. Final frozen delivery validation is an ignored overlay and cannot rewrite this historical record.",
+    "PostgreSQL integration uses controlled publisher fixtures; Kafka, RabbitMQ and full-solution execution were not selected.",
+    "Remaining baseline quality uplifts, business-consumer ownership and clean-room reconstruction remain outside this repair."
+  ]
+}
