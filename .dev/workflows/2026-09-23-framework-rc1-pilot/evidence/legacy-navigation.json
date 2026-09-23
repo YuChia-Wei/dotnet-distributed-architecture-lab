@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "cb122285af09e46b24102f22a0ad9d713219c1f2",
+  "missing_helper": ".ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py",
+  "state": "historical-optional-tool-unavailable",
+  "read_only_discovery": "target_gate_inventory; tracked inventories and canonical references; no replacement declared",
+  "wrapper_changes": [
+    {
+      "path": ".agents/skills/ai-context-upgrader/SKILL.md",
+      "sha256": "f5bf1d5b7fbfcf0043cd291a928c6549eb675cc8643da6cd2f709c02f2d7fba9",
+      "baseline_already_referenced_missing_helper": true,
+      "archive_matches_baseline": true
+    },
+    {
+      "path": ".claude/skills/ai-context-upgrader/SKILL.md",
+      "sha256": "62a9dd7840481739158b8b15ee22b9526932e39ac4af2c5a4dbad8def22ca223",
+      "baseline_already_referenced_missing_helper": true,
+      "archive_matches_baseline": true
+    }
+  ],
+  "retained_playbook": ".ai/assets/skills/ai-context-upgrader/references/upgrade-playbook.md",
+  "behavioral_execution": "not-executed",
+  "admission": "unchanged-pilot-blocked"
+}

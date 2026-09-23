@@ -37,3 +37,11 @@ and existing actual lock; repeat only affected PR/managed-byte checks. Preserve
 five pilot records and all target customizations. Then freeze the complete target
 subject for independent review and terminal admission. Target provider integration,
 Issue closure, stable upgrade and publication remain separate.
+
+Navigation correction: both retained upgrader wrappers now explicitly mark
+the optional source Git-tree comparison helper as unavailable in this target.
+The same missing path was already referenced at the baseline commit. The
+retained playbook permits package inventories and recorded base identity;
+no replacement tool or successful legacy upgrade execution is asserted.
+Archived original wrapper bytes remain exact and active wrapper hashes were
+refreshed. This does not change the current PR blocker or admission state.

@@ -588,7 +588,7 @@
     },
     {
       "path": ".agents/skills/ai-context-upgrader/SKILL.md",
-      "sha256": "aa108dcf0c6cca0429370668f912ee6d8d4dbfc3aafedcf57ffebd52e205a003"
+      "sha256": "f5bf1d5b7fbfcf0043cd291a928c6549eb675cc8643da6cd2f709c02f2d7fba9"
     },
     {
       "path": ".claude/skills/ai-context-init/SKILL.md",
@@ -596,7 +596,7 @@
     },
     {
       "path": ".claude/skills/ai-context-upgrader/SKILL.md",
-      "sha256": "2aa332a0d07e95705bd7c949868f77623e10d0cb32ce8e3641aef755809df8c5"
+      "sha256": "62a9dd7840481739158b8b15ee22b9526932e39ac4af2c5a4dbad8def22ca223"
     }
   ],
   "current_authorities": [

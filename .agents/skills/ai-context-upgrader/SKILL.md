@@ -57,6 +57,10 @@ target boundary takes precedence over assumptions of an active old layout.
 - `.ai/scripts/validate-ai-context-target.py`
 - `.ai/scripts/plan-ai-context-upgrade.py`
 - `.ai/assets/skills/ai-context-upgrader/scripts/compare-ai-context-versions.py`
+  - Historical optional source Git-tree comparison helper; not installed in this
+    target. Do not invoke this path. Follow the retained upgrade playbook's
+    package-inventory and recorded-base discovery route when applicable. Report
+    unavailable if the requested operation specifically requires this helper.
 
 ## Wrapper Rules
 
