@@ -8,7 +8,7 @@
   "owner_skill": "ai-context-governance",
   "status": "in_progress",
   "created_at": "2026-09-23T22:59:04+08:00",
-  "updated_at": "2026-09-23T22:59:04+08:00",
+  "updated_at": "2026-09-23T23:28:43+08:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "gpt-6-astra",
   "reasoning_effort": "ultra",
@@ -46,18 +46,23 @@
       "Verify and activate the reconciled Codex routes"
     ],
     "validation": [],
-    "last_completed_step": "Clean dedicated worktree and Issue binding verified; planning records created",
-    "next_action": "Complete target inventory and native prerequisite; prepare concrete reconciliation"
+    "last_completed_step": "Prepared durable inputs; actual full-candidate plan passed and apply failed before managed publication",
+    "next_action": "Complete current target gate while source Issue 386 repairs observed scan-limit; reviewed repair and fresh plan required before retry"
   },
   "results": {
-    "summary": "Planning only; no target adoption performed",
+    "summary": "Preparation plus retained actual blocked apply; no managed install/activation",
     "files_changed": [
       ".dev/workflows/2026-09-23-framework-rc1-pilot/workflow-plan.md",
       ".dev/workflows/2026-09-23-framework-rc1-pilot/workflow.yaml"
     ],
     "tests_run": [],
     "finding_status": "not-addressed",
-    "residual_risk": "Native prerequisite and target gate reconciliation pending",
+    "residual_risk": "Source scan-limit blocks installation; target verification/independent review remain",
     "follow_up_needed": true
+  },
+  "owner_gate_decision": {
+    "question_call": "call_9Yd5ZfJdp1eBXVZf4Vp09U1v",
+    "observed_at": "2026-09-23T23:05:10+08:00",
+    "answer": "採用新佈局相符的目標 gate：保留 14 條規則、四項客製化、精確雜湊、Git 歸屬與獨立審查；舊 v0.18 gate 保留為歷史／舊版支援（建議）"
   }
 }

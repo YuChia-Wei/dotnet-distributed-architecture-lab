@@ -81,6 +81,39 @@ No destructive cleanup of old evidence, source worktrees or existing ignored dat
 4. Activate exact Codex routes, withdraw selected Claude routes, run installed readers and independent target-context verification.
 5. Reconcile every failure/remaining legacy responsibility and produce a concrete rc.1-to-stable update/rollback record before target integration approval.
 
-Current result: planning only. No core/lock/config/root/runtime/gate mutation,
-installation, activation, independent audit or passing target validation claimed.
+Initial planning checkpoint: no managed installation or activation was performed.
+The later preparation and actual failure below supersede that initial snapshot.
 Any necessary semantic removal or unresolved ownership decision returns to the owner.
+
+
+## Direct target gate adoption decision
+
+The owner directly answered call_9Yd5ZfJdp1eBXVZf4Vp09U1v:
+"採用新佈局相符的目標 gate：保留 14 條規則、四項客製化、精確雜湊、Git 歸屬與獨立審查；舊 v0.18 gate 保留為歷史／舊版支援（建議）".
+This adopts the proposed validation boundary, not a passing execution result.
+Current candidate identity will come from .ai/framework.lock and the active
+target binding; retained legacy provenance/effective state identify only the
+v0.18-derived target rule/legacy support baseline. Root and active consumers
+must consult that binding; a passive side record is insufficient. Existing
+selector/packet equality and unresolved fail-closed behavior remain required.
+No rc version is inserted into the old release-only provenance schema.
+
+
+## Actual preparation and first complete apply
+
+Persistent before-byte backups and finite inputs were prepared under the selected
+ignored pilot-9ceb050fed8f root. Seven explicit record stores/config bindings and
+exact-byte Git attributes exist. The new current gate is being implemented under
+the direct target decision; it is not yet the active root route.
+
+The actual complete rc.1 public plan passed (131 managed members / 18 packages;
+524 paths checked; maximum path length 237). Apply then returned blocked/scan-limit
+while capturing durable objects. All 131 managed destinations, lock and marker are
+absent; 19 protected inputs match. Preserve 102 captured object files / 1,152,958
+bytes and empty scratch/staging operation roots. No completed operation exists;
+no recovery or installation success is claimed. Exact evidence is linked by
+[evidence/installation-first-failure.json](evidence/installation-first-failure.json).
+
+Source Issue 386 owns a separately confirmed bounded repair task. Do not repeat
+unchanged target apply. Keep target routes inactive; resume only after reviewed
+repair/native evidence and a new exact engine pin/plan. Original evidence remains.

@@ -83,3 +83,16 @@ test_code_reviewer_routing_projection.py and test_effective_rule_decisions.py.
 
 No root, authority, runtime, validator or managed file has been changed by this
 proposal. Native installer readiness remains separately pending source #382.
+
+
+## Direct target gate adoption decision
+
+The owner directly answered call_9Yd5ZfJdp1eBXVZf4Vp09U1v:
+"採用新佈局相符的目標 gate：保留 14 條規則、四項客製化、精確雜湊、Git 歸屬與獨立審查；舊 v0.18 gate 保留為歷史／舊版支援（建議）".
+This adopts the proposed validation boundary, not a passing execution result.
+Current candidate identity will come from .ai/framework.lock and the active
+target binding; retained legacy provenance/effective state identify only the
+v0.18-derived target rule/legacy support baseline. Root and active consumers
+must consult that binding; a passive side record is insufficient. Existing
+selector/packet equality and unresolved fail-closed behavior remain required.
+No rc version is inserted into the old release-only provenance schema.

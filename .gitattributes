@@ -63,3 +63,42 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+# Exact managed framework candidate bytes (Issue #15)
+.ai/framework.lock -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/adr/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-adr/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/ai-context-auditor/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-ai-context-auditor/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/ai-context-governance/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-ai-context-governance/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/bdd-gwt-test-designer/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-bdd-gwt-test-designer/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/code-reviewer/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-code-reviewer/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/ddd-ca-hex-architect/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-ddd-ca-hex-architect/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/diagnostic-analyst/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-diagnostic-analyst/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/lesson/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-lesson/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/local-backlog/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-local-backlog/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/local-change-implementer/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-local-change-implementer/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/pr/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-pr/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/problem-frame-author/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-problem-frame-author/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/requirement-author/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-requirement-author/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/slice-implementer/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-slice-implementer/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/software-development-orchestrator/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-software-development-orchestrator/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/spec-author/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-spec-author/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/spec-compliance-validator/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-spec-compliance-validator/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+.ai/core/skills/standards-promotion/** -text -eol -filter -ident -working-tree-encoding -merge
+.agents/skills/framework-standards-promotion/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
