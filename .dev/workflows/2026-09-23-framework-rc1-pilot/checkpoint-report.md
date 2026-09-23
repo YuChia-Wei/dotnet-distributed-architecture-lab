@@ -1,3 +1,19 @@
+# Current repaired candidate checkpoint
+
+Source PR #388 merged the original #335 repair. A new immutable rc.1 candidate
+was actually built/read from 1ce41a4f03f61e83bf9b99de3ce196887547e922, then
+installed through an exact-lock delta plan: two PR files changed, 129 unchanged.
+All 131 installed member hashes matched. Seventy-two protected inputs, 292 retained
+authority files and the five existing local pilot records remained unchanged.
+The actual installed PR prepare/inspect/render retry passed and created one local
+prepared record bound only to the first three preparation commits. No target
+provider action occurred. The new installer lock is a04e2df01f5f6df6889b7c09daa1b9ae1c78e6b503aac852d5aa2b325c56a0e8.
+
+Binding is now pilot-review: final byte/mode parity passed; the frozen selected
+gate and independent admission remain pending. See evidence/repaired-candidate-update.json.
+Earlier checkpoints below describe their historical observations and remain
+preserved with their raw failure evidence; they are not the current blocker state.
+
 # Local complete rc.1 pilot checkpoint
 
 The managed install and target integration are prepared, but **activation is
@@ -51,3 +67,9 @@ reviewer's evidence from subsequent parent admission and lease release. The
 content-subject descriptor keys and byte encoding are explicit before freeze.
 This removes an impossible future-action claim; all independent review and
 parent release requirements remain mandatory and unexecuted at this checkpoint.
+
+Repaired candidate Git parity: all 131 managed members plus the actual new lock
+match candidate/current bytes, staged Git blobs, declared modes and a fresh
+selected index checkout. Six raw-byte attributes are unset for all 132 paths.
+See evidence/repaired-git-byte-parity.json. No full repository checkout or
+independent admission was performed by this parity check.

@@ -8,7 +8,7 @@
   "owner_skill": "ai-context-governance",
   "status": "in_progress",
   "created_at": "2026-09-23T22:59:04+08:00",
-  "updated_at": "2026-09-23T16:07:54.063278+00:00",
+  "updated_at": "2026-09-23T16:28:51.971743+00:00",
   "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
   "model": "gpt-6-astra",
   "reasoning_effort": "ultra",
@@ -46,18 +46,18 @@
       "Verify and activate the reconciled Codex routes"
     ],
     "validation": [],
-    "last_completed_step": "Actual complete installation, 13 installed reads, raw Git parity, runtime withdrawal and current gate reconciliation",
-    "next_action": "Original source #335 PR Git repair, new immutable candidate and explicit target delta update; then frozen independent review"
+    "last_completed_step": "Rebuilt repaired candidate; exact-lock two-file update; actual installed PR prepare/inspect/render",
+    "next_action": "Freeze clean target subject; execute selected gate in independent review, then parent admission and lease release"
   },
   "results": {
-    "summary": "Complete managed install and target reconciliation plus five actual local record lifecycles; PR write blocked, promotion proposal unselected.",
+    "summary": "Complete reconciled rc.1 installation with six actual local record lifecycles; original PR blocker repaired; promotion proposal remains unselected.",
     "files_changed": [
       ".dev/workflows/2026-09-23-framework-rc1-pilot/workflow-plan.md",
       ".dev/workflows/2026-09-23-framework-rc1-pilot/workflow.yaml"
     ],
     "tests_run": [],
     "finding_status": "partially-addressed",
-    "residual_risk": "Actual PR prepare is blocked; full pilot adoption and independent review pending",
+    "residual_risk": "Independent target review and admission pending; selected capability evidence is not whole-product readiness",
     "follow_up_needed": true
   },
   "owner_gate_decision": {

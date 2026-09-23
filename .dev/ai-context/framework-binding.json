@@ -1,15 +1,15 @@
 {
   "schema_version": "target-framework-binding/v1",
-  "state": "pilot-blocked",
+  "state": "pilot-review",
   "decision_ref": ".dev/workflows/2026-09-23-framework-rc1-pilot/reconciliation-proposal.md#direct-target-gate-adoption-decision",
   "workflow_id": "2026-09-23-framework-rc1-pilot",
   "baseline_commit": "cb122285af09e46b24102f22a0ad9d713219c1f2",
   "runtime": "codex",
   "legacy_baseline_role": "retained-target-rules-and-legacy-package-support",
   "candidate": {
-    "identity": "versioned:0.19.0-rc.1:3755b217421a4f1238f740a09de7e034ccf56038:691ef5f2202c02772e0af76c3789e0af829501d8dea5bc24837763fe1caf8a28",
+    "identity": "versioned:0.19.0-rc.1:1ce41a4f03f61e83bf9b99de3ce196887547e922:286088361638d65f741c0fd5c39b210b0bd868c2a08d1e235a3d5613d40bcdbb",
     "version": "0.19.0-rc.1",
-    "source_commit": "3755b217421a4f1238f740a09de7e034ccf56038",
+    "source_commit": "1ce41a4f03f61e83bf9b99de3ce196887547e922",
     "packages": {
       "adr": "0.1.0",
       "ai-context-auditor": "0.1.0",
@@ -32,19 +32,19 @@
     },
     "selection": {
       "path": ".dev/ai-context/framework-candidate/0.19.0-rc.1/selection.json",
-      "sha256": "1a54e480f7f7f060198def7281ffacfed6de5de0baacf3ae5f19b26abfeb6207"
+      "sha256": "93c54c2e5c7f3576185760b1a8393c6e32fe71d610415f3b9eb84221ce04d4e2"
     },
     "inventory": {
       "path": ".dev/ai-context/framework-candidate/0.19.0-rc.1/files.json",
-      "sha256": "b585914d9b7dddd2173ba13fb0026672c1d9e7f69b3c8ebb04af47801809838f"
+      "sha256": "e2152ce4fb43f5a4af24864ce9f5c12bd0513d2503982d1ae56f5365984317d0"
     },
     "build": {
       "path": ".dev/ai-context/framework-candidate/0.19.0-rc.1/build.json",
-      "sha256": "8f836dfdb67e1fba3c88385d31c6ecd3ad736591f60f434faeb11124e81e0050"
+      "sha256": "6e346a13b94417767f74613163cba82342952eb3dce36445a6fe13a82e28ebd7"
     },
     "lock": {
       "path": ".ai/framework.lock",
-      "sha256": "755a96ddab2e9eaebe26a49f4014e584ce2b852f09f7e829a57488301254d6f0"
+      "sha256": "a04e2df01f5f6df6889b7c09daa1b9ae1c78e6b503aac852d5aa2b325c56a0e8"
     }
   },
   "engine": {
@@ -675,7 +675,6 @@
     "criteria": ".dev/workflows/2026-09-23-framework-rc1-pilot/review-criteria.md",
     "receipt_validator": ".dev/ai-context/tooling/validate-target-terminal-audit.py"
   },
-  "blocker": "Actual installed PR prepare blocked by Git worktree config preflight; original source Issue 335 repair, candidate update and independent target review required.",
   "legacy_entry_history": [
     {
       "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-init/SKILL.md",

@@ -1,0 +1,14 @@
+{
+  "kind": "focused gate regression evidence reuse",
+  "outcome": "reused-with-proof",
+  "prior_receipt": ".dev/ai-context/local/rc1-pilot-checks/precommit-02/tests.json",
+  "receipt_sha256": "12b6116c756fa7a4be6b2139d79ca6b0b6780610f789dcab52fecfaa2da8a865",
+  "test_count": 14,
+  "input_sha256": {
+    ".dev/ai-context/tooling/validate-current-framework.py": "383d1e7b30b9915267c2db2b1842e1cdd8523029f585f64a660855625bb63504",
+    ".dev/ai-context/tooling/tests/test_current_framework_gate.py": "d36fc306edbe1d324ac52ea0286449ea7727c4593be22d4d2b45ca90374408d1"
+  },
+  "comparison_commit": "24998b88851b0439896e4f9be51c479e83d73c15",
+  "unchanged_inputs": "Test and imported gate bytes match the completed 14-test checkpoint; bounded tests author their own inputs. Same host, Python executable and selected command; no dependency or runtime changes were performed in this continuation.",
+  "excludes": "Current binding/candidate/authority and full Git-range admission are checked freshly by the independent reviewer, not discharged by reused unit evidence."
+}

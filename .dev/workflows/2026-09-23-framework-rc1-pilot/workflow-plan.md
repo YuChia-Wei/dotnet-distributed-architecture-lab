@@ -8,9 +8,12 @@ Worktree: C:/Github/YuChia/dotnet-mq-arch-lab-rc1-pilot. The original main check
 
 ## Current checkpoint
 
-Actual PR prepare subsequently failed; source Issue 335 is reopened in its original
-task. Binding is pilot-blocked. See [checkpoint-report.md](checkpoint-report.md).
-The gate/read/install successes below remain bounded earlier observations.
+Source #335 repair is merged through PR #388. The rebuilt immutable candidate
+and exact-lock delta update succeeded; installed PR prepare/inspect/render passed.
+Binding is pilot-review; final frozen independent admission remains pending.
+See [checkpoint-report.md](checkpoint-report.md) and
+[evidence/repaired-candidate-update.json](evidence/repaired-candidate-update.json).
+Earlier gate/read/install observations below remain bounded historical evidence.
 
 The complete candidate was actually installed after reviewed source #386.
 Current roots/registries now bind 18 Codex entries and retained target rules;

@@ -1,0 +1,21 @@
+{
+  "kind": "actual repaired candidate/index/fresh-checkout parity",
+  "candidate_identity": "versioned:0.19.0-rc.1:1ce41a4f03f61e83bf9b99de3ce196887547e922:286088361638d65f741c0fd5c39b210b0bd868c2a08d1e235a3d5613d40bcdbb",
+  "files_verified": 132,
+  "managed_members": 131,
+  "lock_members": 1,
+  "attributes_verified": [
+    "text",
+    "eol",
+    "filter",
+    "ident",
+    "working-tree-encoding",
+    "merge"
+  ],
+  "attribute_readback_sha256": "9844339e062fd473e3e995d1b9abcd91456ffa1872e4d470fa36bafe886a1043",
+  "index_modes_verified": true,
+  "index_listing_sha256": "4c7e4f4f49778d74d2716d1de77a1f4d33f5b3c58840221b6f32dadb18209045",
+  "fresh_checkout_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\fresh-checkout-335-5d6a2c3ef1",
+  "outcome": "passed",
+  "limits": "132 selected files; no whole repository checkout; independent adoption still pending"
+}

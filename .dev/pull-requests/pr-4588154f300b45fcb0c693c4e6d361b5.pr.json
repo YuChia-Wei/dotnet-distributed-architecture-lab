@@ -1,0 +1,24 @@
+{
+  "created_at": "2026-09-23T16:27:19.368173+00:00",
+  "id": "pr-4588154f300b45fcb0c693c4e6d361b5",
+  "kind": "pr",
+  "owner": "project",
+  "references": [],
+  "schema_version": "1.0.0",
+  "state": "prepared",
+  "subject": {
+    "base_commit": "cb122285af09e46b24102f22a0ad9d713219c1f2",
+    "base_tree": "3e37752494e1e070dd7524e8e5afa11096b53cc7",
+    "diff_recipe": "pr.diff/v1",
+    "diff_sha256": "ff9c53537744a0c8206c40715efe52cb3afce0746b811105cfd18fd3b38cd0a3",
+    "git_version": "git version 2.55.0.windows.3",
+    "head_commit": "1269a5fae2f21c2fd4d965f57d105d4f0241f20b",
+    "head_tree": "e076c95f810262056f81ec68abfc72aab18a90d7",
+    "merge_base": "cb122285af09e46b24102f22a0ad9d713219c1f2",
+    "object_format": "sha1"
+  },
+  "summary": "Local proposal for the first three committed planning, configuration and gate-preparation stages only. Subsequent installation and integration checkpoints are excluded.",
+  "title": "Target rc1 preparation checkpoint",
+  "updated_at": "2026-09-23T16:27:19.368173+00:00",
+  "validation": []
+}

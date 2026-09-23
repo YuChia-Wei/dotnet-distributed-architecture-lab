@@ -1,8 +1,8 @@
 {
   "behavioral_validation": "not-performed",
-  "candidate_identity": "versioned:0.19.0-rc.1:3755b217421a4f1238f740a09de7e034ccf56038:691ef5f2202c02772e0af76c3789e0af829501d8dea5bc24837763fe1caf8a28",
-  "candidate_sha256": "691ef5f2202c02772e0af76c3789e0af829501d8dea5bc24837763fe1caf8a28",
-  "completed_at": "2026-09-23T14:36:47+00:00",
+  "candidate_identity": "versioned:0.19.0-rc.1:1ce41a4f03f61e83bf9b99de3ce196887547e922:286088361638d65f741c0fd5c39b210b0bd868c2a08d1e235a3d5613d40bcdbb",
+  "candidate_sha256": "286088361638d65f741c0fd5c39b210b0bd868c2a08d1e235a3d5613d40bcdbb",
+  "completed_at": "2026-09-23T16:22:42+00:00",
   "executing_implementation": [
     {
       "execution_file_sha256": "6c02b38ce5adc247280b81e127867fea8d3fb98710861858ece7091d38051c25",
@@ -76,20 +76,20 @@
     }
   ],
   "identity_inputs": {
-    "metadata/files.json": "b585914d9b7dddd2173ba13fb0026672c1d9e7f69b3c8ebb04af47801809838f",
-    "metadata/selection.json": "1a54e480f7f7f060198def7281ffacfed6de5de0baacf3ae5f19b26abfeb6207"
+    "metadata/files.json": "e2152ce4fb43f5a4af24864ce9f5c12bd0513d2503982d1ae56f5365984317d0",
+    "metadata/selection.json": "93c54c2e5c7f3576185760b1a8393c6e32fe71d610415f3b9eb84221ce04d4e2"
   },
   "installation": "not-performed",
   "mode_materialization": "inventory-only",
   "outcome": "assembled",
   "profile": "complete",
   "publication": "not-performed",
-  "run_id": "880decbc11734dae8fbc24939280fcbb",
+  "run_id": "bd8c885690c3465bb7c8d80947190a6a",
   "runtime": {
     "os": "nt",
     "python": "3.13.14",
     "pyyaml": "6.0.3"
   },
   "schema_version": 1,
-  "source_commit": "3755b217421a4f1238f740a09de7e034ccf56038"
+  "source_commit": "1ce41a4f03f61e83bf9b99de3ce196887547e922"
 }

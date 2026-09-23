@@ -1211,17 +1211,17 @@ def git_subject(binding,repository_root,base_commit,head_commit):
         fail("repository-root","repository_root must be the exact Git root.")
     if git("rev-parse","--is-bare-repository").strip()!=b"false" or git("rev-parse","--is-shallow-repository").strip()!=b"false":
         fail("repository-kind","Bare or shallow repositories are unsupported.","unsupported")
-    # Git diff consumes both repository and enabled worktree configuration.
-    # --worktree falls back to --local when the extension is disabled. Inspect
-    # include directives themselves, without following them during preflight.
-    for scope in ("--local", "--worktree"):
-        config=git("config",scope,"--no-includes","--null","--list")
-        for entry in config.split(b"\x00"):
-            if not entry:
-                continue
-            key=entry.split(b"\n",1)[0].decode("utf-8").lower()
-            if (key.startswith(("diff.","include.","includeif.")) or key=="extensions.partialclone" or key.endswith(".promisor")):
-                fail("git-config","Repository or worktree diff/include/promisor configuration requires separate reconciliation.","unsupported")
+    # Read the effective scopes: repository plus worktree when enabled. An
+    # explicit --worktree read fails for multiple worktrees with that extension
+    # disabled. System/global inputs remain disabled by env; inspect include
+    # directives themselves without following them. Any Git error stays fatal.
+    config=git("config","--no-includes","--null","--list")
+    for entry in config.split(b"\x00"):
+        if not entry:
+            continue
+        key=entry.split(b"\n",1)[0].decode("utf-8").lower()
+        if (key.startswith(("diff.","include.","includeif.")) or key=="extensions.partialclone" or key.endswith(".promisor")):
+            fail("git-config","Repository or worktree diff/include/promisor configuration requires separate reconciliation.","unsupported")
     for item in ("info/attributes","info/grafts"):
         location=git("rev-parse","--git-path",item).decode("utf-8").strip()
         selected=safe_path(location,repository)

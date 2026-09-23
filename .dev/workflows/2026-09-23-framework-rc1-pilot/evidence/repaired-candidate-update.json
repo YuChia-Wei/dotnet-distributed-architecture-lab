@@ -1,0 +1,274 @@
+{
+  "kind": "actual repaired candidate delta update and installed PR retry",
+  "source_pr": "https://github.com/YuChia-Wei/ai-collaboration-framework/pull/388",
+  "source_merge": "eca7c971ad84441d67cd4e085ea89b08ba1acd2a",
+  "previous_target_checkpoint": "79da759c5c63c2792c7749ab35bafef3cdc86b61",
+  "previous_candidate": {
+    "identity": "versioned:0.19.0-rc.1:3755b217421a4f1238f740a09de7e034ccf56038:691ef5f2202c02772e0af76c3789e0af829501d8dea5bc24837763fe1caf8a28",
+    "version": "0.19.0-rc.1",
+    "source_commit": "3755b217421a4f1238f740a09de7e034ccf56038",
+    "packages": {
+      "adr": "0.1.0",
+      "ai-context-auditor": "0.1.0",
+      "ai-context-governance": "0.1.0",
+      "bdd-gwt-test-designer": "0.1.0",
+      "code-reviewer": "0.1.0",
+      "ddd-ca-hex-architect": "0.1.0",
+      "diagnostic-analyst": "0.1.0",
+      "lesson": "0.2.0",
+      "local-backlog": "0.1.0",
+      "local-change-implementer": "0.1.0",
+      "pr": "0.1.0",
+      "problem-frame-author": "0.1.0",
+      "requirement-author": "0.1.0",
+      "slice-implementer": "0.1.0",
+      "software-development-orchestrator": "0.1.0",
+      "spec-author": "0.1.0",
+      "spec-compliance-validator": "0.1.0",
+      "standards-promotion": "0.1.0"
+    },
+    "selection": {
+      "path": ".dev/ai-context/framework-candidate/0.19.0-rc.1/selection.json",
+      "sha256": "93c54c2e5c7f3576185760b1a8393c6e32fe71d610415f3b9eb84221ce04d4e2"
+    },
+    "inventory": {
+      "path": ".dev/ai-context/framework-candidate/0.19.0-rc.1/files.json",
+      "sha256": "e2152ce4fb43f5a4af24864ce9f5c12bd0513d2503982d1ae56f5365984317d0"
+    },
+    "build": {
+      "path": ".dev/ai-context/framework-candidate/0.19.0-rc.1/build.json",
+      "sha256": "6e346a13b94417767f74613163cba82342952eb3dce36445a6fe13a82e28ebd7"
+    },
+    "lock": {
+      "path": ".ai/framework.lock",
+      "sha256": "a04e2df01f5f6df6889b7c09daa1b9ae1c78e6b503aac852d5aa2b325c56a0e8"
+    }
+  },
+  "new_candidate_build": {
+    "candidate_identity": "versioned:0.19.0-rc.1:1ce41a4f03f61e83bf9b99de3ce196887547e922:286088361638d65f741c0fd5c39b210b0bd868c2a08d1e235a3d5613d40bcdbb",
+    "candidate_root": "F:\\framework-next\\p7-runs\\versioned-candidate\\complete-1baa4b669c2d4e19a6c39809ece3b4df\\candidate-1ce41a4f03f6-bd8c885690c3465bb7c8d80947190a6a",
+    "component_versions": {
+      "adr": "0.1.0",
+      "ai-context-auditor": "0.1.0",
+      "ai-context-governance": "0.1.0",
+      "bdd-gwt-test-designer": "0.1.0",
+      "code-reviewer": "0.1.0",
+      "ddd-ca-hex-architect": "0.1.0",
+      "diagnostic-analyst": "0.1.0",
+      "lesson": "0.2.0",
+      "local-backlog": "0.1.0",
+      "local-change-implementer": "0.1.0",
+      "pr": "0.1.0",
+      "problem-frame-author": "0.1.0",
+      "requirement-author": "0.1.0",
+      "slice-implementer": "0.1.0",
+      "software-development-orchestrator": "0.1.0",
+      "spec-author": "0.1.0",
+      "spec-compliance-validator": "0.1.0",
+      "standards-promotion": "0.1.0"
+    },
+    "evidence_kind": "actual complete public CLI assembly and installation reader",
+    "file_cap": 512,
+    "finished_at": "2026-09-23T16:22:43.207246+00:00",
+    "installation": "not-performed",
+    "metadata_sha256": {
+      "metadata/build.json": "6e346a13b94417767f74613163cba82342952eb3dce36445a6fe13a82e28ebd7",
+      "metadata/files.json": "e2152ce4fb43f5a4af24864ce9f5c12bd0513d2503982d1ae56f5365984317d0",
+      "metadata/selection.json": "93c54c2e5c7f3576185760b1a8393c6e32fe71d610415f3b9eb84221ce04d4e2"
+    },
+    "outcome": "passed",
+    "payload_members": 113,
+    "publication": "not-performed",
+    "retained_byte_cap": 16777216,
+    "retained_bytes_before_receipt": 2332837,
+    "retained_files_before_receipt": 268,
+    "root": "F:\\framework-next\\p7-runs\\versioned-candidate\\complete-1baa4b669c2d4e19a6c39809ece3b4df",
+    "runtime_entries": 18,
+    "scratch_root": "F:\\framework-next\\p7-runs\\versioned-candidate\\complete-1baa4b669c2d4e19a6c39809ece3b4df\\scratch-bd8c885690c3465bb7c8d80947190a6a",
+    "source_commit": "1ce41a4f03f61e83bf9b99de3ce196887547e922",
+    "started_at": "2026-09-23T16:22:25.633282+00:00",
+    "wall_seconds": 17.574
+  },
+  "delta_observation_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\delta-335-e2f21b235c7b",
+  "delta_receipts": [
+    {
+      "path": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\delta-335-e2f21b235c7b\\plan.execution.json",
+      "sha256": "373dc1043b818b503ce14199a7fb1f6c10bc1ae41bb3bf052fd55a435da7af8f",
+      "receipt": {
+        "command": [
+          "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+          "-I",
+          "-B",
+          "F:\\framework-next\\386\\src\\tools\\maintain_framework.py"
+        ],
+        "started_at": "2026-09-23T16:25:20.451224+00:00",
+        "completed_at": "2026-09-23T16:25:22.524106+00:00",
+        "duration_seconds": 2.073,
+        "exit_code": 0,
+        "request_sha256": "38c07726594a41b547f6ce07330bb4a1104174fc0cf09c14a0e6909783887341",
+        "stdout_sha256": "a108afbeaa18adb5c60909cfa6d5a4af72a6312201c76957b2b9572f9fbe094b",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "executed": true,
+        "synthetic": false
+      }
+    },
+    {
+      "path": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\delta-335-e2f21b235c7b\\apply.execution.json",
+      "sha256": "895332312819cc059f7fc6fda4938de7747b694e26304069e1cdb3b26c1868a7",
+      "receipt": {
+        "executed": true,
+        "synthetic": false,
+        "command": [
+          "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+          "-I",
+          "-B",
+          "F:\\framework-next\\386\\src\\tools\\maintain_framework.py"
+        ],
+        "stdin_request": "apply-request.json",
+        "started_at": "2026-09-23T16:26:17.109856+00:00",
+        "completed_at": "2026-09-23T16:26:32.319254+00:00",
+        "duration_seconds": 15.209,
+        "exit_code": 0,
+        "request_sha256": "967e3409007dd7533382befc5c1fd397d5b0bb8121987da3704fa59a4070a446",
+        "stdout_sha256": "1fa50a2a534711bc075ef1ef16719020b4ffb301350028a54604e4e4c99ea981",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "after": {
+    "unmanaged_hashes_matched": 358,
+    "retained_files": 292,
+    "protected_inputs": 72,
+    "pilot_records_unchanged": 5,
+    "markers_absent": true,
+    "lock_sha256": "a04e2df01f5f6df6889b7c09daa1b9ae1c78e6b503aac852d5aa2b325c56a0e8",
+    "candidate_identity": "versioned:0.19.0-rc.1:1ce41a4f03f61e83bf9b99de3ce196887547e922:286088361638d65f741c0fd5c39b210b0bd868c2a08d1e235a3d5613d40bcdbb",
+    "outcome": "exact-update-readback-passed"
+  },
+  "managed_members_independently_hashed": 131,
+  "pr_retry": {
+    "summary": {
+      "outcome": "passed",
+      "reference": {
+        "id": "pr-4588154f300b45fcb0c693c4e6d361b5",
+        "role": "pr.record"
+      },
+      "operations": [
+        {
+          "label": "prepare",
+          "outcome": "succeeded",
+          "mutation_state": "committed",
+          "receipt": "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.dev\\ai-context\\local\\rc1-record-pilot\\pr-repaired-335\\prepare.execution.json"
+        },
+        {
+          "label": "inspect",
+          "outcome": "succeeded",
+          "mutation_state": "none",
+          "receipt": "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.dev\\ai-context\\local\\rc1-record-pilot\\pr-repaired-335\\inspect.execution.json"
+        },
+        {
+          "label": "render",
+          "outcome": "succeeded",
+          "mutation_state": "none",
+          "receipt": "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.dev\\ai-context\\local\\rc1-record-pilot\\pr-repaired-335\\render.execution.json"
+        }
+      ],
+      "subject": {
+        "base_commit": "cb122285af09e46b24102f22a0ad9d713219c1f2",
+        "base_tree": "3e37752494e1e070dd7524e8e5afa11096b53cc7",
+        "diff_recipe": "pr.diff/v1",
+        "diff_sha256": "ff9c53537744a0c8206c40715efe52cb3afce0746b811105cfd18fd3b38cd0a3",
+        "git_version": "git version 2.55.0.windows.3",
+        "head_commit": "1269a5fae2f21c2fd4d965f57d105d4f0241f20b",
+        "head_tree": "e076c95f810262056f81ec68abfc72aab18a90d7",
+        "merge_base": "cb122285af09e46b24102f22a0ad9d713219c1f2",
+        "object_format": "sha1"
+      },
+      "scope": "actual installed local PR record for initial three preparation commits; no provider action or adoption"
+    },
+    "receipts": [
+      {
+        "path": ".dev/ai-context/local/rc1-record-pilot/pr-repaired-335/prepare.execution.json",
+        "sha256": "d1587e2955569cf687259acf3c69d325c0bd1d535713ec05a2799f8245ac55c0",
+        "receipt": {
+          "executed": true,
+          "synthetic": false,
+          "command": [
+            "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "-I",
+            "-B",
+            "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\pr\\scripts\\pr.py",
+            "--request",
+            "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.dev\\ai-context\\local\\rc1-record-pilot\\pr-repaired-335\\prepare.request.json"
+          ],
+          "started_at": "2026-09-23T16:27:17.980444+00:00",
+          "completed_at": "2026-09-23T16:27:19.420886+00:00",
+          "duration_seconds": 1.44,
+          "exit_code": 0,
+          "request_sha256": "1fafbb735a84167ae704cdbccc4d5ea387d3c871332a2f0810b3b4349049ce2e",
+          "stdout_sha256": "06dd48746c83effc69373f73c0523f60681deafb8627fb8eb8727479cae84020",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "path": ".dev/ai-context/local/rc1-record-pilot/pr-repaired-335/inspect.execution.json",
+        "sha256": "ce70109dfcfdca03d36c9a1847c47ef739f361c43b51c32392406ea1095671d4",
+        "receipt": {
+          "executed": true,
+          "synthetic": false,
+          "command": [
+            "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "-I",
+            "-B",
+            "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\pr\\scripts\\pr.py",
+            "--request",
+            "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.dev\\ai-context\\local\\rc1-record-pilot\\pr-repaired-335\\inspect.request.json"
+          ],
+          "started_at": "2026-09-23T16:27:19.434056+00:00",
+          "completed_at": "2026-09-23T16:27:19.846375+00:00",
+          "duration_seconds": 0.412,
+          "exit_code": 0,
+          "request_sha256": "527458bedf21dd9db18bf55a5daff651698045c7b3085c5c3ebd86251f7dbc32",
+          "stdout_sha256": "59bda84f845d396ca921707e3b1a43bedbe9fb744c63257f7e69dbb793691b1b",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "path": ".dev/ai-context/local/rc1-record-pilot/pr-repaired-335/render.execution.json",
+        "sha256": "81f6a063bdae01136cc60e019f2a35aa19cd6a72be2d0170d143bfea1bc304f4",
+        "receipt": {
+          "executed": true,
+          "synthetic": false,
+          "command": [
+            "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+            "-I",
+            "-B",
+            "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\pr\\scripts\\pr.py",
+            "--request",
+            "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.dev\\ai-context\\local\\rc1-record-pilot\\pr-repaired-335\\render.request.json"
+          ],
+          "started_at": "2026-09-23T16:27:19.853365+00:00",
+          "completed_at": "2026-09-23T16:27:21.045496+00:00",
+          "duration_seconds": 1.192,
+          "exit_code": 0,
+          "request_sha256": "becbe35f24821cb7cc3f1342b92b51916feaa7d13067ebf5f57ace4e33cc9a8e",
+          "stdout_sha256": "82c279b6599fa6868d72307e455c862740d62f072b1d245ce0ea6db8637ea9e6",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    ],
+    "record": {
+      "path": ".dev/pull-requests/pr-4588154f300b45fcb0c693c4e6d361b5.pr.json",
+      "sha256": "4b640fb1d25e748a9799483c149844473f7f0ddcfc6757220a324afe7f91d327"
+    }
+  },
+  "preserved_failures": [
+    "original scan-limit and objects",
+    "unowned-control/guard reconciliation",
+    "Windows gate metadata failure",
+    "original installed PR blocked/git-read",
+    "coordinator inventory-envelope assertion failed before public plan"
+  ],
+  "admission": "pending-independent-review",
+  "provider_actions": "none in target"
+}

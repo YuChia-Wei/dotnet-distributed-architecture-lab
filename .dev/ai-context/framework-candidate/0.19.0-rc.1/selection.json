@@ -941,11 +941,11 @@
       "size": 6128
     },
     {
-      "git_blob": "81a389fe6acad49f9dae658f556f0ac618217fd0",
+      "git_blob": "808d4a9db4fd2919eddec006dcb6dbbef389940c",
       "mode": "100644",
       "path": "src/skills/pr/references/operations.md",
-      "sha256": "3112a244f42d11be15df87ab8f1a895deedec6d3a28304890a9792e2cb6da721",
-      "size": 6826
+      "sha256": "75686bc5818d13a3a22d565e68ce934f3c8b67b3f94aafbba38501626325e935",
+      "size": 7225
     },
     {
       "git_blob": "be81c28ea7417891cda69ded54a430ff5bb1b105",
@@ -962,10 +962,10 @@
       "size": 26584
     },
     {
-      "git_blob": "c15e78dd3ca5083e381c18f1535d254db74bf353",
+      "git_blob": "e574c6b0d782950308c7c445aed8f879f9f74434",
       "mode": "100644",
       "path": "src/skills/pr/scripts/pr.py",
-      "sha256": "1e10c2254eac59a52a28c897458936be54506c764de44b2bc3d6292a2c61d21a",
+      "sha256": "e1e70c584894ec075946891795c76585957e419f527395b412bfef671bb2fc16",
       "size": 65931
     },
     {
@@ -1704,7 +1704,7 @@
   "release_version": "0.19.0-rc.1",
   "schema_version": 2,
   "source": {
-    "commit": "3755b217421a4f1238f740a09de7e034ccf56038",
-    "tree": "d471f2ca1218d7e57663a525cfc2bc8e417548b7"
+    "commit": "1ce41a4f03f61e83bf9b99de3ce196887547e922",
+    "tree": "a6c317370ff75e65dd34a0a7e20bc4b2bb97122f"
   }
 }
