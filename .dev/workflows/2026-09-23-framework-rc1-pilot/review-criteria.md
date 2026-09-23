@@ -17,7 +17,7 @@ The independent reviewer cannot repair or grant provider/publication authority.
 | P15-07 | Current gate rejects missing/drifted binding, authority, runtime, history and rules; preserves Git attribution. Focused regressions and actual selected command pass for frozen subject. Old aggregate remains unchanged legacy support. |
 | P15-08 | Preserve scan-limit failure, unowned-control plan, captured objects and guard reconciliation. Later success does not overwrite failed evidence. Exact recovery pin and durable C: custody remain intact. |
 | P15-09 | Product code/tests, infrastructure, credentials and original target main unchanged. Source U001 does not suspend target rules. Distinguish installation/readers from readiness, review, integration and release. |
-| P15-10 | Actual independent invocation, fixed criteria/authority preflight, ignored output, terminal receipt and released lease satisfy retained review controls. Selected checks alone do not admit or activate. |
+| P15-10 | Reviewer verifies actual independent invocation, fixed criteria/authority preflight, ignored output and active unchanged lease, then returns genuine terminal review evidence. Parent subsequently verifies/adopts that evidence and releases the lease; these later actions remain pending in the reviewer result. Selected checks or a reviewer pass alone do not admit or activate. |
 
 ## Selected reviewer execution
 
@@ -32,12 +32,22 @@ closure is claimed.
 
 ## Content subject and result
 
-Content subject is SHA-256 of canonical sorted compact UTF-8 JSON containing
-repository, baseline tree, full subject tree, criteria digest, binding digest
-and sorted authority path/digest mapping. Commit SHA is execution provenance.
+Content subject is SHA-256 of canonical sorted compact UTF-8 JSON, with no
+trailing newline and exactly these keys: repository, baseline_tree, subject_tree,
+criteria_digest, binding_digest, authority_hashes. repository is the absolute
+pilot worktree path in forward-slash form; tree values are Git tree OIDs, digest
+values are lowercase raw-file SHA-256, and authority_hashes maps repository-relative
+forward-slash paths to lowercase raw-file SHA-256. The independent preflight
+record retains this exact descriptor separately from closed-shape packet and
+receipt documents. Commit SHA is execution provenance.
 Parent verifies these against tracked bytes before dispatch. Return each P15
 criterion's findings or no-finding result, content subject, actual execution
 references and residual limitations under the packet's ignored root.
 Parent separately validates a genuine passing receipt using
-validate-target-terminal-audit.py --admit, then releases the lease. Do not write
-tracked success records after freeze.
+validate-target-terminal-audit.py --admit while the unchanged lease is active,
+verifies all ignored outputs are sealed, then records and validates lease release
+and removes only its exact owned lock. Any failed admission, missing evidence,
+drift or failed release keeps adoption incomplete. Reviewer must not predeclare
+these parent actions passed. Parent closeout evidence stays ignored and binds the
+same subject and actual review invocation. Do not write tracked success records
+after freeze.

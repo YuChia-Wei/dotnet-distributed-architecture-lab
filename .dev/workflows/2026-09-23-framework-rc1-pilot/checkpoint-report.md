@@ -45,3 +45,9 @@ retained playbook permits package inventories and recorded base identity;
 no replacement tool or successful legacy upgrade execution is asserted.
 Archived original wrapper bytes remain exact and active wrapper hashes were
 refreshed. This does not change the current PR blocker or admission state.
+
+Review preparation clarification: P15-10 now distinguishes the independent
+reviewer's evidence from subsequent parent admission and lease release. The
+content-subject descriptor keys and byte encoding are explicit before freeze.
+This removes an impossible future-action claim; all independent review and
+parent release requirements remain mandatory and unexecuted at this checkpoint.
