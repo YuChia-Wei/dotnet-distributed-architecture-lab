@@ -1,0 +1,566 @@
+{
+  "schema_version": "target-framework-binding/v1",
+  "state": "preparation-blocked",
+  "decision_ref": ".dev/workflows/2026-09-23-framework-rc1-pilot/reconciliation-proposal.md#direct-target-gate-adoption-decision",
+  "workflow_id": "2026-09-23-framework-rc1-pilot",
+  "baseline_commit": "cb122285af09e46b24102f22a0ad9d713219c1f2",
+  "runtime": "codex",
+  "legacy_baseline_role": "retained-target-rules-and-legacy-package-support",
+  "candidate": {
+    "identity": "versioned:0.19.0-rc.1:3755b217421a4f1238f740a09de7e034ccf56038:691ef5f2202c02772e0af76c3789e0af829501d8dea5bc24837763fe1caf8a28",
+    "version": "0.19.0-rc.1",
+    "source_commit": "3755b217421a4f1238f740a09de7e034ccf56038",
+    "packages": {
+      "adr": "0.1.0",
+      "ai-context-auditor": "0.1.0",
+      "ai-context-governance": "0.1.0",
+      "bdd-gwt-test-designer": "0.1.0",
+      "code-reviewer": "0.1.0",
+      "ddd-ca-hex-architect": "0.1.0",
+      "diagnostic-analyst": "0.1.0",
+      "lesson": "0.2.0",
+      "local-backlog": "0.1.0",
+      "local-change-implementer": "0.1.0",
+      "pr": "0.1.0",
+      "problem-frame-author": "0.1.0",
+      "requirement-author": "0.1.0",
+      "slice-implementer": "0.1.0",
+      "software-development-orchestrator": "0.1.0",
+      "spec-author": "0.1.0",
+      "spec-compliance-validator": "0.1.0",
+      "standards-promotion": "0.1.0"
+    },
+    "selection": {
+      "path": ".dev/ai-context/framework-candidate/0.19.0-rc.1/selection.json",
+      "sha256": "1a54e480f7f7f060198def7281ffacfed6de5de0baacf3ae5f19b26abfeb6207"
+    },
+    "inventory": {
+      "path": ".dev/ai-context/framework-candidate/0.19.0-rc.1/files.json",
+      "sha256": "b585914d9b7dddd2173ba13fb0026672c1d9e7f69b3c8ebb04af47801809838f"
+    },
+    "build": {
+      "path": ".dev/ai-context/framework-candidate/0.19.0-rc.1/build.json",
+      "sha256": "8f836dfdb67e1fba3c88385d31c6ecd3ad736591f60f434faeb11124e81e0050"
+    },
+    "lock": {
+      "path": ".ai/framework.lock",
+      "sha256": null
+    }
+  },
+  "engine": null,
+  "retained_inventory": {
+    "path": ".dev/ai-context/retained-target-inventory.json",
+    "sha256": "5c7a89a6d19e610ab0316029edb47f26d0a57092787d10f233f773cf715a7e9c"
+  },
+  "rule_ids": [
+    "AGGREGATE-ES-001",
+    "AICTX-EVIDENCE-001",
+    "ARCH-UOW-001",
+    "ASSESSMENT-ARTIFACT-001",
+    "CONTRACT-SEMANTICS-001",
+    "DELETE-PURGE-001",
+    "DELETE-SOFT-001",
+    "MAP-EVENTS-001",
+    "MESSAGING-TX-001",
+    "PROJECT-GRAMMAR-001",
+    "TECH-SELECT-001",
+    "TEST-BDDFY-001",
+    "TEST-GWT-001",
+    "TEST-MOCK-001"
+  ],
+  "customization_ids": [
+    "CUST-DOTNET-MQ-GOVERNANCE",
+    "CUST-DOTNET-MQ-VALIDATION",
+    "CUST-DOTNET-MQ-REPO-TRUTH",
+    "CUST-DOTNET-MQ-EXECUTION-PROVENANCE-ADOPTION"
+  ],
+  "route_bindings": [
+    {
+      "package": "slice-implementer",
+      "route_id": "ROUTE-0060755BB97DCDEAC34944FA27E473EC92B448A74107DA66CB5D9D7E51EED46B",
+      "selector": {
+        "capability": "implementation",
+        "execution_mode": "command",
+        "technology_profile": "dotnet-backend",
+        "file_type": "csharp-production"
+      }
+    },
+    {
+      "package": "spec-author",
+      "route_id": "ROUTE-0CB791EB64099FC942CC9EF435809DB1E757848F558735D7D1417D83E22CAD3A",
+      "selector": {
+        "capability": "specification",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "specification-markdown"
+      }
+    },
+    {
+      "package": "local-change-implementer",
+      "route_id": "ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C",
+      "selector": {
+        "capability": "local-change",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "csharp-production"
+      }
+    },
+    {
+      "package": "slice-implementer",
+      "route_id": "ROUTE-3EE85C82323D6A52F24B406E8F1271F5ED88DDE38EAC1044F0BF971061FFE0C4",
+      "selector": {
+        "capability": "implementation",
+        "execution_mode": "generic",
+        "technology_profile": "dotnet-backend",
+        "file_type": "csharp-production"
+      }
+    },
+    {
+      "package": "code-reviewer",
+      "route_id": "ROUTE-44441057FC3C725F5861E2149944CFB7EFDD0C5F890831C4208291A5B2371222",
+      "selector": {
+        "capability": "review",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "dotnet-mixed-review"
+      }
+    },
+    {
+      "package": "local-change-implementer",
+      "route_id": "ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7",
+      "selector": {
+        "capability": "local-change",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "csharp-test"
+      }
+    },
+    {
+      "package": "problem-frame-author",
+      "route_id": "ROUTE-5376A2F088F0C2FB915830EEC987D1391E96AFDDE1208E4E68B362FE4D3A612E",
+      "selector": {
+        "capability": "problem-framing",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "problem-frame-yaml"
+      }
+    },
+    {
+      "package": "bdd-gwt-test-designer",
+      "route_id": "ROUTE-595016B570726DB08342680D2195648944D898511253100E88AEA1B9E66957D5",
+      "selector": {
+        "capability": "test-design",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "gherkin-feature"
+      }
+    },
+    {
+      "package": "code-reviewer",
+      "route_id": "ROUTE-5FD9FBA84BFD386D5D5F3C8AC8B16EF6332DEA1D48EC5DBF6AA6B096D0828604",
+      "selector": {
+        "capability": "review",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "csharp-review"
+      }
+    },
+    {
+      "package": "ddd-ca-hex-architect",
+      "route_id": "ROUTE-6793F2C32C4BF62763380BCF5CD83D284C40AB2401A5BB42904823E7F28BE96C",
+      "selector": {
+        "capability": "architecture",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "architecture-decision"
+      }
+    },
+    {
+      "package": "local-change-implementer",
+      "route_id": "ROUTE-69320ED2F30633AA22DD3E91C72210D14A955614F1B4269844ED8EAC0274491C",
+      "selector": {
+        "capability": "local-change",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "project-file"
+      }
+    },
+    {
+      "package": "requirement-author",
+      "route_id": "ROUTE-7C1C8C42DEAF9D889A157FA97FA2E5390CDCD0FD5509103DA4DA1A65CB2A85BE",
+      "selector": {
+        "capability": "requirements",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "requirement-markdown"
+      }
+    },
+    {
+      "package": "bdd-gwt-test-designer",
+      "route_id": "ROUTE-8691EB94D951D12620A830D430E1934E0E228CE6B1342F65673ADBD57C484333",
+      "selector": {
+        "capability": "test-design",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "csharp-test"
+      }
+    },
+    {
+      "package": "spec-compliance-validator",
+      "route_id": "ROUTE-86B49603D837372BA200420228174C1CF61333171CE8D96FCFF63ABD07BB796D",
+      "selector": {
+        "capability": "compliance-validation",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "problem-frame-and-dotnet"
+      }
+    },
+    {
+      "package": "local-change-implementer",
+      "route_id": "ROUTE-88F8297799ABD7C258348FA6072DFE56306800798EACEB7529FAC1509F304A15",
+      "selector": {
+        "capability": "local-change",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "sql"
+      }
+    },
+    {
+      "package": "local-change-implementer",
+      "route_id": "ROUTE-93389630E2EAEBD1C926310D5932AA0DB31893A1FC0108457AE8E9B63B44E356",
+      "selector": {
+        "capability": "local-change",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "yaml-config"
+      }
+    },
+    {
+      "package": "slice-implementer",
+      "route_id": "ROUTE-DF0E762322A527898C635F453332C4FD4607EFC0A01AE6AFFA49D799E70BAB18",
+      "selector": {
+        "capability": "implementation",
+        "execution_mode": "generic",
+        "technology_profile": "dotnet-backend",
+        "file_type": "csharp-test"
+      }
+    },
+    {
+      "package": "slice-implementer",
+      "route_id": "ROUTE-E3B4869DC90073EEDA02B8105FB8EE99866C4CF93C5E3FC852258480BEDE8566",
+      "selector": {
+        "capability": "implementation",
+        "execution_mode": "reactor",
+        "technology_profile": "dotnet-backend",
+        "file_type": "csharp-production"
+      }
+    },
+    {
+      "package": "slice-implementer",
+      "route_id": "ROUTE-EFD78BECD2CAFD2890638E78C79E0ABCA47CB5E0C70EC9B3D602EC12FF762AFE",
+      "selector": {
+        "capability": "implementation",
+        "execution_mode": "query",
+        "technology_profile": "dotnet-backend",
+        "file_type": "csharp-production"
+      }
+    },
+    {
+      "package": "spec-author",
+      "route_id": "ROUTE-FAD108B11C0B4A274C0B640D117F2D7EE22FA006DDA09A442DD9BF0E2DC6C0EF",
+      "selector": {
+        "capability": "specification",
+        "execution_mode": "direct",
+        "technology_profile": "dotnet-backend",
+        "file_type": "specification-json"
+      }
+    }
+  ],
+  "project_scope_packages": [
+    "adr",
+    "ai-context-auditor",
+    "ai-context-governance",
+    "diagnostic-analyst",
+    "lesson",
+    "local-backlog",
+    "pr",
+    "software-development-orchestrator",
+    "standards-promotion"
+  ],
+  "withdrawn_entries": [
+    {
+      "old": ".agents/skills/ai-context-auditor",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-auditor/SKILL.md",
+          "sha256": "c06f48b8953771e28b51cdbcd097d1e129a29a4436bf340e945f52c0372701a8"
+        },
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-auditor/agents/openai.yaml",
+          "sha256": "7a7dc18b797d363560d9beb9d0bc38268efc0040b2b531596728a1866cd626e6"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/ai-context-governance",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-governance/SKILL.md",
+          "sha256": "cfda6aa11e320a18e1d807b4e652e13d03ceed60a7750092fe81858adefc8dac"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/bdd-gwt-test-designer",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/bdd-gwt-test-designer/SKILL.md",
+          "sha256": "c2882c77ed63138a29d1a9ada2c1a69c90621451a23af4df768bdc08cadec753"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/code-reviewer",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/code-reviewer/SKILL.md",
+          "sha256": "4a5e7ec6cd0010b9d2d6d91486c6a6a14455c47525ce78a35c9d23c26f8671b4"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/ddd-ca-hex-architect",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ddd-ca-hex-architect/SKILL.md",
+          "sha256": "fd2853f60e14a4900316e71b6e25081ea368b4d45e4b0ed3486c4e2b62dc873b"
+        },
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ddd-ca-hex-architect/agents/openai.yaml",
+          "sha256": "61b62dbafee522d3daa81f45ee9152587e01a9e87439b1e5e7043ddb177923dd"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/diagnostic-analyst",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/diagnostic-analyst/SKILL.md",
+          "sha256": "a9680a63b4094006e79802456d4fab0a59ff746bbd7b35c53ac16543f67707f3"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/local-change-implementer",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/local-change-implementer/SKILL.md",
+          "sha256": "76df15859cd2044a8afdbf91026b93bd04fb94457cd036f1836d364eb9114f9c"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/problem-frame-author",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/problem-frame-author/SKILL.md",
+          "sha256": "e04524ddf10912ba10266734cf6301c1e616cd292adc7b604f10ce4d45c5c091"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/requirement-author",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/requirement-author/SKILL.md",
+          "sha256": "1cc7f528153eb9c5ef3531f05f8a1f72d13e30c2f42226002c8234474ca2454b"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/slice-implementer",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/slice-implementer/SKILL.md",
+          "sha256": "25ece949c11ee6ea30339448f0e9dcde397ed0a9234678d8df0f306b0c4bdf7f"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/software-development-orchestrator",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/software-development-orchestrator/SKILL.md",
+          "sha256": "1425917dca3c7d70117467d2ddfd374e88e4909a4b447dc6d479d97555ee03a0"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/spec-author",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/spec-author/SKILL.md",
+          "sha256": "3a84818b81bff21c876a1b8cf6ad1de08136cdd9fc19800c19e91577cbc672dc"
+        }
+      ]
+    },
+    {
+      "old": ".agents/skills/spec-compliance-validator",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/spec-compliance-validator/SKILL.md",
+          "sha256": "30a76cc7e9171560745b58dba1c381b849cf022f65d345adc9547fc9dd7160ff"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/ai-context-auditor",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ai-context-auditor/SKILL.md",
+          "sha256": "229252a8ed5557d91a83c2126cbf9006e8954af8a8e170f1ed409bd741b154bb"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/ai-context-governance",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ai-context-governance/SKILL.md",
+          "sha256": "d8813c31b319bd7639423a7e55f2c7e0c712ae034b765a6381ebb360bad8871e"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/bdd-gwt-test-designer",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/bdd-gwt-test-designer/SKILL.md",
+          "sha256": "0e1270c24d18b286459f8ff7125a379b6bae94cf528f8d4b2fd013e95804a925"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/code-reviewer",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/code-reviewer/SKILL.md",
+          "sha256": "4a5e7ec6cd0010b9d2d6d91486c6a6a14455c47525ce78a35c9d23c26f8671b4"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/ddd-ca-hex-architect",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ddd-ca-hex-architect/SKILL.md",
+          "sha256": "7385a69374056c6cd0dbf59be542f8761dc0a4650fa946d97aa80d6b03791fbe"
+        },
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ddd-ca-hex-architect/agents/openai.yaml",
+          "sha256": "61b62dbafee522d3daa81f45ee9152587e01a9e87439b1e5e7043ddb177923dd"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/diagnostic-analyst",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/diagnostic-analyst/SKILL.md",
+          "sha256": "fb09c7eaf52e2884c525f0afb190c41693412cdfd5431a4f0f29c8604491dc66"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/local-change-implementer",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/local-change-implementer/SKILL.md",
+          "sha256": "76df15859cd2044a8afdbf91026b93bd04fb94457cd036f1836d364eb9114f9c"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/problem-frame-author",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/problem-frame-author/SKILL.md",
+          "sha256": "248806ce45e60aa4b76cca4f4a7ac791c29d372ece6a482880edb50e9e8812a3"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/requirement-author",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/requirement-author/SKILL.md",
+          "sha256": "5a82b3e4a610c34d362c404f9d76cd42b7bdc83aa229a7d7c0f6035166ac4e5b"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/slice-implementer",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/slice-implementer/SKILL.md",
+          "sha256": "1eb4b970889a6a0f792f4ebcdb0565bb4e117c251ef2828bcb6ea4193ac3c530"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/software-development-orchestrator",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/software-development-orchestrator/SKILL.md",
+          "sha256": "5508808a5f5ff5bde7cdac5727b38e4e5c1d110b8bb5357c3c40c7692a4b3399"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/spec-author",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/spec-author/SKILL.md",
+          "sha256": "6b3ed00f49cf2be211e57f3037d419619323ed6b21c7c8e35e11d8e737057acc"
+        }
+      ]
+    },
+    {
+      "old": ".claude/skills/spec-compliance-validator",
+      "archived_files": [
+        {
+          "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/spec-compliance-validator/SKILL.md",
+          "sha256": "9ae72db707dc34d9d600be1f215c4dcccbbccc905e3cd1c3f4145e2ab2c3cb91"
+        }
+      ]
+    }
+  ],
+  "legacy_entries": [
+    {
+      "path": ".agents/skills/ai-context-init/SKILL.md",
+      "sha256": "86e1f0e000466dde67a594420fe8dac6e26e9fe2494ab3399c7036b90ecbb653"
+    },
+    {
+      "path": ".agents/skills/ai-context-upgrader/SKILL.md",
+      "sha256": "bd0bc472484e5febd44b756e68135947ce42581b66c3081b98594e38a7be2553"
+    },
+    {
+      "path": ".claude/skills/ai-context-init/SKILL.md",
+      "sha256": "c0d5083e360e063c305f424bcbf12e3a5e5680defaa59e5b8b24b72d37102c2f"
+    },
+    {
+      "path": ".claude/skills/ai-context-upgrader/SKILL.md",
+      "sha256": "619ed71917b2fd9ee3392f13f6656504738bcf0cde4e40ebe52e4f4f0978bde5"
+    }
+  ],
+  "current_authorities": [],
+  "git_validator": {
+    "path": ".dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py",
+    "sha256": "844040b36b55433457f48b29132e3a2afa15a7bfd14813b2e7882cb1ba7fbf23"
+  },
+  "independent_review": {
+    "state": "pending",
+    "contract": ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"
+  },
+  "blocker": "Source Issue 386 scan-limit; actual target uninstalled; authority closure and active routes incomplete"
+}

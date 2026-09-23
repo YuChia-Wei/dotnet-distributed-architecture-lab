@@ -1,0 +1,117 @@
+{
+  "selection": "retained-target and 20 actual initialized-target API resolutions only",
+  "gate_code_sha256": "e81942cfa75a5bc9eda830aa218dee2de67c52dc34c212d4fea3289db8b28656",
+  "binding_sha256": "6b584aefd416f68db3e8a77c28968a5efb159166a5749b8f2049d23466be9be9",
+  "retained_inventory_sha256": "5c7a89a6d19e610ab0316029edb47f26d0a57092787d10f233f773cf715a7e9c",
+  "retained": {
+    "exact_retained_files": 285,
+    "net_assets": 194
+  },
+  "rules": {
+    "rule_ids": [
+      "AGGREGATE-ES-001",
+      "AICTX-EVIDENCE-001",
+      "ARCH-UOW-001",
+      "ASSESSMENT-ARTIFACT-001",
+      "CONTRACT-SEMANTICS-001",
+      "DELETE-PURGE-001",
+      "DELETE-SOFT-001",
+      "MAP-EVENTS-001",
+      "MESSAGING-TX-001",
+      "PROJECT-GRAMMAR-001",
+      "TECH-SELECT-001",
+      "TEST-BDDFY-001",
+      "TEST-GWT-001",
+      "TEST-MOCK-001"
+    ],
+    "customizations": 4,
+    "actual_resolutions": [
+      {
+        "route_id": "ROUTE-0060755BB97DCDEAC34944FA27E473EC92B448A74107DA66CB5D9D7E51EED46B",
+        "packet_digest": "93805fd00408859025fee91103776ad75239cc62064a74fe87cefd85323a778a"
+      },
+      {
+        "route_id": "ROUTE-0CB791EB64099FC942CC9EF435809DB1E757848F558735D7D1417D83E22CAD3A",
+        "packet_digest": "e3f32777337755afb725255e09bd87a2e4391a5a49c78351b764819685177019"
+      },
+      {
+        "route_id": "ROUTE-1FDA4CA0244ECF7DBB006600D53ED431A940DF857859E9EB143D2EA3BF59FA2C",
+        "packet_digest": "5089d4e614a1019ce58b5fe649b1898b71b5b9763fc3eae26171b97715cada11"
+      },
+      {
+        "route_id": "ROUTE-3EE85C82323D6A52F24B406E8F1271F5ED88DDE38EAC1044F0BF971061FFE0C4",
+        "packet_digest": "9d609368fbae40901e5e16a2be3d784593aaa5c33182a7fcd3744c857972bfd0"
+      },
+      {
+        "route_id": "ROUTE-44441057FC3C725F5861E2149944CFB7EFDD0C5F890831C4208291A5B2371222",
+        "packet_digest": "893b66b268aa1a6968785004d6469152eb3df9507da581193b89eb3c6601b0a2"
+      },
+      {
+        "route_id": "ROUTE-510496FD8627821F6F011990789DAD56E50CD189EC64045D5D4444FE6AB89EE7",
+        "packet_digest": "07f118dfd46757a0e224c58a3c2e9b8f36bf9db267ea4636a53f25d287b0d9e1"
+      },
+      {
+        "route_id": "ROUTE-5376A2F088F0C2FB915830EEC987D1391E96AFDDE1208E4E68B362FE4D3A612E",
+        "packet_digest": "e13e8398720b6645020ddb4f5fd3c05f10b01d9930f8fd5f0d1c224486320c58"
+      },
+      {
+        "route_id": "ROUTE-595016B570726DB08342680D2195648944D898511253100E88AEA1B9E66957D5",
+        "packet_digest": "7a36a9cbd24168a48783baa4de6a31aedf677b686c4ea83b6c9b4770a322ed2d"
+      },
+      {
+        "route_id": "ROUTE-5FD9FBA84BFD386D5D5F3C8AC8B16EF6332DEA1D48EC5DBF6AA6B096D0828604",
+        "packet_digest": "f491f95b0f3b4ff4067ce6dfc699323e18ba1ae4fc8a1fccbbc9bc435b887d33"
+      },
+      {
+        "route_id": "ROUTE-6793F2C32C4BF62763380BCF5CD83D284C40AB2401A5BB42904823E7F28BE96C",
+        "packet_digest": "9acff028948546b32054a4dae862ea34475c01fcdb61e5aa1f5be1ea95a59ed8"
+      },
+      {
+        "route_id": "ROUTE-69320ED2F30633AA22DD3E91C72210D14A955614F1B4269844ED8EAC0274491C",
+        "packet_digest": "6152a1cf586592b2db8cfc1c1ae255247f35ca3a2c61c35314245c42ca876865"
+      },
+      {
+        "route_id": "ROUTE-7C1C8C42DEAF9D889A157FA97FA2E5390CDCD0FD5509103DA4DA1A65CB2A85BE",
+        "packet_digest": "59eae6b744e3efb9c2751385a68db900c9f1a099accefb46a34d0bf7f1e4fdb8"
+      },
+      {
+        "route_id": "ROUTE-8691EB94D951D12620A830D430E1934E0E228CE6B1342F65673ADBD57C484333",
+        "packet_digest": "f3b0c0ac4fd389c87b5adcb9b68a180dccf5ff48b8ceaf3b0a79dc55b772a5b9"
+      },
+      {
+        "route_id": "ROUTE-86B49603D837372BA200420228174C1CF61333171CE8D96FCFF63ABD07BB796D",
+        "packet_digest": "0b2dfd7cc6ea3ea57ce4ae942fb8191c85428597764a5e44eb10a1dbe6c1efb5"
+      },
+      {
+        "route_id": "ROUTE-88F8297799ABD7C258348FA6072DFE56306800798EACEB7529FAC1509F304A15",
+        "packet_digest": "10d89d967d21004b38c424fc94a5cf322310c5d0263789a1059c4773a0180b5d"
+      },
+      {
+        "route_id": "ROUTE-93389630E2EAEBD1C926310D5932AA0DB31893A1FC0108457AE8E9B63B44E356",
+        "packet_digest": "88a231d5cbe63ffd19b2dc3159cd27d5e7d2ecd3e06e72ddf57d65981944b3a9"
+      },
+      {
+        "route_id": "ROUTE-DF0E762322A527898C635F453332C4FD4607EFC0A01AE6AFFA49D799E70BAB18",
+        "packet_digest": "664d8dffe79c87cd140e81161dbc1db786114ce3a1c25675ea0383208d537619"
+      },
+      {
+        "route_id": "ROUTE-E3B4869DC90073EEDA02B8105FB8EE99866C4CF93C5E3FC852258480BEDE8566",
+        "packet_digest": "c7f6ac6d0ddac060acb8cb7b36401cf91706b70df83ee6d589ff59623b209d8c"
+      },
+      {
+        "route_id": "ROUTE-EFD78BECD2CAFD2890638E78C79E0ABCA47CB5E0C70EC9B3D602EC12FF762AFE",
+        "packet_digest": "ebe0154bf005a73c1e0da7db118c220c049546f7bf993f5fba77e846c7711085"
+      },
+      {
+        "route_id": "ROUTE-FAD108B11C0B4A274C0B640D117F2D7EE22FA006DDA09A442DD9BF0E2DC6C0EF",
+        "packet_digest": "b63bddbcc2cf1783d9bbdacb4d5a2ee7bd1034e7411a6a91df818f10726411fc"
+      }
+    ],
+    "baseline_role": "v0.18-derived target rule authority; not installed candidate provenance"
+  },
+  "elapsed_seconds": 22.199,
+  "outcome": "selected-checks-passed",
+  "installation": "blocked by source Issue 386",
+  "independent_review": "pending",
+  "activation": "inactive"
+}

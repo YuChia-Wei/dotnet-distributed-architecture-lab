@@ -1,0 +1,1710 @@
+{
+  "adapters": [
+    {
+      "entrypoint_source": {
+        "git_blob": "0a90397f3b9a91cd18f46702420b94ee355beb2e",
+        "mode": "100644",
+        "path": "src/skills/adr/SKILL.md",
+        "sha256": "8f1fb571daff003691dac269a3b93c9d295f2ab45d90b2fa28aafe27e1d6774d",
+        "size": 1776
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/adr/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-adr/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/adr",
+        "path": "runtime/.agents/skills/framework-adr/SKILL.md",
+        "sha256": "728ee88543fdfd2831f39890d904627d8fd3f5c4c66d7074f84eb561722379fe",
+        "size": 2285
+      },
+      "package": "adr",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "2aa0ce2e3d000b8ab75d898026eff25d8894b2e1",
+        "mode": "100644",
+        "path": "src/skills/ai-context-auditor/SKILL.md",
+        "sha256": "7d5eda3148ac3b0d792d1c36630b08a0ca17e7ef3f35559c7ca1631688369580",
+        "size": 1155
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/ai-context-auditor/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-ai-context-auditor/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/ai-context-auditor",
+        "path": "runtime/.agents/skills/framework-ai-context-auditor/SKILL.md",
+        "sha256": "b9ab1706718995505c0c4fdb1992b036f629574e9808f8d7745c10a12d278be8",
+        "size": 1890
+      },
+      "package": "ai-context-auditor",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "7c82beb61b00baa9ca197f7ad94bbd96a35b32e4",
+        "mode": "100644",
+        "path": "src/skills/ai-context-governance/SKILL.md",
+        "sha256": "c0aad70a26e6395964d9f996971b0bbdda24a54cda487d76378217d35743d68e",
+        "size": 1312
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/ai-context-governance/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-ai-context-governance/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/ai-context-governance",
+        "path": "runtime/.agents/skills/framework-ai-context-governance/SKILL.md",
+        "sha256": "5b38cf7ced4339a6b37aa298f5b56115634c4f6c9aacd96e89be84ba9c43500f",
+        "size": 1932
+      },
+      "package": "ai-context-governance",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "aa33424e006ac11e5eca103372f26e8bcc0be10a",
+        "mode": "100644",
+        "path": "src/skills/bdd-gwt-test-designer/SKILL.md",
+        "sha256": "56f180f30ec09ed1d38bb5b9cbfd8f70ac6ae1847cadb9ad27e57318eabddb48",
+        "size": 1348
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/bdd-gwt-test-designer/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-bdd-gwt-test-designer/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/bdd-gwt-test-designer",
+        "path": "runtime/.agents/skills/framework-bdd-gwt-test-designer/SKILL.md",
+        "sha256": "daccc942e12b83c6fa8e1114c58cbedb1b9cfde7ec76ec80af8bd52d6f8aa867",
+        "size": 1975
+      },
+      "package": "bdd-gwt-test-designer",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "ff153d4ad7274289ab8937bd99749b291c98636b",
+        "mode": "100644",
+        "path": "src/skills/code-reviewer/SKILL.md",
+        "sha256": "30365affc4fc37fcf621dadd9ef17b2a46f03b34259d6c062998e7d17939393c",
+        "size": 1413
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/code-reviewer/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-code-reviewer/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/code-reviewer",
+        "path": "runtime/.agents/skills/framework-code-reviewer/SKILL.md",
+        "sha256": "a359a1639f9c0312d9e49fab19a63b904ab86cd4070cf50d795c8563f9013646",
+        "size": 1848
+      },
+      "package": "code-reviewer",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "076c554e133b3a79391e548bffd67dd12888dd40",
+        "mode": "100644",
+        "path": "src/skills/ddd-ca-hex-architect/SKILL.md",
+        "sha256": "a4a6d4634f5b534cc838ef3e3a35dd78c26d20c724f6f829e138ceb950b40f69",
+        "size": 1206
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/ddd-ca-hex-architect/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-ddd-ca-hex-architect/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/ddd-ca-hex-architect",
+        "path": "runtime/.agents/skills/framework-ddd-ca-hex-architect/SKILL.md",
+        "sha256": "22e720bd94f868875ac41787b7df6158a5ad7eb7ba700ece4d90616a10569437",
+        "size": 1989
+      },
+      "package": "ddd-ca-hex-architect",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "db665e63540a79af3c5e5ab91e9d9d309b2e7997",
+        "mode": "100644",
+        "path": "src/skills/diagnostic-analyst/SKILL.md",
+        "sha256": "41ea28386a84941cb58f8a79e0965a1f6197233548b18e4fee53faf7b2cae2aa",
+        "size": 1017
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/diagnostic-analyst/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-diagnostic-analyst/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/diagnostic-analyst",
+        "path": "runtime/.agents/skills/framework-diagnostic-analyst/SKILL.md",
+        "sha256": "e4ad91c4bcb009e2e17d7ef2dda1df844da88316e88b0aef3829e54e17f8e3c7",
+        "size": 1893
+      },
+      "package": "diagnostic-analyst",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "6357bff3fc23fda32fc5f08fc60ae07e30df5b55",
+        "mode": "100644",
+        "path": "src/skills/lesson/SKILL.md",
+        "sha256": "f5e5e605f36f015fdbec12a2cd7cfadc4aef229f4c3c58e10cbfd2d99bcdfd16",
+        "size": 1706
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/lesson/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-lesson/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/lesson",
+        "path": "runtime/.agents/skills/framework-lesson/SKILL.md",
+        "sha256": "f34888961544b11ba082200a854e2d99c654697b0883f3b1cb5e1f98e7c0a6c4",
+        "size": 2421
+      },
+      "package": "lesson",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "06b01bd221b418b6b73eef48f97537718f104cc6",
+        "mode": "100644",
+        "path": "src/skills/local-backlog/SKILL.md",
+        "sha256": "052e4db046710899a30aaef9f65c0138303ae6664159e3d7b218bdad9c133637",
+        "size": 1558
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/local-backlog/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-local-backlog/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/local-backlog",
+        "path": "runtime/.agents/skills/framework-local-backlog/SKILL.md",
+        "sha256": "396cef6eb442959d78b682ce19e4832916c1e550722c190febbde0f9ba3b1cd0",
+        "size": 2406
+      },
+      "package": "local-backlog",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "3e3bcd17f985847e29e1459719474c9d2d2ecfeb",
+        "mode": "100644",
+        "path": "src/skills/local-change-implementer/SKILL.md",
+        "sha256": "6dbeef2b61767328cb0b96114333240f41c05694e354273dbe96238fcdd8c9a5",
+        "size": 1168
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/local-change-implementer/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-local-change-implementer/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/local-change-implementer",
+        "path": "runtime/.agents/skills/framework-local-change-implementer/SKILL.md",
+        "sha256": "6f8641f38f90b58df79b3623397d520056ba24dcc7e7b12d3e4b8a979bfbae1d",
+        "size": 1916
+      },
+      "package": "local-change-implementer",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "d79168c56dc312ad37c51a4d4df085cec5285c1d",
+        "mode": "100644",
+        "path": "src/skills/pr/SKILL.md",
+        "sha256": "648b3e8026323157a468e1d1af7de3b190e98a9ee735299fc7d164193125f6bd",
+        "size": 1623
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/pr/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-pr/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/pr",
+        "path": "runtime/.agents/skills/framework-pr/SKILL.md",
+        "sha256": "a52ed40da2128517876af203a6c48fd8c8102bfe12a098122a46e36c5bb1a953",
+        "size": 2372
+      },
+      "package": "pr",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "f750615d89f134e91165beecefcca77fe6783c47",
+        "mode": "100644",
+        "path": "src/skills/problem-frame-author/SKILL.md",
+        "sha256": "afb8692260f704506a7067ae8d9c1acde629adc4dcd83da95032cc2227c19fd1",
+        "size": 2021
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/problem-frame-author/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-problem-frame-author/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/problem-frame-author",
+        "path": "runtime/.agents/skills/framework-problem-frame-author/SKILL.md",
+        "sha256": "77e70ae661d69ca30001b174fbd02a4a095fdf83b78a529a5e3f719482983f82",
+        "size": 2757
+      },
+      "package": "problem-frame-author",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "a50714e88b5cb26a6c2bd31a7dc0e933f732f547",
+        "mode": "100644",
+        "path": "src/skills/requirement-author/SKILL.md",
+        "sha256": "4bf1496cdf400e6c93967e13e1fdc4192253ff3f07129331f749a4473c7a6642",
+        "size": 1526
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/requirement-author/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-requirement-author/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/requirement-author",
+        "path": "runtime/.agents/skills/framework-requirement-author/SKILL.md",
+        "sha256": "c25dc825bca66c162228bdfb4bd9f9aad07a07adf60b817ffe87fbbd235c014b",
+        "size": 2038
+      },
+      "package": "requirement-author",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "3245a25ae42bcd89676f98f4cae7c1b61196703f",
+        "mode": "100644",
+        "path": "src/skills/slice-implementer/SKILL.md",
+        "sha256": "f85a3fdca6bc196fda0a4e87ced3f0fd38a1001613505bd75f23e61dbcb65f49",
+        "size": 1411
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/slice-implementer/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-slice-implementer/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/slice-implementer",
+        "path": "runtime/.agents/skills/framework-slice-implementer/SKILL.md",
+        "sha256": "fd7a83953d36d068ce0a8847687656c1e4520fe7279cfe66959864c2f18a372a",
+        "size": 2514
+      },
+      "package": "slice-implementer",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "3f08ec0fbdf7502f1232c76ddb885d19b2c90d75",
+        "mode": "100644",
+        "path": "src/skills/software-development-orchestrator/SKILL.md",
+        "sha256": "61da4fdcc2f0331725bb34a5ced261566f45bc423e3102b112c9c215cf032ddd",
+        "size": 2339
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/software-development-orchestrator/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-software-development-orchestrator/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/software-development-orchestrator",
+        "path": "runtime/.agents/skills/framework-software-development-orchestrator/SKILL.md",
+        "sha256": "af0726d9ae1c7a38c99f0734b1b89b66b3552c16230e48d055e0931f0c81d2f5",
+        "size": 2934
+      },
+      "package": "software-development-orchestrator",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "149bc17765024273db3a159aa4d3e7e667f82a50",
+        "mode": "100644",
+        "path": "src/skills/spec-author/SKILL.md",
+        "sha256": "c98c96719505f2d8c7c4a66cbd661cd6a570d565701d8c5b936710afd4e28c08",
+        "size": 1672
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/spec-author/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-spec-author/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/spec-author",
+        "path": "runtime/.agents/skills/framework-spec-author/SKILL.md",
+        "sha256": "af8c9de4c2f62b572deaf61b1bafbc5d283a09c996dda7f3ccc0bbc373c2fe93",
+        "size": 2307
+      },
+      "package": "spec-author",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "78da54328dd7cc4c85ff6314f634b7768e72f22d",
+        "mode": "100644",
+        "path": "src/skills/spec-compliance-validator/SKILL.md",
+        "sha256": "06a009d4913f3a540ce5005283e003c009ecf30503c5fd5abad9ea4c69c32637",
+        "size": 1789
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/spec-compliance-validator/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-spec-compliance-validator/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/spec-compliance-validator",
+        "path": "runtime/.agents/skills/framework-spec-compliance-validator/SKILL.md",
+        "sha256": "003d8d76738fb387620193a28bdeaa591fde06acdb985b335bce3c92c2364b03",
+        "size": 2265
+      },
+      "package": "spec-compliance-validator",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    },
+    {
+      "entrypoint_source": {
+        "git_blob": "b381f540642129075428699b8df5709989bd8b09",
+        "mode": "100644",
+        "path": "src/skills/standards-promotion/SKILL.md",
+        "sha256": "9e619bec2a060eafe30a6d4f654963e14633b0462e55365ce2e992debf55055b",
+        "size": 1978
+      },
+      "id": "codex",
+      "installed_entrypoint": ".ai/core/skills/standards-promotion/SKILL.md",
+      "output": {
+        "destination": ".agents/skills/framework-standards-promotion/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "codex/standards-promotion",
+        "path": "runtime/.agents/skills/framework-standards-promotion/SKILL.md",
+        "sha256": "fc17947286a5c866fbadcb278c784414c1f9cd94cc681ff93ca0447727f3afb4",
+        "size": 2621
+      },
+      "package": "standards-promotion",
+      "template": {
+        "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+        "mode": "100644",
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+        "size": 1303
+      }
+    }
+  ],
+  "build_inputs": [
+    {
+      "git_blob": "a76b8be9362b062a1a4fa766e4c8f6581fe0b686",
+      "mode": "100644",
+      "path": "src/adapters/codex/skill-entry.md.template",
+      "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a",
+      "size": 1303
+    },
+    {
+      "git_blob": "fca5683977f2046233795428cc0c16feece19ce6",
+      "mode": "100644",
+      "path": "src/distribution/__init__.py",
+      "sha256": "6c02b38ce5adc247280b81e127867fea8d3fb98710861858ece7091d38051c25",
+      "size": 150
+    },
+    {
+      "git_blob": "01467d0f4e441275bfca1cce5ce3589f6213c101",
+      "mode": "100644",
+      "path": "src/distribution/assembly.py",
+      "sha256": "231ce2c0a14f7cfec1604dea662c1008007b8579e9c32fe36c087ec75a13ac70",
+      "size": 11390
+    },
+    {
+      "git_blob": "b6210d9e8caa65d226af017ba6c3d6f0a12f50a0",
+      "mode": "100644",
+      "path": "src/distribution/codex.py",
+      "sha256": "506e775df87b6a1816cb3be896fd8741fd5bfc7c137c425224561314578e083e",
+      "size": 3403
+    },
+    {
+      "git_blob": "08da2c0b84703887b837297d6d2d63b023c2eebb",
+      "mode": "100644",
+      "path": "src/distribution/data.py",
+      "sha256": "c92b1f4495434ca3df045d67c210d347537aea8a7cf3f6d2bcf1f626ac827c2d",
+      "size": 7701
+    },
+    {
+      "git_blob": "f90c5eb0b53752adf22b48d938bc517b43cb047e",
+      "mode": "100644",
+      "path": "src/distribution/git_source.py",
+      "sha256": "b10e87121133896acefbb682ab1fffafc91c614ec6015b479833cb07a600c5e5",
+      "size": 6202
+    },
+    {
+      "git_blob": "292f4d5c7c1c3f167c11245ed731c13fc166bfb4",
+      "mode": "100644",
+      "path": "src/distribution/manifest.yaml",
+      "sha256": "64e6e19d97266324782dccadc6b51113708c0e8a4b78f94819b0794dedc92a0e",
+      "size": 15474
+    },
+    {
+      "git_blob": "0dc910ca76f4835a5cbf172abbda7595088861a9",
+      "mode": "100644",
+      "path": "src/distribution/package.py",
+      "sha256": "38c21ade871b03dc393c5172f0596a267263bb21a8d718a28b305742a57564bd",
+      "size": 17384
+    },
+    {
+      "git_blob": "f9b8c96854d9f4698d0fd424eeca61bb73644f42",
+      "mode": "100644",
+      "path": "src/distribution/selection.py",
+      "sha256": "d49d240a2c2c776ac90ca4fbe19d887e961031ba7f0fa0c7bcada7aea5e760cd",
+      "size": 8250
+    },
+    {
+      "git_blob": "25d49e8f3c2b9e4e9f1124dacbc30a814516a908",
+      "mode": "100644",
+      "path": "src/profiles/complete.yaml",
+      "sha256": "fb2de112798ad21c3e1a9ec214acbfaffc6e466b991cba7c24847ffeabb1613c",
+      "size": 866
+    },
+    {
+      "git_blob": "0a90397f3b9a91cd18f46702420b94ee355beb2e",
+      "mode": "100644",
+      "path": "src/skills/adr/SKILL.md",
+      "sha256": "8f1fb571daff003691dac269a3b93c9d295f2ab45d90b2fa28aafe27e1d6774d",
+      "size": 1776
+    },
+    {
+      "git_blob": "8bd0916c1a239d85f531b1206e85a12ed7aa0760",
+      "mode": "100644",
+      "path": "src/skills/adr/references/configuration.md",
+      "sha256": "a683f4a8a5d31bbe870b3fce8021fc27bbdffc142091f6a11705740c7dc067c3",
+      "size": 5779
+    },
+    {
+      "git_blob": "bda838601e10f69d9a45bea7f62dc323393a97bf",
+      "mode": "100644",
+      "path": "src/skills/adr/references/example.md",
+      "sha256": "0f41bddbc40183742dc47cdee14a210ed80a4b5845578e56b22000eee4eb2119",
+      "size": 5231
+    },
+    {
+      "git_blob": "b6986be6402caed409a4dac1672eed586ce2d9fc",
+      "mode": "100644",
+      "path": "src/skills/adr/references/operations.md",
+      "sha256": "7cf60de7bc560c7be7fefc1dc399fb557882846818eca710a78f8a4375b73ee7",
+      "size": 10590
+    },
+    {
+      "git_blob": "a04631d81fac04fa2377e2d26605cf0dae248bb0",
+      "mode": "100644",
+      "path": "src/skills/adr/schemas/adr-record.schema.json",
+      "sha256": "8d3e024b738f086e9fa77ac2f4667e5e8ac73e158d80bf250e37dc2060a59d21",
+      "size": 11260
+    },
+    {
+      "git_blob": "eb4dd01988287abad437245822a4a8768cec1530",
+      "mode": "100644",
+      "path": "src/skills/adr/scripts/adr.py",
+      "sha256": "4e99f42c3e77c960810d51222c214ebc3bada5433d9736cab4f5b6aaece6b9c6",
+      "size": 81342
+    },
+    {
+      "git_blob": "97dca5f4e1a3daecadae496b7fbd6405c520efa9",
+      "mode": "100644",
+      "path": "src/skills/adr/skill-package.yaml",
+      "sha256": "af95402ce8fb7fe1f613bfaa09f3d6b2fc688d8ac73a5734d4f8232b202584ab",
+      "size": 5985
+    },
+    {
+      "git_blob": "8a353033ce750682a44005e102d06eb2a963c05e",
+      "mode": "100644",
+      "path": "src/skills/adr/templates/adr.md",
+      "sha256": "148436823ea23a885c1f2529b1c63bdda3b1e4090fe60eafcb29b099152a7594",
+      "size": 512
+    },
+    {
+      "git_blob": "2aa0ce2e3d000b8ab75d898026eff25d8894b2e1",
+      "mode": "100644",
+      "path": "src/skills/ai-context-auditor/SKILL.md",
+      "sha256": "7d5eda3148ac3b0d792d1c36630b08a0ca17e7ef3f35559c7ca1631688369580",
+      "size": 1155
+    },
+    {
+      "git_blob": "9e12ba7273482de9ab45f8d9595fd8782dabe5fd",
+      "mode": "100644",
+      "path": "src/skills/ai-context-auditor/references/audit.md",
+      "sha256": "dde1896506adf1b2c8d8dec2be362ac42fefbd5837a535de060085df77532e4d",
+      "size": 7132
+    },
+    {
+      "git_blob": "78dfe7aeaa717dfdafc8636ef51fbef99470dffc",
+      "mode": "100644",
+      "path": "src/skills/ai-context-auditor/skill-package.yaml",
+      "sha256": "c88eff6a3e286b180b150357d71889bcf0a1ff3fe65aa6ededd6334c954395f6",
+      "size": 1459
+    },
+    {
+      "git_blob": "7c82beb61b00baa9ca197f7ad94bbd96a35b32e4",
+      "mode": "100644",
+      "path": "src/skills/ai-context-governance/SKILL.md",
+      "sha256": "c0aad70a26e6395964d9f996971b0bbdda24a54cda487d76378217d35743d68e",
+      "size": 1312
+    },
+    {
+      "git_blob": "0498c6b52ed56708c787c08aa8547e06142c4d94",
+      "mode": "100644",
+      "path": "src/skills/ai-context-governance/references/maintenance.md",
+      "sha256": "d7a883c88ffca483e9669e3e748be27d9e0648112d77391d632d32b975d8804a",
+      "size": 11292
+    },
+    {
+      "git_blob": "02c7ee665ca1367db062a172b60bd17d601d554e",
+      "mode": "100644",
+      "path": "src/skills/ai-context-governance/skill-package.yaml",
+      "sha256": "3189089591f3f2db743dd271882f91c164432ce679cdea3e91fc2a91249fac2a",
+      "size": 1450
+    },
+    {
+      "git_blob": "aa33424e006ac11e5eca103372f26e8bcc0be10a",
+      "mode": "100644",
+      "path": "src/skills/bdd-gwt-test-designer/SKILL.md",
+      "sha256": "56f180f30ec09ed1d38bb5b9cbfd8f70ac6ae1847cadb9ad27e57318eabddb48",
+      "size": 1348
+    },
+    {
+      "git_blob": "92e0f8b8ba6d680267d07349e89ec6e9d4e9d9ec",
+      "mode": "100644",
+      "path": "src/skills/bdd-gwt-test-designer/references/design.md",
+      "sha256": "d49357af2ab5eaf1b562436c6ed1d17ded54fd07d5db2df271def99be5283668",
+      "size": 5578
+    },
+    {
+      "git_blob": "19cb1da237ca255b3d9f39de53572eac9f9f28d9",
+      "mode": "100644",
+      "path": "src/skills/bdd-gwt-test-designer/references/review.md",
+      "sha256": "2db7f59e489d0d1b99b26b5db245379a4793281d83fe0f5a79186fdaa7d61f28",
+      "size": 3470
+    },
+    {
+      "git_blob": "69c4f293a33feaf3f84d6c945e5b7d2fb41e5bbe",
+      "mode": "100644",
+      "path": "src/skills/bdd-gwt-test-designer/skill-package.yaml",
+      "sha256": "fb3bb4b5650ebd3664f879d7916ac21de30327e1e7d357785b26e5255dfa9b51",
+      "size": 1493
+    },
+    {
+      "git_blob": "ff153d4ad7274289ab8937bd99749b291c98636b",
+      "mode": "100644",
+      "path": "src/skills/code-reviewer/SKILL.md",
+      "sha256": "30365affc4fc37fcf621dadd9ef17b2a46f03b34259d6c062998e7d17939393c",
+      "size": 1413
+    },
+    {
+      "git_blob": "a78b8d3e77fbf1be6317cfccaadc4ecc4c727ba7",
+      "mode": "100644",
+      "path": "src/skills/code-reviewer/references/review.md",
+      "sha256": "59e0b15ec09dff8c7d42a0ae7d4bc040568b5246c402e48d5a94397b522d12fa",
+      "size": 7709
+    },
+    {
+      "git_blob": "b205b7767c850bcd8fe1e4e9aeb0c1471a1a09f7",
+      "mode": "100644",
+      "path": "src/skills/code-reviewer/skill-package.yaml",
+      "sha256": "e148f733d0270efbd139e05ec4257d9f25bf5ab6f34ad0d4093ea7cdf2e0f453",
+      "size": 918
+    },
+    {
+      "git_blob": "076c554e133b3a79391e548bffd67dd12888dd40",
+      "mode": "100644",
+      "path": "src/skills/ddd-ca-hex-architect/SKILL.md",
+      "sha256": "a4a6d4634f5b534cc838ef3e3a35dd78c26d20c724f6f829e138ceb950b40f69",
+      "size": 1206
+    },
+    {
+      "git_blob": "fa1993d187ce51867c7efb482d68347f4069d204",
+      "mode": "100644",
+      "path": "src/skills/ddd-ca-hex-architect/references/design.md",
+      "sha256": "6454161c1748f30832cb2a74db5f681a34ad9303da5bb4ed608935c0bb6441c0",
+      "size": 4541
+    },
+    {
+      "git_blob": "767fc459f40d337eb173e5a159853d2196b4b359",
+      "mode": "100644",
+      "path": "src/skills/ddd-ca-hex-architect/references/review.md",
+      "sha256": "9121b136f15648e9ca9ff1cf94e1cfeb6f05afc7ed6554001b89cdcf9da36012",
+      "size": 3610
+    },
+    {
+      "git_blob": "7582046347423bbeb57e049fbc84c0e1a3a3ef47",
+      "mode": "100644",
+      "path": "src/skills/ddd-ca-hex-architect/skill-package.yaml",
+      "sha256": "584e06353be2977bb91234936faa190870b3e5ca33d04de6cb3cda050a884983",
+      "size": 1510
+    },
+    {
+      "git_blob": "db665e63540a79af3c5e5ab91e9d9d309b2e7997",
+      "mode": "100644",
+      "path": "src/skills/diagnostic-analyst/SKILL.md",
+      "sha256": "41ea28386a84941cb58f8a79e0965a1f6197233548b18e4fee53faf7b2cae2aa",
+      "size": 1017
+    },
+    {
+      "git_blob": "d833c3a86aced1dd36a04d120956cdbec00a52a7",
+      "mode": "100644",
+      "path": "src/skills/diagnostic-analyst/references/diagnose.md",
+      "sha256": "b421aa9ae69b2dd0644da9633c342f1c40d0da74871423b1a08ab6519adcf488",
+      "size": 5845
+    },
+    {
+      "git_blob": "cfb65189ff0785531fb3976df0ae7c9aea5162b6",
+      "mode": "100644",
+      "path": "src/skills/diagnostic-analyst/skill-package.yaml",
+      "sha256": "4e96a9c31d6fa83bb1f95ec6c9b830d292e0323450f40a0bd94463626d946462",
+      "size": 1075
+    },
+    {
+      "git_blob": "6357bff3fc23fda32fc5f08fc60ae07e30df5b55",
+      "mode": "100644",
+      "path": "src/skills/lesson/SKILL.md",
+      "sha256": "f5e5e605f36f015fdbec12a2cd7cfadc4aef229f4c3c58e10cbfd2d99bcdfd16",
+      "size": 1706
+    },
+    {
+      "git_blob": "a1fd0ce5d7d63d6b09cb9303205fe6b6c99a8feb",
+      "mode": "100644",
+      "path": "src/skills/lesson/references/configuration.md",
+      "sha256": "34ae11375dac1b88a4feea3554168ce8bd342f6c3720002b556031051539e320",
+      "size": 6117
+    },
+    {
+      "git_blob": "f8580fa729c614e244f4b32c27219fea0ec415d7",
+      "mode": "100644",
+      "path": "src/skills/lesson/references/example.md",
+      "sha256": "727a19521f91c695bc102c58d4432736a74b72643893c9f7deaf7606e1500b3b",
+      "size": 5014
+    },
+    {
+      "git_blob": "2fbe961898a72bb8c753b02b4035a8095a067675",
+      "mode": "100644",
+      "path": "src/skills/lesson/references/operations.md",
+      "sha256": "702d953102db772a7dca631e3f05eefab3b7c47c5c303e3040fe32de0171997d",
+      "size": 10852
+    },
+    {
+      "git_blob": "7763615e0a654825e6936a7dfebad3163a657f6a",
+      "mode": "100644",
+      "path": "src/skills/lesson/schemas/lesson-record-v2.schema.json",
+      "sha256": "307e0cc3c255d8517d3fe788b8ce8d7fda606aa3af757d6a79eeed4af797c623",
+      "size": 10420
+    },
+    {
+      "git_blob": "8bced2d86584c87d34f8ca2927aab95b7802a3ac",
+      "mode": "100644",
+      "path": "src/skills/lesson/schemas/lesson-record.schema.json",
+      "sha256": "5470074d586fce16703822f65fa469b9fb648a28652f4b32d8c3acf17533348e",
+      "size": 2596
+    },
+    {
+      "git_blob": "c100eeefc22e5f2a80516e2b887f2b719129ad05",
+      "mode": "100644",
+      "path": "src/skills/lesson/scripts/lesson.py",
+      "sha256": "485c6decdd44588ec6559c48afede59b4f7d8931ccf919def767352da40a5996",
+      "size": 81052
+    },
+    {
+      "git_blob": "aa2c069ca6d1e7ccff83eb4fdecb7dec279214b4",
+      "mode": "100644",
+      "path": "src/skills/lesson/skill-package.yaml",
+      "sha256": "a897f9dbc47f18ee75d0698d13bea41efd559ac5785fbe153fe93796a5befc0a",
+      "size": 6336
+    },
+    {
+      "git_blob": "d1b7d7f0e496672aec8da30e862cecb464a6b4ce",
+      "mode": "100644",
+      "path": "src/skills/lesson/templates/lesson.md",
+      "sha256": "97492805aeb42bd74f47f3d7bc5719cf39949980ceff4d7d707d6ab1aaf0798b",
+      "size": 508
+    },
+    {
+      "git_blob": "06b01bd221b418b6b73eef48f97537718f104cc6",
+      "mode": "100644",
+      "path": "src/skills/local-backlog/SKILL.md",
+      "sha256": "052e4db046710899a30aaef9f65c0138303ae6664159e3d7b218bdad9c133637",
+      "size": 1558
+    },
+    {
+      "git_blob": "3bbca977c83c901312c46d86a94658620ec000e8",
+      "mode": "100644",
+      "path": "src/skills/local-backlog/references/configuration.md",
+      "sha256": "b9bf9ad19813fd841a9ffb9dbf0df6247313b77db277c5b7f6891cd8a6c74530",
+      "size": 4272
+    },
+    {
+      "git_blob": "a03b0653189f27b0e2dc0b51f19bf2f6d8059c4b",
+      "mode": "100644",
+      "path": "src/skills/local-backlog/references/example.md",
+      "sha256": "eddf6af8c6514b4099c5285ebb5db938c2b59c898e0ee7aef3e7b0a7585ffe49",
+      "size": 1088
+    },
+    {
+      "git_blob": "3afb328d250401393ca1d29c5a32a75d5f2c2689",
+      "mode": "100644",
+      "path": "src/skills/local-backlog/references/operations.md",
+      "sha256": "53052a7a31366eab7ffea22c053cedf8dfc0b6c4165096f1f9fec9efe5efcbb8",
+      "size": 4818
+    },
+    {
+      "git_blob": "9c508ebe914f4dc954e1a5754749796fb31e1a83",
+      "mode": "100644",
+      "path": "src/skills/local-backlog/schemas/local-backlog-record.schema.json",
+      "sha256": "0342c853227183386b70426390fc6e7798acd81dae542804c1cdd585b2291ea2",
+      "size": 4269
+    },
+    {
+      "git_blob": "2750072578fad79a68352824471e7c0ed8a68217",
+      "mode": "100644",
+      "path": "src/skills/local-backlog/scripts/local_backlog.py",
+      "sha256": "6a2b251aee90ae4226e589ef03417ec655fb61cf97ceb6f7b192181fd1378c32",
+      "size": 55385
+    },
+    {
+      "git_blob": "58bd679c9d5a0d31f61883013ad69839cf4c93ae",
+      "mode": "100644",
+      "path": "src/skills/local-backlog/skill-package.yaml",
+      "sha256": "c5e439f350b3c1b6b102a5fb094b24d12f014c7c2ccc890248e6968d3f2e4a5d",
+      "size": 4488
+    },
+    {
+      "git_blob": "b5ba16c33a3271c106f470fa6b1956061d8af941",
+      "mode": "100644",
+      "path": "src/skills/local-backlog/templates/work-item.md",
+      "sha256": "2c7a10b53791cd63f327bb5e7b545c270201729a1f90a81a7935b9e253d7a60c",
+      "size": 204
+    },
+    {
+      "git_blob": "3e3bcd17f985847e29e1459719474c9d2d2ecfeb",
+      "mode": "100644",
+      "path": "src/skills/local-change-implementer/SKILL.md",
+      "sha256": "6dbeef2b61767328cb0b96114333240f41c05694e354273dbe96238fcdd8c9a5",
+      "size": 1168
+    },
+    {
+      "git_blob": "aad216fbdda5d4bc5f6f641db8c6f247858bc5b9",
+      "mode": "100644",
+      "path": "src/skills/local-change-implementer/references/implement.md",
+      "sha256": "6d66a8a31b14e66d9cfa5ca3bfe8276032007e52e9bfb3de11a95b8960594ea3",
+      "size": 4425
+    },
+    {
+      "git_blob": "291bd2c904bd18879587db0552440d27d0ee027e",
+      "mode": "100644",
+      "path": "src/skills/local-change-implementer/skill-package.yaml",
+      "sha256": "2847ca089fe0c092a329027dcb8f588b2c8fcc42c8c78e60d34a0b19844ab44c",
+      "size": 1225
+    },
+    {
+      "git_blob": "d79168c56dc312ad37c51a4d4df085cec5285c1d",
+      "mode": "100644",
+      "path": "src/skills/pr/SKILL.md",
+      "sha256": "648b3e8026323157a468e1d1af7de3b190e98a9ee735299fc7d164193125f6bd",
+      "size": 1623
+    },
+    {
+      "git_blob": "5ddbd3837282d6f4d21d30121ccae1cd376a2122",
+      "mode": "100644",
+      "path": "src/skills/pr/references/configuration.md",
+      "sha256": "360ece3f3ca9d2d1487a707effcd5694abbdd5dcf133c0124c9afecf54696054",
+      "size": 4223
+    },
+    {
+      "git_blob": "a9a094096d7f63327bf9ebb61d1a864684b7f38d",
+      "mode": "100644",
+      "path": "src/skills/pr/references/example.md",
+      "sha256": "beca6c54de115a780762e208f554972c830f33576f9d249bdd75b8a03adcbfa5",
+      "size": 1392
+    },
+    {
+      "git_blob": "d6cc80010635e060141c8385fd8ea1aaf9920b93",
+      "mode": "100644",
+      "path": "src/skills/pr/references/github.md",
+      "sha256": "5cb6aaff62b0f7752860b2b07bd35eb1766830ee55ce64d95019814f606510e5",
+      "size": 6128
+    },
+    {
+      "git_blob": "81a389fe6acad49f9dae658f556f0ac618217fd0",
+      "mode": "100644",
+      "path": "src/skills/pr/references/operations.md",
+      "sha256": "3112a244f42d11be15df87ab8f1a895deedec6d3a28304890a9792e2cb6da721",
+      "size": 6826
+    },
+    {
+      "git_blob": "be81c28ea7417891cda69ded54a430ff5bb1b105",
+      "mode": "100644",
+      "path": "src/skills/pr/schemas/pr-record.schema.json",
+      "sha256": "63023e31d3de42eec5602c0511c11514387db93453d01b917e066afc7def2c88",
+      "size": 9171
+    },
+    {
+      "git_blob": "fd190b04ee79e9dcb120b9a9c18e228b4454cfe2",
+      "mode": "100644",
+      "path": "src/skills/pr/scripts/github.py",
+      "sha256": "2b9c6901485e9d71d103e2bd305077994f3f772f137441ee25804d1cdedcf48a",
+      "size": 26584
+    },
+    {
+      "git_blob": "c15e78dd3ca5083e381c18f1535d254db74bf353",
+      "mode": "100644",
+      "path": "src/skills/pr/scripts/pr.py",
+      "sha256": "1e10c2254eac59a52a28c897458936be54506c764de44b2bc3d6292a2c61d21a",
+      "size": 65931
+    },
+    {
+      "git_blob": "918fb3067d2ef49f3bced42747c47713db501e35",
+      "mode": "100644",
+      "path": "src/skills/pr/skill-package.yaml",
+      "sha256": "e85987a6d2fc7f3c0276d99284c6612b1e314a729f4d4e8a8d90fc93d2153a86",
+      "size": 5387
+    },
+    {
+      "git_blob": "8f465423946e8750df38d7063f8eaa6022e3ae67",
+      "mode": "100644",
+      "path": "src/skills/pr/templates/pr.md",
+      "sha256": "1fe4e8221258bb2dde5ffdee6d8122380b5d65338ad84b67cdcae4a2725261ca",
+      "size": 162
+    },
+    {
+      "git_blob": "f750615d89f134e91165beecefcca77fe6783c47",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/SKILL.md",
+      "sha256": "afb8692260f704506a7067ae8d9c1acde629adc4dcd83da95032cc2227c19fd1",
+      "size": 2021
+    },
+    {
+      "git_blob": "807b45ee70044aade36d735f20b1fa030df9cd08",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/references/authoring.md",
+      "sha256": "3dd7e302b8862fcb9a7531603734875f62a982081352b9d016fe08ac6909ba5f",
+      "size": 5052
+    },
+    {
+      "git_blob": "f416f724708788b2eebd8199972637fec05eed27",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/references/configuration.md",
+      "sha256": "fe7491c4cd969de89db0ad4a2320cb98a10692e35d37cc9a96aab39d112efba9",
+      "size": 4528
+    },
+    {
+      "git_blob": "c5213f789747adb5a79887f8d5f9f52c87f1daec",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/references/example.md",
+      "sha256": "7993f32b27290489b0a59dc49ca2802f86bd0f16a8400fb46f23823ed259ea38",
+      "size": 6290
+    },
+    {
+      "git_blob": "157be22bc392ba3af98e2661f70bb6ef7c9ef65a",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/references/format.md",
+      "sha256": "7107cd91a9e219e195b1a5f41dca229e0185ff69dce0b2525fb6cbc25f138cba",
+      "size": 4825
+    },
+    {
+      "git_blob": "270d41ae39fd8422ad293efcb0748c5add0e7a66",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/references/operations.md",
+      "sha256": "db527a2933302bc87c9bd32dbff6b06cd3acdc6682d4b68454622ba3a2d668de",
+      "size": 6914
+    },
+    {
+      "git_blob": "4b7f234a110f471f9ddc6477a2468cb90b80115a",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/schemas/cbf-record-v1.schema.json",
+      "sha256": "dc9ff4a16e2ef1361553d1d59abd28530be061b62f9545a9da1eaea6714196b8",
+      "size": 9716
+    },
+    {
+      "git_blob": "c4780389af49c61d9ff6357d73818e8b83e21124",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/scripts/problem_frame.py",
+      "sha256": "c52f3692b6a22e587f67f4bdf0b1e0ac180468e01d2927cb9b1e571c9a6e1ae4",
+      "size": 50841
+    },
+    {
+      "git_blob": "42f404b4e0885a40c2e3a42f5eb4d649fa07d733",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/skill-package.yaml",
+      "sha256": "5705a4c55371ae26e949a8dbf605d3610797948b45464901d29956abb68b44af",
+      "size": 5268
+    },
+    {
+      "git_blob": "cafccb37764b6e2869503f69bbaf136b7a57ef77",
+      "mode": "100644",
+      "path": "src/skills/problem-frame-author/templates/cbf.md",
+      "sha256": "5e2a9b3a5bd309663626b0f16d174f78c87056c041ddc5111af541e5d3f1a7ce",
+      "size": 168
+    },
+    {
+      "git_blob": "a50714e88b5cb26a6c2bd31a7dc0e933f732f547",
+      "mode": "100644",
+      "path": "src/skills/requirement-author/SKILL.md",
+      "sha256": "4bf1496cdf400e6c93967e13e1fdc4192253ff3f07129331f749a4473c7a6642",
+      "size": 1526
+    },
+    {
+      "git_blob": "e7a5529b70d18392e034178def2c3d6be03a51af",
+      "mode": "100644",
+      "path": "src/skills/requirement-author/references/authoring.md",
+      "sha256": "c75fdb5ddc59e87cdcd7c5ccb1465af2a44576e6b6a6b74e2fe67de81d1e1924",
+      "size": 6436
+    },
+    {
+      "git_blob": "3745b7f99dedd9f3f4b855eb76e20cd2bbacb49c",
+      "mode": "100644",
+      "path": "src/skills/requirement-author/references/requirement-template.md",
+      "sha256": "a98f93847d8ce5b9f679f6e9de6a1031f411c827993355a44224b4f4072c9b10",
+      "size": 2761
+    },
+    {
+      "git_blob": "94c65266444b48af86490f29694caf5cbeacf8fd",
+      "mode": "100644",
+      "path": "src/skills/requirement-author/skill-package.yaml",
+      "sha256": "2127968b5f6d9776da7e36b7972d0d651b36b396a455f5a8fcbe3511c4ed35d9",
+      "size": 1484
+    },
+    {
+      "git_blob": "3245a25ae42bcd89676f98f4cae7c1b61196703f",
+      "mode": "100644",
+      "path": "src/skills/slice-implementer/SKILL.md",
+      "sha256": "f85a3fdca6bc196fda0a4e87ced3f0fd38a1001613505bd75f23e61dbcb65f49",
+      "size": 1411
+    },
+    {
+      "git_blob": "e00984f8bf9e023d9792ef82debc26893d60039f",
+      "mode": "100644",
+      "path": "src/skills/slice-implementer/references/implement.md",
+      "sha256": "296d8454fcc6104b2d384512351e5d742ae6875dfeda4fcc04848b83f6daa3fa",
+      "size": 5895
+    },
+    {
+      "git_blob": "c49ab4ae17b24f9b7d102e91b89fc6422f95d0ad",
+      "mode": "100644",
+      "path": "src/skills/slice-implementer/references/modes/command.md",
+      "sha256": "84ac15d6c632f1047dc6854446b8b817544c63f6bada6d2b278185e579ab1c69",
+      "size": 1914
+    },
+    {
+      "git_blob": "d6b8953e688dc96f8c534c1aa30c07cb3a887183",
+      "mode": "100644",
+      "path": "src/skills/slice-implementer/references/modes/generic.md",
+      "sha256": "9e6dee258a57075c55caa5b476013d668c51ef30b49567809ec2a8f07d1514a2",
+      "size": 1735
+    },
+    {
+      "git_blob": "40108cd72294279e7571c4a5a073930800ea1690",
+      "mode": "100644",
+      "path": "src/skills/slice-implementer/references/modes/query.md",
+      "sha256": "ee68d214075c667029bd4e754bb4ba0d4f56176c5b02ea2da439f2521455d251",
+      "size": 1713
+    },
+    {
+      "git_blob": "b8a0df82b203185658afb3ca08eb5cfafa894023",
+      "mode": "100644",
+      "path": "src/skills/slice-implementer/references/modes/reactor.md",
+      "sha256": "5b9eced03f03a950a8782c34581c87acaf980b4d12fc8343e60d669a73c39d68",
+      "size": 1834
+    },
+    {
+      "git_blob": "9acba6069e22dfba5e3dc8e20d6586de6dd7e742",
+      "mode": "100644",
+      "path": "src/skills/slice-implementer/references/remediation.md",
+      "sha256": "de891b07adc4fb4aebe856bbe9ccd5410eab5651fcaf007ade9555496e73a277",
+      "size": 2093
+    },
+    {
+      "git_blob": "98b4e3e42bff44f79453ae7c99ef18ecea0c136a",
+      "mode": "100644",
+      "path": "src/skills/slice-implementer/references/test-handoff.md",
+      "sha256": "93f6b031afaa28ad8e11358df0e5247afe062a0a13a8237466bcc219583ef395",
+      "size": 2844
+    },
+    {
+      "git_blob": "c9d1084d68c4dd4ad3548533f30ea953d8c00742",
+      "mode": "100644",
+      "path": "src/skills/slice-implementer/skill-package.yaml",
+      "sha256": "1ee8e843a6dca577392e9c91019e1543df47d57e866f39fc78c523560dad4c5f",
+      "size": 1619
+    },
+    {
+      "git_blob": "3f08ec0fbdf7502f1232c76ddb885d19b2c90d75",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/SKILL.md",
+      "sha256": "61da4fdcc2f0331725bb34a5ced261566f45bc423e3102b112c9c215cf032ddd",
+      "size": 2339
+    },
+    {
+      "git_blob": "a68705d44ceecda7c6e6af1fcfc886cc0ed37bc7",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/references/composition.md",
+      "sha256": "fa1d9a9aa5f40aeddf4e7374801c499c3dac39c81252ccbe0ace62370436d3f2",
+      "size": 3503
+    },
+    {
+      "git_blob": "e427b9ba22c1864b6a1b173bfbf4331cdd958f01",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/references/configuration.md",
+      "sha256": "13f6975331b1bf5d77fa8bfb26c44ee7a992dc413b9c21427ed67c45eb89d41d",
+      "size": 4648
+    },
+    {
+      "git_blob": "8df91c85305a2f403e6a74b1a9b7a449120f3aa1",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/references/example.md",
+      "sha256": "5a6a85f63fb2b7a7f2762b3d5ebc223d817151146d2ca4e953652c849198030c",
+      "size": 5118
+    },
+    {
+      "git_blob": "37846a094c3fe8dec822063c532c3e8517af539a",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/references/operations.md",
+      "sha256": "66c8c22e936f5d01cc17e7c0ff06fee2ce64117810153f51c3d696fd83ee6b1f",
+      "size": 16476
+    },
+    {
+      "git_blob": "eb79e882e8a1821a65e6005519fdd463e5e7076c",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/references/retention.md",
+      "sha256": "3a149bc8825d29d6e86669938ab1127e64dba3cef8726a63664e9583a8e5008c",
+      "size": 3315
+    },
+    {
+      "git_blob": "2411a8dff1cc4041611544e703166c848a45a377",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/schemas/workflow-record.schema.json",
+      "sha256": "6f3e4672852150d6572565c11c3e984d882ade727cb1c9401214d1420b9e0154",
+      "size": 18945
+    },
+    {
+      "git_blob": "63998067476ff48bc3ff1c82502fcae651a54fa0",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/scripts/workflow.py",
+      "sha256": "7947654676ae802424366e696c22d3c7933a632543a120d1a5168fd14900b53e",
+      "size": 85612
+    },
+    {
+      "git_blob": "46ce2bd6eb765bf8df41a747f6c13b29a7994edc",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/skill-package.yaml",
+      "sha256": "69f4b4f63f1a6a1bd816354a3dc62026b4b7402fc9fc5f0b10e2aeeb22de9a87",
+      "size": 8395
+    },
+    {
+      "git_blob": "c16f731a5ce5d60e602d1123c103a85d3c35ae79",
+      "mode": "100644",
+      "path": "src/skills/software-development-orchestrator/templates/workflow.md",
+      "sha256": "536dc6a4e0264a6a29262cbcfb65bc994323406668f581972b0ac075af31802a",
+      "size": 330
+    },
+    {
+      "git_blob": "149bc17765024273db3a159aa4d3e7e667f82a50",
+      "mode": "100644",
+      "path": "src/skills/spec-author/SKILL.md",
+      "sha256": "c98c96719505f2d8c7c4a66cbd661cd6a570d565701d8c5b936710afd4e28c08",
+      "size": 1672
+    },
+    {
+      "git_blob": "ce669c851d6535dad4946b89fb42a1cc021beb60",
+      "mode": "100644",
+      "path": "src/skills/spec-author/references/adapter-template.md",
+      "sha256": "0c2dccdc61a306553e06c637a5d1fcb6cafd28aac92eef406940ee2150503ba9",
+      "size": 1922
+    },
+    {
+      "git_blob": "4b3a9cc5538cc90a9509bfc60f1d90f39e8ec925",
+      "mode": "100644",
+      "path": "src/skills/spec-author/references/authoring.md",
+      "sha256": "521cd217af6eeb31a2095ef3b5945d93af99129f7209e729b975f3189a559510",
+      "size": 7996
+    },
+    {
+      "git_blob": "8c2e38dfe097cadfd4fc6992d8d1789041a1a0de",
+      "mode": "100644",
+      "path": "src/skills/spec-author/references/entity-template.md",
+      "sha256": "425f67efc291daf5755f61d1963ec2b3f9848d7c3cc80e0f0f339e27483ccaf0",
+      "size": 1901
+    },
+    {
+      "git_blob": "9c0abdd96b773184dd62a54b1b6c0ee0e1a4e596",
+      "mode": "100644",
+      "path": "src/skills/spec-author/references/formal-test-template.md",
+      "sha256": "77e554da50aec47d6db41796527eb78e7e0edf0d7874cd0123bb0c0ece542fa5",
+      "size": 2484
+    },
+    {
+      "git_blob": "9e1a416f48c36968b2384fc45aa5e6b3ab7164d9",
+      "mode": "100644",
+      "path": "src/skills/spec-author/references/production-template.md",
+      "sha256": "d9fddc3d14844aaa692fc33533046c0c5a320e74efd1163599d6be50961079d5",
+      "size": 2175
+    },
+    {
+      "git_blob": "120abfe9d14acfe57c2e87c84aa9e3bfe164fee1",
+      "mode": "100644",
+      "path": "src/skills/spec-author/skill-package.yaml",
+      "sha256": "0cb829b12b78e48799dae1e81f5655bd4d2457a6239e0ae9c71f874055e56ff9",
+      "size": 1626
+    },
+    {
+      "git_blob": "78da54328dd7cc4c85ff6314f634b7768e72f22d",
+      "mode": "100644",
+      "path": "src/skills/spec-compliance-validator/SKILL.md",
+      "sha256": "06a009d4913f3a540ce5005283e003c009ecf30503c5fd5abad9ea4c69c32637",
+      "size": 1789
+    },
+    {
+      "git_blob": "703761c43bdad0af917e1adb98c70a3ab37833fb",
+      "mode": "100644",
+      "path": "src/skills/spec-compliance-validator/profiles/dotnet.md",
+      "sha256": "55355bc97ed921879e9f05ed4f4875289c98da992951047d0a8d8d477f6f7c13",
+      "size": 2731
+    },
+    {
+      "git_blob": "b85a1904a96befb7eb5fef7dd498b2a82d4ab961",
+      "mode": "100644",
+      "path": "src/skills/spec-compliance-validator/references/compliance.md",
+      "sha256": "c242d81d83f24a074ea3561709326445fa5cd5bbda2c8e8e29b492a6932d3f74",
+      "size": 9124
+    },
+    {
+      "git_blob": "c0431d9536b2c579524b5e4963b728f9c75a6327",
+      "mode": "100644",
+      "path": "src/skills/spec-compliance-validator/references/legacy-intake.md",
+      "sha256": "3be1c0b4d5bb7c3439c9135c499330c0bbb99f00343d78050750aa6b1e9741c7",
+      "size": 2516
+    },
+    {
+      "git_blob": "4150528e5ffc1052b0eabbb94b0c93bddf34c4d6",
+      "mode": "100644",
+      "path": "src/skills/spec-compliance-validator/references/report-template.md",
+      "sha256": "be3080a7a26c2a952b8edfc7eb5facc64d73a63b6635d2ccf683ab76e697ca41",
+      "size": 3017
+    },
+    {
+      "git_blob": "30ba18cb4f4cba3b7829c4387c32226005b1c6ec",
+      "mode": "100644",
+      "path": "src/skills/spec-compliance-validator/skill-package.yaml",
+      "sha256": "aedc751c6543dd905b84c40ef1f4f0aeaa58e40e75f723756e3929f6ba477410",
+      "size": 1749
+    },
+    {
+      "git_blob": "b381f540642129075428699b8df5709989bd8b09",
+      "mode": "100644",
+      "path": "src/skills/standards-promotion/SKILL.md",
+      "sha256": "9e619bec2a060eafe30a6d4f654963e14633b0462e55365ce2e992debf55055b",
+      "size": 1978
+    },
+    {
+      "git_blob": "b46bdeeb44092f66ec01149f5e3bcb45422931c8",
+      "mode": "100644",
+      "path": "src/skills/standards-promotion/references/authority.md",
+      "sha256": "3df9b1f1ddfdc6aaf1df05d6b027b47144faa362e718e02a8e3218dc2d132792",
+      "size": 5354
+    },
+    {
+      "git_blob": "3e38aee6d9284861b01a3458b24e4cf1b48846ba",
+      "mode": "100644",
+      "path": "src/skills/standards-promotion/references/configuration.md",
+      "sha256": "78aca34372afa57475f18b7df6ea062f0234e675c96b97589d6f83d8dc3cb28c",
+      "size": 6073
+    },
+    {
+      "git_blob": "de7366b1f1e2618e8f793de4a2a41f472454105b",
+      "mode": "100644",
+      "path": "src/skills/standards-promotion/references/example.md",
+      "sha256": "8cc3b24b18431e17ea3c7ae1fc3941c2f04fb06701f7ad5ac8a788c995679a2d",
+      "size": 6032
+    },
+    {
+      "git_blob": "daff1533f65e26b17e420e9e68524c89000b2f4e",
+      "mode": "100644",
+      "path": "src/skills/standards-promotion/references/operations.md",
+      "sha256": "6e22b7519af5edb7972e5c7c66a009b669977973c8b235a216fc755bd5cd629f",
+      "size": 11605
+    },
+    {
+      "git_blob": "c6810bdbd7e726d7db192dad42c5d49ba26970c4",
+      "mode": "100644",
+      "path": "src/skills/standards-promotion/schemas/promotion-record.schema.json",
+      "sha256": "0002b9d91dfd4cfea7a74d51567dd0d93bc03e7f3c6ad3ad974707996eb58b46",
+      "size": 11955
+    },
+    {
+      "git_blob": "4f74a00457110a75d6aa506ee36d529402da514f",
+      "mode": "100644",
+      "path": "src/skills/standards-promotion/scripts/standards_promotion.py",
+      "sha256": "acccbc01d5a99d32cfa599243ab9359944ec5a6f1feee3a73b72e52379f80b4d",
+      "size": 90862
+    },
+    {
+      "git_blob": "a84f1ae525b5c86ce7cf4a20acbfbb54d0d2d7b5",
+      "mode": "100644",
+      "path": "src/skills/standards-promotion/skill-package.yaml",
+      "sha256": "4727f91052636305e0651114f3a66e0bcb2f0d76e9cc8b6c73f63a2d19abd2e3",
+      "size": 6181
+    },
+    {
+      "git_blob": "230c9dbe8fd8be791a4e17a9fbc20a462a51167f",
+      "mode": "100644",
+      "path": "src/skills/standards-promotion/templates/promotion.md",
+      "sha256": "953e3da7d7029e4bb9560e1454a6c1dbfb6f1f3cf9c22b6f9f7c7b74af992ea5",
+      "size": 413
+    }
+  ],
+  "components": [
+    {
+      "id": "adr",
+      "members": [
+        "SKILL.md",
+        "references/configuration.md",
+        "references/example.md",
+        "references/operations.md",
+        "schemas/adr-record.schema.json",
+        "scripts/adr.py",
+        "skill-package.yaml",
+        "templates/adr.md"
+      ],
+      "metadata_version": 2,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "ai-context-auditor",
+      "members": [
+        "SKILL.md",
+        "references/audit.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "ai-context-governance",
+      "members": [
+        "SKILL.md",
+        "references/maintenance.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "bdd-gwt-test-designer",
+      "members": [
+        "SKILL.md",
+        "references/design.md",
+        "references/review.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "code-reviewer",
+      "members": [
+        "SKILL.md",
+        "references/review.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "ddd-ca-hex-architect",
+      "members": [
+        "SKILL.md",
+        "references/design.md",
+        "references/review.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "diagnostic-analyst",
+      "members": [
+        "SKILL.md",
+        "references/diagnose.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "lesson",
+      "members": [
+        "SKILL.md",
+        "references/configuration.md",
+        "references/example.md",
+        "references/operations.md",
+        "schemas/lesson-record-v2.schema.json",
+        "schemas/lesson-record.schema.json",
+        "scripts/lesson.py",
+        "skill-package.yaml",
+        "templates/lesson.md"
+      ],
+      "metadata_version": 2,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.2.0"
+    },
+    {
+      "id": "local-backlog",
+      "members": [
+        "SKILL.md",
+        "references/configuration.md",
+        "references/example.md",
+        "references/operations.md",
+        "schemas/local-backlog-record.schema.json",
+        "scripts/local_backlog.py",
+        "skill-package.yaml",
+        "templates/work-item.md"
+      ],
+      "metadata_version": 2,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "local-change-implementer",
+      "members": [
+        "SKILL.md",
+        "references/implement.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "pr",
+      "members": [
+        "SKILL.md",
+        "references/configuration.md",
+        "references/example.md",
+        "references/github.md",
+        "references/operations.md",
+        "schemas/pr-record.schema.json",
+        "scripts/github.py",
+        "scripts/pr.py",
+        "skill-package.yaml",
+        "templates/pr.md"
+      ],
+      "metadata_version": 2,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "problem-frame-author",
+      "members": [
+        "SKILL.md",
+        "references/authoring.md",
+        "references/configuration.md",
+        "references/example.md",
+        "references/format.md",
+        "references/operations.md",
+        "schemas/cbf-record-v1.schema.json",
+        "scripts/problem_frame.py",
+        "skill-package.yaml",
+        "templates/cbf.md"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "requirement-author",
+      "members": [
+        "SKILL.md",
+        "references/authoring.md",
+        "references/requirement-template.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "slice-implementer",
+      "members": [
+        "SKILL.md",
+        "references/implement.md",
+        "references/modes/command.md",
+        "references/modes/generic.md",
+        "references/modes/query.md",
+        "references/modes/reactor.md",
+        "references/remediation.md",
+        "references/test-handoff.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "software-development-orchestrator",
+      "members": [
+        "SKILL.md",
+        "references/composition.md",
+        "references/configuration.md",
+        "references/example.md",
+        "references/operations.md",
+        "references/retention.md",
+        "schemas/workflow-record.schema.json",
+        "scripts/workflow.py",
+        "skill-package.yaml",
+        "templates/workflow.md"
+      ],
+      "metadata_version": 2,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "spec-author",
+      "members": [
+        "SKILL.md",
+        "references/adapter-template.md",
+        "references/authoring.md",
+        "references/entity-template.md",
+        "references/formal-test-template.md",
+        "references/production-template.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "spec-compliance-validator",
+      "members": [
+        "SKILL.md",
+        "profiles/dotnet.md",
+        "references/compliance.md",
+        "references/legacy-intake.md",
+        "references/report-template.md",
+        "skill-package.yaml"
+      ],
+      "metadata_version": 3,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    },
+    {
+      "id": "standards-promotion",
+      "members": [
+        "SKILL.md",
+        "references/authority.md",
+        "references/configuration.md",
+        "references/example.md",
+        "references/operations.md",
+        "schemas/promotion-record.schema.json",
+        "scripts/standards_promotion.py",
+        "skill-package.yaml",
+        "templates/promotion.md"
+      ],
+      "metadata_version": 2,
+      "optional_dependencies": [],
+      "required_dependencies": [],
+      "version": "0.1.0"
+    }
+  ],
+  "generator": {
+    "id": "framework-versioned-assembly",
+    "implementation": [
+      {
+        "git_blob": "fca5683977f2046233795428cc0c16feece19ce6",
+        "mode": "100644",
+        "path": "src/distribution/__init__.py",
+        "sha256": "6c02b38ce5adc247280b81e127867fea8d3fb98710861858ece7091d38051c25",
+        "size": 150
+      },
+      {
+        "git_blob": "08da2c0b84703887b837297d6d2d63b023c2eebb",
+        "mode": "100644",
+        "path": "src/distribution/data.py",
+        "sha256": "c92b1f4495434ca3df045d67c210d347537aea8a7cf3f6d2bcf1f626ac827c2d",
+        "size": 7701
+      },
+      {
+        "git_blob": "f90c5eb0b53752adf22b48d938bc517b43cb047e",
+        "mode": "100644",
+        "path": "src/distribution/git_source.py",
+        "sha256": "b10e87121133896acefbb682ab1fffafc91c614ec6015b479833cb07a600c5e5",
+        "size": 6202
+      },
+      {
+        "git_blob": "0dc910ca76f4835a5cbf172abbda7595088861a9",
+        "mode": "100644",
+        "path": "src/distribution/package.py",
+        "sha256": "38c21ade871b03dc393c5172f0596a267263bb21a8d718a28b305742a57564bd",
+        "size": 17384
+      },
+      {
+        "git_blob": "f9b8c96854d9f4698d0fd424eeca61bb73644f42",
+        "mode": "100644",
+        "path": "src/distribution/selection.py",
+        "sha256": "d49d240a2c2c776ac90ca4fbe19d887e961031ba7f0fa0c7bcada7aea5e760cd",
+        "size": 8250
+      },
+      {
+        "git_blob": "01467d0f4e441275bfca1cce5ce3589f6213c101",
+        "mode": "100644",
+        "path": "src/distribution/assembly.py",
+        "sha256": "231ce2c0a14f7cfec1604dea662c1008007b8579e9c32fe36c087ec75a13ac70",
+        "size": 11390
+      },
+      {
+        "git_blob": "b6210d9e8caa65d226af017ba6c3d6f0a12f50a0",
+        "mode": "100644",
+        "path": "src/distribution/codex.py",
+        "sha256": "506e775df87b6a1816cb3be896fd8741fd5bfc7c137c425224561314578e083e",
+        "size": 3403
+      }
+    ]
+  },
+  "mode": "versioned",
+  "profile": "complete",
+  "release_version": "0.19.0-rc.1",
+  "schema_version": 2,
+  "source": {
+    "commit": "3755b217421a4f1238f740a09de7e034ccf56038",
+    "tree": "d471f2ca1218d7e57663a525cfc2bc8e417548b7"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "behavioral_validation": "not-performed",
+  "candidate_identity": "versioned:0.19.0-rc.1:3755b217421a4f1238f740a09de7e034ccf56038:691ef5f2202c02772e0af76c3789e0af829501d8dea5bc24837763fe1caf8a28",
+  "candidate_sha256": "691ef5f2202c02772e0af76c3789e0af829501d8dea5bc24837763fe1caf8a28",
+  "completed_at": "2026-09-23T14:36:47+00:00",
+  "executing_implementation": [
+    {
+      "execution_file_sha256": "6c02b38ce5adc247280b81e127867fea8d3fb98710861858ece7091d38051c25",
+      "source": {
+        "git_blob": "fca5683977f2046233795428cc0c16feece19ce6",
+        "mode": "100644",
+        "path": "src/distribution/__init__.py",
+        "sha256": "6c02b38ce5adc247280b81e127867fea8d3fb98710861858ece7091d38051c25",
+        "size": 150
+      }
+    },
+    {
+      "execution_file_sha256": "c92b1f4495434ca3df045d67c210d347537aea8a7cf3f6d2bcf1f626ac827c2d",
+      "source": {
+        "git_blob": "08da2c0b84703887b837297d6d2d63b023c2eebb",
+        "mode": "100644",
+        "path": "src/distribution/data.py",
+        "sha256": "c92b1f4495434ca3df045d67c210d347537aea8a7cf3f6d2bcf1f626ac827c2d",
+        "size": 7701
+      }
+    },
+    {
+      "execution_file_sha256": "b10e87121133896acefbb682ab1fffafc91c614ec6015b479833cb07a600c5e5",
+      "source": {
+        "git_blob": "f90c5eb0b53752adf22b48d938bc517b43cb047e",
+        "mode": "100644",
+        "path": "src/distribution/git_source.py",
+        "sha256": "b10e87121133896acefbb682ab1fffafc91c614ec6015b479833cb07a600c5e5",
+        "size": 6202
+      }
+    },
+    {
+      "execution_file_sha256": "38c21ade871b03dc393c5172f0596a267263bb21a8d718a28b305742a57564bd",
+      "source": {
+        "git_blob": "0dc910ca76f4835a5cbf172abbda7595088861a9",
+        "mode": "100644",
+        "path": "src/distribution/package.py",
+        "sha256": "38c21ade871b03dc393c5172f0596a267263bb21a8d718a28b305742a57564bd",
+        "size": 17384
+      }
+    },
+    {
+      "execution_file_sha256": "d49d240a2c2c776ac90ca4fbe19d887e961031ba7f0fa0c7bcada7aea5e760cd",
+      "source": {
+        "git_blob": "f9b8c96854d9f4698d0fd424eeca61bb73644f42",
+        "mode": "100644",
+        "path": "src/distribution/selection.py",
+        "sha256": "d49d240a2c2c776ac90ca4fbe19d887e961031ba7f0fa0c7bcada7aea5e760cd",
+        "size": 8250
+      }
+    },
+    {
+      "execution_file_sha256": "231ce2c0a14f7cfec1604dea662c1008007b8579e9c32fe36c087ec75a13ac70",
+      "source": {
+        "git_blob": "01467d0f4e441275bfca1cce5ce3589f6213c101",
+        "mode": "100644",
+        "path": "src/distribution/assembly.py",
+        "sha256": "231ce2c0a14f7cfec1604dea662c1008007b8579e9c32fe36c087ec75a13ac70",
+        "size": 11390
+      }
+    },
+    {
+      "execution_file_sha256": "506e775df87b6a1816cb3be896fd8741fd5bfc7c137c425224561314578e083e",
+      "source": {
+        "git_blob": "b6210d9e8caa65d226af017ba6c3d6f0a12f50a0",
+        "mode": "100644",
+        "path": "src/distribution/codex.py",
+        "sha256": "506e775df87b6a1816cb3be896fd8741fd5bfc7c137c425224561314578e083e",
+        "size": 3403
+      }
+    }
+  ],
+  "identity_inputs": {
+    "metadata/files.json": "b585914d9b7dddd2173ba13fb0026672c1d9e7f69b3c8ebb04af47801809838f",
+    "metadata/selection.json": "1a54e480f7f7f060198def7281ffacfed6de5de0baacf3ae5f19b26abfeb6207"
+  },
+  "installation": "not-performed",
+  "mode_materialization": "inventory-only",
+  "outcome": "assembled",
+  "profile": "complete",
+  "publication": "not-performed",
+  "run_id": "880decbc11734dae8fbc24939280fcbb",
+  "runtime": {
+    "os": "nt",
+    "python": "3.13.14",
+    "pyyaml": "6.0.3"
+  },
+  "schema_version": 1,
+  "source_commit": "3755b217421a4f1238f740a09de7e034ccf56038"
+}
