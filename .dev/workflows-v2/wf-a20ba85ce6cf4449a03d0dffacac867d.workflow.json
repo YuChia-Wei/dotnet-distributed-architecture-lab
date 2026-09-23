@@ -1,0 +1,58 @@
+{
+  "content": {
+    "acceptance": [
+      {
+        "criterion": "Actual operation outcomes and generated identities remain separate from owner acceptance.",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "A1",
+        "reason": "Not executed by this tool."
+      }
+    ],
+    "decisions": [],
+    "evidence": [],
+    "intent": "Represent the bounded local draft/write and read-back pilot without replacing its governing workflow.",
+    "next_action": {
+      "action": "Review the retained record-operation evidence under the governing Issue 15 workflow.",
+      "condition": "After actual task authorization.",
+      "owner": "Coordinator task 01a0ce78-db26-74e1-a615-2bd0599f7d0c",
+      "task_id": "T001"
+    },
+    "references": [],
+    "scope": {
+      "excluded": [
+        "External provider writes and owner acceptance decisions."
+      ],
+      "included": [
+        "Selected installed record operations in explicitly configured target stores."
+      ]
+    },
+    "tasks": [
+      {
+        "action": "Review the retained record-operation evidence under the governing Issue 15 workflow.",
+        "completion_condition": "Actual evidence and any remaining unexecuted operation are reconciled.",
+        "deferral": null,
+        "depends_on": [],
+        "evidence_ids": [],
+        "id": "T001",
+        "reason": "",
+        "result": "",
+        "state": "pending",
+        "title": "Review the retained record-operation evidence under the governing Issue 15 workflow."
+      }
+    ],
+    "title": "Supporting rc1 record-store pilot"
+  },
+  "created_at": "2026-09-23T16:01:32.395730+00:00",
+  "history": [],
+  "id": "wf-a20ba85ce6cf4449a03d0dffacac867d",
+  "kind": "workflow",
+  "owner": "project",
+  "retrospective": null,
+  "revision": 1,
+  "schema_version": "1.0.0",
+  "state": "planned",
+  "state_reason": "Created as planned work.",
+  "updated_at": "2026-09-23T16:01:32.395730+00:00"
+}

@@ -1,0 +1,49 @@
+{
+  "content": {
+    "applies_when": [
+      "Considering standards-promotion write coverage."
+    ],
+    "consequences": [],
+    "context": "The pilot selects a promotion store but has no target or source-read binding for a concrete promotion.",
+    "decision_drivers": [
+      "Preserve target authority and report the exact available coverage."
+    ],
+    "does_not_apply_when": [],
+    "evidence": [],
+    "options": [
+      {
+        "benefits": [
+          "Requires no invented policy target."
+        ],
+        "costs": [
+          "Proposal creation remains unexercised."
+        ],
+        "id": "read-only-readiness",
+        "summary": "Retain read-only promotion readiness until a concrete change is selected."
+      },
+      {
+        "benefits": [
+          "Enables attributable proposal coverage."
+        ],
+        "costs": [
+          "Requires a concrete target-owned selection."
+        ],
+        "id": "explicit-target-binding",
+        "summary": "Select a real policy change and source evidence in a later authorized operation."
+      }
+    ],
+    "title": "Promotion write coverage after the rc1 record lifecycle pilot"
+  },
+  "created_at": "2026-09-23T16:01:29.693067+00:00",
+  "decision": null,
+  "history": [],
+  "id": "adr-299f036a60cf49f6aae1926c92acebf6",
+  "kind": "adr",
+  "owner": "project",
+  "provenance": [],
+  "revision": 1,
+  "schema_version": "1.0.0",
+  "status": "draft",
+  "successor": null,
+  "updated_at": "2026-09-23T16:01:29.693067+00:00"
+}

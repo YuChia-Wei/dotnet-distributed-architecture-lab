@@ -1,0 +1,43 @@
+metadata_version: 3
+id: ai-context-auditor
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+  - id: skill-instruction-reader
+    requirement: Read the selected instructions and permitted context evidence
+    for_operations: [audit, compare]
+    on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+    - references/audit.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+  - id: audit
+    execution: instruction
+    inputs:
+      - Explicit context scope, relevant authority and intended behavior or question
+      - Available subject evidence and optional presentation or export request
+    outputs:
+      - Prioritized prose findings with location, trigger, impact, evidence and uncertainty
+      - Subject identity, actual coverage, observed checks, limits and next actions
+    instructions: references/audit.md
+    implementation_status: implemented
+  - id: compare
+    execution: instruction
+    inputs:
+      - Two identified subjects, or a prior report and current subject
+      - Selected findings, comparison question and relevant authority
+      - Optional presentation or export request
+    outputs:
+      - Confirmed, changed, resolved or unresolved observations tied to prior identities
+      - Current evidence, new issues, exclusions and comparison limits
+    instructions: references/audit.md
+    implementation_status: implemented

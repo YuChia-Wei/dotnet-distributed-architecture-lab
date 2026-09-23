@@ -1,0 +1,157 @@
+{
+  "kind": "runtime withdrawal history",
+  "withdrawn_directories": [
+    {
+      "source": ".agents/skills/ai-context-auditor",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-auditor",
+      "files": 2
+    },
+    {
+      "source": ".agents/skills/ai-context-governance",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-governance",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/bdd-gwt-test-designer",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/bdd-gwt-test-designer",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/code-reviewer",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/code-reviewer",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/ddd-ca-hex-architect",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ddd-ca-hex-architect",
+      "files": 2
+    },
+    {
+      "source": ".agents/skills/diagnostic-analyst",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/diagnostic-analyst",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/local-change-implementer",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/local-change-implementer",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/problem-frame-author",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/problem-frame-author",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/requirement-author",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/requirement-author",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/slice-implementer",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/slice-implementer",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/software-development-orchestrator",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/software-development-orchestrator",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/spec-author",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/spec-author",
+      "files": 1
+    },
+    {
+      "source": ".agents/skills/spec-compliance-validator",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/spec-compliance-validator",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/ai-context-auditor",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ai-context-auditor",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/ai-context-governance",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ai-context-governance",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/bdd-gwt-test-designer",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/bdd-gwt-test-designer",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/code-reviewer",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/code-reviewer",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/ddd-ca-hex-architect",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ddd-ca-hex-architect",
+      "files": 2
+    },
+    {
+      "source": ".claude/skills/diagnostic-analyst",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/diagnostic-analyst",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/local-change-implementer",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/local-change-implementer",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/problem-frame-author",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/problem-frame-author",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/requirement-author",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/requirement-author",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/slice-implementer",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/slice-implementer",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/software-development-orchestrator",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/software-development-orchestrator",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/spec-author",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/spec-author",
+      "files": 1
+    },
+    {
+      "source": ".claude/skills/spec-compliance-validator",
+      "archive": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/spec-compliance-validator",
+      "files": 1
+    }
+  ],
+  "archived_legacy_entries": [
+    {
+      "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-init/SKILL.md",
+      "sha256": "86e1f0e000466dde67a594420fe8dac6e26e9fe2494ab3399c7036b90ecbb653"
+    },
+    {
+      "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-upgrader/SKILL.md",
+      "sha256": "bd0bc472484e5febd44b756e68135947ce42581b66c3081b98594e38a7be2553"
+    },
+    {
+      "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ai-context-init/SKILL.md",
+      "sha256": "c0d5083e360e063c305f424bcbf12e3a5e5680defaa59e5b8b24b72d37102c2f"
+    },
+    {
+      "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ai-context-upgrader/SKILL.md",
+      "sha256": "619ed71917b2fd9ee3392f13f6656504738bcf0cde4e40ebe52e4f4f0978bde5"
+    }
+  ],
+  "superseded_directories": 26,
+  "superseded_files": 29,
+  "scope": "Codex-first pilot; current generated entries retained; two legacy duties per runtime remain pending explicit wrapper notice",
+  "activation": "independent review pending"
+}

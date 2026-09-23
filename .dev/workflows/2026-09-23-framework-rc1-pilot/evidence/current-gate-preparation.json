@@ -1,0 +1,36 @@
+{
+  "kind": "current target gate preparation checks",
+  "gate_sha256": "e81942cfa75a5bc9eda830aa218dee2de67c52dc34c212d4fea3289db8b28656",
+  "focused_tests": {
+    "command": "python -I -B .dev/ai-context/tooling/tests/test_current_framework_gate.py",
+    "tests": 9,
+    "outcome": "passed",
+    "seconds": 0.238,
+    "evidence_scope": "synthetic negative/subject/path tests; no installed candidate pass"
+  },
+  "retained_rule_api_evidence": "retained-rule-consumption.json",
+  "blocked_admission": {
+    "command": [
+      "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-I",
+      "-B",
+      ".dev/ai-context/tooling/validate-current-framework.py",
+      "--binding-sha256",
+      "6b584aefd416f68db3e8a77c28968a5efb159166a5749b8f2049d23466be9be9",
+      "--git-range",
+      "cb122285af09e46b24102f22a0ad9d713219c1f2..HEAD"
+    ],
+    "exit": 1,
+    "result": {
+      "outcome": "failed",
+      "checks_completed": {},
+      "diagnostic": "binding is not a prepared pilot review subject",
+      "independent_review": "not-established",
+      "activation": "blocked"
+    },
+    "stdout_sha256": "d661dd915a529349711639a64bee5d48ac72b776fba7c5b1e861a03fc88b2885"
+  },
+  "full_current_gate": "not-passed; actual target still uninstalled",
+  "independent_review": "pending",
+  "root_activation": "not-performed"
+}

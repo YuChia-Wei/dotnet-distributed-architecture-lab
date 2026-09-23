@@ -1,0 +1,1056 @@
+{
+  "kind": "read-only target baseline inventory",
+  "observed_at": "2026-09-23T22:59:04+08:00",
+  "target_commit": "cb122285af09e46b24102f22a0ad9d713219c1f2",
+  "net_asset_count": 194,
+  "rule_ids": [
+    "AGGREGATE-ES-001",
+    "AICTX-EVIDENCE-001",
+    "ARCH-UOW-001",
+    "ASSESSMENT-ARTIFACT-001",
+    "CONTRACT-SEMANTICS-001",
+    "DELETE-PURGE-001",
+    "DELETE-SOFT-001",
+    "MAP-EVENTS-001",
+    "MESSAGING-TX-001",
+    "PROJECT-GRAMMAR-001",
+    "TECH-SELECT-001",
+    "TEST-BDDFY-001",
+    "TEST-GWT-001",
+    "TEST-MOCK-001"
+  ],
+  "customization_ids": [
+    "CUST-DOTNET-MQ-GOVERNANCE",
+    "CUST-DOTNET-MQ-VALIDATION",
+    "CUST-DOTNET-MQ-REPO-TRUTH",
+    "CUST-DOTNET-MQ-EXECUTION-PROVENANCE-ADOPTION"
+  ],
+  "files": [
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/README.MD",
+      "raw_sha256": "5571aeff075dbd46a9997c41e97a2522bb22fd8d7f617229489da58f0cef8a4c",
+      "git_blob": "cde20d771648b51c9c9ff9b63f9b625eb086d1a4"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/design/architecture-playbook.md",
+      "raw_sha256": "789f7a337009411400c941c63224d0db817f2e1f84414e446bf024844f7123ed",
+      "git_blob": "1c10dcee5163d03a83e59803b385a3d2121fe788"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/design/design-routing.yaml",
+      "raw_sha256": "fa0ac72989f078bc994eafde5899dda03453747b1c88c28a00b79c7a8fa36fd4",
+      "git_blob": "4901559f6c0265e3c24182d1e360108fb7ddca74"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/design/source-map.md",
+      "raw_sha256": "a8652814beba6902e4c509592ec910c3bfa61dd0427201a9db5a3815e15aa4b5",
+      "git_blob": "1c2d26479e5f392b52b2ad88abd5ffcd2b5ab1fa"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml",
+      "raw_sha256": "e26dffe17074ccdf33a925d865cf2b24216db1d3d8afb25f678fa828aadc2ef4",
+      "git_blob": "a153141cbfc852feeaef6758afbde688c1a024dd"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/Plan.cs",
+      "raw_sha256": "91c91645b798a3dd8e97d034ca7886cfb36c0dfeabe3f9dac7e9c52ada22f2e7",
+      "git_blob": "5bade9b970d2275ff8744e334e66120cf90ad804"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/PlanEvents.cs",
+      "raw_sha256": "e599563a7b932cf898a0f405558496868b4c7bf627efd10bbde07bd04732b879",
+      "git_blob": "058d486603916eb58f6a68335aa2c2f4fa9d893a"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/PlanId.cs",
+      "raw_sha256": "a75bc4281e8a4298cb91ed6f7021bf1d2347072597321ff0c6534819e387b4da",
+      "git_blob": "09abd6495426d5917f65cf48c5d0a1308e93d08c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/Project.cs",
+      "raw_sha256": "4adf7253a10bb4b2f04d4bdc73eabf79af27a8759514894106213135edb44d16",
+      "git_blob": "a37a8f2b4ba0eb625b95b24ab247aa02233e0e13"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/ProjectId.cs",
+      "raw_sha256": "b9542cb03edb026360f37e0313e9c0adf0916f0f972fb8d680bf34eabafdf6c9",
+      "git_blob": "9b9d4c0f8cef7fd93d10351f6d9bef6f290d1526"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/ProjectName.cs",
+      "raw_sha256": "1aee24e19038b87740f6678ec253524349912738be2bf35de002c0c1d7e510b3",
+      "git_blob": "07b1e65233128415d730299b3b661dfbd44cb2f4"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/README.md",
+      "raw_sha256": "58aff7b0167f7dfa57020d7934b98d859c7ed7c2105affddd6eabf24e03d70d0",
+      "git_blob": "c39b6d725a01de7a41ee13cbb504cb9063680639"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/TagEvents.cs",
+      "raw_sha256": "3ef18a99cf97ccd4e6606d42bf8b605898e89874972767583cf43fc9fb8d2ad2",
+      "git_blob": "255629d9117e74df14f87c05e096573f1f3833d5"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/TagId.cs",
+      "raw_sha256": "712afbcae4461881e1c93d9e00c5cda0819b2fc4f88cbffd48936147203d0920",
+      "git_blob": "56fe1d1dad404a6005e943f61554f08c7a1d09da"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aggregate/TaskId.cs",
+      "raw_sha256": "7456f890cc3622400881ff80af91f775a93d853422033c55b65388e16483fde2",
+      "git_blob": "2ea922f1a734407df7273c9eb665d9a99dd9bfee"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/InMemoryRepositoryConfig.cs",
+      "raw_sha256": "913f48db1757afb653bdd9813b3a20c9341d14c641cfa9c2fdb5e3f023af4d0f",
+      "git_blob": "5d64e6ba6579fb66098c8fd941df0a71b57e3a44"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/OutboxRepositoryConfig.cs",
+      "raw_sha256": "a72c17cb458b6844e4107703eaf9b7183fbd93663814cb6bc6337fc54a05f50b",
+      "git_blob": "aa26210617da8cec9dc65b66d654383a6834862e"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/Program.cs",
+      "raw_sha256": "aa4adae87d3725a5564a0b4a77949d4ae3ee1209d863aef2615ef931a56b34cc",
+      "git_blob": "893e951ddac9b628f4fe28581eff1d98c30ea3a7"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/README.md",
+      "raw_sha256": "2d45c26e8ae3d001a8cd0b50d01edd99f4deda845c44a16867861baed9384863",
+      "git_blob": "a5115339e6564c3a89a5df9ad1f59b0768a36a12"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/UseCaseConfiguration.cs",
+      "raw_sha256": "c10ea6f869f00b13bae15193013db9788a26b7895d780620aec587560d2d2efe",
+      "git_blob": "5bca4394f431f3de0e8116150f524d34f441f1c5"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/appsettings.InMemory.json",
+      "raw_sha256": "fe955c04b8f70ef4049117f49bfeb0e44ef525b27293126edf13164d28122d11",
+      "git_blob": "8b562617abed890db4379203434c753492f2167a"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/appsettings.Outbox.json",
+      "raw_sha256": "96743debca773a451ac90fe04c658ea88817f01e128b6000534dc062900d24cf",
+      "git_blob": "c20815476215d7c0acf6931f5fe4dfb566d0fb84"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/appsettings.TestInMemory.json",
+      "raw_sha256": "fe0927545098650eda1076e0779e5fe8edd12ba4cd86518ada78deae17499044",
+      "git_blob": "9259082da714cb6732894f214b32e32c03179c10"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/appsettings.TestOutbox.json",
+      "raw_sha256": "a989d62b535b9414d005eeb99f9a2bc4bab6d242bf4692f7c33bc8540dd1ccf0",
+      "git_blob": "6630e99ccce0ad0acbfa764c371a1ea98cb17f51"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/appsettings.json",
+      "raw_sha256": "c0ccf4cdcf41b2fe16f4e8fbe66f8b35666b59567db07cc7b13d81b083e657fd",
+      "git_blob": "e8c9bad00134edb23c487c8a0b1626ac3e833ae5"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-gherkin-example/README.md",
+      "raw_sha256": "1944edbf4985d0a52b76a58a1fe564da9ee8bd00efcd58bb6bee09e142e20db4",
+      "git_blob": "cdaf73884cc0a9e53053b061b05bbf935910f736"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-gherkin-example/aggregate-outbox-repository.feature",
+      "raw_sha256": "7540ee3a3373dcdec391318883866c18899d0a73e235c9dcf565ee6f757d1772",
+      "git_blob": "5d8c2c45295a668750a9bec63e2e4d9b4200bee7"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-gherkin-example/complete-usecase-with-rules.feature",
+      "raw_sha256": "71149a8125c22ccf809219d82a1a11bbb2bf1a225233d70a985d2f2a1eb6d48a",
+      "git_blob": "3a1e9dc13fa957211fb9c430e514b476544c5c5d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-gherkin-example/create-task-usecase.feature",
+      "raw_sha256": "7413888d141492f2a7058e090939f6fa24f9dd2ea3d3c96f0ff0df1aee30b7af",
+      "git_blob": "b7f67053110476815f664290fa814e4a0f1ce8bf"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-gherkin-example/rule-design-before-after.md",
+      "raw_sha256": "0420367d66beee8d5c987956cc4884474a301a384a8cd27d04ce9770984f624f",
+      "git_blob": "d56f106123f8f85bb806c6fb087dd583bfc92546"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-gherkin-example/rule-migration-guide.md",
+      "raw_sha256": "9c4059e4447a5a65bb0ebecd8a56318f154e96019f8ef71a59987780b121cf80",
+      "git_blob": "377b9aeacc365804b329f80c005ddd32272ac9a0"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-given-when-then-example/AggregateOutboxRepositoryTests.cs",
+      "raw_sha256": "1565fc720856feae8f25cd2d7a6ab70f8e392670d2cf4748a4fea8abb334784f",
+      "git_blob": "9fa230022de1090cdbce508ff238c01199bea22b"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-given-when-then-example/CompleteUseCaseRuleTests.cs",
+      "raw_sha256": "82ae8e1cc37e04f98a2f13ab4f6525a72b5ddcefd37b2cf301ade3358130340e",
+      "git_blob": "4d3f5bbe35e920c97511c01b8567bec32b20d17c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-given-when-then-example/README.md",
+      "raw_sha256": "6fefe637b7cd96301f1d8acfd7e42036f5ec348c17b3ffcceb6440081dcc2f6b",
+      "git_blob": "65e4cbd3659f9dd81d59836ae2a649aaf3f0ebe8"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-given-when-then-example/rule-design-before-after.md",
+      "raw_sha256": "88d984fca4fbfcc151f3f365af47e9a58072c9e18c3353a6d30da22f13556e78",
+      "git_blob": "64d2c8308283ef9f690b3aa4b4af22c8ccfa4880"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-given-when-then-example/rule-migration-guide.md",
+      "raw_sha256": "22a94b0d2607c46f5e65ba579dc54d4ab0037389cbe8f0d41940666bacac3494",
+      "git_blob": "7d5fcec922c53d073b6dd3a7742f128308dbcd62"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/BudgetQuery.cs",
+      "raw_sha256": "a25b4746585d9a2fdfd8295ad04d62fc48e303f4de169e399d4eb6428c70aaea",
+      "git_blob": "6b533635ba203e9fd556f9c24cd17913a0b76649"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/DefaultBddfy/BudgetQueryTests.cs",
+      "raw_sha256": "80cb56ce50c933992fde03fe13f46abfa143b242968b7ccdd3f9540778201acd",
+      "git_blob": "50eea4f6888bf0545b27c958033b3b654430b362"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/DefaultBddfy/DefaultBddfy.csproj",
+      "raw_sha256": "4ce195e23fd752c0c5e0542d4010cc9d99153018e21dd196f52cb2fd2717fbf8",
+      "git_blob": "4c076f08b67c3b87f8bac8185b481514433f091c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/Directory.Build.props",
+      "raw_sha256": "94dd99e37b6d6d66fb4bbc35cec6dedd563d18388ff7626dc78ad0aeca1e0cce",
+      "git_blob": "5fb1432247fa4c4ed0cea6f4bf06b6996c897a3f"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/NuGet.Config",
+      "raw_sha256": "aec93b5637ab6d62470979a008990a4a336a287ab83a3f2541849ae735674055",
+      "git_blob": "765346e5343d46ac83654843869dc06b65b2bdc4"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/PlainXunit/BudgetQueryTests.cs",
+      "raw_sha256": "37ea6c47634bdf622e9028e5a762a6f2b848091181e3c86d54a42264f24af74d",
+      "git_blob": "21bf9e913fa3246e5a1095ed5e5b025343aa8649"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/PlainXunit/PlainXunit.csproj",
+      "raw_sha256": "c145a98638224354a344543697ec1a508a23a96a1a08bbf8bb2a4bddc28002e6",
+      "git_blob": "d983fdbf39f1239d2ccd53bbe12074ed974dd524"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/README.md",
+      "raw_sha256": "c5cdc277245788520e65ac9682acbc11d63c417c37657cae355c648c9058cf0c",
+      "git_blob": "5d7af37c4ace6be9ad42edd278bc70bd720a5c73"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/scenarios.md",
+      "raw_sha256": "5a7be6ed0ad207e42ee78413dd71cb316f2ef8a3ff6cb4709b3b6233b62ef3c5",
+      "git_blob": "5e42d2b240f1c6507e6218ec49ebf6a2fbe59063"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/contract/CONTRACT-GUIDE.md",
+      "raw_sha256": "52748ae107cbe0ad29e440b894b2fb468a7ee0139816b3d25ab5395d1c8b86bc",
+      "git_blob": "42c457fe22314a2cb1b13e0b50bee3f86bc95586"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/contract/README.md",
+      "raw_sha256": "70ac235a3b6497c1020781db4792d297b4e4d78baee87b6caa66235a1f22f370",
+      "git_blob": "0d6fe6317c24f53699fe25e7a607a3a2eb7e3185"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/contract/aggregate-contract-example.md",
+      "raw_sha256": "e678084c6488869656e864b5e3aa66d869a6105fd357f7fa1ad7411f9b75f6c5",
+      "git_blob": "d319d23991f1780653da039ed490e8555874d9ee"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/contract/usecase-contract-example.md",
+      "raw_sha256": "ca4b4db25ade0d016f3474d83529f468f6bebf58d08ac2ac2c1a634678be7c83",
+      "git_blob": "256ee0308a5bd4123827689e652e36958f58637f"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/contract/value-object-contract-example.md",
+      "raw_sha256": "70dac70e4a585b87a54f4fe5e4bc63ce78659caf714824cc3331fc30199b9bb8",
+      "git_blob": "b327b9c668b669fcc70e8e4ba022a3d1dfed4a9e"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/controller/CreateTaskController.cs",
+      "raw_sha256": "d139f9a36e1571e80221447aa1192af5769c180f2fd4b8782bfb8a2dade57f58",
+      "git_blob": "f9371d2b9c3619bdf308ed6bf7aa68542a4de206"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/controller/CreateTaskRequest.cs",
+      "raw_sha256": "e5fc3fa24a41c426a7411d682aa2e756fb8dda811f35cc18530450c37fad4221",
+      "git_blob": "2e0cef0450a9dd7aff366f16dc55c74e9d78c2fc"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/controller/CreateTaskResponse.cs",
+      "raw_sha256": "c5c69bccdfbda4fb84540e9801e0839c1435dec302af3cfb8408e8424c2407c6",
+      "git_blob": "e7fc4b70365c358bb4594916d055480d1f8cb054"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/controller/README.md",
+      "raw_sha256": "fb331b93b93fdaf9c9294a6d0251d2a769ea23d2adb9867d819dd9895b6df66d",
+      "git_blob": "b4ca2b67ae83cbf2ac0a423a123f14b07c9ad31d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/dto/PlanDto.cs",
+      "raw_sha256": "11dc3914fb5ddb3de27f69561e42c2586e8799d601db4cfcf33fd1025fa29b08",
+      "git_blob": "31bca7f78d0078c0ec8634e89f4dda51f51abe77"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/dto/ProjectDto.cs",
+      "raw_sha256": "f5a68cbcb7865a4b44543334ca15800fc13699e29ca78554ff9d8d9347b9ceec",
+      "git_blob": "677872ca69d7208f3938ea76e7a64c1b198cff9a"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/dto/README.md",
+      "raw_sha256": "53ed08c66899b66ab815ae60d58b95705b3930a41ba07fed8ec48d7ea34bc93a",
+      "git_blob": "3b924ff4b90f6cfbf52e6700f038583c00e43ab2"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/dto/TaskDto.cs",
+      "raw_sha256": "b50a397f123d8c7ec9e4308630a80ba3bfa9abf9069fc0586d28b31d8de550ab",
+      "git_blob": "23ea821332689b04e854c795ac56253289827c97"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/evidence-manifest.yaml",
+      "raw_sha256": "1a8df29149f6c189a777e61fd2f7328f16506d93cbdadcba04408c3557586d59",
+      "git_blob": "a2b5c8e1aea6846201afffeffdac567153395a90"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/evidence-schema.yaml",
+      "raw_sha256": "c72aff7fc3cdf641ffa81172eff8b36a437b443196cabfc9b02dbc185c32ec44",
+      "git_blob": "5f3bb22977fba18a12a83f0676e0b986ff1636c0"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/generation-templates/README.md",
+      "raw_sha256": "4980eee3aad090a3cb4fdbf28476ab5299656a4cb22a021ca230b50f16f1cf34",
+      "git_blob": "f37006fddf42da9bd081870e951ba9fb6bb25617"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/generation-templates/base-test-classes.md",
+      "raw_sha256": "f1d4fec4dbaa11b636e14afaa112e6ef31461ef159a1c17f921901377ca9b3bb",
+      "git_blob": "dd4a0c8c4945aa549a706d35ae978483a5566e8f"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/generation-templates/complex-aggregate-spec.md",
+      "raw_sha256": "55a1b93a3be8068f2037032395fea9a66b7c8825c42f7685ebce0462928beb5f",
+      "git_blob": "6d6d3f255f18968f1b37abe42bd0cf70b00d9bbe"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/generation-templates/local-utils.md",
+      "raw_sha256": "fadd6df3930ae206e2d66662cb6c327e17fce6b325d31979ddc3fb52a1a7f7fe",
+      "git_blob": "427c6a6531a17b7db29623c2358381e7d3031b1a"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/generation-templates/reactor-full.md",
+      "raw_sha256": "bebb873d4e3e31a0de6ab1a9a02500a0a9ae7cf8c3ed689d63481427af4a3973",
+      "git_blob": "4062c2924fcb1e830e3caefe8fba73e570ae7690"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/generation-templates/test-case-full.md",
+      "raw_sha256": "264d602f1f6d8dcc8bb71898d9a37711c98589aefb74106a638615eae2113b92",
+      "git_blob": "e4acdb0a08d5494ed64884d1847fd9bd9cd59aed"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/generation-templates/test-suites.md",
+      "raw_sha256": "56f7d10ad4c01eceaf9eb758e1cd39bf724472652c6ac4f7e59791414a0aa70e",
+      "git_blob": "bba9470c81fb4e76e9a11f87b9dba68e2657412c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/inquiry-archive/EfFindCardsByTagIdInquiry.cs",
+      "raw_sha256": "e0b5fad8c330250be58dce5de388207e4d8ce83a8df7d2fa0c5fa3f870fb73b4",
+      "git_blob": "3c2de4794a0d2a14d33d3ed51dddeb31d5fdf117"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/inquiry-archive/EfUserArchive.cs",
+      "raw_sha256": "c1dc7d559f4d2810ad8852ad0572a36c6cb2c9b48c5f4e7316b35819622868ea",
+      "git_blob": "96214e54303d240f238e8217f0b82aee92c57d31"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/inquiry-archive/EsFindCardsByTagIdInquiry.cs",
+      "raw_sha256": "90812dc094b2f7b8a29e62c73a3d4ee15b76f190d1c0f0518302cff7cc2d2324",
+      "git_blob": "42d653c76affed669f9c552e4a6d73b13e611264"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/inquiry-archive/FindCardsByTagIdInquiry.cs",
+      "raw_sha256": "b1cfe3047154471c9ccf81e58c61199cd572ee5fca5b49f1fa9f229987e7cb3f",
+      "git_blob": "4f66f101f158c253748a204087736256917c82fe"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/inquiry-archive/InquiryContracts.cs",
+      "raw_sha256": "50426ae182d7aba37def8baf4d9aea47c98f5c562602e78aa66b878ad2b7cf14",
+      "git_blob": "d79d9f159e4dd9cfb5e371a384638f8dfef181bd"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/inquiry-archive/README.md",
+      "raw_sha256": "8064c11f325ae847c4983691d84b9d8eb6c6689e7088e8bbdb2e7026f7d5a73c",
+      "git_blob": "1d9b338584f0bf8526ad9c78130e118907f3676a"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/inquiry-archive/USAGE-GUIDE.md",
+      "raw_sha256": "f5c5791164704b09b43c141e4c6f27df67c63ac8aa14683e34699e58c4686e6b",
+      "git_blob": "336582d50a57c7ef59fe9ffd99598b493953ec4b"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/inquiry-archive/UserArchive.cs",
+      "raw_sha256": "f0b57aa8dfdd2463ce387bce43349fda8d2d684b121ec68acfee49e145934ada",
+      "git_blob": "d802cb3daf5aca7563cda74110c50036f1ac6c9c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/inquiry-archive/UserDbContext.cs",
+      "raw_sha256": "c1d136b992a8d97cc197a45e3d3637a158aae75006e5b0def8a65821dde5bf7a",
+      "git_blob": "127b639a7cc46981830107dd4e180f698dedcf89"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/mapper/PlanMapper.cs",
+      "raw_sha256": "e2ca70fdbd21d8334ffaf68482d40b66ea1370f206550a0d4ef27067aa0f88e4",
+      "git_blob": "88691762251215114571f814ac44caad3eac64c1"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/mapper/README.md",
+      "raw_sha256": "204a304a0af3cdc9199abecae2204d0c47645c03c69da9e9026fe62d4ec106a7",
+      "git_blob": "c8bf66f178c41847e67430c189ce306efacdbb66"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/mapper/TaskMapper.cs",
+      "raw_sha256": "54f053ccd695dcea44f4b15a077beef5ad5f99ff42c1d429c7d9e6c5c949ed41",
+      "git_blob": "6cb46ac9faf1447b43e65abc3cde3368e0a18e36"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/nuget/Directory.Packages.props",
+      "raw_sha256": "3085fea576d10f97fe3140079c97e797a45b9934e8d72266eb9add0239d068e8",
+      "git_blob": "4a344dad6cda5a2323c41c88ec2ae1be42340e28"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/BootstrapConfig.cs",
+      "raw_sha256": "f734384895486795fa919e83be33d3f7b32fdfb9d8cf64ea1dcc79fe70d02624",
+      "git_blob": "0918384c886799fd8f3d632976f4a34f2a8c5fe6"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/DataSourceConfig.cs",
+      "raw_sha256": "9abdf2f1c29c885e278c6b32946b706f2441e37b3d703b3b6970ed76f610d4c5",
+      "git_blob": "2ab7df73a19e98bf9d569adec0f7beb76788a530"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/OUTBOX-TEST-CONFIGURATION.md",
+      "raw_sha256": "a186d7dd25fb53a800fab7cee3994a1e2a87b94f2a98ace9620f3e2da7829732",
+      "git_blob": "8d32c2fe11412ec25972cf702bc73a2da88a6162"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/OutboxContracts.cs",
+      "raw_sha256": "d1a7574eee3f58832ea2906b852a130caaab867fd158e713bdee91bf8a90c539",
+      "git_blob": "c31769861114561d2363a3a48469cceac99dc7ef"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/PlanData.cs",
+      "raw_sha256": "75d5a7b62d30e4ad6c1243ead5bad709b4460c1486aa5504a48bc372c5d695c5",
+      "git_blob": "aa894e481a0e6ba3cd0858aa6a5e410356ab8abb"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/PlanDbContext.cs",
+      "raw_sha256": "0f319cacfe06a47627787c977dc2bfc9079174e6c4e70d7922caa71f8d2e81dd",
+      "git_blob": "fb6bd892c670bf9a8953b1e3c48d6d8a81c5d49e"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/PlanOutboxMapper.cs",
+      "raw_sha256": "2c8d33ebd62e047389800f29b6f61ac2987ec26cd7a5f559898036ac3c33c6af",
+      "git_blob": "20498b1a7cb9f2d26a5ed99623b376bb9c093446"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/ProjectData.cs",
+      "raw_sha256": "c1744ead5e0f55f1734aab8068dff7c7a4750aea1e899f8385980d3688b6866e",
+      "git_blob": "9a23d948dd98321c7c3bb53fe86f70269d9416f2"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/ProjectOutboxMapper.cs",
+      "raw_sha256": "c07dc74dcbe29dde9858635831758fa596dd69019d402389ffea00371c2cdc60",
+      "git_blob": "c94f1b1e64e8ec368b6c40de33049e2ba880361d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/README.md",
+      "raw_sha256": "e0ecace6a6cf3dc2fc96f750aeecc81a9054e186933d1320c2e92bf4801806b9",
+      "git_blob": "d75ce2355607d39bcf8132c6e47948e9f71665ae"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/RepositoryConfig.cs",
+      "raw_sha256": "6a9a75033ef91ae434ff4b16bb1c9ff903c957b94d2449df7b9fd7a07e319632",
+      "git_blob": "3b22de8368f5bea15cfa161b1dd7e3581d2bf8e4"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/TaskData.cs",
+      "raw_sha256": "602aa3d1945ec93fc88d3b81e5e000717f8645e14871c09de7e2cf2e5b23bba1",
+      "git_blob": "150bcfd917df509172c07e9c64db16a07d472ce7"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/outbox/TaskOutboxMapper.cs",
+      "raw_sha256": "20119b0c91025ee00424fc437d146e742be58bf4f2311cfe7dc00099a0e746ea",
+      "git_blob": "307f605c334fc3ff2c860d8a4a51998ebec03530"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/placeholder-disposition.yaml",
+      "raw_sha256": "fe48bdd9e3ac4123b48e7f5d34b17dbb7eb356069bb0f5af0df411e4d4e34a8b",
+      "git_blob": "ad49c0a560769de47dbfc5a761ed1e0c14133556"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/profile-configs/event-architecture-reference.md",
+      "raw_sha256": "04af407a83d5d4d48a05ffdb78ecb766db942aec67b8679f9781cad2ed3d418c",
+      "git_blob": "1bdc4c5073be65f3b94079b2599fd4460a886c87"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/profile-configs/inmemory-profile-config.md",
+      "raw_sha256": "1d497b7112642453554bda06489bde48ee50520a5ed36f4bdeff37b32ae801ba",
+      "git_blob": "0c9ebc8edd4dfcbfe1b5b699991387d27b672df1"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/profile-configs/outbox-profile-config.md",
+      "raw_sha256": "5ffca30e286c4aaf85c5cdc99489fd8b433c41f174ab73cddcc88a40e415e773",
+      "git_blob": "006aae9545aab60f504ecf8445b4c72f94fcd051"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/AllTagsProjection.cs",
+      "raw_sha256": "907d26a098215703e3690ebe27656b3348105ae3c717c0ebfd8d6f94e23e9ca7",
+      "git_blob": "709e2db0c64e671b7162a9b7ede1fbb02a6f2b7d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/EfAllTagsProjection.cs",
+      "raw_sha256": "ba6dfb5e6244002c4818034b1d0bf2cab9b02ab55bcb00f3cda6f0f337da9131",
+      "git_blob": "a23ade5c1da29fa6031e6fffbc1275c2e8025b53"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/EfPlanDtosProjection.cs",
+      "raw_sha256": "df528b4e6301b151aaff8811e79e907b31b12b523c3a43525fc6a6ed95e624a8",
+      "git_blob": "41e7f4a855ea7be9fc43bcfe172f5b5d65653913"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/EfTasksByDateProjection.cs",
+      "raw_sha256": "922bc6a605eb277962213135b647b03b07041d18f78fd055856d7e771aaac1a7",
+      "git_blob": "52b788211563a7aa946a4d9d909ecf4c2e9567f1"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/EfTasksDueTodayProjection.cs",
+      "raw_sha256": "932c9bdfd16cf6bad0e36969d406570521cfbecad0bd2343d034fc4c5f45d4da",
+      "git_blob": "1d639e06b0974502609a67c4858ac8b4d91f04a0"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/PlanDtosProjection.cs",
+      "raw_sha256": "d66d9c409726ed110030b0f5afb06ef39a1ec7783ea942fc74332264d824a4fc",
+      "git_blob": "73a30c12f9ac3b12096e43d6e57a0d8a4adf4e17"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/ProjectionDtos.cs",
+      "raw_sha256": "263da975ff45931a9b93482cfa43b3e1e2c5794c1f486553716b95d297cd66f4",
+      "git_blob": "2488cbf8c3e26aeaeaa71b49efd1ed56e79d6d1a"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/ProjectionModels.cs",
+      "raw_sha256": "5f809dbe0f37e631e49ab33b6470c35755f269f20464d7044f6d217b322c47b2",
+      "git_blob": "1aa68ef104f537a33fa96514934a380201ad4afa"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/README.md",
+      "raw_sha256": "673b6a135e664e29dc07ea14cd744bf388abb7edad00bac2f29a233cf74e25c2",
+      "git_blob": "a175ed0e08e88b85237bd83f25c1a184f7765f8b"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/ReadModelDbContext.cs",
+      "raw_sha256": "68f628338d04d8e07632922702eeb7483e867ac51193d681839280b0abdf5fa2",
+      "git_blob": "78901ce3e61cf8ed7509668998a2c85dea6f0ee8"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/TasksByDateProjection.cs",
+      "raw_sha256": "860d3751e7f756fb2ec33836342b5feca346597e30066c690dcec950ab58c466",
+      "git_blob": "1d18c081448d4917739872dcccdb5f0095086f71"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/TasksDueTodayProjection.cs",
+      "raw_sha256": "5ed324ae5c98a9e0cf0477ef43e7466b422837b626938dba5dd9ab45e2731fb9",
+      "git_blob": "4e87d2c0ece661ed1631bcf7912af9d5cce9a36c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/projection/TasksSortedByDeadlineProjection.cs",
+      "raw_sha256": "408157a006f1923f6e9910077a543c2f9a6f266a1d1bfc490fc43e796a36bb23",
+      "git_blob": "979a2c5089e04ef9d2d2abfdad61c863d4261a5c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/reference/README.md",
+      "raw_sha256": "b6247e7a9d3dd9908380b063fa4b3764b4250f49b63ff549facc2fe0028618df",
+      "git_blob": "433b2fe25ad6ee7bd5f67fccbc2438330e99d5ca"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/reference/bdd-gwt-test-template.md",
+      "raw_sha256": "6b463009d6056810fe89e403e57ea05ec5302d90672e4d1a6497832ae6406a84",
+      "git_blob": "d6b9b83511c4350747ef0571e55959f62e163501"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/reference/nuget-dependencies.md",
+      "raw_sha256": "1001db5a77849ca4a5c07596cccc9d35f1b610df7b0ddb0081f09f417b6eed2f",
+      "git_blob": "52aef98184d4af88693f01f182cce5215168b738"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/reference/reactor-pattern-guide.md",
+      "raw_sha256": "62cd639d6565647f194f0b9c43e47664f2e851041fe070ab08c9bfdb8d29fc28",
+      "git_blob": "93a52e9184978f6f22cf87a5d056b248c7375132"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/use-case-injection/README.md",
+      "raw_sha256": "14c1d74fae3d899852e4637c6313c04f429fc8155c30e6401bda525098acec4d",
+      "git_blob": "dd50aa0244d1e68aa9ce1990baf269f0d24af0cd"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/AssignTagUseCase.cs",
+      "raw_sha256": "239fdc4f86d0ee74d4b2cbde9a619678b105b58865fe4054d0ccb406a9b236f2",
+      "git_blob": "cee4d6ee748ec6edcf5c4122afeeb559b0cea307"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/AssignTagUseCaseContract.cs",
+      "raw_sha256": "cfb670fc1344ba4e698302e2def25422fbf869e64eb1def34fa44eafe1372ed0",
+      "git_blob": "a69c44c7eeab2b00044ebaad862f44e6c2640e76"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/CreatePlanUseCase.cs",
+      "raw_sha256": "a372f386f4240e7a1a85f466f4aaa8e0460448fdd4f53f088641fee6e2cceda7",
+      "git_blob": "f14ae8c4ecbe4c16d2f0c74eb1f90c03adeefb05"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/CreatePlanUseCaseContract.cs",
+      "raw_sha256": "d36668252f0f796599c56b882326e4304129f075e735a8182b6ca3f8a52ee874",
+      "git_blob": "0d2f8093a978cb5f93b9fa341f09cb9540b503b7"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/CreateTaskUseCase.cs",
+      "raw_sha256": "510660a0b8803eef8e98ec35ddaff0464644cc18964ef74dc1a72b7b15f2a03d",
+      "git_blob": "e437470b98c8a69c15168fe11d437bee22b966d3"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/CreateTaskUseCaseContract.cs",
+      "raw_sha256": "6c1ffba8fbddae24304990d4252a4526c3faed01099106e3bd9c1bd3de46f659",
+      "git_blob": "6b80a8cb34498080c8355b8e4229b36d781a2307"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/DeleteTaskUseCase.cs",
+      "raw_sha256": "f303c70ea638b0c9a4147ab105c6f285ca3f59152acf65bec6c40017345af0a1",
+      "git_blob": "261b4e2780414926b57382ea2bf1af9d279c0566"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/DeleteTaskUseCaseContract.cs",
+      "raw_sha256": "48c4fc5350d522014a7b705ad4902739c78a320059988a8166c0cf3c86108256",
+      "git_blob": "b275ed791f1bdcbb9162c7b453a800132ee47528"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/GetPlanUseCase.cs",
+      "raw_sha256": "117cea990cfb8959c786919650f979d806b9d10563524f60b9001b767fd08e9b",
+      "git_blob": "0372982d5f5dde13af91dca6f60c0ea058d1819d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/GetPlanUseCaseContract.cs",
+      "raw_sha256": "8fd2707e141c01735cc627a29cac28f2c1d111615fda12fa1f4a5d0730d12779",
+      "git_blob": "aa377cc4a2df0490b9aef77f5017e466ba934567"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/GetPlansUseCase.cs",
+      "raw_sha256": "db60efa81d13534d79d090707cd2981a0e88418de2f7c45e3993967b25fd8b0b",
+      "git_blob": "2fe35120b57252878c2a68bd4b0202d8ad8391df"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/GetPlansUseCaseContract.cs",
+      "raw_sha256": "d83ba62f4b1b3224091e5a42a6c196dfdf69b9aa284fa7589dd7f16dca8b7a81",
+      "git_blob": "7e8cbdbb85ad435463ba99c74aa42576632ef2aa"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/GetTasksByDateUseCase.cs",
+      "raw_sha256": "3c9345790522ccbff54fe3fc6fffc76b9daa8b6d69640da5453c5a51713e8dc6",
+      "git_blob": "fa94d01abffa2a2fe6beff1295f76aa5b65c9981"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/GetTasksByDateUseCaseContract.cs",
+      "raw_sha256": "804e9076e737589449b6f6657bcbd201df42a9fa052fdc9556401459073aca00",
+      "git_blob": "8d8627e0922e455199645072dbd61fb0173202b5"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/README.md",
+      "raw_sha256": "eb99789c60da0023dbd9d9057c3a80711246848747a9ab5423d4c7ff8176dd06",
+      "git_blob": "a69059f1a347518b91dc8dac99ab55d77c328c1a"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/RenameTaskUseCase.cs",
+      "raw_sha256": "8b68ecc62ba4dfe42f0a7609092f060c77cb19fcf733a9b9445d062951c0e634",
+      "git_blob": "ce6177ce90dd90c3d2362521b00a598dcf7239c7"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/RenameTaskUseCaseContract.cs",
+      "raw_sha256": "6cea1075a0c5a907811e93e8cb4d0b10dd58ad24f996f318c7583e7f1abfbc70",
+      "git_blob": "54a8fd4b68a1e8f27e6424c2b93276c685ab1554"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/examples/usecase/UseCaseContracts.cs",
+      "raw_sha256": "d576812f420b57a45f5a898e3d0fe53712e2bcbfedf0a266d331f3cb8271a6df",
+      "git_blob": "430b85b2754000c82bf49deeb305ea18579f6a58"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD",
+      "raw_sha256": "88be1caf5c10ef42231df90918bde78c9a9f411ba8f8f7d915820324042ab1e6",
+      "git_blob": "a260b83f2c0aeb81349df79b561803a6e26093e6"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/CODE-REVIEW-INDEX.MD",
+      "raw_sha256": "d70adb80f58bb981eeacb491d9cb3b6c3604a403fe2b94bf6dbb99c308f2e813",
+      "git_blob": "afcee5089b8daca6eace2152c4c6658b07ed8907"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/CODE-TEMPLATES.MD",
+      "raw_sha256": "977eb0e536de0b22dd8d1cd16aa0b8fa5dff21351a15901fa938532b9acb9c1f",
+      "git_blob": "dc7e1d76c74079f050dafaf5e3d61c329237bc00"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/COMMON-PITFALLS.MD",
+      "raw_sha256": "4e5b83acfc26127b021644c9e239512c7cf8f7f82cec83dc566190e94423856d",
+      "git_blob": "7ed5797a7502cede3b7c81ee3082ae2542bd9a77"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/ENGINEERING-IDENTITY-BINDINGS.MD",
+      "raw_sha256": "9ed3cf480c2b799ca04595ed3708698f0b03d98e73269d61b5160ea4387fca52",
+      "git_blob": "067b92d25b59d944dbf4a89aa23dc923c1720cb4"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/FAILURE-CASES.MD",
+      "raw_sha256": "051b25f2b1fbb037480dc3ea9337dbf0008e1ae52a840f52df6241f0d477a545",
+      "git_blob": "d87a19f257f03bb97cb5d705669e3d45cf4c4e2d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/rationale/generic-repository-only-rationale.MD",
+      "raw_sha256": "f4ae59627c7e402350fc25a654c25607becb43933d7eb10fbac61dfefe01c383",
+      "git_blob": "9f4f4e9f27e19cbdaeca0f088180fd988e2fdaa0"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/rationale/profile-based-testing-rationale.MD",
+      "raw_sha256": "d317fc6609ecaad6422659259e8d33af95eb759a1a8320697f33519ff7ea2b24",
+      "git_blob": "436fff2db82b770eaeeb087a21575db473edcef6"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/rationale/query-side-layering-rationale.MD",
+      "raw_sha256": "0960a8fa3ad2be9124332d956fe4a99883cf3af12e6037a67a320952ff386b60",
+      "git_blob": "93f874239a704fe7b7e8e62fff2070f47f6e1d41"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/references/rationale/rest-api-resource-path-rationale.MD",
+      "raw_sha256": "883e1b86468ebd59b1ef4bbaa67bbb1deca614e5dde37ea5793cc2f0389b4c74",
+      "git_blob": "9ac3411d6d5c59588558c39c040d682728c2ba23"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/review/review-routing-fixtures.yaml",
+      "raw_sha256": "c1258d55e3d166b2ab64c7a1169e53d3dac775b2e6bfed7e8d471f209f785126",
+      "git_blob": "db5874bf22ab2706fc9b01532b47f75de2f14e59"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/review/review-routing.yaml",
+      "raw_sha256": "429fc24e5557d0f70cdcfc8dd7276ffc886b51c0aa5a2b83433113b6e4d7422c",
+      "git_blob": "2c09c74e8d41c70f61ea646d6de59c541f6619ec"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/review/test-scenario-review.md",
+      "raw_sha256": "5c917a7eacc73ec7daa00c8b8c4267b52dda7ee60de64d3b66773338ac316a7a",
+      "git_blob": "eba446f69b1f4045482a0beddb85653d6c5ece2a"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md",
+      "raw_sha256": "c23bab7c5d3b700f5facc9d4feb3521354ac41846886853f63691f0babd2c977",
+      "git_blob": "772cda370ec87e7eb1e0a1bbfe5ad7763e37970c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/shared/code-review-checklist.md",
+      "raw_sha256": "efe291ae06c9ad90c0aec942766866d7a2061c772d0da332a3b8bf59279edc51",
+      "git_blob": "d529c3c7f0a5a278db8a920dd1ede17932316dd8"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md",
+      "raw_sha256": "d415206adf2a837212f79e22a1adbe1a9680b74e451ad7b1a1264235cbe57e8f",
+      "git_blob": "5b5dbe00df8091775915dc2fddd15faa49a643cd"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/shared/domain-rules.md",
+      "raw_sha256": "19200ce5c2fcfa668e3c27a24aa60fddad6ec1893cb1963b6f29a94de40a6794",
+      "git_blob": "3408e3f024d697e8ec8db76110600adff03b4fba"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/shared/dto-conventions.md",
+      "raw_sha256": "fdc995404c4d66018cca10d097933bfddb957783c8c34f273ada9d69e726b456",
+      "git_blob": "57ba429438cf5b11a8817e2075003f916aae8286"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/shared/testing-standards.md",
+      "raw_sha256": "8307f8fac018df51f4ae8fc8ef3c89c8b9721509ccc079ede6dbfade7074fd97",
+      "git_blob": "bc6ad6b78a9017558c2e655dea33d72a9a9ad242"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md",
+      "raw_sha256": "7b737fecd0d546fe37e0b55f09789fdb7341c2d4d9ccba9ece27ea3aacc529a1",
+      "git_blob": "f4564931f2c50b014a635f8e8e1ed0a3011446d1"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/source-includes/domain/EsAggregateRoot.cs",
+      "raw_sha256": "ad779486b03504e2e8da0f3413743c24d83355d31b6a0739008188f68bb33a63",
+      "git_blob": "4cd83fc3a68868a46107b2ba8e1173f491e4d7a3"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/source-includes/domain/IAggregateRoot.cs",
+      "raw_sha256": "c4ec794ff1bd21a8dcf66ceab4d23ad1da0e361fdfd8a2c4b77af901c0a15fe3",
+      "git_blob": "6ed7ac508336a9bf57e86786e3be472ab5e9983e"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/source-includes/domain/IDomainEntity.cs",
+      "raw_sha256": "76b7e4ca435965258e0251fae9a9f44713a126283d303301b931579154f4571b",
+      "git_blob": "d362f4ddffa42808d13a3dd21b6c3ddbc7aa6f7e"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/source-includes/domain/IDomainEvent.cs",
+      "raw_sha256": "eb0457de7543c1aa98a5d4b57f3a49d79d682476d2e4447fe06a53b86e512cbd",
+      "git_blob": "b0e71deebe26f05b5cf717a538bed1a8a417b7c7"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/source-includes/domain/README.md",
+      "raw_sha256": "daae144db67a587f180c49d87ef3e4b62503faecdb88a428bcd05e8bb98e29f1",
+      "git_blob": "7faec2184127ccc70ca59e0ab6ca70a36dbf8875"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/source-includes/evidence-manifest.yaml",
+      "raw_sha256": "ba96957b4368e024a29b856059d0a9f75653b6f450cddec671b046209068c7fe",
+      "git_blob": "0627682e4d655210dab4a56f62b67c6181f8fcd6"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md",
+      "raw_sha256": "2e4b0d969f72c0296b83114fc6f6536e58245ed1f5e09a60cfc304bc1eeecb60",
+      "git_blob": "49ea5aa3695836b760fdd73bbae14f0f24263df5"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md",
+      "raw_sha256": "9844e261741fd6fcdf8c0489516c2b4be8ad8bb8074463c7e35942631c2dabd9",
+      "git_blob": "61281b39e835085587e94bc28ef8a66035aa439d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/CODE-REVIEW-CHECKLIST.md",
+      "raw_sha256": "a4a81fc19a5ae9436cce332b2f0010dfec83b053398fe4154bced95d7f5b3ee8",
+      "git_blob": "d89f9b46d1e5a49c0d89ba46607a772c29acd117"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/DESIGN-BY-CONTRACT.md",
+      "raw_sha256": "3ab132dc92cf0120a488358f23abdbb90731a98556e71cff34a85cae4425eabc",
+      "git_blob": "efdda8b77d5945c253d1300a6b1b2dafe8395714"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD",
+      "raw_sha256": "12a263b623c280d16dea2b2b6b58d55470e6ce84ea9d206de79f6b67376806e1",
+      "git_blob": "b9979fa5f32a1e3087cc7af8b7a1373c4016b9ca"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/anti-patterns.md",
+      "raw_sha256": "28f547761975c7f3160eac6f7374a870d1ab6cf9d4a2de3a7bc98982f1e2827e",
+      "git_blob": "455ba78f01c7e8f0c5594d7438ba85aac51dccd8"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/best-practices.md",
+      "raw_sha256": "958d8d060f85a43d34cd7295cf00a9def5c839d786051180689aa8d631f43ada",
+      "git_blob": "0e6ae3272fb3bf18be75b7f2c2e85c798045eedb"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-guide.md",
+      "raw_sha256": "7413fa8ca91f3c016470d5c7524d7f993e91a99ad476f31de15d27da5158801f",
+      "git_blob": "0cd4d43955fc31b20df1cb4e4dd2c12a846469ca"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md",
+      "raw_sha256": "31c5ab7526ebdfe553311441f9879bb1d2448aba94be13dfa9c5ae9fc374537e",
+      "git_blob": "272453c9c07355a90acb0714ebf2ed72310a8cec"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md",
+      "raw_sha256": "04763da8d53e4a5921c82d216f4143676d7881350d9e87a39ffb950b45859bc0",
+      "git_blob": "78e6ee97514b651aa6a7e20f1436e6af6bfe46e0"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/archive-standards.md",
+      "raw_sha256": "dbcb817922af4ff243d8fab09bcdc3d1085dcd88f599ef39e65801b55772f626",
+      "git_blob": "dae8d6137483c8ab10949696bf0cab58653f552d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/controller-standards.md",
+      "raw_sha256": "e9c179ec45c01af9eb7c0e84d1c8797432cb1d5ab30202030dd5bb441608125f",
+      "git_blob": "003631d3c423141bb952c71237187025b97afa4a"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/mapper-standards.md",
+      "raw_sha256": "7cf69343dcaa73f12f2dff85549f1627548301d2c72b3bd6c81d6cf2313225b6",
+      "git_blob": "4d9b529f30f058b2d531efebc437e217e0e36970"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/profile-configuration-standards.md",
+      "raw_sha256": "5fe6fd1bc79c3143622683ac71daf8b1f876b0ac71ad43d9e1817daaf4a632a9",
+      "git_blob": "ceebb2fa3bd8e1a9f3007a7579beadc041d07de2"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/projection-standards.md",
+      "raw_sha256": "e7016eba7ae63efa4c279f2e4288f12aa26f2d7a377bcd13a9c4a93f62a3d907",
+      "git_blob": "a8bcc352c2ff7243a1e4b04c99ea86080eb31362"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/reactor-standards.md",
+      "raw_sha256": "0d590f2c6dfe6ebc38d1cdcb1625ac59bf79aae06b60cce3eb2f126f31a8c9b3",
+      "git_blob": "67c5f6966130e933f5f09e2f239844e62bbb36cc"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/repository-standards.md",
+      "raw_sha256": "e728b64ed10658622b66463f1d1f85e38542e6bf9c19c455c83965813a94184b",
+      "git_blob": "d7cc7193cceb22ddb5cb76943a9981d941bf6bcc"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md",
+      "raw_sha256": "5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d",
+      "git_blob": "d0fb09aad544c62db18217ee02b511a3629ed309"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/transactional-messaging-standards.md",
+      "raw_sha256": "2596901c1a7bc94f3f28db00eff2c3d75fb6a27cf0a210d8f6852fd430b1baa7",
+      "git_blob": "8736e6972cd0f57473ce3e31574fa6aef8b5ea14"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md",
+      "raw_sha256": "3f69354497aa9c2e875b43788dc1d8c9d418c98122bf1276c9d069bdea1b4030",
+      "git_blob": "13016df585fd1329160d3ed424611f20b9c6e280"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/standards/project-structure.md",
+      "raw_sha256": "3d1af94d97205dd05e3d8e832c9f222a16e29c8660cb7d59e98ed5043664c904",
+      "git_blob": "d5e02c9a26cc8f65a9c5f38ae6b3fb481d0cd756"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/templates/application-properties-templates.md",
+      "raw_sha256": "f07d1ea6791f78f521f0494a4a116c6c12e58013dc849fecec0c331e61f014be",
+      "git_blob": "e46e33819f796386cadd93dcf90888c57b54ce4e"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/templates/profile-isolated-configurations.md",
+      "raw_sha256": "301d5618cc2e882e3bc7988b7aab81c45409e73e69dc859f4ef5ffa5a354aa21",
+      "git_blob": "0e6c6fee5031dc81bece811634ee6981d0497227"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/README.md",
+      "raw_sha256": "ef1c1e90c36d986ec52e3e40883066912789b601c0168c62b09194865bbc7d5d",
+      "git_blob": "eb34fb3f1d697423222e378cd1e1024a6f9a228e"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml",
+      "raw_sha256": "f84acfb6278f58914b7f26f19d9c3769877c310b729528fa3373b364ba0d7733",
+      "git_blob": "7b19512ecf308b894f929169441e0f458225f7d9"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/provider-contract.schema.yaml",
+      "raw_sha256": "277aefae6565ff6bbac1aa56aa880dab4ec786db5acee91ef5c52a080c5b11fe",
+      "git_blob": "0a2fc48e3d52797e50a4db54f76252029ffa578c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/provider-contract.yaml",
+      "raw_sha256": "27408ac751823a082022862c445d936b22c9e9303ec8000bcd21dfbd802f001f",
+      "git_blob": "81dbb99a0c6d0bf7f4b42d747bca0e921301d368"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/recipe-manifest.yaml",
+      "raw_sha256": "25f93b327f1a73071c5157130ba1d5a990737a3554fa54a874bc5d80e4380cfe",
+      "git_blob": "a1041d423f5defb2da874f9161e9af7f00bc872c"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/recipes/analyzer-project.md",
+      "raw_sha256": "d9cd7bfaca40cfab086562e8efb742b892359bc801daa876a2fac181a801a7c4",
+      "git_blob": "c3618e07d65894fd988bdf05ee9609e521048f1d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/recipes/analyzer-severity.editorconfig.snippet",
+      "raw_sha256": "624cff247ceddb96960419383102430262accb47b19138bd090385238a861be7",
+      "git_blob": "8696742c65fc3605f96c2cae6ae6e428c7d0cf2d"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md",
+      "raw_sha256": "6f8c8244b94e87199988bb91f12277e394cbe05b4d1a59f32f6b580ad20df3fd",
+      "git_blob": "a43d3e636d72e148acca7176ba4dd9e6a2698efa"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/templates/code-fix-decision.md",
+      "raw_sha256": "844d7c155087c148de68883822b47cfb55c59db8fdcac9df87406ecfb58fa458",
+      "git_blob": "0d246c0898f97afc04ca9c26c2be5d25f27eb0f7"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template",
+      "raw_sha256": "70671118b0b7c5eef781888a2d7a1afb7b4d028563003ab720855eaba2a72cbd",
+      "git_blob": "063bfaa1cd5b988c56c9723628c9abc5941da4a5"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template",
+      "raw_sha256": "3924fd3c2b81c568f63476ec3425a5adcc9faebcd9555763c7fa99bb164db4c3",
+      "git_blob": "424d49f84e40f7db77e54c410e340e868f6ecbc9"
+    },
+    {
+      "path": ".ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml",
+      "raw_sha256": "4a4b644912cf498c738869ab8e25ecf4ad82b8ab55f5603cffac19738413ba14",
+      "git_blob": "93c80fad29d784afa8beb1f86c68670b053d655d"
+    },
+    {
+      "path": "AGENTS.md",
+      "raw_sha256": "52b05d5f1e90bb0290e3eeefa98d090a0d8457a623b613c45437c857e2723d80",
+      "git_blob": "437216d8168d25fb40a454c451c47d13dece88a2"
+    },
+    {
+      "path": "AGENTS.zh-TW.md",
+      "raw_sha256": "b459ad7c2404ae8dd8e4780d8cdcad85358309bebcca2322787b5f00727620ff",
+      "git_blob": "ccce1047db49da6cbfbccb2558285d6b283e522f"
+    },
+    {
+      "path": "CLAUDE.md",
+      "raw_sha256": "8c045124b0923f37531f89394df6016510c45a2a4c6df2c0412de0641c0fbf82",
+      "git_blob": "ff1d8624b59f9930cf97bd9ee7714613466eed1d"
+    },
+    {
+      "path": ".gitattributes",
+      "raw_sha256": "10f4dec60aac9eb667385616db603c600e140207d685e680bb3d56189b89bf60",
+      "git_blob": "b9d7017fddd76cf3c5e4f3ad09e94d8c9e4b213d"
+    },
+    {
+      "path": ".gitignore",
+      "raw_sha256": "d71bd6f42b24b4c1c9991827388615a37d34d0993ec1ebdd5f69bbf9e0e226dc",
+      "git_blob": "4a6d1f82861d914f2d1c327e220b422b7f6c44fb"
+    },
+    {
+      "path": ".dev/project-config.yaml",
+      "raw_sha256": "f637b2886d02a58b1a4d52852c260b670322a4a466f785326aa6def31f23ac9b",
+      "git_blob": "5ebd1c901c1cfb6881fcb845b9ac854754fe7ade"
+    },
+    {
+      "path": ".dev/ai-context/provenance.yaml",
+      "raw_sha256": "74ec3e47518a393d481c9dacb6daa2aebba63deb0f84f0bbd5a018ad04cdb7ee",
+      "git_blob": "4c840f7b4824152863c6ff95055721b03ab65568"
+    },
+    {
+      "path": ".dev/ai-context/customizations.yaml",
+      "raw_sha256": "8ce7e56185a9d6bd9e9291ea60d22971dd6d418de6835c12d424ec9e61d96ab5",
+      "git_blob": "af01271731763b77a606b06154873c112190a51f"
+    },
+    {
+      "path": ".dev/ai-context/effective-rules.yaml",
+      "raw_sha256": "6962e871b6cdd164ecbb7c8321ae0b65f13eb1613579f52c219c99cb1044a00e",
+      "git_blob": "6b62edae99fc8f334ab853d38b62f3bfaddc949c"
+    },
+    {
+      "path": ".dev/ai-context/tooling/target-gate-manifest.yaml",
+      "raw_sha256": "88a465befa1418587f8ee2023967f2949e275a5b488bb6cc18df1d0c95a70951",
+      "git_blob": "af7424f18cf4b6b9692964e1af0fb4c0c684a0c6"
+    },
+    {
+      "path": ".dev/ai-context/tooling/target-validation-policy.yaml",
+      "raw_sha256": "1cc3d187a6679ec760d42faa59e591b845b45aaf6a7c589ecfc15936508fe0a9",
+      "git_blob": "4c1f1006b6e1d697ae548b9c18053975f215a8c2"
+    }
+  ],
+  "limits": "No behavioral verification, independent audit, adoption or original ignored-fixture inventory implied."
+}

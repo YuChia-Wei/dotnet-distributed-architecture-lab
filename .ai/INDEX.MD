@@ -2,6 +2,16 @@
 
 This index owns the file and directory catalog for `.ai/`. The `.ai/README.MD` file explains the folder purpose and boundary.
 
+## Current installation
+
+Use [the target registry](../.dev/ai-context/skills.md) and
+[current contract](../.dev/ai-context/CURRENT-FRAMEWORK.md).
+core/skills contains managed packages; framework.lock identifies actual
+installation; custom/framework.json is explicit project configuration.
+This Codex-only candidate requires independent admission.
+The catalog below is retained navigation, not candidate validation or automatic
+permission to invoke old skills, scripts or roles.
+
 ## Entry Documents
 
 | Path | Description |
@@ -13,7 +23,7 @@ This index owns the file and directory catalog for `.ai/`. The `.ai/README.MD` f
 | `distribution/` | Source-side package profiles, ownership rules, and generated metadata schemas. |
 | `evaluation/` | Source-side deterministic behavior corpus, exact baseline, and result schemas. |
 
-## Canonical Assets
+## Retained Assets
 
 | Path | Description |
 | --- | --- |
@@ -27,8 +37,8 @@ This index owns the file and directory catalog for `.ai/`. The `.ai/README.MD` f
 | `assets/tech-stacks/dotnet-backend/examples/` | Canonical landing path for migrated .NET backend profile examples. |
 | `assets/tech-stacks/dotnet-backend/templates/` | Canonical landing path for migrated .NET backend profile templates. |
 | `assets/tech-stacks/dotnet-backend/references/` | .NET backend reference indexes, pitfalls, failure cases, and templates. |
-| `assets/skills/` | Canonical top-level skill specs. |
-| `assets/skills/README.MD` | Canonical skill registry entry. |
+| `assets/skills/` | Selected target guidance and original legacy skill support. |
+| `assets/skills/README.MD` | Retained-source boundary and current registry pointer. |
 | `assets/sub-agent-role-prompts/` | Canonical delegated sub-agent role prompts. |
 | `assets/templates/` | Reusable prompt, command, and skill templates. |
 
@@ -38,7 +48,7 @@ This index owns the file and directory catalog for `.ai/`. The `.ai/README.MD` f
 | --- | --- |
 | `scripts/` | Transitional local workflow scripts and orchestration helpers. |
 | `scripts/README.md` | Script transition policy and inventory. |
-| `scripts/validate-ai-context.py` | Active index, runtime-root, table-integrity, and skill-wrapper parity validation. |
+| `scripts/validate-ai-context.py` | Legacy-layout index, runtime-root, table-integrity and wrapper parity validation only. |
 | `scripts/python-entrypoints.json` | Registry for supported Python CLI prerequisite contracts. |
 | `scripts/run-python-entrypoint.sh` | POSIX interpreter-discovery launcher for registered Python CLIs. |
 | `scripts/run-python-entrypoint.ps1` | PowerShell interpreter-discovery launcher for registered Python CLIs. |

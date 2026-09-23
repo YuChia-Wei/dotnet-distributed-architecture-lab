@@ -1,0 +1,121 @@
+{
+  "observed_at": "2026-09-23T23:08:00+08:00",
+  "target_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot",
+  "baseline_commit": "cb122285af09e46b24102f22a0ad9d713219c1f2",
+  "preparation_commit": "a21dc79a8dd0381848e42fb58049eed926d67cba",
+  "durable_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f",
+  "before_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\before",
+  "recovery_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\recovery",
+  "observations_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations",
+  "scratch_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\scratch",
+  "staging_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\staging",
+  "before": [
+    {
+      "path": "AGENTS.md",
+      "before_sha256": "52b05d5f1e90bb0290e3eeefa98d090a0d8457a623b613c45437c857e2723d80",
+      "bytes": 15601
+    },
+    {
+      "path": "AGENTS.zh-TW.md",
+      "before_sha256": "b459ad7c2404ae8dd8e4780d8cdcad85358309bebcca2322787b5f00727620ff",
+      "bytes": 15057
+    },
+    {
+      "path": "CLAUDE.md",
+      "before_sha256": "8c045124b0923f37531f89394df6016510c45a2a4c6df2c0412de0641c0fbf82",
+      "bytes": 196
+    },
+    {
+      "path": "README.md",
+      "before_sha256": "a7996d57bee89f80664d7b669abd445556a04fab57ba19361e03365673e974d9",
+      "bytes": 10418
+    },
+    {
+      "path": ".gitattributes",
+      "before_sha256": "10f4dec60aac9eb667385616db603c600e140207d685e680bb3d56189b89bf60",
+      "bytes": 2515
+    },
+    {
+      "path": ".gitignore",
+      "before_sha256": "d71bd6f42b24b4c1c9991827388615a37d34d0993ec1ebdd5f69bbf9e0e226dc",
+      "bytes": 5863
+    },
+    {
+      "path": ".agents/skills/README.md",
+      "before_sha256": "1851971d70ce7f942e7db8a35edc092a7f6ac856efad3246b6fcaa9b6cb855ad",
+      "bytes": 2221
+    },
+    {
+      "path": ".claude/skills/README.md",
+      "before_sha256": "6ab22e48e76e6ac392bc60d80b4cd0c6a49e0ace1b256689d2fc545653a70bb2",
+      "bytes": 2168
+    },
+    {
+      "path": ".ai/INDEX.MD",
+      "before_sha256": "2a0e5298507d00e72302262b1fcfdf4afd484b176de0f24f38753d3452a8d785",
+      "bytes": 3614
+    },
+    {
+      "path": ".ai/assets/skills/README.MD",
+      "before_sha256": "6b0c95b20c50491d29440c61a17e311cc59265be9d2371e456969a6d8902508d",
+      "bytes": 4242
+    },
+    {
+      "path": ".dev/INDEX.md",
+      "before_sha256": "8750ca0710c96c810704ceaf0e435e88cae77013c964b033722b8bed0a0a3300",
+      "bytes": 5456
+    },
+    {
+      "path": ".dev/project-config.yaml",
+      "before_sha256": "f637b2886d02a58b1a4d52852c260b670322a4a466f785326aa6def31f23ac9b",
+      "bytes": 13514
+    },
+    {
+      "path": ".dev/ai-context/provenance.yaml",
+      "before_sha256": "74ec3e47518a393d481c9dacb6daa2aebba63deb0f84f0bbd5a018ad04cdb7ee",
+      "bytes": 1500
+    },
+    {
+      "path": ".dev/ai-context/customizations.yaml",
+      "before_sha256": "8ce7e56185a9d6bd9e9291ea60d22971dd6d418de6835c12d424ec9e61d96ab5",
+      "bytes": 14901
+    },
+    {
+      "path": ".dev/ai-context/effective-rules.yaml",
+      "before_sha256": "6962e871b6cdd164ecbb7c8321ae0b65f13eb1613579f52c219c99cb1044a00e",
+      "bytes": 26262
+    },
+    {
+      "path": ".ai/custom/framework.json",
+      "before_sha256": null,
+      "bytes": null
+    },
+    {
+      "path": ".ai/framework.lock",
+      "before_sha256": null,
+      "bytes": null
+    },
+    {
+      "path": ".ai/framework.operation",
+      "before_sha256": null,
+      "bytes": null
+    },
+    {
+      "path": ".dev/ai-context/framework-binding.json",
+      "before_sha256": null,
+      "bytes": null
+    }
+  ],
+  "config_root": ".ai/custom/framework.json",
+  "new_stores": [
+    ".dev/lessons/records",
+    ".dev/adr/records",
+    ".dev/knowledge/promotions",
+    ".dev/pull-requests",
+    ".dev/local-work-items",
+    ".dev/workflows-v2",
+    ".dev/problem-frames/records"
+  ],
+  "state": "prepared only; no managed installation or root activation",
+  "decision_adapters": "not configured; acceptance/decide/propose requiring explicit project evidence remain unavailable, not authorized by configuration"
+}
