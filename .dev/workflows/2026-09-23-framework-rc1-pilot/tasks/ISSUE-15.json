@@ -1,0 +1,63 @@
+{
+  "template_id": "ai-context-governance-remediation-task",
+  "template_version": "1.1.0",
+  "template_created_at": "2026-07-10T18:22:49+08:00",
+  "template_updated_at": "2026-07-27T09:52:09+08:00",
+  "task_id": "ISSUE-15",
+  "workflow_id": "2026-09-23-framework-rc1-pilot",
+  "owner_skill": "ai-context-governance",
+  "status": "in_progress",
+  "created_at": "2026-09-23T22:59:04+08:00",
+  "updated_at": "2026-09-23T22:59:04+08:00",
+  "template_source": ".ai/assets/skills/ai-context-governance/templates/ai-context-remediation-task-template.json",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "ultra",
+  "finding_ids": [],
+  "scope": {
+    "target": "Complete Codex rc.1 pilot in the isolated target worktree",
+    "files": [
+      "AGENTS.md",
+      "AGENTS.zh-TW.md",
+      "CLAUDE.md",
+      ".agents/skills",
+      ".claude/skills",
+      ".ai/core",
+      ".ai/custom",
+      ".ai/framework.lock",
+      ".dev/ai-context",
+      ".dev/workflows/2026-09-23-framework-rc1-pilot"
+    ],
+    "constraints": [
+      "Preserve target semantic customization and .NET rules",
+      "No source U001 adoption",
+      "No provider integration or publication authority inferred"
+    ],
+    "non_goals": [
+      "Product src/tests",
+      "Infrastructure",
+      "Credentials",
+      "Bulk historical record conversion"
+    ]
+  },
+  "execution": {
+    "steps": [
+      "Reconcile target-owned authority and exact gate coupling",
+      "Install and observe the fixed complete candidate after native readiness",
+      "Verify and activate the reconciled Codex routes"
+    ],
+    "validation": [],
+    "last_completed_step": "Clean dedicated worktree and Issue binding verified; planning records created",
+    "next_action": "Complete target inventory and native prerequisite; prepare concrete reconciliation"
+  },
+  "results": {
+    "summary": "Planning only; no target adoption performed",
+    "files_changed": [
+      ".dev/workflows/2026-09-23-framework-rc1-pilot/workflow-plan.md",
+      ".dev/workflows/2026-09-23-framework-rc1-pilot/workflow.yaml"
+    ],
+    "tests_run": [],
+    "finding_status": "not-addressed",
+    "residual_risk": "Native prerequisite and target gate reconciliation pending",
+    "follow_up_needed": true
+  }
+}
