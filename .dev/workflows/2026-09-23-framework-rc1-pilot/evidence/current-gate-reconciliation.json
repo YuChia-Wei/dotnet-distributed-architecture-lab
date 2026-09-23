@@ -1,0 +1,106 @@
+{
+  "kind": "current target gate reconciliation evidence",
+  "checks": [
+    {
+      "path": ".dev/ai-context/local/rc1-pilot-checks/precommit-01/tests.json",
+      "sha256": "fecdfbd4c1f5f1792ab84981efe90ef511bfe7fac3fa84fc9ac93c363f1e5c8c",
+      "receipt": {
+        "executed": true,
+        "synthetic": false,
+        "phase": "uncommitted-reconciliation-check; final commit review still pending",
+        "command": [
+          "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+          "-I",
+          "-B",
+          ".dev/ai-context/tooling/tests/test_current_framework_gate.py"
+        ],
+        "started_at": "2026-09-23T15:57:13.927425+00:00",
+        "completed_at": "2026-09-23T15:57:14.275716+00:00",
+        "duration_seconds": 0.348,
+        "exit_code": 0,
+        "binding_sha256": "f19706299e5bf132e98f0ee5f48a4516ba11a9c767ae0bbda3bec673310bc2f4",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "c03531ba1b823912eaa9c10ecb667cf611af71f11aa5a4392a8a6a63114f9769"
+      }
+    },
+    {
+      "path": ".dev/ai-context/local/rc1-pilot-checks/precommit-01/gate.json",
+      "sha256": "142bdf621bb0e57b5d2a30c5c31e3919c1b84637735f8196fb0543b7fac20005",
+      "receipt": {
+        "executed": true,
+        "synthetic": false,
+        "phase": "uncommitted-reconciliation-check; final commit review still pending",
+        "command": [
+          "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+          "-I",
+          "-B",
+          ".dev/ai-context/tooling/validate-current-framework.py",
+          "--binding-sha256",
+          "f19706299e5bf132e98f0ee5f48a4516ba11a9c767ae0bbda3bec673310bc2f4",
+          "--git-range",
+          "cb122285af09e46b24102f22a0ad9d713219c1f2..HEAD"
+        ],
+        "started_at": "2026-09-23T15:57:14.276413+00:00",
+        "completed_at": "2026-09-23T15:57:15.659665+00:00",
+        "duration_seconds": 1.383,
+        "exit_code": 1,
+        "binding_sha256": "f19706299e5bf132e98f0ee5f48a4516ba11a9c767ae0bbda3bec673310bc2f4",
+        "stdout_sha256": "bf6c0de05dc9ea39277cc584d57beb1e9a35e35f58466bf9e8dcdd1707a0e1a1",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "path": ".dev/ai-context/local/rc1-pilot-checks/precommit-02/tests.json",
+      "sha256": "12b6116c756fa7a4be6b2139d79ca6b0b6780610f789dcab52fecfaa2da8a865",
+      "receipt": {
+        "executed": true,
+        "synthetic": false,
+        "phase": "uncommitted-reconciliation-check; final commit review pending",
+        "material_change": "gate inventory uses direct lstat for Windows identity/link counts; regression added",
+        "command": [
+          "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+          "-I",
+          "-B",
+          ".dev/ai-context/tooling/tests/test_current_framework_gate.py"
+        ],
+        "started_at": "2026-09-23T15:58:09.241097+00:00",
+        "completed_at": "2026-09-23T15:58:09.592140+00:00",
+        "duration_seconds": 0.351,
+        "exit_code": 0,
+        "binding_sha256": "d30152fade32d6907f9781237a1a266bd761b807d6a78bce9ee84d134ff188f5",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "ddf233c5d53973aaf96a21664e59a0db0737998eef57d93d639f4de2e7f983e2"
+      }
+    },
+    {
+      "path": ".dev/ai-context/local/rc1-pilot-checks/precommit-02/gate.json",
+      "sha256": "77c1e408de18edc14656ffed1e54941d685a427554e8b9a25c64b1ddd933592c",
+      "receipt": {
+        "executed": true,
+        "synthetic": false,
+        "phase": "uncommitted-reconciliation-check; final commit review pending",
+        "material_change": "gate inventory uses direct lstat for Windows identity/link counts; regression added",
+        "command": [
+          "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+          "-I",
+          "-B",
+          ".dev/ai-context/tooling/validate-current-framework.py",
+          "--binding-sha256",
+          "d30152fade32d6907f9781237a1a266bd761b807d6a78bce9ee84d134ff188f5",
+          "--git-range",
+          "cb122285af09e46b24102f22a0ad9d713219c1f2..HEAD"
+        ],
+        "started_at": "2026-09-23T15:58:09.593052+00:00",
+        "completed_at": "2026-09-23T15:58:34.665836+00:00",
+        "duration_seconds": 25.073,
+        "exit_code": 0,
+        "binding_sha256": "d30152fade32d6907f9781237a1a266bd761b807d6a78bce9ee84d134ff188f5",
+        "stdout_sha256": "975252f6cba8ca3b0e6da99e1edfb634eb0c0b37dd626acabef1ea6fa5e8a683",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "first_failure_cause": "Windows DirEntry.stat omitted link/identity metadata; direct lstat retained all checks",
+  "current_outcome": "14 focused tests and selected working-content gate passed",
+  "limits": "precommit Git range covers first 3 commits; final fixed subject gate and independent review pending"
+}

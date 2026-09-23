@@ -1,0 +1,43 @@
+metadata_version: 3
+id: ai-context-governance
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+  - id: skill-instruction-reader
+    requirement: Read selected instructions and access permitted project context
+    for_operations: [propose, apply]
+    on_missing: unavailable
+configuration: null
+artifact_roles: []
+resources:
+  references:
+    - references/maintenance.md
+  schemas: []
+  templates: []
+  tools: []
+operations:
+  - id: propose
+    execution: instruction
+    inputs:
+      - Selected finding, problem or direct request and named context files
+      - Ownership, relevant authority, current evidence and intended behavior
+      - Optional presentation or export request
+    outputs:
+      - Reviewable before and after text or bounded edit description
+      - Source and authority bindings, consequences, checks and unresolved decisions
+    instructions: references/maintenance.md
+    implementation_status: implemented
+  - id: apply
+    execution: instruction
+    inputs:
+      - Concrete authorized proposal or bounded direct edit request
+      - Selected project-owned files, applicable authority and current bytes
+    outputs:
+      - Actual changed paths, source or decision references and read-back results
+      - Observed checks, remaining limits, partial state and next actions
+    instructions: references/maintenance.md
+    implementation_status: implemented

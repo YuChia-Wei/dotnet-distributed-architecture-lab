@@ -27,6 +27,27 @@ OWNER_CAPABILITIES = {
     "spec-compliance-validator": "compliance-validation",
 }
 
+HISTORY = ".dev/ai-context/history/v0.18.0/runtime/"
+LEGACY_IDS = {"ai-context-init", "ai-context-upgrader"}
+WITHDRAWN_IDS = {
+    "ai-context-auditor", "ai-context-governance", "bdd-gwt-test-designer",
+    "code-reviewer", "ddd-ca-hex-architect", "diagnostic-analyst",
+    "local-change-implementer", "problem-frame-author", "requirement-author",
+    "slice-implementer", "software-development-orchestrator", "spec-author",
+    "spec-compliance-validator",
+}
+CURRENT_AUTHORITIES = {
+    "AGENTS.md", "AGENTS.zh-TW.md", "CLAUDE.md", ".gitattributes", ".gitignore",
+    ".ai/INDEX.MD", ".ai/assets/skills/README.MD",
+    ".agents/skills/README.md", ".claude/skills/README.md",
+    ".ai/custom/framework.json", ".dev/ai-context/CURRENT-FRAMEWORK.md",
+    ".dev/ai-context/skills.md",
+    ".dev/ai-context/tooling/validate-current-framework.py",
+    ".dev/ai-context/tooling/tests/test_current_framework_gate.py",
+    ".dev/workflows/2026-09-23-framework-rc1-pilot/reconciliation-proposal.md",
+    ".dev/workflows/2026-09-23-framework-rc1-pilot/review-criteria.md",
+}
+
 
 class GateError(ValueError):
     pass
@@ -129,7 +150,8 @@ class Files:
                 for entry in entries:
                     self.entries += 1
                     require(self.entries <= MAX_ENTRIES, "directory observation limit")
-                    info = entry.stat(follow_symlinks=False)
+                    # Windows DirEntry.stat may omit identity/link counts; use direct lstat.
+                    info = Path(entry.path).lstat()
                     require(not stat.S_ISLNK(info.st_mode) and not getattr(info, "st_file_attributes", 0) & 0x400,
                             "non-direct managed entry")
                     if stat.S_ISDIR(info.st_mode):
@@ -202,20 +224,58 @@ def retained_check(files, binding):
     return {"exact_retained_files": len(paths), "net_assets": 194}
 
 
+def route_contract(binding):
+    expected_old = {runtime + "/skills/" + name
+                    for runtime in [".agents", ".claude"] for name in WITHDRAWN_IDS}
+    old = unique(binding["withdrawn_entries"], lambda row: row["old"], "withdrawals")
+    require(set(old) == expected_old, "withdrawal set differs")
+    legacy = {runtime + "/skills/" + name + "/SKILL.md"
+              for runtime in [".agents", ".claude"] for name in LEGACY_IDS}
+    require(set(unique(binding["legacy_entries"], lambda row: row["path"], "legacy entries")) == legacy,
+            "legacy lifecycle entry set differs")
+    require(set(unique(binding["legacy_entry_history"], lambda row: row["path"], "legacy history")) ==
+            {HISTORY + path for path in legacy}, "legacy history set differs")
+    authorities = set(unique(binding["current_authorities"], lambda row: row["path"], "current authorities"))
+    require(CURRENT_AUTHORITIES <= authorities, "required current authority missing")
+    archived = []
+    for row in binding["withdrawn_entries"]:
+        expected = {HISTORY + row["old"] + "/SKILL.md"}
+        if row["old"] in {".agents/skills/ai-context-auditor", ".agents/skills/ddd-ca-hex-architect",
+                          ".claude/skills/ddd-ca-hex-architect"}:
+            expected.add(HISTORY + row["old"] + "/agents/openai.yaml")
+        require(set(unique(row["archived_files"], lambda ref: ref["path"], "archived entry")) == expected,
+                "runtime archive mapping differs")
+        archived.extend(row["archived_files"])
+    archived.extend(binding["legacy_entry_history"])
+    unique(archived, lambda row: row["path"], "complete runtime history")
+    return archived
+
+
 def routes_check(files, binding):
+    archived = route_contract(binding)
     for row in binding["withdrawn_entries"]:
         require(files.locate(row["old"]) is None, "superseded runtime entry remains")
-        require(type(row["archived_files"]) is list and bool(row["archived_files"]), "empty runtime history")
-        for reference in row["archived_files"]:
-            files.pinned(reference)
-    require(len(binding["withdrawn_entries"]) == 26, "withdrawal set incomplete")
-    unique(binding["withdrawn_entries"], lambda row: row["old"], "withdrawals")
+    require(files.inventory(HISTORY.rstrip("/")) == sorted(ref["path"] for ref in archived),
+            "runtime history inventory differs")
+    for ref in archived:
+        raw = files.pinned(ref)
+        original = ref["path"][len(HISTORY):]
+        process = subprocess.run(["git", "show", binding["baseline_commit"] + ":" + original],
+                                 cwd=files.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=15)
+        require(process.returncode == 0 and process.stdout == raw, "runtime history differs from baseline")
     for row in binding["legacy_entries"]:
         files.pinned(row)
-    require(len(binding["legacy_entries"]) == 4, "legacy lifecycle entry set differs")
+    for runtime in [".agents", ".claude"]:
+        expected = [runtime + "/skills/README.md"]
+        expected.extend(runtime + "/skills/" + name + "/SKILL.md" for name in LEGACY_IDS)
+        if runtime == ".agents":
+            expected.extend(".agents/skills/framework-" + name + "/SKILL.md"
+                            for name in binding["candidate"]["packages"])
+        require(files.inventory(runtime + "/skills") == sorted(expected), "active runtime discovery differs")
     for reference in binding["current_authorities"]:
         files.pinned(reference)
-    return {"withdrawn_entries": 26, "legacy_only_entries": 4}
+    return {"withdrawn_entries": 26, "legacy_only_entries": 4, "baseline_history_files": len(archived),
+            "current_authorities": len(binding["current_authorities"]), "complete_runtime_discovery": "matched"}
 
 
 def rules_check(files, binding):

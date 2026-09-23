@@ -1,0 +1,240 @@
+{
+  "kind": "installed public configuration/read observations",
+  "candidate_identity": "versioned:0.19.0-rc.1:3755b217421a4f1238f740a09de7e034ccf56038:691ef5f2202c02772e0af76c3789e0af829501d8dea5bc24837763fe1caf8a28",
+  "config_sha256": "6e9cb78f23ff1c4453e3cdb6906a20c014fe38768bdc02824cc9c82e23e8cb4f",
+  "operations": [
+    {
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\lesson\\scripts\\lesson.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\lesson-explain.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.298,
+      "stdout_sha256": "de1c703e85d4e1c21f7dbc0ed265ac712d0d590a04d602bb86b560f089ab6726",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "package": "lesson",
+      "operation": "explain",
+      "outcome": "succeeded"
+    },
+    {
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\lesson\\scripts\\lesson.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\lesson-query.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.526,
+      "stdout_sha256": "657312a7e15544563e8deeb5331ac76a55b9872ebce441011cc2a9aaebd919ec",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "package": "lesson",
+      "operation": "query",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "adr",
+      "operation": "explain",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\adr\\scripts\\adr.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\adr-explain.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.272,
+      "stdout_sha256": "5df44d0c3df6557543095a632974b679e288cf91afbcdceb99e3234f41aa6cc5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "adr",
+      "operation": "query",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\adr\\scripts\\adr.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\adr-query.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.494,
+      "stdout_sha256": "c2998018c789c8cde403963c0e9b9e7aad72878125b2a98306f8196d778ad594",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "standards-promotion",
+      "operation": "explain",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\standards-promotion\\scripts\\standards_promotion.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\standards-promotion-explain.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.277,
+      "stdout_sha256": "1a4922e4290334f32f6098aabe004794655aed99fffb449c3e73c7da0369e388",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "standards-promotion",
+      "operation": "query",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\standards-promotion\\scripts\\standards_promotion.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\standards-promotion-query.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.54,
+      "stdout_sha256": "112c094432cc57a42aa9d885d736fd65f09018b0dc54fc1dd697bde938a9f8bf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "pr",
+      "operation": "explain",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\pr\\scripts\\pr.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\pr-explain.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.26,
+      "stdout_sha256": "9abf3a2b91094b4e48d7eac1b4b4f9c07bdaee13778841e125924475ef087825",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "pr",
+      "operation": "query",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\pr\\scripts\\pr.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\pr-query.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.379,
+      "stdout_sha256": "96089e372a1a4db159ca87de0052ee293f98d3b109385db2cbc92d065c38ecbb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "local-backlog",
+      "operation": "explain",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\local-backlog\\scripts\\local_backlog.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\local-backlog-explain.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.28,
+      "stdout_sha256": "677232beb5c4d9adc3e929fe51eff2f59e42916d85b9bea535d919f4ce165cc2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "local-backlog",
+      "operation": "query",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\local-backlog\\scripts\\local_backlog.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\local-backlog-query.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.376,
+      "stdout_sha256": "dfaf6a81277e37d54352892358f39ee09e7a8a49306c96cffd2a37bc846df645",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "software-development-orchestrator",
+      "operation": "explain",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\software-development-orchestrator\\scripts\\workflow.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\software-development-orchestrator-explain.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.311,
+      "stdout_sha256": "dd572b018ca4f38fb4fcf89aa19a7036cb409dffc23054242e1e359f02989cf3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "software-development-orchestrator",
+      "operation": "query",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\software-development-orchestrator\\scripts\\workflow.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\software-development-orchestrator-query.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.492,
+      "stdout_sha256": "38613e4a2d661cb3bd6b9e44cb86bf976c2cab6af635d51f99462e06f70a984f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "succeeded"
+    },
+    {
+      "package": "problem-frame-author",
+      "operation": "explain",
+      "command": [
+        "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-I",
+        "-B",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab-rc1-pilot\\.ai\\core\\skills\\problem-frame-author\\scripts\\problem_frame.py",
+        "--request",
+        "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\installed-readers\\problem-frame-author-explain.request.json"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.38,
+      "stdout_sha256": "1337e8236dd499ee76f3c30407ad9ff72e855d9c30ea32a307757cf5888cc591",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "ok"
+    }
+  ],
+  "python": "3.13.14",
+  "dependencies": {
+    "PyYAML": "6.0.3",
+    "jsonschema": "4.26.0",
+    "referencing": "0.37.0"
+  },
+  "seven_explain": "passed; runtime capability not-probed",
+  "six_queries": "passed; partial=false, selected_count=0; README ignored",
+  "problem_frame": "configuration inspected; no record reference selected",
+  "writes_and_decisions": "not exercised; no decision adapter configured; no approval/adoption inferred",
+  "harness_correction": "First summarizer incorrectly expected succeeded for problem-frame-author. Actual response was exit 0/outcome ok per its distinct result envelope. Original output preserved; corrected read-only interpretation, no product re-execution.",
+  "activation": "pending root/runtime reconciliation and independent review"
+}

@@ -102,3 +102,6 @@
 .agents/skills/framework-spec-compliance-validator/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
 .ai/core/skills/standards-promotion/** -text -eol -filter -ident -working-tree-encoding -merge
 .agents/skills/framework-standards-promotion/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
+
+# Preserve exact pre-pilot runtime history bytes.
+.dev/ai-context/history/v0.18.0/runtime/** -text -eol -filter -ident -working-tree-encoding -merge

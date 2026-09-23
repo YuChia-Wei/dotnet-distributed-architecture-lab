@@ -1,0 +1,248 @@
+metadata_version: 2
+id: standards-promotion
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read selected public entry and resources
+  for_operations:
+  - explain
+  - propose
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - withdraw
+  - supersede
+  - reconcile
+  on_missing: unavailable
+- id: python
+  version: '>=3.11,<4'
+  for_operations:
+  - explain
+  - propose
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - withdraw
+  - supersede
+  - reconcile
+  on_missing: unavailable
+- id: pyyaml
+  version: '>=6,<7'
+  for_operations:
+  - explain
+  - propose
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - withdraw
+  - supersede
+  - reconcile
+  on_missing: unavailable
+- id: jsonschema
+  version: '>=4.18,<5'
+  for_operations:
+  - propose
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - withdraw
+  - supersede
+  - reconcile
+  on_missing: unavailable
+- id: filesystem
+  requirement: Explicit local roots, bounded reads and exclusive atomic single-record
+    writes; ignored local config in a Git project requires read-only Git
+  for_operations:
+  - explain
+  - propose
+  - inspect
+  - query
+  - validate
+  - revise
+  - render
+  - withdraw
+  - supersede
+  - reconcile
+  on_missing: unavailable
+configuration:
+  namespace: standards-promotion
+  defaults:
+    store:
+      kind: filesystem
+      root: notes/promotions
+      tracking: tracked
+    template:
+      origin: package
+      path: templates/promotion.md
+artifact_roles:
+- role: standards-promotion.record
+  owner: project
+  schema: standards-promotion.record@1.0.0
+  read_schemas:
+  - standards-promotion.record@1.0.0
+  store_binding: standards-promotion.store
+  identity: promotion-<32 lowercase hex digits>
+  filename: <id>.promotion.json
+  read_operations:
+  - inspect
+  - query
+  - validate
+  - render
+  write_operations:
+  - propose
+  - revise
+  - withdraw
+  - supersede
+  - reconcile
+- role: standards-promotion.view
+  owner: derived
+  source_role: standards-promotion.record
+  output: Result-only Markdown
+  persistence: Export requires separate caller-owned write
+  produce_operations:
+  - render
+resources:
+  references:
+  - references/configuration.md
+  - references/operations.md
+  - references/authority.md
+  - references/example.md
+  schemas:
+  - id: standards-promotion.record
+    version: 1.0.0
+    path: schemas/promotion-record.schema.json
+    owner: standards-promotion
+    migration: unsupported; preserve original
+  templates:
+  - id: standards-promotion.default-view
+    path: templates/promotion.md
+    input_role: standards-promotion.record
+    output_role: standards-promotion.view
+    owner: standards-promotion
+  tools:
+  - id: standards-promotion.fs
+    owner: standards-promotion
+    implementation_status: implemented
+    entrypoint: scripts/standards_promotion.py
+    operation_contract: references/operations.md
+    operations:
+    - explain
+    - propose
+    - inspect
+    - query
+    - validate
+    - revise
+    - render
+    - withdraw
+    - supersede
+    - reconcile
+operations:
+- id: explain
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  outputs:
+  - own effective settings, field sources, config version, ignored namespace names
+    and authority bindings
+  tool: standards-promotion.fs
+  implementation_status: implemented
+- id: propose
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - content
+  - text
+  - decision
+  - optional statuses and immutable extensions
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  - actual related_query and retained directory creations
+  tool: standards-promotion.fs
+  implementation_status: implemented
+- id: inspect
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  outputs:
+  - owned record, raw digest and historical evidence/freshness
+  tool: standards-promotion.fs
+  implementation_status: implemented
+- id: query
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - optional literal text and statuses
+  outputs:
+  - matching references with status/version/raw digest
+  - partial diagnostics and actual query_sha256
+  tool: standards-promotion.fs
+  implementation_status: implemented
+- id: validate
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  outputs:
+  - actual owned structure/semantic result and diagnostics
+  tool: standards-promotion.fs
+  implementation_status: implemented
+- id: revise
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  - expected_sha256
+  - content
+  - reason
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  tool: standards-promotion.fs
+  implementation_status: implemented
+- id: render
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  outputs:
+  - standards-promotion.view as result-only escaped Markdown
+  tool: standards-promotion.fs
+  implementation_status: implemented
+- id: withdraw
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  - expected_sha256
+  - reason
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  tool: standards-promotion.fs
+  implementation_status: implemented
+- id: supersede
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  - expected_sha256
+  - reason
+  - successor
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  tool: standards-promotion.fs
+  implementation_status: implemented
+- id: reconcile
+  inputs:
+  - explicit project_root/package_root and selected configuration
+  - reference
+  - expected_sha256
+  - optional adoption_source and effect_source selections
+  outputs:
+  - record reference, actual persisted-byte digest, changed flag and mutation state
+  - independent adoption/rule-content/effect observation and snapshots
+  tool: standards-promotion.fs
+  implementation_status: implemented

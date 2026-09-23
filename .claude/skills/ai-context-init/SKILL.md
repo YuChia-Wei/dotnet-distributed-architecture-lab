@@ -1,15 +1,25 @@
 ---
 name: ai-context-init
-description: Initialize a target repository after this AI context framework is copied in by scanning repo facts, refreshing repo-specific context, and atomically creating provenance plus the customization ledger only from credible source evidence.
+description: Original published legacy-format support only; not the installed 0.19.0-rc.1 candidate. Initialize a target repository after this AI context framework is copied in by scanning repo facts, refreshing repo-specific context, and atomically creating provenance plus the customization ledger only from credible source evidence.
 ---
 
 # AI Context Init
 
-This is a thin Claude-compatible wrapper.
+This is a retained Claude legacy-format wrapper; the current candidate is unsupported.
+
+## Target Legacy-Only Boundary
+
+This entry supports only its original published legacy formats and explicitly
+authorized recovery. It is not a route for the installed .ai/core candidate.
+Do not change .ai/framework.lock, generate old wrappers over framework-* entries,
+replace the current target binding, or describe this entry as candidate support.
+Read .dev/ai-context/CURRENT-FRAMEWORK.md and .dev/ai-context/skills.md first.
+The retained source below governs only the permitted legacy operation; this
+target boundary takes precedence over assumptions of an active old layout.
 
 ## Canonical Source
 
-- Registry: `.ai/assets/skills/README.MD`
+- Registry: `.dev/ai-context/skills.md`
 - Spec: `.ai/assets/skills/ai-context-init/skill.yaml`
 - Human Guide: `.dev/guides/ai-collaboration-guides/AI-CONTEXT-INIT-SKILL-GUIDE.md`
 - References:
@@ -37,6 +47,6 @@ This is a thin Claude-compatible wrapper.
 
 ## Wrapper Rules
 
-Use this wrapper only as a compatibility entry.
+Use this wrapper only for the explicitly permitted legacy duty above.
 Keep runtime-specific metadata in this wrapper directory only when the runtime requires it.
 If wrapper text and canonical spec differ, follow `.ai/assets/skills/ai-context-init/skill.yaml`.

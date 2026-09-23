@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "local-backlog.record 1.0.0",
+  "description": "Owned record structure; authority, actual evidence, transition and cross-field binding checks remain tool/caller responsibilities.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "owner",
+    "created_at",
+    "updated_at",
+    "title",
+    "summary",
+    "references",
+    "kind",
+    "id",
+    "writable_authority",
+    "state",
+    "state_reason",
+    "acceptance",
+    "completion_evidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "owner": {
+      "const": "project"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "target",
+          "relationship"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "work-item",
+              "pr",
+              "github-issue",
+              "url",
+              "text"
+            ]
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "relationship": {
+            "enum": [
+              "related",
+              "depends-on",
+              "implements",
+              "reference-only"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "github-issue"
+                }
+              },
+              "required": [
+                "kind"
+              ]
+            },
+            "then": {
+              "properties": {
+                "relationship": {
+                  "const": "reference-only"
+                },
+                "target": {
+                  "type": "string",
+                  "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/issues/[1-9][0-9]*$"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 0
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$"
+      },
+      "additionalProperties": true
+    },
+    "kind": {
+      "const": "local-backlog"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^work-[a-f0-9]{32}$"
+    },
+    "writable_authority": {
+      "const": "local"
+    },
+    "state": {
+      "enum": [
+        "draft",
+        "planned",
+        "in_progress",
+        "blocked",
+        "completed",
+        "cancelled"
+      ]
+    },
+    "state_reason": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      },
+      "minItems": 1
+    },
+    "completion_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source",
+          "note"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 0
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "completed"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "completion_evidence": {
+            "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "completion_evidence": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ]
+}

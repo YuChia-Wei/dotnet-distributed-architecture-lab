@@ -104,8 +104,9 @@ Run the target-owned command with the caller-selected immutable binding digest:
 
     python -I -B .dev/ai-context/tooling/validate-current-framework.py --binding-sha256 <review-subject-binding-sha256> --git-range <accepted-base>..HEAD
 
-The command checks exact candidate/lock/managed bytes, eighteen Codex routes,
-withdrawn entry history, retained target authority/dependency bytes, all twenty
+The command checks exact candidate/lock/managed bytes, complete active runtime discovery,
+baseline-exact withdrawn/legacy history, required current authority pins,
+retained target authority/dependency bytes, all twenty
 actual resolver calls and the unchanged target Git overlay. Changing the binding
 or its expected digest is a reviewed authority change, not automatic re-pinning.
 A digest proves identity, not user approval.
@@ -131,3 +132,19 @@ Legacy assessment/workflow/shell validators retain their named historical scope;
 a zero-check dependency result is not candidate dependency evidence. Source U001
 does not suspend any target obligation. Report every selected check and residual
 truthfully instead of relabeling old-package checks as current passes.
+
+## Independent review protocol for this pilot
+
+Retained ai-context-auditor skill.yaml selects fixed-head-independent-auditor,
+its playbook, ROLE-EXECUTION-CONTRACT and AGENT-EXECUTION-GUARDRAILS-CONTRACT.
+The current generic audit package also applies. This explicit target protocol
+does not reactivate the withdrawn ordinary audit wrapper. Tracked criteria:
+.dev/workflows/2026-09-23-framework-rc1-pilot/review-criteria.md.
+
+Before dispatch verify the clean immutable commit, criteria and authority hashes;
+validate the packet and acquire its read-only snapshot lease. Preserve genuine
+invocation evidence/report in the declared ignored root. Admit a passing receipt
+with .dev/ai-context/tooling/validate-target-terminal-audit.py --admit <receipt.json>
+against the unchanged full tree, then release the lease. Binding state pilot-review
+identifies a review subject, not a passing receipt. Ordinary use requires this
+separate admission; no tracked success annotation is needed after freeze.

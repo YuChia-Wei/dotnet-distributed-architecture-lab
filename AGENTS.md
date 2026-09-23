@@ -12,6 +12,24 @@ This document is the canonical English agent-facing root collaboration guide. `A
 - Command priority: User/Approval > Subfolder AGENTS > This file > Other general documents.
 - If an IDE MCP server is configured and provides refactoring capabilities, prefer the IDE MCP refactoring tools.
 
+## Current Framework and Target Authority
+
+Read [.dev/ai-context/CURRENT-FRAMEWORK.md](.dev/ai-context/CURRENT-FRAMEWORK.md)
+and its exact binding for this Codex-only 0.19.0-rc.1 pilot. Managed packages live
+under .ai/core/skills with generated framework-* Codex entries. Ordinary use
+requires a clean unchanged subject admitted by the independent target review
+receipt. Installation and selected checks alone are insufficient. Until admission,
+only this authorized pilot's reconciliation and verification run.
+
+For this installation, the current binding and target registry select layout,
+entry points and validation commands ahead of conflicting legacy layout
+instructions. Retained .NET rules, four customizations, product truth, Git
+attribution and independent review remain mandatory. Legacy provenance identifies
+the retained rule/support baseline, not this installation. The candidate is
+unpublished; a stable release and its upgrade route remain unestablished.
+Claude has no adapter for this candidate. Withdrawn entries remain in
+.dev/ai-context/history/v0.18.0/runtime; do not discover or execute that history.
+
 ## Default Execution Principles
 
 - Do not invent project truth, authorization, execution, or validation. State material assumptions, uncertainty, and tradeoffs. Ask only when an unresolved direction materially affects the outcome.
@@ -37,7 +55,7 @@ Treat `MQArchLab.slnx`, `global.json`, `*.csproj`, `src/`, `tests/`, and `docker
 
 1. Start with the request, current Git/worktree state, this file, and explicitly named artifacts.
 2. Read `README.md`, `.dev/ARCHITECTURE.md`, and `.dev/project-config.yaml` when the task needs product or repository facts; use `MQArchLab.slnx`, project files, and `docker-compose/docker-compose.yml` to verify runtime or package facts.
-3. Use `.ai/assets/skills/README.MD` as the canonical skill registry and expand only for the active task or phase. Execute an explicitly classified generated runtime entry directly; load its full canonical source only for metadata, maintenance, or discrepancy resolution.
+3. Use `.dev/ai-context/skills.md` as the canonical skill registry and expand only for the active task or phase. Execute an explicitly classified generated runtime entry directly; load its full canonical source only for metadata, maintenance, or discrepancy resolution.
 4. Read `.dev/standards/AI-CONTEXT-BOUNDARY.md` and `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md` before moving or rewriting AI context.
 5. Use `.dev/guides/ai-collaboration-guides/README.MD` for human-facing skill and workflow guides, and `.ai/INDEX.MD` for agent-facing AI asset navigation.
 
@@ -76,12 +94,13 @@ Workflow artifact rules:
 2. Use issue-bound `<type>(#<issue-number>): <summary>` (or comma-separated issue references) when an issue number exists.
 3. Use scope-bound `<type>(<scope>): <summary>` when no issue number exists. A literal `|` is not part of the prospective grammar.
 4. For workflow-stage commits, include `Why`, `What`, `Validation`, and `Workflow` body sections.
-5. For repository-history or workflow-range validation, run
-   `.dev/ai-context/tooling/validate-target-ai-context.py`; it composes the
-   byte-exact framework policy with this repository's prospective AI-signature
-   and subject-grammar adoption boundaries plus exact historical attestation.
-   Do not bypass that target-owned
-   overlay by treating the package validator alone as the full historical gate.
+5. For the current installation, run the selected command and independent
+   admission in .dev/ai-context/CURRENT-FRAMEWORK.md. Its Git check invokes
+   .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py
+   with the workflow range and ID, preserving prospective AI-signature and
+   subject-grammar boundaries plus the exact historical attestation.
+   The old validate-target-ai-context.py remains legacy-package support.
+   The package Git validator alone does not replace the target overlay.
 
 ### AI Context Governance
 
@@ -117,7 +136,7 @@ Do not route general AI-context audit, documentation governance, or repository i
 
 ### Repo Init / Template Adaptation
 
-Use `ai-context-init` as the first skill after this framework is copied into an existing or empty target repository.
+Use the retained ai-context-init only for its original published legacy format and explicit recovery scope. The retained ai-context-upgrader has the same boundary. Neither handles this candidate, changes its lock, or initializes its installed state.
 
 The skill must:
 
@@ -131,12 +150,12 @@ Treat `.ai/assets/skills/ai-context-init/references/migration-boundaries.md` as 
 
 ### Code Review
 
-Use `code-reviewer` only when reviewing .NET backend code or dotnet-backend implementation guidance.
+Use the current generic code-reviewer for code review. For .NET backend code or dotnet-backend implementation guidance, additionally apply the retained target extension below.
 
 When code review applies:
 
 1. Complete the applicable effective-rule preflight before loading review guidance.
-2. Load `.ai/assets/skills/code-reviewer/references/review-routing.yaml` first.
+2. Follow the current package instructions; load .ai/assets/skills/code-reviewer/references/review-routing.yaml first when selecting the retained .NET extension.
 3. Select every matching route in this order: explicit scope, type hierarchy or interface, path, then the general C# fallback.
 4. Load only the canonical references and applicable finding rule IDs selected by those routes. Do not treat `CODE-REVIEW-INDEX.MD`, `CODE-REVIEW-CHECKLIST.md`, shared checklists, or `checklist-reference.md` as a second semantic authority.
 5. After route selection, evaluate role bindings and load `role-execution.md` only when needed. Direct execution is the default; delegation requires bounded eligibility and evidence.
@@ -145,20 +164,21 @@ When code review applies:
 
 ### Spec Compliance
 
-When using problem-frame workflows:
+For .NET implementation compliance in problem-frame workflows:
 
 1. Run `spec-compliance-validator`.
 2. Gate: coverage must be 100%.
 3. If coverage is not 100%, return to implementation or test generation before claiming completion.
+4. New CBF structural validation alone is not .NET implementation compliance; retain target compliance rules and evidence.
 
 ## Skill Routing
 
-- Canonical skill registry: `.ai/assets/skills/README.MD`
+- Current target skill registry: `.dev/ai-context/skills.md`
 - Current runtime wrappers: `.agents/skills/README.md`
-- Claude-compatible wrappers: `.claude/skills/README.md`
+- Claude legacy duties and unsupported candidate notice: `.claude/skills/README.md`
 - Human-facing skill guides: `.dev/guides/ai-collaboration-guides/README.MD`
 
-When canonical spec and runtime wrapper differ, treat `.ai/assets/skills/` as the source of truth.
+Current package source is .ai/core/skills/<id>/SKILL.md; its exact managed bytes are authoritative over the generated adapter. Apply CURRENT-FRAMEWORK.md and explicit target rule bindings alongside it. .ai/assets/skills retains selected target guidance and legacy support; old top-level specifications do not replace current instructions.
 
 Use these boundaries:
 
@@ -167,7 +187,7 @@ Use these boundaries:
 | Multi-stage software-development workflow orchestration, development skill routing, validation and commit checkpoints | `software-development-orchestrator` |
 | Read-only AI context health, drift, and structure analysis with conversational or persisted output | `ai-context-auditor` |
 | AI context cleanup, prompt boundary, language policy, wrapper sync | `ai-context-governance` |
-| First sync after copying this framework into a target repo | `ai-context-init` |
+| Explicit initialization or recovery of original published legacy formats only | `ai-context-init` |
 | .NET backend architecture design | `ddd-ca-hex-architect` |
 | GWT scenario and assertion design | `bdd-gwt-test-designer` |
 | .NET backend code review | `code-reviewer` |
@@ -195,12 +215,14 @@ Use these boundaries:
 | :--- | :--- |
 | `.ai/INDEX.MD` | Agent-facing AI asset index |
 | `.ai/README.MD` | `.ai/` purpose and boundary guide |
-| `.ai/assets/` | Canonical reusable AI assets |
+| `.ai/core/skills/` | Exact managed current skill packages |
+| `.ai/custom/framework.json` | Explicit target package configuration |
+| `.ai/assets/` | Retained target rules, references and legacy support |
 | `.ai/assets/shared/` | Universal shared AI context |
 | `.ai/assets/tech-stacks/dotnet-backend/` | .NET backend-specific context |
 | `.ai/assets/skills/code-reviewer/references/review-routing.yaml` | Canonical .NET backend code review routing contract |
 | `.ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD` | .NET backend building block reference |
-| `.ai/assets/skills/` | Canonical skill specs |
+| `.ai/assets/skills/` | Selected retained target guidance and legacy skill support |
 | `.ai/assets/sub-agent-role-prompts/` | Shared canonical roles; skill-private roles live under their owning skill |
 | `.ai/scripts/` | Transitional AI workflow scripts, context governance checks, and local tool orchestration helpers |
 
@@ -226,9 +248,9 @@ Use these boundaries:
 | Path | Description |
 | :--- | :--- |
 | `.agents/skills/README.md` | Current runtime wrapper index |
-| `.agents/skills/<skill>/` | Current runtime skill wrapper |
-| `.claude/skills/README.md` | Claude-compatible wrapper index |
-| `.claude/skills/<skill>/` | Claude-compatible skill wrapper |
+| `.agents/skills/framework-<skill>/` | Current generated Codex entry |
+| `.claude/skills/README.md` | Claude unsupported-candidate and legacy-duty index |
+| `.claude/skills/<skill>/` | Original legacy-format duties only |
 
 ### Product And Tooling Roots
 

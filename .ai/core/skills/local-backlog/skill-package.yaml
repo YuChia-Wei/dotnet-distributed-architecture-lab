@@ -1,0 +1,190 @@
+metadata_version: 2
+id: local-backlog
+version: 0.1.0
+delivery_status: implemented
+entrypoint: SKILL.md
+dependencies:
+  required: []
+  optional: []
+runtime:
+- id: skill-instruction-reader
+  requirement: Read selected package and resources
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - query
+  - revise
+  - transition
+  - render
+  on_missing: unavailable
+- id: python
+  version: '>=3.11,<4'
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - query
+  - revise
+  - transition
+  - render
+  on_missing: unavailable
+- id: pyyaml
+  version: '>=6,<7'
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - query
+  - revise
+  - transition
+  - render
+  on_missing: unavailable
+- id: jsonschema
+  version: '>=4.18,<5'
+  for_operations:
+  - create
+  - inspect
+  - query
+  - revise
+  - transition
+  - render
+  on_missing: unavailable
+- id: filesystem
+  requirement: Selected local files; writes need exclusive creation and same-directory
+    atomic replacement
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - query
+  - revise
+  - transition
+  - render
+  on_missing: unavailable
+- id: git
+  requirement: 'Conditional: selected local-config ignore checks'
+  for_operations:
+  - explain
+  - create
+  - inspect
+  - query
+  - revise
+  - transition
+  - render
+  on_missing: unavailable
+configuration:
+  namespace: local-backlog
+  defaults:
+    store:
+      kind: filesystem
+      root: notes/work-items
+      tracking: tracked
+    template:
+      origin: package
+      path: templates/work-item.md
+artifact_roles:
+- role: local-backlog.record
+  owner: project
+  schema: local-backlog.record@1.0.0
+  read_schemas:
+  - local-backlog.record@1.0.0
+  store_binding: local-backlog.store
+  identity: work-<32 lowercase hex digits>
+  filename: <id>.work-item.json
+  read_operations:
+  - inspect
+  - query
+  - render
+  write_operations:
+  - create
+  - revise
+  - transition
+- role: local-backlog.view
+  owner: derived
+  source_role: local-backlog.record
+  output: result-only Markdown
+  persistence: Caller-selected export is a separate write
+  produce_operations:
+  - render
+resources:
+  references:
+  - references/configuration.md
+  - references/operations.md
+  - references/example.md
+  schemas:
+  - id: local-backlog.record
+    version: 1.0.0
+    path: schemas/local-backlog-record.schema.json
+    owner: local-backlog
+    migration: unsupported; preserve original
+  templates:
+  - id: local-backlog.default-view
+    path: templates/work-item.md
+    input_role: local-backlog.record
+    output_role: local-backlog.view
+    owner: local-backlog
+  tools:
+  - id: local-backlog.fs
+    owner: local-backlog
+    implementation_status: implemented
+    entrypoint: scripts/local_backlog.py
+    operation_contract: references/operations.md
+    operations:
+    - explain
+    - create
+    - inspect
+    - query
+    - revise
+    - transition
+    - render
+operations:
+- id: explain
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: local-backlog.fs
+  implementation_status: implemented
+- id: create
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: local-backlog.fs
+  implementation_status: implemented
+- id: inspect
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: local-backlog.fs
+  implementation_status: implemented
+- id: query
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: local-backlog.fs
+  implementation_status: implemented
+- id: revise
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: local-backlog.fs
+  implementation_status: implemented
+- id: transition
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: local-backlog.fs
+  implementation_status: implemented
+- id: render
+  inputs:
+  - Explicit JSON request defined in the owned operation contract
+  outputs:
+  - Actual outcome, mutation state, output references and diagnostics
+  tool: local-backlog.fs
+  implementation_status: implemented

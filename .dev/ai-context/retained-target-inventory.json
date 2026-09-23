@@ -4,6 +4,11 @@
   "meaning": "v0.18-derived target semantic rule and legacy reference baseline only",
   "files": [
     {
+      "path": ".ai/assets/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md",
+      "sha256": "11cf1cb5815cffeabadf88587ac33125f1517ce4cacd521dcd2aa8d7f15b7adf",
+      "git_blob": "3c91b6a24bf06b25dbfffeb1539e8bbe424e4201"
+    },
+    {
       "path": ".ai/assets/shared/GWT-TEST-HANDOFF-CONTRACT.md",
       "sha256": "a1a07886ef436eacdc7cfa4e5e41c5e186313fccb13af53eb7ebac27381c00db",
       "git_blob": "002671ffedcb1e361ff4daf5fd5d059afc1e9c9c"
@@ -19,9 +24,19 @@
       "git_blob": "a97f5de5ef11506de18a426a6c905453d18b2d6b"
     },
     {
+      "path": ".ai/assets/shared/agent-execution-guardrails.schema.yaml",
+      "sha256": "92e96aebf7bddc69614b811efdbba02a39661ab7799f83d0092d584ce89654ce",
+      "git_blob": "fe02b11d3352faf87e9480071fac14a63cd74658"
+    },
+    {
       "path": ".ai/assets/shared/governance/engineering-rule-catalog.yaml",
       "sha256": "9ec5c0cf7f95fd5a57ed1415c96c88175610d80d811c224b60ee39e2222d3c39",
       "git_blob": "6fcd3f324baa924190c39c09be14c1a32bf2482f"
+    },
+    {
+      "path": ".ai/assets/skills/ai-context-auditor/skill.yaml",
+      "sha256": "5ac4b3d1527fcf52f49f93e77f8a84403229cf659176615036844476a86a04ba",
+      "git_blob": "4cdde146e53b03815b601e78c6f80c4a83365b75"
     },
     {
       "path": ".ai/assets/skills/bdd-gwt-test-designer/skill.yaml",
@@ -272,6 +287,16 @@
       "path": ".ai/assets/skills/spec-compliance-validator/skill.yaml",
       "sha256": "0e1b309221bba7f72d584da0d7cd3615358e7e3ffcb20ce969df09e7d76a1786",
       "git_blob": "67669fb24af4a6d6de49cab3141038affbe550df"
+    },
+    {
+      "path": ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/references/fixed-head-independent-audit-playbook.md",
+      "sha256": "ddcb129626a7a04adadb15c4681c740073db4f5caff626daeff76545f5a6d537",
+      "git_blob": "41bdc164f1155392415c5e05d3a4a6844d362392"
+    },
+    {
+      "path": ".ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml",
+      "sha256": "c5a25948c684eb00ab2bafc9f4cf9ad4ee2d353c3290dd9fb2f3a090274eea3e",
+      "git_blob": "4eba8e9ead8ab1250fe462b452e4f851179f3c46"
     },
     {
       "path": ".ai/assets/tech-stacks/dotnet-backend/README.MD",
@@ -1269,6 +1294,11 @@
       "git_blob": "55fcf5b526d8159e55036b06bb2d23360c1380e4"
     },
     {
+      "path": ".ai/scripts/validate-agent-execution-guardrails.py",
+      "sha256": "fa5d398befda30e3dbbff348a750e7c9a0516f34af91bb3f1f54160a68150e15",
+      "git_blob": "f1bbe7f6d0b510319e1a6c7b3d7c53587974e667"
+    },
+    {
       "path": ".ai/scripts/validate-git-commits.py",
       "sha256": "05504513d224d93e9847cb7fb7234f5281a29fc3c97b1e90b880242c0b87c747",
       "git_blob": "a720b763971b5e3c9dbbc0dd14dc1e07f5a86e73"
@@ -1407,6 +1437,11 @@
       "path": ".dev/ai-context/tooling/target-validation-policy.yaml",
       "sha256": "1cc3d187a6679ec760d42faa59e591b845b45aaf6a7c589ecfc15936508fe0a9",
       "git_blob": "4c1f1006b6e1d697ae548b9c18053975f215a8c2"
+    },
+    {
+      "path": ".dev/ai-context/tooling/validate-target-terminal-audit.py",
+      "sha256": "a6f6e012e709856b6cc5949bbcc649c33e5d160e93b4a27213b4feb5c00150f1",
+      "git_blob": "c0765a9b8cf398f7219c42e05a9877538d88591c"
     },
     {
       "path": ".dev/project-config.yaml",

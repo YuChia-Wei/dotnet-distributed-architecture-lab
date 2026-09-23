@@ -12,6 +12,21 @@
 - 指令優先順序：User/Approval > Subfolder AGENTS > This file > Other general documents。
 - 若有設定 IDE 的 MCP Server，且該 MCP Server 提供重構功能，優先使用 IDE MCP Server 的重構能力。
 
+## 目前 Framework 與目標權威
+
+本次僅支援 Codex 的 0.19.0-rc.1 試行，須閱讀
+[.dev/ai-context/CURRENT-FRAMEWORK.md](.dev/ai-context/CURRENT-FRAMEWORK.md)
+及其精確綁定。受管理 package 位於 .ai/core/skills，Codex 入口為產生的 framework-*。
+一般使用須先有獨立目標審查收據，且目前內容與准入的乾淨版本一致。
+安裝與選定檢查本身不足以啟用；准入前只執行本次已授權試行的整合與驗證。
+
+本次安裝的佈局、入口與驗證指令，由目前綁定與目標 registry 決定，
+優先於互相衝突的舊版佈局指示。保留的 .NET 規則、四項客製化、產品真相、
+Git 歸屬與獨立審查仍為必要條件。舊 provenance 識別保留的規則與支援基線，
+不代表目前安裝。此候選尚未發布；穩定版及其升級路徑仍未建立。
+Claude 尚無此候選的 adapter。被取代的入口保存在
+.dev/ai-context/history/v0.18.0/runtime；不得探索或執行該歷史作為入口。
+
 ## 預設執行原則
 
 - 不得捏造專案事實、授權、執行或驗證。明確說明會影響結果的假設、不確定性與取捨。只有在尚未決定的方向會實質影響成果時，才詢問使用者。
@@ -37,7 +52,7 @@
 
 1. 從請求、目前 Git/worktree 狀態、本檔與明確指出的 artifacts 開始。
 2. 當任務需要產品或 repository facts 時，閱讀 `README.md`、`.dev/ARCHITECTURE.md` 與 `.dev/project-config.yaml`；使用 `MQArchLab.slnx`、project files 與 `docker-compose/docker-compose.yml` 驗證 runtime 或 package facts。
-3. 使用 `.ai/assets/skills/README.MD` 作為 canonical skill registry，且只為目前任務或階段擴展內容。明確分類為 generated 的 runtime entry 可直接執行；只有查閱 metadata、維護或釐清不一致時，才載入完整 canonical source。
+3. 使用 `.dev/ai-context/skills.md` 作為 canonical skill registry，且只為目前任務或階段擴展內容。明確分類為 generated 的 runtime entry 可直接執行；只有查閱 metadata、維護或釐清不一致時，才載入完整 canonical source。
 4. 在移動或重寫 AI context 前，先閱讀 `.dev/standards/AI-CONTEXT-BOUNDARY.md` 與 `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`。
 5. 使用 `.dev/guides/ai-collaboration-guides/README.MD` 查閱 human-facing guides，並使用 `.ai/INDEX.MD` 瀏覽 agent-facing AI assets。
 
@@ -76,11 +91,12 @@ Workflow artifact 規則：
 2. 有 issue number 時使用 issue-bound `<type>(#<issue-number>): <summary>`（多個 issue 以逗號分隔）。
 3. 沒有 issue number 時使用 scope-bound `<type>(<scope>): <summary>`；前瞻 grammar 不接受字面上的 `|`。
 4. workflow-stage commits 需包含 `Why`、`What`、`Validation` 與 `Workflow` body sections。
-5. 驗證 repository history 或 workflow commit range 時，執行
-   `.dev/ai-context/tooling/validate-target-ai-context.py`；該 target-owned
-   overlay 會組合 byte-exact framework policy、本 repository 的前瞻 AI signature
-   與 subject grammar 採用邊界，以及精確歷史佐證。不可只把 package validator
-   視為完整的歷史 gate 而略過此層。
+5. 目前安裝須執行 .dev/ai-context/CURRENT-FRAMEWORK.md 指定的檢查與獨立准入。
+   Git 檢查以 workflow range 與 ID 呼叫
+   .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py，
+   保留前瞻 AI signature、subject grammar 邊界及精確歷史佐證。
+   舊 validate-target-ai-context.py 保留為舊版套件支援。
+   Package Git validator 本身不能取代目標 overlay。
 
 ### AI Context Governance
 
@@ -116,7 +132,7 @@ Workflow artifact 規則：
 
 ### Repo Init / Template Adaptation
 
-當這套 framework 被複製到既有或全新目標 repository 後，第一個 skill 應使用 `ai-context-init`。
+保留的 ai-context-init 僅用於原有已發布舊版格式及明確復原範圍。保留的 ai-context-upgrader 具有相同限制。兩者都不處理此候選、不修改其 lock，也不初始化目前安裝狀態。
 
 該 skill 必須：
 
@@ -130,12 +146,12 @@ Workflow artifact 規則：
 
 ### Code Review
 
-只有在 review .NET backend code 或 dotnet-backend implementation guidance 時才使用 `code-reviewer`。
+程式碼審查使用目前通用的 code-reviewer；審查 .NET backend code 或 dotnet-backend implementation guidance 時，再加上以下保留的目標擴充。
 
 適用 code review 時：
 
 1. 載入 review guidance 前，先完成適用的 effective-rule preflight。
-2. 第一個載入 `.ai/assets/skills/code-reviewer/references/review-routing.yaml`。
+2. 遵循目前 package 指示；選取保留的 .NET 擴充時，第一個載入 .ai/assets/skills/code-reviewer/references/review-routing.yaml。
 3. 依 explicit scope、type hierarchy 或 interface、path、general C# fallback 的順序選出所有 matching routes。
 4. 只載入這些 routes 選出的 canonical references 與適用 finding rule IDs。不要把 `CODE-REVIEW-INDEX.MD`、`CODE-REVIEW-CHECKLIST.md`、shared checklists 或 `checklist-reference.md` 當作第二套語意權威。
 5. Route 選定後才評估 role bindings，且僅在需要時載入 `role-execution.md`。Direct execution 為預設；delegation 必須具備 bounded eligibility 與 evidence。
@@ -144,20 +160,21 @@ Workflow artifact 規則：
 
 ### Spec Compliance
 
-使用 problem-frame workflows 時：
+在 problem-frame workflows 驗證 .NET 實作符合性時：
 
 1. 執行 `spec-compliance-validator`。
 2. Gate：coverage 必須是 100%。
 3. 若 coverage 不是 100%，回到 implementation 或 test generation 後再宣稱完成。
+4. 新 CBF 結構驗證本身不是 .NET 實作符合性；保留目標 compliance 規則與證據。
 
 ## Skill Routing
 
-- Canonical skill registry：`.ai/assets/skills/README.MD`
+- 目前目標 skill registry：`.dev/ai-context/skills.md`
 - Current runtime wrappers：`.agents/skills/README.md`
-- Claude-compatible wrappers：`.claude/skills/README.md`
+- Claude 舊版職責與候選版尚未支援聲明：`.claude/skills/README.md`
 - Human-facing skill guides：`.dev/guides/ai-collaboration-guides/README.MD`
 
-當 canonical spec 與 runtime wrapper 不一致時，以 `.ai/assets/skills/` 作為 source of truth。
+目前 package source 是 .ai/core/skills/<id>/SKILL.md，其精確受管理內容優先於 generated adapter；並須同時遵循 CURRENT-FRAMEWORK.md 與明確目標規則綁定。.ai/assets/skills 保留選定的目標 guidance 與舊版支援；舊 top-level 規格不得取代目前指示。
 
 使用下列邊界：
 
@@ -166,7 +183,7 @@ Workflow artifact 規則：
 | 多階段開發流程協調、workflow artifacts、skill routing、validation 與 commit checkpoint | `software-development-orchestrator` |
 | 唯讀 AI context 健康度、漂移與結構分析；可選擇對話輸出或保存報告 | `ai-context-auditor` |
 | AI context cleanup、prompt boundary、language policy、wrapper sync | `ai-context-governance` |
-| 將此 framework 複製到目標 repo 後的第一次同步 | `ai-context-init` |
+| 僅明確初始化或復原原有已發布舊版格式 | `ai-context-init` |
 | .NET backend architecture design | `ddd-ca-hex-architect` |
 | GWT scenario 與 assertion design | `bdd-gwt-test-designer` |
 | .NET backend code review | `code-reviewer` |
@@ -194,12 +211,14 @@ Workflow artifact 規則：
 | :--- | :--- |
 | `.ai/INDEX.MD` | Agent-facing AI asset index |
 | `.ai/README.MD` | `.ai/` purpose and boundary guide |
-| `.ai/assets/` | Canonical reusable AI assets |
+| `.ai/core/skills/` | 精確受管理的目前 skill packages |
+| `.ai/custom/framework.json` | 明確使用的目標 package 設定 |
+| `.ai/assets/` | 保留的目標規則、參考資料與舊版支援 |
 | `.ai/assets/shared/` | Universal shared AI context |
 | `.ai/assets/tech-stacks/dotnet-backend/` | .NET backend-specific context |
 | `.ai/assets/skills/code-reviewer/references/review-routing.yaml` | Canonical .NET backend code review routing contract |
 | `.ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD` | .NET backend building block reference |
-| `.ai/assets/skills/` | Canonical skill specs |
+| `.ai/assets/skills/` | 選定的目標 guidance 與舊版 skill 支援 |
 | `.ai/assets/sub-agent-role-prompts/` | 共用 canonical roles；skill 私有 roles 放在其所屬 skill 內 |
 | `.ai/scripts/` | 過渡期 AI workflow scripts、context governance checks 與本機工具 orchestration helpers |
 
@@ -225,9 +244,9 @@ Workflow artifact 規則：
 | Path | 說明 |
 | :--- | :--- |
 | `.agents/skills/README.md` | Current runtime wrapper index |
-| `.agents/skills/<skill>/` | Current runtime skill wrapper |
-| `.claude/skills/README.md` | Claude-compatible wrapper index |
-| `.claude/skills/<skill>/` | Claude-compatible skill wrapper |
+| `.agents/skills/framework-<skill>/` | 目前產生的 Codex 入口 |
+| `.claude/skills/README.md` | Claude 尚未支援候選版與舊版職責索引 |
+| `.claude/skills/<skill>/` | 僅限原有舊版格式職責 |
 
 ### 產品與 Tooling 根目錄
 

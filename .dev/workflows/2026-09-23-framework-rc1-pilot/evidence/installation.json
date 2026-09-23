@@ -1,0 +1,48 @@
+{
+  "kind": "actual complete rc.1 installation after reviewed repair",
+  "engine_source": "3afb4ff4207acb3e12e3953018736305a439ed21",
+  "engine_root": "F:\\framework-next\\386",
+  "candidate_identity": "versioned:0.19.0-rc.1:3755b217421a4f1238f740a09de7e034ccf56038:691ef5f2202c02772e0af76c3789e0af829501d8dea5bc24837763fe1caf8a28",
+  "managed_members_verified": 131,
+  "protected_inputs_verified": 26,
+  "retained_authority_files_verified": 285,
+  "lock_sha256": "755a96ddab2e9eaebe26a49f4014e584ce2b852f09f7e829a57488301254d6f0",
+  "marker_absent": true,
+  "project_readiness": "not-assessed",
+  "activation": "inactive; target routes/public readers/independent review pending",
+  "result": {
+    "api_version": 1,
+    "changed": true,
+    "details": {
+      "counts": {
+        "added": 131,
+        "changed": 0,
+        "removed": 0,
+        "unchanged": 0
+      },
+      "lock_sha256": "755a96ddab2e9eaebe26a49f4014e584ce2b852f09f7e829a57488301254d6f0",
+      "managed_state": "managed-bytes-consistent",
+      "operation_root": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\recovery\\i-f240ecdf0dd97d5c81b56e6e6f54e8fa",
+      "project_readiness": "not-assessed",
+      "protected_input_state": "matches"
+    },
+    "diagnostics": [],
+    "operation": "apply",
+    "outcome": "applied"
+  },
+  "execution": {
+    "command": [
+      "C:\\Users\\h4227\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-I",
+      "-B",
+      "F:\\framework-next\\386\\src\\tools\\maintain_framework.py"
+    ],
+    "exit": 0,
+    "elapsed_seconds": 17.032,
+    "request_sha256": "90d3d5588af253882e907685e8bc3449abbb72af7c764e93ad9a02c624ee5bac",
+    "stdout_sha256": "a40646398d287dea4960c7f9c6d11d7b942316eb2c6bd0ee2fea30896050c718",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "prior_failure": "installation-first-failure.json",
+  "guard_reconciliation": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\.dev\\ai-context\\local\\rc1-pilot\\pilot-9ceb050fed8f\\observations\\repaired-386\\guard-reconciliation.json"
+}

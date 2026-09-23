@@ -97,6 +97,42 @@ class CurrentGateTests(unittest.TestCase):
         with self.assertRaisesRegex(gate.GateError, "dispositions differ"):
             gate.rules_check(gate.Files(ROOT), binding)
 
+    def test_missing_current_authorities_refuses(self):
+        binding = json.loads((ROOT / gate.BINDING).read_bytes())
+        binding["current_authorities"] = []
+        with self.assertRaisesRegex(gate.GateError, "required current authority missing"):
+            gate.route_contract(binding)
+
+    def test_wrong_withdrawal_cannot_preserve_count(self):
+        binding = json.loads((ROOT / gate.BINDING).read_bytes())
+        binding["withdrawn_entries"][0]["old"] = ".agents/skills/unrelated"
+        with self.assertRaisesRegex(gate.GateError, "withdrawal set differs"):
+            gate.route_contract(binding)
+
+    def test_duplicate_legacy_and_missing_history_refuse(self):
+        binding = json.loads((ROOT / gate.BINDING).read_bytes())
+        binding["legacy_entries"][0] = binding["legacy_entries"][1]
+        with self.assertRaisesRegex(gate.GateError, "duplicate identity"):
+            gate.route_contract(binding)
+        binding = json.loads((ROOT / gate.BINDING).read_bytes())
+        binding["legacy_entry_history"].pop()
+        with self.assertRaisesRegex(gate.GateError, "legacy history set differs"):
+            gate.route_contract(binding)
+
+    def test_wrong_archive_mapping_refuses(self):
+        binding = json.loads((ROOT / gate.BINDING).read_bytes())
+        binding["current_authorities"] = [{"path": p, "sha256": "0" * 64} for p in gate.CURRENT_AUTHORITIES]
+        binding["withdrawn_entries"][0]["archived_files"][0]["path"] = gate.HISTORY + "unrelated/SKILL.md"
+        with self.assertRaisesRegex(gate.GateError, "runtime archive mapping differs"):
+            gate.route_contract(binding)
+
+    def test_inventory_uses_real_link_count_and_rejects_hardlinks(self):
+        first = self.put("managed/one.txt", b"one")
+        self.assertEqual(gate.Files(self.root).inventory("managed"), ["managed/one.txt"])
+        os.link(first, self.root / "managed/two.txt")
+        with self.assertRaisesRegex(gate.GateError, "nonregular managed entry"):
+            gate.Files(self.root).inventory("managed")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

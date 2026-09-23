@@ -1,6 +1,6 @@
 {
   "schema_version": "target-framework-binding/v1",
-  "state": "preparation-blocked",
+  "state": "pilot-blocked",
   "decision_ref": ".dev/workflows/2026-09-23-framework-rc1-pilot/reconciliation-proposal.md#direct-target-gate-adoption-decision",
   "workflow_id": "2026-09-23-framework-rc1-pilot",
   "baseline_commit": "cb122285af09e46b24102f22a0ad9d713219c1f2",
@@ -44,13 +44,59 @@
     },
     "lock": {
       "path": ".ai/framework.lock",
-      "sha256": null
+      "sha256": "755a96ddab2e9eaebe26a49f4014e584ce2b852f09f7e829a57488301254d6f0"
     }
   },
-  "engine": null,
+  "engine": {
+    "files": [
+      {
+        "path": "src/distribution/__init__.py",
+        "sha256": "6c02b38ce5adc247280b81e127867fea8d3fb98710861858ece7091d38051c25"
+      },
+      {
+        "path": "src/distribution/data.py",
+        "sha256": "c92b1f4495434ca3df045d67c210d347537aea8a7cf3f6d2bcf1f626ac827c2d"
+      },
+      {
+        "path": "src/distribution/git_source.py",
+        "sha256": "b10e87121133896acefbb682ab1fffafc91c614ec6015b479833cb07a600c5e5"
+      },
+      {
+        "path": "src/distribution/installation.py",
+        "sha256": "6fa380bd79bbc18879841d3dff5083537fe788b86b1f3159f48430e40cebafce"
+      },
+      {
+        "path": "src/distribution/installation_io.py",
+        "sha256": "69496398f69908e2ebc2d470934fc55b0eaf6fdcca1df60bd2274c002ad56148"
+      },
+      {
+        "path": "src/distribution/installation_plan.py",
+        "sha256": "4f1f27eab89d3132a1c988487c8b66a4dd6c5e8d403ac91b3e3c37e99a143aca"
+      },
+      {
+        "path": "src/distribution/installation_state.py",
+        "sha256": "2e841633d60f78ba1ca0070847536cb64e411494fbb235dedb8ec56b59a2d369"
+      },
+      {
+        "path": "src/distribution/maintenance_coordination.py",
+        "sha256": "dd071d335e84d31831f479f197e756f429e1101c8d5f3744a8b90f55e448b36a"
+      },
+      {
+        "path": "src/distribution/package.py",
+        "sha256": "38c21ade871b03dc393c5172f0596a267263bb21a8d718a28b305742a57564bd"
+      },
+      {
+        "path": "src/tools/maintain_framework.py",
+        "sha256": "97020adde6f3c1f38e6ee3f73731e5483d96fa281245684507e1a0a6fa96d91e"
+      }
+    ],
+    "id": "framework-managed-installation",
+    "source_commit": "3afb4ff4207acb3e12e3953018736305a439ed21",
+    "version": "1.0.0"
+  },
   "retained_inventory": {
     "path": ".dev/ai-context/retained-target-inventory.json",
-    "sha256": "5c7a89a6d19e610ab0316029edb47f26d0a57092787d10f233f773cf715a7e9c"
+    "sha256": "6f43af37eba76a30cef70037a985ca476b0565121e3f9cbb67086e9880e3b68c"
   },
   "rule_ids": [
     "AGGREGATE-ES-001",
@@ -538,29 +584,114 @@
   "legacy_entries": [
     {
       "path": ".agents/skills/ai-context-init/SKILL.md",
-      "sha256": "86e1f0e000466dde67a594420fe8dac6e26e9fe2494ab3399c7036b90ecbb653"
+      "sha256": "e1f3b06c3cb4daabfded75e8a36f0a7326257bbe54a627d3634a918cdf9c763b"
     },
     {
       "path": ".agents/skills/ai-context-upgrader/SKILL.md",
-      "sha256": "bd0bc472484e5febd44b756e68135947ce42581b66c3081b98594e38a7be2553"
+      "sha256": "aa108dcf0c6cca0429370668f912ee6d8d4dbfc3aafedcf57ffebd52e205a003"
     },
     {
       "path": ".claude/skills/ai-context-init/SKILL.md",
-      "sha256": "c0d5083e360e063c305f424bcbf12e3a5e5680defaa59e5b8b24b72d37102c2f"
+      "sha256": "0e7b662765d87754b72e15632c1a9b78043e1216584dfda8acd27b80f935787e"
     },
     {
       "path": ".claude/skills/ai-context-upgrader/SKILL.md",
-      "sha256": "619ed71917b2fd9ee3392f13f6656504738bcf0cde4e40ebe52e4f4f0978bde5"
+      "sha256": "2aa332a0d07e95705bd7c949868f77623e10d0cb32ce8e3641aef755809df8c5"
     }
   ],
-  "current_authorities": [],
+  "current_authorities": [
+    {
+      "path": ".agents/skills/README.md",
+      "sha256": "301e794e1dd3d6cc9f83849f9a71ad25f93fd12ebeb9a1c0637ad0547941f261"
+    },
+    {
+      "path": ".ai/INDEX.MD",
+      "sha256": "b489f74809d3035143e54b9db56cbf578dd31da9ad90f34bb96605b40abc30c6"
+    },
+    {
+      "path": ".ai/assets/skills/README.MD",
+      "sha256": "5ca44f1ec94049d0bd90e733daf3b1ee614ac90fcf590fa7c7faa6ac11273210"
+    },
+    {
+      "path": ".ai/custom/framework.json",
+      "sha256": "6e9cb78f23ff1c4453e3cdb6906a20c014fe38768bdc02824cc9c82e23e8cb4f"
+    },
+    {
+      "path": ".claude/skills/README.md",
+      "sha256": "649cd8f093c1710d2d00ce457c3247d32d0e68e66ad7b55827fd9199f913e80e"
+    },
+    {
+      "path": ".dev/ai-context/CURRENT-FRAMEWORK.md",
+      "sha256": "5cd901f6bf1060baa58e2c9c3c55c4b39bf23b1b9efeb1525eb5010ef3d6d809"
+    },
+    {
+      "path": ".dev/ai-context/skills.md",
+      "sha256": "90f5b7cf3ee3cbbb373ec72b4ab5389ed414b01c8cf4cbe72b7b11e8c6aa8439"
+    },
+    {
+      "path": ".dev/ai-context/tooling/tests/test_current_framework_gate.py",
+      "sha256": "d36fc306edbe1d324ac52ea0286449ea7727c4593be22d4d2b45ca90374408d1"
+    },
+    {
+      "path": ".dev/ai-context/tooling/validate-current-framework.py",
+      "sha256": "383d1e7b30b9915267c2db2b1842e1cdd8523029f585f64a660855625bb63504"
+    },
+    {
+      "path": ".dev/workflows/2026-09-23-framework-rc1-pilot/reconciliation-proposal.md",
+      "sha256": "ca1fb9c79eb5b345124f0d8579b675778c22ff48cdfb329f0768c518416c52c8"
+    },
+    {
+      "path": ".dev/workflows/2026-09-23-framework-rc1-pilot/review-criteria.md",
+      "sha256": "04a5d4043d719cbf94f98ed42e44098f73ec86c7a3b3e68c9a33e02c84f88914"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "82375c956d74f7630fb007d79ab4658e334f7ac39a5bbf49d15f332a5fdb016f"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "57c6984475b56fbc83b7991cc334ac9f06d447a7508ff276e41e21da43021b8f"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "03b34d44978d5eace67b11b5f786d7436167e27936f06362868476a55314aee6"
+    },
+    {
+      "path": "AGENTS.zh-TW.md",
+      "sha256": "68c088e4188161aed4362001490d899746b6235a609f88afdf905d69e91fc0c5"
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "c01fe471f47fb0c7f1ef8330758d6a00802014dffcefc2536358a542d1d918ae"
+    }
+  ],
   "git_validator": {
     "path": ".dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py",
     "sha256": "844040b36b55433457f48b29132e3a2afa15a7bfd14813b2e7882cb1ba7fbf23"
   },
   "independent_review": {
     "state": "pending",
-    "contract": ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md"
+    "contract": ".ai/assets/shared/ROLE-EXECUTION-CONTRACT.md",
+    "criteria": ".dev/workflows/2026-09-23-framework-rc1-pilot/review-criteria.md",
+    "receipt_validator": ".dev/ai-context/tooling/validate-target-terminal-audit.py"
   },
-  "blocker": "Source Issue 386 scan-limit; actual target uninstalled; authority closure and active routes incomplete"
+  "blocker": "Actual installed PR prepare blocked by Git worktree config preflight; original source Issue 335 repair, candidate update and independent target review required.",
+  "legacy_entry_history": [
+    {
+      "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-init/SKILL.md",
+      "sha256": "86e1f0e000466dde67a594420fe8dac6e26e9fe2494ab3399c7036b90ecbb653"
+    },
+    {
+      "path": ".dev/ai-context/history/v0.18.0/runtime/.agents/skills/ai-context-upgrader/SKILL.md",
+      "sha256": "bd0bc472484e5febd44b756e68135947ce42581b66c3081b98594e38a7be2553"
+    },
+    {
+      "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ai-context-init/SKILL.md",
+      "sha256": "c0d5083e360e063c305f424bcbf12e3a5e5680defaa59e5b8b24b72d37102c2f"
+    },
+    {
+      "path": ".dev/ai-context/history/v0.18.0/runtime/.claude/skills/ai-context-upgrader/SKILL.md",
+      "sha256": "619ed71917b2fd9ee3392f13f6656504738bcf0cde4e40ebe52e4f4f0978bde5"
+    }
+  ]
 }

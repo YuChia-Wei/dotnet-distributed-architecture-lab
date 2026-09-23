@@ -1,76 +1,14 @@
-# Skill Specs
+# Retained skill sources and target guidance
 
-This directory contains runtime-neutral canonical skill specs.
+Use the [current target registry](../../../.dev/ai-context/skills.md).
+Current managed packages live in .ai/core/skills with generated Codex entries
+in .agents/skills/framework-*. This directory is not the active skill registry.
 
-## Purpose
+Preserve this v0.18-derived tree for selected target .NET review, slice and
+compliance guidance, explicit independent review protocols, and original legacy
+initialization/upgrade support. Old top-level specifications and examples do not
+override current packages or establish runtime availability. Load dependencies
+only when selected by the target binding and task.
 
-Use `.ai/assets/skills/` as the source of truth for top-level skills. Runtime wrappers under `.agents/skills/` and `.claude/skills/` should stay thin and point back to these canonical specs.
-
-## Usage
-
-Each skill should keep its canonical entry in `skill.yaml`, with optional
-`references/`, `prompts/`, `examples/`, `roles/`, and `scripts/` when needed. Put an
-executable or contract test under `scripts/` only when exactly one canonical
-skill owns its behavior. Keep multi-skill, provider, release, package, workflow,
-and source-repository-wide automation under `.ai/scripts/`; retain published
-legacy command paths only as explicit thin compatibility entrypoints.
-
-For `code-reviewer` and `local-change-implementer`, the canonical
-`runtime_entry` is projected into the runtime's `SKILL.md`. Execute that
-generated entry directly and expand only its applicable references; reading the
-complete `skill.yaml` again is required only to inspect metadata, change the
-skill, or resolve a discrepancy. The generator verifies parity and package
-assembly regenerates the entry from the final projected canonical payload.
-
-The canonical skill registry currently includes:
-
-- `ai-context-governance`
-- `ai-context-release-closeout` (source-repository-only historical/exception recovery; never packaged)
-- `ai-context-auditor`
-- `ai-context-init`
-- `ai-context-upgrader`
-- `bdd-gwt-test-designer` (design and read-only artifact review; concrete tooling follows target selection)
-- `code-reviewer` (common core in every selection; .NET review extends it when `dotnet-backend` is selected)
-- `diagnostic-analyst`
-- `ddd-ca-hex-architect` (design and read-only artifact review; concrete tooling follows target selection)
-- `local-change-implementer` (one technical target and its bounded direct usage, independent of file count)
-- `problem-frame-author` (selected CBF/SWF file set with source bindings)
-- `requirement-author` (requirement markdown and explicit stakeholder authority)
-- `slice-implementer` (one coordinated implementation goal under accepted architecture)
-- `software-development-orchestrator`
-- `spec-author` (selected production/entity/adapter/formal test spec; preserve the requested document type)
-- `spec-compliance-validator`
-
-## Retired Identifiers
-
-[`transitions/v0.16.0.yaml`](transitions/v0.16.0.yaml) retires
-`repo-structure-sync` (replacement: `ai-context-init`) and `dev-workflow`
-(replacement: `software-development-orchestrator`) in v0.16.0. Their canonical
-specs and runtime wrappers are absent. On a new request using either retired
-identifier, explicitly report: "Skill '<identifier>' was retired in v0.16.0.
-Use '<replacement>' for a new request." Do not silently dispatch an alias.
-
-The portable deterministic request check is
-`python .ai/scripts/skill_identifier_lifecycle.py <identifier>`; a retired or
-unknown runtime request returns a nonzero status. `--context historical` accepts
-a known retired identifier only as evidence and preserves its original value.
-This is an explicit input-context boundary, not automatic history detection.
-
-[`transitions/v0.6.0.yaml`](transitions/v0.6.0.yaml) remains the immutable record
-of the earlier activation and its then-unscheduled removal. Do not rewrite
-historical workflow, task, assessment, release, provenance, commit, or evaluation
-identifiers. Continued execution uses the active replacement without rewriting
-past evidence. New runtime availability is governed by the retirement manifest.
-
-Downstream upgrade packages use the previous release's verified file inventory:
-remove unchanged framework-owned entries; retain modified or target-owned
-entries for explicit owner reconciliation. Missing baseline evidence blocks
-removal. The v0.6.0/v0.9.0 fixture coverage does not authorize a direct upgrade
-edge or publication; the selected release must still supply its verified route.
-
-## Boundary
-
-Keep portable execution instructions, including `runtime_entry`, here. Put
-runtime-specific discovery metadata and generated projections under runtime
-directories, and human-facing tutorials under `.dev/guides/`. A projection must
-not introduce independently maintained instructions.
+Old registry bytes remain in baseline commit
+cb122285af09e46b24102f22a0ad9d713219c1f2 and the pilot's durable before inventory.

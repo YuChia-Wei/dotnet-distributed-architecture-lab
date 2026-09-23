@@ -1,0 +1,324 @@
+{
+  "metadata_version": 2,
+  "id": "software-development-orchestrator",
+  "version": "0.1.0",
+  "delivery_status": "implemented",
+  "entrypoint": "SKILL.md",
+  "dependencies": {
+    "required": [],
+    "optional": []
+  },
+  "runtime": [
+    {
+      "id": "skill-instruction-reader",
+      "requirement": "Read selected package and resources",
+      "for_operations": [
+        "explain",
+        "create",
+        "inspect",
+        "query",
+        "checkpoint",
+        "transition",
+        "resume",
+        "retrospect",
+        "render",
+        "retention-preview"
+      ],
+      "on_missing": "unavailable"
+    },
+    {
+      "id": "python",
+      "version": ">=3.11,<4",
+      "for_operations": [
+        "explain",
+        "create",
+        "inspect",
+        "query",
+        "checkpoint",
+        "transition",
+        "resume",
+        "retrospect",
+        "render",
+        "retention-preview"
+      ],
+      "on_missing": "unavailable"
+    },
+    {
+      "id": "pyyaml",
+      "version": ">=6,<7",
+      "for_operations": [
+        "explain",
+        "create",
+        "inspect",
+        "query",
+        "checkpoint",
+        "transition",
+        "resume",
+        "retrospect",
+        "render",
+        "retention-preview"
+      ],
+      "on_missing": "unavailable"
+    },
+    {
+      "id": "jsonschema",
+      "version": ">=4.18,<5",
+      "for_operations": [
+        "create",
+        "inspect",
+        "query",
+        "checkpoint",
+        "transition",
+        "resume",
+        "retrospect",
+        "render",
+        "retention-preview"
+      ],
+      "on_missing": "unavailable"
+    },
+    {
+      "id": "filesystem",
+      "requirement": "Selected local files; exclusive creation and same-directory replacement for writes",
+      "for_operations": [
+        "explain",
+        "create",
+        "inspect",
+        "query",
+        "checkpoint",
+        "transition",
+        "resume",
+        "retrospect",
+        "render",
+        "retention-preview"
+      ],
+      "on_missing": "unavailable"
+    },
+    {
+      "id": "git",
+      "requirement": "Conditional read-only ignored/untracked selected local-config check",
+      "for_operations": [
+        "explain",
+        "create",
+        "inspect",
+        "query",
+        "checkpoint",
+        "transition",
+        "resume",
+        "retrospect",
+        "render",
+        "retention-preview"
+      ],
+      "on_missing": "unavailable"
+    }
+  ],
+  "configuration": {
+    "namespace": "software-development-orchestrator",
+    "defaults": {
+      "store": {
+        "kind": "filesystem",
+        "root": "notes/workflows",
+        "tracking": "tracked"
+      },
+      "template": {
+        "origin": "package",
+        "path": "templates/workflow.md"
+      }
+    }
+  },
+  "artifact_roles": [
+    {
+      "role": "software-development-orchestrator.record",
+      "owner": "project",
+      "schema": "software-development-orchestrator.record@1.0.0",
+      "read_schemas": [
+        "software-development-orchestrator.record@1.0.0"
+      ],
+      "store_binding": "software-development-orchestrator.store",
+      "identity": "wf-<32 lowercase hex digits>",
+      "filename": "<id>.workflow.json",
+      "read_operations": [
+        "inspect",
+        "query",
+        "resume",
+        "render",
+        "retention-preview"
+      ],
+      "write_operations": [
+        "create",
+        "checkpoint",
+        "transition",
+        "retrospect"
+      ]
+    },
+    {
+      "role": "software-development-orchestrator.view",
+      "owner": "derived",
+      "source_role": "software-development-orchestrator.record",
+      "output": "result-only Markdown",
+      "persistence": "Caller-selected export is a separate write",
+      "produce_operations": [
+        "render"
+      ]
+    }
+  ],
+  "resources": {
+    "references": [
+      "references/configuration.md",
+      "references/operations.md",
+      "references/retention.md",
+      "references/composition.md",
+      "references/example.md"
+    ],
+    "schemas": [
+      {
+        "id": "software-development-orchestrator.record",
+        "version": "1.0.0",
+        "path": "schemas/workflow-record.schema.json",
+        "owner": "software-development-orchestrator",
+        "migration": "unsupported; preserve original"
+      }
+    ],
+    "templates": [
+      {
+        "id": "software-development-orchestrator.default-view",
+        "path": "templates/workflow.md",
+        "input_role": "software-development-orchestrator.record",
+        "output_role": "software-development-orchestrator.view",
+        "owner": "software-development-orchestrator"
+      }
+    ],
+    "tools": [
+      {
+        "id": "software-development-orchestrator.fs",
+        "owner": "software-development-orchestrator",
+        "implementation_status": "implemented",
+        "entrypoint": "scripts/workflow.py",
+        "operation_contract": "references/operations.md",
+        "operations": [
+          "explain",
+          "create",
+          "inspect",
+          "query",
+          "checkpoint",
+          "transition",
+          "resume",
+          "retrospect",
+          "render",
+          "retention-preview"
+        ]
+      }
+    ]
+  },
+  "operations": [
+    {
+      "id": "explain",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    },
+    {
+      "id": "create",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    },
+    {
+      "id": "inspect",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    },
+    {
+      "id": "query",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    },
+    {
+      "id": "checkpoint",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    },
+    {
+      "id": "transition",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    },
+    {
+      "id": "resume",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    },
+    {
+      "id": "retrospect",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    },
+    {
+      "id": "render",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    },
+    {
+      "id": "retention-preview",
+      "inputs": [
+        "Strict JSON request in references/operations.md"
+      ],
+      "outputs": [
+        "Actual outcome, mutation state, owned results and diagnostics"
+      ],
+      "tool": "software-development-orchestrator.fs",
+      "implementation_status": "implemented"
+    }
+  ]
+}

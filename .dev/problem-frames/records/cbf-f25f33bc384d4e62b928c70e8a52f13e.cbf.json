@@ -1,0 +1,79 @@
+{
+  "derived_from": null,
+  "family": "problem-frame.cbf",
+  "frame_key": "rc1-local-record-pilot",
+  "id": "cbf-f25f33bc384d4e62b928c70e8a52f13e",
+  "open_questions": [],
+  "scenarios": [
+    {
+      "given": [
+        "The selected store exists and this identity is unused."
+      ],
+      "id": "SC1",
+      "source_ids": [
+        "SRC1"
+      ],
+      "tests_anchor": [],
+      "then": [
+        {
+          "basis": "inferred",
+          "id": "THEN1",
+          "source_ids": [
+            "SRC1"
+          ],
+          "statement_ids": [
+            "CMD1"
+          ],
+          "text": "The returned identity selects a structurally readable stored snapshot."
+        }
+      ],
+      "title": "Read back the created snapshot",
+      "when": [
+        "The coordinator submits the proposed snapshot through the public create API."
+      ]
+    }
+  ],
+  "schema_version": "1.0.0",
+  "sources": [
+    {
+      "authority": "proposed",
+      "authority_reference": null,
+      "id": "SRC1",
+      "kind": "requirement",
+      "locator": "Authorized local draft/write coverage",
+      "reference": ".dev/workflows/2026-09-23-framework-rc1-pilot/workflow-plan.md",
+      "revision": null,
+      "sha256": null
+    }
+  ],
+  "statements": [
+    {
+      "basis": "inferred",
+      "category": "actor",
+      "id": "ACTOR1",
+      "source_ids": [
+        "SRC1"
+      ],
+      "text": "The target pilot coordinator submits this snapshot."
+    },
+    {
+      "basis": "inferred",
+      "category": "command",
+      "id": "CMD1",
+      "source_ids": [
+        "SRC1"
+      ],
+      "text": "Create one proposed snapshot in the configured store."
+    },
+    {
+      "basis": "inferred",
+      "category": "controlled-domain",
+      "id": "DOMAIN1",
+      "source_ids": [
+        "SRC1"
+      ],
+      "text": "The target problem-frame record store."
+    }
+  ],
+  "title": "Proposed local CBF snapshot pilot"
+}

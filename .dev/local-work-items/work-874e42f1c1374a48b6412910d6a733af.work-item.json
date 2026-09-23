@@ -1,0 +1,18 @@
+{
+  "acceptance": [
+    "Retain actual outcomes and generated record identities without claiming owner acceptance."
+  ],
+  "completion_evidence": [],
+  "created_at": "2026-09-23T16:01:31.142036+00:00",
+  "id": "work-874e42f1c1374a48b6412910d6a733af",
+  "kind": "local-backlog",
+  "owner": "project",
+  "references": [],
+  "schema_version": "1.0.0",
+  "state": "draft",
+  "state_reason": "Created as candidate work.",
+  "summary": "Supporting local record for the actual authorized pilot; GitHub Issue 15 remains the work authority.",
+  "title": "Retain rc1 local record-operation evidence",
+  "updated_at": "2026-09-23T16:01:31.142036+00:00",
+  "writable_authority": "local"
+}

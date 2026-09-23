@@ -1,6 +1,6 @@
 # Target reconciliation proposal
 
-Status: reviewable proposal; no authority or runtime change applied.
+Status: direct owner decision recorded below; local integration prepared for independent review. Installation and current routes exist; activation remains pending.
 Owner: ai-context-governance / coordinator task 01a0ce78-db26-74e1-a615-2bd0599f7d0c.
 Input baseline: cb122285af09e46b24102f22a0ad9d713219c1f2; Issue #15.
 

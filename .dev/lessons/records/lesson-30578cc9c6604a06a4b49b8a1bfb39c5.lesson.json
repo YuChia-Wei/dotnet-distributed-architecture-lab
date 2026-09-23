@@ -1,0 +1,28 @@
+{
+  "content": {
+    "applies_when": [
+      "Executing installed record-package pilot operations."
+    ],
+    "conclusion": "Retain the selected configuration path with actual pilot operation evidence.",
+    "confidence": "tentative",
+    "does_not_apply_when": [],
+    "evidence": [],
+    "follow_up": [
+      "Preserve the actual execution evidence and keep owner acceptance separate."
+    ],
+    "observation": "The installed tools resolved seven selected stores through the explicit project_config request field.",
+    "title": "Explicit configuration in the rc1 record lifecycle pilot"
+  },
+  "created_at": "2026-09-23T16:01:28.066796+00:00",
+  "decision": null,
+  "history": [],
+  "id": "lesson-30578cc9c6604a06a4b49b8a1bfb39c5",
+  "kind": "lesson",
+  "owner": "project",
+  "provenance": [],
+  "revision": 1,
+  "schema_version": "2.0.0",
+  "status": "candidate",
+  "successor": null,
+  "updated_at": "2026-09-23T16:01:28.066796+00:00"
+}

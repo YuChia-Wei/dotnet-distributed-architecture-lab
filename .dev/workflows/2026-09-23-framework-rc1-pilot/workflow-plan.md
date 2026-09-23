@@ -6,6 +6,24 @@ Issue: https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/
 Branch codex/2026-09-23-framework-rc1-pilot, base main at cb122285af09e46b24102f22a0ad9d713219c1f2.
 Worktree: C:/Github/YuChia/dotnet-mq-arch-lab-rc1-pilot. The original main checkout is not the installation target.
 
+## Current checkpoint
+
+Actual PR prepare subsequently failed; source Issue 335 is reopened in its original
+task. Binding is pilot-blocked. See [checkpoint-report.md](checkpoint-report.md).
+The gate/read/install successes below remain bounded earlier observations.
+
+The complete candidate was actually installed after reviewed source #386.
+Current roots/registries now bind 18 Codex entries and retained target rules;
+Claude remains unsupported. All 26 superseded directories are archived exactly,
+and four original lifecycle entries are restricted to legacy-format duties.
+The current gate passed on the reconciled working content (25.073 seconds),
+including 292 retained files, all 20 rule resolutions and unchanged Git overlay.
+Fourteen focused gate regressions passed. This is preparation for a fixed clean
+independent review, not adoption, provider integration or product readiness.
+Historical snapshots below are retained as the sequence of evidence.
+See evidence/installation.json, evidence/installed-public-readers.json,
+evidence/git-byte-parity.json, and the current-gate evidence/report.
+
 ## Authority and outcome
 
 The owner chose the complete new framework with existing customizations and then
@@ -78,7 +96,7 @@ No destructive cleanup of old evidence, source worktrees or existing ignored dat
 1. Finish target gate/routing inventory and baseline context review; classify exact required checks and their current inputs.
 2. Record concrete per-customization reconciliation and immutable engine/native prerequisite.
 3. Prepare backups/config/stores/attributes; apply managed candidate in a quiescent isolated window and retain actual observations.
-4. Activate exact Codex routes, withdraw selected Claude routes, run installed readers and independent target-context verification.
+4. Prepare exact Codex routes, withdraw selected Claude routes, run installed readers and independent target-context verification; activate only after admission.
 5. Reconcile every failure/remaining legacy responsibility and produce a concrete rc.1-to-stable update/rollback record before target integration approval.
 
 Initial planning checkpoint: no managed installation or activation was performed.
