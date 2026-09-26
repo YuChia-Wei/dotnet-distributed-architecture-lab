@@ -1,0 +1,6 @@
+{
+  "mode": "proxy", "description": "Native WireMock low-priority proxy for supplier routes.",
+  "mockSku": "MOCK-001", "fixtureClientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+  "fixtureSupplierOrderId": "00000000-0000-4000-8000-000000000017", "quantity": 2, "unitPrice": 100.00,
+  "upstream": "configured at startup; never editable in the local UI"
+}
