@@ -1,0 +1,14 @@
+{
+  "ReverseProxy": {
+    "Clusters": {
+      "orders-api": { "Destinations": { "orders-api": { "Address": "http://orders-api:8080/" } } },
+      "product-api": { "Destinations": { "product-api": { "Address": "http://product-api:8080/" } } },
+      "inventory-api": { "Destinations": { "inventory-api": { "Address": "http://inventory-api:8080/" } } },
+      "procurement-api": { "Destinations": { "procurement-api": { "Address": "http://procurement-api:8080/" } } },
+      "supplier-mock-admin": { "Destinations": { "supplier-mock": { "Address": "http://supplier-mock:8080/" } } },
+      "supplier-sandbox-admin": { "Destinations": { "supplier-sandbox": { "Address": "http://supplier-sandbox:8080/" } } },
+      "web-frontend": { "Destinations": { "web-frontend": { "Address": "http://web-frontend:80/" } } },
+      "admin-frontend": { "Destinations": { "admin-frontend": { "Address": "http://admin-frontend:80/" } } }
+    }
+  }
+}

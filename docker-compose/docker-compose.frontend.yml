@@ -1,0 +1,27 @@
+services:
+  yarp-gateway:
+    profiles: [frontend-lab]
+    ports: !override
+      - "127.0.0.1:8888:8080"
+    volumes: !override
+      - ./config/yarp-gateway/AuthSetting.json:/app/Configuration/Authentication/AuthSetting.json:ro
+      - ./config/frontend-lab/ClustersSetting.json:/app/Configuration/ReverseProxy/ClustersSetting.json:ro
+      - ./config/frontend-lab/RoutesSetting.json:/app/Configuration/ReverseProxy/RoutesSetting.json:ro
+
+  web-frontend:
+    profiles: [frontend-lab]
+    build:
+      context: ..
+      dockerfile: src/Frontend/Web/Dockerfile
+    pull_policy: build
+    expose:
+      - "80"
+
+  admin-frontend:
+    profiles: [frontend-lab]
+    build:
+      context: ..
+      dockerfile: src/Frontend/Admin/Dockerfile
+    pull_policy: build
+    expose:
+      - "80"

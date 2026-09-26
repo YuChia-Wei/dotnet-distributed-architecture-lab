@@ -5,5 +5,5 @@
     <PackageReference Include="xunit.v3.mtp-off" Version="4.0.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0"><PrivateAssets>all</PrivateAssets></PackageReference>
   </ItemGroup>
-  <ItemGroup><Using Include="Xunit" /><Content Include="../../samples/SupplierMock/presets/*.json" Link="presets/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" /><ProjectReference Include="../../samples/SupplierMock/SupplierMock.WebApi/SupplierMock.WebApi.csproj" /></ItemGroup>
+  <ItemGroup><Using Include="Xunit" /><Content Include="../../samples/SupplierMock/presets/*.json" Link="presets/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" /><Content Include="../../samples/SupplierMock/microcks/supplier-*.yaml" Link="microcks/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" /><ProjectReference Include="../../samples/SupplierMock/SupplierMock.WebApi/SupplierMock.WebApi.csproj" /></ItemGroup>
 </Project>
