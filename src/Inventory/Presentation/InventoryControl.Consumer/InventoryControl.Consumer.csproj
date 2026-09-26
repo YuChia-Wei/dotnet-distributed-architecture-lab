@@ -11,13 +11,17 @@
   <ItemGroup>
     <PackageReference Include="WolverineFx.RuntimeCompilation" Version="6.36.0" />
     <ProjectReference Include="..\..\..\BC-Contracts\Lab.BoundedContextContracts.Products\Lab.BoundedContextContracts.Products.csproj" />
+    <ProjectReference Include="..\..\..\BC-Contracts\Lab.BoundedContextContracts.Procurement\Lab.BoundedContextContracts.Procurement.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Integrations\Lab.BuildingBlocks.Integrations.csproj" />
+    <ProjectReference Include="..\..\DomainCore\InventoryControl.Applications\InventoryControl.Applications.csproj" />
+    <ProjectReference Include="..\..\DomainCore\InventoryControl.Infrastructure\InventoryControl.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Confluent.Kafka.Extensions.OpenTelemetry" Version="0.4.0" />
     <PackageReference Include="RabbitMQ.Client.OpenTelemetry" Version="1.0.0-rc.2" />
     <PackageReference Include="WolverineFx.Kafka" Version="6.36.0" />
+    <PackageReference Include="WolverineFx.Postgresql" Version="6.36.0" />
     <PackageReference Include="WolverineFx.RabbitMQ" Version="6.36.0" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.18.0" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.18.0" />

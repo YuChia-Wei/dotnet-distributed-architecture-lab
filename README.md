@@ -164,6 +164,7 @@ dotnet test MQArchLab.slnx
 - [.dev/operations/context-map.md](.dev/operations/context-map.md)：context relationships
 - [.dev/operations/event-catalog.md](.dev/operations/event-catalog.md)：events 與 request/reply contracts
 - [.dev/operations/mq-topology.md](.dev/operations/mq-topology.md)：Kafka/RabbitMQ topology
+- [.dev/operations/procurement-supplier-lab.md](.dev/operations/procurement-supplier-lab.md)：採購、供應商 mock/proxy 與實際收貨實驗操作
 
 ## AI 協作入口
 

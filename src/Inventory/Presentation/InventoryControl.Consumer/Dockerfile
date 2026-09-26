@@ -5,11 +5,8 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj", "Inventory/Presentation/InventoryControl.Consumer/"]
-COPY ["BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
-COPY ["BC-Contracts/Lab.BoundedContextContracts.Products/Lab.BoundedContextContracts.Products.csproj", "BC-Contracts/Lab.BoundedContextContracts.Products/"]
-RUN dotnet restore "Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj"
 COPY . .
+RUN dotnet restore "Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj"
 WORKDIR "Inventory/Presentation/InventoryControl.Consumer"
 RUN dotnet build "./InventoryControl.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

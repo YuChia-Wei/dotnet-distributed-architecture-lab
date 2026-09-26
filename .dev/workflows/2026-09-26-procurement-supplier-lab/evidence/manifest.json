@@ -1,0 +1,200 @@
+{
+  "note": "Exact copies of actual local evidence. Subject/source commits and reuse boundaries are stated in acceptance-report.md; absence is never a pass.",
+  "files": [
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-first.json",
+      "source": "artifacts/procurement-lab/http-contracts-first.json",
+      "sha256": "eff29167a9c707eb21b81d26cd16a691ebefd80e198a784d1ad523bbd198c680"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-repaired.json",
+      "source": "artifacts/procurement-lab/http-contracts-repaired.json",
+      "sha256": "c012df4321ff7e6ad1b69f1a1ce5d830abfa92438c0ae55480d8a694afe0e0c1"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-final.json",
+      "source": "artifacts/procurement-lab/http-contracts-final.json",
+      "sha256": "bcf41254fc6c3317cae432b549cfac01916e20c23c0921054a5710560575936d"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplemental-http.json",
+      "source": "artifacts/procurement-lab/supplemental-http.json",
+      "sha256": "3bba5dbe4e8db2a1917d03b1dd5f2891c3550b529a43f82b0c2b978a2f1023fe"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/direct-flow.json",
+      "source": "artifacts/procurement-lab/direct-flow.json",
+      "sha256": "525020c6ed0b101be19b9b1a87a644b8890604540d99a44e77fa312b4752724a"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/direct-flow-ledger-readback.json",
+      "source": "artifacts/procurement-lab/direct-flow-ledger-readback.json",
+      "sha256": "dcd0c36055c6bd0316cbc2d29de100ea40532304cf2958758309bf85c40645f8"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/denied-order.json",
+      "source": "artifacts/procurement-lab/denied-order.json",
+      "sha256": "46186a4a0ea0477965dc78e3f02a7d23f3138c5a1d285606129b176f861f43b7"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/broker-recovery.json",
+      "source": "artifacts/procurement-lab/broker-recovery.json",
+      "sha256": "e7f47002bfaae449db502378042b7609af39f3285deea640b2962ef8f7a2f872"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/microcks-import-first.json",
+      "source": "artifacts/procurement-lab/microcks-import-first.json",
+      "sha256": "93d19ab8f1de42baf6322ca9f18b6a7f4c43367078853bb737245f9621c1a281"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/compose-final.json",
+      "source": "artifacts/procurement-lab/compose-final.json",
+      "sha256": "584db6f0f3736c68a0a1453596940c2bb74de01743c1a1853eb0c2d95d26faa9"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/microcks-pre-reset.json",
+      "source": "artifacts/procurement-lab/microcks-pre-reset.json",
+      "sha256": "4e9ab4d1f2666a1b9ffe24819274f3cac29b62fb313e3a74275e0fa3e4aee99e"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/microcks-final-import.json",
+      "source": "artifacts/procurement-lab/microcks-final-import.json",
+      "sha256": "d451e72c6b940e46f21c948fb08905a5f3913727f48aab0b831e23806b0b07f1"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/browser-verification.json",
+      "source": "artifacts/procurement-lab/browser-verification.json",
+      "sha256": "248f71c9335a59ae834cabe2db3496da166496468c5f5b0103d86ccc9952736c"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/observability-before.txt",
+      "source": "artifacts/procurement-lab/observability-before.txt",
+      "sha256": "410be7ad08edea5f470a0947fc57c164477b1102ed68eb2d03faa4afecbded96"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/observability-after.txt",
+      "source": "artifacts/procurement-lab/observability-after.txt",
+      "sha256": "410be7ad08edea5f470a0947fc57c164477b1102ed68eb2d03faa4afecbded96"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/observability-comparison.json",
+      "source": "artifacts/procurement-lab/observability-comparison.json",
+      "sha256": "07271ab0831efde94eaed1f3fe597f00e8303011bbf93af129ddb27131712fae"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/current-framework-check.json",
+      "source": "artifacts/procurement-lab/current-framework-check.json",
+      "sha256": "76791e74d7847be9b8f5800e5dc8dea87c6802a207889a5269ca4dbbc74787ed"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/framework-architecture-pin-failure.json",
+      "source": "artifacts/procurement-lab/framework-architecture-pin-failure.json",
+      "sha256": "e0da321ee1a30501563b90b22a297233b704286e3cbd861f6572b8f6bdbca7e8"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/git-policy-final.txt",
+      "source": "artifacts/procurement-lab/git-policy-final.txt",
+      "sha256": "92f63feff8a51344965e8de0be5baec73ac1259e9ea891136b19f2e27e9d235f"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/commit-message-repair.json",
+      "source": "artifacts/procurement-lab/commit-message-repair.json",
+      "sha256": "ae20774c296cc32188bbc67848651c1ddc39cff232afd52de58d11807fa791ae"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/sandbox-ui.png",
+      "source": "artifacts/procurement-lab/sandbox-ui.png",
+      "sha256": "280542cfd795d86b2e9ece262daf8f32119c86f83ed04ade49b2bc221377d860"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/wiremock-ui.png",
+      "source": "artifacts/procurement-lab/wiremock-ui.png",
+      "sha256": "e092b3cc326e901b7e37d9246a6d7cefc9b2a746be52aee0d625d4193839b71b"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/microcks-ui.png",
+      "source": "artifacts/procurement-lab/microcks-ui.png",
+      "sha256": "1c410e65b0c8d5591049111de9fccfee86c5fc1c2ab686198a6ce8c8d7978b25"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/legacy-locator-check.txt",
+      "source": "artifacts/procurement-lab/legacy-locator-check.txt",
+      "sha256": "bb1ac36e416a5a62cf7244e99a6697efd62d48b9e5bba2385dc54dfefd5028df"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/first-procurement-tests/_39081a7221c7_2026-09-26_03_13_22_net10.0.trx",
+      "source": "artifacts/procurement-lab/first-procurement-tests/_39081a7221c7_2026-09-26_03_13_22_net10.0.trx",
+      "sha256": "a79c095cb989e6338f65d9044808a7b8e6b42d44d5712184ddd9ef411b9e3dd7"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_39_net10.0.trx",
+      "source": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_39_net10.0.trx",
+      "sha256": "428c0cadce0d658f4fcc2f2e4331f0cb2bfca9b35fc7efa8e32aa585a652e718"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_41_net10.0.trx",
+      "source": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_41_net10.0.trx",
+      "sha256": "841a7bdef35f9c3aaacb04cb965e0443570f39751b850860121d31176e549d32"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_47_net10.0.trx",
+      "source": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_47_net10.0.trx",
+      "sha256": "d52b29542938f419183349812b3d2bbd76d7ea91b5492fb69ded493ad5ef71f5"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_49_net10.0.trx",
+      "source": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_49_net10.0.trx",
+      "sha256": "02d4b43721da875f696022bd3abdb7ac02f35e2e4ab8999e7cd904bc91980a67"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_50_net10.0.trx",
+      "source": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_50_net10.0.trx",
+      "sha256": "33c59c1a9c65b420219eb229af71b42b0e17f8de9ab9c9c634014f8d935060d4"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_53_net10.0.trx",
+      "source": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_53_net10.0.trx",
+      "sha256": "75ad235673a83cae610ca8d354f32b2fb6d2bf61f9229de6377233c5a0d94810"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_54_net10.0.trx",
+      "source": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_54_net10.0.trx",
+      "sha256": "5954f0241400aa935dafe33bb8fb100a218197402a8c83f269cf2c6d2be3b1c2"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_32_04_net10.0.trx",
+      "source": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_32_04_net10.0.trx",
+      "sha256": "32ab226ef4edd957a2554a487109a51ffe9d3d64d3615dd82cc85a61664e22a6"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_32_06_net10.0.trx",
+      "source": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_32_06_net10.0.trx",
+      "sha256": "914a35f41c54fc6a42370c0c346952c23df00f6bf79a5a7f12dd611923dfbce5"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/focused-final-results/_9cf966e91f6b_2026-09-26_03_38_11_net10.0.trx",
+      "source": "artifacts/procurement-lab/focused-final-results/_9cf966e91f6b_2026-09-26_03_38_11_net10.0.trx",
+      "sha256": "29152f9dabf589bdd3c0cfe14c5e407156ecd138d87ee48b64f7cf9c5d5c4a45"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/focused-final-results/_b8d927bdf806_2026-09-26_03_38_06_net10.0.trx",
+      "source": "artifacts/procurement-lab/focused-final-results/_b8d927bdf806_2026-09-26_03_38_06_net10.0.trx",
+      "sha256": "61935ab12fdc8391fe9e4f2f540113794198415ed2741175f9016728fbe25538"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/focused-final-results/_e55d1e0c1fa9_2026-09-26_03_38_15_net10.0.trx",
+      "source": "artifacts/procurement-lab/focused-final-results/_e55d1e0c1fa9_2026-09-26_03_38_15_net10.0.trx",
+      "sha256": "afe4f20464b93c8b15db213cd260da5a46fe9e7222e6957b27bd6eb2eedae5eb"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplier-final-results/_8f1b939f8440_2026-09-26_04_07_57_net10.0.trx",
+      "source": "artifacts/procurement-lab/supplier-final-results/_8f1b939f8440_2026-09-26_04_07_57_net10.0.trx",
+      "sha256": "cfcc7cd915d2c31767a3071e38768a97d35cbcc82aaad49edcebace546aec9e4"
+    },
+    {
+      "path": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplier-final-results/_d75d57d0edb3_2026-09-26_04_08_01_net10.0.trx",
+      "source": "artifacts/procurement-lab/supplier-final-results/_d75d57d0edb3_2026-09-26_04_08_01_net10.0.trx",
+      "sha256": "b62b79a448a91d60e3a8de8a59a0bc6b752a4b4005c409e8e7a3a0777a47afb3"
+    }
+  ]
+}

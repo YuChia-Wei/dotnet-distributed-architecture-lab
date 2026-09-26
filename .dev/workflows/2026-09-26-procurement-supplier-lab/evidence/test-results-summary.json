@@ -1,0 +1,1617 @@
+[
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/first-procurement-tests/_39081a7221c7_2026-09-26_03_13_22_net10.0.trx",
+    "sha256": "a79c095cb989e6338f65d9044808a7b8e6b42d44d5712184ddd9ef411b9e3dd7",
+    "counters": {
+      "total": "21",
+      "executed": "21",
+      "passed": "20",
+      "failed": "1",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Matching_replay_returns_same_purchase_without_resubmission",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"currency\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: \"product\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Mismatched_http_order_is_rejected_by_gateway",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: \"quantity\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"price\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 5)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe",
+        "outcome": "Failed",
+        "error": "System.InvalidOperationException : A parameterless default constructor or one matching signature (System.Guid receiptid, System.Guid purchaseorderid, System.Guid productid, System.Int32 quantity, System.DateTime receivedat) is required for Procurement.Domains.GoodsReceipt materialization"
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Malformed_provider_response_is_unknown",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Rejected_purchase_forbids_receipt",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Accepted_purchase_uses_original_client_key",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: \"provider\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Changed_receipt_replay_conflicts",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 0)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"guid\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"quantity\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: -1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Two_partial_receipts_complete_the_order",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Microcks_profile_keeps_service_prefix_and_supplier_route",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"sku\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Matching_terminal_replay_has_one_receipt",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_39_net10.0.trx",
+    "sha256": "428c0cadce0d658f4fcc2f2e4331f0cb2bfca9b35fc7efa8e32aa585a652e718",
+    "counters": {
+      "total": "16",
+      "executed": "12",
+      "passed": "12",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_an_empty_inventory_id_When_decreasing_stock_Then_reject_before_loading",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.MessagingTransactionTests.Given_stock_when_a_real_Kafka_request_completes_then_state_inbox_and_outgoing_event_succeed",
+        "outcome": "NotExecuted",
+        "error": "Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA."
+      },
+      {
+        "name": "EfCoreWolverine.Tests.MessagingTransactionTests.Given_two_repository_contexts_when_both_modify_one_version_then_the_stale_write_fails",
+        "outcome": "NotExecuted",
+        "error": "Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA."
+      },
+      {
+        "name": "EfCoreWolverine.Tests.EfMappingTests.Given_the_current_mapping_when_compared_to_the_migration_then_no_pending_model_changes_exist",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.EfMappingTests.Given_a_detached_aggregate_when_repository_saves_then_an_unenrolled_instance_is_rejected",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_an_unknown_inventory_item_When_decreasing_stock_Then_return_not_found",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_available_stock_When_decreasing_stock_Then_save_precedes_publication",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.MessagingTransactionTests.Given_a_failure_after_SQL_flush_when_processing_ends_then_business_and_outbox_are_rolled_back",
+        "outcome": "NotExecuted",
+        "error": "Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA."
+      },
+      {
+        "name": "EfCoreWolverine.Tests.MessagingTransactionTests.Given_duplicate_Kafka_deliveries_when_the_same_envelope_is_replayed_then_stock_changes_only_once",
+        "outcome": "NotExecuted",
+        "error": "Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA."
+      },
+      {
+        "name": "EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_insufficient_stock_When_decreasing_stock_Then_return_business_failure",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_nonpositive_quantity_When_decreasing_stock_Then_reject_before_loading(quantity: 0)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_nonpositive_quantity_When_decreasing_stock_Then_reject_before_loading(quantity: -1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.EfMappingTests.Given_a_tracked_aggregate_when_repository_saves_then_changes_remain_pending_without_database_io",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_publication_failure_When_decreasing_stock_Then_propagate_for_transaction_rollback",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.TransactionPipelineTests.Given_the_sample_host_when_the_handler_is_generated_then_one_EF_transaction_wraps_the_use_case",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_persistence_failure_When_decreasing_stock_Then_propagate_without_publishing",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_41_net10.0.trx",
+    "sha256": "841a7bdef35f9c3aaacb04cb965e0443570f39751b850860121d31176e549d32",
+    "counters": {
+      "total": "64",
+      "executed": "64",
+      "passed": "64",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "InventoryControl.Tests.InventoryReservationIdempotencyTests.given_a_successful_replay_when_the_event_is_staged_then_delivery_identity_is_stable",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationOutboxRelayTests.given_a_published_reservation_was_purged_when_replayed_then_no_new_publication_is_staged",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryStockUseCaseTests.given_inventory_item_exists_when_stock_is_increased_then_state_and_event_are_staged",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryGoodsReceiptStoreTests.R04_given_a_completed_receipt_when_any_immutable_payload_field_changes_then_identity_conflicts_without_mutation",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryReservationRepositoryTests.given_invalid_outbox_metadata_when_reservation_staging_fails_then_stock_operation_and_message_roll_back",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryStockUseCaseTests.given_insufficient_stock_when_stock_is_decreased_then_state_and_side_effects_are_unchanged",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryStockUseCaseTests.given_inventory_item_exists_when_stock_is_restocked_then_state_and_event_are_staged",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_insufficient_stock_when_reserving_then_failure_is_committed_without_an_outbox_message",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryGoodsReceiptStoreTests.R07_given_stock_near_integer_limit_when_receipt_overflows_then_no_effect_is_committed",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryOutboxRelayOptionsTests.given_finite_retention_without_positive_days_when_configuration_is_parsed_then_startup_fails",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryStockOutboxTests.given_a_stock_change_when_outbox_commit_succeeds_then_state_and_event_are_durable_together",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.GoodsReceivedHandlerTests.R04_given_a_receipt_identity_conflict_when_consumed_then_exception_reaches_the_failure_policy",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_empty_product_id_when_reserving_then_request_is_rejected_before_side_effects",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_non_positive_quantity_when_reserving_then_request_is_rejected_before_side_effects(quantity: -1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryReservationRepositoryTests.given_a_failed_operation_when_stock_changes_then_replay_preserves_the_terminal_outcome",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryReservationIdempotencyTests.reservation_failure_policy_has_bounded_cooldowns_and_terminal_routing_configuration",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryReservationRepositoryTests.given_a_completed_operation_when_payload_changes_then_the_conflict_preserves_the_original_state",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryReservationIdempotencyTests.given_an_operation_identity_when_payload_changes_then_the_conflict_is_terminal",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryReservationRepositoryTests.given_a_rolled_back_scope_when_the_operation_is_retried_then_only_the_retry_commits",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryReservationIdempotencyTests.given_a_terminal_failure_when_stock_changes_then_replay_preserves_the_original_outcome",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationEventContractTests.given_an_increase_event_when_serialized_then_the_quantity_name_matches_its_business_meaning",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationOutboxRelayTests.given_one_pending_row_when_two_relays_claim_concurrently_then_only_one_lease_publishes_it",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryReservationRepositoryTests.given_stock_for_only_one_request_when_two_reservations_run_concurrently_then_stock_and_outcomes_are_atomic",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryGoodsReceiptStoreTests.R07_given_missing_stock_when_receipt_is_retried_after_initialization_then_only_later_attempt_commits",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryGoodsReceiptStoreTests.R07_given_outbox_staging_failure_when_same_receipt_is_retried_then_claim_and_stock_roll_back_before_success",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryStockOutboxTests.given_a_tracked_stock_item_when_a_set_based_commit_succeeds_then_later_reads_see_current_state",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryStockOutboxTests.given_invalid_outbox_metadata_when_staging_fails_then_stock_rolls_back_and_the_scope_can_reload",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryEfPersistenceTests.given_inventory_registration_when_scopes_are_resolved_then_repository_ports_share_the_scoped_context_boundary",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_a_successful_replay_when_committed_then_stock_and_outbox_are_not_duplicated",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationEventContractTests.given_a_return_event_when_serialized_then_the_quantity_name_matches_its_business_meaning",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationOutboxRelayTests.given_a_cancelled_batch_when_relay_runs_then_no_message_is_claimed_or_published",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryStockUseCaseTests.given_inventory_item_is_missing_when_stock_is_decreased_then_failure_has_no_side_effects",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_empty_operation_id_when_reserving_then_request_is_rejected_before_side_effects",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationOutboxRelayTests.given_an_expired_lease_when_relay_recovers_then_original_delivery_identity_is_preserved",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationOutboxRelayTests.given_five_transport_failures_when_relay_runs_again_then_the_row_is_parked_and_not_republished",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ApplyGoodsReceiptUseCaseTests.given_invalid_receipt_identity_or_quantity_when_applied_then_store_is_not_called(invalidField: 1, quantity: 0)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryOutboxRelayOptionsTests.given_no_retention_settings_when_configuration_is_parsed_then_rows_are_retained_without_limit",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationOutboxRelayTests.given_finite_published_retention_when_relay_runs_then_only_expired_published_rows_are_pruned",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryReservationIdempotencyTests.given_a_successful_reservation_when_replayed_then_the_message_factory_is_not_called",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationOutboxRelayTests.given_a_completed_reservation_has_no_outbox_row_when_replayed_then_no_recovery_publication_is_staged",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryEfPersistenceTests.given_a_row_created_with_existing_sql_when_queried_then_the_no_tracking_projection_preserves_its_values",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_sufficient_stock_when_reserving_then_state_and_outbox_commit_with_stable_delivery_identity",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_an_operation_identity_conflict_when_reserving_then_only_the_original_outbox_message_remains",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_a_transient_store_failure_when_reserving_then_exception_propagates_without_commit",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryStockOutboxTests.given_a_concurrent_stock_change_when_outbox_commit_runs_then_it_fails_without_an_event_row",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ApplyGoodsReceiptUseCaseTests.given_invalid_receipt_identity_or_quantity_when_applied_then_store_is_not_called(invalidField: 2, quantity: 0)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationOutboxRelayTests.given_the_same_claimed_row_when_publish_is_retried_then_delivery_identity_and_event_time_are_stable",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_outbox_staging_fails_when_reserving_then_state_and_outbox_are_rolled_back",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryGoodsReceiptStoreTests.R05_given_two_distinct_receipts_when_applied_concurrently_then_both_stock_increments_are_serialized",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryEfPersistenceTests.given_existing_inventory_schema_when_model_is_built_then_only_persisted_domain_fields_are_mapped",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationEventContractTests.given_a_staged_decrease_event_when_deserialized_then_the_original_occurrence_time_is_preserved",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryEfPersistenceTests.given_a_new_inventory_item_when_repository_saves_then_a_fresh_context_can_query_it",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryGoodsReceiptStoreTests.R05_given_one_receipt_when_two_identical_messages_arrive_concurrently_then_only_one_claim_increments_stock",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryReservationRepositoryTests.given_one_operation_when_duplicate_requests_run_concurrently_then_the_outcome_and_message_are_replayed_once",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryReservationIdempotencyTests.given_cancellation_before_reservation_when_executed_then_state_is_not_mutated",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ApplyGoodsReceiptUseCaseTests.given_invalid_receipt_identity_or_quantity_when_applied_then_store_is_not_called(invalidField: 3, quantity: 0)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryIntegrationOutboxRelayTests.given_a_stable_delivery_when_published_then_wolverine_metadata_matches_the_outbox_identity",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryReservationIdempotencyTests.given_a_completed_operation_when_it_is_replayed_then_stock_is_decremented_once",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.GoodsReceivedHandlerTests.R03_given_a_procurement_receipt_when_consumed_then_exact_identity_is_applied_once",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ApplyGoodsReceiptUseCaseTests.given_a_valid_physical_receipt_when_applied_then_inventory_event_uses_the_receipt_identity",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ApplyGoodsReceiptUseCaseTests.given_invalid_receipt_identity_or_quantity_when_applied_then_store_is_not_called(invalidField: 0, quantity: 1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.ReserveInventoryUseCaseTests.given_non_positive_quantity_when_reserving_then_request_is_rejected_before_side_effects(quantity: 0)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.PostgresInventoryGoodsReceiptStoreTests.R03_given_a_completed_receipt_and_removed_outbox_when_replayed_then_original_outcome_is_returned_without_new_effects",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "InventoryControl.Tests.InventoryStockUseCaseTests.given_sufficient_stock_when_stock_is_decreased_then_state_and_event_are_staged",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_47_net10.0.trx",
+    "sha256": "d52b29542938f419183349812b3d2bbd76d7ea91b5492fb69ded493ad5ef71f5",
+    "counters": {
+      "total": "31",
+      "executed": "31",
+      "passed": "29",
+      "failed": "2",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Changed_receipt_replay_conflicts",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: \"P05-5xx\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Rejected_purchase_forbids_receipt",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit",
+        "outcome": "Failed",
+        "error": "Assert.Equal() Failure: Values differ\nExpected: GoodsReceiptResponse { ReceiptId = 642f640b-9234-48d7-95d8-815e3452e7ac, PurchaseOrderId = 636fa3b4-d361-4bde-93af-57d2823b1318, ProductId = 2d659f05-467a-4572-a2a6-e97ccb7cef96, Quantity = 4, ReceivedAt = 09/26/2026 03:31:47 +00:00 }\nActual:   GoodsReceiptResponse { ReceiptId = 642f640b-9234-48d7-95d8-815e3452e7ac, PurchaseOrderId = 636fa3b4-d361-4bde-93af-57d2823b1318, ProductId = 2d659f05-467a-4572-a2a6-e97ccb7cef96, Quantity = 4, ReceivedAt = 09/26/2026 03:31:47 +00:00 }"
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Matching_replay_returns_same_purchase_without_resubmission",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Microcks_profile_keeps_service_prefix_and_supplier_route",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Accepted_purchase_uses_original_client_key",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Matching_terminal_replay_has_one_receipt",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: \"P05-malformed-json\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"price\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: \"P05-identity-mismatch\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe",
+        "outcome": "Failed",
+        "error": "Assert.Single() Failure: The collection did not contain any matching items\nExpected:   (predicate expression)\nCollection: [null, Procurement.Domains.ProcurementRuleException: Only accepted orders can receive goods.\n   at Procurement.Domains.PurchaseOrder.Receive(Guid receiptId, Int32 quantity, DateTimeOffset now) in /workspace/src/Procurement/DomainCore/Procurement.Domains/PurchaseOrder.cs:line 152\n   at Procurement.Applications.ReceiveGoodsUseCase.<>c__DisplayClass2_0.<ExecuteAsync>b__0(PurchaseOrder order) in /workspace/src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs:line 238\n   at Procurement.Infrastructure.PostgresPurchaseStore.CommitAsync(Guid purchaseOrderId, Guid receiptId, Func`2 decide, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs:line 132\n   at Procurement.Infrastructure.PostgresPurchaseStore.CommitAsync(Guid purchaseOrderId, Guid receiptId, Func`2 decide, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs:line 162\n   at Procurement.Infrastructure.PostgresPurchaseStore.CommitAsync(Guid purchaseOrderId, Guid receiptId, Func`2 decide, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs:line 162\n   at Procurement.Applications.ReceiveGoodsUseCase.ExecuteAsync(ReceiveGoodsInput input, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs:line 235\n   at Xunit.Record.ExceptionAsync(Func`1 testCode) in /_/src/xunit.v3.core/Record.cs:line 93]"
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 0)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Transport_failure_uses_portable_gateway_error(failure: \"network\", expectedCode: \"supplier_unavailable\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: \"provider\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: \"product\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Malformed_provider_response_is_unknown",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Reconcile_not_found_keeps_unknown_without_resubmission",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"sku\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"quantity\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Transport_failure_uses_portable_gateway_error(failure: \"timeout\", expectedCode: \"supplier_timeout\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 5)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"guid\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: \"quantity\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Late_transport_failure_preserves_accepted_order",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Caller_cancellation_is_not_reported_as_provider_timeout",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"currency\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Concurrent_receipts_never_expose_mixed_read_snapshot",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: \"P05-unknown-status\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: -1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Two_partial_receipts_complete_the_order",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_49_net10.0.trx",
+    "sha256": "02d4b43721da875f696022bd3abdb7ac02f35e2e4ab8999e7cd904bc91980a67",
+    "counters": {
+      "total": "13",
+      "executed": "13",
+      "passed": "13",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_a_placed_order_when_state_changes_then_reason_is_recorded(targetStatus: Shipped)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged(targetStatus: Delivered, reason: \"   \")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged(targetStatus: Shipped, reason: \"\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_event_history_when_order_is_rehydrated_then_only_history_defines_state",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_a_placed_order_when_state_changes_then_reason_is_recorded(targetStatus: Delivered)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op(targetStatus: Delivered)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_a_placed_order_when_state_changes_then_reason_is_recorded(targetStatus: Cancelled)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_no_pending_events_when_same_commit_is_confirmed_again_then_state_is_unchanged",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged(targetStatus: Cancelled, reason: null)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op(targetStatus: Shipped)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_pending_events_when_commit_is_confirmed_then_version_advances_and_events_clear",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op(targetStatus: Cancelled)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Domains.Tests.OrderTests.Given_pending_events_when_commit_version_is_inconsistent_then_state_is_preserved",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_50_net10.0.trx",
+    "sha256": "33c59c1a9c65b420219eb229af71b42b0e17f8de9ab9c9c634014f8d935060d4",
+    "counters": {
+      "total": "19",
+      "executed": "19",
+      "passed": "19",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SaleOrders.Tests.MessagingTransportOptionsTests.Given_in_memory_profile_when_configuration_is_parsed_then_no_broker_connection_is_required",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.CancelOrderTests.when_cancel_order_then_status_updated_and_event_published",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.PlaceOrderTests.given_inventory_is_insufficient_when_order_is_placed_then_commit_is_skipped",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.GetOrderDetailsEndpointTests.when_getting_order_details_then_returns_expected_payload",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.MessagingTransportOptionsTests.Given_rabbitmq_profile_with_invalid_uri_when_configuration_is_parsed_then_startup_validation_fails",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationEventSerializationTests.Should_record_current_utc_when_producer_creates_order_event(eventType: typeof(Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderDelivered))",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationEventSerializationTests.Should_preserve_stored_payload_when_order_event_is_round_tripped(eventType: typeof(Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderShipped))",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.MessagingTransportOptionsTests.Given_unknown_profile_when_configuration_is_parsed_then_startup_validation_fails",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.PlaceOrderTests.given_inventory_is_reserved_when_order_is_placed_then_order_and_outbox_message_are_committed",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationOutboxRelayTests.given_the_same_claimed_row_when_publish_is_retried_then_delivery_identity_is_stable",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationEventSerializationTests.Should_preserve_stored_payload_when_order_event_is_round_tripped(eventType: typeof(Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderDelivered))",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationOutboxRelayTests.given_the_same_delivery_when_published_twice_then_wolverine_metadata_is_stable",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationEventSerializationTests.Should_record_current_utc_when_producer_creates_order_event(eventType: typeof(Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderCancelled))",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationEventSerializationTests.Should_record_current_utc_when_producer_creates_order_event(eventType: typeof(Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderShipped))",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationEventSerializationTests.Should_preserve_stored_payload_when_order_event_is_round_tripped(eventType: typeof(Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderCancelled))",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationEventSerializationTests.Should_preserve_stored_payload_when_order_event_is_round_tripped(eventType: typeof(Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderPlaced))",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.MessagingTransportOptionsTests.Given_kafka_profile_without_connection_when_configuration_is_parsed_then_startup_validation_fails",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.CancelOrderTests.given_cancelled_order_when_cancelled_again_then_commit_is_skipped",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleOrders.Tests.OrderIntegrationEventSerializationTests.Should_record_current_utc_when_producer_creates_order_event(eventType: typeof(Lab.BoundedContextContracts.Orders.IntegrationEvents.OrderPlaced))",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_53_net10.0.trx",
+    "sha256": "75ad235673a83cae610ca8d354f32b2fb6d2bf61f9229de6377233c5a0d94810",
+    "counters": {
+      "total": "9",
+      "executed": "9",
+      "passed": "9",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SaleProducts.Domains.Tests.ProductTests.Update_InvalidInput_Throws(name: \"Name\", description: \"\", price: 1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Domains.Tests.ProductTests.Update_InvalidInput_Throws(name: \"Name\", description: \"Desc\", price: -1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Domains.Tests.ProductTests.Update_InvalidInput_Throws(name: \"\", description: \"Desc\", price: 1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Domains.Tests.ProductTests.Ctor_InvalidInput_Throws(name: \"Name\", description: \"Desc\", price: -1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Domains.Tests.ProductTests.Ctor_SetsFields_and_Raises_ProductCreated",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Domains.Tests.ProductTests.Ctor_InvalidInput_Throws(name: \"\", description: \"Desc\", price: 1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Domains.Tests.ProductTests.Delete_Raises_ProductDeleted",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Domains.Tests.ProductTests.Ctor_InvalidInput_Throws(name: \"Name\", description: \"\", price: 1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Domains.Tests.ProductTests.Update_ChangesFields_and_Raises_ProductUpdated",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_54_net10.0.trx",
+    "sha256": "5954f0241400aa935dafe33bb8fb100a218197402a8c83f269cf2c6d2be3b1c2",
+    "counters": {
+      "total": "26",
+      "executed": "26",
+      "passed": "26",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SaleProducts.Tests.TriggerParallelWorkProbeTests.Given_cancelled_request_When_triggered_Then_no_event_is_published",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.TriggerParallelWorkProbeTests.Given_enabled_publication_When_requested_Then_the_selected_external_event_preserves_the_replay_identifier(mode: IndependentHandlers)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.TriggerParallelWorkProbeTests.Given_enabled_publication_When_requested_Then_the_selected_external_event_preserves_the_replay_identifier(mode: WhenAll)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.KafkaParallelWorkTests.Given_statistics_fails_once_When_external_event_handlers_retry_Then_successful_audit_does_not_run_again",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ConsumerFailurePolicyTests.given_the_orders_consumer_policy_when_configured_then_retries_are_bounded_before_dead_lettering",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ConsumerFailurePolicyTests.given_the_inventory_consumer_policy_when_configured_then_retries_are_bounded_before_dead_lettering",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.KafkaParallelWorkTests.Given_duplicate_external_events_When_both_handlers_receive_each_delivery_Then_each_effect_is_applied_once",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ProductUseCasesTests.DeleteUseCase_UsesAggregateDelete_AndSave",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ConsumerExceptionPolicyDiagnosticsEndpointTests.given_an_unknown_failure_kind_when_triggered_then_the_endpoint_returns_bad_request",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.WhenAllWorkHandlerTests.Given_inflight_branches_When_cancelled_Then_both_stop_and_all_scopes_are_disposed",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.KafkaParallelWorkTests.Given_WhenAll_event_from_Kafka_When_statistics_fails_Then_whole_delivery_retries_both_branches",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ConsumerFailurePolicyTests.given_the_products_consumer_policy_when_configured_then_retries_are_bounded_before_dead_lettering",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.TriggerConsumerExceptionPolicyProbeUseCaseTests.given_the_probe_is_disabled_when_triggered_then_no_message_is_published",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.TriggerConsumerExceptionPolicyProbeUseCaseTests.given_the_probe_is_enabled_when_triggered_then_a_correlatable_message_is_published(failureKind: Timeout)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ProductUseCasesTests.GetProductByIdUseCase_Throws_WhenByIdNotFound",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.WhenAllWorkHandlerTests.Given_a_synchronous_branch_failure_When_handling_Then_the_other_branch_is_awaited_and_scopes_are_disposed",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ConsumerExceptionPolicyDiagnosticsEndpointTests.given_a_disabled_probe_when_triggered_then_the_endpoint_returns_not_found",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ConsumerExceptionPolicyDiagnosticsEndpointTests.given_an_enabled_probe_when_timeout_is_requested_then_the_endpoint_returns_accepted",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ProductUseCasesTests.GetAllProductsUseCase_UsesQueryService",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.TriggerConsumerExceptionPolicyProbeUseCaseTests.given_the_probe_is_enabled_when_triggered_then_a_correlatable_message_is_published(failureKind: Unhandled)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ConsumerExceptionPolicyProbeHandlerTests.given_an_unhandled_probe_when_handled_then_an_invalid_operation_exception_contains_the_probe_id",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.WhenAllWorkHandlerTests.Given_a_partially_successful_delivery_When_retried_Then_both_run_again_but_effects_are_idempotent",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.WhenAllWorkHandlerTests.Given_two_gated_work_items_When_handling_Then_both_start_in_distinct_scopes_and_completion_waits_for_both",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.KafkaParallelWorkTests.Given_one_external_event_When_Kafka_delivers_Then_two_original_event_handlers_overlap_in_independent_scopes",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.TriggerParallelWorkProbeTests.Given_disabled_publication_When_requested_Then_no_event_is_published",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SaleProducts.Tests.ConsumerExceptionPolicyProbeHandlerTests.given_a_timeout_probe_when_handled_then_a_timeout_exception_contains_the_probe_id",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_32_04_net10.0.trx",
+    "sha256": "32ab226ef4edd957a2554a487109a51ffe9d3d64d3615dd82cc85a61664e22a6",
+    "counters": {
+      "total": "1",
+      "executed": "1",
+      "passed": "1",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SupplierMockTests.M01_M02_Given_a_real_local_upstream_When_modes_select_fixtures_proxy_or_mock_miss_Then_native_wiremock_forwards_only_the_selected_requests",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_32_06_net10.0.trx",
+    "sha256": "914a35f41c54fc6a42370c0c346952c23df00f6bf79a5a7f12dd611923dfbce5",
+    "counters": {
+      "total": "2",
+      "executed": "2",
+      "passed": "2",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SupplierSandboxTests.S01_Given_a_dedicated_postgres_store_When_the_same_supplier_key_is_replayed_Then_one_stable_order_is_returned_and_changed_payload_conflicts",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SupplierSandboxTests.S07_Given_the_supplier_SKU_rule_When_values_are_checked_Then_only_bounded_vendor_SKUs_are_accepted",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/focused-final-results/_9cf966e91f6b_2026-09-26_03_38_11_net10.0.trx",
+    "sha256": "29152f9dabf589bdd3c0cfe14c5e407156ecd138d87ee48b64f7cf9c5d5c4a45",
+    "counters": {
+      "total": "2",
+      "executed": "2",
+      "passed": "2",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SupplierSandboxTests.S01_Given_a_dedicated_postgres_store_When_the_same_supplier_key_is_replayed_Then_one_stable_order_is_returned_and_changed_payload_conflicts",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SupplierSandboxTests.S07_Given_the_supplier_SKU_rule_When_values_are_checked_Then_only_bounded_vendor_SKUs_are_accepted",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/focused-final-results/_b8d927bdf806_2026-09-26_03_38_06_net10.0.trx",
+    "sha256": "61935ab12fdc8391fe9e4f2f540113794198415ed2741175f9016728fbe25538",
+    "counters": {
+      "total": "39",
+      "executed": "39",
+      "passed": "39",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "Procurement.Tests.PurchasePostgresScenarios.Changed_quantity_conflicts_against_postgres_without_supplier_call",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Malformed_provider_response_is_unknown",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchasePostgresScenarios.Concurrent_matching_creates_store_one_purchase",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Microcks_profile_keeps_service_prefix_and_supplier_route",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Reconcile_not_found_keeps_unknown_without_resubmission",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Transport_failure_uses_portable_gateway_error(failure: \"network\", expectedCode: \"supplier_unavailable\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Two_partial_receipts_complete_the_order",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 0)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Transport_failure_uses_portable_gateway_error(failure: \"timeout\", expectedCode: \"supplier_timeout\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Receipt_id_cannot_move_to_another_purchase_or_product",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Matching_replay_returns_same_purchase_without_resubmission",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Replay_after_source_outbox_deletion_does_not_recreate_event",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Invalid_follow_up_receipts_leave_postgres_facts_unchanged",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Concurrent_receipts_never_expose_mixed_read_snapshot",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Changed_receipt_replay_conflicts",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Caller_cancellation_is_not_reported_as_provider_timeout",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: \"provider\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"price\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"quantity\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: -1)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"sku\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchasePostgresScenarios.Changed_product_conflicts_against_postgres_without_supplier_call",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"guid\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.New_receipt_timestamp_is_utc_millisecond_precision",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: \"P05-unknown-status\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Late_transport_failure_preserves_accepted_order",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Matching_terminal_replay_has_one_receipt",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: \"P05-malformed-json\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: \"P05-identity-mismatch\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: \"quantity\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Accepted_purchase_uses_original_client_key",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: \"P05-5xx\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: \"currency\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: \"product\")",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchaseScenarios.Rejected_purchase_forbids_receipt",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 5)",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "Procurement.Tests.PurchasePostgresScenarios.Changed_provider_conflicts_against_postgres_without_supplier_call",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/focused-final-results/_e55d1e0c1fa9_2026-09-26_03_38_15_net10.0.trx",
+    "sha256": "afe4f20464b93c8b15db213cd260da5a46fe9e7222e6957b27bd6eb2eedae5eb",
+    "counters": {
+      "total": "2",
+      "executed": "2",
+      "passed": "2",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SupplierMockTests.M07_Given_concurrent_mode_resets_When_native_http_is_used_Then_selected_mode_matches_a_complete_mapping_set",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SupplierMockTests.M01_M02_Given_a_real_local_upstream_When_modes_select_fixtures_proxy_or_mock_miss_Then_native_wiremock_forwards_only_the_selected_requests",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplier-final-results/_8f1b939f8440_2026-09-26_04_07_57_net10.0.trx",
+    "sha256": "cfcc7cd915d2c31767a3071e38768a97d35cbcc82aaad49edcebace546aec9e4",
+    "counters": {
+      "total": "2",
+      "executed": "2",
+      "passed": "2",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SupplierSandboxTests.S07_Given_the_supplier_SKU_rule_When_values_are_checked_Then_only_bounded_vendor_SKUs_are_accepted",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SupplierSandboxTests.S01_Given_a_dedicated_postgres_store_When_the_same_supplier_key_is_replayed_Then_one_stable_order_is_returned_and_changed_payload_conflicts",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  },
+  {
+    "file": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplier-final-results/_d75d57d0edb3_2026-09-26_04_08_01_net10.0.trx",
+    "sha256": "b62b79a448a91d60e3a8de8a59a0bc6b752a4b4005c409e8e7a3a0777a47afb3",
+    "counters": {
+      "total": "4",
+      "executed": "4",
+      "passed": "4",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "results": [
+      {
+        "name": "SupplierMockTests.M09_Given_cancel_or_admin_failure_When_reset_runs_Then_state_is_accurate_and_retry_recovers",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SupplierMockTests.M01_M02_Given_a_real_local_upstream_When_modes_select_fixtures_proxy_or_mock_miss_Then_native_wiremock_forwards_only_the_selected_requests",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SupplierMockTests.M07_Given_concurrent_mode_resets_When_native_http_is_used_Then_selected_mode_matches_a_complete_mapping_set",
+        "outcome": "Passed",
+        "error": null
+      },
+      {
+        "name": "SupplierMockTests.M08_Given_a_mode_setting_When_numeric_or_null_values_are_parsed_Then_only_named_values_are_accepted",
+        "outcome": "Passed",
+        "error": null
+      }
+    ]
+  }
+]

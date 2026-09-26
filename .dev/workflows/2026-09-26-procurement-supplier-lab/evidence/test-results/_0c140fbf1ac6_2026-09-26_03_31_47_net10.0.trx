@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="f067ea72-9ac7-44d8-a922-df37fdca7ab1" name="@0c140fbf1ac6 2026-09-26 03:31:47" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-26T03:31:47.0928448+00:00" queuing="2026-09-26T03:31:47.0928449+00:00" start="2026-09-26T03:31:45.7244803+00:00" finish="2026-09-26T03:31:47.8606804+00:00" />
+  <TestSettings name="default" id="7cb0b630-5449-4c75-af56-6ce97c0bf650">
+    <Deployment runDeploymentRoot="_0c140fbf1ac6_2026-09-26_03_31_47" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="98d2c188-5dca-44b9-a308-d06183e038e1" testId="0f349c79-f264-9e15-3c68-e2056634c2f1" testName="Procurement.Tests.ReceiptScenarios.Changed_receipt_replay_conflicts" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:46.9610280+00:00" endTime="2026-09-26T03:31:46.9614181+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="98d2c188-5dca-44b9-a308-d06183e038e1" />
+    <UnitTestResult executionId="b13183c4-0b48-42e6-94fe-0edff50a25ab" testId="80df4f7e-1a9c-3de5-0c34-9e835cfa5c7b" testName="Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: &quot;P05-5xx&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0955785+00:00" endTime="2026-09-26T03:31:47.0962068+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b13183c4-0b48-42e6-94fe-0edff50a25ab" />
+    <UnitTestResult executionId="86e04bbb-1e4f-43a6-9612-9827f991bdaa" testId="2522febd-cb23-72cd-2ff7-2eb3e8665d6d" testName="Procurement.Tests.PurchaseScenarios.Rejected_purchase_forbids_receipt" computerName="0c140fbf1ac6" duration="00:00:00.0020000" startTime="2026-09-26T03:31:47.0488913+00:00" endTime="2026-09-26T03:31:47.0516733+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86e04bbb-1e4f-43a6-9612-9827f991bdaa" />
+    <UnitTestResult executionId="28bd643d-ce70-4e67-937a-ac31df41ce00" testId="90f73909-f012-844a-a924-4cbdae510be4" testName="Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit" computerName="0c140fbf1ac6" duration="00:00:00.0709999" startTime="2026-09-26T03:31:47.3931499+00:00" endTime="2026-09-26T03:31:47.4656413+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28bd643d-ce70-4e67-937a-ac31df41ce00">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ
+Expected: GoodsReceiptResponse { ReceiptId = 642f640b-9234-48d7-95d8-815e3452e7ac, PurchaseOrderId = 636fa3b4-d361-4bde-93af-57d2823b1318, ProductId = 2d659f05-467a-4572-a2a6-e97ccb7cef96, Quantity = 4, ReceivedAt = 09/26/2026 03:31:47 +00:00 }
+Actual:   GoodsReceiptResponse { ReceiptId = 642f640b-9234-48d7-95d8-815e3452e7ac, PurchaseOrderId = 636fa3b4-d361-4bde-93af-57d2823b1318, ProductId = 2d659f05-467a-4572-a2a6-e97ccb7cef96, Quantity = 4, ReceivedAt = 09/26/2026 03:31:47 +00:00 }</Message>
+          <StackTrace>   at Procurement.Tests.ReceiptPostgresScenarios.ThenConcurrentReplayHasOneCommit(NpgsqlDataSource dataSource, Guid orderId, Guid receiptId, IReadOnlyList`1 outcomes) in /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs:line 206
+   at Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit() in /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs:line 55
+   at Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit() in /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs:line 57
+   at Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit() in /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs:line 57
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="960736ee-147d-4d81-ba35-820c6f6b86b8" testId="35e4a1b8-bb81-1a64-1937-8500c2d56d3b" testName="Procurement.Tests.PurchaseScenarios.Matching_replay_returns_same_purchase_without_resubmission" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0390216+00:00" endTime="2026-09-26T03:31:47.0408172+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="960736ee-147d-4d81-ba35-820c6f6b86b8" />
+    <UnitTestResult executionId="f14c26b5-d586-490b-b240-711b7b358b7c" testId="81f2732e-1ea0-00eb-cd3f-9d39e79d8274" testName="Procurement.Tests.SupplierGatewayScenarios.Microcks_profile_keeps_service_prefix_and_supplier_route" computerName="0c140fbf1ac6" duration="00:00:00.0080000" startTime="2026-09-26T03:31:47.0971143+00:00" endTime="2026-09-26T03:31:47.1053874+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f14c26b5-d586-490b-b240-711b7b358b7c" />
+    <UnitTestResult executionId="6cc8c1a9-0d30-4dba-9063-f58fe8b90dfb" testId="b9580daa-7842-a5f5-f0d9-1b3abad3fbba" testName="Procurement.Tests.PurchaseScenarios.Accepted_purchase_uses_original_client_key" computerName="0c140fbf1ac6" duration="00:00:00.0020000" startTime="2026-09-26T03:31:47.0415990+00:00" endTime="2026-09-26T03:31:47.0444689+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6cc8c1a9-0d30-4dba-9063-f58fe8b90dfb" />
+    <UnitTestResult executionId="b9d28356-9445-4a59-b674-a652e0a012e0" testId="dae406c4-4c7d-7fb7-5bad-6ed8098aebcd" testName="Procurement.Tests.ReceiptScenarios.Matching_terminal_replay_has_one_receipt" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:46.9598939+00:00" endTime="2026-09-26T03:31:46.9603842+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9d28356-9445-4a59-b674-a652e0a012e0" />
+    <UnitTestResult executionId="037adcf8-02c1-4de6-aeb6-53840ce37cff" testId="ae5b2fd5-5d09-92d5-5557-5019963ce98b" testName="Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: &quot;P05-malformed-json&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0030000" startTime="2026-09-26T03:31:47.0895928+00:00" endTime="2026-09-26T03:31:47.0930173+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="037adcf8-02c1-4de6-aeb6-53840ce37cff" />
+    <UnitTestResult executionId="f9620bf9-82a8-4ca5-918f-4af83d533282" testId="16da0901-e4be-2610-4db1-e4716f47ec2f" testName="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;price&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0325633+00:00" endTime="2026-09-26T03:31:47.0327893+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f9620bf9-82a8-4ca5-918f-4af83d533282" />
+    <UnitTestResult executionId="f770abbf-033e-4d05-adec-5881296e592a" testId="4b64ffac-1938-3d1e-e0b6-150faa0f74fc" testName="Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: &quot;P05-identity-mismatch&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0935375+00:00" endTime="2026-09-26T03:31:47.0949543+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f770abbf-033e-4d05-adec-5881296e592a" />
+    <UnitTestResult executionId="dd04de58-8f05-4396-bea3-7c3c59fe2ad5" testId="e222cec7-e471-72c2-1203-75993fbfa250" testName="Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe" computerName="0c140fbf1ac6" duration="00:00:00.4810000" startTime="2026-09-26T03:31:46.8873263+00:00" endTime="2026-09-26T03:31:47.3881240+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd04de58-8f05-4396-bea3-7c3c59fe2ad5">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Single() Failure: The collection did not contain any matching items
+Expected:   (predicate expression)
+Collection: [null, Procurement.Domains.ProcurementRuleException: Only accepted orders can receive goods.
+   at Procurement.Domains.PurchaseOrder.Receive(Guid receiptId, Int32 quantity, DateTimeOffset now) in /workspace/src/Procurement/DomainCore/Procurement.Domains/PurchaseOrder.cs:line 152
+   at Procurement.Applications.ReceiveGoodsUseCase.&lt;&gt;c__DisplayClass2_0.&lt;ExecuteAsync&gt;b__0(PurchaseOrder order) in /workspace/src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs:line 238
+   at Procurement.Infrastructure.PostgresPurchaseStore.CommitAsync(Guid purchaseOrderId, Guid receiptId, Func`2 decide, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs:line 132
+   at Procurement.Infrastructure.PostgresPurchaseStore.CommitAsync(Guid purchaseOrderId, Guid receiptId, Func`2 decide, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs:line 162
+   at Procurement.Infrastructure.PostgresPurchaseStore.CommitAsync(Guid purchaseOrderId, Guid receiptId, Func`2 decide, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs:line 162
+   at Procurement.Applications.ReceiveGoodsUseCase.ExecuteAsync(ReceiveGoodsInput input, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs:line 235
+   at Xunit.Record.ExceptionAsync(Func`1 testCode) in /_/src/xunit.v3.core/Record.cs:line 93]</Message>
+          <StackTrace>   at Procurement.Tests.ReceiptPostgresScenarios.ThenConcurrentOverreceiptIsRejected(NpgsqlDataSource dataSource, Guid orderId, IReadOnlyList`1 competing) in /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs:line 187
+   at Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe() in /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs:line 35
+   at Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe() in /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs:line 37
+   at Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe() in /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs:line 37
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="73f48e0d-a5bb-4370-8282-1056d7f73dbf" testId="aa27e1e0-0279-1c8c-c0b6-1a944467be99" testName="Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 0)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:46.9500215+00:00" endTime="2026-09-26T03:31:46.9510590+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="73f48e0d-a5bb-4370-8282-1056d7f73dbf" />
+    <UnitTestResult executionId="68c826f4-5031-4447-87ea-ec0c43c4e7d3" testId="273f97b8-0a6e-5d61-18f9-df0e19fcc9b7" testName="Procurement.Tests.SupplierGatewayScenarios.Transport_failure_uses_portable_gateway_error(failure: &quot;network&quot;, expectedCode: &quot;supplier_unavailable&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.1117627+00:00" endTime="2026-09-26T03:31:47.1125215+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68c826f4-5031-4447-87ea-ec0c43c4e7d3" />
+    <UnitTestResult executionId="884fe903-2d81-4b0a-b264-e3749abd6c62" testId="1b202287-7938-dd82-a7aa-57f115b31f9d" testName="Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: &quot;provider&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0473308+00:00" endTime="2026-09-26T03:31:47.0481553+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="884fe903-2d81-4b0a-b264-e3749abd6c62" />
+    <UnitTestResult executionId="ca2ef52b-c13e-40b6-9325-9ad5842ec89e" testId="063dbd89-fb17-7484-ffc6-f0b07d389f35" testName="Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: &quot;product&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0466388+00:00" endTime="2026-09-26T03:31:47.0470896+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca2ef52b-c13e-40b6-9325-9ad5842ec89e" />
+    <UnitTestResult executionId="fe523429-b239-4365-ad64-eed2f3aeddc5" testId="67335bff-30fe-80ab-e17d-e666ecc59a3b" testName="Procurement.Tests.PurchaseScenarios.Malformed_provider_response_is_unknown" computerName="0c140fbf1ac6" duration="00:00:00.0040000" startTime="2026-09-26T03:31:47.0230429+00:00" endTime="2026-09-26T03:31:47.0271637+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fe523429-b239-4365-ad64-eed2f3aeddc5" />
+    <UnitTestResult executionId="3b8bca71-e3e0-48c7-85ab-ddd6fb606d2f" testId="7755fd51-3b36-3418-6bb2-1f63701fd389" testName="Procurement.Tests.PurchaseScenarios.Reconcile_not_found_keeps_unknown_without_resubmission" computerName="0c140fbf1ac6" duration="00:00:00.1260000" startTime="2026-09-26T03:31:46.8873650+00:00" endTime="2026-09-26T03:31:47.0220616+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3b8bca71-e3e0-48c7-85ab-ddd6fb606d2f" />
+    <UnitTestResult executionId="0dac63cb-72be-473d-b075-fa863048de91" testId="af4dcd9e-ce58-4b5e-9857-8842d28e1093" testName="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;sku&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0335973+00:00" endTime="2026-09-26T03:31:47.0338675+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0dac63cb-72be-473d-b075-fa863048de91" />
+    <UnitTestResult executionId="8b60372b-0658-4699-817e-dd6ec4f0aa80" testId="72520b4b-ab82-3176-a4aa-2a049cc17fbb" testName="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;quantity&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0020000" startTime="2026-09-26T03:31:47.0283176+00:00" endTime="2026-09-26T03:31:47.0312091+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8b60372b-0658-4699-817e-dd6ec4f0aa80" />
+    <UnitTestResult executionId="c0002a03-3e17-4650-9526-08b34c257f05" testId="93ca922a-1bd0-1cb7-4c44-02ef227074e8" testName="Procurement.Tests.SupplierGatewayScenarios.Transport_failure_uses_portable_gateway_error(failure: &quot;timeout&quot;, expectedCode: &quot;supplier_timeout&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.1098811+00:00" endTime="2026-09-26T03:31:47.1111630+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c0002a03-3e17-4650-9526-08b34c257f05" />
+    <UnitTestResult executionId="44193396-1252-4b9d-9f2b-65c087dc206e" testId="4dca77e6-890b-8852-f2b3-0789659a0897" testName="Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 5)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:46.9516012+00:00" endTime="2026-09-26T03:31:46.9518617+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="44193396-1252-4b9d-9f2b-65c087dc206e" />
+    <UnitTestResult executionId="23796272-387a-48a7-a1e7-a89d108f1493" testId="bbf3968c-0002-9f32-595a-8b07024ba97e" testName="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;guid&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0330968+00:00" endTime="2026-09-26T03:31:47.0333080+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="23796272-387a-48a7-a1e7-a89d108f1493" />
+    <UnitTestResult executionId="b6329c2c-c59d-4b29-ae6c-9c67858c8eca" testId="117691dc-3040-82b5-4b98-930f8274fcb8" testName="Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: &quot;quantity&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0453690+00:00" endTime="2026-09-26T03:31:47.0463945+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6329c2c-c59d-4b29-ae6c-9c67858c8eca" />
+    <UnitTestResult executionId="75b7865f-bf3d-42a6-a3e4-bc881dfca0ed" testId="e1bd25a1-2370-edd4-21d6-36a560cf1e2d" testName="Procurement.Tests.PurchaseScenarios.Late_transport_failure_preserves_accepted_order" computerName="0c140fbf1ac6" duration="00:00:00.0020000" startTime="2026-09-26T03:31:47.0523852+00:00" endTime="2026-09-26T03:31:47.0553701+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75b7865f-bf3d-42a6-a3e4-bc881dfca0ed" />
+    <UnitTestResult executionId="3eb966cd-b231-4851-8859-158f5244c247" testId="7d1ab038-c250-fd37-d0f6-3840c9a52e90" testName="Procurement.Tests.SupplierGatewayScenarios.Caller_cancellation_is_not_reported_as_provider_timeout" computerName="0c140fbf1ac6" duration="00:00:00.0020000" startTime="2026-09-26T03:31:47.1065893+00:00" endTime="2026-09-26T03:31:47.1087802+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3eb966cd-b231-4851-8859-158f5244c247" />
+    <UnitTestResult executionId="198372ea-a906-4ba9-8be4-bfba79450b07" testId="3f4914ef-b698-216b-494b-0283590cb490" testName="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;currency&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:47.0316439+00:00" endTime="2026-09-26T03:31:47.0321674+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="198372ea-a906-4ba9-8be4-bfba79450b07" />
+    <UnitTestResult executionId="45766a4b-97ee-46e7-a9d0-7b229a4f0449" testId="2249934e-78f5-314a-1dbe-3e8726548dd1" testName="Procurement.Tests.ReceiptPostgresScenarios.Concurrent_receipts_never_expose_mixed_read_snapshot" computerName="0c140fbf1ac6" duration="00:00:00.3000000" startTime="2026-09-26T03:31:47.4668623+00:00" endTime="2026-09-26T03:31:47.7670028+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="45766a4b-97ee-46e7-a9d0-7b229a4f0449" />
+    <UnitTestResult executionId="e2be103a-3600-4bbc-b036-5519837a239f" testId="9f0ef041-37df-aa4b-a08e-8f0c06887f30" testName="Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: &quot;P05-unknown-status&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.1890000" startTime="2026-09-26T03:31:46.8873868+00:00" endTime="2026-09-26T03:31:47.0888662+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e2be103a-3600-4bbc-b036-5519837a239f" />
+    <UnitTestResult executionId="c6afc65c-dea7-47dc-b007-caa3b596ffba" testId="f26623b2-e357-7b22-9258-37d8b9603770" testName="Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: -1)" computerName="0c140fbf1ac6" duration="00:00:00.0360000" startTime="2026-09-26T03:31:46.8872916+00:00" endTime="2026-09-26T03:31:46.9423438+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c6afc65c-dea7-47dc-b007-caa3b596ffba" />
+    <UnitTestResult executionId="5ed249c3-add6-4582-9bd5-7905a342a98d" testId="06f23880-26f3-8ea7-054f-26789a2e4db8" testName="Procurement.Tests.ReceiptScenarios.Two_partial_receipts_complete_the_order" computerName="0c140fbf1ac6" duration="00:00:00.0020000" startTime="2026-09-26T03:31:46.9561860+00:00" endTime="2026-09-26T03:31:46.9590944+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5ed249c3-add6-4582-9bd5-7905a342a98d" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="90f73909-f012-844a-a924-4cbdae510be4">
+      <Execution id="28bd643d-ce70-4e67-937a-ac31df41ce00" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.ReceiptPostgresScenarios" name="Concurrent_matching_receipt_has_one_commit" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="e222cec7-e471-72c2-1203-75993fbfa250">
+      <Execution id="dd04de58-8f05-4396-bea3-7c3c59fe2ad5" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.ReceiptPostgresScenarios" name="Receipt_transaction_is_durable_and_race_safe" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.ReceiptScenarios.Matching_terminal_replay_has_one_receipt" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="dae406c4-4c7d-7fb7-5bad-6ed8098aebcd">
+      <Execution id="b9d28356-9445-4a59-b674-a652e0a012e0" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.ReceiptScenarios" name="Matching_terminal_replay_has_one_receipt" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;quantity&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="72520b4b-ab82-3176-a4aa-2a049cc17fbb">
+      <Execution id="8b60372b-0658-4699-817e-dd6ec4f0aa80" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Invalid_purchase_fails_before_io" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Rejected_purchase_forbids_receipt" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="2522febd-cb23-72cd-2ff7-2eb3e8665d6d">
+      <Execution id="86e04bbb-1e4f-43a6-9612-9827f991bdaa" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Rejected_purchase_forbids_receipt" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.ReceiptScenarios.Two_partial_receipts_complete_the_order" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="06f23880-26f3-8ea7-054f-26789a2e4db8">
+      <Execution id="5ed249c3-add6-4582-9bd5-7905a342a98d" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.ReceiptScenarios" name="Two_partial_receipts_complete_the_order" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Malformed_provider_response_is_unknown" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="67335bff-30fe-80ab-e17d-e666ecc59a3b">
+      <Execution id="fe523429-b239-4365-ad64-eed2f3aeddc5" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Malformed_provider_response_is_unknown" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: &quot;P05-unknown-status&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="9f0ef041-37df-aa4b-a08e-8f0c06887f30">
+      <Execution id="e2be103a-3600-4bbc-b036-5519837a239f" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.SupplierGatewayScenarios" name="Invalid_http_result_never_claims_supplier_acceptance" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;guid&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="bbf3968c-0002-9f32-595a-8b07024ba97e">
+      <Execution id="23796272-387a-48a7-a1e7-a89d108f1493" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Invalid_purchase_fails_before_io" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Reconcile_not_found_keeps_unknown_without_resubmission" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="7755fd51-3b36-3418-6bb2-1f63701fd389">
+      <Execution id="3b8bca71-e3e0-48c7-85ab-ddd6fb606d2f" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Reconcile_not_found_keeps_unknown_without_resubmission" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;currency&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="3f4914ef-b698-216b-494b-0283590cb490">
+      <Execution id="198372ea-a906-4ba9-8be4-bfba79450b07" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Invalid_purchase_fails_before_io" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.SupplierGatewayScenarios.Transport_failure_uses_portable_gateway_error(failure: &quot;timeout&quot;, expectedCode: &quot;supplier_timeout&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="93ca922a-1bd0-1cb7-4c44-02ef227074e8">
+      <Execution id="c0002a03-3e17-4650-9526-08b34c257f05" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.SupplierGatewayScenarios" name="Transport_failure_uses_portable_gateway_error" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: &quot;provider&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="1b202287-7938-dd82-a7aa-57f115b31f9d">
+      <Execution id="884fe903-2d81-4b0a-b264-e3749abd6c62" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Changed_payload_conflicts_before_supplier_call" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: &quot;P05-malformed-json&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="ae5b2fd5-5d09-92d5-5557-5019963ce98b">
+      <Execution id="037adcf8-02c1-4de6-aeb6-53840ce37cff" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.SupplierGatewayScenarios" name="Invalid_http_result_never_claims_supplier_acceptance" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: &quot;P05-5xx&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="80df4f7e-1a9c-3de5-0c34-9e835cfa5c7b">
+      <Execution id="b13183c4-0b48-42e6-94fe-0edff50a25ab" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.SupplierGatewayScenarios" name="Invalid_http_result_never_claims_supplier_acceptance" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: &quot;product&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="063dbd89-fb17-7484-ffc6-f0b07d389f35">
+      <Execution id="ca2ef52b-c13e-40b6-9325-9ad5842ec89e" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Changed_payload_conflicts_before_supplier_call" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;sku&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="af4dcd9e-ce58-4b5e-9857-8842d28e1093">
+      <Execution id="0dac63cb-72be-473d-b075-fa863048de91" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Invalid_purchase_fails_before_io" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: -1)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="f26623b2-e357-7b22-9258-37d8b9603770">
+      <Execution id="c6afc65c-dea7-47dc-b007-caa3b596ffba" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.ReceiptScenarios" name="Invalid_second_receipt_preserves_prior_six" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Invalid_purchase_fails_before_io(field: &quot;price&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="16da0901-e4be-2610-4db1-e4716f47ec2f">
+      <Execution id="f9620bf9-82a8-4ca5-918f-4af83d533282" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Invalid_purchase_fails_before_io" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.SupplierGatewayScenarios.Invalid_http_result_never_claims_supplier_acceptance(rowId: &quot;P05-identity-mismatch&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="4b64ffac-1938-3d1e-e0b6-150faa0f74fc">
+      <Execution id="f770abbf-033e-4d05-adec-5881296e592a" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.SupplierGatewayScenarios" name="Invalid_http_result_never_claims_supplier_acceptance" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.SupplierGatewayScenarios.Microcks_profile_keeps_service_prefix_and_supplier_route" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="81f2732e-1ea0-00eb-cd3f-9d39e79d8274">
+      <Execution id="f14c26b5-d586-490b-b240-711b7b358b7c" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.SupplierGatewayScenarios" name="Microcks_profile_keeps_service_prefix_and_supplier_route" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Accepted_purchase_uses_original_client_key" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="b9580daa-7842-a5f5-f0d9-1b3abad3fbba">
+      <Execution id="6cc8c1a9-0d30-4dba-9063-f58fe8b90dfb" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Accepted_purchase_uses_original_client_key" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.SupplierGatewayScenarios.Caller_cancellation_is_not_reported_as_provider_timeout" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="7d1ab038-c250-fd37-d0f6-3840c9a52e90">
+      <Execution id="3eb966cd-b231-4851-8859-158f5244c247" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.SupplierGatewayScenarios" name="Caller_cancellation_is_not_reported_as_provider_timeout" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.ReceiptPostgresScenarios.Concurrent_receipts_never_expose_mixed_read_snapshot" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="2249934e-78f5-314a-1dbe-3e8726548dd1">
+      <Execution id="45766a4b-97ee-46e7-a9d0-7b229a4f0449" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.ReceiptPostgresScenarios" name="Concurrent_receipts_never_expose_mixed_read_snapshot" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Matching_replay_returns_same_purchase_without_resubmission" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="35e4a1b8-bb81-1a64-1937-8500c2d56d3b">
+      <Execution id="960736ee-147d-4d81-ba35-820c6f6b86b8" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Matching_replay_returns_same_purchase_without_resubmission" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.SupplierGatewayScenarios.Transport_failure_uses_portable_gateway_error(failure: &quot;network&quot;, expectedCode: &quot;supplier_unavailable&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="273f97b8-0a6e-5d61-18f9-df0e19fcc9b7">
+      <Execution id="68c826f4-5031-4447-87ea-ec0c43c4e7d3" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.SupplierGatewayScenarios" name="Transport_failure_uses_portable_gateway_error" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.ReceiptScenarios.Changed_receipt_replay_conflicts" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="0f349c79-f264-9e15-3c68-e2056634c2f1">
+      <Execution id="98d2c188-5dca-44b9-a308-d06183e038e1" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.ReceiptScenarios" name="Changed_receipt_replay_conflicts" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 0)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="aa27e1e0-0279-1c8c-c0b6-1a944467be99">
+      <Execution id="73f48e0d-a5bb-4370-8282-1056d7f73dbf" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.ReceiptScenarios" name="Invalid_second_receipt_preserves_prior_six" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.ReceiptScenarios.Invalid_second_receipt_preserves_prior_six(quantity: 5)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="4dca77e6-890b-8852-f2b3-0789659a0897">
+      <Execution id="44193396-1252-4b9d-9f2b-65c087dc206e" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.ReceiptScenarios" name="Invalid_second_receipt_preserves_prior_six" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Late_transport_failure_preserves_accepted_order" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="e1bd25a1-2370-edd4-21d6-36a560cf1e2d">
+      <Execution id="75b7865f-bf3d-42a6-a3e4-bc881dfca0ed" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Late_transport_failure_preserves_accepted_order" />
+    </UnitTest>
+    <UnitTest name="Procurement.Tests.PurchaseScenarios.Changed_payload_conflicts_before_supplier_call(field: &quot;quantity&quot;)" storage="/workspace/tests/procurement.tests/bin/release/net10.0/procurement.tests.dll" id="117691dc-3040-82b5-4b98-930f8274fcb8">
+      <Execution id="b6329c2c-c59d-4b29-ae6c-9c67858c8eca" />
+      <TestMethod codeBase="/workspace/tests/Procurement.Tests/bin/Release/net10.0/Procurement.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Procurement.Tests.PurchaseScenarios" name="Changed_payload_conflicts_before_supplier_call" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="0f349c79-f264-9e15-3c68-e2056634c2f1" executionId="98d2c188-5dca-44b9-a308-d06183e038e1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="80df4f7e-1a9c-3de5-0c34-9e835cfa5c7b" executionId="b13183c4-0b48-42e6-94fe-0edff50a25ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2522febd-cb23-72cd-2ff7-2eb3e8665d6d" executionId="86e04bbb-1e4f-43a6-9612-9827f991bdaa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="90f73909-f012-844a-a924-4cbdae510be4" executionId="28bd643d-ce70-4e67-937a-ac31df41ce00" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="35e4a1b8-bb81-1a64-1937-8500c2d56d3b" executionId="960736ee-147d-4d81-ba35-820c6f6b86b8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="81f2732e-1ea0-00eb-cd3f-9d39e79d8274" executionId="f14c26b5-d586-490b-b240-711b7b358b7c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b9580daa-7842-a5f5-f0d9-1b3abad3fbba" executionId="6cc8c1a9-0d30-4dba-9063-f58fe8b90dfb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dae406c4-4c7d-7fb7-5bad-6ed8098aebcd" executionId="b9d28356-9445-4a59-b674-a652e0a012e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ae5b2fd5-5d09-92d5-5557-5019963ce98b" executionId="037adcf8-02c1-4de6-aeb6-53840ce37cff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16da0901-e4be-2610-4db1-e4716f47ec2f" executionId="f9620bf9-82a8-4ca5-918f-4af83d533282" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4b64ffac-1938-3d1e-e0b6-150faa0f74fc" executionId="f770abbf-033e-4d05-adec-5881296e592a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e222cec7-e471-72c2-1203-75993fbfa250" executionId="dd04de58-8f05-4396-bea3-7c3c59fe2ad5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aa27e1e0-0279-1c8c-c0b6-1a944467be99" executionId="73f48e0d-a5bb-4370-8282-1056d7f73dbf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="273f97b8-0a6e-5d61-18f9-df0e19fcc9b7" executionId="68c826f4-5031-4447-87ea-ec0c43c4e7d3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b202287-7938-dd82-a7aa-57f115b31f9d" executionId="884fe903-2d81-4b0a-b264-e3749abd6c62" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="063dbd89-fb17-7484-ffc6-f0b07d389f35" executionId="ca2ef52b-c13e-40b6-9325-9ad5842ec89e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="67335bff-30fe-80ab-e17d-e666ecc59a3b" executionId="fe523429-b239-4365-ad64-eed2f3aeddc5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7755fd51-3b36-3418-6bb2-1f63701fd389" executionId="3b8bca71-e3e0-48c7-85ab-ddd6fb606d2f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af4dcd9e-ce58-4b5e-9857-8842d28e1093" executionId="0dac63cb-72be-473d-b075-fa863048de91" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="72520b4b-ab82-3176-a4aa-2a049cc17fbb" executionId="8b60372b-0658-4699-817e-dd6ec4f0aa80" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="93ca922a-1bd0-1cb7-4c44-02ef227074e8" executionId="c0002a03-3e17-4650-9526-08b34c257f05" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4dca77e6-890b-8852-f2b3-0789659a0897" executionId="44193396-1252-4b9d-9f2b-65c087dc206e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bbf3968c-0002-9f32-595a-8b07024ba97e" executionId="23796272-387a-48a7-a1e7-a89d108f1493" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="117691dc-3040-82b5-4b98-930f8274fcb8" executionId="b6329c2c-c59d-4b29-ae6c-9c67858c8eca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e1bd25a1-2370-edd4-21d6-36a560cf1e2d" executionId="75b7865f-bf3d-42a6-a3e4-bc881dfca0ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7d1ab038-c250-fd37-d0f6-3840c9a52e90" executionId="3eb966cd-b231-4851-8859-158f5244c247" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f4914ef-b698-216b-494b-0283590cb490" executionId="198372ea-a906-4ba9-8be4-bfba79450b07" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2249934e-78f5-314a-1dbe-3e8726548dd1" executionId="45766a4b-97ee-46e7-a9d0-7b229a4f0449" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f0ef041-37df-aa4b-a08e-8f0c06887f30" executionId="e2be103a-3600-4bbc-b036-5519837a239f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f26623b2-e357-7b22-9258-37d8b9603770" executionId="c6afc65c-dea7-47dc-b007-caa3b596ffba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="06f23880-26f3-8ea7-054f-26789a2e4db8" executionId="5ed249c3-add6-4582-9bd5-7905a342a98d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="31" executed="31" passed="29" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v4.0.0+05679a7ab5 (64-bit .NET 10.0.12)
+[xUnit.net 00:00:00.19]   Discovering: Procurement.Tests
+[xUnit.net 00:00:00.43]   Discovered:  Procurement.Tests
+[xUnit.net 00:00:00.67]   Starting:    Procurement.Tests
+[xUnit.net 00:00:01.34]       Assert.Single() Failure: The collection did not contain any matching items
+[xUnit.net 00:00:01.34]       Expected:   (predicate expression)
+[xUnit.net 00:00:01.34]       Collection: [null, Procurement.Domains.ProcurementRuleException: Only accepted orders can receive goods.
+[xUnit.net 00:00:01.34]          at Procurement.Domains.PurchaseOrder.Receive(Guid receiptId, Int32 quantity, DateTimeOffset now) in /workspace/src/Procurement/DomainCore/Procurement.Domains/PurchaseOrder.cs:line 152
+[xUnit.net 00:00:01.34]          at Procurement.Applications.ReceiveGoodsUseCase.&lt;&gt;c__DisplayClass2_0.&lt;ExecuteAsync&gt;b__0(PurchaseOrder order) in /workspace/src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs:line 238
+[xUnit.net 00:00:01.34]          at Procurement.Infrastructure.PostgresPurchaseStore.CommitAsync(Guid purchaseOrderId, Guid receiptId, Func`2 decide, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs:line 132
+[xUnit.net 00:00:01.34]          at Procurement.Infrastructure.PostgresPurchaseStore.CommitAsync(Guid purchaseOrderId, Guid receiptId, Func`2 decide, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs:line 162
+[xUnit.net 00:00:01.34]          at Procurement.Infrastructure.PostgresPurchaseStore.CommitAsync(Guid purchaseOrderId, Guid receiptId, Func`2 decide, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs:line 162
+[xUnit.net 00:00:01.34]          at Procurement.Applications.ReceiveGoodsUseCase.ExecuteAsync(ReceiveGoodsInput input, CancellationToken cancellationToken) in /workspace/src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs:line 235
+[xUnit.net 00:00:01.34]          at Xunit.Record.ExceptionAsync(Func`1 testCode) in /_/src/xunit.v3.core/Record.cs:line 93]
+[xUnit.net 00:00:01.34]       Stack Trace:
+[xUnit.net 00:00:01.34]         /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs(187,0): at Procurement.Tests.ReceiptPostgresScenarios.ThenConcurrentOverreceiptIsRejected(NpgsqlDataSource dataSource, Guid orderId, IReadOnlyList`1 competing)
+[xUnit.net 00:00:01.34]         /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs(35,0): at Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe()
+[xUnit.net 00:00:01.34]         /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs(37,0): at Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe()
+[xUnit.net 00:00:01.34]         /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs(37,0): at Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe()
+[xUnit.net 00:00:01.34]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:01.41]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:01.41]       Expected: GoodsReceiptResponse { ReceiptId = 642f640b-9234-48d7-95d8-815e3452e7ac, PurchaseOrderId = 636fa3b4-d361-4bde-93af-57d2823b1318, ProductId = 2d659f05-467a-4572-a2a6-e97ccb7cef96, Quantity = 4, ReceivedAt = 09/26/2026 03:31:47 +00:00 }
+[xUnit.net 00:00:01.41]       Actual:   GoodsReceiptResponse { ReceiptId = 642f640b-9234-48d7-95d8-815e3452e7ac, PurchaseOrderId = 636fa3b4-d361-4bde-93af-57d2823b1318, ProductId = 2d659f05-467a-4572-a2a6-e97ccb7cef96, Quantity = 4, ReceivedAt = 09/26/2026 03:31:47 +00:00 }
+[xUnit.net 00:00:01.41]       Stack Trace:
+[xUnit.net 00:00:01.41]         /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs(206,0): at Procurement.Tests.ReceiptPostgresScenarios.ThenConcurrentReplayHasOneCommit(NpgsqlDataSource dataSource, Guid orderId, Guid receiptId, IReadOnlyList`1 outcomes)
+[xUnit.net 00:00:01.41]         /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs(55,0): at Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit()
+[xUnit.net 00:00:01.41]         /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs(57,0): at Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit()
+[xUnit.net 00:00:01.41]         /workspace/tests/Procurement.Tests/ReceiptPostgresScenarios.cs(57,0): at Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit()
+[xUnit.net 00:00:01.41]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:01.74]   Finished:    Procurement.Tests (ID = '91336ede3cee21bf78b1a9fe329d74acb076cf2a7592bcb160bac6c324d087a5')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="0c140fbf1ac6" outcome="Error" timestamp="2026-09-26T03:31:47.3938851+00:00">
+        <Text>[xUnit.net 00:00:01.34]     Procurement.Tests.ReceiptPostgresScenarios.Receipt_transaction_is_durable_and_race_safe [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="0c140fbf1ac6" outcome="Error" timestamp="2026-09-26T03:31:47.4673729+00:00">
+        <Text>[xUnit.net 00:00:01.41]     Procurement.Tests.ReceiptPostgresScenarios.Concurrent_matching_receipt_has_one_commit [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

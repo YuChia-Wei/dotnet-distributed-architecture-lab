@@ -1,0 +1,111 @@
+services:
+  postgres-procurement:
+    profiles: [procurement-lab]
+    image: postgres:16.15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: procurement_db
+    volumes:
+      - postgres_procurement_data:/var/lib/postgresql/data
+      - ./sql-script/procurement/001-procurement.sql:/docker-entrypoint-initdb.d/001-procurement.sql:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U user -d procurement_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  postgres-supplier:
+    profiles: [procurement-lab]
+    image: postgres:16.15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: supplier_db
+    volumes:
+      - postgres_supplier_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U user -d supplier_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  supplier-sandbox:
+    profiles: [procurement-lab]
+    build:
+      context: ..
+      dockerfile: samples/SupplierSandbox/SupplierSandbox.WebApi/Dockerfile
+    pull_policy: build
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+      ConnectionStrings__SupplierDb: Host=postgres-supplier;Port=5432;Database=supplier_db;Username=user;Password=password
+    ports:
+      - "127.0.0.1:8181:8080"
+    depends_on:
+      postgres-supplier:
+        condition: service_healthy
+
+  supplier-mock:
+    profiles: [procurement-lab]
+    build:
+      context: ..
+      dockerfile: samples/SupplierMock/SupplierMock.WebApi/Dockerfile
+    pull_policy: build
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+      SupplierMock__Mode: hybrid
+      SupplierMock__UpstreamUrl: http://supplier-sandbox:8080
+      SupplierMock__NativeListenUrl: http://0.0.0.0:9091
+      SupplierMock__AdminUrl: http://127.0.0.1:9091
+    ports:
+      - "127.0.0.1:8182:8080"
+      - "127.0.0.1:8183:9091"
+    depends_on:
+      - supplier-sandbox
+
+  microcks:
+    profiles: [procurement-lab]
+    image: quay.io/microcks/microcks-uber:1.15.0
+    ports:
+      - "127.0.0.1:8184:8080"
+    depends_on:
+      - supplier-sandbox
+
+  procurement-api:
+    profiles: [procurement-lab]
+    build:
+      context: ..
+      dockerfile: src/Procurement/Presentation/Procurement.WebApi/Dockerfile
+    pull_policy: build
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+      ConnectionStrings__DefaultConnection: Host=postgres-procurement;Port=5432;Database=procurement_db;Username=user;Password=password
+      SupplierProfiles__direct: http://supplier-sandbox:8080/
+      SupplierProfiles__wiremock: http://supplier-mock:9091/
+      SupplierProfiles__microcks: http://microcks:8080/rest/Supplier+API/1.0.0/
+      Messaging__Profile: Kafka
+      Messaging__Kafka__ConnectionString: kafka:9092
+    ports:
+      - "127.0.0.1:8180:8080"
+    depends_on:
+      postgres-procurement:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      supplier-sandbox:
+        condition: service_started
+
+  inventory-api:
+    ports: !override
+      - "127.0.0.1:8185:8080"
+
+  regression-tests:
+    environment:
+      PROCUREMENT_TEST_POSTGRES_CONNECTION_STRING: Host=postgres-procurement;Port=5432;Database=procurement_db;Username=user;Password=password
+      SUPPLIER_TEST_POSTGRES_CONNECTION_STRING: Host=postgres-supplier;Port=5432;Database=supplier_db;Username=user;Password=password
+    volumes: !override
+      - ../artifacts/procurement-lab/test-results:/results
+
+volumes:
+  postgres_procurement_data:
+  postgres_supplier_data:

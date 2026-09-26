@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="76b23dfe-f265-4f1c-b4c3-e0d0ad3266d4" name="@0c140fbf1ac6 2026-09-26 03:31:49" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-26T03:31:49.3130451+00:00" queuing="2026-09-26T03:31:49.3130451+00:00" start="2026-09-26T03:31:48.0968013+00:00" finish="2026-09-26T03:31:49.3645450+00:00" />
+  <TestSettings name="default" id="c05b1397-414a-42cd-be14-db8aa1bcf811">
+    <Deployment runDeploymentRoot="_0c140fbf1ac6_2026-09-26_03_31_49" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="c00ea4d6-3627-480a-9343-8bb8fcf0a054" testId="e0abbf8f-967e-b980-e7c6-d6afb127a735" testName="SaleOrders.Domains.Tests.OrderTests.Given_a_placed_order_when_state_changes_then_reason_is_recorded(targetStatus: Shipped)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2688327+00:00" endTime="2026-09-26T03:31:49.2692968+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c00ea4d6-3627-480a-9343-8bb8fcf0a054" />
+    <UnitTestResult executionId="e5894def-ed29-4a19-b2cd-2a6b577fd367" testId="29a1278d-bd68-5e60-2707-ec29404aa378" testName="SaleOrders.Domains.Tests.OrderTests.Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged(targetStatus: Delivered, reason: &quot;   &quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2414674+00:00" endTime="2026-09-26T03:31:49.2416200+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5894def-ed29-4a19-b2cd-2a6b577fd367" />
+    <UnitTestResult executionId="cfaf468d-d44c-4d78-94cd-0e456bcb5bf0" testId="e2ec7c09-38ed-7903-f13f-79220e66a283" testName="SaleOrders.Domains.Tests.OrderTests.Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged(targetStatus: Shipped, reason: &quot;&quot;)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2404487+00:00" endTime="2026-09-26T03:31:49.2411537+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cfaf468d-d44c-4d78-94cd-0e456bcb5bf0" />
+    <UnitTestResult executionId="1652161b-3078-435d-b3ea-bbaff1c294b8" testId="a52b04cf-bb10-94ab-f15a-aa11f2d87625" testName="SaleOrders.Domains.Tests.OrderTests.Given_event_history_when_order_is_rehydrated_then_only_history_defines_state" computerName="0c140fbf1ac6" duration="00:00:00.0170000" startTime="2026-09-26T03:31:49.2470292+00:00" endTime="2026-09-26T03:31:49.2649273+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1652161b-3078-435d-b3ea-bbaff1c294b8" />
+    <UnitTestResult executionId="04c00969-8c7c-469e-a4e8-44a9a8a3eb9d" testId="82f42425-9e38-dc35-d021-b07b74d3715a" testName="SaleOrders.Domains.Tests.OrderTests.Given_a_placed_order_when_state_changes_then_reason_is_recorded(targetStatus: Delivered)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2695461+00:00" endTime="2026-09-26T03:31:49.2696411+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="04c00969-8c7c-469e-a4e8-44a9a8a3eb9d" />
+    <UnitTestResult executionId="23299188-4f36-499b-bf7b-9fea1c2b30a2" testId="4835a911-dd21-314e-8657-30e7a191fadc" testName="SaleOrders.Domains.Tests.OrderTests.Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op(targetStatus: Delivered)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2451572+00:00" endTime="2026-09-26T03:31:49.2455401+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="23299188-4f36-499b-bf7b-9fea1c2b30a2" />
+    <UnitTestResult executionId="d5a00d12-5821-431d-9979-3df288cc994b" testId="6c4f24ad-b65c-ed1a-116d-d11853831149" testName="SaleOrders.Domains.Tests.OrderTests.Given_a_placed_order_when_state_changes_then_reason_is_recorded(targetStatus: Cancelled)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2676536+00:00" endTime="2026-09-26T03:31:49.2683916+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5a00d12-5821-431d-9979-3df288cc994b" />
+    <UnitTestResult executionId="a775e1f2-3d87-44da-aa0d-ff9abe401ef1" testId="6bdabc83-c17b-e5c6-8cfe-aab5a101b5b9" testName="SaleOrders.Domains.Tests.OrderTests.Given_no_pending_events_when_same_commit_is_confirmed_again_then_state_is_unchanged" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2661038+00:00" endTime="2026-09-26T03:31:49.2666662+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a775e1f2-3d87-44da-aa0d-ff9abe401ef1" />
+    <UnitTestResult executionId="ef2c27d9-02a0-4664-9473-3ffdae65b146" testId="14661670-5e83-797a-4ec7-3db8a1c3dccc" testName="SaleOrders.Domains.Tests.OrderTests.Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged(targetStatus: Cancelled, reason: null)" computerName="0c140fbf1ac6" duration="00:00:00.0180000" startTime="2026-09-26T03:31:49.2040711+00:00" endTime="2026-09-26T03:31:49.2355916+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ef2c27d9-02a0-4664-9473-3ffdae65b146" />
+    <UnitTestResult executionId="24f09639-7fa8-41f9-a71c-dc7360253ec1" testId="fe44ed7a-778b-f53f-5dd6-94bffba176a2" testName="SaleOrders.Domains.Tests.OrderTests.Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op(targetStatus: Shipped)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2444126+00:00" endTime="2026-09-26T03:31:49.2448080+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="24f09639-7fa8-41f9-a71c-dc7360253ec1" />
+    <UnitTestResult executionId="088a4d92-de1f-4db1-90a7-cda25b3f0f9c" testId="2054ce35-0b46-00c7-1640-23b4fe754e9f" testName="SaleOrders.Domains.Tests.OrderTests.Given_pending_events_when_commit_is_confirmed_then_version_advances_and_events_clear" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2702712+00:00" endTime="2026-09-26T03:31:49.2704623+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="088a4d92-de1f-4db1-90a7-cda25b3f0f9c" />
+    <UnitTestResult executionId="7fdfc723-7da1-413e-8121-2fecfaa1c8d7" testId="47a38b97-0f2a-ec11-ee35-2f1ff2c8de66" testName="SaleOrders.Domains.Tests.OrderTests.Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op(targetStatus: Cancelled)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2459491+00:00" endTime="2026-09-26T03:31:49.2461189+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7fdfc723-7da1-413e-8121-2fecfaa1c8d7" />
+    <UnitTestResult executionId="cf174a4f-e491-4156-8906-927334341699" testId="efd89564-07d9-e200-b0e9-f07bd2caacad" testName="SaleOrders.Domains.Tests.OrderTests.Given_pending_events_when_commit_version_is_inconsistent_then_state_is_preserved" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:49.2707870+00:00" endTime="2026-09-26T03:31:49.2712654+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cf174a4f-e491-4156-8906-927334341699" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged(targetStatus: Cancelled, reason: null)" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="14661670-5e83-797a-4ec7-3db8a1c3dccc">
+      <Execution id="ef2c27d9-02a0-4664-9473-3ffdae65b146" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged(targetStatus: Shipped, reason: &quot;&quot;)" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="e2ec7c09-38ed-7903-f13f-79220e66a283">
+      <Execution id="cfaf468d-d44c-4d78-94cd-0e456bcb5bf0" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_event_history_when_order_is_rehydrated_then_only_history_defines_state" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="a52b04cf-bb10-94ab-f15a-aa11f2d87625">
+      <Execution id="1652161b-3078-435d-b3ea-bbaff1c294b8" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_event_history_when_order_is_rehydrated_then_only_history_defines_state" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_no_pending_events_when_same_commit_is_confirmed_again_then_state_is_unchanged" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="6bdabc83-c17b-e5c6-8cfe-aab5a101b5b9">
+      <Execution id="a775e1f2-3d87-44da-aa0d-ff9abe401ef1" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_no_pending_events_when_same_commit_is_confirmed_again_then_state_is_unchanged" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_a_placed_order_when_state_changes_then_reason_is_recorded(targetStatus: Shipped)" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="e0abbf8f-967e-b980-e7c6-d6afb127a735">
+      <Execution id="c00ea4d6-3627-480a-9343-8bb8fcf0a054" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_a_placed_order_when_state_changes_then_reason_is_recorded" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op(targetStatus: Cancelled)" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="47a38b97-0f2a-ec11-ee35-2f1ff2c8de66">
+      <Execution id="7fdfc723-7da1-413e-8121-2fecfaa1c8d7" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_a_placed_order_when_state_changes_then_reason_is_recorded(targetStatus: Cancelled)" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="6c4f24ad-b65c-ed1a-116d-d11853831149">
+      <Execution id="d5a00d12-5821-431d-9979-3df288cc994b" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_a_placed_order_when_state_changes_then_reason_is_recorded" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged(targetStatus: Delivered, reason: &quot;   &quot;)" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="29a1278d-bd68-5e60-2707-ec29404aa378">
+      <Execution id="e5894def-ed29-4a19-b2cd-2a6b577fd367" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_a_missing_reason_when_state_change_is_requested_then_the_order_is_unchanged" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op(targetStatus: Shipped)" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="fe44ed7a-778b-f53f-5dd6-94bffba176a2">
+      <Execution id="24f09639-7fa8-41f9-a71c-dc7360253ec1" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op(targetStatus: Delivered)" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="4835a911-dd21-314e-8657-30e7a191fadc">
+      <Execution id="23299188-4f36-499b-bf7b-9fea1c2b30a2" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_a_target_state_when_same_transition_repeats_then_it_is_a_no_op" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_a_placed_order_when_state_changes_then_reason_is_recorded(targetStatus: Delivered)" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="82f42425-9e38-dc35-d021-b07b74d3715a">
+      <Execution id="04c00969-8c7c-469e-a4e8-44a9a8a3eb9d" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_a_placed_order_when_state_changes_then_reason_is_recorded" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_pending_events_when_commit_is_confirmed_then_version_advances_and_events_clear" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="2054ce35-0b46-00c7-1640-23b4fe754e9f">
+      <Execution id="088a4d92-de1f-4db1-90a7-cda25b3f0f9c" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_pending_events_when_commit_is_confirmed_then_version_advances_and_events_clear" />
+    </UnitTest>
+    <UnitTest name="SaleOrders.Domains.Tests.OrderTests.Given_pending_events_when_commit_version_is_inconsistent_then_state_is_preserved" storage="/workspace/tests/saleorders.domains.tests/bin/release/net10.0/saleorders.domains.tests.dll" id="efd89564-07d9-e200-b0e9-f07bd2caacad">
+      <Execution id="cf174a4f-e491-4156-8906-927334341699" />
+      <TestMethod codeBase="/workspace/tests/SaleOrders.Domains.Tests/bin/Release/net10.0/SaleOrders.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleOrders.Domains.Tests.OrderTests" name="Given_pending_events_when_commit_version_is_inconsistent_then_state_is_preserved" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e0abbf8f-967e-b980-e7c6-d6afb127a735" executionId="c00ea4d6-3627-480a-9343-8bb8fcf0a054" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="29a1278d-bd68-5e60-2707-ec29404aa378" executionId="e5894def-ed29-4a19-b2cd-2a6b577fd367" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e2ec7c09-38ed-7903-f13f-79220e66a283" executionId="cfaf468d-d44c-4d78-94cd-0e456bcb5bf0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a52b04cf-bb10-94ab-f15a-aa11f2d87625" executionId="1652161b-3078-435d-b3ea-bbaff1c294b8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="82f42425-9e38-dc35-d021-b07b74d3715a" executionId="04c00969-8c7c-469e-a4e8-44a9a8a3eb9d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4835a911-dd21-314e-8657-30e7a191fadc" executionId="23299188-4f36-499b-bf7b-9fea1c2b30a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6c4f24ad-b65c-ed1a-116d-d11853831149" executionId="d5a00d12-5821-431d-9979-3df288cc994b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6bdabc83-c17b-e5c6-8cfe-aab5a101b5b9" executionId="a775e1f2-3d87-44da-aa0d-ff9abe401ef1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="14661670-5e83-797a-4ec7-3db8a1c3dccc" executionId="ef2c27d9-02a0-4664-9473-3ffdae65b146" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe44ed7a-778b-f53f-5dd6-94bffba176a2" executionId="24f09639-7fa8-41f9-a71c-dc7360253ec1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2054ce35-0b46-00c7-1640-23b4fe754e9f" executionId="088a4d92-de1f-4db1-90a7-cda25b3f0f9c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="47a38b97-0f2a-ec11-ee35-2f1ff2c8de66" executionId="7fdfc723-7da1-413e-8121-2fecfaa1c8d7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="efd89564-07d9-e200-b0e9-f07bd2caacad" executionId="cf174a4f-e491-4156-8906-927334341699" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="13" executed="13" passed="13" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v4.0.0+05679a7ab5 (64-bit .NET 10.0.12)
+[xUnit.net 00:00:00.19]   Discovering: SaleOrders.Domains.Tests
+[xUnit.net 00:00:00.42]   Discovered:  SaleOrders.Domains.Tests
+[xUnit.net 00:00:00.63]   Starting:    SaleOrders.Domains.Tests
+[xUnit.net 00:00:00.85]   Finished:    SaleOrders.Domains.Tests (ID = 'f08f96094586adc76c8d87c7e4cad1f49772e597fbd2fadcfd88fee33aae3e00')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

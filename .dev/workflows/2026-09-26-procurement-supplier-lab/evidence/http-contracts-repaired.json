@@ -1,0 +1,2170 @@
+{
+  "workflow": "2026-09-26-procurement-supplier-lab",
+  "startedAt": "2026-09-26T03:37:33.338868+00:00",
+  "scenarioResults": [
+    {
+      "scenario": "P02",
+      "startedAt": "2026-09-26T03:37:33.338888+00:00",
+      "observations": [
+        {
+          "label": "create",
+          "status": 201,
+          "originHeader": null,
+          "body": {
+            "id": "ad889a68-9a99-453e-9fac-3c5699c1d176",
+            "identity": {
+              "clientRequestId": "4fe14ecc-5baf-45aa-b97d-314310989702",
+              "productId": "3968fc53-d117-4b1a-a002-4f478383b0d2",
+              "supplierSku": "REAL-001",
+              "quantity": 2,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "Accepted",
+            "supplierOrderId": "efae5166-5a25-4d31-9986-54239179d477",
+            "receivedQuantity": 0,
+            "version": 1,
+            "createdAt": "2026-09-26T03:37:33.672475+00:00",
+            "updatedAt": "2026-09-26T03:37:33.8567105+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "replay",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "id": "ad889a68-9a99-453e-9fac-3c5699c1d176",
+            "identity": {
+              "clientRequestId": "4fe14ecc-5baf-45aa-b97d-314310989702",
+              "productId": "3968fc53-d117-4b1a-a002-4f478383b0d2",
+              "supplierSku": "REAL-001",
+              "quantity": 2,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "Accepted",
+            "supplierOrderId": "efae5166-5a25-4d31-9986-54239179d477",
+            "receivedQuantity": 0,
+            "version": 1,
+            "createdAt": "2026-09-26T03:37:33.672475+00:00",
+            "updatedAt": "2026-09-26T03:37:33.85671+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "supplier POST delta",
+          "clientRequestId": "4fe14ecc-5baf-45aa-b97d-314310989702",
+          "delta": 1
+        },
+        {
+          "label": "supplier lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "efae5166-5a25-4d31-9986-54239179d477",
+            "clientRequestId": "4fe14ecc-5baf-45aa-b97d-314310989702",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:33.956507+00:00"
+    },
+    {
+      "scenario": "P03",
+      "startedAt": "2026-09-26T03:37:33.956549+00:00",
+      "observations": [
+        {
+          "label": "stored original",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "id": "ad889a68-9a99-453e-9fac-3c5699c1d176",
+            "identity": {
+              "clientRequestId": "4fe14ecc-5baf-45aa-b97d-314310989702",
+              "productId": "3968fc53-d117-4b1a-a002-4f478383b0d2",
+              "supplierSku": "REAL-001",
+              "quantity": 2,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "Accepted",
+            "supplierOrderId": "efae5166-5a25-4d31-9986-54239179d477",
+            "receivedQuantity": 0,
+            "version": 1,
+            "createdAt": "2026-09-26T03:37:33.672475+00:00",
+            "updatedAt": "2026-09-26T03:37:33.85671+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "conflict quantity",
+          "status": 409,
+          "originHeader": null,
+          "body": {
+            "title": "purchase_identity_conflict",
+            "status": 409,
+            "detail": "ClientRequestId already belongs to a different purchase.",
+            "code": "purchase_identity_conflict",
+            "message": "ClientRequestId already belongs to a different purchase."
+          }
+        },
+        {
+          "label": "conflict provider",
+          "status": 409,
+          "originHeader": null,
+          "body": {
+            "title": "purchase_identity_conflict",
+            "status": 409,
+            "detail": "ClientRequestId already belongs to a different purchase.",
+            "code": "purchase_identity_conflict",
+            "message": "ClientRequestId already belongs to a different purchase."
+          }
+        },
+        {
+          "label": "conflict product",
+          "status": 409,
+          "originHeader": null,
+          "body": {
+            "title": "purchase_identity_conflict",
+            "status": 409,
+            "detail": "ClientRequestId already belongs to a different purchase.",
+            "code": "purchase_identity_conflict",
+            "message": "ClientRequestId already belongs to a different purchase."
+          }
+        },
+        {
+          "label": "stored after conflicts",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "id": "ad889a68-9a99-453e-9fac-3c5699c1d176",
+            "identity": {
+              "clientRequestId": "4fe14ecc-5baf-45aa-b97d-314310989702",
+              "productId": "3968fc53-d117-4b1a-a002-4f478383b0d2",
+              "supplierSku": "REAL-001",
+              "quantity": 2,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "Accepted",
+            "supplierOrderId": "efae5166-5a25-4d31-9986-54239179d477",
+            "receivedQuantity": 0,
+            "version": 1,
+            "createdAt": "2026-09-26T03:37:33.672475+00:00",
+            "updatedAt": "2026-09-26T03:37:33.85671+00:00",
+            "receipts": []
+          }
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:34.115528+00:00"
+    },
+    {
+      "scenario": "P04",
+      "startedAt": "2026-09-26T03:37:34.115567+00:00",
+      "observations": [
+        {
+          "label": "delay 4000",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "delayAfterCommitMs": 4000,
+            "persistence": "服務重新啟動後恢復為零"
+          }
+        },
+        {
+          "label": "unknown submission",
+          "status": 202,
+          "originHeader": null,
+          "body": {
+            "id": "7cbaba70-7c5a-40ad-bff8-def38fc3565b",
+            "identity": {
+              "clientRequestId": "134a4fcd-3ab3-437e-8ba6-5461abae901a",
+              "productId": "0c528d8a-1ee2-4571-a3b1-adeebef2b94a",
+              "supplierSku": "REAL-001",
+              "quantity": 2,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "SubmissionUnknown",
+            "supplierOrderId": null,
+            "receivedQuantity": 0,
+            "version": 1,
+            "createdAt": "2026-09-26T03:37:34.155307+00:00",
+            "updatedAt": "2026-09-26T03:37:36.1646009+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "committed supplier lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "c31071eb-d68c-4605-954b-9203c65f105d",
+            "clientRequestId": "134a4fcd-3ab3-437e-8ba6-5461abae901a",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "reconcile by original key",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "id": "7cbaba70-7c5a-40ad-bff8-def38fc3565b",
+            "identity": {
+              "clientRequestId": "134a4fcd-3ab3-437e-8ba6-5461abae901a",
+              "productId": "0c528d8a-1ee2-4571-a3b1-adeebef2b94a",
+              "supplierSku": "REAL-001",
+              "quantity": 2,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "Accepted",
+            "supplierOrderId": "c31071eb-d68c-4605-954b-9203c65f105d",
+            "receivedQuantity": 0,
+            "version": 2,
+            "createdAt": "2026-09-26T03:37:34.155307+00:00",
+            "updatedAt": "2026-09-26T03:37:36.2170261+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "upstream calls",
+          "postDelta": 1,
+          "reconcileLookupCount": 2,
+          "clientRequestId": "134a4fcd-3ab3-437e-8ba6-5461abae901a"
+        },
+        {
+          "label": "delay reset",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "delayAfterCommitMs": 0,
+            "persistence": "服務重新啟動後恢復為零"
+          }
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:36.248745+00:00"
+    },
+    {
+      "scenario": "P07",
+      "startedAt": "2026-09-26T03:37:36.248777+00:00",
+      "observations": [
+        {
+          "label": "purchase list before",
+          "status": 200,
+          "originHeader": null,
+          "body": [
+            {
+              "id": "7cbaba70-7c5a-40ad-bff8-def38fc3565b",
+              "identity": {
+                "clientRequestId": "134a4fcd-3ab3-437e-8ba6-5461abae901a",
+                "productId": "0c528d8a-1ee2-4571-a3b1-adeebef2b94a",
+                "supplierSku": "REAL-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Accepted",
+              "supplierOrderId": "c31071eb-d68c-4605-954b-9203c65f105d",
+              "receivedQuantity": 0,
+              "version": 2,
+              "createdAt": "2026-09-26T03:37:34.155307+00:00",
+              "updatedAt": "2026-09-26T03:37:36.217026+00:00",
+              "receipts": []
+            },
+            {
+              "id": "ad889a68-9a99-453e-9fac-3c5699c1d176",
+              "identity": {
+                "clientRequestId": "4fe14ecc-5baf-45aa-b97d-314310989702",
+                "productId": "3968fc53-d117-4b1a-a002-4f478383b0d2",
+                "supplierSku": "REAL-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Accepted",
+              "supplierOrderId": "efae5166-5a25-4d31-9986-54239179d477",
+              "receivedQuantity": 0,
+              "version": 1,
+              "createdAt": "2026-09-26T03:37:33.672475+00:00",
+              "updatedAt": "2026-09-26T03:37:33.85671+00:00",
+              "receipts": []
+            },
+            {
+              "id": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+              "identity": {
+                "clientRequestId": "2a5e40c5-c0e6-4c3a-8525-755d1e952cbc",
+                "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                "supplierSku": "REAL-001",
+                "quantity": 3,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Received",
+              "supplierOrderId": "9dd2eb76-4799-458c-ac48-57e62b56a926",
+              "receivedQuantity": 3,
+              "version": 2,
+              "createdAt": "2026-09-26T03:30:25.631339+00:00",
+              "updatedAt": "2026-09-26T03:30:29.485738+00:00",
+              "receipts": [
+                {
+                  "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+                  "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+                  "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                  "quantity": 3,
+                  "receivedAt": "2026-09-26T03:30:29.485738+00:00"
+                }
+              ]
+            },
+            {
+              "id": "0b1b2c7c-1b71-4a78-a472-c4195cb4f013",
+              "identity": {
+                "clientRequestId": "a016d1d6-75a9-4049-bafe-2358a387202b",
+                "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                "supplierSku": "DENY-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Rejected",
+              "supplierOrderId": "a61c0b38-b3f5-45a4-9ab7-e55233d36d54",
+              "receivedQuantity": 0,
+              "version": 1,
+              "createdAt": "2026-09-26T03:29:09.767088+00:00",
+              "updatedAt": "2026-09-26T03:29:09.798111+00:00",
+              "receipts": []
+            },
+            {
+              "id": "357a9b2a-0278-4f67-932f-8c56b069679c",
+              "identity": {
+                "clientRequestId": "30c6dfe2-4d09-407e-9655-d32b77924099",
+                "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                "supplierSku": "REAL-001",
+                "quantity": 10,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Received",
+              "supplierOrderId": "2459de3f-4280-43d0-89e9-c6162227c6a4",
+              "receivedQuantity": 10,
+              "version": 3,
+              "createdAt": "2026-09-26T03:24:11.54862+00:00",
+              "updatedAt": "2026-09-26T03:24:19.715118+00:00",
+              "receipts": [
+                {
+                  "receiptId": "38e57bde-d523-4b83-b7a8-4397ec646a9a",
+                  "purchaseOrderId": "357a9b2a-0278-4f67-932f-8c56b069679c",
+                  "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                  "quantity": 6,
+                  "receivedAt": "2026-09-26T03:24:11.601025+00:00"
+                },
+                {
+                  "receiptId": "34173413-61b4-438e-b5c5-70607b61ae02",
+                  "purchaseOrderId": "357a9b2a-0278-4f67-932f-8c56b069679c",
+                  "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                  "quantity": 4,
+                  "receivedAt": "2026-09-26T03:24:19.715118+00:00"
+                }
+              ]
+            },
+            {
+              "id": "220e5f4b-4558-4810-b1a2-19d5cf9805cf",
+              "identity": {
+                "clientRequestId": "1f400ce1-dfe5-4039-9e5e-00801d90b48f",
+                "productId": "ce2b9f7a-b79d-44cc-badc-b792646774a5",
+                "supplierSku": "REAL-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Accepted",
+              "supplierOrderId": "4cda98cb-547f-45f3-9f26-f62cdc81fb4c",
+              "receivedQuantity": 0,
+              "version": 2,
+              "createdAt": "2026-09-26T03:21:40.50017+00:00",
+              "updatedAt": "2026-09-26T03:21:42.562499+00:00",
+              "receipts": []
+            },
+            {
+              "id": "0afac2e9-7f99-4930-a2d9-885cf8eaa534",
+              "identity": {
+                "clientRequestId": "4e5fd2f9-45b8-4a3e-80dd-23139bdd5011",
+                "productId": "358e0ed9-6d38-49fe-9a7c-58f5dfbe0178",
+                "supplierSku": "REAL-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Accepted",
+              "supplierOrderId": "917ba450-c938-438b-bd10-f25f6742e141",
+              "receivedQuantity": 0,
+              "version": 1,
+              "createdAt": "2026-09-26T03:21:39.974569+00:00",
+              "updatedAt": "2026-09-26T03:21:40.145265+00:00",
+              "receipts": []
+            }
+          ]
+        },
+        {
+          "label": "empty client ID",
+          "status": 400,
+          "originHeader": null,
+          "body": {
+            "title": "invalid_identity",
+            "status": 400,
+            "detail": "ClientRequestId and ProductId are required.",
+            "code": "invalid_identity",
+            "message": "ClientRequestId and ProductId are required."
+          }
+        },
+        {
+          "label": "empty product ID",
+          "status": 400,
+          "originHeader": null,
+          "body": {
+            "title": "invalid_identity",
+            "status": 400,
+            "detail": "ClientRequestId and ProductId are required.",
+            "code": "invalid_identity",
+            "message": "ClientRequestId and ProductId are required."
+          }
+        },
+        {
+          "label": "invalid SKU",
+          "status": 400,
+          "originHeader": null,
+          "body": {
+            "title": "invalid_sku",
+            "status": 400,
+            "detail": "SupplierSku must contain 1–64 letters, digits, hyphens or underscores.",
+            "code": "invalid_sku",
+            "message": "SupplierSku must contain 1–64 letters, digits, hyphens or underscores."
+          }
+        },
+        {
+          "label": "zero quantity",
+          "status": 400,
+          "originHeader": null,
+          "body": {
+            "title": "invalid_purchase",
+            "status": 400,
+            "detail": "Quantity, price, currency or provider is invalid.",
+            "code": "invalid_purchase",
+            "message": "Quantity, price, currency or provider is invalid."
+          }
+        },
+        {
+          "label": "negative price",
+          "status": 400,
+          "originHeader": null,
+          "body": {
+            "title": "invalid_purchase",
+            "status": 400,
+            "detail": "Quantity, price, currency or provider is invalid.",
+            "code": "invalid_purchase",
+            "message": "Quantity, price, currency or provider is invalid."
+          }
+        },
+        {
+          "label": "non-TWD",
+          "status": 400,
+          "originHeader": null,
+          "body": {
+            "title": "invalid_purchase",
+            "status": 400,
+            "detail": "Quantity, price, currency or provider is invalid.",
+            "code": "invalid_purchase",
+            "message": "Quantity, price, currency or provider is invalid."
+          }
+        },
+        {
+          "label": "supplier POST delta",
+          "delta": 0
+        },
+        {
+          "label": "purchase list after",
+          "status": 200,
+          "originHeader": null,
+          "body": [
+            {
+              "id": "7cbaba70-7c5a-40ad-bff8-def38fc3565b",
+              "identity": {
+                "clientRequestId": "134a4fcd-3ab3-437e-8ba6-5461abae901a",
+                "productId": "0c528d8a-1ee2-4571-a3b1-adeebef2b94a",
+                "supplierSku": "REAL-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Accepted",
+              "supplierOrderId": "c31071eb-d68c-4605-954b-9203c65f105d",
+              "receivedQuantity": 0,
+              "version": 2,
+              "createdAt": "2026-09-26T03:37:34.155307+00:00",
+              "updatedAt": "2026-09-26T03:37:36.217026+00:00",
+              "receipts": []
+            },
+            {
+              "id": "ad889a68-9a99-453e-9fac-3c5699c1d176",
+              "identity": {
+                "clientRequestId": "4fe14ecc-5baf-45aa-b97d-314310989702",
+                "productId": "3968fc53-d117-4b1a-a002-4f478383b0d2",
+                "supplierSku": "REAL-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Accepted",
+              "supplierOrderId": "efae5166-5a25-4d31-9986-54239179d477",
+              "receivedQuantity": 0,
+              "version": 1,
+              "createdAt": "2026-09-26T03:37:33.672475+00:00",
+              "updatedAt": "2026-09-26T03:37:33.85671+00:00",
+              "receipts": []
+            },
+            {
+              "id": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+              "identity": {
+                "clientRequestId": "2a5e40c5-c0e6-4c3a-8525-755d1e952cbc",
+                "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                "supplierSku": "REAL-001",
+                "quantity": 3,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Received",
+              "supplierOrderId": "9dd2eb76-4799-458c-ac48-57e62b56a926",
+              "receivedQuantity": 3,
+              "version": 2,
+              "createdAt": "2026-09-26T03:30:25.631339+00:00",
+              "updatedAt": "2026-09-26T03:30:29.485738+00:00",
+              "receipts": [
+                {
+                  "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+                  "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+                  "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                  "quantity": 3,
+                  "receivedAt": "2026-09-26T03:30:29.485738+00:00"
+                }
+              ]
+            },
+            {
+              "id": "0b1b2c7c-1b71-4a78-a472-c4195cb4f013",
+              "identity": {
+                "clientRequestId": "a016d1d6-75a9-4049-bafe-2358a387202b",
+                "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                "supplierSku": "DENY-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Rejected",
+              "supplierOrderId": "a61c0b38-b3f5-45a4-9ab7-e55233d36d54",
+              "receivedQuantity": 0,
+              "version": 1,
+              "createdAt": "2026-09-26T03:29:09.767088+00:00",
+              "updatedAt": "2026-09-26T03:29:09.798111+00:00",
+              "receipts": []
+            },
+            {
+              "id": "357a9b2a-0278-4f67-932f-8c56b069679c",
+              "identity": {
+                "clientRequestId": "30c6dfe2-4d09-407e-9655-d32b77924099",
+                "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                "supplierSku": "REAL-001",
+                "quantity": 10,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Received",
+              "supplierOrderId": "2459de3f-4280-43d0-89e9-c6162227c6a4",
+              "receivedQuantity": 10,
+              "version": 3,
+              "createdAt": "2026-09-26T03:24:11.54862+00:00",
+              "updatedAt": "2026-09-26T03:24:19.715118+00:00",
+              "receipts": [
+                {
+                  "receiptId": "38e57bde-d523-4b83-b7a8-4397ec646a9a",
+                  "purchaseOrderId": "357a9b2a-0278-4f67-932f-8c56b069679c",
+                  "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                  "quantity": 6,
+                  "receivedAt": "2026-09-26T03:24:11.601025+00:00"
+                },
+                {
+                  "receiptId": "34173413-61b4-438e-b5c5-70607b61ae02",
+                  "purchaseOrderId": "357a9b2a-0278-4f67-932f-8c56b069679c",
+                  "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                  "quantity": 4,
+                  "receivedAt": "2026-09-26T03:24:19.715118+00:00"
+                }
+              ]
+            },
+            {
+              "id": "220e5f4b-4558-4810-b1a2-19d5cf9805cf",
+              "identity": {
+                "clientRequestId": "1f400ce1-dfe5-4039-9e5e-00801d90b48f",
+                "productId": "ce2b9f7a-b79d-44cc-badc-b792646774a5",
+                "supplierSku": "REAL-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Accepted",
+              "supplierOrderId": "4cda98cb-547f-45f3-9f26-f62cdc81fb4c",
+              "receivedQuantity": 0,
+              "version": 2,
+              "createdAt": "2026-09-26T03:21:40.50017+00:00",
+              "updatedAt": "2026-09-26T03:21:42.562499+00:00",
+              "receipts": []
+            },
+            {
+              "id": "0afac2e9-7f99-4930-a2d9-885cf8eaa534",
+              "identity": {
+                "clientRequestId": "4e5fd2f9-45b8-4a3e-80dd-23139bdd5011",
+                "productId": "358e0ed9-6d38-49fe-9a7c-58f5dfbe0178",
+                "supplierSku": "REAL-001",
+                "quantity": 2,
+                "unitPrice": 100.0,
+                "currency": "TWD",
+                "provider": "direct"
+              },
+              "state": "Accepted",
+              "supplierOrderId": "917ba450-c938-438b-bd10-f25f6742e141",
+              "receivedQuantity": 0,
+              "version": 1,
+              "createdAt": "2026-09-26T03:21:39.974569+00:00",
+              "updatedAt": "2026-09-26T03:21:40.145265+00:00",
+              "receipts": []
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:36.407980+00:00"
+    },
+    {
+      "scenario": "S01",
+      "startedAt": "2026-09-26T03:37:36.408031+00:00",
+      "observations": [
+        {
+          "label": "concurrent POST 1",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "6e592615-6dbc-4f7e-8656-db266625cd1c",
+            "clientRequestId": "db0afe9c-cc62-4136-adda-398e4f466716",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "concurrent POST 2",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "6e592615-6dbc-4f7e-8656-db266625cd1c",
+            "clientRequestId": "db0afe9c-cc62-4136-adda-398e4f466716",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "concurrent POST 3",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "6e592615-6dbc-4f7e-8656-db266625cd1c",
+            "clientRequestId": "db0afe9c-cc62-4136-adda-398e4f466716",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "concurrent POST 4",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "6e592615-6dbc-4f7e-8656-db266625cd1c",
+            "clientRequestId": "db0afe9c-cc62-4136-adda-398e4f466716",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "replay",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "6e592615-6dbc-4f7e-8656-db266625cd1c",
+            "clientRequestId": "db0afe9c-cc62-4136-adda-398e4f466716",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "changed payload",
+          "status": 409,
+          "originHeader": null,
+          "body": {
+            "code": "idempotency_conflict",
+            "message": "此 clientRequestId 已對應至不同的訂單內容。"
+          }
+        },
+        {
+          "label": "supplier lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "6e592615-6dbc-4f7e-8656-db266625cd1c",
+            "clientRequestId": "db0afe9c-cc62-4136-adda-398e4f466716",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "upstream supplier POST journal",
+          "clientRequestId": "db0afe9c-cc62-4136-adda-398e4f466716",
+          "before": 0,
+          "after": 6,
+          "delta": 6
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:36.520080+00:00"
+    },
+    {
+      "scenario": "M01-wiremock",
+      "startedAt": "2026-09-26T03:37:36.520135+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "fixture quote",
+          "status": 200,
+          "originHeader": "wiremock",
+          "body": {
+            "sku": "MOCK-001",
+            "name": "WireMock 範例商品",
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "origin": "wiremock"
+          }
+        },
+        {
+          "label": "fixture quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/MOCK-001",
+          "clientRequestId": null,
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:36.628116+00:00"
+    },
+    {
+      "scenario": "M02-wiremock",
+      "startedAt": "2026-09-26T03:37:36.628151+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "real quote",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "sku": "REAL-001",
+            "name": "Sandbox real product",
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "real quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/REAL-001",
+          "clientRequestId": null,
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:36.7043524+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            }
+          ]
+        },
+        {
+          "label": "real order",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "f100cf6e-6ce7-47e2-a432-5bb675f19a91",
+            "clientRequestId": "80d0f763-80f4-4608-9fe9-c66c0788e137",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "real order upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "80d0f763-80f4-4608-9fe9-c66c0788e137",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:36.7722291+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "80d0f763-80f4-4608-9fe9-c66c0788e137"
+            }
+          ]
+        },
+        {
+          "label": "real lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "f100cf6e-6ce7-47e2-a432-5bb675f19a91",
+            "clientRequestId": "80d0f763-80f4-4608-9fe9-c66c0788e137",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "real lookup upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/80d0f763-80f4-4608-9fe9-c66c0788e137",
+          "clientRequestId": "80d0f763-80f4-4608-9fe9-c66c0788e137",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:36.8158994+00:00",
+              "method": "GET",
+              "path": "/supplier/orders/by-client-request/80d0f763-80f4-4608-9fe9-c66c0788e137",
+              "clientRequestId": "80d0f763-80f4-4608-9fe9-c66c0788e137"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:36.843001+00:00"
+    },
+    {
+      "scenario": "M03-wiremock",
+      "startedAt": "2026-09-26T03:37:36.843042+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "fixture order",
+          "status": 200,
+          "originHeader": "wiremock",
+          "body": {
+            "supplierOrderId": "00000000-0000-4000-8000-000000000017",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "wiremock"
+          }
+        },
+        {
+          "label": "fixture order upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        },
+        {
+          "label": "fixture lookup",
+          "status": 200,
+          "originHeader": "wiremock",
+          "body": {
+            "supplierOrderId": "00000000-0000-4000-8000-000000000017",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "wiremock"
+          }
+        },
+        {
+          "label": "fixture lookup upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:36.923538+00:00"
+    },
+    {
+      "scenario": "M04-wiremock",
+      "startedAt": "2026-09-26T03:37:36.923579+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "unmatched known POST",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "a30e484b-bdd3-41b8-92c7-cef30c1fd2df",
+            "clientRequestId": "bfee2fbe-5b88-46a3-ada0-dae4f6b79619",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "unmatched known POST upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "bfee2fbe-5b88-46a3-ada0-dae4f6b79619",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:36.9840426+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "bfee2fbe-5b88-46a3-ada0-dae4f6b79619"
+            }
+          ]
+        },
+        {
+          "label": "unmatched known GET",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "a30e484b-bdd3-41b8-92c7-cef30c1fd2df",
+            "clientRequestId": "bfee2fbe-5b88-46a3-ada0-dae4f6b79619",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "unmatched known GET upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/bfee2fbe-5b88-46a3-ada0-dae4f6b79619",
+          "clientRequestId": "bfee2fbe-5b88-46a3-ada0-dae4f6b79619",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.0274283+00:00",
+              "method": "GET",
+              "path": "/supplier/orders/by-client-request/bfee2fbe-5b88-46a3-ada0-dae4f6b79619",
+              "clientRequestId": "bfee2fbe-5b88-46a3-ada0-dae4f6b79619"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:37.055776+00:00"
+    },
+    {
+      "scenario": "M05-wiremock",
+      "startedAt": "2026-09-26T03:37:37.055807+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "proxy",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "proxy",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "formerly mocked quote",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "sku": "MOCK-001",
+            "name": "Reserved mock example product",
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "formerly mocked quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/MOCK-001",
+          "clientRequestId": null,
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.1208351+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/MOCK-001",
+              "clientRequestId": null
+            }
+          ]
+        },
+        {
+          "label": "proxy order",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "fc03d43e-f22a-4de7-bcf9-8dcae5c97ce1",
+            "clientRequestId": "fbd68e36-c4ba-4214-b835-59da055b1189",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "proxy order upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "fbd68e36-c4ba-4214-b835-59da055b1189",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.1688989+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "fbd68e36-c4ba-4214-b835-59da055b1189"
+            }
+          ]
+        },
+        {
+          "label": "proxy lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "fc03d43e-f22a-4de7-bcf9-8dcae5c97ce1",
+            "clientRequestId": "fbd68e36-c4ba-4214-b835-59da055b1189",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "proxy lookup upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/fbd68e36-c4ba-4214-b835-59da055b1189",
+          "clientRequestId": "fbd68e36-c4ba-4214-b835-59da055b1189",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.2132301+00:00",
+              "method": "GET",
+              "path": "/supplier/orders/by-client-request/fbd68e36-c4ba-4214-b835-59da055b1189",
+              "clientRequestId": "fbd68e36-c4ba-4214-b835-59da055b1189"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:37.242170+00:00"
+    },
+    {
+      "scenario": "M06-wiremock",
+      "startedAt": "2026-09-26T03:37:37.242203+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "mock",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "mock",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "mock-only unmatched known quote",
+          "status": 404,
+          "originHeader": null,
+          "body": {
+            "Status": "No matching mapping found"
+          }
+        },
+        {
+          "label": "mock-only unmatched known quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/REAL-001",
+          "clientRequestId": null,
+          "before": 1,
+          "after": 1,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:36.7043524+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            }
+          ]
+        },
+        {
+          "label": "mock miss classification",
+          "status": 404,
+          "body": {
+            "Status": "No matching mapping found"
+          }
+        },
+        {
+          "label": "mock-only unknown route",
+          "status": 404,
+          "originHeader": null,
+          "body": {
+            "Status": "No matching mapping found"
+          }
+        },
+        {
+          "label": "mock-only unknown route upstream journal",
+          "method": "GET",
+          "path": "/supplier/unknown/9884e0b38b2c4fadbe1e616832d4f0b8",
+          "clientRequestId": null,
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        },
+        {
+          "label": "unknown route classification",
+          "status": 404,
+          "body": {
+            "Status": "No matching mapping found"
+          }
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:37.365505+00:00"
+    },
+    {
+      "scenario": "M01-microcks",
+      "startedAt": "2026-09-26T03:37:37.365541+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790393857375
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JSON_BODY\",\"dispatcherRules\":\"{\\\"exp\\\":\\\"/clientRequestId\\\",\\\"operator\\\":\\\"equals\\\",\\\"cases\\\":{\\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\":\\\"mock-order\\\",\\\"default\\\":\\\"__proxy_unmatched__\\\"}}\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "fixture quote",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "sku": "MOCK-001",
+            "name": "Microcks fixture product",
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "origin": "microcks"
+          }
+        },
+        {
+          "label": "fixture quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/MOCK-001",
+          "clientRequestId": null,
+          "before": 1,
+          "after": 1,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.1208351+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/MOCK-001",
+              "clientRequestId": null
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:37.502613+00:00"
+    },
+    {
+      "scenario": "M02-microcks",
+      "startedAt": "2026-09-26T03:37:37.502649+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790393857527
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JSON_BODY\",\"dispatcherRules\":\"{\\\"exp\\\":\\\"/clientRequestId\\\",\\\"operator\\\":\\\"equals\\\",\\\"cases\\\":{\\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\":\\\"mock-order\\\",\\\"default\\\":\\\"__proxy_unmatched__\\\"}}\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "real quote",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "sku": "REAL-001",
+            "name": "Sandbox real product",
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "real quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/REAL-001",
+          "clientRequestId": null,
+          "before": 1,
+          "after": 2,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.5794986+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T03:37:36.7043524+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            }
+          ]
+        },
+        {
+          "label": "real order",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "313953fe-11b3-4081-9c97-a2ecdccb8f30",
+            "clientRequestId": "7e80947a-957f-4011-a234-da8a459dc9d7",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "real order upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "7e80947a-957f-4011-a234-da8a459dc9d7",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.6312228+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "7e80947a-957f-4011-a234-da8a459dc9d7"
+            }
+          ]
+        },
+        {
+          "label": "real lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "313953fe-11b3-4081-9c97-a2ecdccb8f30",
+            "clientRequestId": "7e80947a-957f-4011-a234-da8a459dc9d7",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "real lookup upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/7e80947a-957f-4011-a234-da8a459dc9d7",
+          "clientRequestId": "7e80947a-957f-4011-a234-da8a459dc9d7",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.694083+00:00",
+              "method": "GET",
+              "path": "/supplier/orders/by-client-request/7e80947a-957f-4011-a234-da8a459dc9d7",
+              "clientRequestId": "7e80947a-957f-4011-a234-da8a459dc9d7"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:37.716956+00:00"
+    },
+    {
+      "scenario": "M03-microcks",
+      "startedAt": "2026-09-26T03:37:37.716993+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790393857726
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JSON_BODY\",\"dispatcherRules\":\"{\\\"exp\\\":\\\"/clientRequestId\\\",\\\"operator\\\":\\\"equals\\\",\\\"cases\\\":{\\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\":\\\"mock-order\\\",\\\"default\\\":\\\"__proxy_unmatched__\\\"}}\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "fixture order",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "supplierOrderId": "00000000-0000-4000-8000-000000000017",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "microcks"
+          }
+        },
+        {
+          "label": "fixture order upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        },
+        {
+          "label": "fixture lookup",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "supplierOrderId": "00000000-0000-4000-8000-000000000017",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "microcks"
+          }
+        },
+        {
+          "label": "fixture lookup upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:37.871678+00:00"
+    },
+    {
+      "scenario": "M04-microcks",
+      "startedAt": "2026-09-26T03:37:37.871711+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790393857892
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JSON_BODY\",\"dispatcherRules\":\"{\\\"exp\\\":\\\"/clientRequestId\\\",\\\"operator\\\":\\\"equals\\\",\\\"cases\\\":{\\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\":\\\"mock-order\\\",\\\"default\\\":\\\"__proxy_unmatched__\\\"}}\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "unmatched known POST",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "05e6f6e8-0922-4fe0-92b8-15169a1811e1",
+            "clientRequestId": "2612ad0c-140c-4f3b-a666-af62e95f3f4e",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "unmatched known POST upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "2612ad0c-140c-4f3b-a666-af62e95f3f4e",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.9614858+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "2612ad0c-140c-4f3b-a666-af62e95f3f4e"
+            }
+          ]
+        },
+        {
+          "label": "unmatched known GET",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "05e6f6e8-0922-4fe0-92b8-15169a1811e1",
+            "clientRequestId": "2612ad0c-140c-4f3b-a666-af62e95f3f4e",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "unmatched known GET upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/2612ad0c-140c-4f3b-a666-af62e95f3f4e",
+          "clientRequestId": "2612ad0c-140c-4f3b-a666-af62e95f3f4e",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:38.0246067+00:00",
+              "method": "GET",
+              "path": "/supplier/orders/by-client-request/2612ad0c-140c-4f3b-a666-af62e95f3f4e",
+              "clientRequestId": "2612ad0c-140c-4f3b-a666-af62e95f3f4e"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:38.042361+00:00"
+    },
+    {
+      "scenario": "M05-microcks",
+      "startedAt": "2026-09-26T03:37:38.042401+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "proxy",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-proxy.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790393858052
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY",
+                "dispatcherRules": "http://supplier-sandbox:8080/",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}"
+                ]
+              },
+              {
+                "dispatcher": "PROXY",
+                "dispatcherRules": "http://supplier-sandbox:8080/",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY",
+                "dispatcherRules": "http://supplier-sandbox:8080/",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "formerly mocked quote",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "sku": "MOCK-001",
+            "name": "Reserved mock example product",
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "formerly mocked quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/MOCK-001",
+          "clientRequestId": null,
+          "before": 1,
+          "after": 2,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:38.1578124+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/MOCK-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T03:37:37.1208351+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/MOCK-001",
+              "clientRequestId": null
+            }
+          ]
+        },
+        {
+          "label": "proxy order",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "b672a829-91cc-427b-a8c0-711c4fb6d9c3",
+            "clientRequestId": "ffac8a43-a887-4796-9694-1f2aa4ffde9d",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "proxy order upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "ffac8a43-a887-4796-9694-1f2aa4ffde9d",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:38.1938533+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "ffac8a43-a887-4796-9694-1f2aa4ffde9d"
+            }
+          ]
+        },
+        {
+          "label": "proxy lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "b672a829-91cc-427b-a8c0-711c4fb6d9c3",
+            "clientRequestId": "ffac8a43-a887-4796-9694-1f2aa4ffde9d",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "proxy lookup upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/ffac8a43-a887-4796-9694-1f2aa4ffde9d",
+          "clientRequestId": "ffac8a43-a887-4796-9694-1f2aa4ffde9d",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:38.2333083+00:00",
+              "method": "GET",
+              "path": "/supplier/orders/by-client-request/ffac8a43-a887-4796-9694-1f2aa4ffde9d",
+              "clientRequestId": "ffac8a43-a887-4796-9694-1f2aa4ffde9d"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:38.255742+00:00"
+    },
+    {
+      "scenario": "M06-microcks",
+      "startedAt": "2026-09-26T03:37:38.255775+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "mock",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-mock.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790393858265
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "URI_PARTS",
+                "dispatcherRules": "sku",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "URI_PARTS",
+                "dispatcherRules": "clientRequestId",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "mock-only unmatched known quote",
+          "status": 400,
+          "originHeader": null,
+          "body": "The response /sku=REAL-001 does not exist!"
+        },
+        {
+          "label": "mock-only unmatched known quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/REAL-001",
+          "clientRequestId": null,
+          "before": 2,
+          "after": 2,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T03:37:37.5794986+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T03:37:36.7043524+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            }
+          ]
+        },
+        {
+          "label": "mock miss classification",
+          "status": 400,
+          "body": "The response /sku=REAL-001 does not exist!"
+        },
+        {
+          "label": "mock-only unknown route",
+          "status": 404,
+          "originHeader": null,
+          "body": null
+        },
+        {
+          "label": "mock-only unknown route upstream journal",
+          "method": "GET",
+          "path": "/supplier/unknown/741257babb8e47b7918810baa1ebe60b",
+          "clientRequestId": null,
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        },
+        {
+          "label": "unknown route classification",
+          "status": 404,
+          "body": null
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T03:37:38.419984+00:00"
+    }
+  ],
+  "cleanup": [
+    {
+      "label": "sandbox delay",
+      "status": "passed",
+      "outcome": {
+        "status": 200,
+        "originHeader": null,
+        "body": {
+          "delayAfterCommitMs": 0,
+          "persistence": "服務重新啟動後恢復為零"
+        }
+      }
+    },
+    {
+      "label": "WireMock hybrid",
+      "status": "passed",
+      "outcome": {
+        "engine": "wiremock",
+        "mode": "hybrid",
+        "state": {
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "mode": "hybrid",
+            "upstream": "http://supplier-sandbox:8080",
+            "persistence": "執行階段設定；重新啟動後回到啟動模式"
+          }
+        }
+      }
+    },
+    {
+      "label": "Microcks hybrid",
+      "status": "passed",
+      "outcome": {
+        "engine": "microcks",
+        "mode": "hybrid",
+        "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+        "uploadedFilename": "supplier-api.yaml",
+        "upload": {
+          "status": 201,
+          "originHeader": null,
+          "body": "Supplier API:1.0.0"
+        },
+        "service": {
+          "id": "6ab73e0156041fb00d499958",
+          "metadata": {
+            "annotations": {},
+            "createdOn": 1790393857375,
+            "labels": {},
+            "lastUpdate": 1790393858494
+          },
+          "name": "Supplier API",
+          "operations": [
+            {
+              "dispatcher": "PROXY_FALLBACK",
+              "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+              "method": "GET",
+              "name": "GET /supplier/catalog/{sku}",
+              "resourcePaths": [
+                "/supplier/catalog/{sku}",
+                "/supplier/catalog/MOCK-001"
+              ]
+            },
+            {
+              "dispatcher": "PROXY_FALLBACK",
+              "dispatcherRules": "{\"dispatcher\":\"JSON_BODY\",\"dispatcherRules\":\"{\\\"exp\\\":\\\"/clientRequestId\\\",\\\"operator\\\":\\\"equals\\\",\\\"cases\\\":{\\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\":\\\"mock-order\\\",\\\"default\\\":\\\"__proxy_unmatched__\\\"}}\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+              "method": "POST",
+              "name": "POST /supplier/orders",
+              "resourcePaths": [
+                "/supplier/orders"
+              ]
+            },
+            {
+              "dispatcher": "PROXY_FALLBACK",
+              "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+              "method": "GET",
+              "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+              "resourcePaths": [
+                "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                "/supplier/orders/by-client-request/{clientRequestId}"
+              ]
+            }
+          ],
+          "sourceArtifact": "supplier-api.yaml",
+          "type": "REST",
+          "version": "1.0.0"
+        }
+      }
+    }
+  ],
+  "endedAt": "2026-09-26T03:37:38.543415+00:00",
+  "passed": true
+}

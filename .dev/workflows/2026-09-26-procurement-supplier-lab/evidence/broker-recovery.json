@@ -1,0 +1,368 @@
+{
+  "scenario": "R08",
+  "workflow": "2026-09-26-procurement-supplier-lab",
+  "startedAt": "2026-09-26T03:30:23.300768+00:00",
+  "status": "passed",
+  "observations": [
+    {
+      "at": "2026-09-26T03:30:24.616777+00:00",
+      "label": "initial Inventory stock",
+      "value": {
+        "status": 200,
+        "body": {
+          "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+          "availableQuantity": 30
+        }
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:25.600267+00:00",
+      "label": "Kafka before",
+      "value": {
+        "containerId": "8a3246ddc8b537583bea923784bb273b4cae0cc8f588cd234d6084323227924d",
+        "name": "/kafka",
+        "projectLabel": "mqarchlab-pr5-integration",
+        "serviceLabel": "kafka",
+        "running": true,
+        "status": "running"
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:25.607244+00:00",
+      "label": "direct quote",
+      "value": {
+        "status": 200,
+        "body": {
+          "sku": "REAL-001",
+          "name": "Sandbox real product",
+          "unitPrice": 100.0,
+          "currency": "TWD",
+          "origin": "sandbox"
+        }
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:25.648100+00:00",
+      "label": "accepted purchase",
+      "value": {
+        "status": 201,
+        "body": {
+          "id": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+          "identity": {
+            "clientRequestId": "2a5e40c5-c0e6-4c3a-8525-755d1e952cbc",
+            "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+            "supplierSku": "REAL-001",
+            "quantity": 3,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "provider": "direct"
+          },
+          "state": "Accepted",
+          "supplierOrderId": "9dd2eb76-4799-458c-ac48-57e62b56a926",
+          "receivedQuantity": 0,
+          "version": 1,
+          "createdAt": "2026-09-26T03:30:25.631339+00:00",
+          "updatedAt": "2026-09-26T03:30:25.643297+00:00",
+          "receipts": []
+        }
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:25.652534+00:00",
+      "label": "stock after supplier acceptance",
+      "value": {
+        "status": 200,
+        "body": {
+          "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+          "availableQuantity": 30
+        }
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:29.466753+00:00",
+      "label": "Kafka stopped",
+      "value": {
+        "containerId": "8a3246ddc8b537583bea923784bb273b4cae0cc8f588cd234d6084323227924d",
+        "name": "/kafka",
+        "projectLabel": "mqarchlab-pr5-integration",
+        "serviceLabel": "kafka",
+        "running": false,
+        "status": "exited"
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:29.492825+00:00",
+      "label": "receipt committed while Kafka stopped",
+      "value": {
+        "status": 201,
+        "body": {
+          "order": {
+            "id": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+            "identity": {
+              "clientRequestId": "2a5e40c5-c0e6-4c3a-8525-755d1e952cbc",
+              "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+              "supplierSku": "REAL-001",
+              "quantity": 3,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "Received",
+            "supplierOrderId": "9dd2eb76-4799-458c-ac48-57e62b56a926",
+            "receivedQuantity": 3,
+            "version": 2,
+            "createdAt": "2026-09-26T03:30:25.631339+00:00",
+            "updatedAt": "2026-09-26T03:30:29.4857384+00:00",
+            "receipts": [
+              {
+                "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+                "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+                "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                "quantity": 3,
+                "receivedAt": "2026-09-26T03:30:29.4857384+00:00"
+              }
+            ]
+          },
+          "receipt": {
+            "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+            "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+            "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+            "quantity": 3,
+            "receivedAt": "2026-09-26T03:30:29.4857384+00:00"
+          },
+          "created": true
+        }
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:29.497255+00:00",
+      "label": "stock with Kafka stopped",
+      "value": {
+        "status": 200,
+        "body": {
+          "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+          "availableQuantity": 30
+        }
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:29.967417+00:00",
+      "label": "Procurement receipt row",
+      "value": {
+        "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+        "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+        "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+        "quantity": 3,
+        "receivedAt": "2026-09-26T03:30:29.485738+00:00"
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:30.427752+00:00",
+      "label": "Procurement source outbox",
+      "value": {
+        "id": "35f101df-2b11-4328-991d-e9ee75f63a90",
+        "partitionKey": "d6de1326d34a480d8f7d5dd80ced1254",
+        "payload": {
+          "quantity": 3,
+          "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+          "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+          "receivedAt": "2026-09-26T03:30:29.4857384+00:00",
+          "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3"
+        },
+        "publishedAt": "2026-09-26T03:30:29.765542+00:00",
+        "parkedAt": null,
+        "attempts": 1,
+        "lastError": null
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:30.911965+00:00",
+      "label": "Procurement Wolverine outgoing envelopes",
+      "value": [
+        {
+          "id": "08df1b7e-8399-86ff-f6d3-425fbad70000",
+          "destination": "kafka://topic/procurement.integration.events",
+          "ownerId": "1",
+          "deduplicationId": null
+        }
+      ]
+    },
+    {
+      "at": "2026-09-26T03:30:32.657446+00:00",
+      "label": "Kafka restarted",
+      "value": {
+        "containerId": "8a3246ddc8b537583bea923784bb273b4cae0cc8f588cd234d6084323227924d",
+        "name": "/kafka",
+        "projectLabel": "mqarchlab-pr5-integration",
+        "serviceLabel": "kafka",
+        "running": true,
+        "status": "running"
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:50.785504+00:00",
+      "label": "Inventory recovery polling",
+      "value": [
+        {
+          "at": "2026-09-26T03:30:32.677888+00:00",
+          "stock": 30,
+          "status": 200
+        },
+        {
+          "at": "2026-09-26T03:30:34.683830+00:00",
+          "stock": 30,
+          "status": 200
+        },
+        {
+          "at": "2026-09-26T03:30:36.691415+00:00",
+          "stock": 30,
+          "status": 200
+        },
+        {
+          "at": "2026-09-26T03:30:38.713961+00:00",
+          "stock": 30,
+          "status": 200
+        },
+        {
+          "at": "2026-09-26T03:30:40.740567+00:00",
+          "stock": 30,
+          "status": 200
+        },
+        {
+          "at": "2026-09-26T03:30:42.745275+00:00",
+          "stock": 30,
+          "status": 200
+        },
+        {
+          "at": "2026-09-26T03:30:44.767233+00:00",
+          "stock": 30,
+          "status": 200
+        },
+        {
+          "at": "2026-09-26T03:30:46.774861+00:00",
+          "stock": 30,
+          "status": 200
+        },
+        {
+          "at": "2026-09-26T03:30:48.780106+00:00",
+          "stock": 30,
+          "status": 200
+        },
+        {
+          "at": "2026-09-26T03:30:50.785491+00:00",
+          "stock": 33,
+          "status": 200
+        }
+      ]
+    },
+    {
+      "at": "2026-09-26T03:30:51.268795+00:00",
+      "label": "Inventory receipt ledger",
+      "value": {
+        "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+        "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+        "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+        "quantity": 3,
+        "resultingStock": 33,
+        "completedAt": "2026-09-26T03:30:50.420665+00:00"
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:51.277623+00:00",
+      "label": "receipt replay after recovery",
+      "value": {
+        "status": 200,
+        "body": {
+          "order": {
+            "id": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+            "identity": {
+              "clientRequestId": "2a5e40c5-c0e6-4c3a-8525-755d1e952cbc",
+              "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+              "supplierSku": "REAL-001",
+              "quantity": 3,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "Received",
+            "supplierOrderId": "9dd2eb76-4799-458c-ac48-57e62b56a926",
+            "receivedQuantity": 3,
+            "version": 2,
+            "createdAt": "2026-09-26T03:30:25.631339+00:00",
+            "updatedAt": "2026-09-26T03:30:29.485738+00:00",
+            "receipts": [
+              {
+                "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+                "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+                "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+                "quantity": 3,
+                "receivedAt": "2026-09-26T03:30:29.485738+00:00"
+              }
+            ]
+          },
+          "receipt": {
+            "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+            "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+            "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+            "quantity": 3,
+            "receivedAt": "2026-09-26T03:30:29.485738+00:00"
+          },
+          "created": false
+        }
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:54.282985+00:00",
+      "label": "Inventory stock after replay",
+      "value": {
+        "status": 200,
+        "body": {
+          "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+          "availableQuantity": 33
+        }
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:54.763720+00:00",
+      "label": "source outbox after recovery",
+      "value": {
+        "id": "35f101df-2b11-4328-991d-e9ee75f63a90",
+        "partitionKey": "d6de1326d34a480d8f7d5dd80ced1254",
+        "payload": {
+          "quantity": 3,
+          "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+          "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90",
+          "receivedAt": "2026-09-26T03:30:29.4857384+00:00",
+          "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3"
+        },
+        "publishedAt": "2026-09-26T03:30:29.765542+00:00",
+        "parkedAt": null,
+        "attempts": 1,
+        "lastError": null
+      }
+    },
+    {
+      "at": "2026-09-26T03:30:55.229191+00:00",
+      "label": "Wolverine envelopes after recovery",
+      "value": []
+    }
+  ],
+  "stopAttempted": true,
+  "brokerContainerId": "8a3246ddc8b537583bea923784bb273b4cae0cc8f588cd234d6084323227924d",
+  "identities": {
+    "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+    "clientRequestId": "2a5e40c5-c0e6-4c3a-8525-755d1e952cbc",
+    "purchaseOrderId": "e0c69177-7cee-4737-98ef-edadfbdbf2f3",
+    "receiptId": "35f101df-2b11-4328-991d-e9ee75f63a90"
+  },
+  "brokerAfter": {
+    "containerId": "8a3246ddc8b537583bea923784bb273b4cae0cc8f588cd234d6084323227924d",
+    "name": "/kafka",
+    "projectLabel": "mqarchlab-pr5-integration",
+    "serviceLabel": "kafka",
+    "running": true,
+    "status": "running"
+  },
+  "cleanup": "Kafka running in the same verified Compose container",
+  "endedAt": "2026-09-26T03:30:57.139873+00:00"
+}

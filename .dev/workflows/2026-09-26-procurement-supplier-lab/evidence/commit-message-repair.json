@@ -1,0 +1,25 @@
+{
+  "reason": "Standalone policy body headings; no tree changes; old history retained on local backup branch.",
+  "mapping": [
+    {
+      "old_commit": "feee507b9b24ea55a5dc312adf8c553a9c030e50",
+      "new_commit": "0dc52d297200ff28f25d398028452e3b47e704c7",
+      "unchanged_tree": "47aa7f00f21e1305905d88eb7bff0269eb22eef1"
+    },
+    {
+      "old_commit": "0946879cd95c1fcaf73af9f40d73806b8ed29ad2",
+      "new_commit": "56d01c7eab3fdd3dda9fda07ae279dd5738301c7",
+      "unchanged_tree": "e4c8f70642d9c756932774ea571a256e863340b9"
+    },
+    {
+      "old_commit": "4763adad110f5a216c56e8f73e342cb7617f93b8",
+      "new_commit": "7b19968e905365db0159e823f9fc1a2d004a4c59",
+      "unchanged_tree": "4c458769bf407f76789296d56e654e42a6e69956"
+    },
+    {
+      "old_commit": "284fce05969f5da4cb3c12501ece1eeca4ca1a98",
+      "new_commit": "1425b3a87d38cb36ff134c5ba676a1c49e4dae40",
+      "unchanged_tree": "beb5791cccf96ae7c9d663e85d5742588cafc883"
+    }
+  ]
+}

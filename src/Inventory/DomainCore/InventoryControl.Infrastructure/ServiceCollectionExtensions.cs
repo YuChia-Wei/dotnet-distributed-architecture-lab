@@ -11,6 +11,7 @@ using InventoryControl.Applications.Repositories;
 using InventoryControl.Applications.Queries;
 using InventoryControl.Applications.Outbox;
 using InventoryControl.Applications.Reservations;
+using InventoryControl.Applications.Receipts;
 
 namespace InventoryControl.Infrastructure;
 
@@ -28,6 +29,7 @@ public static class ServiceCollectionExtensions
             sp => sp.GetRequiredService<InventoryItemDomainRepository>());
         services.AddScoped<IInventoryStockOutbox, PostgresInventoryStockOutbox>();
         services.AddScoped<IInventoryReservationOutbox, PostgresInventoryReservationRepository>();
+        services.AddScoped<IInventoryGoodsReceiptStore, PostgresInventoryGoodsReceiptStore>();
         services.AddScoped<IIntegrationEventPublisher, IntegrationEventPublisher>();
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         var outboxOptions = InventoryOutboxRelayOptions.FromConfiguration(configuration);

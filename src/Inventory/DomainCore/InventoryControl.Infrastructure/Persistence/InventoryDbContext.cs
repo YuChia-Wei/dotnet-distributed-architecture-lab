@@ -10,6 +10,8 @@ public sealed class InventoryDbContext(DbContextOptions<InventoryDbContext> opti
 
     internal DbSet<InventoryReservationOperation> ReservationOperations => this.Set<InventoryReservationOperation>();
 
+    internal DbSet<InventoryGoodsReceiptRecord> GoodsReceipts => this.Set<InventoryGoodsReceiptRecord>();
+
     internal DbSet<InventoryOutboxRecord> OutboxMessages => this.Set<InventoryOutboxRecord>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +29,12 @@ public sealed class InventoryDbContext(DbContextOptions<InventoryDbContext> opti
         operations.HasKey(operation => operation.OperationId);
         operations.Property(operation => operation.OperationId).ValueGeneratedNever();
         operations.HasIndex(operation => operation.ProductId).HasDatabaseName("ix_inventoryreservationoperations_productid");
+
+        var receipts = modelBuilder.Entity<InventoryGoodsReceiptRecord>();
+        receipts.ToTable("inventorygoodsreceipts");
+        receipts.HasKey(receipt => receipt.ReceiptId);
+        receipts.Property(receipt => receipt.ReceiptId).ValueGeneratedNever();
+        receipts.HasIndex(receipt => receipt.ProductId).HasDatabaseName("ix_inventorygoodsreceipts_productid");
 
         var outbox = modelBuilder.Entity<InventoryOutboxRecord>();
         outbox.ToTable("inventoryintegrationoutbox");

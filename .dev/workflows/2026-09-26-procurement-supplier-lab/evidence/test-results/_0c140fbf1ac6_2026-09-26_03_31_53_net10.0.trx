@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0b8f81ae-3b3c-46ee-8cc1-d5ae259b010a" name="@0c140fbf1ac6 2026-09-26 03:31:53" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-26T03:31:53.1734649+00:00" queuing="2026-09-26T03:31:53.1734649+00:00" start="2026-09-26T03:31:51.8180184+00:00" finish="2026-09-26T03:31:53.1807577+00:00" />
+  <TestSettings name="default" id="4add4b40-80bb-481d-b95d-b52619d185f5">
+    <Deployment runDeploymentRoot="_0c140fbf1ac6_2026-09-26_03_31_53" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="c7526eb8-4406-4202-bd6f-09802c340292" testId="9b2e63c7-feb3-8a4a-a819-ccc6dddaad7a" testName="SaleProducts.Domains.Tests.ProductTests.Update_InvalidInput_Throws(name: &quot;Name&quot;, description: &quot;&quot;, price: 1)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:53.0100815+00:00" endTime="2026-09-26T03:31:53.0112541+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c7526eb8-4406-4202-bd6f-09802c340292" />
+    <UnitTestResult executionId="c2051c86-da85-4c4b-87f7-35500809b162" testId="4f5755c8-1862-ab51-3ad2-d7194847b979" testName="SaleProducts.Domains.Tests.ProductTests.Update_InvalidInput_Throws(name: &quot;Name&quot;, description: &quot;Desc&quot;, price: -1)" computerName="0c140fbf1ac6" duration="00:00:00.0190000" startTime="2026-09-26T03:31:52.9652521+00:00" endTime="2026-09-26T03:31:53.0036720+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c2051c86-da85-4c4b-87f7-35500809b162" />
+    <UnitTestResult executionId="b9305600-5ed6-41d3-8652-761adbb5dcfc" testId="6789b7fa-af54-bbee-d57e-af0466f9dbbb" testName="SaleProducts.Domains.Tests.ProductTests.Update_InvalidInput_Throws(name: &quot;&quot;, description: &quot;Desc&quot;, price: 1)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:53.0119038+00:00" endTime="2026-09-26T03:31:53.0121088+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9305600-5ed6-41d3-8652-761adbb5dcfc" />
+    <UnitTestResult executionId="c7d9961e-ff55-4dcb-8e92-9bf144d537a3" testId="463ee093-9743-9e15-deb5-56f5c3c2063e" testName="SaleProducts.Domains.Tests.ProductTests.Ctor_InvalidInput_Throws(name: &quot;Name&quot;, description: &quot;Desc&quot;, price: -1)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:53.0305153+00:00" endTime="2026-09-26T03:31:53.0309431+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c7d9961e-ff55-4dcb-8e92-9bf144d537a3" />
+    <UnitTestResult executionId="3021022d-d876-4a25-b01e-06c39a4e6a16" testId="837ffe98-a5aa-a4cf-7759-8a98bce7abc4" testName="SaleProducts.Domains.Tests.ProductTests.Ctor_SetsFields_and_Raises_ProductCreated" computerName="0c140fbf1ac6" duration="00:00:00.0050000" startTime="2026-09-26T03:31:53.0222150+00:00" endTime="2026-09-26T03:31:53.0274727+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3021022d-d876-4a25-b01e-06c39a4e6a16" />
+    <UnitTestResult executionId="4ff3adb5-5376-4233-8b70-44fc88b0cf6d" testId="8b7b2d2a-dcb3-69a6-8cd5-bccd1e9c220e" testName="SaleProducts.Domains.Tests.ProductTests.Ctor_InvalidInput_Throws(name: &quot;&quot;, description: &quot;Desc&quot;, price: 1)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:53.0288634+00:00" endTime="2026-09-26T03:31:53.0300294+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4ff3adb5-5376-4233-8b70-44fc88b0cf6d" />
+    <UnitTestResult executionId="affc00e6-0016-4dcf-9ddc-c9f90a37143e" testId="947f44aa-4484-334c-c7cd-7f9f11613ca6" testName="SaleProducts.Domains.Tests.ProductTests.Delete_Raises_ProductDeleted" computerName="0c140fbf1ac6" duration="00:00:00.0040000" startTime="2026-09-26T03:31:53.0157341+00:00" endTime="2026-09-26T03:31:53.0207735+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="affc00e6-0016-4dcf-9ddc-c9f90a37143e" />
+    <UnitTestResult executionId="d194edd2-6343-4ee4-af06-288bb73da16a" testId="9cc58093-4806-8ec6-25a5-76ae42e3a15e" testName="SaleProducts.Domains.Tests.ProductTests.Ctor_InvalidInput_Throws(name: &quot;Name&quot;, description: &quot;&quot;, price: 1)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:53.0312847+00:00" endTime="2026-09-26T03:31:53.0313795+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d194edd2-6343-4ee4-af06-288bb73da16a" />
+    <UnitTestResult executionId="a4b258f5-aaac-4a00-bc29-39ddd3f13061" testId="0350fea4-6d30-2384-c443-1e6f722c17b8" testName="SaleProducts.Domains.Tests.ProductTests.Update_ChangesFields_and_Raises_ProductUpdated" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:53.0319428+00:00" endTime="2026-09-26T03:31:53.0324702+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4b258f5-aaac-4a00-bc29-39ddd3f13061" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="SaleProducts.Domains.Tests.ProductTests.Update_ChangesFields_and_Raises_ProductUpdated" storage="/workspace/tests/saleproducts.domains.tests/bin/release/net10.0/saleproducts.domains.tests.dll" id="0350fea4-6d30-2384-c443-1e6f722c17b8">
+      <Execution id="a4b258f5-aaac-4a00-bc29-39ddd3f13061" />
+      <TestMethod codeBase="/workspace/tests/SaleProducts.Domains.Tests/bin/Release/net10.0/SaleProducts.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleProducts.Domains.Tests.ProductTests" name="Update_ChangesFields_and_Raises_ProductUpdated" />
+    </UnitTest>
+    <UnitTest name="SaleProducts.Domains.Tests.ProductTests.Update_InvalidInput_Throws(name: &quot;&quot;, description: &quot;Desc&quot;, price: 1)" storage="/workspace/tests/saleproducts.domains.tests/bin/release/net10.0/saleproducts.domains.tests.dll" id="6789b7fa-af54-bbee-d57e-af0466f9dbbb">
+      <Execution id="b9305600-5ed6-41d3-8652-761adbb5dcfc" />
+      <TestMethod codeBase="/workspace/tests/SaleProducts.Domains.Tests/bin/Release/net10.0/SaleProducts.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleProducts.Domains.Tests.ProductTests" name="Update_InvalidInput_Throws" />
+    </UnitTest>
+    <UnitTest name="SaleProducts.Domains.Tests.ProductTests.Update_InvalidInput_Throws(name: &quot;Name&quot;, description: &quot;Desc&quot;, price: -1)" storage="/workspace/tests/saleproducts.domains.tests/bin/release/net10.0/saleproducts.domains.tests.dll" id="4f5755c8-1862-ab51-3ad2-d7194847b979">
+      <Execution id="c2051c86-da85-4c4b-87f7-35500809b162" />
+      <TestMethod codeBase="/workspace/tests/SaleProducts.Domains.Tests/bin/Release/net10.0/SaleProducts.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleProducts.Domains.Tests.ProductTests" name="Update_InvalidInput_Throws" />
+    </UnitTest>
+    <UnitTest name="SaleProducts.Domains.Tests.ProductTests.Update_InvalidInput_Throws(name: &quot;Name&quot;, description: &quot;&quot;, price: 1)" storage="/workspace/tests/saleproducts.domains.tests/bin/release/net10.0/saleproducts.domains.tests.dll" id="9b2e63c7-feb3-8a4a-a819-ccc6dddaad7a">
+      <Execution id="c7526eb8-4406-4202-bd6f-09802c340292" />
+      <TestMethod codeBase="/workspace/tests/SaleProducts.Domains.Tests/bin/Release/net10.0/SaleProducts.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleProducts.Domains.Tests.ProductTests" name="Update_InvalidInput_Throws" />
+    </UnitTest>
+    <UnitTest name="SaleProducts.Domains.Tests.ProductTests.Ctor_InvalidInput_Throws(name: &quot;Name&quot;, description: &quot;Desc&quot;, price: -1)" storage="/workspace/tests/saleproducts.domains.tests/bin/release/net10.0/saleproducts.domains.tests.dll" id="463ee093-9743-9e15-deb5-56f5c3c2063e">
+      <Execution id="c7d9961e-ff55-4dcb-8e92-9bf144d537a3" />
+      <TestMethod codeBase="/workspace/tests/SaleProducts.Domains.Tests/bin/Release/net10.0/SaleProducts.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleProducts.Domains.Tests.ProductTests" name="Ctor_InvalidInput_Throws" />
+    </UnitTest>
+    <UnitTest name="SaleProducts.Domains.Tests.ProductTests.Ctor_InvalidInput_Throws(name: &quot;&quot;, description: &quot;Desc&quot;, price: 1)" storage="/workspace/tests/saleproducts.domains.tests/bin/release/net10.0/saleproducts.domains.tests.dll" id="8b7b2d2a-dcb3-69a6-8cd5-bccd1e9c220e">
+      <Execution id="4ff3adb5-5376-4233-8b70-44fc88b0cf6d" />
+      <TestMethod codeBase="/workspace/tests/SaleProducts.Domains.Tests/bin/Release/net10.0/SaleProducts.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleProducts.Domains.Tests.ProductTests" name="Ctor_InvalidInput_Throws" />
+    </UnitTest>
+    <UnitTest name="SaleProducts.Domains.Tests.ProductTests.Ctor_InvalidInput_Throws(name: &quot;Name&quot;, description: &quot;&quot;, price: 1)" storage="/workspace/tests/saleproducts.domains.tests/bin/release/net10.0/saleproducts.domains.tests.dll" id="9cc58093-4806-8ec6-25a5-76ae42e3a15e">
+      <Execution id="d194edd2-6343-4ee4-af06-288bb73da16a" />
+      <TestMethod codeBase="/workspace/tests/SaleProducts.Domains.Tests/bin/Release/net10.0/SaleProducts.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleProducts.Domains.Tests.ProductTests" name="Ctor_InvalidInput_Throws" />
+    </UnitTest>
+    <UnitTest name="SaleProducts.Domains.Tests.ProductTests.Ctor_SetsFields_and_Raises_ProductCreated" storage="/workspace/tests/saleproducts.domains.tests/bin/release/net10.0/saleproducts.domains.tests.dll" id="837ffe98-a5aa-a4cf-7759-8a98bce7abc4">
+      <Execution id="3021022d-d876-4a25-b01e-06c39a4e6a16" />
+      <TestMethod codeBase="/workspace/tests/SaleProducts.Domains.Tests/bin/Release/net10.0/SaleProducts.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleProducts.Domains.Tests.ProductTests" name="Ctor_SetsFields_and_Raises_ProductCreated" />
+    </UnitTest>
+    <UnitTest name="SaleProducts.Domains.Tests.ProductTests.Delete_Raises_ProductDeleted" storage="/workspace/tests/saleproducts.domains.tests/bin/release/net10.0/saleproducts.domains.tests.dll" id="947f44aa-4484-334c-c7cd-7f9f11613ca6">
+      <Execution id="affc00e6-0016-4dcf-9ddc-c9f90a37143e" />
+      <TestMethod codeBase="/workspace/tests/SaleProducts.Domains.Tests/bin/Release/net10.0/SaleProducts.Domains.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SaleProducts.Domains.Tests.ProductTests" name="Delete_Raises_ProductDeleted" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="9b2e63c7-feb3-8a4a-a819-ccc6dddaad7a" executionId="c7526eb8-4406-4202-bd6f-09802c340292" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4f5755c8-1862-ab51-3ad2-d7194847b979" executionId="c2051c86-da85-4c4b-87f7-35500809b162" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6789b7fa-af54-bbee-d57e-af0466f9dbbb" executionId="b9305600-5ed6-41d3-8652-761adbb5dcfc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="463ee093-9743-9e15-deb5-56f5c3c2063e" executionId="c7d9961e-ff55-4dcb-8e92-9bf144d537a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="837ffe98-a5aa-a4cf-7759-8a98bce7abc4" executionId="3021022d-d876-4a25-b01e-06c39a4e6a16" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b7b2d2a-dcb3-69a6-8cd5-bccd1e9c220e" executionId="4ff3adb5-5376-4233-8b70-44fc88b0cf6d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="947f44aa-4484-334c-c7cd-7f9f11613ca6" executionId="affc00e6-0016-4dcf-9ddc-c9f90a37143e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9cc58093-4806-8ec6-25a5-76ae42e3a15e" executionId="d194edd2-6343-4ee4-af06-288bb73da16a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0350fea4-6d30-2384-c443-1e6f722c17b8" executionId="a4b258f5-aaac-4a00-bc29-39ddd3f13061" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v4.0.0+05679a7ab5 (64-bit .NET 10.0.12)
+[xUnit.net 00:00:00.19]   Discovering: SaleProducts.Domains.Tests
+[xUnit.net 00:00:00.43]   Discovered:  SaleProducts.Domains.Tests
+[xUnit.net 00:00:00.65]   Starting:    SaleProducts.Domains.Tests
+[xUnit.net 00:00:00.88]   Finished:    SaleProducts.Domains.Tests (ID = '671926404c8b845e11511eda6c132a4a34c0ea9274f9736a0364ec84b9ed208f')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,11 @@
+{
+  "selectedMode": "hybrid",
+  "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+  "uploadedFilename": "supplier-api.yaml",
+  "serviceName": "Supplier API",
+  "serviceVersion": "1.0.0",
+  "serviceId": "6ab73e0156041fb00d499958",
+  "operations": 3,
+  "mockBaseUrl": "http://127.0.0.1:8184/rest/Supplier+API/1.0.0/",
+  "note": "Service identity was read back; mock/proxy behavior still requires HTTP and origin checks."
+}

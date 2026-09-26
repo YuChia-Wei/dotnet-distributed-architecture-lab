@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: Supplier API
+  version: 1.0.0
+  description: Supplier contract configured to proxy each imported operation to the sandbox.
+servers:
+  - url: http://localhost:8184/rest/Supplier+API/1.0.0
+paths:
+  /supplier/catalog/{sku}:
+    get:
+      operationId: getSupplierCatalogQuote
+      x-microcks-operation: { dispatcher: PROXY, dispatcherRules: 'http://supplier-sandbox:8080/' }
+      parameters:
+        - name: sku
+          in: path
+          required: true
+          schema: { type: string }
+          examples: { MOCK-001: { value: MOCK-001 } }
+      responses:
+        '200':
+          description: Supplier quote
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Quote' }
+              examples:
+                MOCK-001: { value: { sku: MOCK-001, name: Microcks fixture product, unitPrice: 100.00, currency: TWD, origin: microcks } }
+  /supplier/orders:
+    post:
+      operationId: submitSupplierOrder
+      x-microcks-operation: { dispatcher: PROXY, dispatcherRules: 'http://supplier-sandbox:8080/' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OrderRequest' }
+            examples:
+              mock-order: { value: { clientRequestId: 9d4c99da-6517-46b2-baa7-7e81106d3d34, sku: MOCK-001, quantity: 2, unitPrice: 100.00, currency: TWD } }
+      responses:
+        '200':
+          description: Supplier order result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+              examples:
+                mock-order: { value: { supplierOrderId: 00000000-0000-4000-8000-000000000017, clientRequestId: 9d4c99da-6517-46b2-baa7-7e81106d3d34, sku: MOCK-001, quantity: 2, unitPrice: 100.00, currency: TWD, status: accepted, origin: microcks } }
+  /supplier/orders/by-client-request/{clientRequestId}:
+    get:
+      operationId: getSupplierOrderByClientRequestId
+      x-microcks-operation: { dispatcher: PROXY, dispatcherRules: 'http://supplier-sandbox:8080/' }
+      parameters:
+        - name: clientRequestId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+          examples:
+            9d4c99da-6517-46b2-baa7-7e81106d3d34: { value: 9d4c99da-6517-46b2-baa7-7e81106d3d34 }
+      responses:
+        '200':
+          description: Previously created supplier order
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+              examples:
+                mock-order: { value: { supplierOrderId: 00000000-0000-4000-8000-000000000017, clientRequestId: 9d4c99da-6517-46b2-baa7-7e81106d3d34, sku: MOCK-001, quantity: 2, unitPrice: 100.00, currency: TWD, status: accepted, origin: microcks } }
+components:
+  schemas:
+    Quote: { type: object, required: [sku, name, unitPrice, currency, origin], properties: { sku: { type: string }, name: { type: string }, unitPrice: { type: number }, currency: { type: string }, origin: { type: string } } }
+    OrderRequest: { type: object, required: [clientRequestId, sku, quantity, unitPrice, currency], properties: { clientRequestId: { type: string, format: uuid }, sku: { type: string }, quantity: { type: integer, minimum: 1 }, unitPrice: { type: number, minimum: 0 }, currency: { type: string } } }
+    Order:
+      allOf:
+        - $ref: '#/components/schemas/OrderRequest'
+        - type: object
+          required: [supplierOrderId, status, origin]
+          properties: { supplierOrderId: { type: string }, status: { type: string }, origin: { type: string } }

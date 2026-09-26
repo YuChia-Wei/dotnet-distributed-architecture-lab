@@ -1,0 +1,79 @@
+{
+  "scenario": "P06",
+  "subject": "deployed Procurement4375495 Supplier47db2c3",
+  "observedAt": "2026-09-26T03:29:09.852524+00:00",
+  "status": "passed",
+  "first": {
+    "status": 201,
+    "originHeader": null,
+    "body": {
+      "id": "0b1b2c7c-1b71-4a78-a472-c4195cb4f013",
+      "identity": {
+        "clientRequestId": "a016d1d6-75a9-4049-bafe-2358a387202b",
+        "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+        "supplierSku": "DENY-001",
+        "quantity": 2,
+        "unitPrice": 100.0,
+        "currency": "TWD",
+        "provider": "direct"
+      },
+      "state": "Rejected",
+      "supplierOrderId": "a61c0b38-b3f5-45a4-9ab7-e55233d36d54",
+      "receivedQuantity": 0,
+      "version": 1,
+      "createdAt": "2026-09-26T03:29:09.767088+00:00",
+      "updatedAt": "2026-09-26T03:29:09.7981113+00:00",
+      "receipts": []
+    }
+  },
+  "replay": {
+    "status": 200,
+    "originHeader": null,
+    "body": {
+      "id": "0b1b2c7c-1b71-4a78-a472-c4195cb4f013",
+      "identity": {
+        "clientRequestId": "a016d1d6-75a9-4049-bafe-2358a387202b",
+        "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+        "supplierSku": "DENY-001",
+        "quantity": 2,
+        "unitPrice": 100.0,
+        "currency": "TWD",
+        "provider": "direct"
+      },
+      "state": "Rejected",
+      "supplierOrderId": "a61c0b38-b3f5-45a4-9ab7-e55233d36d54",
+      "receivedQuantity": 0,
+      "version": 1,
+      "createdAt": "2026-09-26T03:29:09.767088+00:00",
+      "updatedAt": "2026-09-26T03:29:09.798111+00:00",
+      "receipts": []
+    }
+  },
+  "receipt": {
+    "status": 409,
+    "originHeader": null,
+    "body": {
+      "title": "receipt_state_conflict",
+      "status": 409,
+      "detail": "Only accepted orders can receive goods.",
+      "code": "receipt_state_conflict",
+      "message": "Only accepted orders can receive goods."
+    }
+  },
+  "stockBefore": {
+    "status": 200,
+    "originHeader": null,
+    "body": {
+      "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+      "availableQuantity": 30
+    }
+  },
+  "stockAfter": {
+    "status": 200,
+    "originHeader": null,
+    "body": {
+      "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+      "availableQuantity": 30
+    }
+  }
+}
