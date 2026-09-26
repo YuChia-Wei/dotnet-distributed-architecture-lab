@@ -148,6 +148,26 @@ def fixture_variant(case: dict[str, Any], engine: str, label: str,
                    f"{engine} {label}: sandbox response changed request fields")
 
 
+def fixture_mock_only_variants(case: dict[str, Any], engine: str) -> None:
+    mock_origin = "wiremock" if engine == "wiremock" else "microcks"
+    case["observations"].append({"label": "mode", **core.set_mode(engine, "mock")})
+    for label, changes in VARIANTS:
+        payload = {**core.order_payload(core.FIXTURE_ID, "MOCK-001"), **changes}
+        case["observations"].append({"label": label + " mock-only request", "payload": payload})
+        response = core.supplier_probe(case, label + " mock-only changed fixture",
+                                       core.engine_base(engine), "POST", "/supplier/orders",
+                                       payload, None, False, core.FIXTURE_ID)
+        body = response["body"] if isinstance(response["body"], dict) else {}
+        fixed_acceptance = (200 <= response["status"] < 300 and
+                            (str(body.get("supplierOrderId", "")).lower() == core.FIXTURE_ORDER_ID or
+                             (body.get("origin") == mock_origin and
+                              str(body.get("clientRequestId", "")).lower() == core.FIXTURE_ID)))
+        core.check(not fixed_acceptance,
+                   f"{engine} {label}: mock-only variant received fixed mock acceptance")
+        core.check(body.get("origin") != "sandbox" and response["originHeader"] != "sandbox",
+                   f"{engine} {label}: mock-only variant claimed sandbox origin")
+
+
 def procurement_profile(case: dict[str, Any], engine: str, product_id: uuid.UUID) -> None:
     before_stock, before_response = stock(product_id)
     core.observed(case, "Inventory before provider purchase", before_response)
@@ -207,6 +227,8 @@ def main() -> int:
                 core.run_case(results, f"FIXTURE-{label}-{engine}",
                               lambda case, selected=engine, variation=label, fields=changes:
                               fixture_variant(case, selected, variation, fields))
+            core.run_case(results, f"FIXTURE-mock-only-altered-{engine}",
+                          lambda case, selected=engine: fixture_mock_only_variants(case, selected))
             core.run_case(results, f"PROFILE-{engine}",
                           lambda case, selected=engine: procurement_profile(case, selected, args.product_id))
     finally:
