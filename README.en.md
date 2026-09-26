@@ -163,6 +163,7 @@ This repository currently has no active target-owned analyzer or runtime-validat
 - [.dev/operations/context-map.md](.dev/operations/context-map.md): context relationships
 - [.dev/operations/event-catalog.md](.dev/operations/event-catalog.md): events and request/reply contracts
 - [.dev/operations/mq-topology.md](.dev/operations/mq-topology.md): Kafka/RabbitMQ topology
+- [.dev/operations/procurement-supplier-lab.md](.dev/operations/procurement-supplier-lab.md): procurement, supplier mock/proxy, and goods receipt lab guide (Traditional Chinese)
 
 ## AI Collaboration Entry Points
 

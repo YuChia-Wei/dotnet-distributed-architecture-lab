@@ -3,6 +3,7 @@
     <Project Path="src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj" />
     <Project Path="src/BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj" />
     <Project Path="src/BC-Contracts/Lab.BoundedContextContracts.Products/Lab.BoundedContextContracts.Products.csproj" />
+    <Project Path="src/BC-Contracts/Lab.BoundedContextContracts.Procurement/Lab.BoundedContextContracts.Procurement.csproj" />
   </Folder>
   <Folder Name="/BuildingBlocks/">
     <Project Path="src/BuildingBlocks/Lab.BuildingBlocks.Domains/Lab.BuildingBlocks.Domains.csproj" />
@@ -20,6 +21,15 @@
     <Project Path="src/Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj" />
   </Folder>
   <Folder Name="/Order/" />
+  <Folder Name="/Procurement/" />
+  <Folder Name="/Procurement/DomainCore/">
+    <Project Path="src/Procurement/DomainCore/Procurement.Applications/Procurement.Applications.csproj" />
+    <Project Path="src/Procurement/DomainCore/Procurement.Domains/Procurement.Domains.csproj" />
+    <Project Path="src/Procurement/DomainCore/Procurement.Infrastructure/Procurement.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Procurement/Presentation/">
+    <Project Path="src/Procurement/Presentation/Procurement.WebApi/Procurement.WebApi.csproj" />
+  </Folder>
   <Folder Name="/Order/DomainCore/">
     <Project Path="src/Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj" />
     <Project Path="src/Order/DomainCore/SaleOrders.Domains/SaleOrders.Domains.csproj" />
@@ -49,12 +59,21 @@
   <Folder Name="/Samples/EfCoreWolverine/Presentation/">
     <Project Path="samples/EfCoreWolverine/EfCoreWolverine.Host/EfCoreWolverine.Host.csproj" />
   </Folder>
+  <Folder Name="/Samples/SupplierSandbox/">
+    <Project Path="samples/SupplierSandbox/SupplierSandbox.WebApi/SupplierSandbox.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Samples/SupplierMock/">
+    <Project Path="samples/SupplierMock/SupplierMock.WebApi/SupplierMock.WebApi.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/EfCoreWolverine.Tests/EfCoreWolverine.Tests.csproj" />
     <Project Path="tests/InventoryControl.Tests/InventoryControl.Tests.csproj" />
+    <Project Path="tests/Procurement.Tests/Procurement.Tests.csproj" />
     <Project Path="tests/SaleOrders.Tests/SaleOrders.Tests.csproj" />
     <Project Path="tests/SaleProducts.Tests/SaleProducts.Tests.csproj" />
     <Project Path="tests/SaleOrders.Domains.Tests/SaleOrders.Domains.Tests.csproj" />
     <Project Path="tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj" />
+    <Project Path="tests/SupplierSandbox.Tests/SupplierSandbox.Tests.csproj" />
+    <Project Path="tests/SupplierMock.Tests/SupplierMock.Tests.csproj" />
   </Folder>
 </Solution>
