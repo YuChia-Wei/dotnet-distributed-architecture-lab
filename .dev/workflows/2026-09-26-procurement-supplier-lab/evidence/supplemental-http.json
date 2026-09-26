@@ -1,0 +1,2256 @@
+{
+  "workflow": "2026-09-26-procurement-supplier-lab",
+  "suite": "supplemental HTTP contracts",
+  "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+  "startedAt": "2026-09-26T04:08:07.859601+00:00",
+  "scenarioResults": [
+    {
+      "scenario": "P04-retained-stock",
+      "startedAt": "2026-09-26T04:08:07.859623+00:00",
+      "observations": [
+        {
+          "label": "Inventory before timeout",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+            "availableQuantity": 33
+          }
+        },
+        {
+          "label": "direct real quote",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "sku": "REAL-001",
+            "name": "Sandbox real product",
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "delay 4000",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "delayAfterCommitMs": 4000,
+            "persistence": "服務重新啟動後恢復為零"
+          }
+        },
+        {
+          "label": "unknown purchase after supplier commit",
+          "status": 202,
+          "originHeader": null,
+          "body": {
+            "id": "d1f9b8fb-1b25-4561-a2d7-31bae3650340",
+            "identity": {
+              "clientRequestId": "b46d5d02-2913-46d0-adad-c044245a23fd",
+              "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+              "supplierSku": "REAL-001",
+              "quantity": 3,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "SubmissionUnknown",
+            "supplierOrderId": null,
+            "receivedQuantity": 0,
+            "version": 1,
+            "createdAt": "2026-09-26T04:08:08.250753+00:00",
+            "updatedAt": "2026-09-26T04:08:10.2606447+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "identities",
+          "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+          "clientRequestId": "b46d5d02-2913-46d0-adad-c044245a23fd",
+          "purchaseOrderId": "d1f9b8fb-1b25-4561-a2d7-31bae3650340"
+        },
+        {
+          "label": "supplier committed order lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "e44fe094-746b-43b5-9c48-152aebfb7c91",
+            "clientRequestId": "b46d5d02-2913-46d0-adad-c044245a23fd",
+            "sku": "REAL-001",
+            "quantity": 3,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "reconcile using original supplier key",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "id": "d1f9b8fb-1b25-4561-a2d7-31bae3650340",
+            "identity": {
+              "clientRequestId": "b46d5d02-2913-46d0-adad-c044245a23fd",
+              "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+              "supplierSku": "REAL-001",
+              "quantity": 3,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "Accepted",
+            "supplierOrderId": "e44fe094-746b-43b5-9c48-152aebfb7c91",
+            "receivedQuantity": 0,
+            "version": 2,
+            "createdAt": "2026-09-26T04:08:08.250753+00:00",
+            "updatedAt": "2026-09-26T04:08:10.311238+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "local purchase after reconcile",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "id": "d1f9b8fb-1b25-4561-a2d7-31bae3650340",
+            "identity": {
+              "clientRequestId": "b46d5d02-2913-46d0-adad-c044245a23fd",
+              "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+              "supplierSku": "REAL-001",
+              "quantity": 3,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "direct"
+            },
+            "state": "Accepted",
+            "supplierOrderId": "e44fe094-746b-43b5-9c48-152aebfb7c91",
+            "receivedQuantity": 0,
+            "version": 2,
+            "createdAt": "2026-09-26T04:08:08.250753+00:00",
+            "updatedAt": "2026-09-26T04:08:10.311238+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "sandbox journal after timeout/reconcile",
+          "clientRequestId": "b46d5d02-2913-46d0-adad-c044245a23fd",
+          "supplierPostDelta": 1,
+          "lookupDelta": 2,
+          "matched": [
+            {
+              "timestamp": "2026-09-26T04:08:10.3084693+00:00",
+              "method": "GET",
+              "path": "/supplier/orders/by-client-request/b46d5d02-2913-46d0-adad-c044245a23fd",
+              "clientRequestId": "b46d5d02-2913-46d0-adad-c044245a23fd"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.2881999+00:00",
+              "method": "GET",
+              "path": "/supplier/orders/by-client-request/b46d5d02-2913-46d0-adad-c044245a23fd",
+              "clientRequestId": "b46d5d02-2913-46d0-adad-c044245a23fd"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:08.257675+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "b46d5d02-2913-46d0-adad-c044245a23fd"
+            }
+          ]
+        },
+        {
+          "label": "Inventory after reconcile",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+            "availableQuantity": 33
+          }
+        },
+        {
+          "label": "delay reset",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "delayAfterCommitMs": 0,
+            "persistence": "服務重新啟動後恢復為零"
+          }
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:10.381008+00:00"
+    },
+    {
+      "scenario": "FIXTURE-exact-wiremock",
+      "startedAt": "2026-09-26T04:08:10.381051+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "status": "ready",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "exact request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "exact native POST",
+          "status": 200,
+          "originHeader": "wiremock",
+          "body": {
+            "supplierOrderId": "00000000-0000-4000-8000-000000000017",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "wiremock"
+          }
+        },
+        {
+          "label": "exact native POST upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        },
+        {
+          "label": "exact native GET lookup",
+          "status": 200,
+          "originHeader": "wiremock",
+          "body": {
+            "supplierOrderId": "00000000-0000-4000-8000-000000000017",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "wiremock"
+          }
+        },
+        {
+          "label": "exact native GET lookup upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:10.443407+00:00"
+    },
+    {
+      "scenario": "FIXTURE-quantity-wiremock",
+      "startedAt": "2026-09-26T04:08:10.443475+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "status": "ready",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "quantity request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 3,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "quantity changed fixture",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "8cdebf30-2688-4cfc-9891-8bd96eb8874e",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 3,
+            "unitPrice": 100,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "quantity changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:10.504538+00:00"
+    },
+    {
+      "scenario": "FIXTURE-unitPrice-wiremock",
+      "startedAt": "2026-09-26T04:08:10.504575+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "status": "ready",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "unitPrice request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 101,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "unitPrice changed fixture",
+          "status": 409,
+          "originHeader": null,
+          "body": {
+            "code": "idempotency_conflict",
+            "message": "此 clientRequestId 已對應至不同的訂單內容。"
+          }
+        },
+        {
+          "label": "unitPrice changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 1,
+          "after": 2,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:10.552403+00:00"
+    },
+    {
+      "scenario": "FIXTURE-currency-wiremock",
+      "startedAt": "2026-09-26T04:08:10.552435+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "status": "ready",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "currency request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "USD"
+          }
+        },
+        {
+          "label": "currency changed fixture",
+          "status": 400,
+          "originHeader": null,
+          "body": {
+            "code": "invalid_order",
+            "message": "clientRequestId、SKU、數量、價格或幣別無效。"
+          }
+        },
+        {
+          "label": "currency changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 2,
+          "after": 3,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:10.609032+00:00"
+    },
+    {
+      "scenario": "FIXTURE-sku-wiremock",
+      "startedAt": "2026-09-26T04:08:10.609084+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "status": "ready",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "sku request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "sku changed fixture",
+          "status": 409,
+          "originHeader": null,
+          "body": {
+            "code": "idempotency_conflict",
+            "message": "此 clientRequestId 已對應至不同的訂單內容。"
+          }
+        },
+        {
+          "label": "sku changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 3,
+          "after": 4,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:10.703793+00:00"
+    },
+    {
+      "scenario": "FIXTURE-mock-only-altered-wiremock",
+      "startedAt": "2026-09-26T04:08:10.703834+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "mock",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "mock",
+              "status": "ready",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "quantity mock-only request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 3,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "quantity mock-only changed fixture",
+          "status": 404,
+          "originHeader": null,
+          "body": {
+            "Status": "No matching mapping found"
+          }
+        },
+        {
+          "label": "quantity mock-only changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 4,
+          "after": 4,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        },
+        {
+          "label": "unitPrice mock-only request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 101,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "unitPrice mock-only changed fixture",
+          "status": 404,
+          "originHeader": null,
+          "body": {
+            "Status": "No matching mapping found"
+          }
+        },
+        {
+          "label": "unitPrice mock-only changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 4,
+          "after": 4,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        },
+        {
+          "label": "currency mock-only request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "USD"
+          }
+        },
+        {
+          "label": "currency mock-only changed fixture",
+          "status": 404,
+          "originHeader": null,
+          "body": {
+            "Status": "No matching mapping found"
+          }
+        },
+        {
+          "label": "currency mock-only changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 4,
+          "after": 4,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        },
+        {
+          "label": "sku mock-only request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "sku mock-only changed fixture",
+          "status": 404,
+          "originHeader": null,
+          "body": {
+            "Status": "No matching mapping found"
+          }
+        },
+        {
+          "label": "sku mock-only changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 4,
+          "after": 4,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:10.855659+00:00"
+    },
+    {
+      "scenario": "PROFILE-wiremock",
+      "startedAt": "2026-09-26T04:08:10.855695+00:00",
+      "observations": [
+        {
+          "label": "Inventory before provider purchase",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+            "availableQuantity": 33
+          }
+        },
+        {
+          "label": "mode",
+          "engine": "wiremock",
+          "mode": "hybrid",
+          "state": {
+            "status": 200,
+            "originHeader": null,
+            "body": {
+              "mode": "hybrid",
+              "status": "ready",
+              "upstream": "http://supplier-sandbox:8080",
+              "persistence": "執行階段設定；重新啟動後回到啟動模式"
+            }
+          }
+        },
+        {
+          "label": "Procurement real quote",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "sku": "REAL-001",
+            "name": "Sandbox real product",
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "Procurement real quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/REAL-001",
+          "clientRequestId": null,
+          "before": 3,
+          "after": 4,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.9384864+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T04:08:08.2374223+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T04:08:06.4342531+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T04:08:05.5735745+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            }
+          ]
+        },
+        {
+          "label": "Procurement real purchase",
+          "status": 201,
+          "originHeader": null,
+          "body": {
+            "id": "e4a25178-f7f4-4e7b-b7bb-694587272335",
+            "identity": {
+              "clientRequestId": "4a0dc0da-7ebb-4ad3-b625-3501c30b67dc",
+              "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+              "supplierSku": "REAL-001",
+              "quantity": 2,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "wiremock"
+            },
+            "state": "Accepted",
+            "supplierOrderId": "3f5bc863-d3a2-46af-9f27-fe34d50d731b",
+            "receivedQuantity": 0,
+            "version": 1,
+            "createdAt": "2026-09-26T04:08:10.948848+00:00",
+            "updatedAt": "2026-09-26T04:08:10.9638871+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "Procurement real purchase upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "4a0dc0da-7ebb-4ad3-b625-3501c30b67dc",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.9555891+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "4a0dc0da-7ebb-4ad3-b625-3501c30b67dc"
+            }
+          ]
+        },
+        {
+          "label": "sandbox order lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "3f5bc863-d3a2-46af-9f27-fe34d50d731b",
+            "clientRequestId": "4a0dc0da-7ebb-4ad3-b625-3501c30b67dc",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "Inventory after provider purchase",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+            "availableQuantity": 33
+          }
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:11.026723+00:00"
+    },
+    {
+      "scenario": "FIXTURE-exact-microcks",
+      "startedAt": "2026-09-26T04:08:11.026763+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790395691033
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JS\",\"dispatcherRules\":\"try {\\n  const body = JSON.parse(mockRequest.requestContent());\\n  if (body\\n      && body.clientRequestId === \\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\"\\n      && body.sku === \\\"MOCK-001\\\"\\n      && body.quantity === 2\\n      && body.unitPrice === 100\\n      && body.currency === \\\"TWD\\\") {\\n    return \\\"mock-order\\\";\\n  }\\n} catch (error) {\\n  log.warn(\\\"Supplier fixture request was not valid JSON: \\\" + error);\\n}\\nreturn \\\"__proxy_unmatched__\\\";\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "exact request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "exact native POST",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "supplierOrderId": "00000000-0000-4000-8000-000000000017",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "microcks"
+          }
+        },
+        {
+          "label": "exact native POST upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 4,
+          "after": 4,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        },
+        {
+          "label": "exact native GET lookup",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "supplierOrderId": "00000000-0000-4000-8000-000000000017",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "microcks"
+          }
+        },
+        {
+          "label": "exact native GET lookup upstream journal",
+          "method": "GET",
+          "path": "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 0,
+          "after": 0,
+          "delta": 0,
+          "matchedAfter": []
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:11.186634+00:00"
+    },
+    {
+      "scenario": "FIXTURE-quantity-microcks",
+      "startedAt": "2026-09-26T04:08:11.186665+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790395691192
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JS\",\"dispatcherRules\":\"try {\\n  const body = JSON.parse(mockRequest.requestContent());\\n  if (body\\n      && body.clientRequestId === \\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\"\\n      && body.sku === \\\"MOCK-001\\\"\\n      && body.quantity === 2\\n      && body.unitPrice === 100\\n      && body.currency === \\\"TWD\\\") {\\n    return \\\"mock-order\\\";\\n  }\\n} catch (error) {\\n  log.warn(\\\"Supplier fixture request was not valid JSON: \\\" + error);\\n}\\nreturn \\\"__proxy_unmatched__\\\";\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "quantity request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 3,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "quantity changed fixture",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "8cdebf30-2688-4cfc-9891-8bd96eb8874e",
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 3,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "quantity changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 4,
+          "after": 5,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:11.2770937+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:11.287852+00:00"
+    },
+    {
+      "scenario": "FIXTURE-unitPrice-microcks",
+      "startedAt": "2026-09-26T04:08:11.287886+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790395691294
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JS\",\"dispatcherRules\":\"try {\\n  const body = JSON.parse(mockRequest.requestContent());\\n  if (body\\n      && body.clientRequestId === \\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\"\\n      && body.sku === \\\"MOCK-001\\\"\\n      && body.quantity === 2\\n      && body.unitPrice === 100\\n      && body.currency === \\\"TWD\\\") {\\n    return \\\"mock-order\\\";\\n  }\\n} catch (error) {\\n  log.warn(\\\"Supplier fixture request was not valid JSON: \\\" + error);\\n}\\nreturn \\\"__proxy_unmatched__\\\";\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "unitPrice request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 101,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "unitPrice changed fixture",
+          "status": 409,
+          "originHeader": null,
+          "body": {
+            "code": "idempotency_conflict",
+            "message": "此 clientRequestId 已對應至不同的訂單內容。"
+          }
+        },
+        {
+          "label": "unitPrice changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 5,
+          "after": 6,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:11.3733834+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.2770937+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:11.409499+00:00"
+    },
+    {
+      "scenario": "FIXTURE-currency-microcks",
+      "startedAt": "2026-09-26T04:08:11.409539+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790395691427
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JS\",\"dispatcherRules\":\"try {\\n  const body = JSON.parse(mockRequest.requestContent());\\n  if (body\\n      && body.clientRequestId === \\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\"\\n      && body.sku === \\\"MOCK-001\\\"\\n      && body.quantity === 2\\n      && body.unitPrice === 100\\n      && body.currency === \\\"TWD\\\") {\\n    return \\\"mock-order\\\";\\n  }\\n} catch (error) {\\n  log.warn(\\\"Supplier fixture request was not valid JSON: \\\" + error);\\n}\\nreturn \\\"__proxy_unmatched__\\\";\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "currency request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "USD"
+          }
+        },
+        {
+          "label": "currency changed fixture",
+          "status": 400,
+          "originHeader": null,
+          "body": {
+            "code": "invalid_order",
+            "message": "clientRequestId、SKU、數量、價格或幣別無效。"
+          }
+        },
+        {
+          "label": "currency changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 6,
+          "after": 7,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:11.5419691+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.3733834+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.2770937+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:11.563584+00:00"
+    },
+    {
+      "scenario": "FIXTURE-sku-microcks",
+      "startedAt": "2026-09-26T04:08:11.563624+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790395691581
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JS\",\"dispatcherRules\":\"try {\\n  const body = JSON.parse(mockRequest.requestContent());\\n  if (body\\n      && body.clientRequestId === \\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\"\\n      && body.sku === \\\"MOCK-001\\\"\\n      && body.quantity === 2\\n      && body.unitPrice === 100\\n      && body.currency === \\\"TWD\\\") {\\n    return \\\"mock-order\\\";\\n  }\\n} catch (error) {\\n  log.warn(\\\"Supplier fixture request was not valid JSON: \\\" + error);\\n}\\nreturn \\\"__proxy_unmatched__\\\";\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "sku request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "sku changed fixture",
+          "status": 409,
+          "originHeader": null,
+          "body": {
+            "code": "idempotency_conflict",
+            "message": "此 clientRequestId 已對應至不同的訂單內容。"
+          }
+        },
+        {
+          "label": "sku changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 7,
+          "after": 8,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:11.6913245+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.5419691+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.3733834+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.2770937+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:11.719183+00:00"
+    },
+    {
+      "scenario": "FIXTURE-mock-only-altered-microcks",
+      "startedAt": "2026-09-26T04:08:11.719216+00:00",
+      "observations": [
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "mock",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-mock.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790395691737
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "URI_PARTS",
+                "dispatcherRules": "sku",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "JS",
+                "dispatcherRules": "try {\n  const body = JSON.parse(mockRequest.requestContent());\n  if (body\n      && body.clientRequestId === \"9d4c99da-6517-46b2-baa7-7e81106d3d34\"\n      && body.sku === \"MOCK-001\"\n      && body.quantity === 2\n      && body.unitPrice === 100\n      && body.currency === \"TWD\") {\n    return \"mock-order\";\n  }\n} catch (error) {\n  log.warn(\"Supplier fixture request was not valid JSON: \" + error);\n}\nreturn \"__unmatched_supplier_order__\";\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "URI_PARTS",
+                "dispatcherRules": "clientRequestId",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "quantity mock-only request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 3,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "quantity mock-only changed fixture",
+          "status": 400,
+          "originHeader": null,
+          "body": "The response __unmatched_supplier_order__ does not exist!"
+        },
+        {
+          "label": "quantity mock-only changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 8,
+          "after": 8,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:11.6913245+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.5419691+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.3733834+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.2770937+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        },
+        {
+          "label": "unitPrice mock-only request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 101,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "unitPrice mock-only changed fixture",
+          "status": 400,
+          "originHeader": null,
+          "body": "The response __unmatched_supplier_order__ does not exist!"
+        },
+        {
+          "label": "unitPrice mock-only changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 8,
+          "after": 8,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:11.6913245+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.5419691+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.3733834+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.2770937+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        },
+        {
+          "label": "currency mock-only request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "MOCK-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "USD"
+          }
+        },
+        {
+          "label": "currency mock-only changed fixture",
+          "status": 400,
+          "originHeader": null,
+          "body": "The response __unmatched_supplier_order__ does not exist!"
+        },
+        {
+          "label": "currency mock-only changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 8,
+          "after": 8,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:11.6913245+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.5419691+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.3733834+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.2770937+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        },
+        {
+          "label": "sku mock-only request",
+          "payload": {
+            "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100,
+            "currency": "TWD"
+          }
+        },
+        {
+          "label": "sku mock-only changed fixture",
+          "status": 400,
+          "originHeader": null,
+          "body": "The response __unmatched_supplier_order__ does not exist!"
+        },
+        {
+          "label": "sku mock-only changed fixture upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+          "before": 8,
+          "after": 8,
+          "delta": 0,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:11.6913245+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.5419691+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.3733834+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:11.2770937+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6764935+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.6054012+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.5442155+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.4829764+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+            }
+          ]
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:12.011048+00:00"
+    },
+    {
+      "scenario": "PROFILE-microcks",
+      "startedAt": "2026-09-26T04:08:12.011081+00:00",
+      "observations": [
+        {
+          "label": "Inventory before provider purchase",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+            "availableQuantity": 33
+          }
+        },
+        {
+          "label": "mode",
+          "engine": "microcks",
+          "mode": "hybrid",
+          "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+          "uploadedFilename": "supplier-api.yaml",
+          "upload": {
+            "status": 201,
+            "originHeader": null,
+            "body": "Supplier API:1.0.0"
+          },
+          "service": {
+            "id": "6ab73e0156041fb00d499958",
+            "metadata": {
+              "annotations": {},
+              "createdOn": 1790393857375,
+              "labels": {},
+              "lastUpdate": 1790395692023
+            },
+            "name": "Supplier API",
+            "operations": [
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/catalog/{sku}",
+                "resourcePaths": [
+                  "/supplier/catalog/{sku}",
+                  "/supplier/catalog/MOCK-001"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"JS\",\"dispatcherRules\":\"try {\\n  const body = JSON.parse(mockRequest.requestContent());\\n  if (body\\n      && body.clientRequestId === \\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\"\\n      && body.sku === \\\"MOCK-001\\\"\\n      && body.quantity === 2\\n      && body.unitPrice === 100\\n      && body.currency === \\\"TWD\\\") {\\n    return \\\"mock-order\\\";\\n  }\\n} catch (error) {\\n  log.warn(\\\"Supplier fixture request was not valid JSON: \\\" + error);\\n}\\nreturn \\\"__proxy_unmatched__\\\";\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "POST",
+                "name": "POST /supplier/orders",
+                "resourcePaths": [
+                  "/supplier/orders"
+                ]
+              },
+              {
+                "dispatcher": "PROXY_FALLBACK",
+                "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+                "method": "GET",
+                "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+                "resourcePaths": [
+                  "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                  "/supplier/orders/by-client-request/{clientRequestId}"
+                ]
+              }
+            ],
+            "sourceArtifact": "supplier-api.yaml",
+            "type": "REST",
+            "version": "1.0.0"
+          }
+        },
+        {
+          "label": "Procurement real quote",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "sku": "REAL-001",
+            "name": "Sandbox real product",
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "Procurement real quote upstream journal",
+          "method": "GET",
+          "path": "/supplier/catalog/REAL-001",
+          "clientRequestId": null,
+          "before": 4,
+          "after": 5,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:12.1152799+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T04:08:10.9384864+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T04:08:08.2374223+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T04:08:06.4342531+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            },
+            {
+              "timestamp": "2026-09-26T04:08:05.5735745+00:00",
+              "method": "GET",
+              "path": "/supplier/catalog/REAL-001",
+              "clientRequestId": null
+            }
+          ]
+        },
+        {
+          "label": "Procurement real purchase",
+          "status": 201,
+          "originHeader": null,
+          "body": {
+            "id": "aa4f3c6a-6be6-4b1a-bddc-f32c84b5b672",
+            "identity": {
+              "clientRequestId": "3c7dfc4c-ab15-4114-bf4b-b4637b2cae52",
+              "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+              "supplierSku": "REAL-001",
+              "quantity": 2,
+              "unitPrice": 100.0,
+              "currency": "TWD",
+              "provider": "microcks"
+            },
+            "state": "Accepted",
+            "supplierOrderId": "5f907c4d-e76d-4970-88fb-2656336eb19b",
+            "receivedQuantity": 0,
+            "version": 1,
+            "createdAt": "2026-09-26T04:08:12.164757+00:00",
+            "updatedAt": "2026-09-26T04:08:12.2295071+00:00",
+            "receipts": []
+          }
+        },
+        {
+          "label": "Procurement real purchase upstream journal",
+          "method": "POST",
+          "path": "/supplier/orders",
+          "clientRequestId": "3c7dfc4c-ab15-4114-bf4b-b4637b2cae52",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "matchedAfter": [
+            {
+              "timestamp": "2026-09-26T04:08:12.2204324+00:00",
+              "method": "POST",
+              "path": "/supplier/orders",
+              "clientRequestId": "3c7dfc4c-ab15-4114-bf4b-b4637b2cae52"
+            }
+          ]
+        },
+        {
+          "label": "sandbox order lookup",
+          "status": 200,
+          "originHeader": "sandbox",
+          "body": {
+            "supplierOrderId": "5f907c4d-e76d-4970-88fb-2656336eb19b",
+            "clientRequestId": "3c7dfc4c-ab15-4114-bf4b-b4637b2cae52",
+            "sku": "REAL-001",
+            "quantity": 2,
+            "unitPrice": 100.0,
+            "currency": "TWD",
+            "status": "accepted",
+            "origin": "sandbox"
+          }
+        },
+        {
+          "label": "Inventory after provider purchase",
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+            "availableQuantity": 33
+          }
+        }
+      ],
+      "status": "passed",
+      "endedAt": "2026-09-26T04:08:12.265321+00:00"
+    }
+  ],
+  "cleanup": [
+    {
+      "label": "sandbox delay",
+      "status": "passed",
+      "result": {
+        "status": 200,
+        "originHeader": null,
+        "body": {
+          "delayAfterCommitMs": 0,
+          "persistence": "服務重新啟動後恢復為零"
+        }
+      }
+    },
+    {
+      "label": "WireMock hybrid",
+      "status": "passed",
+      "result": {
+        "engine": "wiremock",
+        "mode": "hybrid",
+        "state": {
+          "status": 200,
+          "originHeader": null,
+          "body": {
+            "mode": "hybrid",
+            "status": "ready",
+            "upstream": "http://supplier-sandbox:8080",
+            "persistence": "執行階段設定；重新啟動後回到啟動模式"
+          }
+        }
+      }
+    },
+    {
+      "label": "Microcks hybrid",
+      "status": "passed",
+      "result": {
+        "engine": "microcks",
+        "mode": "hybrid",
+        "artifact": "C:\\Github\\YuChia\\dotnet-mq-arch-lab\\samples\\SupplierMock\\microcks\\supplier-hybrid.yaml",
+        "uploadedFilename": "supplier-api.yaml",
+        "upload": {
+          "status": 201,
+          "originHeader": null,
+          "body": "Supplier API:1.0.0"
+        },
+        "service": {
+          "id": "6ab73e0156041fb00d499958",
+          "metadata": {
+            "annotations": {},
+            "createdOn": 1790393857375,
+            "labels": {},
+            "lastUpdate": 1790395692321
+          },
+          "name": "Supplier API",
+          "operations": [
+            {
+              "dispatcher": "PROXY_FALLBACK",
+              "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+              "method": "GET",
+              "name": "GET /supplier/catalog/{sku}",
+              "resourcePaths": [
+                "/supplier/catalog/{sku}",
+                "/supplier/catalog/MOCK-001"
+              ]
+            },
+            {
+              "dispatcher": "PROXY_FALLBACK",
+              "dispatcherRules": "{\"dispatcher\":\"JS\",\"dispatcherRules\":\"try {\\n  const body = JSON.parse(mockRequest.requestContent());\\n  if (body\\n      && body.clientRequestId === \\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\"\\n      && body.sku === \\\"MOCK-001\\\"\\n      && body.quantity === 2\\n      && body.unitPrice === 100\\n      && body.currency === \\\"TWD\\\") {\\n    return \\\"mock-order\\\";\\n  }\\n} catch (error) {\\n  log.warn(\\\"Supplier fixture request was not valid JSON: \\\" + error);\\n}\\nreturn \\\"__proxy_unmatched__\\\";\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+              "method": "POST",
+              "name": "POST /supplier/orders",
+              "resourcePaths": [
+                "/supplier/orders"
+              ]
+            },
+            {
+              "dispatcher": "PROXY_FALLBACK",
+              "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+              "method": "GET",
+              "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+              "resourcePaths": [
+                "/supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34",
+                "/supplier/orders/by-client-request/{clientRequestId}"
+              ]
+            }
+          ],
+          "sourceArtifact": "supplier-api.yaml",
+          "type": "REST",
+          "version": "1.0.0"
+        }
+      }
+    }
+  ],
+  "endedAt": "2026-09-26T04:08:12.363801+00:00",
+  "passed": true
+}

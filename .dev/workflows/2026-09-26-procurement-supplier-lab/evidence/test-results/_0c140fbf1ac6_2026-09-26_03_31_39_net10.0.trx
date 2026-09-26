@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="fef46e0b-4ad5-40c6-b6eb-3df1bcc2cb72" name="@0c140fbf1ac6 2026-09-26 03:31:39" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-26T03:31:39.4247563+00:00" queuing="2026-09-26T03:31:39.4247565+00:00" start="2026-09-26T03:31:38.0684068+00:00" finish="2026-09-26T03:31:40.1424948+00:00" />
+  <TestSettings name="default" id="b07846c1-de13-4b10-a4ae-b6c52abbb1de">
+    <Deployment runDeploymentRoot="_0c140fbf1ac6_2026-09-26_03_31_39" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="0fa39c3f-c316-4cb7-b43b-2f6af1aa2917" testId="747e8d9c-5b03-f1cd-34ee-b8b0eb471004" testName="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_an_empty_inventory_id_When_decreasing_stock_Then_reject_before_loading" computerName="0c140fbf1ac6" duration="00:00:00.0070000" startTime="2026-09-26T03:31:39.3515135+00:00" endTime="2026-09-26T03:31:39.3596210+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0fa39c3f-c316-4cb7-b43b-2f6af1aa2917" />
+    <UnitTestResult executionId="9afac446-731f-4f02-8f2f-e52248c61c23" testId="087a46d1-e915-0768-b6f8-8512fef2ee50" testName="EfCoreWolverine.Tests.MessagingTransactionTests.Given_stock_when_a_real_Kafka_request_completes_then_state_inbox_and_outgoing_event_succeed" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:39.1936178+00:00" endTime="2026-09-26T03:31:39.1936552+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9afac446-731f-4f02-8f2f-e52248c61c23">
+      <Output>
+        <ErrorInfo>
+          <Message>Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="34e30950-4d1a-4940-a6f1-4baa18684a6c" testId="53d297c8-1795-0b21-7042-59c499ccd633" testName="EfCoreWolverine.Tests.MessagingTransactionTests.Given_two_repository_contexts_when_both_modify_one_version_then_the_stale_write_fails" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:39.1927854+00:00" endTime="2026-09-26T03:31:39.1928611+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="34e30950-4d1a-4940-a6f1-4baa18684a6c">
+      <Output>
+        <ErrorInfo>
+          <Message>Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8d830ab7-a531-4904-8266-e820e46bff54" testId="7a90cc87-0af0-cc8e-6855-15e552d37887" testName="EfCoreWolverine.Tests.EfMappingTests.Given_the_current_mapping_when_compared_to_the_migration_then_no_pending_model_changes_exist" computerName="0c140fbf1ac6" duration="00:00:00.7040000" startTime="2026-09-26T03:31:39.1779904+00:00" endTime="2026-09-26T03:31:39.8959699+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8d830ab7-a531-4904-8266-e820e46bff54" />
+    <UnitTestResult executionId="2b9fd62e-8d8e-49aa-930e-363b5d1f7fb3" testId="7b6b80ba-2f1e-90f9-ed29-6f191e9b7416" testName="EfCoreWolverine.Tests.EfMappingTests.Given_a_detached_aggregate_when_repository_saves_then_an_unenrolled_instance_is_rejected" computerName="0c140fbf1ac6" duration="00:00:00.0540000" startTime="2026-09-26T03:31:39.9959891+00:00" endTime="2026-09-26T03:31:40.0501828+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2b9fd62e-8d8e-49aa-930e-363b5d1f7fb3" />
+    <UnitTestResult executionId="8ee653c7-4974-405d-9f00-c6e25064ce02" testId="1d2ac927-a282-6d7f-6d2f-3cb5bf6c5cd9" testName="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_an_unknown_inventory_item_When_decreasing_stock_Then_return_not_found" computerName="0c140fbf1ac6" duration="00:00:00.0020000" startTime="2026-09-26T03:31:39.3655436+00:00" endTime="2026-09-26T03:31:39.3681521+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ee653c7-4974-405d-9f00-c6e25064ce02" />
+    <UnitTestResult executionId="2c873c14-d81c-4888-8c91-f388441b9d2a" testId="913b8556-0054-6f50-cf62-cab5ffeff273" testName="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_available_stock_When_decreasing_stock_Then_save_precedes_publication" computerName="0c140fbf1ac6" duration="00:00:00.1610000" startTime="2026-09-26T03:31:39.1779750+00:00" endTime="2026-09-26T03:31:39.3501962+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2c873c14-d81c-4888-8c91-f388441b9d2a" />
+    <UnitTestResult executionId="cac2826e-6104-4168-8cca-2bffb7f60ff2" testId="7ad86a2e-6335-fab8-37df-1d1c83b96b5b" testName="EfCoreWolverine.Tests.MessagingTransactionTests.Given_a_failure_after_SQL_flush_when_processing_ends_then_business_and_outbox_are_rolled_back" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:39.1943203+00:00" endTime="2026-09-26T03:31:39.1943580+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cac2826e-6104-4168-8cca-2bffb7f60ff2">
+      <Output>
+        <ErrorInfo>
+          <Message>Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0565033c-c1f5-4f7a-a953-4c61055aea07" testId="fca794e2-5199-3d32-8bfc-bc86fefc5ab9" testName="EfCoreWolverine.Tests.MessagingTransactionTests.Given_duplicate_Kafka_deliveries_when_the_same_envelope_is_replayed_then_stock_changes_only_once" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:39.1778994+00:00" endTime="2026-09-26T03:31:39.1832165+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0565033c-c1f5-4f7a-a953-4c61055aea07">
+      <Output>
+        <ErrorInfo>
+          <Message>Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a2960a44-3366-411d-9ef3-4646a7c3cc6e" testId="c6198466-292f-da99-5bd1-c41ebfb9135a" testName="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_insufficient_stock_When_decreasing_stock_Then_return_business_failure" computerName="0c140fbf1ac6" duration="00:00:00.0020000" startTime="2026-09-26T03:31:39.3606699+00:00" endTime="2026-09-26T03:31:39.3632673+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2960a44-3366-411d-9ef3-4646a7c3cc6e" />
+    <UnitTestResult executionId="7336ae5f-0b9b-4934-847c-779c16336007" testId="f26dfca2-fe1d-ec15-d79c-e9fa24af9e11" testName="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_nonpositive_quantity_When_decreasing_stock_Then_reject_before_loading(quantity: 0)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:39.3739756+00:00" endTime="2026-09-26T03:31:39.3745738+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7336ae5f-0b9b-4934-847c-779c16336007" />
+    <UnitTestResult executionId="fe14e077-8953-4ddc-a16e-076e0a79931f" testId="22e8a3d3-41e8-4f54-6771-207a457b0f2e" testName="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_nonpositive_quantity_When_decreasing_stock_Then_reject_before_loading(quantity: -1)" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:39.3725276+00:00" endTime="2026-09-26T03:31:39.3736731+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fe14e077-8953-4ddc-a16e-076e0a79931f" />
+    <UnitTestResult executionId="581f75ae-b8e1-4575-889b-de7d2796627a" testId="59db9e40-9338-8ff7-cc72-5b8b5a39ace9" testName="EfCoreWolverine.Tests.EfMappingTests.Given_a_tracked_aggregate_when_repository_saves_then_changes_remain_pending_without_database_io" computerName="0c140fbf1ac6" duration="00:00:00.0980000" startTime="2026-09-26T03:31:39.8969096+00:00" endTime="2026-09-26T03:31:39.9953544+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="581f75ae-b8e1-4575-889b-de7d2796627a" />
+    <UnitTestResult executionId="16ef7360-a3ee-4dd8-be99-f7cb7b23b3c5" testId="bd446fba-856d-f22d-5fb9-8c92cc94ac9b" testName="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_publication_failure_When_decreasing_stock_Then_propagate_for_transaction_rollback" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:39.3688715+00:00" endTime="2026-09-26T03:31:39.3707226+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="16ef7360-a3ee-4dd8-be99-f7cb7b23b3c5" />
+    <UnitTestResult executionId="914d69b2-d008-4732-8789-d4471bbc5879" testId="38f09dd4-2ab1-35e4-21a5-75eaa5f8cb68" testName="EfCoreWolverine.Tests.TransactionPipelineTests.Given_the_sample_host_when_the_handler_is_generated_then_one_EF_transaction_wraps_the_use_case" computerName="0c140fbf1ac6" duration="00:00:00.5220000" startTime="2026-09-26T03:31:39.1779376+00:00" endTime="2026-09-26T03:31:39.7135930+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="914d69b2-d008-4732-8789-d4471bbc5879" />
+    <UnitTestResult executionId="1cd8c620-9430-48d2-8296-85b54316143b" testId="c4816a06-267e-1246-89b0-4db5b70fd468" testName="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_persistence_failure_When_decreasing_stock_Then_propagate_without_publishing" computerName="0c140fbf1ac6" duration="00:00:00.0010000" startTime="2026-09-26T03:31:39.3751949+00:00" endTime="2026-09-26T03:31:39.3763232+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1cd8c620-9430-48d2-8296-85b54316143b" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_nonpositive_quantity_When_decreasing_stock_Then_reject_before_loading(quantity: -1)" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="22e8a3d3-41e8-4f54-6771-207a457b0f2e">
+      <Execution id="fe14e077-8953-4ddc-a16e-076e0a79931f" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.DecreaseStockUseCaseTests" name="Given_a_nonpositive_quantity_When_decreasing_stock_Then_reject_before_loading" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_persistence_failure_When_decreasing_stock_Then_propagate_without_publishing" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="c4816a06-267e-1246-89b0-4db5b70fd468">
+      <Execution id="1cd8c620-9430-48d2-8296-85b54316143b" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.DecreaseStockUseCaseTests" name="Given_a_persistence_failure_When_decreasing_stock_Then_propagate_without_publishing" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.MessagingTransactionTests.Given_a_failure_after_SQL_flush_when_processing_ends_then_business_and_outbox_are_rolled_back" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="7ad86a2e-6335-fab8-37df-1d1c83b96b5b">
+      <Execution id="cac2826e-6104-4168-8cca-2bffb7f60ff2" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.MessagingTransactionTests" name="Given_a_failure_after_SQL_flush_when_processing_ends_then_business_and_outbox_are_rolled_back" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.MessagingTransactionTests.Given_stock_when_a_real_Kafka_request_completes_then_state_inbox_and_outgoing_event_succeed" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="087a46d1-e915-0768-b6f8-8512fef2ee50">
+      <Execution id="9afac446-731f-4f02-8f2f-e52248c61c23" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.MessagingTransactionTests" name="Given_stock_when_a_real_Kafka_request_completes_then_state_inbox_and_outgoing_event_succeed" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.TransactionPipelineTests.Given_the_sample_host_when_the_handler_is_generated_then_one_EF_transaction_wraps_the_use_case" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="38f09dd4-2ab1-35e4-21a5-75eaa5f8cb68">
+      <Execution id="914d69b2-d008-4732-8789-d4471bbc5879" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.TransactionPipelineTests" name="Given_the_sample_host_when_the_handler_is_generated_then_one_EF_transaction_wraps_the_use_case" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_nonpositive_quantity_When_decreasing_stock_Then_reject_before_loading(quantity: 0)" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="f26dfca2-fe1d-ec15-d79c-e9fa24af9e11">
+      <Execution id="7336ae5f-0b9b-4934-847c-779c16336007" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.DecreaseStockUseCaseTests" name="Given_a_nonpositive_quantity_When_decreasing_stock_Then_reject_before_loading" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_a_publication_failure_When_decreasing_stock_Then_propagate_for_transaction_rollback" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="bd446fba-856d-f22d-5fb9-8c92cc94ac9b">
+      <Execution id="16ef7360-a3ee-4dd8-be99-f7cb7b23b3c5" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.DecreaseStockUseCaseTests" name="Given_a_publication_failure_When_decreasing_stock_Then_propagate_for_transaction_rollback" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.MessagingTransactionTests.Given_duplicate_Kafka_deliveries_when_the_same_envelope_is_replayed_then_stock_changes_only_once" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="fca794e2-5199-3d32-8bfc-bc86fefc5ab9">
+      <Execution id="0565033c-c1f5-4f7a-a953-4c61055aea07" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.MessagingTransactionTests" name="Given_duplicate_Kafka_deliveries_when_the_same_envelope_is_replayed_then_stock_changes_only_once" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_an_unknown_inventory_item_When_decreasing_stock_Then_return_not_found" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="1d2ac927-a282-6d7f-6d2f-3cb5bf6c5cd9">
+      <Execution id="8ee653c7-4974-405d-9f00-c6e25064ce02" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.DecreaseStockUseCaseTests" name="Given_an_unknown_inventory_item_When_decreasing_stock_Then_return_not_found" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.MessagingTransactionTests.Given_two_repository_contexts_when_both_modify_one_version_then_the_stale_write_fails" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="53d297c8-1795-0b21-7042-59c499ccd633">
+      <Execution id="34e30950-4d1a-4940-a6f1-4baa18684a6c" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.MessagingTransactionTests" name="Given_two_repository_contexts_when_both_modify_one_version_then_the_stale_write_fails" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.EfMappingTests.Given_the_current_mapping_when_compared_to_the_migration_then_no_pending_model_changes_exist" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="7a90cc87-0af0-cc8e-6855-15e552d37887">
+      <Execution id="8d830ab7-a531-4904-8266-e820e46bff54" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.EfMappingTests" name="Given_the_current_mapping_when_compared_to_the_migration_then_no_pending_model_changes_exist" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_insufficient_stock_When_decreasing_stock_Then_return_business_failure" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="c6198466-292f-da99-5bd1-c41ebfb9135a">
+      <Execution id="a2960a44-3366-411d-9ef3-4646a7c3cc6e" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.DecreaseStockUseCaseTests" name="Given_insufficient_stock_When_decreasing_stock_Then_return_business_failure" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.EfMappingTests.Given_a_tracked_aggregate_when_repository_saves_then_changes_remain_pending_without_database_io" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="59db9e40-9338-8ff7-cc72-5b8b5a39ace9">
+      <Execution id="581f75ae-b8e1-4575-889b-de7d2796627a" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.EfMappingTests" name="Given_a_tracked_aggregate_when_repository_saves_then_changes_remain_pending_without_database_io" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.EfMappingTests.Given_a_detached_aggregate_when_repository_saves_then_an_unenrolled_instance_is_rejected" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="7b6b80ba-2f1e-90f9-ed29-6f191e9b7416">
+      <Execution id="2b9fd62e-8d8e-49aa-930e-363b5d1f7fb3" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.EfMappingTests" name="Given_a_detached_aggregate_when_repository_saves_then_an_unenrolled_instance_is_rejected" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_an_empty_inventory_id_When_decreasing_stock_Then_reject_before_loading" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="747e8d9c-5b03-f1cd-34ee-b8b0eb471004">
+      <Execution id="0fa39c3f-c316-4cb7-b43b-2f6af1aa2917" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.DecreaseStockUseCaseTests" name="Given_an_empty_inventory_id_When_decreasing_stock_Then_reject_before_loading" />
+    </UnitTest>
+    <UnitTest name="EfCoreWolverine.Tests.DecreaseStockUseCaseTests.Given_available_stock_When_decreasing_stock_Then_save_precedes_publication" storage="/workspace/tests/efcorewolverine.tests/bin/release/net10.0/efcorewolverine.tests.dll" id="913b8556-0054-6f50-cf62-cab5ffeff273">
+      <Execution id="2c873c14-d81c-4888-8c91-f388441b9d2a" />
+      <TestMethod codeBase="/workspace/tests/EfCoreWolverine.Tests/bin/Release/net10.0/EfCoreWolverine.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="EfCoreWolverine.Tests.DecreaseStockUseCaseTests" name="Given_available_stock_When_decreasing_stock_Then_save_precedes_publication" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="747e8d9c-5b03-f1cd-34ee-b8b0eb471004" executionId="0fa39c3f-c316-4cb7-b43b-2f6af1aa2917" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="087a46d1-e915-0768-b6f8-8512fef2ee50" executionId="9afac446-731f-4f02-8f2f-e52248c61c23" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="53d297c8-1795-0b21-7042-59c499ccd633" executionId="34e30950-4d1a-4940-a6f1-4baa18684a6c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7a90cc87-0af0-cc8e-6855-15e552d37887" executionId="8d830ab7-a531-4904-8266-e820e46bff54" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7b6b80ba-2f1e-90f9-ed29-6f191e9b7416" executionId="2b9fd62e-8d8e-49aa-930e-363b5d1f7fb3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d2ac927-a282-6d7f-6d2f-3cb5bf6c5cd9" executionId="8ee653c7-4974-405d-9f00-c6e25064ce02" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="913b8556-0054-6f50-cf62-cab5ffeff273" executionId="2c873c14-d81c-4888-8c91-f388441b9d2a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7ad86a2e-6335-fab8-37df-1d1c83b96b5b" executionId="cac2826e-6104-4168-8cca-2bffb7f60ff2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fca794e2-5199-3d32-8bfc-bc86fefc5ab9" executionId="0565033c-c1f5-4f7a-a953-4c61055aea07" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6198466-292f-da99-5bd1-c41ebfb9135a" executionId="a2960a44-3366-411d-9ef3-4646a7c3cc6e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f26dfca2-fe1d-ec15-d79c-e9fa24af9e11" executionId="7336ae5f-0b9b-4934-847c-779c16336007" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="22e8a3d3-41e8-4f54-6771-207a457b0f2e" executionId="fe14e077-8953-4ddc-a16e-076e0a79931f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="59db9e40-9338-8ff7-cc72-5b8b5a39ace9" executionId="581f75ae-b8e1-4575-889b-de7d2796627a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bd446fba-856d-f22d-5fb9-8c92cc94ac9b" executionId="16ef7360-a3ee-4dd8-be99-f7cb7b23b3c5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="38f09dd4-2ab1-35e4-21a5-75eaa5f8cb68" executionId="914d69b2-d008-4732-8789-d4471bbc5879" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c4816a06-267e-1246-89b0-4db5b70fd468" executionId="1cd8c620-9430-48d2-8296-85b54316143b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="16" executed="12" passed="12" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v4.0.0+05679a7ab5 (64-bit .NET 10.0.12)
+[xUnit.net 00:00:00.18]   Discovering: EfCoreWolverine.Tests
+[xUnit.net 00:00:00.43]   Discovered:  EfCoreWolverine.Tests
+[xUnit.net 00:00:00.64]   Starting:    EfCoreWolverine.Tests
+[xUnit.net 00:00:00.77]       Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA.
+[xUnit.net 00:00:00.79]       Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA.
+[xUnit.net 00:00:00.79]       Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA.
+[xUnit.net 00:00:00.79]       Set RUN_EXTERNAL_INTEGRATION_TESTS=true, EF_SAMPLE_POSTGRES, and EF_SAMPLE_KAFKA.
+Test 'EfCoreWolverine.Tests.MessagingTransactionTests.Given_duplicate_Kafka_deliveries_when_the_same_envelope_is_replayed_then_stock_changes_only_once' was skipped in the test run.
+Test 'EfCoreWolverine.Tests.MessagingTransactionTests.Given_two_repository_contexts_when_both_modify_one_version_then_the_stale_write_fails' was skipped in the test run.
+Test 'EfCoreWolverine.Tests.MessagingTransactionTests.Given_stock_when_a_real_Kafka_request_completes_then_state_inbox_and_outgoing_event_succeed' was skipped in the test run.
+Test 'EfCoreWolverine.Tests.MessagingTransactionTests.Given_a_failure_after_SQL_flush_when_processing_ends_then_business_and_outbox_are_rolled_back' was skipped in the test run.
+[xUnit.net 00:00:01.66]   Finished:    EfCoreWolverine.Tests (ID = 'e741c6cd28da447b4a1bc4b4cd81a9282dc2e197450cffa7ba0837bae200654b')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="0c140fbf1ac6" outcome="Warning" timestamp="2026-09-26T03:31:39.1873089+00:00">
+        <Text>[xUnit.net 00:00:00.77]     EfCoreWolverine.Tests.MessagingTransactionTests.Given_duplicate_Kafka_deliveries_when_the_same_envelope_is_replayed_then_stock_changes_only_once [SKIP]</Text>
+      </RunInfo>
+      <RunInfo computerName="0c140fbf1ac6" outcome="Warning" timestamp="2026-09-26T03:31:39.1997911+00:00">
+        <Text>[xUnit.net 00:00:00.78]     EfCoreWolverine.Tests.MessagingTransactionTests.Given_two_repository_contexts_when_both_modify_one_version_then_the_stale_write_fails [SKIP]</Text>
+      </RunInfo>
+      <RunInfo computerName="0c140fbf1ac6" outcome="Warning" timestamp="2026-09-26T03:31:39.2011830+00:00">
+        <Text>[xUnit.net 00:00:00.79]     EfCoreWolverine.Tests.MessagingTransactionTests.Given_stock_when_a_real_Kafka_request_completes_then_state_inbox_and_outgoing_event_succeed [SKIP]</Text>
+      </RunInfo>
+      <RunInfo computerName="0c140fbf1ac6" outcome="Warning" timestamp="2026-09-26T03:31:39.2018984+00:00">
+        <Text>[xUnit.net 00:00:00.79]     EfCoreWolverine.Tests.MessagingTransactionTests.Given_a_failure_after_SQL_flush_when_processing_ends_then_business_and_outbox_are_rolled_back [SKIP]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

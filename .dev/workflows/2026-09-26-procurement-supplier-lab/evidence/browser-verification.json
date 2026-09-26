@@ -1,0 +1,68 @@
+{
+  "workflow": "2026-09-26-procurement-supplier-lab",
+  "observer": "root coordinator using Codex in-app browser CUA",
+  "observations": [
+    {
+      "scenario": "U03",
+      "subject": "4763ada",
+      "outcome": "failed",
+      "observedAt": "2026-09-26T03:39:29Z",
+      "url": "http://127.0.0.1:8181/",
+      "observed": [
+        "Rendered page but order and request panels remained empty.",
+        "Browser console: SyntaxError Unexpected token '}'.",
+        "Clicking Apply yielded ReferenceError saveDelay is not defined."
+      ]
+    },
+    {
+      "scenario": "U03",
+      "subject": "35589b8",
+      "outcome": "passed",
+      "observedAt": "2026-09-26T04:11:09.675087+00:00",
+      "url": "http://127.0.0.1:8181/",
+      "observed": [
+        "Reloaded repaired page; actual stored orders appeared.",
+        "Applied100ms; invalid10001ms displayed rejection text; restored0ms and API readback confirmed0.",
+        "Generate new ID produced8fdc9976-b7b3-496c-9468-f0004e227ddf; Submit returned200 accepted supplierOrderId4f43343c-509a-439f-b2c9-b0abcb71e3ac, origin sandbox.",
+        "Same order and matching POST appeared in recent orders/request panels.",
+        "No new console errors after repaired deployment; earlier03:39 errors retained."
+      ],
+      "screenshot": "sandbox-ui.png"
+    },
+    {
+      "scenario": "U01",
+      "subject": "35589b8",
+      "outcome": "passed",
+      "observedAt": "2026-09-26T04:11:09.675087+00:00",
+      "url": "http://127.0.0.1:8182/",
+      "observed": [
+        "UI switched proxy:ready with exactly one priority10 ProxyUrl mapping.",
+        "UI switched mock:ready with three priority1 mappings and no proxy.",
+        "Restore startup preset returned hybrid:ready with three priority1 mappings and one priority10 proxy.",
+        "After actual MOCK-001 and REAL-001 HTTP quotes, Refresh displayed both native request entries with wiremock/sandbox origin and real ProxyUrl.",
+        "No captured console errors/warnings."
+      ],
+      "screenshot": "wiremock-ui.png"
+    },
+    {
+      "scenario": "U02",
+      "subject": "35589b8;Microcks1.15.0",
+      "outcome": "passed",
+      "observedAt": "2026-09-26T04:11:09.675087+00:00",
+      "url": "http://127.0.0.1:8184/#/services/6ab73e0156041fb00d499958/operation/POST%20%2Fsupplier%2Forders",
+      "observed": [
+        "Actual PowerShell Set-MicrocksMode hybrid imported stable supplier-api.yaml; Supplier API1.0.0 service read back.",
+        "Native UI showed exactly three operations, one sample each, and PROXY_FALLBACK.",
+        "Edit Properties showed native JS full typed fixture predicate and fixed proxy URL.",
+        "Clicked dispatcher Save with unchanged rules; native success toast said Dispatch properties have been updated.",
+        "Generic Microcks UI console ERROR y_ at04:09:01.783Z was observed; cause unresolved. Service listing, operation editor, save and actualHTTP all worked. No assertion that upstream UI console is error-free or its separate conformance test suite was run."
+      ],
+      "screenshot": "microcks-ui.png"
+    }
+  ],
+  "finalControls": {
+    "wiremock": "hybrid:ready",
+    "microcks": "hybrid:PROXY_FALLBACK",
+    "sandboxDelayAfterCommitMs": 0
+  }
+}

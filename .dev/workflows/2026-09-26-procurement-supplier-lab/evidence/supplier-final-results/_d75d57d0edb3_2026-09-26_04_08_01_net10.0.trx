@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="1155253a-740b-474f-a2e0-b3cf5c0130c9" name="@d75d57d0edb3 2026-09-26 04:08:01" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-26T04:08:01.6422380+00:00" queuing="2026-09-26T04:08:01.6422380+00:00" start="2026-09-26T04:07:59.3307907+00:00" finish="2026-09-26T04:08:01.6482981+00:00" />
+  <TestSettings name="default" id="184c2a67-6392-4efc-b533-e82e7e932b9c">
+    <Deployment runDeploymentRoot="_d75d57d0edb3_2026-09-26_04_08_01" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="951c32df-ac57-4616-b2f1-e0e535e0ee21" testId="9fd2a965-9892-5400-b4a1-582d671718c9" testName="SupplierMockTests.M09_Given_cancel_or_admin_failure_When_reset_runs_Then_state_is_accurate_and_retry_recovers" computerName="d75d57d0edb3" duration="00:00:00.0820000" startTime="2026-09-26T04:08:01.4491729+00:00" endTime="2026-09-26T04:08:01.5314483+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="951c32df-ac57-4616-b2f1-e0e535e0ee21" />
+    <UnitTestResult executionId="d89f0f4f-372d-44ce-a815-6950a98b5a38" testId="28116237-4562-7dca-1aaf-986ffb787e16" testName="SupplierMockTests.M01_M02_Given_a_real_local_upstream_When_modes_select_fixtures_proxy_or_mock_miss_Then_native_wiremock_forwards_only_the_selected_requests" computerName="d75d57d0edb3" duration="00:00:00.8129999" startTime="2026-09-26T04:08:00.3806465+00:00" endTime="2026-09-26T04:08:01.2067541+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d89f0f4f-372d-44ce-a815-6950a98b5a38" />
+    <UnitTestResult executionId="e9ab75e8-2f82-47a6-83a6-5c6df5bba22d" testId="b3698119-91d4-3b5f-3fbc-f37774d28ec8" testName="SupplierMockTests.M07_Given_concurrent_mode_resets_When_native_http_is_used_Then_selected_mode_matches_a_complete_mapping_set" computerName="d75d57d0edb3" duration="00:00:00.2260000" startTime="2026-09-26T04:08:01.2173150+00:00" endTime="2026-09-26T04:08:01.4436689+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e9ab75e8-2f82-47a6-83a6-5c6df5bba22d" />
+    <UnitTestResult executionId="9c967bed-9a4f-484e-adee-06bf5a766ee8" testId="66a0ed14-3b54-706c-2632-fbb8f640cb67" testName="SupplierMockTests.M08_Given_a_mode_setting_When_numeric_or_null_values_are_parsed_Then_only_named_values_are_accepted" computerName="d75d57d0edb3" duration="00:00:00.0020000" startTime="2026-09-26T04:08:01.4456031+00:00" endTime="2026-09-26T04:08:01.4482136+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c967bed-9a4f-484e-adee-06bf5a766ee8" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="SupplierMockTests.M01_M02_Given_a_real_local_upstream_When_modes_select_fixtures_proxy_or_mock_miss_Then_native_wiremock_forwards_only_the_selected_requests" storage="/workspace/tests/suppliermock.tests/bin/release/net10.0/suppliermock.tests.dll" id="28116237-4562-7dca-1aaf-986ffb787e16">
+      <Execution id="d89f0f4f-372d-44ce-a815-6950a98b5a38" />
+      <TestMethod codeBase="/workspace/tests/SupplierMock.Tests/bin/Release/net10.0/SupplierMock.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SupplierMockTests" name="M01_M02_Given_a_real_local_upstream_When_modes_select_fixtures_proxy_or_mock_miss_Then_native_wiremock_forwards_only_the_selected_requests" />
+    </UnitTest>
+    <UnitTest name="SupplierMockTests.M08_Given_a_mode_setting_When_numeric_or_null_values_are_parsed_Then_only_named_values_are_accepted" storage="/workspace/tests/suppliermock.tests/bin/release/net10.0/suppliermock.tests.dll" id="66a0ed14-3b54-706c-2632-fbb8f640cb67">
+      <Execution id="9c967bed-9a4f-484e-adee-06bf5a766ee8" />
+      <TestMethod codeBase="/workspace/tests/SupplierMock.Tests/bin/Release/net10.0/SupplierMock.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SupplierMockTests" name="M08_Given_a_mode_setting_When_numeric_or_null_values_are_parsed_Then_only_named_values_are_accepted" />
+    </UnitTest>
+    <UnitTest name="SupplierMockTests.M09_Given_cancel_or_admin_failure_When_reset_runs_Then_state_is_accurate_and_retry_recovers" storage="/workspace/tests/suppliermock.tests/bin/release/net10.0/suppliermock.tests.dll" id="9fd2a965-9892-5400-b4a1-582d671718c9">
+      <Execution id="951c32df-ac57-4616-b2f1-e0e535e0ee21" />
+      <TestMethod codeBase="/workspace/tests/SupplierMock.Tests/bin/Release/net10.0/SupplierMock.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SupplierMockTests" name="M09_Given_cancel_or_admin_failure_When_reset_runs_Then_state_is_accurate_and_retry_recovers" />
+    </UnitTest>
+    <UnitTest name="SupplierMockTests.M07_Given_concurrent_mode_resets_When_native_http_is_used_Then_selected_mode_matches_a_complete_mapping_set" storage="/workspace/tests/suppliermock.tests/bin/release/net10.0/suppliermock.tests.dll" id="b3698119-91d4-3b5f-3fbc-f37774d28ec8">
+      <Execution id="e9ab75e8-2f82-47a6-83a6-5c6df5bba22d" />
+      <TestMethod codeBase="/workspace/tests/SupplierMock.Tests/bin/Release/net10.0/SupplierMock.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="SupplierMockTests" name="M07_Given_concurrent_mode_resets_When_native_http_is_used_Then_selected_mode_matches_a_complete_mapping_set" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="9fd2a965-9892-5400-b4a1-582d671718c9" executionId="951c32df-ac57-4616-b2f1-e0e535e0ee21" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="28116237-4562-7dca-1aaf-986ffb787e16" executionId="d89f0f4f-372d-44ce-a815-6950a98b5a38" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3698119-91d4-3b5f-3fbc-f37774d28ec8" executionId="e9ab75e8-2f82-47a6-83a6-5c6df5bba22d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="66a0ed14-3b54-706c-2632-fbb8f640cb67" executionId="9c967bed-9a4f-484e-adee-06bf5a766ee8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v4.0.0+05679a7ab5 (64-bit .NET 10.0.12)
+[xUnit.net 00:00:00.18]   Discovering: SupplierMock.Tests
+[xUnit.net 00:00:00.40]   Discovered:  SupplierMock.Tests
+[xUnit.net 00:00:00.60]   Starting:    SupplierMock.Tests
+[xUnit.net 00:00:01.90]   Finished:    SupplierMock.Tests (ID = 'cd516992c4052bf51e4861a301cb61763e02646d4dbb19f1fb04628784b57260')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

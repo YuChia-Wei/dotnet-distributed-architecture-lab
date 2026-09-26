@@ -4,50 +4,63 @@
       {
         "criterion": "Purchase submission and supplier order idempotency/reconciliation follow the documented contract.",
         "deferral": null,
-        "disposition": "not-executed",
-        "evidence_ids": [],
+        "disposition": "succeeded",
+        "evidence_ids": [
+          "EV-FINAL-HTTP",
+          "EV-FINAL-COMPLIANCE"
+        ],
         "id": "AC01",
-        "reason": "Not executed by this tool."
+        "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
       },
       {
         "criterion": "Physical partial receipts commit once and are eventually applied once in Inventory.",
         "deferral": null,
-        "disposition": "not-executed",
-        "evidence_ids": [],
+        "disposition": "succeeded",
+        "evidence_ids": [
+          "EV-FINAL-COMPLIANCE"
+        ],
         "id": "AC02",
-        "reason": "Not executed by this tool."
+        "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
       },
       {
         "criterion": "Both mock platforms demonstrate native mock hits and upstream proxy forwarding with provenance.",
         "deferral": null,
-        "disposition": "not-executed",
-        "evidence_ids": [],
+        "disposition": "succeeded",
+        "evidence_ids": [
+          "EV-FINAL-HTTP"
+        ],
         "id": "AC03",
-        "reason": "Not executed by this tool."
+        "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
       },
       {
         "criterion": "Local management UI and configuration instructions make modes and requests observable.",
         "deferral": null,
-        "disposition": "not-executed",
-        "evidence_ids": [],
+        "disposition": "succeeded",
+        "evidence_ids": [
+          "EV-FINAL-UI"
+        ],
         "id": "AC04",
-        "reason": "Not executed by this tool."
+        "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
       },
       {
         "criterion": "Requirements and complete behavior/API/test specifications map to actual tests and runtime evidence.",
         "deferral": null,
-        "disposition": "not-executed",
-        "evidence_ids": [],
+        "disposition": "succeeded",
+        "evidence_ids": [
+          "EV-FINAL-COMPLIANCE"
+        ],
         "id": "AC05",
-        "reason": "Not executed by this tool."
+        "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
       },
       {
         "criterion": "Sol/Luna implementation evidence and parent review are retained without unsupported comparative claims.",
         "deferral": null,
-        "disposition": "not-executed",
-        "evidence_ids": [],
+        "disposition": "succeeded",
+        "evidence_ids": [
+          "EV-FINAL-COMPLIANCE"
+        ],
         "id": "AC06",
-        "reason": "Not executed by this tool."
+        "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
       }
     ],
     "decisions": [],
@@ -144,15 +157,92 @@
         "subject": "4763ada supplier and0946879 procurement",
         "summary": "All17 HTTP scenarios passed after fixed Microcks examples/default and sandbox Content-Length.",
         "task_id": "T005"
+      },
+      {
+        "basis": "caller-supplied",
+        "disposition": "succeeded",
+        "id": "EV-FINAL-SUPPLIER",
+        "observed_at": "2026-09-26T04:15:11.476896+00:00",
+        "reported_by": "root coordinator",
+        "source_refs": [
+          "FINAL-TESTS"
+        ],
+        "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+        "summary": "Actual final supplier containers: Sandbox2/2 real PostgreSQL and WireMock4/4 nativeHTTP passed; numeric equivalence, reset failure/cancellation/recovery covered.",
+        "task_id": null
+      },
+      {
+        "basis": "caller-supplied",
+        "disposition": "succeeded",
+        "id": "EV-FINAL-HTTP",
+        "observed_at": "2026-09-26T04:15:11.476896+00:00",
+        "reported_by": "root coordinator",
+        "source_refs": [
+          "FINAL-HTTP",
+          "FINAL-SUPPLEMENTAL"
+        ],
+        "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+        "summary": "Original17 and supplemental15 authentic HTTP cases passed; both native modes, full fixture identity, retained stock timeout/reconcile and both Procurement profiles.",
+        "task_id": null
+      },
+      {
+        "basis": "caller-supplied",
+        "disposition": "succeeded",
+        "id": "EV-FINAL-UI",
+        "observed_at": "2026-09-26T04:15:11.476896+00:00",
+        "reported_by": "root coordinator",
+        "source_refs": [
+          "FINAL-BROWSER"
+        ],
+        "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+        "summary": "All3 selected browser scenarios passed with actual control actions; Microcks nativeSave success and exactly3 operations/one sample each. Generic upstreamUI console error remains explicitly recorded.",
+        "task_id": null
+      },
+      {
+        "basis": "caller-supplied",
+        "disposition": "succeeded",
+        "id": "EV-FINAL-PROTECTED",
+        "observed_at": "2026-09-26T04:15:11.476896+00:00",
+        "reported_by": "root coordinator",
+        "source_refs": [
+          "FINAL-PROTECTED"
+        ],
+        "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+        "summary": "All9 protected observability container names/IDs/start times/statuses unchanged. Lab is retained running with hybrid and zero delay.",
+        "task_id": null
+      },
+      {
+        "basis": "caller-supplied",
+        "disposition": "failed",
+        "id": "EV-LEGACY-LOCATOR-LIMIT",
+        "observed_at": "2026-09-26T04:15:11.476896+00:00",
+        "reported_by": "root coordinator",
+        "source_refs": [
+          "LEGACY-LOCATOR-LIMIT"
+        ],
+        "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+        "summary": "Extra legacy validator fails because its index checker hardcodes discovery-root entrypoints instead of the selected external record store. Not a pass; no binding/tool rewrite.",
+        "task_id": null
+      },
+      {
+        "basis": "caller-supplied",
+        "disposition": "succeeded",
+        "id": "EV-FINAL-COMPLIANCE",
+        "observed_at": "2026-09-26T04:15:11.476896+00:00",
+        "reported_by": "root coordinator",
+        "source_refs": [
+          "FINAL-ACCEPTANCE",
+          "FINAL-MODEL-REVIEW",
+          "FINAL-EVIDENCE-MANIFEST",
+          "FINAL-FRAMEWORK-CHECK"
+        ],
+        "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+        "summary": "Parent reviewed27/27 selected scenarios and AC01-AC06; compliant-within-scope using real component/runtime/UI evidence with explicit reuse boundaries. Four unrelated sample skips, legacychecker limitation and upstreamUIconsole uncertainty remain disclosed; no owner acceptance/publication claimed.",
+        "task_id": null
       }
     ],
     "intent": "Deliver one owner-reviewable procurement and supplier integration laboratory, including native mock/proxy behavior, controls, specifications, actual validation and attributed GPT-6 Sol/Luna implementation.",
-    "next_action": {
-      "action": "Repair final UI script syntax, interrupted reset state and complete fixture matching; rerun affected native HTTP/browser acceptance.",
-      "condition": "Preserve passing unaffected component evidence and earlier failed observations in this workflow.",
-      "owner": "GPT-6 Luna worker and root reviewer",
-      "task_id": "T002"
-    },
+    "next_action": null,
     "references": [
       {
         "blocking": false,
@@ -241,6 +331,116 @@
         "schema": null,
         "sha256": null,
         "target": "artifacts/procurement-lab/http-contracts-repaired.json"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "FINAL-HTTP",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "bcf41254fc6c3317cae432b549cfac01916e20c23c0921054a5710560575936d",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-final.json"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "FINAL-SUPPLEMENTAL",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "3bba5dbe4e8db2a1917d03b1dd5f2891c3550b529a43f82b0c2b978a2f1023fe",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplemental-http.json"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "FINAL-BROWSER",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "248f71c9335a59ae834cabe2db3496da166496468c5f5b0103d86ccc9952736c",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/browser-verification.json"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "FINAL-TESTS",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "2c1787b2530ec076a850bb236f561a5ac05d63addeca002df6125f46fb000917",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results-summary.json"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "FINAL-PROTECTED",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "07271ab0831efde94eaed1f3fe597f00e8303011bbf93af129ddb27131712fae",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/observability-comparison.json"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "FINAL-ACCEPTANCE",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "9e4bbcbb618eea27247990a79d0bbb15e0c036573974b80900b183261cc962f5",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/acceptance-report.md"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "FINAL-MODEL-REVIEW",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "a25b4e9196b18c56954c6358564ea114ab3fbda481711e8133b275407cd80efd",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/review-and-model-observations.md"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "FINAL-EVIDENCE-MANIFEST",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "bb953f380111a742f4199726a1538686bd98a74ab8a73244b90423d7ded38b1d",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/manifest.json"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "LEGACY-LOCATOR-LIMIT",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "bb1ac36e416a5a62cf7244e99a6697efd62d48b9e5bba2385dc54dfefd5028df",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/legacy-locator-check.txt"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "FINAL-FRAMEWORK-CHECK",
+        "kind": "opaque",
+        "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "76791e74d7847be9b8f5800e5dc8dea87c6802a207889a5269ca4dbbc74787ed",
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/current-framework-check.json"
       }
     ],
     "scope": {
@@ -279,11 +479,15 @@
         "depends_on": [
           "T001"
         ],
-        "evidence_ids": [],
+        "evidence_ids": [
+          "EV-FINAL-SUPPLIER",
+          "EV-FINAL-HTTP",
+          "EV-FINAL-UI"
+        ],
         "id": "T002",
-        "reason": "",
-        "result": "",
-        "state": "active",
+        "reason": "Bounded supplier review repairs passed actual nativeHTTP/PG/browser verification.",
+        "result": "Real supplier sandbox, WireMock native control UI and Microcks artifacts implemented and verified.",
+        "state": "completed",
         "title": "Supplier and native mocks"
       },
       {
@@ -325,11 +529,15 @@
         "depends_on": [
           "T001"
         ],
-        "evidence_ids": [],
+        "evidence_ids": [
+          "EV-FINAL-HTTP",
+          "EV-FINAL-UI",
+          "EV-FINAL-PROTECTED"
+        ],
         "id": "T005",
-        "reason": "GPT-6 Sol reuses the Inventory task worktree for explicitly bounded Compose, solution and runbook preparation after committing T004 review repairs.",
-        "result": "",
-        "state": "active",
+        "reason": "Authorized Compose deployment, startup/import helpers and end-to-end scripts actually ran.",
+        "result": "Lab remains available with preserved data/protected observability; documented controls and provider routes verified.",
+        "state": "completed",
         "title": "Integrated lab operation"
       },
       {
@@ -342,11 +550,13 @@
           "T004",
           "T005"
         ],
-        "evidence_ids": [],
+        "evidence_ids": [
+          "EV-FINAL-COMPLIANCE"
+        ],
         "id": "T006",
-        "reason": "",
-        "result": "",
-        "state": "pending",
+        "reason": "All selected criteria covered and review repairs verified; owner review is outside this local delivery completion.",
+        "result": "27 scenario mappings,6 accepted criteria, actual evidence manifest and model observations retained.",
+        "state": "completed",
         "title": "Acceptance and parent review"
       }
     ],
@@ -1991,15 +2201,2129 @@
       },
       "reason": "Complete Procurement and Inventory implementation tasks from actual component and broker evidence; keep supplier UI/control review repair active.",
       "recorded_at": "2026-09-26T03:40:17.352151+00:00"
+    },
+    {
+      "from_revision": 10,
+      "operation": "checkpoint",
+      "previous_sha256": "f2680dc4d085a1d50ace1913f7a4a92ad22b99535a1c3fd9d880b72b5e2e41e0",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Purchase submission and supplier order idempotency/reconciliation follow the documented contract.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC01",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Physical partial receipts commit once and are eventually applied once in Inventory.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC02",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Both mock platforms demonstrate native mock hits and upstream proxy forwarding with provenance.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC03",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Local management UI and configuration instructions make modes and requests observable.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC04",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Requirements and complete behavior/API/test specifications map to actual tests and runtime evidence.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC05",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Sol/Luna implementation evidence and parent review are retained without unsupported comparative claims.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC06",
+              "reason": "Not executed by this tool."
+            }
+          ],
+          "decisions": [],
+          "evidence": [
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-SPEC-01",
+              "observed_at": "2026-09-26T02:48:33+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "SPEC-BASELINE"
+              ],
+              "subject": "requirements.md, architecture.md, specifications.md, test-specification.md version 1",
+              "summary": "Authored and self-reviewed the bounded specification baseline; proxy capabilities researched against official documentation.",
+              "task_id": "T001"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-FIRST-PG-FAIL",
+              "observed_at": "2026-09-26T03:14:14+00:00",
+              "reported_by": "root coordinator actual Docker execution",
+              "source_refs": [
+                "FIRST-PG-TRX"
+              ],
+              "subject": "Procurement source/tests 79437e8; parent build subject c757dfd; mqarchlab-procurement-first-delivery-tests:17; PostgreSQL16.15",
+              "summary": "First-delivery actual PostgreSQL test failed GoodsReceipt materialization: Npgsql returned DateTime for timestamptz, positional domain constructor requires DateTimeOffset. Twenty unit tests passed; one PG test failed; zero skips.",
+              "task_id": "T003"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-FIRST-HTTP",
+              "observed_at": "2026-09-26T03:25:59+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FIRST-HTTP"
+              ],
+              "subject": "abeedde Supplier; 4375495 deployed Procurement; c2e098c runner",
+              "summary": "Actual first HTTP run: 12 passed, 5 failed; Microcks dispatch/proxy repairs required.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-DIRECT-FLOW",
+              "observed_at": "2026-09-26T03:25:59+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "DIRECT-FLOW"
+              ],
+              "subject": "4375495 deployed Procurement and f4befe9 Inventory",
+              "summary": "Actual direct supplier acceptance did not change stock; receipts6+4 delivered once through Kafka, stock20->26->30.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-T003-PG",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-PROC-TRX"
+              ],
+              "subject": "0946879 Procurement source/tests",
+              "summary": "Procurement39 passed,0fail0skip including actualPG identity,receipt,precisionandquerysnapshot scenarios.",
+              "task_id": "T003"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-T004-PG-BROKER",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "INVENTORY-TRX",
+                "BROKER-RECOVERY",
+                "DIRECT-FLOW"
+              ],
+              "subject": "f4befe9 Inventory and deployedfirst Procurement4375495",
+              "summary": "Inventory64 passed0skip and actual Kafka receipt delivery/outage recovery produced one increment perReceiptId.",
+              "task_id": "T004"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-HTTP-REPAIRED",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "REPAIRED-HTTP"
+              ],
+              "subject": "4763ada supplier and0946879 procurement",
+              "summary": "All17 HTTP scenarios passed after fixed Microcks examples/default and sandbox Content-Length.",
+              "task_id": "T005"
+            }
+          ],
+          "intent": "Deliver one owner-reviewable procurement and supplier integration laboratory, including native mock/proxy behavior, controls, specifications, actual validation and attributed GPT-6 Sol/Luna implementation.",
+          "next_action": {
+            "action": "Repair final UI script syntax, interrupted reset state and complete fixture matching; rerun affected native HTTP/browser acceptance.",
+            "condition": "Preserve passing unaffected component evidence and earlier failed observations in this workflow.",
+            "owner": "GPT-6 Luna worker and root reviewer",
+            "task_id": "T002"
+          },
+          "references": [
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "SPEC-BASELINE",
+              "kind": "opaque",
+              "note": "Parent-authored requirements, architecture, production/entity/adapter and GWT formal-test specifications; no runtime pass.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FIRST-PG-TRX",
+              "kind": "opaque",
+              "note": "Actual Docker PostgreSQL run against Procurement first delivery 79437e8, integrated in subject c757dfd.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "a79c095cb989e6338f65d9044808a7b8e6b42d44d5712184ddd9ef411b9e3dd7",
+              "target": "artifacts/procurement-lab/first-procurement-tests/_39081a7221c7_2026-09-26_03_13_22_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FIRST-HTTP",
+              "kind": "opaque",
+              "note": "Actual first integrated HTTP run: Procurement/Sandbox/WireMock passed; Microcks M01-M05 failed.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/http-contracts-first.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "DIRECT-FLOW",
+              "kind": "opaque",
+              "note": "Actual direct purchase, 6+4 receipt, Kafka delivery and stock20->26->30 with replay stable.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/direct-flow.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-PROC-TRX",
+              "kind": "opaque",
+              "note": "39 passed including all10 real PostgreSQL scenarios,0 skipped.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/focused-final-results/_b8d927bdf806_2026-09-26_03_38_06_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "INVENTORY-TRX",
+              "kind": "opaque",
+              "note": "64 Inventory tests passed,0 skipped.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_41_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "BROKER-RECOVERY",
+              "kind": "opaque",
+              "note": "Actual Kafka outage/recovery with one receipt and stock30->33,matchingreplaystable.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/broker-recovery.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "REPAIRED-HTTP",
+              "kind": "opaque",
+              "note": "17 actual HTTP scenarios passed after repairs; subsequent review improvements remain active.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/http-contracts-repaired.json"
+            }
+          ],
+          "scope": {
+            "excluded": [
+              "Payments",
+              "Production deployment or credentials",
+              "Main merge, push, release and Issue closure before owner review"
+            ],
+            "included": [
+              "Procurement purchase and receipt lifecycle",
+              "SupplierSandbox.WebApi actual upstream",
+              "Inventory idempotent goods receipt",
+              "Microcks and WireMock.Net native mock/proxy controls",
+              "Requirements, specifications, verification and model evidence in one workflow"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+              "completion_condition": "Specification baseline is reviewable and implementation work packets are bounded.",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [
+                "EV-SPEC-01"
+              ],
+              "id": "T001",
+              "reason": "Specification baseline ready for bounded implementation.",
+              "result": "Four specification documents and Issue 17 scope retained.",
+              "state": "completed",
+              "title": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17."
+            },
+            {
+              "action": "Implement sandbox, native WireMock controls, Microcks contract artifacts and focused tests.",
+              "completion_condition": "Supplier/mocks meet S01, M01-M06, U01-U03 contracts.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [],
+              "id": "T002",
+              "reason": "",
+              "result": "",
+              "state": "active",
+              "title": "Supplier and native mocks"
+            },
+            {
+              "action": "Implement the procurement domain, use cases, persistence, HTTP supplier adapter, API and source outbox.",
+              "completion_condition": "Purchase and receipt contracts have focused tests and build.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-T003-PG"
+              ],
+              "id": "T003",
+              "reason": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+              "result": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+              "state": "completed",
+              "title": "Procurement lifecycle"
+            },
+            {
+              "action": "Implement durable receipt deduplication, stock/outbox transaction and Kafka inbound adapter.",
+              "completion_condition": "Receipt replay/concurrency/rollback contract passes focused tests.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-T004-PG-BROKER"
+              ],
+              "id": "T004",
+              "reason": "Inventory slice completed with actual PostgreSQL and Kafka receipt/recovery evidence; final integrated review remains T006.",
+              "result": "Inventory slice completed with actual PostgreSQL and Kafka receipt/recovery evidence; final integrated review remains T006.",
+              "state": "completed",
+              "title": "Inventory receiving"
+            },
+            {
+              "action": "Prepare Compose, solution integration, scripts and runbook against the specified module interfaces; perform deployment once worker commits are integrated.",
+              "completion_condition": "Integrated worker commits are deployed and the documented services and operation scripts work.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [],
+              "id": "T005",
+              "reason": "GPT-6 Sol reuses the Inventory task worktree for explicitly bounded Compose, solution and runbook preparation after committing T004 review repairs.",
+              "result": "",
+              "state": "active",
+              "title": "Integrated lab operation"
+            },
+            {
+              "action": "Run scoped acceptance, review code/UX and document model results and remaining owner review.",
+              "completion_condition": "Required scenario evidence and parent review are complete with truthful limitations.",
+              "deferral": null,
+              "depends_on": [
+                "T002",
+                "T003",
+                "T004",
+                "T005"
+              ],
+              "evidence_ids": [],
+              "id": "T006",
+              "reason": "",
+              "result": "",
+              "state": "pending",
+              "title": "Acceptance and parent review"
+            }
+          ],
+          "title": "2026-09-26-procurement-supplier-lab"
+        },
+        "retrospective": null,
+        "state": "active",
+        "state_reason": "Owner authorized the complete workflow and Issue 17 is bound."
+      },
+      "reason": "Complete supplier/integration tasks and activate acceptance in the same workflow; retain failures and unselected legacy compatibility limit.",
+      "recorded_at": "2026-09-26T04:15:12.715056+00:00"
+    },
+    {
+      "from_revision": 11,
+      "operation": "checkpoint",
+      "previous_sha256": "3932b306f0b61e6f1590385120dc9a92ab269bb46f48cf963b2a20893eba22cc",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Purchase submission and supplier order idempotency/reconciliation follow the documented contract.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC01",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Physical partial receipts commit once and are eventually applied once in Inventory.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC02",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Both mock platforms demonstrate native mock hits and upstream proxy forwarding with provenance.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC03",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Local management UI and configuration instructions make modes and requests observable.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC04",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Requirements and complete behavior/API/test specifications map to actual tests and runtime evidence.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC05",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Sol/Luna implementation evidence and parent review are retained without unsupported comparative claims.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC06",
+              "reason": "Not executed by this tool."
+            }
+          ],
+          "decisions": [],
+          "evidence": [
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-SPEC-01",
+              "observed_at": "2026-09-26T02:48:33+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "SPEC-BASELINE"
+              ],
+              "subject": "requirements.md, architecture.md, specifications.md, test-specification.md version 1",
+              "summary": "Authored and self-reviewed the bounded specification baseline; proxy capabilities researched against official documentation.",
+              "task_id": "T001"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-FIRST-PG-FAIL",
+              "observed_at": "2026-09-26T03:14:14+00:00",
+              "reported_by": "root coordinator actual Docker execution",
+              "source_refs": [
+                "FIRST-PG-TRX"
+              ],
+              "subject": "Procurement source/tests 79437e8; parent build subject c757dfd; mqarchlab-procurement-first-delivery-tests:17; PostgreSQL16.15",
+              "summary": "First-delivery actual PostgreSQL test failed GoodsReceipt materialization: Npgsql returned DateTime for timestamptz, positional domain constructor requires DateTimeOffset. Twenty unit tests passed; one PG test failed; zero skips.",
+              "task_id": "T003"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-FIRST-HTTP",
+              "observed_at": "2026-09-26T03:25:59+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FIRST-HTTP"
+              ],
+              "subject": "abeedde Supplier; 4375495 deployed Procurement; c2e098c runner",
+              "summary": "Actual first HTTP run: 12 passed, 5 failed; Microcks dispatch/proxy repairs required.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-DIRECT-FLOW",
+              "observed_at": "2026-09-26T03:25:59+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "DIRECT-FLOW"
+              ],
+              "subject": "4375495 deployed Procurement and f4befe9 Inventory",
+              "summary": "Actual direct supplier acceptance did not change stock; receipts6+4 delivered once through Kafka, stock20->26->30.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-T003-PG",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-PROC-TRX"
+              ],
+              "subject": "0946879 Procurement source/tests",
+              "summary": "Procurement39 passed,0fail0skip including actualPG identity,receipt,precisionandquerysnapshot scenarios.",
+              "task_id": "T003"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-T004-PG-BROKER",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "INVENTORY-TRX",
+                "BROKER-RECOVERY",
+                "DIRECT-FLOW"
+              ],
+              "subject": "f4befe9 Inventory and deployedfirst Procurement4375495",
+              "summary": "Inventory64 passed0skip and actual Kafka receipt delivery/outage recovery produced one increment perReceiptId.",
+              "task_id": "T004"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-HTTP-REPAIRED",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "REPAIRED-HTTP"
+              ],
+              "subject": "4763ada supplier and0946879 procurement",
+              "summary": "All17 HTTP scenarios passed after fixed Microcks examples/default and sandbox Content-Length.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-SUPPLIER",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-TESTS"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Actual final supplier containers: Sandbox2/2 real PostgreSQL and WireMock4/4 nativeHTTP passed; numeric equivalence, reset failure/cancellation/recovery covered.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-HTTP",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-HTTP",
+                "FINAL-SUPPLEMENTAL"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Original17 and supplemental15 authentic HTTP cases passed; both native modes, full fixture identity, retained stock timeout/reconcile and both Procurement profiles.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-UI",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-BROWSER"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "All3 selected browser scenarios passed with actual control actions; Microcks nativeSave success and exactly3 operations/one sample each. Generic upstreamUI console error remains explicitly recorded.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-PROTECTED",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-PROTECTED"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "All9 protected observability container names/IDs/start times/statuses unchanged. Lab is retained running with hybrid and zero delay.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-LEGACY-LOCATOR-LIMIT",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "LEGACY-LOCATOR-LIMIT"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Extra legacy validator fails because its index checker hardcodes discovery-root entrypoints instead of the selected external record store. Not a pass; no binding/tool rewrite.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-COMPLIANCE",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-ACCEPTANCE",
+                "FINAL-MODEL-REVIEW",
+                "FINAL-EVIDENCE-MANIFEST",
+                "FINAL-FRAMEWORK-CHECK"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Parent reviewed27/27 selected scenarios and AC01-AC06; compliant-within-scope using real component/runtime/UI evidence with explicit reuse boundaries. Four unrelated sample skips, legacychecker limitation and upstreamUIconsole uncertainty remain disclosed; no owner acceptance/publication claimed.",
+              "task_id": null
+            }
+          ],
+          "intent": "Deliver one owner-reviewable procurement and supplier integration laboratory, including native mock/proxy behavior, controls, specifications, actual validation and attributed GPT-6 Sol/Luna implementation.",
+          "next_action": {
+            "action": "Conclude the selected acceptance and retrospective from the retained actual evidence.",
+            "condition": "All required implementation and integration tasks are completed.",
+            "owner": "root coordinator",
+            "task_id": "T006"
+          },
+          "references": [
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "SPEC-BASELINE",
+              "kind": "opaque",
+              "note": "Parent-authored requirements, architecture, production/entity/adapter and GWT formal-test specifications; no runtime pass.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FIRST-PG-TRX",
+              "kind": "opaque",
+              "note": "Actual Docker PostgreSQL run against Procurement first delivery 79437e8, integrated in subject c757dfd.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "a79c095cb989e6338f65d9044808a7b8e6b42d44d5712184ddd9ef411b9e3dd7",
+              "target": "artifacts/procurement-lab/first-procurement-tests/_39081a7221c7_2026-09-26_03_13_22_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FIRST-HTTP",
+              "kind": "opaque",
+              "note": "Actual first integrated HTTP run: Procurement/Sandbox/WireMock passed; Microcks M01-M05 failed.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/http-contracts-first.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "DIRECT-FLOW",
+              "kind": "opaque",
+              "note": "Actual direct purchase, 6+4 receipt, Kafka delivery and stock20->26->30 with replay stable.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/direct-flow.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-PROC-TRX",
+              "kind": "opaque",
+              "note": "39 passed including all10 real PostgreSQL scenarios,0 skipped.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/focused-final-results/_b8d927bdf806_2026-09-26_03_38_06_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "INVENTORY-TRX",
+              "kind": "opaque",
+              "note": "64 Inventory tests passed,0 skipped.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_41_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "BROKER-RECOVERY",
+              "kind": "opaque",
+              "note": "Actual Kafka outage/recovery with one receipt and stock30->33,matchingreplaystable.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/broker-recovery.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "REPAIRED-HTTP",
+              "kind": "opaque",
+              "note": "17 actual HTTP scenarios passed after repairs; subsequent review improvements remain active.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/http-contracts-repaired.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-HTTP",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "bcf41254fc6c3317cae432b549cfac01916e20c23c0921054a5710560575936d",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-final.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-SUPPLEMENTAL",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "3bba5dbe4e8db2a1917d03b1dd5f2891c3550b529a43f82b0c2b978a2f1023fe",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplemental-http.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-BROWSER",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "248f71c9335a59ae834cabe2db3496da166496468c5f5b0103d86ccc9952736c",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/browser-verification.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-TESTS",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "2c1787b2530ec076a850bb236f561a5ac05d63addeca002df6125f46fb000917",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results-summary.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-PROTECTED",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "07271ab0831efde94eaed1f3fe597f00e8303011bbf93af129ddb27131712fae",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/observability-comparison.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-ACCEPTANCE",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "9e4bbcbb618eea27247990a79d0bbb15e0c036573974b80900b183261cc962f5",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/acceptance-report.md"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-MODEL-REVIEW",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "a25b4e9196b18c56954c6358564ea114ab3fbda481711e8133b275407cd80efd",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/review-and-model-observations.md"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-EVIDENCE-MANIFEST",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "bb953f380111a742f4199726a1538686bd98a74ab8a73244b90423d7ded38b1d",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/manifest.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "LEGACY-LOCATOR-LIMIT",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "bb1ac36e416a5a62cf7244e99a6697efd62d48b9e5bba2385dc54dfefd5028df",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/legacy-locator-check.txt"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-FRAMEWORK-CHECK",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "76791e74d7847be9b8f5800e5dc8dea87c6802a207889a5269ca4dbbc74787ed",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/current-framework-check.json"
+            }
+          ],
+          "scope": {
+            "excluded": [
+              "Payments",
+              "Production deployment or credentials",
+              "Main merge, push, release and Issue closure before owner review"
+            ],
+            "included": [
+              "Procurement purchase and receipt lifecycle",
+              "SupplierSandbox.WebApi actual upstream",
+              "Inventory idempotent goods receipt",
+              "Microcks and WireMock.Net native mock/proxy controls",
+              "Requirements, specifications, verification and model evidence in one workflow"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+              "completion_condition": "Specification baseline is reviewable and implementation work packets are bounded.",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [
+                "EV-SPEC-01"
+              ],
+              "id": "T001",
+              "reason": "Specification baseline ready for bounded implementation.",
+              "result": "Four specification documents and Issue 17 scope retained.",
+              "state": "completed",
+              "title": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17."
+            },
+            {
+              "action": "Implement sandbox, native WireMock controls, Microcks contract artifacts and focused tests.",
+              "completion_condition": "Supplier/mocks meet S01, M01-M06, U01-U03 contracts.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-FINAL-SUPPLIER",
+                "EV-FINAL-HTTP",
+                "EV-FINAL-UI"
+              ],
+              "id": "T002",
+              "reason": "Bounded supplier review repairs passed actual nativeHTTP/PG/browser verification.",
+              "result": "Real supplier sandbox, WireMock native control UI and Microcks artifacts implemented and verified.",
+              "state": "completed",
+              "title": "Supplier and native mocks"
+            },
+            {
+              "action": "Implement the procurement domain, use cases, persistence, HTTP supplier adapter, API and source outbox.",
+              "completion_condition": "Purchase and receipt contracts have focused tests and build.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-T003-PG"
+              ],
+              "id": "T003",
+              "reason": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+              "result": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+              "state": "completed",
+              "title": "Procurement lifecycle"
+            },
+            {
+              "action": "Implement durable receipt deduplication, stock/outbox transaction and Kafka inbound adapter.",
+              "completion_condition": "Receipt replay/concurrency/rollback contract passes focused tests.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-T004-PG-BROKER"
+              ],
+              "id": "T004",
+              "reason": "Inventory slice completed with actual PostgreSQL and Kafka receipt/recovery evidence; final integrated review remains T006.",
+              "result": "Inventory slice completed with actual PostgreSQL and Kafka receipt/recovery evidence; final integrated review remains T006.",
+              "state": "completed",
+              "title": "Inventory receiving"
+            },
+            {
+              "action": "Prepare Compose, solution integration, scripts and runbook against the specified module interfaces; perform deployment once worker commits are integrated.",
+              "completion_condition": "Integrated worker commits are deployed and the documented services and operation scripts work.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-FINAL-HTTP",
+                "EV-FINAL-UI",
+                "EV-FINAL-PROTECTED"
+              ],
+              "id": "T005",
+              "reason": "Authorized Compose deployment, startup/import helpers and end-to-end scripts actually ran.",
+              "result": "Lab remains available with preserved data/protected observability; documented controls and provider routes verified.",
+              "state": "completed",
+              "title": "Integrated lab operation"
+            },
+            {
+              "action": "Run scoped acceptance, review code/UX and document model results and remaining owner review.",
+              "completion_condition": "Required scenario evidence and parent review are complete with truthful limitations.",
+              "deferral": null,
+              "depends_on": [
+                "T002",
+                "T003",
+                "T004",
+                "T005"
+              ],
+              "evidence_ids": [],
+              "id": "T006",
+              "reason": "Dependencies completed; consolidate actual evidence and parent dispositions.",
+              "result": "",
+              "state": "active",
+              "title": "Acceptance and parent review"
+            }
+          ],
+          "title": "2026-09-26-procurement-supplier-lab"
+        },
+        "retrospective": null,
+        "state": "active",
+        "state_reason": "Owner authorized the complete workflow and Issue 17 is bound."
+      },
+      "reason": "Conclude all selected acceptance criteria using attributed authentic evidence; preserve all earlier failed observations.",
+      "recorded_at": "2026-09-26T04:15:14.513120+00:00"
+    },
+    {
+      "from_revision": 12,
+      "operation": "retrospect",
+      "previous_sha256": "ee2d607413ffd3575791d5e5f42ddece44a0ae936b06418dea86fa9708f7618b",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Purchase submission and supplier order idempotency/reconciliation follow the documented contract.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-HTTP",
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "AC01",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Physical partial receipts commit once and are eventually applied once in Inventory.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "AC02",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Both mock platforms demonstrate native mock hits and upstream proxy forwarding with provenance.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-HTTP"
+              ],
+              "id": "AC03",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Local management UI and configuration instructions make modes and requests observable.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-UI"
+              ],
+              "id": "AC04",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Requirements and complete behavior/API/test specifications map to actual tests and runtime evidence.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "AC05",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Sol/Luna implementation evidence and parent review are retained without unsupported comparative claims.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "AC06",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            }
+          ],
+          "decisions": [],
+          "evidence": [
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-SPEC-01",
+              "observed_at": "2026-09-26T02:48:33+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "SPEC-BASELINE"
+              ],
+              "subject": "requirements.md, architecture.md, specifications.md, test-specification.md version 1",
+              "summary": "Authored and self-reviewed the bounded specification baseline; proxy capabilities researched against official documentation.",
+              "task_id": "T001"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-FIRST-PG-FAIL",
+              "observed_at": "2026-09-26T03:14:14+00:00",
+              "reported_by": "root coordinator actual Docker execution",
+              "source_refs": [
+                "FIRST-PG-TRX"
+              ],
+              "subject": "Procurement source/tests 79437e8; parent build subject c757dfd; mqarchlab-procurement-first-delivery-tests:17; PostgreSQL16.15",
+              "summary": "First-delivery actual PostgreSQL test failed GoodsReceipt materialization: Npgsql returned DateTime for timestamptz, positional domain constructor requires DateTimeOffset. Twenty unit tests passed; one PG test failed; zero skips.",
+              "task_id": "T003"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-FIRST-HTTP",
+              "observed_at": "2026-09-26T03:25:59+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FIRST-HTTP"
+              ],
+              "subject": "abeedde Supplier; 4375495 deployed Procurement; c2e098c runner",
+              "summary": "Actual first HTTP run: 12 passed, 5 failed; Microcks dispatch/proxy repairs required.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-DIRECT-FLOW",
+              "observed_at": "2026-09-26T03:25:59+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "DIRECT-FLOW"
+              ],
+              "subject": "4375495 deployed Procurement and f4befe9 Inventory",
+              "summary": "Actual direct supplier acceptance did not change stock; receipts6+4 delivered once through Kafka, stock20->26->30.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-T003-PG",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-PROC-TRX"
+              ],
+              "subject": "0946879 Procurement source/tests",
+              "summary": "Procurement39 passed,0fail0skip including actualPG identity,receipt,precisionandquerysnapshot scenarios.",
+              "task_id": "T003"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-T004-PG-BROKER",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "INVENTORY-TRX",
+                "BROKER-RECOVERY",
+                "DIRECT-FLOW"
+              ],
+              "subject": "f4befe9 Inventory and deployedfirst Procurement4375495",
+              "summary": "Inventory64 passed0skip and actual Kafka receipt delivery/outage recovery produced one increment perReceiptId.",
+              "task_id": "T004"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-HTTP-REPAIRED",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "REPAIRED-HTTP"
+              ],
+              "subject": "4763ada supplier and0946879 procurement",
+              "summary": "All17 HTTP scenarios passed after fixed Microcks examples/default and sandbox Content-Length.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-SUPPLIER",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-TESTS"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Actual final supplier containers: Sandbox2/2 real PostgreSQL and WireMock4/4 nativeHTTP passed; numeric equivalence, reset failure/cancellation/recovery covered.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-HTTP",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-HTTP",
+                "FINAL-SUPPLEMENTAL"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Original17 and supplemental15 authentic HTTP cases passed; both native modes, full fixture identity, retained stock timeout/reconcile and both Procurement profiles.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-UI",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-BROWSER"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "All3 selected browser scenarios passed with actual control actions; Microcks nativeSave success and exactly3 operations/one sample each. Generic upstreamUI console error remains explicitly recorded.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-PROTECTED",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-PROTECTED"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "All9 protected observability container names/IDs/start times/statuses unchanged. Lab is retained running with hybrid and zero delay.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-LEGACY-LOCATOR-LIMIT",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "LEGACY-LOCATOR-LIMIT"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Extra legacy validator fails because its index checker hardcodes discovery-root entrypoints instead of the selected external record store. Not a pass; no binding/tool rewrite.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-COMPLIANCE",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-ACCEPTANCE",
+                "FINAL-MODEL-REVIEW",
+                "FINAL-EVIDENCE-MANIFEST",
+                "FINAL-FRAMEWORK-CHECK"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Parent reviewed27/27 selected scenarios and AC01-AC06; compliant-within-scope using real component/runtime/UI evidence with explicit reuse boundaries. Four unrelated sample skips, legacychecker limitation and upstreamUIconsole uncertainty remain disclosed; no owner acceptance/publication claimed.",
+              "task_id": null
+            }
+          ],
+          "intent": "Deliver one owner-reviewable procurement and supplier integration laboratory, including native mock/proxy behavior, controls, specifications, actual validation and attributed GPT-6 Sol/Luna implementation.",
+          "next_action": {
+            "action": "Record the bounded retrospective and complete local workflow delivery.",
+            "condition": "Actual scoped acceptance and review are complete; final owner review/publication remain separate.",
+            "owner": "root coordinator",
+            "task_id": "T006"
+          },
+          "references": [
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "SPEC-BASELINE",
+              "kind": "opaque",
+              "note": "Parent-authored requirements, architecture, production/entity/adapter and GWT formal-test specifications; no runtime pass.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FIRST-PG-TRX",
+              "kind": "opaque",
+              "note": "Actual Docker PostgreSQL run against Procurement first delivery 79437e8, integrated in subject c757dfd.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "a79c095cb989e6338f65d9044808a7b8e6b42d44d5712184ddd9ef411b9e3dd7",
+              "target": "artifacts/procurement-lab/first-procurement-tests/_39081a7221c7_2026-09-26_03_13_22_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FIRST-HTTP",
+              "kind": "opaque",
+              "note": "Actual first integrated HTTP run: Procurement/Sandbox/WireMock passed; Microcks M01-M05 failed.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/http-contracts-first.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "DIRECT-FLOW",
+              "kind": "opaque",
+              "note": "Actual direct purchase, 6+4 receipt, Kafka delivery and stock20->26->30 with replay stable.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/direct-flow.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-PROC-TRX",
+              "kind": "opaque",
+              "note": "39 passed including all10 real PostgreSQL scenarios,0 skipped.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/focused-final-results/_b8d927bdf806_2026-09-26_03_38_06_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "INVENTORY-TRX",
+              "kind": "opaque",
+              "note": "64 Inventory tests passed,0 skipped.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_41_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "BROKER-RECOVERY",
+              "kind": "opaque",
+              "note": "Actual Kafka outage/recovery with one receipt and stock30->33,matchingreplaystable.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/broker-recovery.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "REPAIRED-HTTP",
+              "kind": "opaque",
+              "note": "17 actual HTTP scenarios passed after repairs; subsequent review improvements remain active.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/http-contracts-repaired.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-HTTP",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "bcf41254fc6c3317cae432b549cfac01916e20c23c0921054a5710560575936d",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-final.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-SUPPLEMENTAL",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "3bba5dbe4e8db2a1917d03b1dd5f2891c3550b529a43f82b0c2b978a2f1023fe",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplemental-http.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-BROWSER",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "248f71c9335a59ae834cabe2db3496da166496468c5f5b0103d86ccc9952736c",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/browser-verification.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-TESTS",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "2c1787b2530ec076a850bb236f561a5ac05d63addeca002df6125f46fb000917",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results-summary.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-PROTECTED",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "07271ab0831efde94eaed1f3fe597f00e8303011bbf93af129ddb27131712fae",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/observability-comparison.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-ACCEPTANCE",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "9e4bbcbb618eea27247990a79d0bbb15e0c036573974b80900b183261cc962f5",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/acceptance-report.md"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-MODEL-REVIEW",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "a25b4e9196b18c56954c6358564ea114ab3fbda481711e8133b275407cd80efd",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/review-and-model-observations.md"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-EVIDENCE-MANIFEST",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "bb953f380111a742f4199726a1538686bd98a74ab8a73244b90423d7ded38b1d",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/manifest.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "LEGACY-LOCATOR-LIMIT",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "bb1ac36e416a5a62cf7244e99a6697efd62d48b9e5bba2385dc54dfefd5028df",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/legacy-locator-check.txt"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-FRAMEWORK-CHECK",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "76791e74d7847be9b8f5800e5dc8dea87c6802a207889a5269ca4dbbc74787ed",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/current-framework-check.json"
+            }
+          ],
+          "scope": {
+            "excluded": [
+              "Payments",
+              "Production deployment or credentials",
+              "Main merge, push, release and Issue closure before owner review"
+            ],
+            "included": [
+              "Procurement purchase and receipt lifecycle",
+              "SupplierSandbox.WebApi actual upstream",
+              "Inventory idempotent goods receipt",
+              "Microcks and WireMock.Net native mock/proxy controls",
+              "Requirements, specifications, verification and model evidence in one workflow"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+              "completion_condition": "Specification baseline is reviewable and implementation work packets are bounded.",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [
+                "EV-SPEC-01"
+              ],
+              "id": "T001",
+              "reason": "Specification baseline ready for bounded implementation.",
+              "result": "Four specification documents and Issue 17 scope retained.",
+              "state": "completed",
+              "title": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17."
+            },
+            {
+              "action": "Implement sandbox, native WireMock controls, Microcks contract artifacts and focused tests.",
+              "completion_condition": "Supplier/mocks meet S01, M01-M06, U01-U03 contracts.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-FINAL-SUPPLIER",
+                "EV-FINAL-HTTP",
+                "EV-FINAL-UI"
+              ],
+              "id": "T002",
+              "reason": "Bounded supplier review repairs passed actual nativeHTTP/PG/browser verification.",
+              "result": "Real supplier sandbox, WireMock native control UI and Microcks artifacts implemented and verified.",
+              "state": "completed",
+              "title": "Supplier and native mocks"
+            },
+            {
+              "action": "Implement the procurement domain, use cases, persistence, HTTP supplier adapter, API and source outbox.",
+              "completion_condition": "Purchase and receipt contracts have focused tests and build.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-T003-PG"
+              ],
+              "id": "T003",
+              "reason": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+              "result": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+              "state": "completed",
+              "title": "Procurement lifecycle"
+            },
+            {
+              "action": "Implement durable receipt deduplication, stock/outbox transaction and Kafka inbound adapter.",
+              "completion_condition": "Receipt replay/concurrency/rollback contract passes focused tests.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-T004-PG-BROKER"
+              ],
+              "id": "T004",
+              "reason": "Inventory slice completed with actual PostgreSQL and Kafka receipt/recovery evidence; final integrated review remains T006.",
+              "result": "Inventory slice completed with actual PostgreSQL and Kafka receipt/recovery evidence; final integrated review remains T006.",
+              "state": "completed",
+              "title": "Inventory receiving"
+            },
+            {
+              "action": "Prepare Compose, solution integration, scripts and runbook against the specified module interfaces; perform deployment once worker commits are integrated.",
+              "completion_condition": "Integrated worker commits are deployed and the documented services and operation scripts work.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-FINAL-HTTP",
+                "EV-FINAL-UI",
+                "EV-FINAL-PROTECTED"
+              ],
+              "id": "T005",
+              "reason": "Authorized Compose deployment, startup/import helpers and end-to-end scripts actually ran.",
+              "result": "Lab remains available with preserved data/protected observability; documented controls and provider routes verified.",
+              "state": "completed",
+              "title": "Integrated lab operation"
+            },
+            {
+              "action": "Run scoped acceptance, review code/UX and document model results and remaining owner review.",
+              "completion_condition": "Required scenario evidence and parent review are complete with truthful limitations.",
+              "deferral": null,
+              "depends_on": [
+                "T002",
+                "T003",
+                "T004",
+                "T005"
+              ],
+              "evidence_ids": [
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "T006",
+              "reason": "All selected criteria covered and review repairs verified; owner review is outside this local delivery completion.",
+              "result": "27 scenario mappings,6 accepted criteria, actual evidence manifest and model observations retained.",
+              "state": "completed",
+              "title": "Acceptance and parent review"
+            }
+          ],
+          "title": "2026-09-26-procurement-supplier-lab"
+        },
+        "retrospective": null,
+        "state": "active",
+        "state_reason": "Owner authorized the complete workflow and Issue 17 is bound."
+      },
+      "reason": "Task-specific findings and reproducible evidence are already retained; no new reusable rule/adoption or separate workflow is necessary or authorized.",
+      "recorded_at": "2026-09-26T04:15:15.730224+00:00"
+    },
+    {
+      "from_revision": 13,
+      "operation": "transition",
+      "previous_sha256": "5821252431aedf391a5538e7fdea450d35c79884c6110ac06f2a1c895156af6c",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Purchase submission and supplier order idempotency/reconciliation follow the documented contract.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-HTTP",
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "AC01",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Physical partial receipts commit once and are eventually applied once in Inventory.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "AC02",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Both mock platforms demonstrate native mock hits and upstream proxy forwarding with provenance.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-HTTP"
+              ],
+              "id": "AC03",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Local management UI and configuration instructions make modes and requests observable.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-UI"
+              ],
+              "id": "AC04",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Requirements and complete behavior/API/test specifications map to actual tests and runtime evidence.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "AC05",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            },
+            {
+              "criterion": "Sol/Luna implementation evidence and parent review are retained without unsupported comparative claims.",
+              "deferral": null,
+              "disposition": "succeeded",
+              "evidence_ids": [
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "AC06",
+              "reason": "Parent assessment within the explicit selected specification; exact observations and limits retained in acceptance-report.md."
+            }
+          ],
+          "decisions": [],
+          "evidence": [
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-SPEC-01",
+              "observed_at": "2026-09-26T02:48:33+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "SPEC-BASELINE"
+              ],
+              "subject": "requirements.md, architecture.md, specifications.md, test-specification.md version 1",
+              "summary": "Authored and self-reviewed the bounded specification baseline; proxy capabilities researched against official documentation.",
+              "task_id": "T001"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-FIRST-PG-FAIL",
+              "observed_at": "2026-09-26T03:14:14+00:00",
+              "reported_by": "root coordinator actual Docker execution",
+              "source_refs": [
+                "FIRST-PG-TRX"
+              ],
+              "subject": "Procurement source/tests 79437e8; parent build subject c757dfd; mqarchlab-procurement-first-delivery-tests:17; PostgreSQL16.15",
+              "summary": "First-delivery actual PostgreSQL test failed GoodsReceipt materialization: Npgsql returned DateTime for timestamptz, positional domain constructor requires DateTimeOffset. Twenty unit tests passed; one PG test failed; zero skips.",
+              "task_id": "T003"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-FIRST-HTTP",
+              "observed_at": "2026-09-26T03:25:59+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FIRST-HTTP"
+              ],
+              "subject": "abeedde Supplier; 4375495 deployed Procurement; c2e098c runner",
+              "summary": "Actual first HTTP run: 12 passed, 5 failed; Microcks dispatch/proxy repairs required.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-DIRECT-FLOW",
+              "observed_at": "2026-09-26T03:25:59+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "DIRECT-FLOW"
+              ],
+              "subject": "4375495 deployed Procurement and f4befe9 Inventory",
+              "summary": "Actual direct supplier acceptance did not change stock; receipts6+4 delivered once through Kafka, stock20->26->30.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-T003-PG",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-PROC-TRX"
+              ],
+              "subject": "0946879 Procurement source/tests",
+              "summary": "Procurement39 passed,0fail0skip including actualPG identity,receipt,precisionandquerysnapshot scenarios.",
+              "task_id": "T003"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-T004-PG-BROKER",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "INVENTORY-TRX",
+                "BROKER-RECOVERY",
+                "DIRECT-FLOW"
+              ],
+              "subject": "f4befe9 Inventory and deployedfirst Procurement4375495",
+              "summary": "Inventory64 passed0skip and actual Kafka receipt delivery/outage recovery produced one increment perReceiptId.",
+              "task_id": "T004"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-HTTP-REPAIRED",
+              "observed_at": "2026-09-26T03:40:16+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "REPAIRED-HTTP"
+              ],
+              "subject": "4763ada supplier and0946879 procurement",
+              "summary": "All17 HTTP scenarios passed after fixed Microcks examples/default and sandbox Content-Length.",
+              "task_id": "T005"
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-SUPPLIER",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-TESTS"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Actual final supplier containers: Sandbox2/2 real PostgreSQL and WireMock4/4 nativeHTTP passed; numeric equivalence, reset failure/cancellation/recovery covered.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-HTTP",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-HTTP",
+                "FINAL-SUPPLEMENTAL"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Original17 and supplemental15 authentic HTTP cases passed; both native modes, full fixture identity, retained stock timeout/reconcile and both Procurement profiles.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-UI",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-BROWSER"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "All3 selected browser scenarios passed with actual control actions; Microcks nativeSave success and exactly3 operations/one sample each. Generic upstreamUI console error remains explicitly recorded.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-PROTECTED",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-PROTECTED"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "All9 protected observability container names/IDs/start times/statuses unchanged. Lab is retained running with hybrid and zero delay.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "failed",
+              "id": "EV-LEGACY-LOCATOR-LIMIT",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "LEGACY-LOCATOR-LIMIT"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Extra legacy validator fails because its index checker hardcodes discovery-root entrypoints instead of the selected external record store. Not a pass; no binding/tool rewrite.",
+              "task_id": null
+            },
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-FINAL-COMPLIANCE",
+              "observed_at": "2026-09-26T04:15:11.476896+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "FINAL-ACCEPTANCE",
+                "FINAL-MODEL-REVIEW",
+                "FINAL-EVIDENCE-MANIFEST",
+                "FINAL-FRAMEWORK-CHECK"
+              ],
+              "subject": "Product runtime source35589b8; reused Procurement/Inventory/R08 subjects explicitly identified in acceptance-report.md.",
+              "summary": "Parent reviewed27/27 selected scenarios and AC01-AC06; compliant-within-scope using real component/runtime/UI evidence with explicit reuse boundaries. Four unrelated sample skips, legacychecker limitation and upstreamUIconsole uncertainty remain disclosed; no owner acceptance/publication claimed.",
+              "task_id": null
+            }
+          ],
+          "intent": "Deliver one owner-reviewable procurement and supplier integration laboratory, including native mock/proxy behavior, controls, specifications, actual validation and attributed GPT-6 Sol/Luna implementation.",
+          "next_action": {
+            "action": "Record the bounded retrospective and complete local workflow delivery.",
+            "condition": "Actual scoped acceptance and review are complete; final owner review/publication remain separate.",
+            "owner": "root coordinator",
+            "task_id": "T006"
+          },
+          "references": [
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "SPEC-BASELINE",
+              "kind": "opaque",
+              "note": "Parent-authored requirements, architecture, production/entity/adapter and GWT formal-test specifications; no runtime pass.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FIRST-PG-TRX",
+              "kind": "opaque",
+              "note": "Actual Docker PostgreSQL run against Procurement first delivery 79437e8, integrated in subject c757dfd.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "a79c095cb989e6338f65d9044808a7b8e6b42d44d5712184ddd9ef411b9e3dd7",
+              "target": "artifacts/procurement-lab/first-procurement-tests/_39081a7221c7_2026-09-26_03_13_22_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FIRST-HTTP",
+              "kind": "opaque",
+              "note": "Actual first integrated HTTP run: Procurement/Sandbox/WireMock passed; Microcks M01-M05 failed.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/http-contracts-first.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "DIRECT-FLOW",
+              "kind": "opaque",
+              "note": "Actual direct purchase, 6+4 receipt, Kafka delivery and stock20->26->30 with replay stable.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/direct-flow.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-PROC-TRX",
+              "kind": "opaque",
+              "note": "39 passed including all10 real PostgreSQL scenarios,0 skipped.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/focused-final-results/_b8d927bdf806_2026-09-26_03_38_06_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "INVENTORY-TRX",
+              "kind": "opaque",
+              "note": "64 Inventory tests passed,0 skipped.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_41_net10.0.trx"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "BROKER-RECOVERY",
+              "kind": "opaque",
+              "note": "Actual Kafka outage/recovery with one receipt and stock30->33,matchingreplaystable.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/broker-recovery.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "REPAIRED-HTTP",
+              "kind": "opaque",
+              "note": "17 actual HTTP scenarios passed after repairs; subsequent review improvements remain active.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": null,
+              "target": "artifacts/procurement-lab/http-contracts-repaired.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-HTTP",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "bcf41254fc6c3317cae432b549cfac01916e20c23c0921054a5710560575936d",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-final.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-SUPPLEMENTAL",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "3bba5dbe4e8db2a1917d03b1dd5f2891c3550b529a43f82b0c2b978a2f1023fe",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplemental-http.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-BROWSER",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "248f71c9335a59ae834cabe2db3496da166496468c5f5b0103d86ccc9952736c",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/browser-verification.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-TESTS",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "2c1787b2530ec076a850bb236f561a5ac05d63addeca002df6125f46fb000917",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results-summary.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-PROTECTED",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "07271ab0831efde94eaed1f3fe597f00e8303011bbf93af129ddb27131712fae",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/observability-comparison.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-ACCEPTANCE",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "9e4bbcbb618eea27247990a79d0bbb15e0c036573974b80900b183261cc962f5",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/acceptance-report.md"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-MODEL-REVIEW",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "a25b4e9196b18c56954c6358564ea114ab3fbda481711e8133b275407cd80efd",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/review-and-model-observations.md"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-EVIDENCE-MANIFEST",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "bb953f380111a742f4199726a1538686bd98a74ab8a73244b90423d7ded38b1d",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/manifest.json"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "LEGACY-LOCATOR-LIMIT",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "bb1ac36e416a5a62cf7244e99a6697efd62d48b9e5bba2385dc54dfefd5028df",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/legacy-locator-check.txt"
+            },
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "FINAL-FRAMEWORK-CHECK",
+              "kind": "opaque",
+              "note": "Retained actual evidence or attributed review; exact source/reuse limits are in acceptance-report.md.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "76791e74d7847be9b8f5800e5dc8dea87c6802a207889a5269ca4dbbc74787ed",
+              "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/evidence/current-framework-check.json"
+            }
+          ],
+          "scope": {
+            "excluded": [
+              "Payments",
+              "Production deployment or credentials",
+              "Main merge, push, release and Issue closure before owner review"
+            ],
+            "included": [
+              "Procurement purchase and receipt lifecycle",
+              "SupplierSandbox.WebApi actual upstream",
+              "Inventory idempotent goods receipt",
+              "Microcks and WireMock.Net native mock/proxy controls",
+              "Requirements, specifications, verification and model evidence in one workflow"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+              "completion_condition": "Specification baseline is reviewable and implementation work packets are bounded.",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [
+                "EV-SPEC-01"
+              ],
+              "id": "T001",
+              "reason": "Specification baseline ready for bounded implementation.",
+              "result": "Four specification documents and Issue 17 scope retained.",
+              "state": "completed",
+              "title": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17."
+            },
+            {
+              "action": "Implement sandbox, native WireMock controls, Microcks contract artifacts and focused tests.",
+              "completion_condition": "Supplier/mocks meet S01, M01-M06, U01-U03 contracts.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-FINAL-SUPPLIER",
+                "EV-FINAL-HTTP",
+                "EV-FINAL-UI"
+              ],
+              "id": "T002",
+              "reason": "Bounded supplier review repairs passed actual nativeHTTP/PG/browser verification.",
+              "result": "Real supplier sandbox, WireMock native control UI and Microcks artifacts implemented and verified.",
+              "state": "completed",
+              "title": "Supplier and native mocks"
+            },
+            {
+              "action": "Implement the procurement domain, use cases, persistence, HTTP supplier adapter, API and source outbox.",
+              "completion_condition": "Purchase and receipt contracts have focused tests and build.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-T003-PG"
+              ],
+              "id": "T003",
+              "reason": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+              "result": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+              "state": "completed",
+              "title": "Procurement lifecycle"
+            },
+            {
+              "action": "Implement durable receipt deduplication, stock/outbox transaction and Kafka inbound adapter.",
+              "completion_condition": "Receipt replay/concurrency/rollback contract passes focused tests.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-T004-PG-BROKER"
+              ],
+              "id": "T004",
+              "reason": "Inventory slice completed with actual PostgreSQL and Kafka receipt/recovery evidence; final integrated review remains T006.",
+              "result": "Inventory slice completed with actual PostgreSQL and Kafka receipt/recovery evidence; final integrated review remains T006.",
+              "state": "completed",
+              "title": "Inventory receiving"
+            },
+            {
+              "action": "Prepare Compose, solution integration, scripts and runbook against the specified module interfaces; perform deployment once worker commits are integrated.",
+              "completion_condition": "Integrated worker commits are deployed and the documented services and operation scripts work.",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [
+                "EV-FINAL-HTTP",
+                "EV-FINAL-UI",
+                "EV-FINAL-PROTECTED"
+              ],
+              "id": "T005",
+              "reason": "Authorized Compose deployment, startup/import helpers and end-to-end scripts actually ran.",
+              "result": "Lab remains available with preserved data/protected observability; documented controls and provider routes verified.",
+              "state": "completed",
+              "title": "Integrated lab operation"
+            },
+            {
+              "action": "Run scoped acceptance, review code/UX and document model results and remaining owner review.",
+              "completion_condition": "Required scenario evidence and parent review are complete with truthful limitations.",
+              "deferral": null,
+              "depends_on": [
+                "T002",
+                "T003",
+                "T004",
+                "T005"
+              ],
+              "evidence_ids": [
+                "EV-FINAL-COMPLIANCE"
+              ],
+              "id": "T006",
+              "reason": "All selected criteria covered and review repairs verified; owner review is outside this local delivery completion.",
+              "result": "27 scenario mappings,6 accepted criteria, actual evidence manifest and model observations retained.",
+              "state": "completed",
+              "title": "Acceptance and parent review"
+            }
+          ],
+          "title": "2026-09-26-procurement-supplier-lab"
+        },
+        "retrospective": {
+          "basis": "caller-supplied",
+          "candidates": [],
+          "content_sha256": "54ef526c4c99eb553ea6ebd502d89b470ea4b857da2ea8f3d3b235ce484564b4",
+          "outcome": "no-new-knowledge",
+          "rationale": "Task-specific findings and reproducible evidence are already retained; no new reusable rule/adoption or separate workflow is necessary or authorized.",
+          "recorded_at": "2026-09-26T04:15:15.730224+00:00",
+          "reflection": {
+            "actual_outcome": "Single workflow delivered Procurement, supplier sandbox, both native mock/proxy systems, UI, specs and actual acceptance; no push/main merge/PR/Issue closure.",
+            "limitations": "Task difficulty differs; no controlled model ranking or measured token/cost data. Four unrelated sample tests skipped; Microcks internal database is ephemeral; generic upstreamUI error and legacyvalidator external-store limitation retained. Owner final review remains pending.",
+            "observations": "Real database precision, native dispatcher matching and browser scripts exposed failures missed by local builds. Parent review and Sol/Luna assisted repairs are attributed separately from first deliveries."
+          }
+        },
+        "state": "active",
+        "state_reason": "Owner authorized the complete workflow and Issue 17 is bound."
+      },
+      "reason": "Authorized local implementation, selected validation and coordinator review are complete in this single workflow; owner review and external lifecycle operations remain separate.",
+      "recorded_at": "2026-09-26T04:15:16.970345+00:00"
     }
   ],
   "id": "wf-28ef2d2ffe044802a4ddba263d5e5471",
   "kind": "workflow",
   "owner": "project",
-  "retrospective": null,
-  "revision": 10,
+  "retrospective": {
+    "basis": "caller-supplied",
+    "candidates": [],
+    "content_sha256": "54ef526c4c99eb553ea6ebd502d89b470ea4b857da2ea8f3d3b235ce484564b4",
+    "outcome": "no-new-knowledge",
+    "rationale": "Task-specific findings and reproducible evidence are already retained; no new reusable rule/adoption or separate workflow is necessary or authorized.",
+    "recorded_at": "2026-09-26T04:15:15.730224+00:00",
+    "reflection": {
+      "actual_outcome": "Single workflow delivered Procurement, supplier sandbox, both native mock/proxy systems, UI, specs and actual acceptance; no push/main merge/PR/Issue closure.",
+      "limitations": "Task difficulty differs; no controlled model ranking or measured token/cost data. Four unrelated sample tests skipped; Microcks internal database is ephemeral; generic upstreamUI error and legacyvalidator external-store limitation retained. Owner final review remains pending.",
+      "observations": "Real database precision, native dispatcher matching and browser scripts exposed failures missed by local builds. Parent review and Sol/Luna assisted repairs are attributed separately from first deliveries."
+    }
+  },
+  "revision": 14,
   "schema_version": "1.0.0",
-  "state": "active",
-  "state_reason": "Owner authorized the complete workflow and Issue 17 is bound.",
-  "updated_at": "2026-09-26T03:40:17.352151+00:00"
+  "state": "completed",
+  "state_reason": "Authorized local implementation, selected validation and coordinator review are complete in this single workflow; owner review and external lifecycle operations remain separate.",
+  "updated_at": "2026-09-26T04:15:16.970345+00:00"
 }

@@ -1,0 +1,282 @@
+{
+  "status": 200,
+  "originHeader": null,
+  "body": {
+    "service": {
+      "id": "6ab73a4756041fb00d499928",
+      "metadata": {
+        "annotations": {},
+        "createdOn": 1790392903594,
+        "labels": {},
+        "lastUpdate": 1790392904796
+      },
+      "name": "Supplier API",
+      "operations": [
+        {
+          "dispatcher": "PROXY_FALLBACK",
+          "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"sku\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+          "method": "GET",
+          "name": "GET /supplier/catalog/{sku}",
+          "resourcePaths": [
+            "/supplier/catalog/{sku}"
+          ]
+        },
+        {
+          "dispatcher": "PROXY_FALLBACK",
+          "dispatcherRules": "{\"dispatcher\":\"JSON_BODY\",\"dispatcherRules\":\"{\\\"exp\\\":\\\"/clientRequestId\\\",\\\"operator\\\":\\\"equals\\\",\\\"cases\\\":{\\\"9d4c99da-6517-46b2-baa7-7e81106d3d34\\\":\\\"mock-order\\\"}}\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+          "method": "POST",
+          "name": "POST /supplier/orders",
+          "resourcePaths": [
+            "/supplier/orders"
+          ]
+        },
+        {
+          "dispatcher": "PROXY_FALLBACK",
+          "dispatcherRules": "{\"dispatcher\":\"URI_PARTS\",\"dispatcherRules\":\"clientRequestId\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}\n",
+          "method": "GET",
+          "name": "GET /supplier/orders/by-client-request/{clientRequestId}",
+          "resourcePaths": [
+            "/supplier/orders/by-client-request/{clientRequestId}"
+          ]
+        }
+      ],
+      "sourceArtifact": "supplier-hybrid.yaml",
+      "type": "REST",
+      "version": "1.0.0"
+    },
+    "messagesMap": {
+      "POST /supplier/orders": [
+        {
+          "type": "reqRespPair",
+          "request": {
+            "content": "{\"clientRequestId\":\"9d4c99da-6517-46b2-baa7-7e81106d3d34\",\"sku\":\"MOCK-001\",\"quantity\":2,\"unitPrice\":100.0,\"currency\":\"TWD\"}",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "values": [
+                  "application/json"
+                ]
+              },
+              {
+                "name": "Accept",
+                "values": [
+                  "application/json"
+                ]
+              }
+            ],
+            "id": "6ab73a4856041fb00d499954",
+            "name": "mock-order",
+            "operationId": "6ab73a4756041fb00d499928-POST /supplier/orders",
+            "responseId": "6ab73a4856041fb00d499953",
+            "sourceArtifact": "supplier-hybrid.yaml"
+          },
+          "response": {
+            "content": "{\"supplierOrderId\":\"00000000-0000-4000-8000-000000000017\",\"clientRequestId\":\"9d4c99da-6517-46b2-baa7-7e81106d3d34\",\"sku\":\"MOCK-001\",\"quantity\":2,\"unitPrice\":100.0,\"currency\":\"TWD\",\"status\":\"accepted\",\"origin\":\"microcks\"}",
+            "fault": false,
+            "id": "6ab73a4856041fb00d499953",
+            "mediaType": "application/json",
+            "name": "mock-order",
+            "operationId": "6ab73a4756041fb00d499928-POST /supplier/orders",
+            "sourceArtifact": "supplier-hybrid.yaml",
+            "status": "200"
+          },
+          "name": "mock-order"
+        },
+        {
+          "type": "reqRespPair",
+          "request": {
+            "content": "{\"clientRequestId\":\"9d4c99da-6517-46b2-baa7-7e81106d3d34\",\"sku\":\"MOCK-001\",\"quantity\":2,\"unitPrice\":100.0,\"currency\":\"TWD\"}",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "values": [
+                  "application/json"
+                ]
+              },
+              {
+                "name": "Accept",
+                "values": [
+                  "application/json"
+                ]
+              }
+            ],
+            "id": "6ab73a4856041fb00d49994a",
+            "name": "mock-order",
+            "operationId": "6ab73a4756041fb00d499928-POST /supplier/orders",
+            "responseId": "6ab73a4856041fb00d499949",
+            "sourceArtifact": "supplier-proxy.yaml"
+          },
+          "response": {
+            "content": "{\"supplierOrderId\":\"00000000-0000-4000-8000-000000000017\",\"clientRequestId\":\"9d4c99da-6517-46b2-baa7-7e81106d3d34\",\"sku\":\"MOCK-001\",\"quantity\":2,\"unitPrice\":100.0,\"currency\":\"TWD\",\"status\":\"accepted\",\"origin\":\"microcks\"}",
+            "fault": false,
+            "id": "6ab73a4856041fb00d499949",
+            "mediaType": "application/json",
+            "name": "mock-order",
+            "operationId": "6ab73a4756041fb00d499928-POST /supplier/orders",
+            "sourceArtifact": "supplier-proxy.yaml",
+            "status": "200"
+          },
+          "name": "mock-order"
+        },
+        {
+          "type": "reqRespPair",
+          "request": {
+            "content": "{\"clientRequestId\":\"9d4c99da-6517-46b2-baa7-7e81106d3d34\",\"sku\":\"MOCK-001\",\"quantity\":2,\"unitPrice\":100.0,\"currency\":\"TWD\"}",
+            "headers": [
+              {
+                "name": "Content-Type",
+                "values": [
+                  "application/json"
+                ]
+              },
+              {
+                "name": "Accept",
+                "values": [
+                  "application/json"
+                ]
+              }
+            ],
+            "id": "6ab73a4856041fb00d49994f",
+            "name": "mock-order",
+            "operationId": "6ab73a4756041fb00d499928-POST /supplier/orders",
+            "responseId": "6ab73a4856041fb00d49994e",
+            "sourceArtifact": "supplier-mock.yaml"
+          },
+          "response": {
+            "content": "{\"supplierOrderId\":\"00000000-0000-4000-8000-000000000017\",\"clientRequestId\":\"9d4c99da-6517-46b2-baa7-7e81106d3d34\",\"sku\":\"MOCK-001\",\"quantity\":2,\"unitPrice\":100.0,\"currency\":\"TWD\",\"status\":\"accepted\",\"origin\":\"microcks\"}",
+            "fault": false,
+            "id": "6ab73a4856041fb00d49994e",
+            "mediaType": "application/json",
+            "name": "mock-order",
+            "operationId": "6ab73a4756041fb00d499928-POST /supplier/orders",
+            "sourceArtifact": "supplier-mock.yaml",
+            "status": "200"
+          },
+          "name": "mock-order"
+        }
+      ],
+      "GET /supplier/catalog/{sku}": [
+        {
+          "type": "reqRespPair",
+          "request": {
+            "headers": [
+              {
+                "name": "Accept",
+                "values": [
+                  "application/json"
+                ]
+              }
+            ],
+            "id": "6ab73a4856041fb00d499952",
+            "name": "MOCK-001",
+            "operationId": "6ab73a4756041fb00d499928-GET /supplier/catalog/{sku}",
+            "responseId": "6ab73a4856041fb00d499951",
+            "sourceArtifact": "supplier-hybrid.yaml"
+          },
+          "response": {
+            "content": "{\"sku\":\"MOCK-001\",\"name\":\"Microcks fixture product\",\"unitPrice\":100.0,\"currency\":\"TWD\",\"origin\":\"microcks\"}",
+            "dispatchCriteria": "",
+            "fault": false,
+            "id": "6ab73a4856041fb00d499951",
+            "mediaType": "application/json",
+            "name": "MOCK-001",
+            "operationId": "6ab73a4756041fb00d499928-GET /supplier/catalog/{sku}",
+            "sourceArtifact": "supplier-hybrid.yaml",
+            "status": "200"
+          },
+          "name": "MOCK-001"
+        },
+        {
+          "type": "reqRespPair",
+          "request": {
+            "headers": [
+              {
+                "name": "Accept",
+                "values": [
+                  "application/json"
+                ]
+              }
+            ],
+            "id": "6ab73a4856041fb00d499948",
+            "name": "MOCK-001",
+            "operationId": "6ab73a4756041fb00d499928-GET /supplier/catalog/{sku}",
+            "responseId": "6ab73a4856041fb00d499947",
+            "sourceArtifact": "supplier-proxy.yaml"
+          },
+          "response": {
+            "content": "{\"sku\":\"MOCK-001\",\"name\":\"Microcks fixture product\",\"unitPrice\":100.0,\"currency\":\"TWD\",\"origin\":\"microcks\"}",
+            "fault": false,
+            "id": "6ab73a4856041fb00d499947",
+            "mediaType": "application/json",
+            "name": "MOCK-001",
+            "operationId": "6ab73a4756041fb00d499928-GET /supplier/catalog/{sku}",
+            "sourceArtifact": "supplier-proxy.yaml",
+            "status": "200"
+          },
+          "name": "MOCK-001"
+        }
+      ],
+      "GET /supplier/orders/by-client-request/{clientRequestId}": [
+        {
+          "type": "reqRespPair",
+          "request": {
+            "headers": [
+              {
+                "name": "Accept",
+                "values": [
+                  "application/json"
+                ]
+              }
+            ],
+            "id": "6ab73a4856041fb00d499956",
+            "name": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "operationId": "6ab73a4756041fb00d499928-GET /supplier/orders/by-client-request/{clientRequestId}",
+            "responseId": "6ab73a4856041fb00d499955",
+            "sourceArtifact": "supplier-hybrid.yaml"
+          },
+          "response": {
+            "content": "{\"supplierOrderId\":\"00000000-0000-4000-8000-000000000017\",\"clientRequestId\":\"9d4c99da-6517-46b2-baa7-7e81106d3d34\",\"sku\":\"MOCK-001\",\"quantity\":2,\"unitPrice\":100.0,\"currency\":\"TWD\",\"status\":\"accepted\",\"origin\":\"microcks\"}",
+            "dispatchCriteria": "",
+            "fault": false,
+            "id": "6ab73a4856041fb00d499955",
+            "mediaType": "application/json",
+            "name": "9d4c99da-6517-46b2-baa7-7e81106d3d34",
+            "operationId": "6ab73a4756041fb00d499928-GET /supplier/orders/by-client-request/{clientRequestId}",
+            "sourceArtifact": "supplier-hybrid.yaml",
+            "status": "200"
+          },
+          "name": "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+        },
+        {
+          "type": "reqRespPair",
+          "request": {
+            "headers": [
+              {
+                "name": "Accept",
+                "values": [
+                  "application/json"
+                ]
+              }
+            ],
+            "id": "6ab73a4856041fb00d49994c",
+            "name": "mock-order",
+            "operationId": "6ab73a4756041fb00d499928-GET /supplier/orders/by-client-request/{clientRequestId}",
+            "responseId": "6ab73a4856041fb00d49994b",
+            "sourceArtifact": "supplier-proxy.yaml"
+          },
+          "response": {
+            "content": "{\"supplierOrderId\":\"00000000-0000-4000-8000-000000000017\",\"clientRequestId\":\"9d4c99da-6517-46b2-baa7-7e81106d3d34\",\"sku\":\"MOCK-001\",\"quantity\":2,\"unitPrice\":100.0,\"currency\":\"TWD\",\"status\":\"accepted\",\"origin\":\"microcks\"}",
+            "fault": false,
+            "id": "6ab73a4856041fb00d49994b",
+            "mediaType": "application/json",
+            "name": "mock-order",
+            "operationId": "6ab73a4756041fb00d499928-GET /supplier/orders/by-client-request/{clientRequestId}",
+            "sourceArtifact": "supplier-proxy.yaml",
+            "status": "200"
+          },
+          "name": "mock-order"
+        }
+      ]
+    }
+  }
+}

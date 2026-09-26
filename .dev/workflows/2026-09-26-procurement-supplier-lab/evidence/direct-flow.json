@@ -1,0 +1,12 @@
+{
+  "observedAt": "2026-09-26T03:24:23.7785705+00:00",
+  "outcome": "passed",
+  "productId": "d6de1326-d34a-480d-8f7d-5dd80ced1254",
+  "clientRequestId": "30c6dfe2-4d09-407e-9655-d32b77924099",
+  "purchaseOrderId": "357a9b2a-0278-4f67-932f-8c56b069679c",
+  "firstReceiptId": "38e57bde-d523-4b83-b7a8-4397ec646a9a",
+  "secondReceiptId": "34173413-61b4-438e-b5c5-70607b61ae02",
+  "firstReceiptReplayStatus": 200,
+  "initialStock": 20,
+  "finalStock": 30
+}

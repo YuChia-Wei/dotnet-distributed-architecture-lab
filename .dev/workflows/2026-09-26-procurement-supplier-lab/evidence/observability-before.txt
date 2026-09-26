@@ -1,0 +1,9 @@
+/ai-collaboration-observability-otel-collector-1|8e75af7f59ebe8e4e105bc9e472e209611450711bf0221ff1e10a346a1098595|2026-09-24T23:30:17.30893085Z|running
+/ai-collaboration-observability-source-archive-1|f9693a96eeba1438cdb8fcee6439291cbdc6a34d38279b238b89869586053837|2026-09-24T23:30:17.286351953Z|running
+/ai-collaboration-observability-source-storage-init-1|4a2ee937b8e0e43abc29896e1da35ea961896ad4e4c8296bccd85bcaa690f91a|2026-09-22T23:30:55.269089914Z|exited
+/ai-collaboration-observability-grafana-1|50bb5e456daf71cc8b2469a7df18717248260d8bc1d8a07ed0a65c1a8979e304|2026-09-24T23:30:17.315383755Z|running
+/ai-collaboration-observability-prometheus-1|edbba7b102de66dc7f4e4b431cf207ada2fbadaf719b0ab91d93005aa86e39d5|2026-09-24T23:30:17.310766252Z|running
+/ai-collaboration-observability-loki-1|aca6026fa970ed8e5b18e3e722a15670e51a1496f3f8e22f6cc9c013fb787343|2026-09-24T23:30:17.291711966Z|running
+/ai-collaboration-observability-tempo-1|1e4709bbe8b2105ef42f3e0466261d27d665a5c3c130daca309f443d89317029|2026-09-24T23:30:17.312740125Z|running
+/ai-collaboration-observability-postgres-1|1a505e1bbd94a8073324b467fc355e757b3e0a7ad04ac7e3c5795f1c1c184a60|2026-09-24T23:30:17.282861552Z|running
+/ai-collaboration-observability-phoenix-1|acedb1ba66af0ffe23fde5a8c85e2412682d45a47e257f40198d5c3299609237|2026-09-24T23:30:17.317264844Z|running

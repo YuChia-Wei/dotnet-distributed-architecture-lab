@@ -1,0 +1,7 @@
+{
+  "outcome": "failed",
+  "checks_completed": {},
+  "diagnostic": "pinned bytes differ: .dev/ARCHITECTURE.md",
+  "independent_review": "not-established",
+  "activation": "blocked"
+}
