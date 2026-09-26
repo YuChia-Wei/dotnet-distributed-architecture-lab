@@ -10,7 +10,7 @@ internal static class InventoryOutboxWriter
     internal static readonly JsonSerializerOptions SerializerOptions = new() { PropertyNameCaseInsensitive = true };
 
     /// <summary>在呼叫端擁有的交易內儲存穩定訊息識別；已完成的預留重播不會再次呼叫此方法。</summary>
-    public static Task StageAsync(InventoryDbContext context, InventoryOutboxMessage message, CancellationToken cancellationToken)
+    public static Task<int> StageAsync(InventoryDbContext context, InventoryOutboxMessage message, CancellationToken cancellationToken)
     {
         var messageType = message.IntegrationEvent.GetType().Name;
         var data = JsonSerializer.Serialize(message.IntegrationEvent, message.IntegrationEvent.GetType(), SerializerOptions);

@@ -3,6 +3,9 @@
 using Confluent.Kafka.Extensions.OpenTelemetry;
 using Lab.BuildingBlocks.Integrations.Configuration;
 using InventoryControl.Consumer.Messaging;
+using InventoryControl.Applications;
+using InventoryControl.Applications.Receipts;
+using InventoryControl.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +14,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Wolverine;
 using Wolverine.Kafka;
+using Wolverine.Postgresql;
 using Wolverine.RabbitMQ;
 
 var configuration = new ConfigurationManager()
@@ -22,6 +26,11 @@ var messaging = MessagingTransportOptions.FromConfiguration(configuration);
 var builder = Host.CreateDefaultBuilder(args)
                   .ConfigureServices((ctx, services) =>
                   {
+                      services.AddApplicationServices();
+                      if (messaging.Profile != MessagingTransportProfile.InMemory)
+                      {
+                          services.AddInfrastructureServices(ctx.Configuration);
+                      }
                       services.AddOpenTelemetry()
                               .WithLogging(loggerProviderBuilder =>
                               {
@@ -65,14 +74,18 @@ var builder = Host.CreateDefaultBuilder(args)
                       }
                       else if (messaging.Profile == MessagingTransportProfile.Kafka)
                       {
+                          ConfigurePostgresqlPersistence(opts, configuration);
                           opts.UseKafka(messaging.GetRequiredKafkaConnectionString())
                               .AutoProvision();
 
                           opts.ListenToKafkaTopic("orders.integration.events")
                               .UseDurableInbox();
+                          opts.ListenToKafkaTopic("procurement.integration.events")
+                              .UseDurableInbox();
                       }
                       else
                       {
+                          ConfigurePostgresqlPersistence(opts, configuration);
                           opts.UseRabbitMq(messaging.GetRequiredRabbitMqUri())
                               .AutoProvision();
 
@@ -85,3 +98,11 @@ var builder = Host.CreateDefaultBuilder(args)
                   });
 
 await builder.RunConsoleAsync(); // Ctrl+C 可優雅關閉
+
+static void ConfigurePostgresqlPersistence(WolverineOptions options, IConfiguration configuration)
+{
+    var connectionString = configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is required for durable Inventory receipt delivery.");
+    options.PersistMessagesWithPostgresql(connectionString, "wolverine_messages");
+    options.CodeGeneration.AlwaysUseServiceLocationFor<IApplyGoodsReceiptUseCase>();
+}
