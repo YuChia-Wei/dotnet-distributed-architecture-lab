@@ -93,6 +93,15 @@ Microcks 使用自己的 UI。從 `samples/SupplierMock/microcks/` 擇一匯入 
 docker compose @compose run --rm --no-deps regression-tests
 ```
 
+若要留下採購與兩套原生 mock/proxy 的 HTTP 契約證據，可在這些服務就緒後執行以下標準函式庫腳本。它使用固定本機 port、隨機測試識別與文件化的 `MOCK-001` fixture，並逐情境記錄狀態碼、回應、供應商 request journal 前後值及 cleanup 結果。它會切換 WireMock/Microcks 模式、設定並重設 sandbox 延遲；不操作 Docker 或清除資料。失敗時傳回非零狀態，JSON 仍保存已觀察的結果。首次實際執行前，檢查現場服務是否與本文件設定一致。
+
+```powershell
+python ./scripts/procurement-lab/test_contracts.py `
+  --output 'artifacts/procurement-lab/http-contracts.json'
+```
+
+腳本的 `P02/P03/P04/P07`、`S01` 與每套引擎的 `M01`–`M06` 結果只代表當次實際 HTTP 觀察；Receipt/Kafka 停機恢復、PostgreSQL 查驗與原生 UI 仍須另外驗收。`M06` 記錄 mock-only 未命中與未知路徑的實際狀態/內容，僅要求 sandbox request journal 不增加。
+
 當 Kafka 停止時，新增收貨應保留 Procurement source outbox 記錄；重新啟動 Kafka 後，同一 ReceiptId 最終只增加一次庫存。只停止本專案的 Kafka 服務並記錄停機前後 stock、兩邊 outbox/receipt 表與事件 ID：
 
 ```powershell
