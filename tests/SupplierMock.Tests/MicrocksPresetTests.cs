@@ -1,29 +1,26 @@
 using System.Net;
-using System.Text.Json;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 
-public sealed class MicrocksPresetTests : IAsyncLifetime
+public sealed class MicrocksPresetTests : IDisposable
 {
-    private WebApplication? native;
-    private HttpClient? client;
-    private MicrocksPresetController? controller;
-    private readonly List<string> uploadedNames = [];
-    private string nativeMode = "unconfigured";
-    private bool rejectUpload;
-    private int uploads;
+    private readonly NativeMicrocksHandler native = new();
+    private readonly HttpClient client;
+    private readonly MicrocksPresetController controller;
+
+    public MicrocksPresetTests()
+    {
+        client = new HttpClient(native) { BaseAddress = new Uri("http://microcks:8080/"), Timeout = TimeSpan.FromSeconds(35) };
+        controller = new MicrocksPresetController(client, Path.Combine(AppContext.BaseDirectory, "microcks"));
+    }
 
     [Fact]
     [Trait("Scenario", "M02-invalid-mode")]
     public async Task Given_invalid_mode_When_checked_Then_no_native_upload_occurs()
     {
-        await GivenNativeMicrocksAsync();
+        GivenUnconfiguredNativeService();
         var valid = MicrocksPresetController.IsValidMode("http://evil.test/");
-        var failure = await Record.ExceptionAsync(() => controller!.ChangeAsync("../proxy", TestContext.Current.CancellationToken));
+        var failure = await Record.ExceptionAsync(() => controller.ChangeAsync("../proxy", TestContext.Current.CancellationToken));
         ThenInvalidModeIsRejectedWithoutUpload(valid, failure);
     }
 
@@ -31,10 +28,10 @@ public sealed class MicrocksPresetTests : IAsyncLifetime
     [Trait("Scenario", "M02-unconfigured-custom")]
     public async Task Given_unconfigured_or_native_custom_service_When_state_is_read_Then_mode_is_not_claimed()
     {
-        await GivenNativeMicrocksAsync();
+        GivenUnconfiguredNativeService();
         var unconfigured = await WhenReadingStateAsync();
         ThenUnconfiguredHasNoMode(unconfigured);
-        nativeMode = "custom";
+        GivenExternallyEditedNativeService();
         var custom = await WhenReadingStateAsync();
         ThenCustomHasNoMode(custom);
     }
@@ -43,10 +40,10 @@ public sealed class MicrocksPresetTests : IAsyncLifetime
     [Trait("Scenario", "M02-proxy-readback")]
     public async Task Given_native_service_When_proxy_preset_is_uploaded_Then_filename_and_all_dispatchers_are_verified()
     {
-        await GivenNativeMicrocksAsync();
+        GivenUnconfiguredNativeService();
         var selected = await WhenSelectingProxyAsync();
-        ThenProxyReadbackMatchesNative(selected);
-        nativeMode = "custom";
+        ThenProxyReadbackMatchesNative(selected, 1);
+        GivenExternallyEditedNativeService();
         var externalEdit = await WhenReadingStateAsync();
         ThenCustomHasNoMode(externalEdit);
     }
@@ -55,64 +52,46 @@ public sealed class MicrocksPresetTests : IAsyncLifetime
     [Trait("Scenario", "M02-upstream-failure")]
     public async Task Given_failed_native_upload_When_selecting_proxy_Then_failed_state_allows_explicit_retry()
     {
-        await GivenNativeMicrocksAsync();
-        rejectUpload = true;
+        GivenRejectedNativeUpload();
         var failure = await Record.ExceptionAsync(WhenSelectingProxyAsync);
         var failedState = await WhenReadingStateAsync();
         ThenFailureIsTruthful(failure, failedState);
-        rejectUpload = false;
+        GivenNativeUploadRecovered();
         var recovered = await WhenSelectingProxyAsync();
-        ThenProxyReadbackMatchesNative(recovered);
+        ThenProxyReadbackMatchesNative(recovered, 2);
     }
 
-    private async Task GivenNativeMicrocksAsync()
+    [Theory]
+    [InlineData("malformed-service")]
+    [InlineData("malformed-operation")]
+    [Trait("Scenario", "M02-malformed-native")]
+    public async Task Given_malformed_native_json_When_reading_or_switching_Then_no_mode_is_claimed_and_failure_is_bounded(string shape)
     {
-        var builder = WebApplication.CreateBuilder();
-        builder.WebHost.UseUrls("http://127.0.0.1:0");
-        native = builder.Build();
-        native.MapGet("/api/services", () => nativeMode switch
-        {
-            "unconfigured" => Results.Json(Array.Empty<object>()),
-            "proxy" => Results.Json(new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = ProxyOperations() } }),
-            _ => Results.Json(new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = new[]
-            {
-                new { name = "GET /supplier/catalog/{sku}", method = "GET", dispatcher = "PROXY", dispatcherRules = "http://changed-upstream:8080/" }
-            } } })
-        });
-        native.MapPost("/api/artifact/upload", async (HttpRequest request) =>
-        {
-            uploads++;
-            if (rejectUpload) return Results.StatusCode(503);
-            var form = await request.ReadFormAsync();
-            var file = Assert.Single(form.Files);
-            uploadedNames.Add(file.FileName);
-            using var reader = new StreamReader(file.OpenReadStream());
-            var artifact = await reader.ReadToEndAsync();
-            Assert.Contains("Supplier API", artifact);
-            nativeMode = artifact.Contains("proxy each imported operation", StringComparison.Ordinal) ? "proxy" : "custom";
-            return Results.Ok(new { imported = true });
-        });
-        await native.StartAsync();
-        var address = native.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses.Single();
-        client = new HttpClient { BaseAddress = new Uri(address), Timeout = TimeSpan.FromSeconds(35) };
-        controller = new MicrocksPresetController(client, Path.Combine(AppContext.BaseDirectory, "microcks"));
+        GivenMalformedNativeService(shape);
+        var state = await WhenReadingStateAsync();
+        var failure = await Record.ExceptionAsync(WhenSelectingProxyAsync);
+        var afterFailure = await WhenReadingStateAsync();
+        ThenMalformedNativeStateIsUnavailable(state, failure, afterFailure);
     }
 
-    private static object[] ProxyOperations() =>
-    [
-        new { name = "GET /supplier/catalog/{sku}", method = "GET", dispatcher = "PROXY", dispatcherRules = "http://supplier-sandbox:8080/" },
-        new { name = "POST /supplier/orders", method = "POST", dispatcher = "PROXY", dispatcherRules = "http://supplier-sandbox:8080/" },
-        new { name = "GET /supplier/orders/by-client-request/{clientRequestId}", method = "GET", dispatcher = "PROXY", dispatcherRules = "http://supplier-sandbox:8080/" }
-    ];
+    private void GivenUnconfiguredNativeService() => native.Mode = "unconfigured";
+    private void GivenExternallyEditedNativeService() => native.Mode = "custom";
+    private void GivenRejectedNativeUpload() => native.RejectUpload = true;
+    private void GivenNativeUploadRecovered() => native.RejectUpload = false;
+    private void GivenMalformedNativeService(string shape)
+    {
+        native.Mode = shape;
+        native.PreserveMalformedReadbackAfterUpload = true;
+    }
 
-    private Task<MicrocksState> WhenReadingStateAsync() => controller!.GetStateAsync();
-    private Task<MicrocksState> WhenSelectingProxyAsync() => controller!.ChangeAsync("proxy");
+    private Task<MicrocksState> WhenReadingStateAsync() => controller.GetStateAsync(TestContext.Current.CancellationToken);
+    private Task<MicrocksState> WhenSelectingProxyAsync() => controller.ChangeAsync("proxy", TestContext.Current.CancellationToken);
 
     private void ThenInvalidModeIsRejectedWithoutUpload(bool valid, Exception? failure)
     {
         Assert.False(valid);
         Assert.IsType<ArgumentException>(failure);
-        Assert.Equal(0, uploads);
+        Assert.Equal(0, native.UploadCount);
     }
 
     private static void ThenUnconfiguredHasNoMode(MicrocksState state)
@@ -130,13 +109,14 @@ public sealed class MicrocksPresetTests : IAsyncLifetime
         Assert.NotEmpty(state.Operations);
     }
 
-    private void ThenProxyReadbackMatchesNative(MicrocksState state)
+    private void ThenProxyReadbackMatchesNative(MicrocksState state, int expectedUploads)
     {
         Assert.Equal("ready", state.Status);
         Assert.Equal("proxy", state.Mode);
         Assert.Equal("supplier-1", state.ServiceId);
         Assert.Equal(3, state.Operations.Count);
-        Assert.Equal("supplier-api.yaml", Assert.Single(uploadedNames));
+        Assert.Equal(expectedUploads, native.UploadCount);
+        Assert.All(native.UploadedNames, name => Assert.Equal("supplier-api.yaml", name));
     }
 
     private static void ThenFailureIsTruthful(Exception? failure, MicrocksState state)
@@ -146,10 +126,70 @@ public sealed class MicrocksPresetTests : IAsyncLifetime
         Assert.Null(state.Mode);
     }
 
-    public ValueTask InitializeAsync() => ValueTask.CompletedTask;
-    public async ValueTask DisposeAsync()
+    private static void ThenMalformedNativeStateIsUnavailable(MicrocksState before, Exception? failure, MicrocksState after)
     {
-        client?.Dispose();
-        if (native is not null) await native.DisposeAsync();
+        Assert.Equal("unavailable", before.Status);
+        Assert.Null(before.Mode);
+        Assert.IsType<InvalidDataException>(failure);
+        Assert.Equal("unavailable", after.Status);
+        Assert.Null(after.Mode);
+    }
+
+    public void Dispose()
+    {
+        client.Dispose();
+        native.Dispose();
+    }
+
+    private sealed class NativeMicrocksHandler : HttpMessageHandler
+    {
+        public string Mode { get; set; } = "unconfigured";
+        public bool RejectUpload { get; set; }
+        public bool PreserveMalformedReadbackAfterUpload { get; set; }
+        public int UploadCount { get; private set; }
+        public List<string> UploadedNames { get; } = [];
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var path = request.RequestUri?.AbsolutePath;
+            if (request.Method == HttpMethod.Get && path == "/api/services")
+                return new HttpResponseMessage(HttpStatusCode.OK) { Content = JsonContent.Create(NativeServices()) };
+
+            if (request.Method == HttpMethod.Post && path == "/api/artifact/upload")
+            {
+                UploadCount++;
+                if (RejectUpload) return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
+                Assert.NotNull(request.Content);
+                Assert.StartsWith("multipart/form-data", request.Content.Headers.ContentType?.MediaType);
+                var body = await request.Content.ReadAsStringAsync(cancellationToken);
+                var filename = Regex.Match(body, @"filename=""?(?<name>[^"";\r\n]+)");
+                Assert.True(filename.Success);
+                Assert.Contains("Supplier API", body);
+                UploadedNames.Add(filename.Groups["name"].Value);
+                if (!PreserveMalformedReadbackAfterUpload)
+                    Mode = body.Contains("proxy each imported operation", StringComparison.Ordinal) ? "proxy" : "custom";
+                return new HttpResponseMessage(HttpStatusCode.OK) { Content = JsonContent.Create(new { imported = true }) };
+            }
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
+        }
+
+        private object NativeServices() => Mode switch
+        {
+            "unconfigured" => Array.Empty<object>(),
+            "malformed-service" => new object?[] { null },
+            "malformed-operation" => new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = new object?[] { null } } },
+            "proxy" => new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = ProxyOperations() } },
+            _ => new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = new[]
+            {
+                new { name = "GET /supplier/catalog/{sku}", method = "GET", dispatcher = "PROXY", dispatcherRules = "http://changed-upstream:8080/" }
+            } } }
+        };
+
+        private static object[] ProxyOperations() =>
+        [
+            new { name = "GET /supplier/catalog/{sku}", method = "GET", dispatcher = "PROXY", dispatcherRules = "http://supplier-sandbox:8080/" },
+            new { name = "POST /supplier/orders", method = "POST", dispatcher = "PROXY", dispatcherRules = "http://supplier-sandbox:8080/" },
+            new { name = "GET /supplier/orders/by-client-request/{clientRequestId}", method = "GET", dispatcher = "PROXY", dispatcherRules = "http://supplier-sandbox:8080/" }
+        ];
     }
 }

@@ -1,11 +1,22 @@
-using System.Net;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
+/// <summary>Microcks 原生服務回報的單一操作與派送設定。</summary>
+/// <param name="Name">原生操作名稱。</param>
+/// <param name="Method">HTTP 方法。</param>
+/// <param name="Dispatcher">原生派送器名稱。</param>
+/// <param name="DispatcherRules">原生派送規則。</param>
 public sealed record MicrocksOperation(string Name, string Method, string? Dispatcher, string? DispatcherRules);
 
+/// <summary>供應商 Microcks 控制狀態；模式僅在原生操作完整符合已知預設時提供。</summary>
+/// <param name="Mode">確認的預設模式；未知、失敗或讀取中斷時為 null。</param>
+/// <param name="Status">目前控制狀態。</param>
+/// <param name="ServiceId">Microcks 原生服務識別碼。</param>
+/// <param name="ServiceName">固定服務名稱。</param>
+/// <param name="ServiceVersion">固定服務版本。</param>
+/// <param name="Operations">原生操作與派送設定。</param>
+/// <param name="Message">供操作員參考的狀態說明。</param>
 public sealed record MicrocksState(
     string? Mode,
     string Status,
@@ -15,7 +26,9 @@ public sealed record MicrocksState(
     IReadOnlyList<MicrocksOperation> Operations,
     string? Message);
 
-/// <summary>Controls only the three repository-owned Supplier API artifacts on one configured Microcks origin.</summary>
+/// <summary>在固定 Microcks 來源套用三份隨程式封裝的供應商 API 預設。</summary>
+/// <param name="client">只連至已設定 Microcks 來源的 HTTP 用戶端。</param>
+/// <param name="presetDirectory">隨程式發佈的預設檔目錄。</param>
 public sealed class MicrocksPresetController(HttpClient client, string presetDirectory)
 {
     private const string ServiceName = "Supplier API";
@@ -25,8 +38,14 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
     private volatile bool applying;
     private volatile bool failed;
 
+    /// <summary>判斷名稱是否為三種明確允許的預設模式。</summary>
+    /// <param name="mode">待檢查的模式。</param>
+    /// <returns>模式是否有效。</returns>
     public static bool IsValidMode(string? mode) => mode is "mock" or "proxy" or "hybrid";
 
+    /// <summary>驗證設定中的 Microcks 來源為固定允許的 HTTP 主機。</summary>
+    /// <param name="value">設定的來源網址。</param>
+    /// <returns>已驗證的絕對來源網址。</returns>
     public static Uri ValidateMicrocksOrigin(string value)
     {
         if (!Uri.TryCreate(value, UriKind.Absolute, out var uri)
@@ -43,6 +62,9 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
         return uri;
     }
 
+    /// <summary>讀取原生服務並依完整操作派送設定判定目前模式。</summary>
+    /// <param name="cancellationToken">讀取取消權杖。</param>
+    /// <returns>即時 Microcks 控制狀態。</returns>
     public async Task<MicrocksState> GetStateAsync(CancellationToken cancellationToken = default)
     {
         if (applying)
@@ -72,7 +94,10 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
         }
     }
 
-    /// <summary>The request may disconnect after the gate is acquired; the bounded import still completes.</summary>
+    /// <summary>序列化套用固定預設；取得閘門後即使呼叫端斷線也會在時限內完成或失敗。</summary>
+    /// <param name="mode">三種固定預設之一。</param>
+    /// <param name="requestCancellation">等待套用閘門時的呼叫端取消權杖。</param>
+    /// <returns>匯入後由原生操作確認的狀態。</returns>
     public async Task<MicrocksState> ChangeAsync(string mode, CancellationToken requestCancellation = default)
     {
         if (!IsValidMode(mode)) throw new ArgumentException("Invalid Microcks mode.", nameof(mode));
@@ -127,28 +152,35 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
         (string Id, IReadOnlyList<MicrocksOperation> Operations)? selected = null;
         foreach (var service in document.RootElement.EnumerateArray())
         {
+            if (service.ValueKind != JsonValueKind.Object) throw new InvalidDataException("Microcks service entry is not an object.");
             if (RequiredString(service, "name") != ServiceName || RequiredString(service, "version") != ServiceVersion) continue;
             if (selected is not null) throw new InvalidDataException("Microcks has duplicate Supplier API versions.");
             var id = RequiredString(service, "id");
             if (string.IsNullOrWhiteSpace(id)) throw new InvalidDataException("Microcks service id is missing.");
             if (!service.TryGetProperty("operations", out var operations) || operations.ValueKind != JsonValueKind.Array)
                 throw new InvalidDataException("Microcks service operations are missing.");
-            selected = (id, operations.EnumerateArray().Select(operation => new MicrocksOperation(
-                RequiredString(operation, "name"),
-                RequiredString(operation, "method"),
-                ReadOptional(operation, "dispatcher"),
-                ReadOptional(operation, "dispatcherRules"))).ToArray());
+            var parsed = new List<MicrocksOperation>();
+            foreach (var operation in operations.EnumerateArray())
+            {
+                if (operation.ValueKind != JsonValueKind.Object) throw new InvalidDataException("Microcks operation entry is not an object.");
+                parsed.Add(new MicrocksOperation(
+                    RequiredString(operation, "name"),
+                    RequiredString(operation, "method"),
+                    ReadOptional(operation, "dispatcher"),
+                    ReadOptional(operation, "dispatcherRules")));
+            }
+            selected = (id, parsed);
         }
         return selected;
     }
 
     private static string RequiredString(JsonElement element, string property) =>
-        element.TryGetProperty(property, out var value) && value.ValueKind == JsonValueKind.String
+        element.ValueKind == JsonValueKind.Object && element.TryGetProperty(property, out var value) && value.ValueKind == JsonValueKind.String
             ? value.GetString() ?? ""
             : throw new InvalidDataException($"Microcks service field {property} is missing.");
 
     private static string? ReadOptional(JsonElement element, string property) =>
-        element.TryGetProperty(property, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
+        element.ValueKind == JsonValueKind.Object && element.TryGetProperty(property, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
 
     private static MicrocksState NewState(string? mode, string status, string? id,
         IReadOnlyList<MicrocksOperation> operations, string? message) =>

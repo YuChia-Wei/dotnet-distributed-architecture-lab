@@ -11,8 +11,8 @@ services:
   web-frontend:
     profiles: [frontend-lab]
     build:
-      context: ..
-      dockerfile: src/Frontend/Web/Dockerfile
+      context: ../src/Frontend/Web
+      dockerfile: Dockerfile
     pull_policy: build
     expose:
       - "80"
@@ -20,8 +20,8 @@ services:
   admin-frontend:
     profiles: [frontend-lab]
     build:
-      context: ..
-      dockerfile: src/Frontend/Admin/Dockerfile
+      context: ../src/Frontend/Admin
+      dockerfile: Dockerfile
     pull_policy: build
     expose:
       - "80"
