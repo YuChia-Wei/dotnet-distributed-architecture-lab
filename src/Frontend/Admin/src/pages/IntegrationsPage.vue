@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { isAbort, messageOf } from '../lib/api'
+import ConfirmDialog from '../components/ConfirmDialog.vue'
 import {
   clearWireRequests, getMappings, getMicrocks, getSandboxControl, getSandboxOrders,
   getSandboxRequests, getWire, getWireRequests, modes, resetWire, setMicrocksMode,
@@ -9,7 +10,13 @@ import {
 } from '../lib/contracts'
 
 type Tab = 'wire' | 'microcks' | 'sandbox'
+type PendingControl =
+  | { kind: 'wire-mode'; mode: Mode }
+  | { kind: 'microcks-mode'; mode: Mode }
+  | { kind: 'wire-reset' }
+  | { kind: 'wire-clear-logs' }
 const active = ref<Tab>('wire')
+const pendingControl = ref<PendingControl | null>(null)
 const wire = ref<WireState | null>(null)
 const microcks = ref<MicrocksState | null>(null)
 const sandbox = ref<SandboxControl | null>(null)
@@ -26,6 +33,26 @@ const wireController = ref<AbortController | null>(null)
 const microcksController = ref<AbortController | null>(null)
 const sandboxController = ref<AbortController | null>(null)
 const modeLabel: Record<Mode, string> = { mock: 'Mock', proxy: 'Proxy', hybrid: 'Hybrid' }
+const confirmation = computed(() => {
+  const pending = pendingControl.value
+  if (pending?.kind === 'wire-mode') return {
+    title: '套用 WireMock 模式', description: `套用 ${modeLabel[pending.mode]} 模式？這會重建規則並清除現有請求紀錄。`,
+    confirmText: '確認套用',
+  }
+  if (pending?.kind === 'microcks-mode') return {
+    title: '匯入 Microcks 預設', description: `匯入 ${modeLabel[pending.mode]} 預設？這會覆蓋目前 Supplier API 規則，自訂設定也會被取代。`,
+    confirmText: '確認匯入',
+  }
+  if (pending?.kind === 'wire-reset') return {
+    title: '還原啟動模式', description: '還原 WireMock 啟動模式？這會重建規則並清除請求紀錄。',
+    confirmText: '確認還原',
+  }
+  if (pending?.kind === 'wire-clear-logs') return {
+    title: '清除請求紀錄', description: '確定清除 WireMock 請求紀錄？此操作無法復原。',
+    confirmText: '確認清除',
+  }
+  return { title: '', description: '', confirmText: '確認' }
+})
 const displayMode = (mode: string | null) => mode === null ? '未辨識' : modeLabel[mode as Mode] ?? mode
 const displayStatus = (status: string) => ({
   ready: '已就緒', applying: '套用中', failed: '套用失敗', custom: '自訂設定',
@@ -133,9 +160,24 @@ function refreshActive() {
   else void loadSandbox()
 }
 
+function askControl(action: PendingControl) {
+  const tab = action.kind === 'microcks-mode' ? 'microcks' : 'wire'
+  if (pendingControl.value || loading.value[tab] || Object.values(busy.value).some(Boolean)) return
+  pendingControl.value = action
+}
+
+function confirmControl() {
+  const action = pendingControl.value
+  if (!action) return
+  pendingControl.value = null
+  if (action.kind === 'wire-mode') void changeWire(action.mode)
+  else if (action.kind === 'microcks-mode') void changeMicrocks(action.mode)
+  else if (action.kind === 'wire-reset') void restoreWire()
+  else void clearLogs()
+}
+
 async function changeWire(mode: Mode) {
   if (busy.value.wire) return
-  if (!window.confirm(`套用 WireMock ${modeLabel[mode]} 模式？這會重建規則並清除現有請求紀錄。`)) return
   wireController.value?.abort()
   busy.value.wire = true
   errors.value.wire = ''
@@ -152,7 +194,7 @@ async function changeWire(mode: Mode) {
 }
 
 async function restoreWire() {
-  if (busy.value.wire || !window.confirm('還原 WireMock 啟動模式？這會重建規則並清除請求紀錄。')) return
+  if (busy.value.wire) return
   wireController.value?.abort()
   busy.value.wire = true
   errors.value.wire = ''
@@ -169,7 +211,7 @@ async function restoreWire() {
 }
 
 async function clearLogs() {
-  if (busy.value.wire || !window.confirm('確定清除 WireMock 請求紀錄？此操作無法復原。')) return
+  if (busy.value.wire) return
   wireController.value?.abort()
   busy.value.wire = true
   errors.value.wire = ''
@@ -187,7 +229,6 @@ async function clearLogs() {
 
 async function changeMicrocks(mode: Mode) {
   if (busy.value.microcks) return
-  if (!window.confirm(`匯入 Microcks ${modeLabel[mode]} 預設？這會覆蓋目前 Supplier API 規則，自訂設定也會被取代。`)) return
   microcksController.value?.abort()
   busy.value.microcks = true
   errors.value.microcks = ''
@@ -249,14 +290,14 @@ onUnmounted(() => {
         <p v-if="busy.wire || errors.wire" class="field-help">下列為上次讀取的資料；重新讀取後再確認目前模式。</p>
         <div class="detail-list"><div><span>目前模式</span><strong>{{ wire ? displayMode(wire.mode) : '—' }}</strong></div><div><span>固定上游</span><strong class="breakable">{{ wire?.upstream || '—' }}</strong></div><div><span>保存方式</span><strong>{{ wire?.persistence || '—' }}</strong></div></div>
         <p class="field-help">Mock 只處理固定範例；Hybrid 以規則優先，未命中時轉送上游。切換或還原會清除規則與請求紀錄。</p>
-        <div class="mode-actions"><button v-for="mode in modes" :key="mode" class="button" :class="wire?.mode === mode && wire.status === 'ready' ? 'selected' : 'ghost'" type="button" :disabled="busy.wire || loading.wire" @click="changeWire(mode)">套用 {{ modeLabel[mode] }}</button></div>
-        <div class="sub-actions"><button class="text-button" type="button" :disabled="busy.wire || loading.wire" @click="restoreWire">還原啟動模式</button></div>
+        <div class="mode-actions"><button v-for="mode in modes" :key="mode" class="button" :class="wire?.mode === mode && wire.status === 'ready' ? 'selected' : 'ghost'" type="button" :disabled="busy.wire || loading.wire" @click="askControl({ kind: 'wire-mode', mode })">套用 {{ modeLabel[mode] }}</button></div>
+        <div class="sub-actions"><button class="text-button" type="button" :disabled="busy.wire || loading.wire" @click="askControl({ kind: 'wire-reset' })">還原啟動模式</button></div>
       </div>
       <div class="panel">
         <div class="panel-heading"><div><p class="eyebrow">NATIVE STATE</p><h2>規則與紀錄</h2></div></div>
         <div class="raw-head"><h3>映射規則 <span v-if="mappingCount !== null" class="heading-count">{{ mappingCount }}</span></h3></div>
         <div v-if="mappings === null" class="empty-state">尚無可顯示的規則資料。</div><pre v-else class="json-panel">{{ formatted(mappings) }}</pre>
-        <div class="raw-head"><h3>請求紀錄 <span v-if="wireCount !== null" class="heading-count">{{ wireCount }}</span></h3><button class="text-button danger" type="button" :disabled="busy.wire || loading.wire || wireRequests === null" @click="clearLogs">清除紀錄</button></div>
+        <div class="raw-head"><h3>請求紀錄 <span v-if="wireCount !== null" class="heading-count">{{ wireCount }}</span></h3><button class="text-button danger" type="button" :disabled="busy.wire || loading.wire || wireRequests === null" @click="askControl({ kind: 'wire-clear-logs' })">清除紀錄</button></div>
         <div v-if="wireRequests === null" class="empty-state">尚無可顯示的請求資料。</div><pre v-else class="json-panel">{{ formatted(wireRequests) }}</pre>
       </div>
     </div>
@@ -272,7 +313,7 @@ onUnmounted(() => {
         <div class="detail-list"><div><span>原生狀態</span><strong>{{ microcks ? displayStatus(microcks.status) : '—' }}</strong></div><div><span>辨識模式</span><strong>{{ microcks ? displayMode(microcks.mode) : '—' }}</strong></div><div><span>服務版本</span><strong>{{ microcks ? `${microcks.serviceName} ${microcks.serviceVersion}` : '—' }}</strong></div><div><span>服務 ID</span><strong class="breakable">{{ microcks?.serviceId || '—' }}</strong></div></div>
         <p v-if="microcks?.message" class="notice info" role="status">{{ microcks.message }}</p>
         <p class="field-help">模式由原生操作的完整規則讀回辨識。自訂、未設定或無法連線時，不會標示預設已就緒。套用會匯入內建固定預設。</p>
-        <div class="mode-actions"><button v-for="mode in modes" :key="mode" class="button" :class="microcks?.mode === mode && microcks.status === 'ready' ? 'selected' : 'ghost'" type="button" :disabled="busy.microcks || loading.microcks" @click="changeMicrocks(mode)">套用 {{ modeLabel[mode] }}</button></div>
+        <div class="mode-actions"><button v-for="mode in modes" :key="mode" class="button" :class="microcks?.mode === mode && microcks.status === 'ready' ? 'selected' : 'ghost'" type="button" :disabled="busy.microcks || loading.microcks" @click="askControl({ kind: 'microcks-mode', mode })">套用 {{ modeLabel[mode] }}</button></div>
       </div>
       <div class="panel">
         <div class="panel-heading"><div><p class="eyebrow">NATIVE OPERATIONS</p><h2>服務操作</h2></div><span class="heading-count">{{ microcks?.operations.length ?? '—' }}</span></div>
@@ -300,4 +341,5 @@ onUnmounted(() => {
       </div>
     </div>
   </section>
+  <ConfirmDialog :open="pendingControl !== null" :title="confirmation.title" :description="confirmation.description" :confirm-text="confirmation.confirmText" @cancel="pendingControl = null" @confirm="confirmControl" />
 </template>

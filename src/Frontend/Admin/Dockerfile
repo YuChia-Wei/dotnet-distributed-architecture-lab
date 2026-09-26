@@ -6,7 +6,8 @@ COPY index.html tsconfig.json vite.config.ts ./
 COPY src ./src
 RUN npm run build
 
-FROM nginx:1.27-alpine
+FROM nginx:1.28-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN nginx -t
 COPY --from=build /app/dist/ /usr/share/nginx/html/admin/
 EXPOSE 80

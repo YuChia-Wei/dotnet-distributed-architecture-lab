@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { createProduct, deleteProduct, listProducts, updateProduct, validateProduct, type Product, type ProductDraft } from '../lib/contracts'
 import { ApiError, isAbort, messageOf } from '../lib/api'
+import ConfirmDialog from '../components/ConfirmDialog.vue'
 
 const items = ref<Product[]>([])
 const loading = ref(false)
@@ -10,11 +11,14 @@ const error = ref('')
 const feedback = ref('')
 const filter = ref('')
 const editing = ref<Product | null>(null)
+const pendingDelete = ref<Product | null>(null)
 const draft = reactive<ProductDraft>({ name: '', description: '', price: 0 })
 let controller: AbortController | null = null
 const filtered = computed(() => items.value.filter(item =>
   `${item.name} ${item.description} ${item.id}`.toLocaleLowerCase().includes(filter.value.trim().toLocaleLowerCase())))
 const money = (value: number) => new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 2 }).format(value)
+const deleteDescription = computed(() => pendingDelete.value
+  ? `確定刪除「${pendingDelete.value.name}」？此操作會移除商品主檔。` : '')
 
 async function refresh() {
   controller?.abort()
@@ -78,8 +82,20 @@ async function save() {
   } finally { busy.value = false }
 }
 
+function askRemove(item: Product) {
+  if (busy.value || pendingDelete.value) return
+  pendingDelete.value = item
+}
+
+function confirmRemove() {
+  const item = pendingDelete.value
+  if (!item || busy.value) return
+  pendingDelete.value = null
+  void remove(item)
+}
+
 async function remove(item: Product) {
-  if (busy.value || !window.confirm(`確定刪除「${item.name}」？此操作會移除商品主檔。`)) return
+  if (busy.value) return
   busy.value = true
   error.value = ''
   feedback.value = ''
@@ -128,9 +144,10 @@ onUnmounted(() => controller?.abort())
       <div v-else-if="!filtered.length" class="empty-state">沒有符合搜尋條件的商品。</div>
       <div v-else class="table-scroll">
         <table><thead><tr><th scope="col">商品</th><th scope="col">價格</th><th scope="col">操作</th></tr></thead>
-          <tbody><tr v-for="item in filtered" :key="item.id"><td><strong>{{ item.name }}</strong><span class="table-detail">{{ item.description || '無描述' }}</span><span class="table-id">{{ item.id }}</span></td><td class="amount">NT$ {{ money(item.price) }}</td><td><div class="row-actions"><button class="text-button" type="button" :disabled="busy" :aria-label="`編輯 ${item.name}`" @click="edit(item)">編輯</button><button class="text-button danger" type="button" :disabled="busy" :aria-label="`刪除 ${item.name}`" @click="remove(item)">刪除</button></div></td></tr></tbody>
+          <tbody><tr v-for="item in filtered" :key="item.id"><td><strong>{{ item.name }}</strong><span class="table-detail">{{ item.description || '無描述' }}</span><span class="table-id">{{ item.id }}</span></td><td class="amount">NT$ {{ money(item.price) }}</td><td><div class="row-actions"><button class="text-button" type="button" :disabled="busy" :aria-label="`編輯 ${item.name}`" @click="edit(item)">編輯</button><button class="text-button danger" type="button" :disabled="busy" :aria-label="`刪除 ${item.name}`" @click="askRemove(item)">刪除</button></div></td></tr></tbody>
         </table>
       </div>
     </section>
   </div>
+  <ConfirmDialog :open="pendingDelete !== null" title="刪除商品" :description="deleteDescription" confirm-text="確認刪除" @cancel="pendingDelete = null" @confirm="confirmRemove" />
 </template>

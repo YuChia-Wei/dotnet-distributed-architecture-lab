@@ -34,7 +34,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false })
         <div class="breadcrumb"><span>商務實驗室</span><span aria-hidden="true">/</span><strong>{{ route.meta.title }}</strong></div>
         <a class="top-switch" href="/web/">前往作業工作台 <span aria-hidden="true">↗</span></a>
       </header>
-      <main id="main" class="content">
+      <main id="main" class="content" tabindex="-1">
         <RouterView />
       </main>
       <footer class="footer">本機實驗環境 · 狀態與資料均以服務回應為準</footer>

@@ -27,19 +27,37 @@ describe('dangerous controls', () => {
       throw new Error(`Unexpected ${path}`)
     })
     vi.stubGlobal('fetch', fetchMock)
-    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
-    const wrapper = mount(IntegrationsPage)
+    const nativeConfirm = vi.spyOn(window, 'confirm').mockImplementation(() => {
+      throw new Error('Native dialog must not be used')
+    })
+    const host = document.createElement('div')
+    document.body.appendChild(host)
+    const wrapper = mount(IntegrationsPage, { attachTo: host })
     await flushPromises()
 
     const mockButton = wrapper.findAll('button').find(button => button.text().includes('套用 Mock'))
     expect(mockButton).toBeDefined()
+    ;(mockButton!.element as HTMLButtonElement).focus()
     await mockButton!.trigger('click')
-    expect(confirm).toHaveBeenCalledOnce()
+    expect(wrapper.find('[role="alertdialog"]').text()).toContain('清除現有請求紀錄')
+    expect(document.activeElement).toBe(wrapper.find('[data-testid="confirm-cancel"]').element)
     expect(fetchMock.mock.calls.filter(([path, init]) =>
       String(path).endsWith('/control/mode') && init?.method === 'POST')).toHaveLength(0)
 
-    confirm.mockReturnValue(true)
+    await wrapper.find('[role="alertdialog"]').trigger('keydown', { key: 'Escape' })
+    await flushPromises()
+    expect(wrapper.find('[role="alertdialog"]').exists()).toBe(false)
+    expect(document.activeElement).toBe(mockButton!.element)
+
     await mockButton!.trigger('click')
+    await mockButton!.trigger('click')
+    expect(wrapper.findAll('[role="alertdialog"]')).toHaveLength(1)
+    expect(fetchMock.mock.calls.filter(([path, init]) =>
+      String(path).endsWith('/control/mode') && init?.method === 'POST')).toHaveLength(0)
+    await wrapper.find('[data-testid="confirm-cancel"]').trigger('click')
+    expect(wrapper.find('[role="alertdialog"]').exists()).toBe(false)
+    await mockButton!.trigger('click')
+    await wrapper.find('[data-testid="confirm-accept"]').trigger('click')
     expect(mockButton!.attributes('disabled')).toBeDefined()
     await mockButton!.trigger('click')
     expect(fetchMock.mock.calls.filter(([path, init]) =>
@@ -49,7 +67,9 @@ describe('dangerous controls', () => {
     finishPost?.(new Response('{}', { status: 200 }))
     await flushPromises()
     expect(wrapper.text()).toContain('服務已讀回所選模式')
+    expect(nativeConfirm).not.toHaveBeenCalled()
     wrapper.unmount()
+    host.remove()
   })
 
   it('blocks out-of-range sandbox delay before PUT', async () => {
@@ -71,6 +91,88 @@ describe('dangerous controls', () => {
     await wrapper.find('form').trigger('submit')
     expect(wrapper.text()).toContain('延遲須為 0 至 10000')
     expect(fetchMock.mock.calls.filter(([, init]) => init?.method === 'PUT')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('uses the in-page dialog for WireMock reset and log clearing', async () => {
+    const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
+      const path = String(input)
+      if (path.endsWith('/control/state')) return wireResponse('hybrid')
+      if (path.endsWith('/control/mappings')) return new Response('{"mappings":[]}')
+      if (path.endsWith('/control/requests') && init?.method === 'GET') return new Response('{"requests":[{"id":"one"}]}')
+      if (path.endsWith('/control/requests') && init?.method === 'DELETE') return new Response(null, { status: 204 })
+      if (path.endsWith('/control/reset') && init?.method === 'POST') return wireResponse('hybrid')
+      throw new Error(`Unexpected ${path}`)
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    const nativeConfirm = vi.spyOn(window, 'confirm').mockImplementation(() => {
+      throw new Error('Native dialog must not be used')
+    })
+    const wrapper = mount(IntegrationsPage)
+    await flushPromises()
+
+    const resetButton = wrapper.findAll('button').find(button => button.text() === '還原啟動模式')
+    await resetButton!.trigger('click')
+    expect(wrapper.find('[role="alertdialog"]').text()).toContain('重建規則並清除請求紀錄')
+    await wrapper.find('[data-testid="confirm-cancel"]').trigger('click')
+    expect(fetchMock.mock.calls.filter(([path, init]) =>
+      String(path).endsWith('/control/reset') && init?.method === 'POST')).toHaveLength(0)
+
+    const clearButton = wrapper.findAll('button').find(button => button.text() === '清除紀錄')
+    await clearButton!.trigger('click')
+    expect(wrapper.find('[role="alertdialog"]').text()).toContain('無法復原')
+    await wrapper.find('[data-testid="confirm-cancel"]').trigger('click')
+    expect(fetchMock.mock.calls.filter(([path, init]) =>
+      String(path).endsWith('/control/requests') && init?.method === 'DELETE')).toHaveLength(0)
+
+    await resetButton!.trigger('click')
+    await wrapper.find('[data-testid="confirm-accept"]').trigger('click')
+    await flushPromises()
+    expect(fetchMock.mock.calls.filter(([path, init]) =>
+      String(path).endsWith('/control/reset') && init?.method === 'POST')).toHaveLength(1)
+    expect(nativeConfirm).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('keeps Microcks custom state until its preset import is confirmed and read back', async () => {
+    let mode: string | null = null
+    const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
+      const path = String(input)
+      if (path.endsWith('/control/state')) return wireResponse('hybrid')
+      if (path.endsWith('/control/mappings')) return new Response('{"mappings":[]}')
+      if (path.endsWith('/control/requests')) return new Response('{"requests":[]}')
+      if (path.endsWith('/control/microcks/state')) {
+        return new Response(JSON.stringify({
+          mode, status: mode ? 'ready' : 'custom', serviceId: 'id',
+          serviceName: 'Supplier API', serviceVersion: '1.0.0', operations: [], message: null,
+        }))
+      }
+      if (path.endsWith('/control/microcks/mode') && init?.method === 'POST') {
+        mode = 'proxy'
+        return new Response('{}')
+      }
+      throw new Error(`Unexpected ${path}`)
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    const nativeConfirm = vi.spyOn(window, 'confirm').mockImplementation(() => {
+      throw new Error('Native dialog must not be used')
+    })
+    const wrapper = mount(IntegrationsPage)
+    await flushPromises()
+    await wrapper.find('#tab-microcks').trigger('click')
+    await flushPromises()
+    expect(wrapper.text()).toContain('自訂設定')
+    const proxyButton = wrapper.find('#panel-microcks').findAll('button').find(button => button.text() === '套用 Proxy')
+    await proxyButton!.trigger('click')
+    expect(wrapper.find('[role="alertdialog"]').text()).toContain('自訂設定也會被取代')
+    expect(fetchMock.mock.calls.filter(([path, init]) =>
+      String(path).endsWith('/control/microcks/mode') && init?.method === 'POST')).toHaveLength(0)
+    await wrapper.find('[data-testid="confirm-accept"]').trigger('click')
+    await flushPromises()
+    expect(fetchMock.mock.calls.filter(([path, init]) =>
+      String(path).endsWith('/control/microcks/mode') && init?.method === 'POST')).toHaveLength(1)
+    expect(wrapper.text()).toContain('原生服務已讀回所選模式')
+    expect(nativeConfirm).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 })
