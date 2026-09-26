@@ -48,4 +48,38 @@ describe('product deletion', () => {
     wrapper.unmount()
     host.remove()
   })
+
+  it('shows the required description error and blocks create and update requests', async () => {
+    const product = { id: 'd77fa33a-4d40-49ce-9a8a-1138c152802a',
+      name: '測試商品', description: '既有描述', price: 12 }
+    const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
+      if (String(input) === '/api/products' && init?.method === 'GET') {
+        return new Response(JSON.stringify([product]), { status: 200 })
+      }
+      throw new Error(`Invalid form sent ${init?.method} ${String(input)}`)
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    const host = document.createElement('div')
+    document.body.appendChild(host)
+    const wrapper = mount(ProductsPage, { attachTo: host })
+    await flushPromises()
+    const description = wrapper.find('#product-description')
+    expect(description.attributes('required')).toBeDefined()
+
+    await wrapper.find('#product-name').setValue('新商品')
+    await description.setValue('   ')
+    await wrapper.find('form').trigger('submit')
+    expect(wrapper.find('#product-description-error').text()).toBe('請輸入商品描述。')
+    expect(description.attributes('aria-invalid')).toBe('true')
+    expect(document.activeElement).toBe(description.element)
+    expect(fetchMock.mock.calls.filter(([, init]) => init?.method === 'POST')).toHaveLength(0)
+
+    await wrapper.find('button[aria-label="編輯 測試商品"]').trigger('click')
+    await description.setValue('')
+    await wrapper.find('form').trigger('submit')
+    expect(wrapper.find('#product-description-error').text()).toBe('請輸入商品描述。')
+    expect(fetchMock.mock.calls.filter(([, init]) => init?.method === 'PUT')).toHaveLength(0)
+    wrapper.unmount()
+    host.remove()
+  })
 })

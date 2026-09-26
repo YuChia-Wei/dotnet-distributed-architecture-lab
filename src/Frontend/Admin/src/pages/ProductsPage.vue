@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
-import { createProduct, deleteProduct, listProducts, updateProduct, validateProduct, type Product, type ProductDraft } from '../lib/contracts'
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { createProduct, deleteProduct, listProducts, updateProduct, validateProduct, type Product, type ProductDraft, type ProductValidationError } from '../lib/contracts'
 import { ApiError, isAbort, messageOf } from '../lib/api'
 import ConfirmDialog from '../components/ConfirmDialog.vue'
 
@@ -9,6 +9,7 @@ const loading = ref(false)
 const busy = ref(false)
 const error = ref('')
 const feedback = ref('')
+const fieldError = ref<ProductValidationError | null>(null)
 const filter = ref('')
 const editing = ref<Product | null>(null)
 const pendingDelete = ref<Product | null>(null)
@@ -38,6 +39,7 @@ async function refresh() {
 
 function resetForm() {
   editing.value = null
+  fieldError.value = null
   draft.name = ''
   draft.description = ''
   draft.price = 0
@@ -45,19 +47,29 @@ function resetForm() {
 
 function edit(item: Product) {
   editing.value = item
+  fieldError.value = null
   draft.name = item.name
   draft.description = item.description
   draft.price = item.price
   feedback.value = ''
-  document.getElementById('product-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  document.getElementById('product-form')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })
+}
+
+function clearFieldError() {
+  fieldError.value = null
 }
 
 async function save() {
   if (busy.value) return
   feedback.value = ''
-  const validation = validateProduct(draft)
-  if (validation) { error.value = validation; return }
   error.value = ''
+  const validation = validateProduct(draft)
+  fieldError.value = validation
+  if (validation) {
+    await nextTick()
+    document.getElementById(`product-${validation.field}`)?.focus()
+    return
+  }
   busy.value = true
   controller?.abort()
   const payload = { name: draft.name.trim(), description: draft.description.trim(), price: draft.price }
@@ -123,13 +135,16 @@ onUnmounted(() => controller?.abort())
     <section id="product-form" class="panel">
       <div class="panel-heading"><div><p class="eyebrow">PRODUCT EDITOR</p><h2>{{ editing ? '修改商品' : '新增商品' }}</h2></div><span v-if="editing" class="pill attention">編輯中</span></div>
       <p v-if="editing" class="muted id-line">商品 ID：{{ editing.id }}</p>
-      <form @submit.prevent="save">
+      <form novalidate @submit.prevent="save">
         <label for="product-name">商品名稱 <span class="required">*</span></label>
-        <input id="product-name" v-model="draft.name" type="text" maxlength="200" autocomplete="off" required :disabled="busy" />
-        <label for="product-description">描述</label>
-        <textarea id="product-description" v-model="draft.description" rows="4" maxlength="2000" :disabled="busy"></textarea>
+        <input id="product-name" v-model="draft.name" type="text" maxlength="200" autocomplete="off" required :aria-invalid="fieldError?.field === 'name' || undefined" :aria-describedby="fieldError?.field === 'name' ? 'product-name-error' : undefined" :disabled="busy" @input="clearFieldError" />
+        <p v-if="fieldError?.field === 'name'" id="product-name-error" class="field-error" role="alert">{{ fieldError.message }}</p>
+        <label for="product-description">描述 <span class="required">*</span></label>
+        <textarea id="product-description" v-model="draft.description" rows="4" maxlength="2000" required :aria-invalid="fieldError?.field === 'description' || undefined" :aria-describedby="fieldError?.field === 'description' ? 'product-description-error' : undefined" :disabled="busy" @input="clearFieldError"></textarea>
+        <p v-if="fieldError?.field === 'description'" id="product-description-error" class="field-error" role="alert">{{ fieldError.message }}</p>
         <label for="product-price">價格（TWD，實驗顯示） <span class="required">*</span></label>
-        <input id="product-price" v-model.number="draft.price" type="number" min="0" step="0.01" required :disabled="busy" />
+        <input id="product-price" v-model.number="draft.price" type="number" min="0" step="0.01" required :aria-invalid="fieldError?.field === 'price' || undefined" :aria-describedby="fieldError?.field === 'price' ? 'product-price-error' : undefined" :disabled="busy" @input="clearFieldError" />
+        <p v-if="fieldError?.field === 'price'" id="product-price-error" class="field-error" role="alert">{{ fieldError.message }}</p>
         <p class="field-help">價格由現有商品 API 保存；TWD 為本工作台的顯示慣例。</p>
         <div class="form-actions"><button class="button primary" type="submit" :disabled="busy">{{ busy ? '提交中…' : editing ? '儲存修改' : '建立商品' }}</button><button class="button quiet" type="button" :disabled="busy" @click="resetForm">{{ editing ? '取消編輯' : '清空' }}</button></div>
       </form>

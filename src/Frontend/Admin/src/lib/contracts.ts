@@ -13,6 +13,11 @@ export interface ProductDraft {
   price: number
 }
 
+export interface ProductValidationError {
+  field: 'name' | 'description' | 'price'
+  message: string
+}
+
 export type Mode = 'mock' | 'proxy' | 'hybrid'
 export const modes: Mode[] = ['mock', 'proxy', 'hybrid']
 
@@ -54,11 +59,12 @@ export function parseProduct(value: unknown): Product {
   return { id: data.id, name: data.name, description: data.description, price: data.price }
 }
 
-export function validateProduct(draft: ProductDraft): string | null {
-  if (!draft.name.trim()) return '請輸入商品名稱。'
+export function validateProduct(draft: ProductDraft): ProductValidationError | null {
+  if (!draft.name.trim()) return { field: 'name', message: '請輸入商品名稱。' }
+  if (!draft.description.trim()) return { field: 'description', message: '請輸入商品描述。' }
   if (!Number.isFinite(draft.price) || draft.price < 0 ||
       Math.abs(Math.round(draft.price * 100) - draft.price * 100) > 1e-7) {
-    return '價格須為非負數，最多兩位小數。'
+    return { field: 'price', message: '價格須為非負數，最多兩位小數。' }
   }
   return null
 }

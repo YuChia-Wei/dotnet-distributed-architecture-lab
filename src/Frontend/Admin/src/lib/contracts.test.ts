@@ -53,10 +53,17 @@ describe('HTTP contract', () => {
 
 describe('admin mutation and control contracts', () => {
   it('rejects invalid product price and sandbox delay before mutation', () => {
-    expect(validateProduct({ name: ' ', description: '', price: 1 })).toBe('請輸入商品名稱。')
-    expect(validateProduct({ name: 'X', description: '', price: -1 })).toContain('價格')
-    expect(validateProduct({ name: 'X', description: '', price: 1.234 })).toContain('價格')
-    expect(validateProduct({ name: 'X', description: '', price: 1.1 })).toBeNull()
+    expect(validateProduct({ name: ' ', description: '描述', price: 1 })).toEqual({
+      field: 'name', message: '請輸入商品名稱。',
+    })
+    expect(validateProduct({ name: 'X', description: '  ', price: 1 })).toEqual({
+      field: 'description', message: '請輸入商品描述。',
+    })
+    expect(validateProduct({ name: 'X', description: '描述', price: -1 })?.field).toBe('price')
+    expect(validateProduct({ name: 'X', description: '描述', price: 1.234 })?.field).toBe('price')
+    expect(validateProduct({ name: 'X', description: '描述', price: Number.POSITIVE_INFINITY })?.field).toBe('price')
+    expect(validateProduct({ name: 'X', description: '描述', price: 1.1 })).toBeNull()
+    expect(validateProduct({ name: 'X', description: '描述', price: 0 })).toBeNull()
     expect(validDelay(-1)).toBe(false)
     expect(validDelay(10001)).toBe(false)
     expect(validDelay(1.5)).toBe(false)
