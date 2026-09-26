@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -33,6 +34,8 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
 {
     private const string ServiceName = "Supplier API";
     private const string ServiceVersion = "1.0.0";
+    private const int ServicePageSize = 100;
+    private const int MaxServicePages = 10;
     private static readonly string[] Modes = ["mock", "proxy", "hybrid"];
     private readonly SemaphoreSlim changeGate = new(1, 1);
     private volatile bool applying;
@@ -118,6 +121,7 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
             // Import processing may finish after upload returns. Verify the native dispatcher set, not only identity.
             var expected = LoadExpected(mode);
             var deadline = DateTime.UtcNow.AddSeconds(20);
+            var reconciled = false;
             do
             {
                 var native = await ReadNativeAsync(timeout.Token);
@@ -125,6 +129,21 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
                 {
                     applying = false;
                     return NewState(mode, "ready", native.Value.Id, native.Value.Operations, null);
+                }
+                if (native is not null && !reconciled && SameOperationIdentities(native.Value.Operations, expected))
+                {
+                    // A native operation edit can survive a main-artifact import. Reconcile only
+                    // this fixed service's three known operations, then verify the native state again.
+                    foreach (var wanted in expected)
+                    {
+                        var actual = native.Value.Operations.Single(operation => operation.Name == wanted.Name && operation.Method == wanted.Method);
+                        if (actual.Dispatcher == wanted.Dispatcher && SameRules(actual.DispatcherRules, wanted.DispatcherRules)) continue;
+                        using var update = await client.PutAsJsonAsync(
+                            $"api/services/{Uri.EscapeDataString(native.Value.Id)}/operation",
+                            new { wanted.Name, wanted.Dispatcher, wanted.DispatcherRules }, timeout.Token);
+                        update.EnsureSuccessStatusCode();
+                    }
+                    reconciled = true;
                 }
                 await Task.Delay(250, timeout.Token);
             } while (DateTime.UtcNow < deadline);
@@ -145,33 +164,37 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
 
     private async Task<(string Id, IReadOnlyList<MicrocksOperation> Operations)?> ReadNativeAsync(CancellationToken cancellationToken)
     {
-        using var response = await client.GetAsync("api/services?page=0&size=100", cancellationToken);
-        response.EnsureSuccessStatusCode();
-        using var document = JsonDocument.Parse(await response.Content.ReadAsStreamAsync(cancellationToken));
-        if (document.RootElement.ValueKind != JsonValueKind.Array) throw new InvalidDataException("Microcks service list is not an array.");
         (string Id, IReadOnlyList<MicrocksOperation> Operations)? selected = null;
-        foreach (var service in document.RootElement.EnumerateArray())
+        for (var page = 0; page < MaxServicePages; page++)
         {
-            if (service.ValueKind != JsonValueKind.Object) throw new InvalidDataException("Microcks service entry is not an object.");
-            if (RequiredString(service, "name") != ServiceName || RequiredString(service, "version") != ServiceVersion) continue;
-            if (selected is not null) throw new InvalidDataException("Microcks has duplicate Supplier API versions.");
-            var id = RequiredString(service, "id");
-            if (string.IsNullOrWhiteSpace(id)) throw new InvalidDataException("Microcks service id is missing.");
-            if (!service.TryGetProperty("operations", out var operations) || operations.ValueKind != JsonValueKind.Array)
-                throw new InvalidDataException("Microcks service operations are missing.");
-            var parsed = new List<MicrocksOperation>();
-            foreach (var operation in operations.EnumerateArray())
+            using var response = await client.GetAsync($"api/services?page={page}&size={ServicePageSize}", cancellationToken);
+            response.EnsureSuccessStatusCode();
+            using var document = JsonDocument.Parse(await response.Content.ReadAsStreamAsync(cancellationToken));
+            if (document.RootElement.ValueKind != JsonValueKind.Array) throw new InvalidDataException("Microcks service list is not an array.");
+            foreach (var service in document.RootElement.EnumerateArray())
             {
-                if (operation.ValueKind != JsonValueKind.Object) throw new InvalidDataException("Microcks operation entry is not an object.");
-                parsed.Add(new MicrocksOperation(
-                    RequiredString(operation, "name"),
-                    RequiredString(operation, "method"),
-                    ReadOptional(operation, "dispatcher"),
-                    ReadOptional(operation, "dispatcherRules")));
+                if (service.ValueKind != JsonValueKind.Object) throw new InvalidDataException("Microcks service entry is not an object.");
+                if (RequiredString(service, "name") != ServiceName || RequiredString(service, "version") != ServiceVersion) continue;
+                if (selected is not null) throw new InvalidDataException("Microcks has duplicate Supplier API versions.");
+                var id = RequiredString(service, "id");
+                if (string.IsNullOrWhiteSpace(id)) throw new InvalidDataException("Microcks service id is missing.");
+                if (!service.TryGetProperty("operations", out var operations) || operations.ValueKind != JsonValueKind.Array)
+                    throw new InvalidDataException("Microcks service operations are missing.");
+                var parsed = new List<MicrocksOperation>();
+                foreach (var operation in operations.EnumerateArray())
+                {
+                    if (operation.ValueKind != JsonValueKind.Object) throw new InvalidDataException("Microcks operation entry is not an object.");
+                    parsed.Add(new MicrocksOperation(
+                        RequiredString(operation, "name"),
+                        RequiredString(operation, "method"),
+                        ReadOptional(operation, "dispatcher"),
+                        ReadOptional(operation, "dispatcherRules")));
+                }
+                selected = (id, parsed);
             }
-            selected = (id, parsed);
+            if (document.RootElement.GetArrayLength() < ServicePageSize) return selected;
         }
-        return selected;
+        throw new InvalidDataException("Microcks service listing exceeded the bounded page limit.");
     }
 
     private static string RequiredString(JsonElement element, string property) =>
@@ -191,6 +214,10 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
             candidate.Name == wanted.Name && candidate.Method == wanted.Method
             && candidate.Dispatcher == wanted.Dispatcher
             && SameRules(candidate.DispatcherRules, wanted.DispatcherRules)) == 1);
+
+    private static bool SameOperationIdentities(IReadOnlyList<MicrocksOperation> actual, IReadOnlyList<MicrocksOperation> expected) =>
+        actual.Count == expected.Count && expected.All(wanted => actual.Count(candidate =>
+            candidate.Name == wanted.Name && candidate.Method == wanted.Method) == 1);
 
     private static bool SameRules(string? actual, string? expected)
     {

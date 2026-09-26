@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 public sealed class MicrocksPresetTests : IDisposable
@@ -74,6 +75,51 @@ public sealed class MicrocksPresetTests : IDisposable
         ThenMalformedNativeStateIsUnavailable(state, failure, afterFailure);
     }
 
+    [Fact]
+    [Trait("Scenario", "M02-stale-native-dispatcher")]
+    public async Task Given_import_retains_hybrid_post_When_selecting_mock_Then_only_supplier_post_is_updated_and_read_back()
+    {
+        native.PreserveHybridPostOnMockUpload = true;
+        var selected = await controller.ChangeAsync("mock", TestContext.Current.CancellationToken);
+        Assert.Equal("ready", selected.Status);
+        Assert.Equal("mock", selected.Mode);
+        Assert.Equal("supplier-api.yaml", Assert.Single(native.UploadedNames));
+        var update = Assert.Single(native.OperationUpdates);
+        Assert.Equal("supplier-1", update.ServiceId);
+        Assert.Equal("POST /supplier/orders", update.Name);
+        Assert.Equal("JS", update.Dispatcher);
+        Assert.Contains("__unmatched_supplier_order__", update.DispatcherRules);
+        Assert.DoesNotContain("proxyUrl", update.DispatcherRules);
+        var readback = await WhenReadingStateAsync();
+        Assert.Equal("mock", readback.Mode);
+    }
+
+    [Fact]
+    [Trait("Scenario", "M02-native-update-failure")]
+    public async Task Given_native_operation_update_fails_When_selecting_mock_Then_mode_stays_unconfirmed()
+    {
+        native.PreserveHybridPostOnMockUpload = true;
+        native.RejectOperationUpdate = true;
+        var failure = await Record.ExceptionAsync(() => controller.ChangeAsync("mock", TestContext.Current.CancellationToken));
+        Assert.IsType<HttpRequestException>(failure);
+        var state = await WhenReadingStateAsync();
+        Assert.Equal("failed", state.Status);
+        Assert.Null(state.Mode);
+        Assert.Equal("PROXY_FALLBACK", state.Operations.Single(operation => operation.Name == "POST /supplier/orders").Dispatcher);
+    }
+
+    [Fact]
+    [Trait("Scenario", "M02-native-pagination")]
+    public async Task Given_supplier_is_on_second_native_page_When_reading_state_Then_proxy_mode_is_found()
+    {
+        native.Mode = "proxy";
+        native.SupplierOnSecondPage = true;
+        var state = await WhenReadingStateAsync();
+        Assert.Equal("ready", state.Status);
+        Assert.Equal("proxy", state.Mode);
+        Assert.Contains(1, native.RequestedPages);
+    }
+
     private void GivenUnconfiguredNativeService() => native.Mode = "unconfigured";
     private void GivenExternallyEditedNativeService() => native.Mode = "custom";
     private void GivenRejectedNativeUpload() => native.RejectUpload = true;
@@ -146,14 +192,27 @@ public sealed class MicrocksPresetTests : IDisposable
         public string Mode { get; set; } = "unconfigured";
         public bool RejectUpload { get; set; }
         public bool PreserveMalformedReadbackAfterUpload { get; set; }
+        public bool PreserveHybridPostOnMockUpload { get; set; }
+        public bool RejectOperationUpdate { get; set; }
+        public bool SupplierOnSecondPage { get; set; }
         public int UploadCount { get; private set; }
         public List<string> UploadedNames { get; } = [];
+        public List<int> RequestedPages { get; } = [];
+        public List<(string ServiceId, string Name, string Dispatcher, string DispatcherRules)> OperationUpdates { get; } = [];
+        private string? mockPostRules;
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var path = request.RequestUri?.AbsolutePath;
             if (request.Method == HttpMethod.Get && path == "/api/services")
-                return new HttpResponseMessage(HttpStatusCode.OK) { Content = JsonContent.Create(NativeServices()) };
+            {
+                var page = int.Parse(request.RequestUri!.Query.Split('&').Single(part => part.StartsWith("?page=", StringComparison.Ordinal))[6..]);
+                RequestedPages.Add(page);
+                object services = SupplierOnSecondPage && page == 0
+                    ? Enumerable.Range(0, 100).Select(index => (object)new { id = $"other-{index}", name = $"Other {index}", version = "1.0.0" }).ToArray()
+                    : SupplierOnSecondPage && page > 1 ? Array.Empty<object>() : NativeServices();
+                return new HttpResponseMessage(HttpStatusCode.OK) { Content = JsonContent.Create(services) };
+            }
 
             if (request.Method == HttpMethod.Post && path == "/api/artifact/upload")
             {
@@ -167,8 +226,26 @@ public sealed class MicrocksPresetTests : IDisposable
                 Assert.Contains("Supplier API", body);
                 UploadedNames.Add(filename.Groups["name"].Value);
                 if (!PreserveMalformedReadbackAfterUpload)
-                    Mode = body.Contains("proxy each imported operation", StringComparison.Ordinal) ? "proxy" : "custom";
+                    Mode = body.Contains("proxy each imported operation", StringComparison.Ordinal) ? "proxy"
+                        : PreserveHybridPostOnMockUpload && body.Contains("External supplier sandbox contract", StringComparison.Ordinal) ? "stale-mock"
+                        : "custom";
                 return new HttpResponseMessage(HttpStatusCode.OK) { Content = JsonContent.Create(new { imported = true }) };
+            }
+            if (request.Method == HttpMethod.Put && path == "/api/services/supplier-1/operation")
+            {
+                if (RejectOperationUpdate) return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
+                using var document = JsonDocument.Parse(await request.Content!.ReadAsStreamAsync(cancellationToken));
+                var operation = document.RootElement;
+                var name = operation.GetProperty("name").GetString()!;
+                var dispatcher = operation.GetProperty("dispatcher").GetString()!;
+                var rules = operation.GetProperty("dispatcherRules").GetString()!;
+                OperationUpdates.Add(("supplier-1", name, dispatcher, rules));
+                if (Mode == "stale-mock" && name == "POST /supplier/orders")
+                {
+                    mockPostRules = rules;
+                    Mode = "mock-updated";
+                }
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
             return new HttpResponseMessage(HttpStatusCode.NotFound);
         }
@@ -179,6 +256,8 @@ public sealed class MicrocksPresetTests : IDisposable
             "malformed-service" => new object?[] { null },
             "malformed-operation" => new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = new object?[] { null } } },
             "proxy" => new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = ProxyOperations() } },
+            "stale-mock" => new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = MockOperations("PROXY_FALLBACK", "{\"dispatcher\":\"JS\",\"proxyUrl\":\"http://supplier-sandbox:8080/\"}") } },
+            "mock-updated" => new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = MockOperations("JS", mockPostRules!) } },
             _ => new[] { new { id = "supplier-1", name = "Supplier API", version = "1.0.0", operations = new[]
             {
                 new { name = "GET /supplier/catalog/{sku}", method = "GET", dispatcher = "PROXY", dispatcherRules = "http://changed-upstream:8080/" }
@@ -190,6 +269,13 @@ public sealed class MicrocksPresetTests : IDisposable
             new { name = "GET /supplier/catalog/{sku}", method = "GET", dispatcher = "PROXY", dispatcherRules = "http://supplier-sandbox:8080/" },
             new { name = "POST /supplier/orders", method = "POST", dispatcher = "PROXY", dispatcherRules = "http://supplier-sandbox:8080/" },
             new { name = "GET /supplier/orders/by-client-request/{clientRequestId}", method = "GET", dispatcher = "PROXY", dispatcherRules = "http://supplier-sandbox:8080/" }
+        ];
+
+        private static object[] MockOperations(string dispatcher, string rules) =>
+        [
+            new { name = "GET /supplier/catalog/{sku}", method = "GET", dispatcher = "URI_PARTS", dispatcherRules = "sku" },
+            new { name = "POST /supplier/orders", method = "POST", dispatcher, dispatcherRules = rules },
+            new { name = "GET /supplier/orders/by-client-request/{clientRequestId}", method = "GET", dispatcher = "URI_PARTS", dispatcherRules = "clientRequestId" }
         ];
     }
 }
