@@ -1,6 +1,6 @@
 # UI and adapter implementation contract
 
-created_at: 2026-09-26T06:15:44+00:00; updated_at: 2026-09-26T06:15:44+00:00
+created_at: 2026-09-26T06:15:44+00:00; updated_at: 2026-09-26T06:26:33+00:00
 
 Version2; owner clarified internal sales/warehouse staff; source requirements AC01–06 and main8213a9e controller/source discovery. Expected behavior; not test results.
 
@@ -22,7 +22,7 @@ Routes `/admin/` overview (real service probe status / shortcuts, no fake KPI), 
 
 Products: GET /api/products; POST body `{name,description,price}` returns200 product; PUT /{id} same body returns200 empty; DELETE /{id} returns200 empty. Required nonblank name, price guard; explicit delete confirmation. Refresh list only after successful mutation. Web independently reads the product list for Inventory and Procurement selectors.
 
-Inventory: GET `/api/inventory/product/{productId}` -> `{productId,availableQuantity}`. No list exists: choose product then load. POST same path initialize, POST suffix `/increase`, `/decrease`, `/restock`, all body `{stock:int}`. Distinguish initial/absolute restock from increment/decrement using actual source semantics, verify labels before implementation. Missing GET may be500; show unavailable/retry rather than assume stock0 or automatically initialize. Explicit operator must choose initialize. Successful writes refresh actual server stock.
+Inventory: GET `/api/inventory/product/{productId}` -> `{productId,availableQuantity}`. No list exists: choose product then load. POST same path initialize, POST suffix `/increase`, `/decrease`, `/restock`, all body `{stock:int}`. Initialize sets the starting quantity; increase/decrease are deltas. Restock is also an additive return/replenishment delta (InventoryItem.Restock adds to Stock), labeled 退貨回補（增加庫存）, not an absolute stock reset. Missing GET may be500; show unavailable/retry rather than assume stock0 or automatically initialize. Explicit operator must choose initialize. Successful writes refresh actual server stock.
 
 Procurement: provider exact direct|wiremock|microcks; GET `/api/procurement/suppliers/{provider}/catalog/{sku}` -> `{sku,name,unitPrice,currency,origin}`. SKU ASCII `[A-Za-z0-9_-]{1,64}`; known examples REAL-001, MOCK-001, DENY-001. GET `/api/procurement/purchase-orders` newest max100 array; clearly 最近100筆, no fabricated total/paging. POST body `{clientRequestId,productId,supplierSku,quantity,unitPrice,currency:'TWD',provider}`; retain frozen request identity once sent, including across uncertain outcome. A new purchase is explicit new UUID/new draft; do not change provider or money on an existing identity.
 
