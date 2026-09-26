@@ -235,7 +235,9 @@ public sealed class ReceiveGoodsUseCase(IGoodsReceiptCommitter committer)
         var committed = await committer.CommitAsync(input.PurchaseOrderId, input.ReceiptId, order =>
         {
             var prior = order.Receipts.FirstOrDefault(x => x.ReceiptId == input.ReceiptId);
-            var receipt = order.Receive(input.ReceiptId, input.Quantity, DateTimeOffset.UtcNow);
+            // PostgreSQL timestamptz stores microseconds; millisecond UTC precision preserves exact replay/event identity.
+            var receivedAt = DateTimeOffset.FromUnixTimeMilliseconds(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+            var receipt = order.Receive(input.ReceiptId, input.Quantity, receivedAt);
             return new ReceiptCommitResult(order, receipt, prior is null);
         }, cancellationToken);
         return new ReceiveGoodsOutput(PurchaseOrderResponse.From(committed.Order),

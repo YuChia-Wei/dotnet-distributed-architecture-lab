@@ -91,6 +91,18 @@ public sealed class PurchaseScenarios
         ThenReceiptIsForbidden(error, created.Order);
     }
 
+    // R05 timestamp identity / AC02: created receipt precision survives PostgreSQL timestamptz storage unchanged.
+    [Fact, Trait("Scenario", "R05-timestamp-precision")]
+    public async Task New_receipt_timestamp_is_utc_millisecond_precision()
+    {
+        GivenSupplierAccepts("vendor-42");
+        var created = await WhenCreatingPurchase(identity);
+        var receipt = await new ReceiveGoodsUseCase(store).ExecuteAsync(
+            new ReceiveGoodsInput(created.Order.Id, Guid.NewGuid(), 4), CancellationToken.None);
+        Assert.Equal(TimeSpan.Zero, receipt.Receipt.ReceivedAt.Offset);
+        Assert.Equal(0, receipt.Receipt.ReceivedAt.Ticks % TimeSpan.TicksPerMillisecond);
+    }
+
     // P07 / AC01: invalid payloads fail before either port is called.
     [Theory, Trait("Scenario", "P07")]
     [InlineData("guid")]

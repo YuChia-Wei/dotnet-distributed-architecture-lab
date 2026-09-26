@@ -251,6 +251,9 @@ public sealed class ReceiptPostgresScenarios
         using var document = JsonDocument.Parse(row.Payload);
         Assert.Equal(receiptId, document.RootElement.GetProperty("receiptId").GetGuid());
         Assert.Equal(6, document.RootElement.GetProperty("quantity").GetInt32());
+        Assert.Equal(first.Receipt.ReceivedAt,
+            document.RootElement.GetProperty("receivedAt").GetDateTimeOffset());
+        Assert.Equal(0, first.Receipt.ReceivedAt.Ticks % TimeSpan.TicksPerMillisecond);
     }
 
     private static void ThenChangedReceiptConflicts(Exception? error) =>
@@ -328,7 +331,8 @@ public sealed class ReceiptPostgresScenarios
         IReadOnlyList<Exception?> competing)
     {
         Assert.Single(competing, error => error is null);
-        Assert.Single(competing, error => error is ProcurementRuleException rule && rule.Code == "over_receipt");
+        Assert.Single(competing, error => error is ProcurementRuleException rule &&
+            (rule.Code is "over_receipt" or "receipt_state_conflict"));
         await using var connection = await dataSource.OpenConnectionAsync();
         var order = await connection.QuerySingleAsync<(int ReceivedQuantity, string State)>(
             "SELECT received_quantity,state FROM procurement_purchase_orders WHERE id=@Id", new { Id = orderId });
@@ -348,6 +352,7 @@ public sealed class ReceiptPostgresScenarios
         Assert.Single(outcomes, result => result.Created);
         Assert.Single(outcomes, result => !result.Created);
         Assert.Equal(outcomes[0].Receipt, outcomes[1].Receipt);
+        Assert.Equal(0, outcomes[0].Receipt.ReceivedAt.Ticks % TimeSpan.TicksPerMillisecond);
         await using var connection = await dataSource.OpenConnectionAsync();
         Assert.Equal(4, await connection.ExecuteScalarAsync<int>(
             "SELECT received_quantity FROM procurement_purchase_orders WHERE id=@Id", new { Id = orderId }));
