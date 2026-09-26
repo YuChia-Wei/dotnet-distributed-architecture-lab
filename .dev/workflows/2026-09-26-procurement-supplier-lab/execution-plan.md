@@ -8,7 +8,7 @@ Workflow: 2026-09-26-procurement-supplier-lab. Issue: #17. Primary record: `.dev
 | T002 | slice-implementer (generic) | gpt-6-luna / high | Supplier sandbox, WireMock host/control UI, Microcks artifacts, focused tests |
 | T003 | slice-implementer (generic) | gpt-6-sol / high | Procurement domain, application, persistence, provider HTTP adapter, API/outbox and focused tests |
 | T004 | slice-implementer (generic) | gpt-6-sol / high | Inventory receipt transaction, event consumer, additive SQL and tests |
-| T005 | slice-implementer (generic) | assigned on dispatch | Compose integration, lab scripts and runbook |
+| T005 | slice-implementer (generic) | gpt-6-sol / high (Inventory worker reused after T004 local delivery) | Compose integration, lab scripts and runbook |
 | T006 | code-reviewer, spec-compliance-validator | parent configured gpt-6-astra / ultra | Review, actual acceptance evidence and model observations |
 
 Actual child invocation establishes child model attribution. Parent model is from configured default because the exact parent runtime model string is not separately exposed. Task status and timestamps are owned by the primary tool-created record and its history; these are planned assignments, not claims of execution.
@@ -24,3 +24,9 @@ Evaluation keeps first delivery separate from corrections. Task difficulty and s
 - Docker engine responded at 29.8.0. Existing unrelated observability Compose project remains running; commerce project was not listed as running. No data/volume deletion authorized.
 - Hosted Issue creation initially rejected by automatic approval; owner explicitly authorized it, then Issue #17 was created. Initial sandbox network/Docker/other-worktree read failures remain actual preflight failures, resolved through approved scoped access.
 - Code graph has stale Inventory implementation edges/snippets. Graph remains discovery only; implementation uses current tracked source on the baseline.
+
+## Owner execution updates
+
+The owner authorized Docker deployment and integration/data tests in the existing `mqarchlab-pr5-integration` project, including new UI/database services and Compose changes. Preserve the separate running `ai-collaboration-observability` project; record its container identities/start times before and after acceptance. Preserve existing volumes and data.
+
+The owner subsequently selected `F:\git-worktree` (RAM disk) as the preferred location for future worktrees and disposable temporary data. The three already active managed task worktrees remain in place for this workflow. Rebuildable download/build/test logs may use `F:\git-worktree\procurement-lab-evidence`; tracked specifications, commits and durable acceptance summaries remain in the repository. RAM-disk placement alone is not a measured performance claim.

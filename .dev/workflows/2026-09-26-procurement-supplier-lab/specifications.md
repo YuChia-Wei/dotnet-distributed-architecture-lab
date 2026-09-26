@@ -12,6 +12,8 @@ Purchase creation payload identity includes every immutable field except generat
 
 Base `/api/procurement`; JSON camelCase. Error shape includes stable `code` and `message`; invalid input 400, missing resource 404, identity/concurrency/state/over-receipt conflict 409, provider transport unavailable outcome represented durably as SubmissionUnknown with 202. Never expose stack traces/connection strings. Created order 201, identical established replay 200. Cancellation after provider side effects cannot erase durable pending identity.
 
+Apply the target's ProblemDetails transport format, carrying `code` and `message` as extensions, including model-binding failures. The explicitly selected route prefix above follows this lab's existing unversioned HTTP convention.
+
 | Method/path | Input | Result / effect |
 | --- | --- | --- |
 | GET `/suppliers/{provider}/catalog/{sku}` | configured provider, valid SKU | quote `{sku,name,unitPrice,currency,origin}`; unknown SKU 404, unreachable 502/504 with explicit code |
