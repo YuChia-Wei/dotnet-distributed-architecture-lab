@@ -102,6 +102,13 @@ python ./scripts/procurement-lab/test_contracts.py `
 
 腳本的 `P02/P03/P04/P07`、`S01` 與每套引擎的 `M01`–`M06` 結果只代表當次實際 HTTP 觀察；Receipt/Kafka 停機恢復、PostgreSQL 查驗與原生 UI 仍須另外驗收。`M06` 記錄 mock-only 未命中與未知路徑的實際狀態/內容，僅要求 sandbox request journal 不增加。
 
+若需補上以既有商品驗證的逾時/協調零收貨、兩條 Procurement provider 真實 quote/create，以及兩套原生引擎完整固定 POST 和同 key 的四種變體，執行補充腳本。`ProductId` 必須已在 Inventory 初始化；腳本不登錄收貨或重設庫存，每個採購情境都記錄前後庫存。變體可能因 sandbox 已持久綁定同 key 而被拒絕，但不得拿到固定 mock 接受結果，且須看到 sandbox POST。它在 `finally` 重設 sandbox 延遲為 0 並把兩個 mock 引擎設回 hybrid：
+
+```powershell
+python ./scripts/procurement-lab/test_supplemental_contracts.py --product-id $productId `
+  --output 'artifacts/procurement-lab/supplemental-http-contracts.json'
+```
+
 當 Kafka 停止時，新增收貨應保留 Procurement source outbox 記錄；重新啟動 Kafka 後，同一 ReceiptId 最終只增加一次庫存。只停止本專案的 Kafka 服務並記錄停機前後 stock、兩邊 outbox/receipt 表與事件 ID：
 
 ```powershell
