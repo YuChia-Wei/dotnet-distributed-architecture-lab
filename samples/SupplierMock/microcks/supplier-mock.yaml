@@ -14,6 +14,7 @@ paths:
           in: path
           required: true
           schema: { type: string }
+          examples: { MOCK-001: { value: MOCK-001 } }
       responses:
         '200':
           description: Supplier quote
@@ -53,7 +54,8 @@ paths:
           in: path
           required: true
           schema: { type: string, format: uuid }
-          example: 9d4c99da-6517-46b2-baa7-7e81106d3d34
+          examples:
+            9d4c99da-6517-46b2-baa7-7e81106d3d34: { value: 9d4c99da-6517-46b2-baa7-7e81106d3d34 }
       responses:
         '200':
           description: Reconciled supplier order

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using WireMock.Server;
 
+/// <summary>透過真實 HTTP 呼叫驗證 WireMock 模式與上游轉送行為。</summary>
 public sealed class SupplierMockTests : IAsyncLifetime
 {
     private WebApplication? upstream;
@@ -20,6 +21,7 @@ public sealed class SupplierMockTests : IAsyncLifetime
     private readonly ConcurrentQueue<(string Path, string? Body)> forwarded = new();
     private const string FixtureId = "9d4c99da-6517-46b2-baa7-7e81106d3d34";
 
+    /// <summary>依據固定範例、真實上游與目前模式驗證原生 HTTP 路由結果。</summary>
     [Fact]
     [Trait("Scenario", "M01-M02-M05-M06")]
     public async Task M01_M02_Given_a_real_local_upstream_When_modes_select_fixtures_proxy_or_mock_miss_Then_native_wiremock_forwards_only_the_selected_requests()
@@ -43,6 +45,65 @@ public sealed class SupplierMockTests : IAsyncLifetime
         await WhenSwitchingToMockModeAsync();
         using var mockOnlyMiss = await WhenGetAsync("/supplier/catalog/REAL-001");
         ThenMockModeMissDoesNotReachUpstream(mockOnlyMiss);
+    }
+
+    /// <summary>並行重設完成後，模式狀態、原生映射與實際回應必須一致。</summary>
+    [Fact]
+    [Trait("Scenario", "M07")]
+    public async Task M07_Given_concurrent_mode_resets_When_native_http_is_used_Then_selected_mode_matches_a_complete_mapping_set()
+    {
+        await GivenARealLocalUpstreamAsync();
+        await GivenNativeWireMockWithHybridMappingsAsync();
+
+        var modes = Enumerable.Range(0, 18)
+            .Select(index => (WireMockMode)(index % Enum.GetValues<WireMockMode>().Length))
+            .ToArray();
+        await Task.WhenAll(modes.Select(mode => controller!.ResetAsync(mode)));
+
+        using var mappingsDocument = JsonDocument.Parse(
+            await controller!.GetJsonAsync("__admin/mappings", CancellationToken.None));
+        var mappings = mappingsDocument.RootElement.EnumerateArray().ToArray();
+        var modeAfterResets = controller.Mode;
+        var mockCount = mappings.Count(mapping => GetPriority(mapping) == 1);
+        var proxyCount = mappings.Count(mapping => GetPriority(mapping) == 10);
+
+        switch (modeAfterResets)
+        {
+            case WireMockMode.Mock:
+                Assert.Equal(3, mockCount);
+                Assert.Equal(0, proxyCount);
+                Assert.Equal(3, mappings.Length);
+                break;
+            case WireMockMode.Proxy:
+                Assert.Equal(0, mockCount);
+                Assert.Equal(1, proxyCount);
+                Assert.Single(mappings);
+                break;
+            case WireMockMode.Hybrid:
+                Assert.Equal(3, mockCount);
+                Assert.Equal(1, proxyCount);
+                Assert.Equal(4, mappings.Length);
+                break;
+            default:
+                throw new Xunit.Sdk.XunitException($"Unexpected final mode: {modeAfterResets}");
+        }
+
+        using var quoteResponse = await WhenGetAsync("/supplier/catalog/MOCK-001");
+        Assert.Equal(HttpStatusCode.OK, quoteResponse.StatusCode);
+        var expectedOrigin = modeAfterResets == WireMockMode.Proxy ? "sandbox" : "wiremock";
+        Assert.Equal(expectedOrigin, quoteResponse.Headers.GetValues("X-Supplier-Origin").Single());
+    }
+
+    private static int GetPriority(JsonElement mapping)
+    {
+        if (mapping.TryGetProperty("priority", out var priority)
+            || mapping.TryGetProperty("Priority", out priority))
+        {
+            return priority.GetInt32();
+        }
+
+        throw new Xunit.Sdk.XunitException(
+            $"WireMock mapping did not expose a priority. Properties: {string.Join(", ", mapping.EnumerateObject().Select(property => property.Name))}");
     }
 
     private async Task GivenARealLocalUpstreamAsync()
@@ -133,7 +194,11 @@ public sealed class SupplierMockTests : IAsyncLifetime
         Assert.Equal(4, forwarded.Count);
     }
 
+    /// <summary>準備測試執行環境。</summary>
     public ValueTask InitializeAsync() => ValueTask.CompletedTask;
+
+    /// <summary>釋放 HTTP 用戶端與本機供應商伺服器。</summary>
+    /// <returns>非同步清理作業。</returns>
     public async ValueTask DisposeAsync()
     {
         controller?.DisposeAdminClient();

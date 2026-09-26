@@ -13,7 +13,12 @@ paths:
         dispatcher: PROXY_FALLBACK
         dispatcherRules: |
           {"dispatcher":"URI_PARTS","dispatcherRules":"sku","proxyUrl":"http://supplier-sandbox:8080/"}
-      parameters: [{ name: sku, in: path, required: true, schema: { type: string } }]
+      parameters:
+        - name: sku
+          in: path
+          required: true
+          schema: { type: string }
+          examples: { MOCK-001: { value: MOCK-001 } }
       responses:
         '200':
           description: Supplier quote
@@ -28,7 +33,7 @@ paths:
       x-microcks-operation:
         dispatcher: PROXY_FALLBACK
         dispatcherRules: |
-          {"dispatcher":"JSON_BODY","dispatcherRules":"{\"exp\":\"/clientRequestId\",\"operator\":\"equals\",\"cases\":{\"9d4c99da-6517-46b2-baa7-7e81106d3d34\":\"mock-order\"}}","proxyUrl":"http://supplier-sandbox:8080/"}
+          {"dispatcher":"JSON_BODY","dispatcherRules":"{\"exp\":\"/clientRequestId\",\"operator\":\"equals\",\"cases\":{\"9d4c99da-6517-46b2-baa7-7e81106d3d34\":\"mock-order\",\"default\":\"__proxy_unmatched__\"}}","proxyUrl":"http://supplier-sandbox:8080/"}
       requestBody:
         required: true
         content:
@@ -51,7 +56,13 @@ paths:
         dispatcher: PROXY_FALLBACK
         dispatcherRules: |
           {"dispatcher":"URI_PARTS","dispatcherRules":"clientRequestId","proxyUrl":"http://supplier-sandbox:8080/"}
-      parameters: [{ name: clientRequestId, in: path, required: true, schema: { type: string, format: uuid } }]
+      parameters:
+        - name: clientRequestId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+          examples:
+            9d4c99da-6517-46b2-baa7-7e81106d3d34: { value: 9d4c99da-6517-46b2-baa7-7e81106d3d34 }
       responses:
         '200':
           description: Previously created supplier order

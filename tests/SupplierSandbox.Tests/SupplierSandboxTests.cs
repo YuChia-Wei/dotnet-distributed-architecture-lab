@@ -1,14 +1,17 @@
 using Dapper;
 using Npgsql;
 
+/// <summary>驗證供應商資料規則與 PostgreSQL 冪等訂單行為。</summary>
 public sealed class SupplierSandboxTests : IAsyncLifetime
 {
     private readonly NpgsqlDataSource dataSource = NpgsqlDataSource.Create(Environment.GetEnvironmentVariable("SUPPLIER_TEST_POSTGRES_CONNECTION_STRING") ?? "Host=localhost;Database=unconfigured_supplier_test;Username=postgres;Password=postgres");
     private readonly SupplierStore store;
     private readonly string? connectionString = Environment.GetEnvironmentVariable("SUPPLIER_TEST_POSTGRES_CONNECTION_STRING");
 
+    /// <summary>建立資料庫來源與供應商儲存庫。</summary>
     public SupplierSandboxTests() => store = new SupplierStore(dataSource);
 
+    /// <summary>驗證相同識別碼重播訂單，以及不同欄位造成的冪等衝突。</summary>
     [Fact]
     [Trait("Scenario", "S01")]
     public async Task S01_Given_a_dedicated_postgres_store_When_the_same_supplier_key_is_replayed_Then_one_stable_order_is_returned_and_changed_payload_conflicts()
@@ -38,6 +41,7 @@ public sealed class SupplierSandboxTests : IAsyncLifetime
         finally { await CleanupAsync(sku, requestId); await CleanupAsync(sku, concurrentRequestId); }
     }
 
+    /// <summary>驗證供應商 SKU 格式限制。</summary>
     [Fact]
     [Trait("Scenario", "S07")]
     public void S07_Given_the_supplier_SKU_rule_When_values_are_checked_Then_only_bounded_vendor_SKUs_are_accepted()
@@ -75,6 +79,9 @@ public sealed class SupplierSandboxTests : IAsyncLifetime
         await c.ExecuteAsync("DELETE FROM supplier_orders WHERE client_request_id=@requestId", new { requestId });
         await c.ExecuteAsync("DELETE FROM supplier_skus WHERE sku=@sku", new { sku });
     }
+    /// <summary>準備測試執行環境。</summary>
     public ValueTask InitializeAsync() => ValueTask.CompletedTask;
+
+    /// <summary>釋放 PostgreSQL 資料來源。</summary>
     public ValueTask DisposeAsync() => dataSource.DisposeAsync();
 }
