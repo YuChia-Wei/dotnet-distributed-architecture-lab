@@ -9,6 +9,82 @@ namespace Procurement.Tests;
 
 public sealed class ReceiptPostgresScenarios
 {
+    // R02 / AC02: invalid follow-up quantities cannot change the stored partial receipt or source outbox.
+    [ExternalIntegrationFact, Trait("Scenario", "R02")]
+    public async Task Invalid_follow_up_receipts_leave_postgres_facts_unchanged()
+    {
+        await using var dataSource = NpgsqlDataSource.Create(
+            Environment.GetEnvironmentVariable(ExternalIntegrationFactAttribute.ConnectionVariable)!);
+        await GivenAdditiveSchema(dataSource);
+        var store = new PostgresPurchaseStore(dataSource);
+        var identity = new PurchaseIdentity(Guid.NewGuid(), Guid.NewGuid(), "REAL-001", 10, 100m, "TWD", "direct");
+        var orderId = Guid.NewGuid();
+        try
+        {
+            await GivenAcceptedPurchase(store, identity, orderId);
+            await WhenReceiving(store, orderId, Guid.NewGuid(), 6);
+            foreach (var quantity in new[] { 5, 0, -1 })
+            {
+                var attemptedReceiptId = Guid.NewGuid();
+                var error = await WhenReceivingInvalid(store, orderId, attemptedReceiptId, quantity);
+                ThenInvalidReceiptIsRejected(error, quantity);
+                await ThenPartialReceiptFactsRemain(dataSource, orderId);
+                await ThenNoFactWasCreatedForAttempt(dataSource, attemptedReceiptId);
+            }
+        }
+        finally { await CleanupOwnRows(dataSource, orderId); }
+    }
+
+    // R03 / AC02: a replay after source-outbox retention still returns the original receipt without restaging it.
+    [ExternalIntegrationFact, Trait("Scenario", "R03-after-outbox-purge")]
+    public async Task Replay_after_source_outbox_deletion_does_not_recreate_event()
+    {
+        await using var dataSource = NpgsqlDataSource.Create(
+            Environment.GetEnvironmentVariable(ExternalIntegrationFactAttribute.ConnectionVariable)!);
+        await GivenAdditiveSchema(dataSource);
+        var store = new PostgresPurchaseStore(dataSource);
+        var identity = new PurchaseIdentity(Guid.NewGuid(), Guid.NewGuid(), "REAL-001", 10, 100m, "TWD", "direct");
+        var orderId = Guid.NewGuid();
+        try
+        {
+            await GivenAcceptedPurchase(store, identity, orderId);
+            var receiptId = Guid.NewGuid();
+            var first = await WhenReceiving(store, orderId, receiptId, 10);
+            await WhenDeletingOwnSourceOutbox(dataSource, receiptId);
+            var replay = await WhenReceiving(store, orderId, receiptId, 10);
+            await ThenReplayAfterPurgeHasNoSecondEffect(dataSource, orderId, receiptId, first, replay);
+        }
+        finally { await CleanupOwnRows(dataSource, orderId); }
+    }
+
+    // R04 / AC02: a receipt ID is global across orders, including orders for different products.
+    [ExternalIntegrationFact, Trait("Scenario", "R04-cross-purchase-product")]
+    public async Task Receipt_id_cannot_move_to_another_purchase_or_product()
+    {
+        await using var dataSource = NpgsqlDataSource.Create(
+            Environment.GetEnvironmentVariable(ExternalIntegrationFactAttribute.ConnectionVariable)!);
+        await GivenAdditiveSchema(dataSource);
+        var store = new PostgresPurchaseStore(dataSource);
+        var firstIdentity = new PurchaseIdentity(Guid.NewGuid(), Guid.NewGuid(), "REAL-001", 10, 100m, "TWD", "direct");
+        var secondIdentity = firstIdentity with { ClientRequestId = Guid.NewGuid(), ProductId = Guid.NewGuid() };
+        var firstOrderId = Guid.NewGuid();
+        var secondOrderId = Guid.NewGuid();
+        try
+        {
+            await GivenAcceptedPurchase(store, firstIdentity, firstOrderId);
+            await GivenAcceptedPurchase(store, secondIdentity, secondOrderId);
+            var receiptId = Guid.NewGuid();
+            await WhenReceiving(store, firstOrderId, receiptId, 4);
+            var error = await WhenReceivingInvalid(store, secondOrderId, receiptId, 4);
+            await ThenCrossPurchaseReplayConflictsWithoutMutation(dataSource, firstOrderId, secondOrderId, receiptId, error);
+        }
+        finally
+        {
+            await CleanupOwnRows(dataSource, firstOrderId);
+            await CleanupOwnRows(dataSource, secondOrderId);
+        }
+    }
+
     // R03/R04/R06/R08-source / AC02: real PG receipt+outbox atomicity, replay and competing overreceipt.
     // Broker delivery and Inventory stock effects remain separate external scenarios.
     [ExternalIntegrationFact, Trait("Scenario", "R03-R04-R06-R08-source")]
@@ -179,6 +255,74 @@ public sealed class ReceiptPostgresScenarios
 
     private static void ThenChangedReceiptConflicts(Exception? error) =>
         Assert.Equal("receipt_identity_conflict", Assert.IsType<ProcurementRuleException>(error).Code);
+
+    private static void ThenInvalidReceiptIsRejected(Exception? error, int quantity) =>
+        Assert.Equal(quantity > 0 ? "over_receipt" : "invalid_receipt",
+            Assert.IsType<ProcurementRuleException>(error).Code);
+
+    private static async Task ThenPartialReceiptFactsRemain(NpgsqlDataSource dataSource, Guid orderId)
+    {
+        await using var connection = await dataSource.OpenConnectionAsync();
+        var state = await connection.QuerySingleAsync<(int ReceivedQuantity, string State)>(
+            "SELECT received_quantity,state FROM procurement_purchase_orders WHERE id=@Id", new { Id = orderId });
+        Assert.Equal(6, state.ReceivedQuantity);
+        Assert.Equal("PartiallyReceived", state.State);
+        Assert.Equal(1, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_receipts WHERE purchase_order_id=@Id", new { Id = orderId }));
+        Assert.Equal(1, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_outbox WHERE id IN (SELECT receipt_id FROM procurement_receipts WHERE purchase_order_id=@Id)",
+            new { Id = orderId }));
+    }
+
+    private static async Task ThenNoFactWasCreatedForAttempt(NpgsqlDataSource dataSource, Guid receiptId)
+    {
+        await using var connection = await dataSource.OpenConnectionAsync();
+        Assert.Equal(0, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_receipts WHERE receipt_id=@Id", new { Id = receiptId }));
+        Assert.Equal(0, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_outbox WHERE id=@Id", new { Id = receiptId }));
+    }
+
+    private static async Task WhenDeletingOwnSourceOutbox(NpgsqlDataSource dataSource, Guid receiptId)
+    {
+        await using var connection = await dataSource.OpenConnectionAsync();
+        Assert.Equal(1, await connection.ExecuteAsync("DELETE FROM procurement_outbox WHERE id=@Id", new { Id = receiptId }));
+    }
+
+    private static async Task ThenReplayAfterPurgeHasNoSecondEffect(NpgsqlDataSource dataSource, Guid orderId,
+        Guid receiptId, ReceiveGoodsOutput first, ReceiveGoodsOutput replay)
+    {
+        Assert.True(first.Created);
+        Assert.False(replay.Created);
+        Assert.Equal(first.Receipt, replay.Receipt);
+        Assert.Equal(first.Order.Version, replay.Order.Version);
+        Assert.Equal(10, replay.Order.ReceivedQuantity);
+        await using var connection = await dataSource.OpenConnectionAsync();
+        Assert.Equal(1, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_receipts WHERE receipt_id=@Id", new { Id = receiptId }));
+        Assert.Equal(0, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_outbox WHERE id=@Id", new { Id = receiptId }));
+        Assert.Equal(10, await connection.ExecuteScalarAsync<int>(
+            "SELECT received_quantity FROM procurement_purchase_orders WHERE id=@Id", new { Id = orderId }));
+    }
+
+    private static async Task ThenCrossPurchaseReplayConflictsWithoutMutation(NpgsqlDataSource dataSource,
+        Guid firstOrderId, Guid secondOrderId, Guid receiptId, Exception? error)
+    {
+        ThenChangedReceiptConflicts(error);
+        await using var connection = await dataSource.OpenConnectionAsync();
+        Assert.Equal(4, await connection.ExecuteScalarAsync<int>(
+            "SELECT received_quantity FROM procurement_purchase_orders WHERE id=@Id", new { Id = firstOrderId }));
+        Assert.Equal(0, await connection.ExecuteScalarAsync<int>(
+            "SELECT received_quantity FROM procurement_purchase_orders WHERE id=@Id", new { Id = secondOrderId }));
+        Assert.Equal(1, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_receipts WHERE receipt_id=@Id AND purchase_order_id=@OrderId",
+            new { Id = receiptId, OrderId = firstOrderId }));
+        Assert.Equal(0, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_receipts WHERE purchase_order_id=@Id", new { Id = secondOrderId }));
+        Assert.Equal(1, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_outbox WHERE id=@Id", new { Id = receiptId }));
+    }
 
     private static async Task ThenConcurrentOverreceiptIsRejected(NpgsqlDataSource dataSource, Guid orderId,
         IReadOnlyList<Exception?> competing)
