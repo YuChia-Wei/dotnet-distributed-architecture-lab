@@ -2,7 +2,7 @@
 
 created_at: 2026-09-26T06:15:44+00:00; updated_at: 2026-09-26T06:26:33+00:00
 
-Version2; owner clarified internal sales/warehouse staff; source requirements AC01–06 and main8213a9e controller/source discovery. Expected behavior; not test results.
+Version2 with source-backed description correction recorded in review-notes RUN-02; owner clarified internal sales/warehouse staff; source requirements AC01–06 and main8213a9e controller/source discovery. Expected behavior; not test results.
 
 ## Shared frontend behavior
 
@@ -20,7 +20,7 @@ GET /api/orders/{id} -> `{orderId,lineItems:[{productId,quantity}]}`. Render exa
 
 Routes `/admin/` overview (real service probe status / shortcuts, no fake KPI), `/admin/products`, `/admin/integrations`. Provide a direct link to `/web/inventory` and `/web/procurement` for daily operations. Product CRUD belongs to Admin; the Inventory and Procurement contracts below belong to Web.
 
-Products: GET /api/products; POST body `{name,description,price}` returns200 product; PUT /{id} same body returns200 empty; DELETE /{id} returns200 empty. Required nonblank name, price guard; explicit delete confirmation. Refresh list only after successful mutation. Web independently reads the product list for Inventory and Procurement selectors.
+Products: GET /api/products; POST body `{name,description,price}` returns200 product; PUT /{id} same body returns200 empty; DELETE /{id} returns200 empty. Required nonblank name and description (Product.ValidateProductData), price guard; explicit delete confirmation. Refresh list only after successful mutation. Web independently reads the product list for Inventory and Procurement selectors.
 
 Inventory: GET `/api/inventory/product/{productId}` -> `{productId,availableQuantity}`. No list exists: choose product then load. POST same path initialize, POST suffix `/increase`, `/decrease`, `/restock`, all body `{stock:int}`. Initialize sets the starting quantity; increase/decrease are deltas. Restock is also an additive return/replenishment delta (InventoryItem.Restock adds to Stock), labeled 退貨回補（增加庫存）, not an absolute stock reset. Missing GET may be500; show unavailable/retry rather than assume stock0 or automatically initialize. Explicit operator must choose initialize. Successful writes refresh actual server stock.
 

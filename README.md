@@ -156,6 +156,19 @@ dotnet test MQArchLab.slnx
 
 本 repository 目前沒有 active target-owned analyzer 或 runtime-validator projects。它們已在受治理的 v0.9 AI context 升級中退役，v0.13 framework 也已移除先前的 bundled mechanical-validation provider。現在僅保留 `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/` 下的 reference-only recipes；它們未被選用、未加入 `MQArchLab.slnx`、未接入 build，也未啟用。
 
+## 前台與管理後台
+
+兩套 Vue 3 / TypeScript 應用位於 `src/Frontend/Web` 與 `src/Frontend/Admin`，以 Nginx 提供正式建置，經同一個 YARP 入口存取。
+
+```powershell
+./scripts/frontend-lab/Start-Lab.ps1
+```
+
+- [作業工作台](http://127.0.0.1:8888/web/)：內部業務／倉管的商品查詢、銷售訂單、庫存、採購與收貨。
+- [管理後台](http://127.0.0.1:8888/admin/)：商品主檔、服務狀態、WireMock.Net／Microcks mock 與 proxy 控制、供應商沙盒。
+
+腳本復用 `mqarchlab-pr5-integration`，保留既有資料 volumes，僅啟動指定服務。這是無登入與角色授權的 localhost 實驗環境。完整路由、操作與故障排查請見[前端實驗操作手冊](.dev/operations/commerce-frontend.md)。
+
 ## 專案知識入口
 
 - [.dev/ARCHITECTURE.md](.dev/ARCHITECTURE.md)：目前產品架構與依賴邊界
