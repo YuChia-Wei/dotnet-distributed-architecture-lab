@@ -83,7 +83,7 @@ Microcks 使用自己的 UI。從 `samples/SupplierMock/microcks/` 擇一匯入 
 # 啟用驗證的環境：-BearerToken $managerToken
 ```
 
-匯入成功與服務身分讀回只證明規格已登錄，切換後仍須以不同 request ID 確認 dispatch 與來源。此版本預期前綴是 `/rest/Supplier+API/1.0.0/`；若 UI 顯示不同路徑，修改 `docker-compose.procurement.yml` 的 `SupplierProfiles__microcks` 再重建 `procurement-api`。每次切換匯入檔後檢查 dispatcher/proxy 設定實際生效；`PROXY_FALLBACK` 只適用已知 operation 的 response matching，不能當作所有未知路徑的轉發。mock/proxy/hybrid 各以唯一 request ID 比對 Microcks response origin 和 sandbox request log，留下原生 UI/請求證據。
+匯入腳本和 HTTP 契約腳本都用固定上傳檔名 `supplier-api.yaml`，讓不同模式覆蓋同一份 Microcks source artifact；手動 Quick Import 時先把所選 YAML 複製成該檔名再上傳，避免以三個來源檔名累積範例。匯入成功與服務身分讀回只證明規格已登錄，切換後仍須以不同 request ID 確認 dispatch 與來源。此版本預期前綴是 `/rest/Supplier+API/1.0.0/`；若 UI 顯示不同路徑，修改 `docker-compose.procurement.yml` 的 `SupplierProfiles__microcks` 再重建 `procurement-api`。每次切換匯入檔後檢查 dispatcher/proxy 設定實際生效；`PROXY_FALLBACK` 只適用已知 operation 的 response matching，不能當作所有未知路徑的轉發。mock/proxy/hybrid 各以唯一 request ID 比對 Microcks response origin 和 sandbox request log，留下原生 UI/請求證據。
 
 ## 可重現驗證與故障恢復
 

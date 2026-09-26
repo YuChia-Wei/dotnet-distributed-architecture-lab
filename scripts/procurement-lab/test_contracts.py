@@ -169,7 +169,7 @@ def set_microcks(mode: str) -> dict[str, Any]:
     check(artifact.is_file(), f"missing checked Microcks artifact: {artifact}")
     boundary = "codex-" + uuid.uuid4().hex
     data = (f"--{boundary}\r\nContent-Disposition: form-data; name=\"file\"; "
-            f"filename=\"{artifact.name}\"\r\nContent-Type: application/yaml\r\n\r\n").encode()
+            "filename=\"supplier-api.yaml\"\r\nContent-Type: application/yaml\r\n\r\n").encode()
     data += artifact.read_bytes() + f"\r\n--{boundary}--\r\n".encode()
     upload = http("POST", MICROCKS + "/api/artifact/upload?mainArtifact=true",
                   data, f"multipart/form-data; boundary={boundary}")
@@ -182,7 +182,7 @@ def set_microcks(mode: str) -> dict[str, Any]:
         matched = [item for item in services["body"] if item.get("name") == "Supplier API"
                    and item.get("version") == "1.0.0"]
         if matched:
-            return {"mode": mode, "artifact": str(artifact), "upload": upload,
+            return {"mode": mode, "artifact": str(artifact), "uploadedFilename": "supplier-api.yaml", "upload": upload,
                     "service": matched[0]}
         check(time.monotonic() < deadline, "Microcks Supplier API 1.0.0 was not read back")
         time.sleep(1)

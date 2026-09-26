@@ -15,13 +15,24 @@ if (-not (Test-Path -LiteralPath $artifact -PathType Leaf)) {
 $headers = @{}
 if ($BearerToken) { $headers.Authorization = "Bearer $BearerToken" }
 $baseUri = 'http://127.0.0.1:8184'
+$uploadDirectory = Join-Path ([System.IO.Path]::GetTempPath()) "microcks-$([Guid]::NewGuid().ToString('N'))"
+$uploadFile = Join-Path $uploadDirectory 'supplier-api.yaml'
 
 try {
+    New-Item -ItemType Directory -Path $uploadDirectory -ErrorAction Stop | Out-Null
+    Copy-Item -LiteralPath $artifact -Destination $uploadFile -ErrorAction Stop
     Invoke-RestMethod -Method Post -Uri "$baseUri/api/artifact/upload?mainArtifact=true" `
-        -Form @{ file = (Get-Item -LiteralPath $artifact) } -Headers $headers `
+        -Form @{ file = (Get-Item -LiteralPath $uploadFile) } -Headers $headers `
         -TimeoutSec 30 -ErrorAction Stop | Out-Null
 } catch {
     throw "Microcks $Mode artifact upload failed: $($_.Exception.Message)"
+} finally {
+    if (Test-Path -LiteralPath $uploadFile) {
+        Remove-Item -LiteralPath $uploadFile -Force -ErrorAction SilentlyContinue
+    }
+    if (Test-Path -LiteralPath $uploadDirectory) {
+        Remove-Item -LiteralPath $uploadDirectory -Force -ErrorAction SilentlyContinue
+    }
 }
 
 $service = $null
@@ -46,6 +57,7 @@ if (-not $service) {
 [ordered]@{
     selectedMode = $Mode
     artifact = $artifact
+    uploadedFilename = 'supplier-api.yaml'
     serviceName = $service.name
     serviceVersion = $service.version
     serviceId = $service.id

@@ -73,7 +73,7 @@ Wait-Http 'http://127.0.0.1:8181/health'
 Wait-Http 'http://127.0.0.1:8182/health'
 Wait-Http 'http://127.0.0.1:8180/health'
 Wait-Http 'http://127.0.0.1:8184/api/services?page=0&size=1'
-if ($InventoryProductId -ne [Guid]::Empty) {
+if ($PSBoundParameters.ContainsKey('InventoryProductId') -and $InventoryProductId -ne [Guid]::Empty) {
     Wait-Http "http://127.0.0.1:8185/api/inventory/product/$InventoryProductId"
 }
 
