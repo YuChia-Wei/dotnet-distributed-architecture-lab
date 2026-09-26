@@ -1,3 +1,4 @@
+using Lab.BuildingBlocks.Application;
 using Procurement.Domains;
 
 namespace Procurement.Applications;
@@ -88,7 +89,7 @@ public interface IPurchaseOrderRepository
 }
 
 /// <summary>唯讀查詢埠，只回傳公開投影。</summary>
-public interface IPurchaseOrderQueries
+public interface IPurchaseOrderQueries : IQueryRepository
 {
     /// <summary>依本地識別碼查詢採購快照。</summary>
     Task<PurchaseOrderResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken);

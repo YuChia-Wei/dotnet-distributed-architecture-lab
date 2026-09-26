@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Data;
 using Dapper;
 using Lab.BoundedContextContracts.Procurement.IntegrationEvents;
 using Npgsql;
@@ -39,8 +40,11 @@ public sealed class PostgresPurchaseStore(NpgsqlDataSource dataSource) :
             State = candidate.State.ToString(),
             candidate.CreatedAt
         }, cancellationToken: cancellationToken));
-        var order = await LoadByClientRequestAsync(connection, candidate.Identity.ClientRequestId, null, cancellationToken)
+        // ON CONFLICT may wait for another creator. Start the read snapshot afterward.
+        await using var readTransaction = await connection.BeginTransactionAsync(IsolationLevel.RepeatableRead, cancellationToken);
+        var order = await LoadByClientRequestAsync(connection, candidate.Identity.ClientRequestId, readTransaction, cancellationToken)
             ?? throw new InvalidOperationException("Committed purchase order could not be loaded.");
+        await readTransaction.CommitAsync(cancellationToken);
         return new CreateCommittedPurchase(order, count == 1);
     }
 
@@ -48,7 +52,10 @@ public sealed class PostgresPurchaseStore(NpgsqlDataSource dataSource) :
     public async Task<PurchaseOrder?> FindByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         await using var connection = await dataSource.OpenConnectionAsync(cancellationToken);
-        return await LoadByIdAsync(connection, id, null, false, cancellationToken);
+        await using var transaction = await connection.BeginTransactionAsync(IsolationLevel.RepeatableRead, cancellationToken);
+        var order = await LoadByIdAsync(connection, id, transaction, false, cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        return order;
     }
 
     /// <inheritdoc />
@@ -62,15 +69,17 @@ public sealed class PostgresPurchaseStore(NpgsqlDataSource dataSource) :
     public async Task<IReadOnlyList<PurchaseOrderResponse>> RecentAsync(int limit, CancellationToken cancellationToken)
     {
         await using var connection = await dataSource.OpenConnectionAsync(cancellationToken);
+        await using var transaction = await connection.BeginTransactionAsync(IsolationLevel.RepeatableRead, cancellationToken);
         var ids = await connection.QueryAsync<Guid>(new CommandDefinition(
             "SELECT id FROM procurement_purchase_orders ORDER BY created_at DESC, id DESC LIMIT @Limit",
-            new { Limit = Math.Clamp(limit, 1, 100) }, cancellationToken: cancellationToken));
+            new { Limit = Math.Clamp(limit, 1, 100) }, transaction, cancellationToken: cancellationToken));
         var result = new List<PurchaseOrderResponse>();
         foreach (var id in ids)
         {
-            var order = await LoadByIdAsync(connection, id, null, false, cancellationToken);
+            var order = await LoadByIdAsync(connection, id, transaction, false, cancellationToken);
             if (order is not null) result.Add(PurchaseOrderResponse.From(order));
         }
+        await transaction.CommitAsync(cancellationToken);
         return result.AsReadOnly();
     }
 

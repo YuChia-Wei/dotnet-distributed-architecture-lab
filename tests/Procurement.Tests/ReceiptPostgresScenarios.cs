@@ -57,6 +57,29 @@ public sealed class ReceiptPostgresScenarios
         finally { await CleanupOwnRows(dataSource, orderId); }
     }
 
+    // R06 read projection / AC02: multi-statement reads stay internally coherent during partial receipts.
+    [ExternalIntegrationFact, Trait("Scenario", "R06-read-snapshot")]
+    public async Task Concurrent_receipts_never_expose_mixed_read_snapshot()
+    {
+        await using var dataSource = NpgsqlDataSource.Create(
+            Environment.GetEnvironmentVariable(ExternalIntegrationFactAttribute.ConnectionVariable)!);
+        await GivenAdditiveSchema(dataSource);
+        var store = new PostgresPurchaseStore(dataSource);
+        var identity = new PurchaseIdentity(Guid.NewGuid(), Guid.NewGuid(), "REAL-001", 10, 100m, "TWD", "direct");
+        var orderId = Guid.NewGuid();
+        try
+        {
+            await GivenAcceptedPurchase(store, identity, orderId);
+            var snapshots = await WhenReadingWhileTwoReceiptsCommit(store, orderId);
+            ThenEverySnapshotMatchesItsReceiptFacts(snapshots);
+            var final = await store.GetByIdAsync(orderId, CancellationToken.None);
+            Assert.NotNull(final);
+            Assert.Equal(10, final.ReceivedQuantity);
+            Assert.Equal(2, final.Receipts.Count);
+        }
+        finally { await CleanupOwnRows(dataSource, orderId); }
+    }
+
     private static async Task GivenAdditiveSchema(NpgsqlDataSource dataSource)
     {
         var sql = await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "Schema", "procurement.sql"));
@@ -91,6 +114,51 @@ public sealed class ReceiptPostgresScenarios
         Guid orderId, Guid receiptId) => Task.WhenAll(
         WhenReceiving(store, orderId, receiptId, 4),
         WhenReceiving(store, orderId, receiptId, 4));
+
+    private static async Task<IReadOnlyList<PurchaseOrderResponse>> WhenReadingWhileTwoReceiptsCommit(
+        PostgresPurchaseStore store, Guid orderId)
+    {
+        var begin = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var reader = Task.Run(async () =>
+        {
+            var observed = new List<PurchaseOrderResponse>();
+            begin.SetResult(true);
+            for (var attempt = 0; attempt < 40; attempt++)
+            {
+                var current = await store.GetByIdAsync(orderId, CancellationToken.None);
+                Assert.NotNull(current);
+                observed.Add(current);
+                if (attempt % 5 == 0)
+                {
+                    var recent = await store.RecentAsync(100, CancellationToken.None);
+                    var listed = recent.FirstOrDefault(x => x.Id == orderId);
+                    if (listed is not null) observed.Add(listed);
+                }
+                await Task.Delay(1);
+            }
+            return observed;
+        });
+        var writer = Task.Run(async () =>
+        {
+            await begin.Task;
+            await Task.Delay(5);
+            await WhenReceiving(store, orderId, Guid.NewGuid(), 6);
+            await Task.Delay(5);
+            await WhenReceiving(store, orderId, Guid.NewGuid(), 4);
+        });
+        await Task.WhenAll(reader, writer);
+        return await reader;
+    }
+
+    private static void ThenEverySnapshotMatchesItsReceiptFacts(IReadOnlyList<PurchaseOrderResponse> snapshots)
+    {
+        Assert.NotEmpty(snapshots);
+        Assert.All(snapshots, snapshot =>
+        {
+            Assert.Equal(snapshot.ReceivedQuantity, snapshot.Receipts.Sum(receipt => receipt.Quantity));
+            Assert.InRange(snapshot.ReceivedQuantity, 0, snapshot.Identity.Quantity);
+        });
+    }
 
     private static async Task ThenReplayHasOneDurableOutbox(NpgsqlDataSource dataSource,
         ReceiveGoodsOutput first, ReceiveGoodsOutput replay, Guid receiptId, Guid productId)
