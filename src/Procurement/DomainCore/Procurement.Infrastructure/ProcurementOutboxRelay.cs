@@ -8,7 +8,7 @@ using Wolverine;
 
 namespace Procurement.Infrastructure;
 
-/// <summary>Leases committed receipts, publishes with their stable identity, and retains failures for diagnosis.</summary>
+/// <summary>租用已提交收貨並交付 Wolverine 持久化寄件匣；失敗保留診斷資訊。</summary>
 public sealed class ProcurementOutboxRelay(NpgsqlDataSource dataSource, IMessageBus bus,
     ILogger<ProcurementOutboxRelay> logger) : BackgroundService
 {
@@ -26,6 +26,7 @@ public sealed class ProcurementOutboxRelay(NpgsqlDataSource dataSource, IMessage
         }
     }
 
+    /// <summary>交付一批待處理來源事件；published_at 表示傳輸持久化交接，不代表 Kafka 消費完成。</summary>
     public async Task<int> RelayBatchAsync(CancellationToken cancellationToken)
     {
         var lease = Guid.NewGuid();
@@ -61,6 +62,7 @@ public sealed class ProcurementOutboxRelay(NpgsqlDataSource dataSource, IMessage
                 };
                 options.WithHeader("lab-message-id", row.Id.ToString("D"));
                 await bus.PublishAsync(message, options);
+                // 只有 awaited Wolverine durable-outbox handoff 成功後才標記來源列；Kafka 實際送達需另查傳輸寄件匣。
                 await connection.ExecuteAsync(new CommandDefinition("""
                     UPDATE procurement_outbox SET published_at=now(),locked_by=NULL,locked_until=NULL,last_error=NULL
                     WHERE id=@Id AND locked_by=@Lease

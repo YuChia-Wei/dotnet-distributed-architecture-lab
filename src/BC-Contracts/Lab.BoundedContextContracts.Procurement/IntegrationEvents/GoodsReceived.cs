@@ -2,9 +2,10 @@ using System.Text.Json.Serialization;
 
 namespace Lab.BoundedContextContracts.Procurement.IntegrationEvents;
 
-/// <summary>Procurement-owned v1 physical receipt fact. ReceiptId is the stable message identity.</summary>
+/// <summary>採購端擁有的 v1 實際收貨事實；ReceiptId 是重送時不變的訊息識別碼。</summary>
 public sealed record GoodsReceived
 {
+    /// <summary>建立有效的實際收貨事件。</summary>
     [JsonConstructor]
     public GoodsReceived(Guid receiptId, Guid purchaseOrderId, Guid productId, int quantity, DateTimeOffset receivedAt)
     {
@@ -19,14 +20,19 @@ public sealed record GoodsReceived
         ReceivedAt = receivedAt;
     }
 
+    /// <summary>全域收貨與訊息識別碼。</summary>
     [JsonPropertyName("receiptId")]
     public Guid ReceiptId { get; }
+    /// <summary>來源採購單識別碼。</summary>
     [JsonPropertyName("purchaseOrderId")]
     public Guid PurchaseOrderId { get; }
+    /// <summary>既有商品識別碼。</summary>
     [JsonPropertyName("productId")]
     public Guid ProductId { get; }
+    /// <summary>實際收到的正整數數量。</summary>
     [JsonPropertyName("quantity")]
     public int Quantity { get; }
+    /// <summary>收貨發生時間。</summary>
     [JsonPropertyName("receivedAt")]
     public DateTimeOffset ReceivedAt { get; }
 }

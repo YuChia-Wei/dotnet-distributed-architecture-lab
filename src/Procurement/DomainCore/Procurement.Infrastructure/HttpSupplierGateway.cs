@@ -6,11 +6,14 @@ using Procurement.Domains;
 
 namespace Procurement.Infrastructure;
 
+/// <summary>以固定命名路徑呼叫供應商，並將傳輸錯誤轉成應用層錯誤。</summary>
 public sealed class HttpSupplierGateway(IHttpClientFactory clients) : ISupplierGateway
 {
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
-    public async Task<SupplierQuote> QuoteAsync(string provider, string sku, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public Task<SupplierQuoteResponse> QuoteAsync(string provider, string sku, CancellationToken cancellationToken) =>
+        NormalizeAsync(async () =>
     {
         new PurchaseIdentity(Guid.NewGuid(), Guid.NewGuid(), sku, 1, 0, "TWD", provider).Validate();
         using var response = await Client(provider).GetAsync($"supplier/catalog/{Uri.EscapeDataString(sku)}", cancellationToken);
@@ -21,10 +24,12 @@ public sealed class HttpSupplierGateway(IHttpClientFactory clients) : ISupplierG
         if (body is null || body.Sku != sku || body.Currency != "TWD" || body.UnitPrice < 0 ||
             string.IsNullOrWhiteSpace(body.Name) || string.IsNullOrWhiteSpace(body.Origin))
             throw new SupplierGatewayException("supplier_invalid_response", "Supplier quote response is invalid.");
-        return new SupplierQuote(body.Sku, body.Name, body.UnitPrice, body.Currency, body.Origin);
-    }
+        return new SupplierQuoteResponse(body.Sku, body.Name, body.UnitPrice, body.Currency, body.Origin);
+    }, cancellationToken);
 
-    public async Task<SupplierOrderOutcome> SubmitAsync(PurchaseIdentity identity, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public Task<SupplierOrderOutcome> SubmitAsync(PurchaseIdentity identity, CancellationToken cancellationToken) =>
+        NormalizeAsync(async () =>
     {
         identity.Validate();
         using var response = await Client(identity.Provider).PostAsJsonAsync("supplier/orders", new
@@ -41,9 +46,11 @@ public sealed class HttpSupplierGateway(IHttpClientFactory clients) : ISupplierG
             throw new SupplierGatewayException("supplier_business_rejection", "Supplier rejected the submitted purchase payload.");
         RequireSuccess(response);
         return ValidateOrder(await ReadAsync<OrderBody>(response, cancellationToken), identity);
-    }
+    }, cancellationToken);
 
-    public async Task<SupplierLookup> LookupAsync(PurchaseIdentity identity, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public Task<SupplierLookup> LookupAsync(PurchaseIdentity identity, CancellationToken cancellationToken) =>
+        NormalizeAsync(async () =>
     {
         using var response = await Client(identity.Provider).GetAsync(
             $"supplier/orders/by-client-request/{identity.ClientRequestId:D}", cancellationToken);
@@ -53,6 +60,20 @@ public sealed class HttpSupplierGateway(IHttpClientFactory clients) : ISupplierG
         RequireSuccess(response);
         return new SupplierLookup(SupplierLookupKind.Found,
             ValidateOrder(await ReadAsync<OrderBody>(response, cancellationToken), identity));
+    }, cancellationToken);
+
+    private static async Task<T> NormalizeAsync<T>(Func<Task<T>> call, CancellationToken cancellationToken)
+    {
+        try { return await call(); }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
+        catch (OperationCanceledException)
+        {
+            throw new SupplierGatewayException("supplier_timeout", "Supplier request timed out.");
+        }
+        catch (HttpRequestException)
+        {
+            throw new SupplierGatewayException("supplier_unavailable", "Supplier is unavailable.");
+        }
     }
 
     private HttpClient Client(string provider) => provider switch

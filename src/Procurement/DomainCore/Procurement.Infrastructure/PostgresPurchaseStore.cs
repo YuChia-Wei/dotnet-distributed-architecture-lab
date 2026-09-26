@@ -7,13 +7,15 @@ using Procurement.Domains;
 
 namespace Procurement.Infrastructure;
 
-/// <summary>Capability-specific PostgreSQL commits for one Procurement aggregate and its receipt source outbox.</summary>
+/// <summary>以 PostgreSQL 提交採購聚合、收貨身分及同交易來源 outbox。</summary>
 public sealed class PostgresPurchaseStore(NpgsqlDataSource dataSource) :
-    IPurchaseOrderQueries, IPurchaseCreationCommitter, IPurchaseSubmissionCommitter, IGoodsReceiptCommitter
+    IPurchaseOrderRepository, IPurchaseOrderQueries, IPurchaseCreationCommitter,
+    IPurchaseSubmissionCommitter, IGoodsReceiptCommitter
 {
     static PostgresPurchaseStore() => DefaultTypeMap.MatchNamesWithUnderscores = true;
 
-    public async Task<CreatePurchaseResult> CreateOrGetAsync(PurchaseOrder candidate, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public async Task<CreateCommittedPurchase> CreateOrGetAsync(PurchaseOrder candidate, CancellationToken cancellationToken)
     {
         await using var connection = await dataSource.OpenConnectionAsync(cancellationToken);
         const string insert = """
@@ -39,34 +41,45 @@ public sealed class PostgresPurchaseStore(NpgsqlDataSource dataSource) :
         }, cancellationToken: cancellationToken));
         var order = await LoadByClientRequestAsync(connection, candidate.Identity.ClientRequestId, null, cancellationToken)
             ?? throw new InvalidOperationException("Committed purchase order could not be loaded.");
-        return new CreatePurchaseResult(order, count == 1);
+        return new CreateCommittedPurchase(order, count == 1);
     }
 
+    /// <inheritdoc />
     public async Task<PurchaseOrder?> FindByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         await using var connection = await dataSource.OpenConnectionAsync(cancellationToken);
         return await LoadByIdAsync(connection, id, null, false, cancellationToken);
     }
 
-    public async Task<IReadOnlyList<PurchaseOrder>> RecentAsync(int limit, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public async Task<PurchaseOrderResponse?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var order = await FindByIdAsync(id, cancellationToken);
+        return order is null ? null : PurchaseOrderResponse.From(order);
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<PurchaseOrderResponse>> RecentAsync(int limit, CancellationToken cancellationToken)
     {
         await using var connection = await dataSource.OpenConnectionAsync(cancellationToken);
         var ids = await connection.QueryAsync<Guid>(new CommandDefinition(
             "SELECT id FROM procurement_purchase_orders ORDER BY created_at DESC, id DESC LIMIT @Limit",
             new { Limit = Math.Clamp(limit, 1, 100) }, cancellationToken: cancellationToken));
-        var result = new List<PurchaseOrder>();
+        var result = new List<PurchaseOrderResponse>();
         foreach (var id in ids)
         {
             var order = await LoadByIdAsync(connection, id, null, false, cancellationToken);
-            if (order is not null) result.Add(order);
+            if (order is not null) result.Add(PurchaseOrderResponse.From(order));
         }
-        return result;
+        return result.AsReadOnly();
     }
 
+    /// <inheritdoc />
     public Task<PurchaseOrder> ApplyOutcomeAsync(Guid id, SupplierOrderOutcome outcome,
         CancellationToken cancellationToken) => ChangeSubmissionAsync(id,
         order => order.ApplySupplierOutcome(outcome.Accepted, outcome.SupplierOrderId, DateTimeOffset.UtcNow), cancellationToken);
 
+    /// <inheritdoc />
     public Task<PurchaseOrder> MarkUnknownAsync(Guid id, CancellationToken cancellationToken) =>
         ChangeSubmissionAsync(id, order => order.MarkUnknown(DateTimeOffset.UtcNow), cancellationToken);
 
@@ -91,8 +104,9 @@ public sealed class PostgresPurchaseStore(NpgsqlDataSource dataSource) :
         return order;
     }
 
-    public async Task<ReceiveGoodsResult> CommitAsync(Guid purchaseOrderId, Guid receiptId,
-        Func<PurchaseOrder, ReceiveGoodsResult> decide, CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public async Task<ReceiptCommitResult> CommitAsync(Guid purchaseOrderId, Guid receiptId,
+        Func<PurchaseOrder, ReceiptCommitResult> decide, CancellationToken cancellationToken)
     {
         await using var connection = await dataSource.OpenConnectionAsync(cancellationToken);
         await using var transaction = await connection.BeginTransactionAsync(cancellationToken);
@@ -161,14 +175,18 @@ public sealed class PostgresPurchaseStore(NpgsqlDataSource dataSource) :
     private static async Task<PurchaseOrder> RestoreAsync(NpgsqlConnection connection, PurchaseRow row,
         NpgsqlTransaction? transaction, CancellationToken cancellationToken)
     {
-        var receipts = await connection.QueryAsync<GoodsReceipt>(new CommandDefinition(
-            "SELECT receipt_id AS ReceiptId,purchase_order_id AS PurchaseOrderId,product_id AS ProductId,quantity,received_at AS ReceivedAt FROM procurement_receipts WHERE purchase_order_id=@Id ORDER BY received_at,receipt_id",
+        var receiptRows = await connection.QueryAsync<ReceiptRow>(new CommandDefinition(
+            "SELECT * FROM procurement_receipts WHERE purchase_order_id=@Id ORDER BY received_at,receipt_id",
             new { row.Id }, transaction, cancellationToken: cancellationToken));
+        var receipts = receiptRows.Select(receipt => new GoodsReceipt(receipt.ReceiptId, receipt.PurchaseOrderId,
+            receipt.ProductId, receipt.Quantity, new DateTimeOffset(DateTime.SpecifyKind(receipt.ReceivedAt, DateTimeKind.Utc))));
         return PurchaseOrder.Restore(row.Id,
             new PurchaseIdentity(row.ClientRequestId, row.ProductId, row.SupplierSku, row.Quantity,
                 row.UnitPrice, row.Currency, row.Provider),
             Enum.Parse<PurchaseOrderState>(row.State, false), row.SupplierOrderId,
-            row.ReceivedQuantity, row.Version, row.CreatedAt, row.UpdatedAt, receipts);
+            row.ReceivedQuantity, row.Version,
+            new DateTimeOffset(DateTime.SpecifyKind(row.CreatedAt, DateTimeKind.Utc)),
+            new DateTimeOffset(DateTime.SpecifyKind(row.UpdatedAt, DateTimeKind.Utc)), receipts);
     }
 
     private sealed class PurchaseRow
@@ -185,7 +203,16 @@ public sealed class PostgresPurchaseStore(NpgsqlDataSource dataSource) :
         public string? SupplierOrderId { get; set; }
         public int ReceivedQuantity { get; set; }
         public int Version { get; set; }
-        public DateTimeOffset CreatedAt { get; set; }
-        public DateTimeOffset UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+    }
+
+    private sealed class ReceiptRow
+    {
+        public Guid ReceiptId { get; set; }
+        public Guid PurchaseOrderId { get; set; }
+        public Guid ProductId { get; set; }
+        public int Quantity { get; set; }
+        public DateTime ReceivedAt { get; set; }
     }
 }

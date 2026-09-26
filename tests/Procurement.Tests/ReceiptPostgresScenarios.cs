@@ -19,9 +19,10 @@ public sealed class ReceiptPostgresScenarios
         await GivenAdditiveSchema(dataSource);
         var identity = new PurchaseIdentity(Guid.NewGuid(), Guid.NewGuid(), "REAL-001", 10, 100m, "TWD", "direct");
         var store = new PostgresPurchaseStore(dataSource);
-        var order = await GivenAcceptedPurchase(store, identity);
+        var orderId = Guid.NewGuid();
         try
         {
+            var order = await GivenAcceptedPurchase(store, identity, orderId);
             var firstId = Guid.NewGuid();
             var first = await WhenReceiving(store, order.Id, firstId, 6);
             var replay = await WhenReceiving(store, order.Id, firstId, 6);
@@ -30,10 +31,30 @@ public sealed class ReceiptPostgresScenarios
             var changed = await WhenReceivingInvalid(store, order.Id, firstId, 5);
             ThenChangedReceiptConflicts(changed);
 
-            var competing = await WhenTwoSixUnitReceiptsCompete(store, order.Id);
+            var competing = await WhenTwoFourUnitReceiptsCompete(store, order.Id);
             await ThenConcurrentOverreceiptIsRejected(dataSource, order.Id, competing);
         }
-        finally { await CleanupOwnRows(dataSource, order.Id); }
+        finally { await CleanupOwnRows(dataSource, orderId); }
+    }
+
+    // R05 / AC02: concurrent same-key receipt requests converge on one stored fact and event.
+    [ExternalIntegrationFact, Trait("Scenario", "R05")]
+    public async Task Concurrent_matching_receipt_has_one_commit()
+    {
+        await using var dataSource = NpgsqlDataSource.Create(
+            Environment.GetEnvironmentVariable(ExternalIntegrationFactAttribute.ConnectionVariable)!);
+        await GivenAdditiveSchema(dataSource);
+        var store = new PostgresPurchaseStore(dataSource);
+        var identity = new PurchaseIdentity(Guid.NewGuid(), Guid.NewGuid(), "REAL-001", 10, 100m, "TWD", "direct");
+        var orderId = Guid.NewGuid();
+        try
+        {
+            var order = await GivenAcceptedPurchase(store, identity, orderId);
+            var receiptId = Guid.NewGuid();
+            var outcomes = await WhenSameReceiptIsConcurrent(store, order.Id, receiptId);
+            await ThenConcurrentReplayHasOneCommit(dataSource, order.Id, receiptId, outcomes);
+        }
+        finally { await CleanupOwnRows(dataSource, orderId); }
     }
 
     private static async Task GivenAdditiveSchema(NpgsqlDataSource dataSource)
@@ -44,29 +65,35 @@ public sealed class ReceiptPostgresScenarios
         await command.ExecuteNonQueryAsync();
     }
 
-    private static async Task<PurchaseOrder> GivenAcceptedPurchase(PostgresPurchaseStore store, PurchaseIdentity identity)
+    private static async Task<PurchaseOrder> GivenAcceptedPurchase(PostgresPurchaseStore store,
+        PurchaseIdentity identity, Guid orderId)
     {
-        var created = await store.CreateOrGetAsync(PurchaseOrder.Create(Guid.NewGuid(), identity, DateTimeOffset.UtcNow),
+        var created = await store.CreateOrGetAsync(PurchaseOrder.Create(orderId, identity, DateTimeOffset.UtcNow),
             CancellationToken.None);
         Assert.True(created.Created);
         return await store.ApplyOutcomeAsync(created.Order.Id, new SupplierOrderOutcome(true, "vendor-pg"), CancellationToken.None);
     }
 
-    private static Task<ReceiveGoodsResult> WhenReceiving(PostgresPurchaseStore store, Guid orderId, Guid receiptId, int quantity) =>
-        new ReceiveGoodsUseCase(store).ExecuteAsync(new ReceiveGoods(orderId, receiptId, quantity), CancellationToken.None);
+    private static Task<ReceiveGoodsOutput> WhenReceiving(PostgresPurchaseStore store, Guid orderId, Guid receiptId, int quantity) =>
+        new ReceiveGoodsUseCase(store).ExecuteAsync(new ReceiveGoodsInput(orderId, receiptId, quantity), CancellationToken.None);
     private static ValueTask<Exception?> WhenReceivingInvalid(PostgresPurchaseStore store, Guid orderId, Guid receiptId, int quantity) =>
         Record.ExceptionAsync(() => WhenReceiving(store, orderId, receiptId, quantity));
-    private static async Task<Exception?[]> WhenTwoSixUnitReceiptsCompete(PostgresPurchaseStore store, Guid orderId)
+    private static async Task<Exception?[]> WhenTwoFourUnitReceiptsCompete(PostgresPurchaseStore store, Guid orderId)
     {
         var left = Guid.NewGuid();
         var right = Guid.NewGuid();
         return await Task.WhenAll(
-            Record.ExceptionAsync(() => WhenReceiving(store, orderId, left, 6)).AsTask(),
-            Record.ExceptionAsync(() => WhenReceiving(store, orderId, right, 6)).AsTask());
+            Record.ExceptionAsync(() => WhenReceiving(store, orderId, left, 4)).AsTask(),
+            Record.ExceptionAsync(() => WhenReceiving(store, orderId, right, 4)).AsTask());
     }
 
+    private static Task<ReceiveGoodsOutput[]> WhenSameReceiptIsConcurrent(PostgresPurchaseStore store,
+        Guid orderId, Guid receiptId) => Task.WhenAll(
+        WhenReceiving(store, orderId, receiptId, 4),
+        WhenReceiving(store, orderId, receiptId, 4));
+
     private static async Task ThenReplayHasOneDurableOutbox(NpgsqlDataSource dataSource,
-        ReceiveGoodsResult first, ReceiveGoodsResult replay, Guid receiptId, Guid productId)
+        ReceiveGoodsOutput first, ReceiveGoodsOutput replay, Guid receiptId, Guid productId)
     {
         Assert.True(first.Created);
         Assert.False(replay.Created);
@@ -88,14 +115,34 @@ public sealed class ReceiptPostgresScenarios
     private static async Task ThenConcurrentOverreceiptIsRejected(NpgsqlDataSource dataSource, Guid orderId,
         IReadOnlyList<Exception?> competing)
     {
-        Assert.All(competing, error => Assert.Equal("over_receipt", Assert.IsType<ProcurementRuleException>(error).Code));
+        Assert.Single(competing, error => error is null);
+        Assert.Single(competing, error => error is ProcurementRuleException rule && rule.Code == "over_receipt");
         await using var connection = await dataSource.OpenConnectionAsync();
         var order = await connection.QuerySingleAsync<(int ReceivedQuantity, string State)>(
             "SELECT received_quantity,state FROM procurement_purchase_orders WHERE id=@Id", new { Id = orderId });
-        Assert.Equal(6, order.ReceivedQuantity);
-        Assert.Equal("PartiallyReceived", order.State);
-        Assert.Equal(1, await connection.ExecuteScalarAsync<int>(
+        Assert.Equal(10, order.ReceivedQuantity);
+        Assert.Equal("Received", order.State);
+        Assert.Equal(2, await connection.ExecuteScalarAsync<int>(
             "SELECT count(*) FROM procurement_receipts WHERE purchase_order_id=@Id", new { Id = orderId }));
+        Assert.Equal(2, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_outbox WHERE id IN (SELECT receipt_id FROM procurement_receipts WHERE purchase_order_id=@Id)",
+            new { Id = orderId }));
+    }
+
+    private static async Task ThenConcurrentReplayHasOneCommit(NpgsqlDataSource dataSource,
+        Guid orderId, Guid receiptId, IReadOnlyList<ReceiveGoodsOutput> outcomes)
+    {
+        Assert.Equal(2, outcomes.Count);
+        Assert.Single(outcomes, result => result.Created);
+        Assert.Single(outcomes, result => !result.Created);
+        Assert.Equal(outcomes[0].Receipt, outcomes[1].Receipt);
+        await using var connection = await dataSource.OpenConnectionAsync();
+        Assert.Equal(4, await connection.ExecuteScalarAsync<int>(
+            "SELECT received_quantity FROM procurement_purchase_orders WHERE id=@Id", new { Id = orderId }));
+        Assert.Equal(1, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_receipts WHERE receipt_id=@Id", new { Id = receiptId }));
+        Assert.Equal(1, await connection.ExecuteScalarAsync<int>(
+            "SELECT count(*) FROM procurement_outbox WHERE id=@Id", new { Id = receiptId }));
     }
 
     private static async Task CleanupOwnRows(NpgsqlDataSource dataSource, Guid orderId)

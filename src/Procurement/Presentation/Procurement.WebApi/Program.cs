@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using System.Globalization;
 using Lab.BoundedContextContracts.Procurement.IntegrationEvents;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +18,24 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddSingleton(NpgsqlDataSource.Create(connectionString));
 builder.Services.AddScoped<PostgresPurchaseStore>();
+builder.Services.AddScoped<IPurchaseOrderRepository>(sp => sp.GetRequiredService<PostgresPurchaseStore>());
 builder.Services.AddScoped<IPurchaseOrderQueries>(sp => sp.GetRequiredService<PostgresPurchaseStore>());
 builder.Services.AddScoped<IPurchaseCreationCommitter>(sp => sp.GetRequiredService<PostgresPurchaseStore>());
 builder.Services.AddScoped<IPurchaseSubmissionCommitter>(sp => sp.GetRequiredService<PostgresPurchaseStore>());
 builder.Services.AddScoped<IGoodsReceiptCommitter>(sp => sp.GetRequiredService<PostgresPurchaseStore>());
-builder.Services.AddScoped<IOperationUseCase<CreatePurchase, CreatePurchaseResult>, CreatePurchaseUseCase>();
-builder.Services.AddScoped<IOperationUseCase<ReconcilePurchase, PurchaseOrder>, ReconcilePurchaseUseCase>();
-builder.Services.AddScoped<IOperationUseCase<ReceiveGoods, ReceiveGoodsResult>, ReceiveGoodsUseCase>();
+builder.Services.AddScoped<IOperationUseCase<QuoteSupplierInput, SupplierQuoteResponse>, QuoteSupplierUseCase>();
+builder.Services.AddScoped<IOperationUseCase<GetPurchaseInput, PurchaseOrderResponse>, GetPurchaseUseCase>();
+builder.Services.AddScoped<IOperationUseCase<ListPurchasesInput, IReadOnlyList<PurchaseOrderResponse>>, ListPurchasesUseCase>();
+builder.Services.AddScoped<IOperationUseCase<CreatePurchaseInput, CreatePurchaseOutput>, CreatePurchaseUseCase>();
+builder.Services.AddScoped<IOperationUseCase<ReconcilePurchaseInput, PurchaseOrderResponse>, ReconcilePurchaseUseCase>();
+builder.Services.AddScoped<IOperationUseCase<ReceiveGoodsInput, ReceiveGoodsOutput>, ReceiveGoodsUseCase>();
 builder.Services.AddSingleton<ISupplierGateway, HttpSupplierGateway>();
 builder.Services.AddHostedService<ProcurementOutboxRelay>();
+
+var timeoutSetting = builder.Configuration["SupplierHttp:TimeoutSeconds"] ?? "2";
+if (!int.TryParse(timeoutSetting, NumberStyles.None, CultureInfo.InvariantCulture, out var timeoutSeconds)
+    || timeoutSeconds is < 1 or > 30)
+    throw new InvalidOperationException("SupplierHttp:TimeoutSeconds must be an integer from 1 through 30.");
 
 foreach (var profile in new[] { "direct", "wiremock", "microcks" })
 {
@@ -37,7 +47,7 @@ foreach (var profile in new[] { "direct", "wiremock", "microcks" })
     builder.Services.AddHttpClient($"supplier-{profile}", client =>
     {
         client.BaseAddress = uri;
-        client.Timeout = TimeSpan.FromSeconds(2);
+        client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
     });
 }
 
@@ -115,10 +125,13 @@ app.MapControllers();
 app.MapHealthChecks("/health");
 app.Run();
 
+/// <summary>採購 API 的主機入口。</summary>
 public partial class Program;
 
+/// <summary>確認採購資料庫可供本機 API 使用。</summary>
 public sealed class ProcurementDatabaseHealthCheck(NpgsqlDataSource dataSource) : IHealthCheck
 {
+    /// <inheritdoc />
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
         CancellationToken cancellationToken = default)
     {

@@ -60,6 +60,27 @@ public sealed class PurchaseScenarios
         ThenSubmissionIsUnknown(result);
     }
 
+    // P05 / AC01: a late failed submission cannot overwrite a concurrently persisted acceptance.
+    [Fact, Trait("Scenario", "P05-late-failure")]
+    public async Task Late_transport_failure_preserves_accepted_order()
+    {
+        GivenSupplierAcceptsLocallyThenTransportFails();
+        var result = await WhenCreatingPurchase(identity);
+        ThenPurchaseIsAccepted(result, "vendor-race");
+        Assert.Equal(PurchaseOrderState.Accepted, store.Current!.State);
+    }
+
+    // P04 reconciliation branch / AC01: a true supplier 404 keeps Unknown and never POSTs automatically.
+    [Fact, Trait("Scenario", "P04-lookup-404")]
+    public async Task Reconcile_not_found_keeps_unknown_without_resubmission()
+    {
+        GivenSupplierSubmitIsUnavailableAndLookupIsAbsent();
+        var submitted = await WhenCreatingPurchase(identity);
+        var reconciled = await WhenReconcilingPurchase(submitted.Order.Id);
+        ThenLookup404PreservesUnknown(submitted, reconciled);
+        await ThenSupplierWasSubmittedOnce();
+    }
+
     // P06 / AC01: a rejected order cannot receive physical goods.
     [Fact, Trait("Scenario", "P06")]
     public async Task Rejected_purchase_forbids_receipt()
@@ -97,16 +118,31 @@ public sealed class PurchaseScenarios
         .Returns(Task.FromResult(new SupplierOrderOutcome(false, vendorId)));
     private void GivenSupplierResponseIsInvalid() => supplier.SubmitAsync(Arg.Any<PurchaseIdentity>(), Arg.Any<CancellationToken>())
         .Returns(Task.FromException<SupplierOrderOutcome>(new SupplierGatewayException("supplier_invalid_response", "invalid")));
+    private void GivenSupplierAcceptsLocallyThenTransportFails() =>
+        supplier.SubmitAsync(Arg.Any<PurchaseIdentity>(), Arg.Any<CancellationToken>()).Returns(_ =>
+        {
+            store.ApplyOutcomeAsync(store.Current!.Id, new SupplierOrderOutcome(true, "vendor-race"), CancellationToken.None);
+            return Task.FromException<SupplierOrderOutcome>(new SupplierGatewayException("supplier_timeout", "timeout"));
+        });
+    private void GivenSupplierSubmitIsUnavailableAndLookupIsAbsent()
+    {
+        supplier.SubmitAsync(Arg.Any<PurchaseIdentity>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromException<SupplierOrderOutcome>(new SupplierGatewayException("supplier_unavailable", "unavailable")));
+        supplier.LookupAsync(Arg.Any<PurchaseIdentity>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SupplierLookup(SupplierLookupKind.NotFound)));
+    }
 
-    private Task<CreatePurchaseResult> WhenCreatingPurchase(PurchaseIdentity input) =>
-        new CreatePurchaseUseCase(store, store, supplier).ExecuteAsync(new CreatePurchase(input), CancellationToken.None);
+    private Task<CreatePurchaseOutput> WhenCreatingPurchase(PurchaseIdentity input) =>
+        new CreatePurchaseUseCase(store, store, supplier).ExecuteAsync(new CreatePurchaseInput(input), CancellationToken.None);
+    private Task<PurchaseOrderResponse> WhenReconcilingPurchase(Guid id) =>
+        new ReconcilePurchaseUseCase(store, store, supplier).ExecuteAsync(new ReconcilePurchaseInput(id), CancellationToken.None);
     private ValueTask<Exception?> WhenCreatingConflictingPurchase(PurchaseIdentity input) =>
         Record.ExceptionAsync(() => WhenCreatingPurchase(input));
-    private ValueTask<Exception?> WhenReceivingRejectedOrder(PurchaseOrder order) =>
+    private ValueTask<Exception?> WhenReceivingRejectedOrder(PurchaseOrderResponse order) =>
         Record.ExceptionAsync(() => new ReceiveGoodsUseCase(store).ExecuteAsync(
-            new ReceiveGoods(order.Id, Guid.NewGuid(), 1), CancellationToken.None));
+            new ReceiveGoodsInput(order.Id, Guid.NewGuid(), 1), CancellationToken.None));
 
-    private static void ThenPurchaseIsAccepted(CreatePurchaseResult result, string vendorId)
+    private static void ThenPurchaseIsAccepted(CreatePurchaseOutput result, string vendorId)
     {
         Assert.True(result.Created);
         Assert.Equal(PurchaseOrderState.Accepted, result.Order.State);
@@ -115,7 +151,7 @@ public sealed class PurchaseScenarios
     }
     private async Task ThenSupplierReceivedOriginalIdentity(PurchaseIdentity expected) =>
         await supplier.Received(1).SubmitAsync(expected, Arg.Any<CancellationToken>());
-    private static void ThenReplayUsesSameIdentity(CreatePurchaseResult first, CreatePurchaseResult replay)
+    private static void ThenReplayUsesSameIdentity(CreatePurchaseOutput first, CreatePurchaseOutput replay)
     {
         Assert.False(replay.Created);
         Assert.Equal(first.Order.Id, replay.Order.Id);
@@ -123,18 +159,25 @@ public sealed class PurchaseScenarios
     }
     private async Task ThenSupplierWasSubmittedOnce() =>
         await supplier.Received(1).SubmitAsync(Arg.Any<PurchaseIdentity>(), Arg.Any<CancellationToken>());
-    private static void ThenConflictPreservesOriginal(CreatePurchaseResult first, Exception? error)
+    private static void ThenConflictPreservesOriginal(CreatePurchaseOutput first, Exception? error)
     {
         Assert.Equal("purchase_identity_conflict", Assert.IsType<ProcurementRuleException>(error).Code);
         Assert.Equal(PurchaseOrderState.Accepted, first.Order.State);
     }
-    private static void ThenSubmissionIsUnknown(CreatePurchaseResult result)
+    private static void ThenSubmissionIsUnknown(CreatePurchaseOutput result)
     {
         Assert.Equal(PurchaseOrderState.SubmissionUnknown, result.Order.State);
         Assert.Null(result.Order.SupplierOrderId);
         Assert.Empty(result.Order.Receipts);
     }
-    private static void ThenReceiptIsForbidden(Exception? error, PurchaseOrder order)
+    private static void ThenLookup404PreservesUnknown(CreatePurchaseOutput submitted, PurchaseOrderResponse reconciled)
+    {
+        Assert.Equal(PurchaseOrderState.SubmissionUnknown, submitted.Order.State);
+        Assert.Equal(PurchaseOrderState.SubmissionUnknown, reconciled.State);
+        Assert.Equal(submitted.Order.Id, reconciled.Id);
+        Assert.Null(reconciled.SupplierOrderId);
+    }
+    private static void ThenReceiptIsForbidden(Exception? error, PurchaseOrderResponse order)
     {
         Assert.Equal("receipt_state_conflict", Assert.IsType<ProcurementRuleException>(error).Code);
         Assert.Equal(0, order.ReceivedQuantity);
@@ -146,13 +189,16 @@ public sealed class PurchaseScenarios
         await supplier.DidNotReceive().SubmitAsync(Arg.Any<PurchaseIdentity>(), Arg.Any<CancellationToken>());
     }
 
-    private sealed class InMemoryCommitter : IPurchaseCreationCommitter, IPurchaseSubmissionCommitter, IGoodsReceiptCommitter
+    private sealed class InMemoryCommitter : IPurchaseOrderRepository, IPurchaseCreationCommitter,
+        IPurchaseSubmissionCommitter, IGoodsReceiptCommitter
     {
         public PurchaseOrder? Current { get; private set; }
-        public Task<CreatePurchaseResult> CreateOrGetAsync(PurchaseOrder candidate, CancellationToken cancellationToken)
+        public Task<PurchaseOrder?> FindByIdAsync(Guid id, CancellationToken cancellationToken) =>
+            Task.FromResult(Current?.Id == id ? Current : null);
+        public Task<CreateCommittedPurchase> CreateOrGetAsync(PurchaseOrder candidate, CancellationToken cancellationToken)
         {
-            if (Current is null) { Current = candidate; return Task.FromResult(new CreatePurchaseResult(candidate, true)); }
-            return Task.FromResult(new CreatePurchaseResult(Current, false));
+            if (Current is null) { Current = candidate; return Task.FromResult(new CreateCommittedPurchase(candidate, true)); }
+            return Task.FromResult(new CreateCommittedPurchase(Current, false));
         }
         public Task<PurchaseOrder> ApplyOutcomeAsync(Guid id, SupplierOrderOutcome outcome, CancellationToken cancellationToken)
         {
@@ -164,8 +210,8 @@ public sealed class PurchaseScenarios
             Current!.MarkUnknown(DateTimeOffset.UtcNow);
             return Task.FromResult(Current);
         }
-        public Task<ReceiveGoodsResult> CommitAsync(Guid purchaseOrderId, Guid receiptId,
-            Func<PurchaseOrder, ReceiveGoodsResult> decide, CancellationToken cancellationToken) =>
+        public Task<ReceiptCommitResult> CommitAsync(Guid purchaseOrderId, Guid receiptId,
+            Func<PurchaseOrder, ReceiptCommitResult> decide, CancellationToken cancellationToken) =>
             Task.FromResult(decide(Current!));
     }
 }
