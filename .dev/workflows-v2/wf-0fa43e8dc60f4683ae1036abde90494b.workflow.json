@@ -1,0 +1,773 @@
+{
+  "content": {
+    "acceptance": [
+      {
+        "criterion": "Real responsive customer workflows and honest states",
+        "deferral": null,
+        "disposition": "not-applicable",
+        "evidence_ids": [],
+        "id": "AC01",
+        "reason": "Owner clarified ordinary users are internal sales/warehouse staff; replaced by AC07 before code implementation."
+      },
+      {
+        "criterion": "Real administration domain operations and safe request identity",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC02",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Integrated WireMock.Net and Microcks controls with documented boundaries",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC03",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Nginx production builds and same-origin YARP subpath routing",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC04",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Specifications actual browser/gateway validation and protected Docker preservation",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC05",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Reviewed PR merged to main and task branches/worktrees cleaned",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC06",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Real responsive internal operations frontend supports products sales-order lookup/creation Inventory and Procurement receiving with honest states",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC07",
+        "reason": "Owner clarification replaces customer storefront assumption; implementation pending"
+      }
+    ],
+    "decisions": [
+      {
+        "id": "D-AUDIENCE",
+        "next_action": null,
+        "owner": "user",
+        "question": "Who are ordinary frontend users?",
+        "resolution": "Internal sales/warehouse staff; /web owns stock procurement receiving and sales operations, /admin owns master maintenance and developer tools",
+        "source_refs": [
+          "SPEC18-V2"
+        ],
+        "state": "resolved"
+      }
+    ],
+    "evidence": [
+      {
+        "basis": "caller-supplied",
+        "disposition": "succeeded",
+        "id": "EV-SPEC18",
+        "observed_at": "2026-09-26T06:15:44+00:00",
+        "reported_by": "root coordinator",
+        "source_refs": [
+          "SPEC18"
+        ],
+        "subject": "Frontend requirements architecture API/UI contracts and GWT baseline v1",
+        "summary": "Coordinator authored and self-reviewed source-backed baseline; discovered known API limitations and resolved applicable retained .NET packets. No runtime acceptance claimed.",
+        "task_id": "T001"
+      }
+    ],
+    "intent": "Deliver Vue3 TypeScript customer/admin applications under src through Nginx and one YARP gateway, implement with GPT-6 Sol and coordinator review, then PR/merge/cleanup under owner authorization. Issue18.",
+    "next_action": {
+      "action": "Implement T002-T004 in parallel, review and integrate local commits",
+      "condition": "Follow committed baseline and named ownership; parent owns Docker and provider operations",
+      "owner": "root and GPT-6 Sol workers",
+      "task_id": "T002"
+    },
+    "references": [
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "SPEC18",
+        "kind": "opaque",
+        "note": "Initial storefront requirement superseded by explicit owner clarification; original prose retained in design-history/v1-requirements.md.",
+        "resolution": "stale",
+        "schema": null,
+        "sha256": "6a1804e0776022834cd760132629fd0ce5661e788511f767630af3d81c579ad7",
+        "target": ".dev/workflows/2026-09-26-commerce-frontend/requirements.md"
+      },
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "SPEC18-V2",
+        "kind": "opaque",
+        "note": "Owner clarification integrated before implementation; normal users are internal sales/warehouse staff.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": "a102860aa0aae6214b154bf2a6d1daa2241cfeb8a9c2eb5edbe9dbaeee984139",
+        "target": ".dev/workflows/2026-09-26-commerce-frontend/requirements.md"
+      }
+    ],
+    "scope": {
+      "excluded": [
+        "Production identity tenant isolation payment",
+        "Unrelated framework authority changes",
+        "Changes to protected observability deployment"
+      ],
+      "included": [
+        "Internal sales/warehouse operations: products sales orders Inventory Procurement and receiving",
+        "Administration: product master maintenance service status and mock/proxy controls",
+        "Nginx YARP routing production deployment and real browser acceptance",
+        "One coordinated workflow with Sol implementation and parent review"
+      ]
+    },
+    "tasks": [
+      {
+        "action": "Define requirements architecture UI/API contracts and observable scenarios",
+        "completion_condition": "Implementation baseline is committed and responsibilities are explicit",
+        "deferral": null,
+        "depends_on": [],
+        "evidence_ids": [
+          "EV-SPEC18"
+        ],
+        "id": "T001",
+        "reason": "Implementation contract prepared under owner delegated design authority",
+        "result": "Five baseline documents define scope interfaces visual design scenarios and ownership",
+        "state": "completed",
+        "title": "Define requirements architecture UI/API contracts and observable scenarios"
+      },
+      {
+        "action": "Implement operations Vue app with products sales orders Inventory Procurement and receiving",
+        "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+        "deferral": null,
+        "depends_on": [
+          "T001"
+        ],
+        "evidence_ids": [],
+        "id": "T002",
+        "reason": "Owner clarified audience before dispatch; use specifications v2",
+        "result": "",
+        "state": "active",
+        "title": "Internal operations web"
+      },
+      {
+        "action": "Implement admin Vue app for product master maintenance status and mock/proxy controls",
+        "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+        "deferral": null,
+        "depends_on": [
+          "T001"
+        ],
+        "evidence_ids": [],
+        "id": "T003",
+        "reason": "Daily operations move to /web per owner clarification",
+        "result": "",
+        "state": "active",
+        "title": "Administration web"
+      },
+      {
+        "action": "Implement bounded Microcks adapter and reproducible YARP/Nginx deployment",
+        "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+        "deferral": null,
+        "depends_on": [
+          "T001"
+        ],
+        "evidence_ids": [],
+        "id": "T004",
+        "reason": "Dispatched to GPT-6 Sol in one isolated writer worktree per deliverable",
+        "result": "",
+        "state": "active",
+        "title": "Gateway and mock management adapter"
+      },
+      {
+        "action": "Review integrated implementation and verify real browser/gateway/domain behavior",
+        "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+        "deferral": null,
+        "depends_on": [
+          "T002",
+          "T003",
+          "T004"
+        ],
+        "evidence_ids": [],
+        "id": "T005",
+        "reason": "Awaiting baseline and implementation dispatch",
+        "result": "",
+        "state": "pending",
+        "title": "Integrated acceptance and review"
+      }
+    ],
+    "title": "Commerce customer and administration frontends"
+  },
+  "created_at": "2026-09-26T06:11:01.468147+00:00",
+  "history": [
+    {
+      "from_revision": 1,
+      "operation": "transition",
+      "previous_sha256": "00d9083dbab6e27ffc0ee508c11891baa1fbf1dbc0f3209905cee3a6bae6e04a",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Real responsive customer workflows and honest states",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC01",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Real administration domain operations and safe request identity",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC02",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Integrated WireMock.Net and Microcks controls with documented boundaries",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC03",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Nginx production builds and same-origin YARP subpath routing",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC04",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Specifications actual browser/gateway validation and protected Docker preservation",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC05",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Reviewed PR merged to main and task branches/worktrees cleaned",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC06",
+              "reason": "Not executed by this tool."
+            }
+          ],
+          "decisions": [],
+          "evidence": [],
+          "intent": "Deliver Vue3 TypeScript customer/admin applications under src through Nginx and one YARP gateway, implement with GPT-6 Sol and coordinator review, then PR/merge/cleanup under owner authorization. Issue18.",
+          "next_action": {
+            "action": "Define requirements architecture UI/API contracts and observable scenarios",
+            "condition": "After actual task authorization.",
+            "owner": "root",
+            "task_id": "T001"
+          },
+          "references": [],
+          "scope": {
+            "excluded": [
+              "Production identity tenant isolation payment",
+              "Unrelated framework authority changes",
+              "Changes to protected observability deployment"
+            ],
+            "included": [
+              "Customer catalog and sales orders",
+              "Administration products Inventory Procurement and mock/proxy controls",
+              "Nginx YARP routing production deployment and real browser acceptance",
+              "One coordinated workflow with Sol implementation and parent review"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Define requirements architecture UI/API contracts and observable scenarios",
+              "completion_condition": "Implementation baseline is committed and responsibilities are explicit",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [],
+              "id": "T001",
+              "reason": "",
+              "result": "",
+              "state": "pending",
+              "title": "Define requirements architecture UI/API contracts and observable scenarios"
+            }
+          ],
+          "title": "Commerce customer and administration frontends"
+        },
+        "retrospective": null,
+        "state": "planned",
+        "state_reason": "Created as planned work."
+      },
+      "reason": "Owner directly authorized full implementation and provider delivery; Issue18 bound.",
+      "recorded_at": "2026-09-26T06:14:39.821069+00:00"
+    },
+    {
+      "from_revision": 2,
+      "operation": "checkpoint",
+      "previous_sha256": "f2b6fba32d9d44953a2aae55fd22c36e661f6a97fe5772e1237f20c22437262a",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Real responsive customer workflows and honest states",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC01",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Real administration domain operations and safe request identity",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC02",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Integrated WireMock.Net and Microcks controls with documented boundaries",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC03",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Nginx production builds and same-origin YARP subpath routing",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC04",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Specifications actual browser/gateway validation and protected Docker preservation",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC05",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Reviewed PR merged to main and task branches/worktrees cleaned",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC06",
+              "reason": "Not executed by this tool."
+            }
+          ],
+          "decisions": [],
+          "evidence": [],
+          "intent": "Deliver Vue3 TypeScript customer/admin applications under src through Nginx and one YARP gateway, implement with GPT-6 Sol and coordinator review, then PR/merge/cleanup under owner authorization. Issue18.",
+          "next_action": {
+            "action": "Define requirements architecture UI/API contracts and observable scenarios",
+            "condition": "After actual task authorization.",
+            "owner": "root",
+            "task_id": "T001"
+          },
+          "references": [],
+          "scope": {
+            "excluded": [
+              "Production identity tenant isolation payment",
+              "Unrelated framework authority changes",
+              "Changes to protected observability deployment"
+            ],
+            "included": [
+              "Customer catalog and sales orders",
+              "Administration products Inventory Procurement and mock/proxy controls",
+              "Nginx YARP routing production deployment and real browser acceptance",
+              "One coordinated workflow with Sol implementation and parent review"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Define requirements architecture UI/API contracts and observable scenarios",
+              "completion_condition": "Implementation baseline is committed and responsibilities are explicit",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [],
+              "id": "T001",
+              "reason": "",
+              "result": "",
+              "state": "pending",
+              "title": "Define requirements architecture UI/API contracts and observable scenarios"
+            }
+          ],
+          "title": "Commerce customer and administration frontends"
+        },
+        "retrospective": null,
+        "state": "active",
+        "state_reason": "Owner directly authorized full implementation and provider delivery; Issue18 bound."
+      },
+      "reason": "Retain one coordinated workflow and disjoint Sol implementation responsibilities.",
+      "recorded_at": "2026-09-26T06:14:40.620018+00:00"
+    },
+    {
+      "from_revision": 3,
+      "operation": "checkpoint",
+      "previous_sha256": "b1537253abebc53f30dca035639d0fb9941df6780ce0dce4cc351a9dc585e49e",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Real responsive customer workflows and honest states",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC01",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Real administration domain operations and safe request identity",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC02",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Integrated WireMock.Net and Microcks controls with documented boundaries",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC03",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Nginx production builds and same-origin YARP subpath routing",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC04",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Specifications actual browser/gateway validation and protected Docker preservation",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC05",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Reviewed PR merged to main and task branches/worktrees cleaned",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC06",
+              "reason": "Not executed by this tool."
+            }
+          ],
+          "decisions": [],
+          "evidence": [],
+          "intent": "Deliver Vue3 TypeScript customer/admin applications under src through Nginx and one YARP gateway, implement with GPT-6 Sol and coordinator review, then PR/merge/cleanup under owner authorization. Issue18.",
+          "next_action": {
+            "action": "Define requirements architecture UI/API contracts and observable scenarios",
+            "condition": "After actual task authorization.",
+            "owner": "root",
+            "task_id": "T001"
+          },
+          "references": [],
+          "scope": {
+            "excluded": [
+              "Production identity tenant isolation payment",
+              "Unrelated framework authority changes",
+              "Changes to protected observability deployment"
+            ],
+            "included": [
+              "Customer catalog and sales orders",
+              "Administration products Inventory Procurement and mock/proxy controls",
+              "Nginx YARP routing production deployment and real browser acceptance",
+              "One coordinated workflow with Sol implementation and parent review"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Define requirements architecture UI/API contracts and observable scenarios",
+              "completion_condition": "Implementation baseline is committed and responsibilities are explicit",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [],
+              "id": "T001",
+              "reason": "Requirements and source-backed API baseline authored.",
+              "result": "",
+              "state": "active",
+              "title": "Define requirements architecture UI/API contracts and observable scenarios"
+            },
+            {
+              "action": "Implement customer Vue application and focused checks",
+              "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [],
+              "id": "T002",
+              "reason": "Awaiting baseline and implementation dispatch",
+              "result": "",
+              "state": "pending",
+              "title": "Customer web"
+            },
+            {
+              "action": "Implement administration Vue application and focused checks",
+              "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [],
+              "id": "T003",
+              "reason": "Awaiting baseline and implementation dispatch",
+              "result": "",
+              "state": "pending",
+              "title": "Administration web"
+            },
+            {
+              "action": "Implement bounded Microcks adapter and reproducible YARP/Nginx deployment",
+              "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [],
+              "id": "T004",
+              "reason": "Awaiting baseline and implementation dispatch",
+              "result": "",
+              "state": "pending",
+              "title": "Gateway and mock management adapter"
+            },
+            {
+              "action": "Review integrated implementation and verify real browser/gateway/domain behavior",
+              "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+              "deferral": null,
+              "depends_on": [
+                "T002",
+                "T003",
+                "T004"
+              ],
+              "evidence_ids": [],
+              "id": "T005",
+              "reason": "Awaiting baseline and implementation dispatch",
+              "result": "",
+              "state": "pending",
+              "title": "Integrated acceptance and review"
+            }
+          ],
+          "title": "Commerce customer and administration frontends"
+        },
+        "retrospective": null,
+        "state": "active",
+        "state_reason": "Owner directly authorized full implementation and provider delivery; Issue18 bound."
+      },
+      "reason": "Baseline ready and Sol worktrees prepared; retain actual authoring evidence",
+      "recorded_at": "2026-09-26T06:15:45.586647+00:00"
+    },
+    {
+      "from_revision": 4,
+      "operation": "checkpoint",
+      "previous_sha256": "95277cebedfdf0453d78955a68ccc0b7cbf83072e251d91c0f09b1d72b8cd2df",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Real responsive customer workflows and honest states",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC01",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Real administration domain operations and safe request identity",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC02",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Integrated WireMock.Net and Microcks controls with documented boundaries",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC03",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Nginx production builds and same-origin YARP subpath routing",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC04",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Specifications actual browser/gateway validation and protected Docker preservation",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC05",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Reviewed PR merged to main and task branches/worktrees cleaned",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC06",
+              "reason": "Not executed by this tool."
+            }
+          ],
+          "decisions": [],
+          "evidence": [
+            {
+              "basis": "caller-supplied",
+              "disposition": "succeeded",
+              "id": "EV-SPEC18",
+              "observed_at": "2026-09-26T06:15:44+00:00",
+              "reported_by": "root coordinator",
+              "source_refs": [
+                "SPEC18"
+              ],
+              "subject": "Frontend requirements architecture API/UI contracts and GWT baseline v1",
+              "summary": "Coordinator authored and self-reviewed source-backed baseline; discovered known API limitations and resolved applicable retained .NET packets. No runtime acceptance claimed.",
+              "task_id": "T001"
+            }
+          ],
+          "intent": "Deliver Vue3 TypeScript customer/admin applications under src through Nginx and one YARP gateway, implement with GPT-6 Sol and coordinator review, then PR/merge/cleanup under owner authorization. Issue18.",
+          "next_action": {
+            "action": "Implement T002-T004 in parallel, review and integrate local commits",
+            "condition": "Follow committed baseline and named ownership; parent owns Docker and provider operations",
+            "owner": "root and GPT-6 Sol workers",
+            "task_id": "T002"
+          },
+          "references": [
+            {
+              "blocking": false,
+              "evidence_value": "irreplaceable",
+              "id": "SPEC18",
+              "kind": "opaque",
+              "note": "Actual authored requirement baseline; sibling architecture/specification/test documents complete the handoff.",
+              "resolution": "resolved",
+              "schema": null,
+              "sha256": "6a1804e0776022834cd760132629fd0ce5661e788511f767630af3d81c579ad7",
+              "target": ".dev/workflows/2026-09-26-commerce-frontend/requirements.md"
+            }
+          ],
+          "scope": {
+            "excluded": [
+              "Production identity tenant isolation payment",
+              "Unrelated framework authority changes",
+              "Changes to protected observability deployment"
+            ],
+            "included": [
+              "Customer catalog and sales orders",
+              "Administration products Inventory Procurement and mock/proxy controls",
+              "Nginx YARP routing production deployment and real browser acceptance",
+              "One coordinated workflow with Sol implementation and parent review"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Define requirements architecture UI/API contracts and observable scenarios",
+              "completion_condition": "Implementation baseline is committed and responsibilities are explicit",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [
+                "EV-SPEC18"
+              ],
+              "id": "T001",
+              "reason": "Implementation contract prepared under owner delegated design authority",
+              "result": "Five baseline documents define scope interfaces visual design scenarios and ownership",
+              "state": "completed",
+              "title": "Define requirements architecture UI/API contracts and observable scenarios"
+            },
+            {
+              "action": "Implement customer Vue application and focused checks",
+              "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [],
+              "id": "T002",
+              "reason": "Dispatched to GPT-6 Sol in one isolated writer worktree per deliverable",
+              "result": "",
+              "state": "active",
+              "title": "Customer web"
+            },
+            {
+              "action": "Implement administration Vue application and focused checks",
+              "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [],
+              "id": "T003",
+              "reason": "Dispatched to GPT-6 Sol in one isolated writer worktree per deliverable",
+              "result": "",
+              "state": "active",
+              "title": "Administration web"
+            },
+            {
+              "action": "Implement bounded Microcks adapter and reproducible YARP/Nginx deployment",
+              "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+              "deferral": null,
+              "depends_on": [
+                "T001"
+              ],
+              "evidence_ids": [],
+              "id": "T004",
+              "reason": "Dispatched to GPT-6 Sol in one isolated writer worktree per deliverable",
+              "result": "",
+              "state": "active",
+              "title": "Gateway and mock management adapter"
+            },
+            {
+              "action": "Review integrated implementation and verify real browser/gateway/domain behavior",
+              "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+              "deferral": null,
+              "depends_on": [
+                "T002",
+                "T003",
+                "T004"
+              ],
+              "evidence_ids": [],
+              "id": "T005",
+              "reason": "Awaiting baseline and implementation dispatch",
+              "result": "",
+              "state": "pending",
+              "title": "Integrated acceptance and review"
+            }
+          ],
+          "title": "Commerce customer and administration frontends"
+        },
+        "retrospective": null,
+        "state": "active",
+        "state_reason": "Owner directly authorized full implementation and provider delivery; Issue18 bound."
+      },
+      "reason": "Direct owner reply selects internal sales/warehouse audience; retain original design history and add AC07 rather than changing criterion identity.",
+      "recorded_at": "2026-09-26T06:17:06.718732+00:00"
+    }
+  ],
+  "id": "wf-0fa43e8dc60f4683ae1036abde90494b",
+  "kind": "workflow",
+  "owner": "project",
+  "retrospective": null,
+  "revision": 5,
+  "schema_version": "1.0.0",
+  "state": "active",
+  "state_reason": "Owner directly authorized full implementation and provider delivery; Issue18 bound.",
+  "updated_at": "2026-09-26T06:17:06.718732+00:00"
+}
