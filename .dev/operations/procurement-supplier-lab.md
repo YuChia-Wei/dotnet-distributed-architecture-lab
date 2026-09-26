@@ -111,4 +111,11 @@ docker compose @compose up -d --no-deps kafka
 # 等待庫存增加一次，再重送相同收貨識別並讀回原結果。
 ```
 
+可用下列 R08 腳本重現此情境，`ProductId` 必須先在 Inventory 初始化且可讀到目前庫存；腳本不清零或重設現有庫存。它先核對 Kafka 容器的 Compose project/service label 與容器 ID，僅停止本專案的 `kafka`，在 `finally` 中啟動同一容器並記錄復原結果。收貨時檢查 Procurement receipt、來源 outbox，以及已交接到 Wolverine 時的 `procurement_wolverine.wolverine_outgoing_envelopes`；`published_at` 只表示持久化交接，不表示 Kafka 已消費。Kafka 恢復後最多等待 120 秒確認庫存增加 3 並重播同一收貨識別，JSON 保留成功或失敗的實際觀察。
+
+```powershell
+python ./scripts/procurement-lab/test_broker_recovery.py --product-id $productId `
+  --output 'artifacts/procurement-lab/broker-recovery.json'
+```
+
 若收貨先於 Inventory 商品初始化，Consumer 應把失敗保留於有限重試／錯誤佇列；初始化 stock 後以同一 ReceiptId 重新投遞才可入庫一次。不能把跳過的 external tests、Compose 語法檢查或一個 mock response 說成實際 PostgreSQL/Kafka 接受證據。驗收需分別保存 HTTP 回應、供應商 origin/request、PostgreSQL receipt/outbox/stock、Kafka 事件與 consumer log；workflow 的最終狀態由 coordinator review 決定。
