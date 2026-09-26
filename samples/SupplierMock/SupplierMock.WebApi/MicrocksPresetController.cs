@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 /// <summary>Microcks 原生服務回報的單一操作與派送設定。</summary>
@@ -8,7 +9,12 @@ using System.Text.RegularExpressions;
 /// <param name="Method">HTTP 方法。</param>
 /// <param name="Dispatcher">原生派送器名稱。</param>
 /// <param name="DispatcherRules">原生派送規則。</param>
-public sealed record MicrocksOperation(string Name, string Method, string? Dispatcher, string? DispatcherRules);
+public sealed record MicrocksOperation(string Name, string Method, string? Dispatcher, string? DispatcherRules)
+{
+    /// <summary>保留原生操作的其他可變欄位，供派送設定更新時原樣帶回；不輸出至控制 API。</summary>
+    [JsonIgnore]
+    public JsonElement? NativeFields { get; init; }
+}
 
 /// <summary>供應商 Microcks 控制狀態；模式僅在原生操作完整符合已知預設時提供。</summary>
 /// <param name="Mode">確認的預設模式；未知、失敗或讀取中斷時為 null。</param>
@@ -139,8 +145,15 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
                         var actual = native.Value.Operations.Single(operation => operation.Name == wanted.Name && operation.Method == wanted.Method);
                         if (actual.Dispatcher == wanted.Dispatcher && SameRules(actual.DispatcherRules, wanted.DispatcherRules)) continue;
                         using var update = await client.PutAsJsonAsync(
-                            $"api/services/{Uri.EscapeDataString(native.Value.Id)}/operation",
-                            new { wanted.Name, wanted.Dispatcher, wanted.DispatcherRules }, timeout.Token);
+                            $"api/services/{Uri.EscapeDataString(native.Value.Id)}/operation?operationName={Uri.EscapeDataString(actual.Name)}",
+                            new
+                            {
+                                wanted.Dispatcher,
+                                wanted.DispatcherRules,
+                                DefaultDelay = NativeField(actual.NativeFields, "defaultDelay"),
+                                DefaultDelayStrategy = NativeField(actual.NativeFields, "defaultDelayStrategy"),
+                                ParameterConstraints = NativeField(actual.NativeFields, "parameterConstraints")
+                            }, timeout.Token);
                         update.EnsureSuccessStatusCode();
                     }
                     reconciled = true;
@@ -188,7 +201,7 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
                         RequiredString(operation, "name"),
                         RequiredString(operation, "method"),
                         ReadOptional(operation, "dispatcher"),
-                        ReadOptional(operation, "dispatcherRules")));
+                        ReadOptional(operation, "dispatcherRules")) { NativeFields = operation.Clone() });
                 }
                 selected = (id, parsed);
             }
@@ -204,6 +217,10 @@ public sealed class MicrocksPresetController(HttpClient client, string presetDir
 
     private static string? ReadOptional(JsonElement element, string property) =>
         element.ValueKind == JsonValueKind.Object && element.TryGetProperty(property, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
+
+    private static JsonElement? NativeField(JsonElement? operation, string property) =>
+        operation is { ValueKind: JsonValueKind.Object } native && native.TryGetProperty(property, out var value)
+            ? value.Clone() : null;
 
     private static MicrocksState NewState(string? mode, string status, string? id,
         IReadOnlyList<MicrocksOperation> operations, string? message) =>

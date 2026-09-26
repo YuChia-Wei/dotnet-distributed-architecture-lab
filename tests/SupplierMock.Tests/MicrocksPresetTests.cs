@@ -85,11 +85,15 @@ public sealed class MicrocksPresetTests : IDisposable
         Assert.Equal("mock", selected.Mode);
         Assert.Equal("supplier-api.yaml", Assert.Single(native.UploadedNames));
         var update = Assert.Single(native.OperationUpdates);
+        Assert.Equal("?operationName=POST%20%2Fsupplier%2Forders", Assert.Single(native.OperationQueries));
         Assert.Equal("supplier-1", update.ServiceId);
         Assert.Equal("POST /supplier/orders", update.Name);
         Assert.Equal("JS", update.Dispatcher);
         Assert.Contains("__unmatched_supplier_order__", update.DispatcherRules);
         Assert.DoesNotContain("proxyUrl", update.DispatcherRules);
+        Assert.Equal(125L, update.DefaultDelay);
+        Assert.Equal("CONSTANT", update.DefaultDelayStrategy);
+        Assert.Equal("[{\"name\":\"x-test\",\"value\":\"keep\"}]", update.ParameterConstraints);
         var readback = await WhenReadingStateAsync();
         Assert.Equal("mock", readback.Mode);
     }
@@ -198,7 +202,9 @@ public sealed class MicrocksPresetTests : IDisposable
         public int UploadCount { get; private set; }
         public List<string> UploadedNames { get; } = [];
         public List<int> RequestedPages { get; } = [];
-        public List<(string ServiceId, string Name, string Dispatcher, string DispatcherRules)> OperationUpdates { get; } = [];
+        public List<(string ServiceId, string Name, string Dispatcher, string DispatcherRules,
+            long? DefaultDelay, string? DefaultDelayStrategy, string ParameterConstraints)> OperationUpdates { get; } = [];
+        public List<string> OperationQueries { get; } = [];
         private string? mockPostRules;
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -234,12 +240,18 @@ public sealed class MicrocksPresetTests : IDisposable
             if (request.Method == HttpMethod.Put && path == "/api/services/supplier-1/operation")
             {
                 if (RejectOperationUpdate) return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
+                var operationName = Regex.Match(request.RequestUri!.Query, @"(?:^\?|&)operationName=([^&]+)");
+                if (!operationName.Success) return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                OperationQueries.Add(request.RequestUri.Query);
                 using var document = JsonDocument.Parse(await request.Content!.ReadAsStreamAsync(cancellationToken));
                 var operation = document.RootElement;
-                var name = operation.GetProperty("name").GetString()!;
+                var name = Uri.UnescapeDataString(operationName.Groups[1].Value);
                 var dispatcher = operation.GetProperty("dispatcher").GetString()!;
                 var rules = operation.GetProperty("dispatcherRules").GetString()!;
-                OperationUpdates.Add(("supplier-1", name, dispatcher, rules));
+                var delay = operation.GetProperty("defaultDelay").GetInt64();
+                var strategy = operation.GetProperty("defaultDelayStrategy").GetString()!;
+                var constraints = operation.GetProperty("parameterConstraints").GetRawText();
+                OperationUpdates.Add(("supplier-1", name, dispatcher, rules, delay, strategy, constraints));
                 if (Mode == "stale-mock" && name == "POST /supplier/orders")
                 {
                     mockPostRules = rules;
@@ -274,7 +286,9 @@ public sealed class MicrocksPresetTests : IDisposable
         private static object[] MockOperations(string dispatcher, string rules) =>
         [
             new { name = "GET /supplier/catalog/{sku}", method = "GET", dispatcher = "URI_PARTS", dispatcherRules = "sku" },
-            new { name = "POST /supplier/orders", method = "POST", dispatcher, dispatcherRules = rules },
+            new { name = "POST /supplier/orders", method = "POST", dispatcher, dispatcherRules = rules,
+                defaultDelay = 125L, defaultDelayStrategy = "CONSTANT",
+                parameterConstraints = new[] { new { name = "x-test", value = "keep" } } },
             new { name = "GET /supplier/orders/by-client-request/{clientRequestId}", method = "GET", dispatcher = "URI_PARTS", dispatcherRules = "clientRequestId" }
         ];
     }

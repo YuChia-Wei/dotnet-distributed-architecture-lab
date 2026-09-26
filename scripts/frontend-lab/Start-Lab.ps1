@@ -63,4 +63,4 @@ Invoke-Compose -Parameters $appArgs
 Wait-Http 'http://127.0.0.1:8888/web/'
 Wait-Http 'http://127.0.0.1:8888/admin/'
 Write-Output 'Frontend lab: http://127.0.0.1:8888/web/ and http://127.0.0.1:8888/admin/'
-Write-Output 'Microcks mode is unconfigured until an operator imports a selected Supplier API preset.'
+Write-Output 'Check the Admin integrations page for the current Microcks state; select a Supplier API preset only if needed.'
