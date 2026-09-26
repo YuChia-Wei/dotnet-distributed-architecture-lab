@@ -1,0 +1,24 @@
+{
+  "ReverseProxy": {
+    "Routes": {
+      "orders-api": { "ClusterId": "orders-api", "Match": { "Path": "/api/orders/{**catch-all}" } },
+      "product-api": { "ClusterId": "product-api", "Match": { "Path": "/api/products/{**catch-all}" } },
+      "inventory-api": { "ClusterId": "inventory-api", "Match": { "Path": "/api/inventory/{**catch-all}" } },
+      "procurement-api": { "ClusterId": "procurement-api", "Match": { "Path": "/api/procurement/{**catch-all}" } },
+      "supplier-mock-admin": {
+        "ClusterId": "supplier-mock-admin",
+        "Match": { "Path": "/api/admin/supplier-mock/{**catch-all}" },
+        "Transforms": [{ "PathRemovePrefix": "/api/admin/supplier-mock" }]
+      },
+      "supplier-sandbox-admin": {
+        "ClusterId": "supplier-sandbox-admin",
+        "Match": { "Path": "/api/admin/supplier-sandbox/{**catch-all}" },
+        "Transforms": [{ "PathRemovePrefix": "/api/admin/supplier-sandbox" }]
+      },
+      "web-root": { "ClusterId": "web-frontend", "Match": { "Path": "/web" } },
+      "web-pages": { "ClusterId": "web-frontend", "Match": { "Path": "/web/{**catch-all}" } },
+      "admin-root": { "ClusterId": "admin-frontend", "Match": { "Path": "/admin" } },
+      "admin-pages": { "ClusterId": "admin-frontend", "Match": { "Path": "/admin/{**catch-all}" } }
+    }
+  }
+}

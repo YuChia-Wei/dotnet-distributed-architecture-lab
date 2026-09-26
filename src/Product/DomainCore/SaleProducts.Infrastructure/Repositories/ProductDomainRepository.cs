@@ -96,12 +96,6 @@ public class ProductDomainRepository : IDomainRepository<Product, Guid>
                 {
                     throw new DBConcurrencyException("The record has been modified by another user.");
                 }
-
-                const string deleteSalesSql = """DELETE FROM "productsales" WHERE "productid" = @ProductId""";
-                await this._dbConnection.ExecuteAsync(deleteSalesSql, new
-                {
-                    ProductId = product.Id
-                }, transaction);
             }
 
             transaction.Commit();

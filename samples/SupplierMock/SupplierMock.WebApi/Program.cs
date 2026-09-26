@@ -23,14 +23,46 @@ var adminClient = new HttpClient
 };
 var controller = new WireMockPresetController(adminClient, upstream, initialMode);
 await controller.ResetAsync(initialMode);
+var microcksUrl = MicrocksPresetController.ValidateMicrocksOrigin(
+    builder.Configuration["SupplierMock:MicrocksUrl"] ?? "http://microcks:8080");
+var microcksClient = new HttpClient { BaseAddress = microcksUrl, Timeout = TimeSpan.FromSeconds(35) };
+var microcksController = new MicrocksPresetController(microcksClient, Path.Combine(AppContext.BaseDirectory, "microcks"));
 
 builder.Services.AddSingleton(controller);
+builder.Services.AddSingleton(microcksController);
 builder.Services.AddSingleton(wireMock);
 builder.Services.AddSingleton(adminClient);
 
 var app = builder.Build();
 app.Lifetime.ApplicationStopping.Register(wireMock.Stop);
 app.Lifetime.ApplicationStopping.Register(controller.DisposeAdminClient);
+app.Lifetime.ApplicationStopping.Register(microcksClient.Dispose);
+
+app.MapGet("/control/microcks/state", async (MicrocksPresetController presetController, CancellationToken cancellationToken) =>
+    Results.Ok(await presetController.GetStateAsync(cancellationToken)));
+
+app.MapPost("/control/microcks/mode", async (
+    ChangeModeRequest request, MicrocksPresetController presetController, CancellationToken cancellationToken) =>
+{
+    if (!MicrocksPresetController.IsValidMode(request.Mode))
+        return Results.BadRequest(new { code = "invalid_mode", message = "模式必須是 mock、proxy 或 hybrid。" });
+
+    try
+    {
+        return Results.Ok(await presetController.ChangeAsync(request.Mode, cancellationToken));
+    }
+    catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+    {
+        return Results.StatusCode(499);
+    }
+    catch (Exception ex) when (ex is HttpRequestException or OperationCanceledException or InvalidDataException or IOException)
+    {
+        var state = await presetController.GetStateAsync();
+        return Results.Json(state with { Mode = null, Status = state.Status == "unavailable" ? "unavailable" : "failed",
+            Message = "Microcks 匯入或原生狀態確認失敗；請檢查服務並明確重試。" },
+            statusCode: state.Status == "unavailable" ? 503 : 502);
+    }
+});
 
 app.MapGet("/health", async (WireMockPresetController presetController, CancellationToken cancellationToken) =>
 {

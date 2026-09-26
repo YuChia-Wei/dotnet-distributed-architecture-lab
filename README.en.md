@@ -155,6 +155,19 @@ dotnet test MQArchLab.slnx
 
 This repository currently has no active target-owned analyzer or runtime-validator projects. They were retired during the governed v0.9 AI-context upgrade, and v0.13 also removed the former bundled mechanical-validation provider. Only reference-only recipes remain under `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/`; they are not selected, included in `MQArchLab.slnx`, wired into the build, or activated.
 
+## Operations and administration frontends
+
+The Vue 3 / TypeScript applications in `src/Frontend/Web` and `src/Frontend/Admin` serve production builds with Nginx behind the same YARP gateway.
+
+```powershell
+./scripts/frontend-lab/Start-Lab.ps1
+```
+
+- [Operations workspace](http://127.0.0.1:8888/web/): product lookup, sales orders, inventory, procurement and receiving for internal sales and warehouse staff.
+- [Administration](http://127.0.0.1:8888/admin/): product master data, service status, WireMock.Net/Microcks mock and proxy controls, and the supplier sandbox.
+
+The helper reuses `mqarchlab-pr5-integration`, preserves existing data volumes and starts only selected services. This localhost lab has no login or role authorization. See the [frontend operations guide](.dev/operations/commerce-frontend.md) for routing, controls and troubleshooting (Traditional Chinese).
+
 ## Project Knowledge Entry Points
 
 - [.dev/ARCHITECTURE.md](.dev/ARCHITECTURE.md): current product architecture and dependency boundaries
