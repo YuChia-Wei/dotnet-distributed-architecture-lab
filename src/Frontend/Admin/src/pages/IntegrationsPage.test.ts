@@ -94,6 +94,84 @@ describe('dangerous controls', () => {
     wrapper.unmount()
   })
 
+  it('cannot submit the default delay before control GET or during refresh', async () => {
+    const pendingControls: Array<(response: Response) => void> = []
+    const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
+      const path = String(input)
+      if (path.endsWith('/control/state')) return wireResponse('hybrid')
+      if (path.endsWith('/control/mappings')) return new Response('{"mappings":[]}')
+      if (path.endsWith('/control/requests')) return new Response('{"requests":[]}')
+      if (path.endsWith('/sandbox/control') && init?.method === 'GET') {
+        return new Promise<Response>(resolve => { pendingControls.push(resolve) })
+      }
+      if (path.endsWith('/sandbox/orders') || path.endsWith('/sandbox/requests')) return new Response('[]')
+      throw new Error(`Unexpected ${init?.method} ${path}`)
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    const wrapper = mount(IntegrationsPage)
+    await flushPromises()
+    await wrapper.find('#tab-sandbox').trigger('click')
+    expect(pendingControls).toHaveLength(1)
+    expect(wrapper.find('#delay-input').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('#panel-sandbox button[type="submit"]').attributes('disabled')).toBeDefined()
+    await wrapper.find('#panel-sandbox form').trigger('submit')
+    expect(fetchMock.mock.calls.filter(([, init]) => init?.method === 'PUT')).toHaveLength(0)
+
+    pendingControls.shift()?.(new Response('{"delayAfterCommitMs":750,"persistence":"runtime"}'))
+    await flushPromises()
+    expect((wrapper.find('#delay-input').element as HTMLInputElement).value).toBe('750')
+    expect(wrapper.find('#delay-input').attributes('disabled')).toBeUndefined()
+
+    await wrapper.find('#delay-input').setValue('900')
+    await wrapper.find('.page-head button').trigger('click')
+    expect(pendingControls).toHaveLength(1)
+    expect(wrapper.find('#delay-input').attributes('disabled')).toBeDefined()
+    await wrapper.find('#panel-sandbox form').trigger('submit')
+    expect(fetchMock.mock.calls.filter(([, init]) => init?.method === 'PUT')).toHaveLength(0)
+    pendingControls.shift()?.(new Response('{"delayAfterCommitMs":750,"persistence":"runtime"}'))
+    await flushPromises()
+    expect((wrapper.find('#delay-input').element as HTMLInputElement).value).toBe('900')
+    wrapper.unmount()
+  })
+
+  it('keeps the requested delay when native GET reads back a different value', async () => {
+    let controlReads = 0
+    const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
+      const path = String(input)
+      if (path.endsWith('/control/state')) return wireResponse('hybrid')
+      if (path.endsWith('/control/mappings')) return new Response('{"mappings":[]}')
+      if (path.endsWith('/control/requests')) return new Response('{"requests":[]}')
+      if (path.endsWith('/sandbox/control') && init?.method === 'GET') {
+        controlReads++
+        return new Response(JSON.stringify({
+          delayAfterCommitMs: controlReads === 1 ? 650 : 250, persistence: 'runtime',
+        }))
+      }
+      if (path.endsWith('/sandbox/control') && init?.method === 'PUT') {
+        return new Response('{"delayAfterCommitMs":900,"persistence":"runtime"}')
+      }
+      if (path.endsWith('/sandbox/orders') || path.endsWith('/sandbox/requests')) return new Response('[]')
+      throw new Error(`Unexpected ${init?.method} ${path}`)
+    })
+    vi.stubGlobal('fetch', fetchMock)
+    const wrapper = mount(IntegrationsPage)
+    await flushPromises()
+    await wrapper.find('#tab-sandbox').trigger('click')
+    await flushPromises()
+    const delay = wrapper.find('#delay-input')
+    expect((delay.element as HTMLInputElement).value).toBe('650')
+    await delay.setValue('900')
+    await wrapper.find('#panel-sandbox form').trigger('submit')
+    await flushPromises()
+
+    expect(fetchMock.mock.calls.filter(([, init]) => init?.method === 'PUT')).toHaveLength(1)
+    expect(controlReads).toBe(2)
+    expect(wrapper.text()).toContain('服務讀回 250 毫秒，與要求的 900 毫秒不同')
+    expect(wrapper.text()).not.toContain('延遲設定已由服務讀回')
+    expect((delay.element as HTMLInputElement).value).toBe('900')
+    wrapper.unmount()
+  })
+
   it('uses the in-page dialog for WireMock reset and log clearing', async () => {
     const fetchMock = vi.fn<typeof fetch>(async (input, init) => {
       const path = String(input)

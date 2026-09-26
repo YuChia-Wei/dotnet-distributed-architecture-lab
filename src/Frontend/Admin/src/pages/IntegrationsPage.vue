@@ -25,6 +25,8 @@ const wireRequests = ref<unknown>(null)
 const sandboxOrders = ref<unknown[] | null>(null)
 const sandboxRequests = ref<unknown[] | null>(null)
 const delayInput = ref<number>(0)
+const delayDirty = ref(false)
+const sandboxControlReady = ref(false)
 const loading = ref<Record<Tab, boolean>>({ wire: false, microcks: false, sandbox: false })
 const busy = ref<Record<Tab, boolean>>({ wire: false, microcks: false, sandbox: false })
 const errors = ref<Record<Tab, string>>({ wire: '', microcks: '', sandbox: '' })
@@ -70,6 +72,9 @@ const count = (value: unknown): number | null => {
 }
 const wireCount = computed(() => count(wireRequests.value))
 const mappingCount = computed(() => count(mappings.value))
+const canSaveDelay = computed(() =>
+  sandboxControlReady.value && sandbox.value !== null &&
+  !loading.value.sandbox && !busy.value.sandbox)
 
 async function loadWire() {
   wireController.value?.abort()
@@ -108,11 +113,12 @@ async function loadMicrocks() {
   }
 }
 
-async function loadSandbox() {
+async function loadSandbox(preserveDelayInput = false) {
   sandboxController.value?.abort()
   const current = new AbortController()
   sandboxController.value = current
   loading.value.sandbox = true
+  sandboxControlReady.value = false
   errors.value.sandbox = ''
   const results = await Promise.allSettled([
     getSandboxControl(current.signal), getSandboxOrders(current.signal),
@@ -122,8 +128,11 @@ async function loadSandbox() {
   const failed: string[] = []
   if (results[0].status === 'fulfilled') {
     sandbox.value = results[0].value
-    // Keep an unfinished operator edit intact when refreshing.
-    if (document.activeElement?.id !== 'delay-input') delayInput.value = results[0].value.delayAfterCommitMs
+    sandboxControlReady.value = true
+    // A refresh must not replace an unfinished operator edit.
+    if (!preserveDelayInput && !delayDirty.value) {
+      delayInput.value = results[0].value.delayAfterCommitMs
+    }
   } else if (!isAbort(results[0].reason)) failed.push(`設定：${messageOf(results[0].reason)}`)
   if (results[1].status === 'fulfilled') sandboxOrders.value = results[1].value
   else if (!isAbort(results[1].reason)) failed.push(`訂單：${messageOf(results[1].reason)}`)
@@ -137,7 +146,7 @@ function showTab(tab: Tab) {
   active.value = tab
   if (tab === 'wire' && !wire.value) void loadWire()
   if (tab === 'microcks' && !microcks.value) void loadMicrocks()
-  if (tab === 'sandbox' && !sandbox.value) void loadSandbox()
+  if (tab === 'sandbox' && !sandboxControlReady.value && !loading.value.sandbox) void loadSandbox()
 }
 
 function onTabKeydown(event: KeyboardEvent) {
@@ -245,8 +254,9 @@ async function changeMicrocks(mode: Mode) {
 }
 
 async function saveDelay() {
-  if (busy.value.sandbox) return
-  if (!validDelay(delayInput.value)) {
+  if (!canSaveDelay.value) return
+  const requestedDelay = delayInput.value
+  if (!validDelay(requestedDelay)) {
     errors.value.sandbox = '延遲須為 0 至 10000 的整數毫秒。'
     return
   }
@@ -255,10 +265,19 @@ async function saveDelay() {
   errors.value.sandbox = ''
   feedback.value.sandbox = ''
   try {
-    await setSandboxDelay(delayInput.value)
-    await loadSandbox()
-    feedback.value.sandbox = !errors.value.sandbox && sandbox.value?.delayAfterCommitMs === delayInput.value
-      ? '延遲設定已由服務讀回。' : '設定已送出，但讀回結果尚未確認；請重新整理查核。'
+    await setSandboxDelay(requestedDelay)
+    await loadSandbox(true)
+    if (sandboxControlReady.value && sandbox.value?.delayAfterCommitMs === requestedDelay) {
+      delayInput.value = requestedDelay
+      delayDirty.value = false
+      feedback.value.sandbox = '延遲設定已由服務讀回。'
+    } else if (sandboxControlReady.value) {
+      delayDirty.value = true
+      feedback.value.sandbox = `服務讀回 ${sandbox.value?.delayAfterCommitMs} 毫秒，與要求的 ${requestedDelay} 毫秒不同；輸入值已保留供查核。`
+    } else {
+      delayDirty.value = true
+      feedback.value.sandbox = '設定已送出，但讀回失敗；輸入值已保留供查核。'
+    }
   } catch (error) {
     errors.value.sandbox = messageOf(error)
     feedback.value.sandbox = '設定結果尚未確認；輸入值已保留。'
@@ -328,10 +347,10 @@ onUnmounted(() => {
     <div v-if="feedback.sandbox" class="notice info" role="status">{{ feedback.sandbox }}</div>
     <div class="integration-grid">
       <div class="panel">
-        <div class="panel-heading"><div><p class="eyebrow">UPSTREAM</p><h2>Supplier Sandbox</h2></div><span class="pill" :class="!busy.sandbox && !errors.sandbox && sandbox ? 'ready' : 'attention'">{{ busy.sandbox ? '操作中' : errors.sandbox ? '需查核' : sandbox ? '可讀取' : '尚未讀取' }}</span></div>
-        <p v-if="busy.sandbox || errors.sandbox" class="field-help">下列為上次讀取的資料；重新讀取後再確認目前延遲。</p>
+        <div class="panel-heading"><div><p class="eyebrow">UPSTREAM</p><h2>Supplier Sandbox</h2></div><span class="pill" :class="!busy.sandbox && !loading.sandbox && sandboxControlReady && !errors.sandbox ? 'ready' : 'attention'">{{ busy.sandbox ? '操作中' : loading.sandbox ? '讀取中' : !sandboxControlReady ? '需查核' : errors.sandbox ? '需查核' : '可讀取' }}</span></div>
+        <p v-if="busy.sandbox || loading.sandbox || !sandboxControlReady || errors.sandbox" class="field-help">下列為上次讀取的資料；重新讀取後再確認目前延遲。</p>
         <div class="detail-list"><div><span>實際延遲</span><strong>{{ sandbox ? `${sandbox.delayAfterCommitMs} 毫秒` : '—' }}</strong></div><div><span>保存方式</span><strong>{{ sandbox?.persistence || '—' }}</strong></div></div>
-        <form @submit.prevent="saveDelay"><label for="delay-input">訂單提交後延遲（毫秒）</label><input id="delay-input" v-model.number="delayInput" type="number" min="0" max="10000" step="1" :disabled="busy.sandbox" /><p class="field-help">用於驗證「供應商已提交、呼叫端等待回應」的情境。設定只在服務程序期間有效；0 代表不延遲。</p><button class="button primary" type="submit" :disabled="busy.sandbox">{{ busy.sandbox ? '套用中…' : '套用延遲' }}</button></form>
+        <form @submit.prevent="saveDelay"><label for="delay-input">訂單提交後延遲（毫秒）</label><input id="delay-input" v-model.number="delayInput" type="number" min="0" max="10000" step="1" :disabled="!canSaveDelay" @input="delayDirty = true" /><p class="field-help">用於驗證「供應商已提交、呼叫端等待回應」的情境。設定只在服務程序期間有效；0 代表不延遲。</p><button class="button primary" type="submit" :disabled="!canSaveDelay">{{ busy.sandbox ? '套用中…' : loading.sandbox ? '讀取中…' : '套用延遲' }}</button></form>
         <div class="callout"><strong>代理差異</strong><p>WireMock 未命中規則時可轉送固定上游；Microcks 僅對已匯入的操作套用其設定的代理行為。上游失敗不等於規則未命中。</p></div>
       </div>
       <div class="panel">
