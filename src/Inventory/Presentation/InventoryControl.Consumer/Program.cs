@@ -103,6 +103,6 @@ static void ConfigurePostgresqlPersistence(WolverineOptions options, IConfigurat
 {
     var connectionString = configuration.GetConnectionString("DefaultConnection")
         ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is required for durable Inventory receipt delivery.");
-    options.PersistMessagesWithPostgresql(connectionString, "wolverine_messages");
+    options.PersistMessagesWithPostgresql(connectionString, "inventory_consumer_messages");
     options.CodeGeneration.AlwaysUseServiceLocationFor<IApplyGoodsReceiptUseCase>();
 }

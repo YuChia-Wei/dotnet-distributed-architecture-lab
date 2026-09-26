@@ -15,17 +15,11 @@ public sealed class ApplyGoodsReceiptUseCaseTests
     [InlineData(3, 0)]
     public async Task given_invalid_receipt_identity_or_quantity_when_applied_then_store_is_not_called(int invalidField, int quantity)
     {
-        // Given R07: invalid requests must not create a receipt claim.
         var store = Substitute.For<IInventoryGoodsReceiptStore>();
-        var ids = new[] { Guid.CreateVersion7(), Guid.CreateVersion7(), Guid.CreateVersion7() };
-        if (invalidField < 3) ids[invalidField] = Guid.Empty;
-        var input = new ApplyGoodsReceiptInput(ids[0], ids[1], ids[2], quantity);
+        var input = GivenInvalidInput(invalidField, quantity);
 
-        // When
-        var error = await Should.ThrowAsync<InventoryGoodsReceiptException>(
-            () => new ApplyGoodsReceiptUseCase(store).ExecuteAsync(input, CancellationToken.None));
+        var error = await WhenApplyingInvalidReceipt(store, input);
 
-        // Then
         error.Code.ShouldBe(invalidField < 3 ? "ReceiptIdentityRequired" : "ReceiptQuantityMustBePositive");
         await store.DidNotReceiveWithAnyArgs().ApplyAndStageAsync(default!, default!, TestContext.Current.CancellationToken);
     }
@@ -33,7 +27,6 @@ public sealed class ApplyGoodsReceiptUseCaseTests
     [Fact]
     public async Task given_a_valid_physical_receipt_when_applied_then_inventory_event_uses_the_receipt_identity()
     {
-        // Given R03: the receipt ID is the stable source event and Inventory outbox ID.
         var input = new ApplyGoodsReceiptInput(Guid.CreateVersion7(), Guid.CreateVersion7(), Guid.CreateVersion7(), 4);
         var output = new ApplyGoodsReceiptOutput(input.ReceiptId, Guid.CreateVersion7(), 9, false);
         var store = Substitute.For<IInventoryGoodsReceiptStore>();
@@ -45,10 +38,33 @@ public sealed class ApplyGoodsReceiptUseCaseTests
                 return Task.FromResult(output);
             });
 
-        // When
-        var actual = await new ApplyGoodsReceiptUseCase(store).ExecuteAsync(input, CancellationToken.None);
+        var actual = await WhenApplyingReceipt(store, input);
 
-        // Then
+        ThenMessageShouldCarryReceiptIdentity(actual, output, staged, input);
+    }
+
+    private static ApplyGoodsReceiptInput GivenInvalidInput(int invalidField, int quantity)
+    {
+        var ids = new[] { Guid.CreateVersion7(), Guid.CreateVersion7(), Guid.CreateVersion7() };
+        if (invalidField < 3) ids[invalidField] = Guid.Empty;
+        return new ApplyGoodsReceiptInput(ids[0], ids[1], ids[2], quantity);
+    }
+
+    private static Task<InventoryGoodsReceiptException> WhenApplyingInvalidReceipt(
+        IInventoryGoodsReceiptStore store, ApplyGoodsReceiptInput input)
+        => Should.ThrowAsync<InventoryGoodsReceiptException>(
+            () => new ApplyGoodsReceiptUseCase(store).ExecuteAsync(input, CancellationToken.None));
+
+    private static Task<ApplyGoodsReceiptOutput> WhenApplyingReceipt(
+        IInventoryGoodsReceiptStore store, ApplyGoodsReceiptInput input)
+        => new ApplyGoodsReceiptUseCase(store).ExecuteAsync(input, CancellationToken.None);
+
+    private static void ThenMessageShouldCarryReceiptIdentity(
+        ApplyGoodsReceiptOutput actual,
+        ApplyGoodsReceiptOutput output,
+        InventoryOutboxMessage? staged,
+        ApplyGoodsReceiptInput input)
+    {
         actual.ShouldBe(output);
         staged.ShouldNotBeNull();
         staged.Delivery.MessageId.ShouldBe(input.ReceiptId);

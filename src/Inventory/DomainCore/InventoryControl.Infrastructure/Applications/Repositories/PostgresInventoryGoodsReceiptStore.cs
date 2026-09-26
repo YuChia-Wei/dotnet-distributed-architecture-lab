@@ -8,11 +8,12 @@ using Npgsql;
 
 namespace InventoryControl.Infrastructure.Applications.Repositories;
 
-/// <summary>Owns the receipt identity and all of its Inventory effects in one database transaction.</summary>
+/// <summary>在 PostgreSQL 單一交易中保存收貨識別與所有庫存變動。</summary>
 public sealed class PostgresInventoryGoodsReceiptStore(
     InventoryDbContext context,
     IDomainEventDispatcher dispatcher) : IInventoryGoodsReceiptStore
 {
+    /// <summary>提交收貨、庫存增加及來源 outbox，或回傳既有收貨結果。</summary>
     public async Task<ApplyGoodsReceiptOutput> ApplyAndStageAsync(
         ApplyGoodsReceiptInput input,
         Func<ApplyGoodsReceiptOutput, InventoryOutboxMessage> successfulMessageFactory,

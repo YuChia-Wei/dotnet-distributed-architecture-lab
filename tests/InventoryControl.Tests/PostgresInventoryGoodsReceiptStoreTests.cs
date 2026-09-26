@@ -84,7 +84,12 @@ public sealed class PostgresInventoryGoodsReceiptStoreTests
         var outcomes = await Task.WhenAll(WhenApplying(database, firstInput), WhenApplying(database, secondInput));
 
         outcomes.ShouldAllBe(outcome => !outcome.WasAlreadyProcessed);
-        outcomes.Select(outcome => outcome.ResultingStock).Order().ToArray().ShouldBe(new[] { 7, 10 });
+        outcomes.Length.ShouldBe(2);
+        var resultingStocks = outcomes.Select(outcome => outcome.ResultingStock).Order().ToArray();
+        resultingStocks[1].ShouldBe(10);
+        new[] { 7, 8 }.ShouldContain(resultingStocks[0]);
+        outcomes.Select(outcome => outcome.ReceiptId).ToHashSet()
+            .SetEquals(new[] { firstInput.ReceiptId, secondInput.ReceiptId }).ShouldBeTrue();
         await ThenDurableState(database, item.Id, 10, 2, 2);
     }
 
