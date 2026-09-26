@@ -1,0 +1,525 @@
+{
+  "content": {
+    "acceptance": [
+      {
+        "criterion": "Purchase submission and supplier order idempotency/reconciliation follow the documented contract.",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC01",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Physical partial receipts commit once and are eventually applied once in Inventory.",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC02",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Both mock platforms demonstrate native mock hits and upstream proxy forwarding with provenance.",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC03",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Local management UI and configuration instructions make modes and requests observable.",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC04",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Requirements and complete behavior/API/test specifications map to actual tests and runtime evidence.",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC05",
+        "reason": "Not executed by this tool."
+      },
+      {
+        "criterion": "Sol/Luna implementation evidence and parent review are retained without unsupported comparative claims.",
+        "deferral": null,
+        "disposition": "not-executed",
+        "evidence_ids": [],
+        "id": "AC06",
+        "reason": "Not executed by this tool."
+      }
+    ],
+    "decisions": [],
+    "evidence": [
+      {
+        "basis": "caller-supplied",
+        "disposition": "succeeded",
+        "id": "EV-SPEC-01",
+        "observed_at": "2026-09-26T02:48:33+00:00",
+        "reported_by": "root coordinator",
+        "source_refs": [
+          "SPEC-BASELINE"
+        ],
+        "subject": "requirements.md, architecture.md, specifications.md, test-specification.md version 1",
+        "summary": "Authored and self-reviewed the bounded specification baseline; proxy capabilities researched against official documentation.",
+        "task_id": "T001"
+      }
+    ],
+    "intent": "Deliver one owner-reviewable procurement and supplier integration laboratory, including native mock/proxy behavior, controls, specifications, actual validation and attributed GPT-6 Sol/Luna implementation.",
+    "next_action": {
+      "action": "Implement the supplier and mock tool slice from the specification baseline.",
+      "condition": "Dedicated task worktree available; parent retains workflow ownership.",
+      "owner": "GPT-6 Luna worker",
+      "task_id": "T002"
+    },
+    "references": [
+      {
+        "blocking": false,
+        "evidence_value": "irreplaceable",
+        "id": "SPEC-BASELINE",
+        "kind": "opaque",
+        "note": "Parent-authored requirements, architecture, production/entity/adapter and GWT formal-test specifications; no runtime pass.",
+        "resolution": "resolved",
+        "schema": null,
+        "sha256": null,
+        "target": ".dev/workflows/2026-09-26-procurement-supplier-lab/"
+      }
+    ],
+    "scope": {
+      "excluded": [
+        "Payments",
+        "Production deployment or credentials",
+        "Main merge, push, release and Issue closure before owner review"
+      ],
+      "included": [
+        "Procurement purchase and receipt lifecycle",
+        "SupplierSandbox.WebApi actual upstream",
+        "Inventory idempotent goods receipt",
+        "Microcks and WireMock.Net native mock/proxy controls",
+        "Requirements, specifications, verification and model evidence in one workflow"
+      ]
+    },
+    "tasks": [
+      {
+        "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+        "completion_condition": "Specification baseline is reviewable and implementation work packets are bounded.",
+        "deferral": null,
+        "depends_on": [],
+        "evidence_ids": [
+          "EV-SPEC-01"
+        ],
+        "id": "T001",
+        "reason": "Specification baseline ready for bounded implementation.",
+        "result": "Four specification documents and Issue 17 scope retained.",
+        "state": "completed",
+        "title": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17."
+      },
+      {
+        "action": "Implement sandbox, native WireMock controls, Microcks contract artifacts and focused tests.",
+        "completion_condition": "Supplier/mocks meet S01, M01-M06, U01-U03 contracts.",
+        "deferral": null,
+        "depends_on": [
+          "T001"
+        ],
+        "evidence_ids": [],
+        "id": "T002",
+        "reason": "",
+        "result": "",
+        "state": "pending",
+        "title": "Supplier and native mocks"
+      },
+      {
+        "action": "Implement the procurement domain, use cases, persistence, HTTP supplier adapter, API and source outbox.",
+        "completion_condition": "Purchase and receipt contracts have focused tests and build.",
+        "deferral": null,
+        "depends_on": [
+          "T001"
+        ],
+        "evidence_ids": [],
+        "id": "T003",
+        "reason": "",
+        "result": "",
+        "state": "pending",
+        "title": "Procurement lifecycle"
+      },
+      {
+        "action": "Implement durable receipt deduplication, stock/outbox transaction and Kafka inbound adapter.",
+        "completion_condition": "Receipt replay/concurrency/rollback contract passes focused tests.",
+        "deferral": null,
+        "depends_on": [
+          "T001"
+        ],
+        "evidence_ids": [],
+        "id": "T004",
+        "reason": "",
+        "result": "",
+        "state": "pending",
+        "title": "Inventory receiving"
+      },
+      {
+        "action": "Integrate modules and additive Compose deployment, scripts, UI access and runbook.",
+        "completion_condition": "Actual configured services start and documented workflows execute.",
+        "deferral": null,
+        "depends_on": [
+          "T002",
+          "T003",
+          "T004"
+        ],
+        "evidence_ids": [],
+        "id": "T005",
+        "reason": "",
+        "result": "",
+        "state": "pending",
+        "title": "Integrated lab operation"
+      },
+      {
+        "action": "Run scoped acceptance, review code/UX and document model results and remaining owner review.",
+        "completion_condition": "Required scenario evidence and parent review are complete with truthful limitations.",
+        "deferral": null,
+        "depends_on": [
+          "T005"
+        ],
+        "evidence_ids": [],
+        "id": "T006",
+        "reason": "",
+        "result": "",
+        "state": "pending",
+        "title": "Acceptance and parent review"
+      }
+    ],
+    "title": "2026-09-26-procurement-supplier-lab"
+  },
+  "created_at": "2026-09-26T02:44:16.013339+00:00",
+  "extensions": {
+    "project.workflow": {
+      "base_branch": "main",
+      "branch": "codex/2026-09-26-procurement-supplier-lab",
+      "issue": "https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/17",
+      "model_source": "configured default; parent exact runtime setting not otherwise exposed",
+      "parent_model": "gpt-6-astra",
+      "parent_reasoning_effort": "ultra",
+      "workflow_id": "2026-09-26-procurement-supplier-lab"
+    }
+  },
+  "history": [
+    {
+      "from_revision": 1,
+      "operation": "transition",
+      "previous_sha256": "bd722811c48c164217ef1ff77590926efac26225cf05be4e122df613c3ac4514",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Purchase submission and supplier order idempotency/reconciliation follow the documented contract.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC01",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Physical partial receipts commit once and are eventually applied once in Inventory.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC02",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Both mock platforms demonstrate native mock hits and upstream proxy forwarding with provenance.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC03",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Local management UI and configuration instructions make modes and requests observable.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC04",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Requirements and complete behavior/API/test specifications map to actual tests and runtime evidence.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC05",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Sol/Luna implementation evidence and parent review are retained without unsupported comparative claims.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC06",
+              "reason": "Not executed by this tool."
+            }
+          ],
+          "decisions": [],
+          "evidence": [],
+          "intent": "Deliver one owner-reviewable procurement and supplier integration laboratory, including native mock/proxy behavior, controls, specifications, actual validation and attributed GPT-6 Sol/Luna implementation.",
+          "next_action": {
+            "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+            "condition": "After actual task authorization.",
+            "owner": "root coordinator",
+            "task_id": "T001"
+          },
+          "references": [],
+          "scope": {
+            "excluded": [
+              "Payments",
+              "Production deployment or credentials",
+              "Main merge, push, release and Issue closure before owner review"
+            ],
+            "included": [
+              "Procurement purchase and receipt lifecycle",
+              "SupplierSandbox.WebApi actual upstream",
+              "Inventory idempotent goods receipt",
+              "Microcks and WireMock.Net native mock/proxy controls",
+              "Requirements, specifications, verification and model evidence in one workflow"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+              "completion_condition": "Specification baseline is reviewable and implementation work packets are bounded.",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [],
+              "id": "T001",
+              "reason": "",
+              "result": "",
+              "state": "pending",
+              "title": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17."
+            }
+          ],
+          "title": "2026-09-26-procurement-supplier-lab"
+        },
+        "retrospective": null,
+        "state": "planned",
+        "state_reason": "Created as planned work."
+      },
+      "reason": "Owner authorized the complete workflow and Issue 17 is bound.",
+      "recorded_at": "2026-09-26T02:48:31.512980+00:00"
+    },
+    {
+      "from_revision": 2,
+      "operation": "checkpoint",
+      "previous_sha256": "0a3c33e01b86ac47399667875576d76fafb01b1bc479bdf808d8f3c0b3a40836",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Purchase submission and supplier order idempotency/reconciliation follow the documented contract.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC01",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Physical partial receipts commit once and are eventually applied once in Inventory.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC02",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Both mock platforms demonstrate native mock hits and upstream proxy forwarding with provenance.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC03",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Local management UI and configuration instructions make modes and requests observable.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC04",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Requirements and complete behavior/API/test specifications map to actual tests and runtime evidence.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC05",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Sol/Luna implementation evidence and parent review are retained without unsupported comparative claims.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC06",
+              "reason": "Not executed by this tool."
+            }
+          ],
+          "decisions": [],
+          "evidence": [],
+          "intent": "Deliver one owner-reviewable procurement and supplier integration laboratory, including native mock/proxy behavior, controls, specifications, actual validation and attributed GPT-6 Sol/Luna implementation.",
+          "next_action": {
+            "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+            "condition": "After actual task authorization.",
+            "owner": "root coordinator",
+            "task_id": "T001"
+          },
+          "references": [],
+          "scope": {
+            "excluded": [
+              "Payments",
+              "Production deployment or credentials",
+              "Main merge, push, release and Issue closure before owner review"
+            ],
+            "included": [
+              "Procurement purchase and receipt lifecycle",
+              "SupplierSandbox.WebApi actual upstream",
+              "Inventory idempotent goods receipt",
+              "Microcks and WireMock.Net native mock/proxy controls",
+              "Requirements, specifications, verification and model evidence in one workflow"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+              "completion_condition": "Specification baseline is reviewable and implementation work packets are bounded.",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [],
+              "id": "T001",
+              "reason": "",
+              "result": "",
+              "state": "pending",
+              "title": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17."
+            }
+          ],
+          "title": "2026-09-26-procurement-supplier-lab"
+        },
+        "retrospective": null,
+        "state": "active",
+        "state_reason": "Owner authorized the complete workflow and Issue 17 is bound."
+      },
+      "reason": "Begin actual specification authoring under the selected skills.",
+      "recorded_at": "2026-09-26T02:48:33.149458+00:00"
+    },
+    {
+      "from_revision": 3,
+      "operation": "checkpoint",
+      "previous_sha256": "986d432cfa0fa59e320e2811f5dd297487f9b056b60fc8715ad50dcd66f85e73",
+      "previous_state": {
+        "content": {
+          "acceptance": [
+            {
+              "criterion": "Purchase submission and supplier order idempotency/reconciliation follow the documented contract.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC01",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Physical partial receipts commit once and are eventually applied once in Inventory.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC02",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Both mock platforms demonstrate native mock hits and upstream proxy forwarding with provenance.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC03",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Local management UI and configuration instructions make modes and requests observable.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC04",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Requirements and complete behavior/API/test specifications map to actual tests and runtime evidence.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC05",
+              "reason": "Not executed by this tool."
+            },
+            {
+              "criterion": "Sol/Luna implementation evidence and parent review are retained without unsupported comparative claims.",
+              "deferral": null,
+              "disposition": "not-executed",
+              "evidence_ids": [],
+              "id": "AC06",
+              "reason": "Not executed by this tool."
+            }
+          ],
+          "decisions": [],
+          "evidence": [],
+          "intent": "Deliver one owner-reviewable procurement and supplier integration laboratory, including native mock/proxy behavior, controls, specifications, actual validation and attributed GPT-6 Sol/Luna implementation.",
+          "next_action": {
+            "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+            "condition": "After actual task authorization.",
+            "owner": "root coordinator",
+            "task_id": "T001"
+          },
+          "references": [],
+          "scope": {
+            "excluded": [
+              "Payments",
+              "Production deployment or credentials",
+              "Main merge, push, release and Issue closure before owner review"
+            ],
+            "included": [
+              "Procurement purchase and receipt lifecycle",
+              "SupplierSandbox.WebApi actual upstream",
+              "Inventory idempotent goods receipt",
+              "Microcks and WireMock.Net native mock/proxy controls",
+              "Requirements, specifications, verification and model evidence in one workflow"
+            ]
+          },
+          "tasks": [
+            {
+              "action": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17.",
+              "completion_condition": "Specification baseline is reviewable and implementation work packets are bounded.",
+              "deferral": null,
+              "depends_on": [],
+              "evidence_ids": [],
+              "id": "T001",
+              "reason": "",
+              "result": "",
+              "state": "active",
+              "title": "Author the bounded requirements, architecture and executable API/test contracts for Issue 17."
+            }
+          ],
+          "title": "2026-09-26-procurement-supplier-lab"
+        },
+        "retrospective": null,
+        "state": "active",
+        "state_reason": "Owner authorized the complete workflow and Issue 17 is bound."
+      },
+      "reason": "Finish specification baseline and declare three independently owned implementation slices in the same workflow.",
+      "recorded_at": "2026-09-26T02:48:34.241017+00:00"
+    }
+  ],
+  "id": "wf-28ef2d2ffe044802a4ddba263d5e5471",
+  "kind": "workflow",
+  "owner": "project",
+  "retrospective": null,
+  "revision": 4,
+  "schema_version": "1.0.0",
+  "state": "active",
+  "state_reason": "Owner authorized the complete workflow and Issue 17 is bound.",
+  "updated_at": "2026-09-26T02:48:34.241017+00:00"
+}
