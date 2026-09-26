@@ -40,7 +40,8 @@ app.MapGet("/health", async (WireMockPresetController presetController, Cancella
 
 app.MapGet("/control/state", (WireMockPresetController presetController) => Results.Ok(new
 {
-    mode = presetController.Mode.ToString().ToLowerInvariant(),
+    mode = presetController.Mode?.ToString().ToLowerInvariant(),
+    status = presetController.Status,
     upstream = presetController.Upstream,
     persistence = "執行階段設定；重新啟動後回到啟動模式"
 }));
@@ -62,7 +63,8 @@ app.MapPost("/control/mode", async (
     await presetController.ResetAsync(mode, cancellationToken);
     return Results.Ok(new
     {
-        mode = presetController.Mode.ToString().ToLowerInvariant(),
+        mode = presetController.Mode?.ToString().ToLowerInvariant(),
+        status = presetController.Status,
         upstream = presetController.Upstream,
         persistence = "設定只保留至服務重新啟動"
     });
@@ -75,7 +77,8 @@ app.MapPost("/control/reset", async (
     await presetController.ResetAsync(presetController.StartupMode, cancellationToken);
     return Results.Ok(new
     {
-        mode = presetController.Mode.ToString().ToLowerInvariant(),
+        mode = presetController.Mode?.ToString().ToLowerInvariant(),
+        status = presetController.Status,
         persistence = "已還原為啟動時的預設模式"
     });
 });
@@ -100,8 +103,9 @@ app.MapDelete("/control/requests", async (
 
 app.MapGet("/", (WireMockPresetController presetController) => Results.Content(
     WireMockPage.Html
-        .Replace("__MODE__", presetController.Mode.ToString().ToLowerInvariant(), StringComparison.Ordinal)
-        .Replace("__UPSTREAM__", WebUtility.HtmlEncode(presetController.Upstream), StringComparison.Ordinal),
+        .Replace("__MODE__", presetController.Mode?.ToString().ToLowerInvariant() ?? "unavailable", StringComparison.Ordinal)
+        .Replace("__UPSTREAM__", WebUtility.HtmlEncode(presetController.Upstream), StringComparison.Ordinal)
+        .Replace("__STATUS__", presetController.Status, StringComparison.Ordinal),
     "text/html; charset=utf-8"));
 
 app.Run();
@@ -152,8 +156,25 @@ public static class WireMockModeExtensions
     /// <param name="text">要解析的模式名稱。</param>
     /// <param name="mode">解析成功時的模式。</param>
     /// <returns>名稱是否有效。</returns>
-    public static bool TryParse(string? text, out WireMockMode mode) =>
-        Enum.TryParse(text, true, out mode) && Enum.IsDefined(mode);
+    public static bool TryParse(string? text, out WireMockMode mode)
+    {
+        mode = default;
+        if (text is null)
+        {
+            return false;
+        }
+
+        foreach (var candidate in Enum.GetValues<WireMockMode>())
+        {
+            if (candidate.ToString().Equals(text, StringComparison.OrdinalIgnoreCase))
+            {
+                mode = candidate;
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 /// <summary>透過 WireMock 管理 API 套用預設映射並回報目前設定。</summary>
@@ -167,8 +188,11 @@ public sealed class WireMockPresetController(HttpClient admin, Uri upstream, Wir
     /// <summary>取得固定上游的來源網址。</summary>
     public string Upstream => upstream.ToString().TrimEnd('/');
 
-    /// <summary>取得最近一次完整套用的模式。</summary>
-    public WireMockMode Mode { get; private set; }
+    /// <summary>取得最近一次完整套用的模式；正在套用或失敗時為 null。</summary>
+    public WireMockMode? Mode { get; private set; }
+
+    /// <summary>取得映射套用狀態：applying、ready 或 failed。</summary>
+    public string Status { get; private set; } = "applying";
 
     /// <summary>取得服務啟動時設定的預設模式。</summary>
     public WireMockMode StartupMode { get; } = startupMode;
@@ -205,7 +229,25 @@ public sealed class WireMockPresetController(HttpClient admin, Uri upstream, Wir
         await resetGate.WaitAsync(ct);
         try
         {
-            await ResetCoreAsync(mode, ct);
+            ct.ThrowIfCancellationRequested();
+            var preset = LoadPreset(mode);
+            ct.ThrowIfCancellationRequested();
+
+            Status = "applying";
+            Mode = null;
+            try
+            {
+                using var operationTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                await ResetCoreAsync(mode, preset, operationTimeout.Token);
+                Mode = mode;
+                Status = "ready";
+            }
+            catch
+            {
+                Mode = null;
+                Status = "failed";
+                throw;
+            }
         }
         finally
         {
@@ -213,9 +255,8 @@ public sealed class WireMockPresetController(HttpClient admin, Uri upstream, Wir
         }
     }
 
-    private async Task ResetCoreAsync(WireMockMode mode, CancellationToken ct)
+    private async Task ResetCoreAsync(WireMockMode mode, WireMockPreset preset, CancellationToken ct)
     {
-        var preset = LoadPreset(mode);
         var quoteBody = new
         {
             sku = preset.MockSku,
@@ -284,12 +325,18 @@ public sealed class WireMockPresetController(HttpClient admin, Uri upstream, Wir
                     {
                         Matcher = new
                         {
-                            Name = "JsonPartialMatcher",
-                            Pattern = JsonSerializer.Serialize(new
-                            {
-                                clientRequestId = preset.FixtureClientRequestId,
-                                sku = preset.MockSku
-                            })
+                            Name = "JmesPathMatcher",
+                            Pattern = "clientRequestId == '"
+                                + preset.FixtureClientRequestId.ToString("D")
+                                + "' && sku == '"
+                                + preset.MockSku
+                                + "' && quantity == `"
+                                + preset.Quantity.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                                + "` && unitPrice >= `"
+                                + preset.UnitPrice.ToString("G29", System.Globalization.CultureInfo.InvariantCulture)
+                                + "` && unitPrice <= `"
+                                + preset.UnitPrice.ToString("G29", System.Globalization.CultureInfo.InvariantCulture)
+                                + "` && currency == 'TWD'"
                         }
                     }
                 },
@@ -355,7 +402,6 @@ public sealed class WireMockPresetController(HttpClient admin, Uri upstream, Wir
             }, ct);
         }
 
-        Mode = mode;
     }
 
     /// <summary>讀取 WireMock 原生管理 API 回傳的 JSON。</summary>
@@ -369,6 +415,11 @@ public sealed class WireMockPresetController(HttpClient admin, Uri upstream, Wir
     /// <returns>原生管理 API 是否回報成功。</returns>
     public async Task<bool> IsNativeHealthyAsync(CancellationToken ct)
     {
+        if (Status != "ready" || Mode is null)
+        {
+            return false;
+        }
+
         using var response = await admin.GetAsync("__admin/health", ct);
         return response.IsSuccessStatusCode;
     }
@@ -429,7 +480,62 @@ public static class WireMockPage
 {
     /// <summary>本機供應商模擬器操作頁面的 HTML。</summary>
     public const string Html = """
-        <!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>供應商模擬器</title><style>body{font:16px system-ui;max-width:1000px;margin:2rem auto;padding:0 1rem;color:#172033}button{padding:.55rem;margin:.2rem}section{border:1px solid #ccd4e0;border-radius:8px;padding:1rem;margin:1rem 0}pre{white-space:pre-wrap;background:#f2f5f9;padding:1rem;max-height:18rem;overflow:auto}.badge{background:#e5efff;padding:.3rem .6rem}</style></head><body><h1>SupplierMock.WebApi 供應商模擬器</h1><p><strong>本機實驗室操作介面</strong>，控制內嵌的 WireMock.Net 伺服器；這不是 WireMock 內建儀表板或 WireMockInspector。</p><p>目前模式：<span id="mode" class="badge">__MODE__</span> · 固定上游：<code id="upstream">__UPSTREAM__</code></p><p><button onclick="setWireMockMode('mock')">僅模擬</button><button onclick="setWireMockMode('proxy')">全部代理</button><button onclick="setWireMockMode('hybrid')">混合模式</button><button onclick="resetPreset()">還原啟動預設</button><button onclick="refresh()">重新整理映射與請求紀錄</button><button onclick="clearRequests()">清除請求紀錄</button></p><p>模式切換會更新原生 WireMock 映射，重新啟動後會回到啟動模式。上游只由啟動設定指定。混合模式以優先序 1 回應 MOCK-001 範例，其餘路徑以優先序 10 轉送。</p><p><a href="/control/mappings">原生映射 JSON</a> · <a href="/control/requests">原生請求紀錄 JSON</a> · <a href="http://localhost:8184">Microcks 操作介面</a> · <a href="http://localhost:8181">供應商沙盒</a></p><section><h2>實際原生映射</h2><pre id="mappings"></pre></section><section><h2>實際原生請求紀錄</h2><pre id="requests"></pre></section><script>async function setWireMockMode(m){let r=await fetch('/control/mode',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:m})});if(!r.ok)alert((await r.json()).message);refresh()}async function resetPreset(){await fetch('/control/reset',{method:'POST'});refresh()}async function clearRequests(){await fetch('/control/requests',{method:'DELETE'});refresh()}async function refresh(){let s=await(await fetch('/control/state')).json();document.getElementById("mode").textContent=s.mode;document.getElementById("upstream").textContent=s.upstream;for(let [p,i] of [['/control/mappings','mappings'],['/control/requests','requests']])document.getElementById(i).textContent=JSON.stringify(await(await fetch(p)).json(),null,2)}refresh();setInterval(refresh,5000)</script></body></html>
+        <!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>供應商模擬器</title><style>body{font:16px system-ui;max-width:1000px;margin:2rem auto;padding:0 1rem;color:#172033}button{padding:.55rem;margin:.2rem}section{border:1px solid #ccd4e0;border-radius:8px;padding:1rem;margin:1rem 0}pre{white-space:pre-wrap;background:#f2f5f9;padding:1rem;max-height:18rem;overflow:auto}.badge{background:#e5efff;padding:.3rem .6rem}</style></head><body><h1>SupplierMock.WebApi 供應商模擬器</h1><p><strong>本機實驗室操作介面</strong>，控制內嵌的 WireMock.Net 伺服器；這不是 WireMock 內建儀表板或 WireMockInspector。</p><p>目前模式：<span id="mode" class="badge">__MODE__</span> · <span id="status">狀態：__STATUS__</span> · 固定上游：<code id="upstream">__UPSTREAM__</code></p><p><button onclick="setWireMockMode('mock')">僅模擬</button><button onclick="setWireMockMode('proxy')">全部代理</button><button onclick="setWireMockMode('hybrid')">混合模式</button><button onclick="resetPreset()">還原啟動預設</button><button onclick="refresh()">重新整理映射與請求紀錄</button><button onclick="clearRequests()">清除請求紀錄</button></p><p>模式切換會更新原生 WireMock 映射，重新啟動後會回到啟動模式。上游只由啟動設定指定。混合模式以優先序 1 回應 MOCK-001 範例，其餘路徑以優先序 10 轉送。</p><p><a href="/control/mappings">原生映射 JSON</a> · <a href="/control/requests">原生請求紀錄 JSON</a> · <a href="http://localhost:8184">Microcks 操作介面</a> · <a href="http://localhost:8181">供應商沙盒</a></p><section><h2>實際原生映射</h2><pre id="mappings"></pre></section><section><h2>實際原生請求紀錄</h2><pre id="requests"></pre></section><script>
+        async function setWireMockMode(mode) {
+            let message = "模式套用失敗；請檢查目前狀態。";
+            try {
+                const response = await fetch("/control/mode", {
+                    method: "POST",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify({ mode })
+                });
+                if (response.ok) {
+                    return;
+                }
+                try {
+                    const result = await response.json();
+                    message = result.message || message;
+                } catch {
+                    message = `模式套用失敗（HTTP ${response.status}）；請檢查目前狀態。`;
+                }
+            } catch {
+                message = "無法連線以套用模式；請檢查伺服器狀態。";
+            } finally {
+                await refresh();
+            }
+            alert(message);
+        }
+
+        async function resetPreset() {
+            const response = await fetch("/control/reset", { method: "POST" });
+            if (!response.ok) {
+                alert("還原預設模式失敗；請檢查目前狀態。");
+            }
+            await refresh();
+        }
+
+        async function clearRequests() {
+            await fetch("/control/requests", { method: "DELETE" });
+            await refresh();
+        }
+
+        async function refresh() {
+            const [stateResponse, mappingsResponse, requestsResponse] = await Promise.all([
+                fetch("/control/state"),
+                fetch("/control/mappings"),
+                fetch("/control/requests")
+            ]);
+            const state = await stateResponse.json();
+            document.getElementById("mode").textContent = state.mode || "無有效模式";
+            document.getElementById("status").textContent = `狀態：${state.status}`;
+            document.getElementById("upstream").textContent = state.upstream;
+            document.getElementById("mappings").textContent = JSON.stringify(await mappingsResponse.json(), null, 2);
+            document.getElementById("requests").textContent = JSON.stringify(await requestsResponse.json(), null, 2);
+        }
+
+        void refresh();
+        setInterval(() => { void refresh(); }, 5000);
+        </script></body></html>
         """;
 }
 

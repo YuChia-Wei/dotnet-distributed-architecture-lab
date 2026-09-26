@@ -28,6 +28,23 @@ paths:
   /supplier/orders:
     post:
       operationId: submitSupplierOrder
+      x-microcks-operation:
+        dispatcher: JS
+        dispatcherRules: |
+          try {
+            const body = JSON.parse(mockRequest.requestContent());
+            if (body
+                && body.clientRequestId === "9d4c99da-6517-46b2-baa7-7e81106d3d34"
+                && body.sku === "MOCK-001"
+                && body.quantity === 2
+                && body.unitPrice === 100
+                && body.currency === "TWD") {
+              return "mock-order";
+            }
+          } catch (error) {
+            log.warn("Supplier fixture request was not valid JSON: " + error);
+          }
+          return "__unmatched_supplier_order__";
       requestBody:
         required: true
         content:

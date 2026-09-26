@@ -17,6 +17,7 @@ public sealed class SupplierMockTests : IAsyncLifetime
     private WebApplication? upstream;
     private WireMockServer? wireMock;
     private WireMockPresetController? controller;
+    private ResetFaultHandler? resetFaultHandler;
     private readonly HttpClient client = new();
     private readonly ConcurrentQueue<(string Path, string? Body)> forwarded = new();
     private const string FixtureId = "9d4c99da-6517-46b2-baa7-7e81106d3d34";
@@ -37,6 +38,39 @@ public sealed class SupplierMockTests : IAsyncLifetime
         using var realOrder = await WhenPostAsync("/supplier/orders?trace=fixture", orderPayload);
         using var reconciled = await WhenGetAsync("/supplier/orders/by-client-request/" + clientRequestId);
         await ThenHybridSeparatesFixturesAndProxyAsync(mockQuote, mockOrder, mockReconcile, realQuote, realOrder, reconciled, clientRequestId, orderPayload);
+
+        var scaledPriceFixture = FixtureOrder().Replace("\"unitPrice\":100", "\"unitPrice\":100.00", StringComparison.Ordinal);
+        using (var equivalentNumericFixture = await WhenPostAsync("/supplier/orders", scaledPriceFixture))
+        {
+            Assert.Equal(HttpStatusCode.OK, equivalentNumericFixture.StatusCode);
+            Assert.Equal("wiremock", equivalentNumericFixture.Headers.GetValues("X-Supplier-Origin").Single());
+        }
+
+        foreach (var alteredPayload in new[]
+        {
+            JsonSerializer.Serialize(new { clientRequestId = Guid.Parse(FixtureId), sku = "MOCK-001", quantity = 3, unitPrice = 100m, currency = "TWD" }),
+            JsonSerializer.Serialize(new { clientRequestId = Guid.Parse(FixtureId), sku = "MOCK-001", quantity = 2, unitPrice = 101m, currency = "TWD" }),
+            JsonSerializer.Serialize(new { clientRequestId = Guid.Parse(FixtureId), sku = "MOCK-001", quantity = 2, unitPrice = 100m, currency = "USD" }),
+            JsonSerializer.Serialize(new { clientRequestId = Guid.Parse(FixtureId), sku = "REAL-001", quantity = 2, unitPrice = 100m, currency = "TWD" }),
+            JsonSerializer.Serialize(new
+            {
+                clientRequestId = Guid.Parse(FixtureId),
+                sku = "REAL-001",
+                quantity = 3,
+                unitPrice = 101m,
+                currency = "USD",
+                decoy = new { clientRequestId = Guid.Parse(FixtureId), sku = "MOCK-001", quantity = 2, unitPrice = 100m, currency = "TWD" }
+            })
+        })
+        {
+            using var alteredOrder = await WhenPostAsync("/supplier/orders", alteredPayload);
+            Assert.Equal(HttpStatusCode.OK, alteredOrder.StatusCode);
+            Assert.Equal("sandbox", alteredOrder.Headers.GetValues("X-Supplier-Origin").Single());
+            using var alteredBody = JsonDocument.Parse(await alteredOrder.Content.ReadAsStringAsync());
+            Assert.Equal("real-order-" + FixtureId, alteredBody.RootElement.GetProperty("supplierOrderId").GetString());
+        }
+
+        Assert.Equal(8, forwarded.Count);
 
         await WhenSwitchingToProxyModeAsync();
         using var proxyOnly = await WhenGetAsync("/supplier/catalog/MOCK-001");
@@ -63,7 +97,7 @@ public sealed class SupplierMockTests : IAsyncLifetime
         using var mappingsDocument = JsonDocument.Parse(
             await controller!.GetJsonAsync("__admin/mappings", CancellationToken.None));
         var mappings = mappingsDocument.RootElement.EnumerateArray().ToArray();
-        var modeAfterResets = controller.Mode;
+        var modeAfterResets = controller.Mode ?? throw new Xunit.Sdk.XunitException("A completed reset must expose an effective mode.");
         var mockCount = mappings.Count(mapping => GetPriority(mapping) == 1);
         var proxyCount = mappings.Count(mapping => GetPriority(mapping) == 10);
 
@@ -92,6 +126,64 @@ public sealed class SupplierMockTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.OK, quoteResponse.StatusCode);
         var expectedOrigin = modeAfterResets == WireMockMode.Proxy ? "sandbox" : "wiremock";
         Assert.Equal(expectedOrigin, quoteResponse.Headers.GetValues("X-Supplier-Origin").Single());
+    }
+
+    /// <summary>驗證模式解析只接受列舉名稱，拒絕數字與空值。</summary>
+    [Fact]
+    [Trait("Scenario", "M08")]
+    public void M08_Given_a_mode_setting_When_numeric_or_null_values_are_parsed_Then_only_named_values_are_accepted()
+    {
+        Assert.True(WireMockModeExtensions.TryParse("MoCk", out var mode));
+        Assert.Equal(WireMockMode.Mock, mode);
+        Assert.False(WireMockModeExtensions.TryParse("1", out _));
+        Assert.False(WireMockModeExtensions.TryParse("0", out _));
+        Assert.False(WireMockModeExtensions.TryParse(null, out _));
+    }
+
+    /// <summary>驗證重設失敗不會回報有效模式，且後續重試可恢復。</summary>
+    [Fact]
+    [Trait("Scenario", "M09")]
+    public async Task M09_Given_cancel_or_admin_failure_When_reset_runs_Then_state_is_accurate_and_retry_recovers()
+    {
+        await GivenARealLocalUpstreamAsync();
+        await GivenNativeWireMockWithHybridMappingsAsync();
+
+        using (var alreadyCanceled = new CancellationTokenSource())
+        {
+            alreadyCanceled.Cancel();
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
+                () => controller!.ResetAsync(WireMockMode.Mock, alreadyCanceled.Token));
+        }
+
+        Assert.Equal("ready", controller!.Status);
+        Assert.Equal(WireMockMode.Hybrid, controller.Mode);
+
+        resetFaultHandler!.FailNextMappingPost = true;
+        await Assert.ThrowsAsync<HttpRequestException>(() => controller.ResetAsync(WireMockMode.Proxy));
+        Assert.Equal("failed", controller.Status);
+        Assert.Null(controller.Mode);
+        Assert.False(await controller.IsNativeHealthyAsync(CancellationToken.None));
+        using (var mappingsDocument = JsonDocument.Parse(
+            await controller.GetJsonAsync("__admin/mappings", CancellationToken.None)))
+        {
+            Assert.Empty(mappingsDocument.RootElement.EnumerateArray());
+        }
+
+        await controller.ResetAsync(WireMockMode.Proxy);
+        Assert.Equal("ready", controller.Status);
+        Assert.Equal(WireMockMode.Proxy, controller.Mode);
+        Assert.True(await controller.IsNativeHealthyAsync(CancellationToken.None));
+
+        using var canceledAfterMutation = new CancellationTokenSource();
+        resetFaultHandler.CancelCallerAfterNextDelete = canceledAfterMutation;
+        await controller.ResetAsync(WireMockMode.Hybrid, canceledAfterMutation.Token);
+        Assert.True(canceledAfterMutation.IsCancellationRequested);
+        Assert.Equal("ready", controller.Status);
+        Assert.Equal(WireMockMode.Hybrid, controller.Mode);
+
+        using var finalMappings = JsonDocument.Parse(
+            await controller.GetJsonAsync("__admin/mappings", CancellationToken.None));
+        Assert.Equal(4, finalMappings.RootElement.GetArrayLength());
     }
 
     private static int GetPriority(JsonElement mapping)
@@ -145,7 +237,12 @@ public sealed class SupplierMockTests : IAsyncLifetime
     {
         var address = upstream!.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>()!.Addresses.Single();
         wireMock = WireMockServer.StartWithAdminInterface();
-        var admin = new HttpClient { BaseAddress = new Uri(wireMock.Url!) };
+        resetFaultHandler = new ResetFaultHandler(new HttpClientHandler());
+        var admin = new HttpClient(resetFaultHandler)
+        {
+            BaseAddress = new Uri(wireMock.Url!),
+            Timeout = TimeSpan.FromSeconds(5)
+        };
         controller = new WireMockPresetController(admin, WireMockPresetController.ValidateUpstream(address), WireMockMode.Hybrid);
         await controller.ResetAsync(WireMockMode.Hybrid);
     }
@@ -185,13 +282,13 @@ public sealed class SupplierMockTests : IAsyncLifetime
     {
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("sandbox", response.Headers.GetValues("X-Supplier-Origin").Single());
-        Assert.Equal(4, forwarded.Count);
+        Assert.Equal(9, forwarded.Count);
     }
 
     private void ThenMockModeMissDoesNotReachUpstream(HttpResponseMessage response)
     {
         Assert.NotEqual(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(4, forwarded.Count);
+        Assert.Equal(9, forwarded.Count);
     }
 
     /// <summary>準備測試執行環境。</summary>
@@ -205,5 +302,36 @@ public sealed class SupplierMockTests : IAsyncLifetime
         client.Dispose();
         wireMock?.Stop();
         if (upstream is not null) await upstream.DisposeAsync();
+    }
+
+    private sealed class ResetFaultHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
+    {
+        public bool FailNextMappingPost { get; set; }
+
+        public CancellationTokenSource? CancelCallerAfterNextDelete { get; set; }
+
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            var path = request.RequestUri?.AbsolutePath ?? string.Empty;
+            if (FailNextMappingPost
+                && request.Method == HttpMethod.Post
+                && path.EndsWith("/__admin/mappings", StringComparison.Ordinal))
+            {
+                FailNextMappingPost = false;
+                return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
+            }
+
+            if (request.Method == HttpMethod.Delete
+                && path.EndsWith("/__admin/mappings", StringComparison.Ordinal)
+                && CancelCallerAfterNextDelete is { } callerCancellation)
+            {
+                CancelCallerAfterNextDelete = null;
+                callerCancellation.Cancel();
+            }
+
+            return await base.SendAsync(request, cancellationToken);
+        }
     }
 }

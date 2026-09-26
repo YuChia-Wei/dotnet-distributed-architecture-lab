@@ -1,17 +1,23 @@
-# Supplier Microcks artifacts
+# 供應商模擬器與 Microcks 契約
 
-These OpenAPI 3.0.3 files import the same external provider contract as the sandbox:
+`SupplierMock.WebApi` 在固定內部連接埠執行真正的 WireMock.Net 伺服器，並提供本機實驗室操作頁面。WireMock 會依啟動設定中的固定上游網址轉送請求；操作頁面不接受任意上游網址。
 
-- `microcks/supplier-mock.yaml` has fixture examples without proxy dispatchers.
-- `microcks/supplier-proxy.yaml` sets each known operation to native `PROXY`.
-- `microcks/supplier-hybrid.yaml` uses operation-level `PROXY_FALLBACK`: the `MOCK-001` catalog fixture and the fixed order fixture are mocked; unmatched requests on those known operations are forwarded to the sandbox. Unknown paths remain Microcks misses because dispatchers apply per operation, not as a global reverse proxy.
+Microcks 契約位於 `microcks/`：
 
-## Import and reset
+- `supplier-mock.yaml` 提供固定範例回應；建立訂單以原生 JS dispatcher 比對完整固定範例內容，其他本文不會收到固定接受回應。
+- `supplier-proxy.yaml` 對已描述的操作使用原生 `PROXY` dispatcher。
+- `supplier-hybrid.yaml` 使用原生 `PROXY_FALLBACK` dispatcher；商品路徑與查詢識別碼依 URI 範例分派，建立訂單則用原生 JS dispatcher 比對完整固定範例內容，其他內容交由 Microcks 原生代理功能轉送。
 
-Open the Microcks UI (the lab compose maps it to `http://localhost:8184`), choose Quick Import, and upload exactly one of the three files. Confirm the discovered API name `Supplier API` and version `1.0.0` in **APIs | Services**. After changing a file or mode, upload that same artifact again; its operation-level `x-microcks-operation` values are the repeatable reset source. The built-in Microcks UI is the control surface; this repository does not present a fake Microcks dashboard.
+## 切換 Microcks 契約
 
-The resulting mock base path is `/rest/Supplier+API/1.0.0`. For example, the quote operation is `/rest/Supplier+API/1.0.0/supplier/catalog/MOCK-001`. If the UI reports a different imported API identity, use the displayed name/version when composing that prefix. The fixed mock-order example uses clientRequestId `9d4c99da-6517-46b2-baa7-7e81106d3d34`, SKU `MOCK-001`, quantity 2, price 100 TWD, and fixed supplierOrderId `00000000-0000-4000-8000-000000000017`; keep those values together so the response preserves request identity.
+建議使用 repo 根目錄的匯入腳本。它會將所選契約固定以上傳名稱 `supplier-api.yaml` 匯入，檢查服務識別資料，並讀回匯入結果：
 
-For hybrid dispatch, Microcks' `PROXY_FALLBACK` uses its native per-operation rules: `URI_PARTS` for path parameters and `JSON_BODY` for the fixed order example. Proxy URL is the configured internal service origin `http://supplier-sandbox:8080/`; the request path is appended by Microcks. Use the deployed internal sandbox service name if compose assigns another name. The sandbox request journal and `X-Supplier-Origin` response header are evidence that an unmatched known operation reached the real upstream. Reaching an undocumented route is a separate expected miss.
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/procurement-lab/Set-MicrocksMode.ps1 -Mode hybrid
+```
 
-These are fixture contracts. Verify upload/import status and real proxy behavior in the selected Microcks container during runtime acceptance; file parsing or successful mock responses do not prove proxy forwarding.
+`-Mode` 可設為 `mock`、`proxy` 或 `hybrid`。若使用 Microcks 網頁操作介面手動切換，請先將欲匯入的選定契約檔以相同名稱 `supplier-api.yaml` 上傳。Microcks 會依來源檔案名稱累積契約；直接用三個不同檔名匯入會留下多份同名服務版本，造成操作頁面與呼叫結果混淆。
+
+Microcks uber 1.15.0 的內部資料庫是暫存的。Microcks 重新啟動後，請重新匯入所需契約。供應商沙盒與 Procurement 的 PostgreSQL 資料則由持久化資料磁碟區保存。
+
+Microcks 的 dispatcher 只作用於已匯入契約所描述的操作；未知路徑不是全域代理。匯入契約或讀到範例回應本身不能證明代理已生效，請由整合驗收以實際 HTTP 請求驗證。

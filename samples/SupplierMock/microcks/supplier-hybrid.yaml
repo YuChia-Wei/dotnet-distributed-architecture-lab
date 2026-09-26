@@ -33,7 +33,7 @@ paths:
       x-microcks-operation:
         dispatcher: PROXY_FALLBACK
         dispatcherRules: |
-          {"dispatcher":"JSON_BODY","dispatcherRules":"{\"exp\":\"/clientRequestId\",\"operator\":\"equals\",\"cases\":{\"9d4c99da-6517-46b2-baa7-7e81106d3d34\":\"mock-order\",\"default\":\"__proxy_unmatched__\"}}","proxyUrl":"http://supplier-sandbox:8080/"}
+          {"dispatcher":"JS","dispatcherRules":"try {\n  const body = JSON.parse(mockRequest.requestContent());\n  if (body\n      && body.clientRequestId === \"9d4c99da-6517-46b2-baa7-7e81106d3d34\"\n      && body.sku === \"MOCK-001\"\n      && body.quantity === 2\n      && body.unitPrice === 100\n      && body.currency === \"TWD\") {\n    return \"mock-order\";\n  }\n} catch (error) {\n  log.warn(\"Supplier fixture request was not valid JSON: \" + error);\n}\nreturn \"__proxy_unmatched__\";","proxyUrl":"http://supplier-sandbox:8080/"}
       requestBody:
         required: true
         content:

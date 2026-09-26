@@ -438,7 +438,69 @@ public static class SandboxPage
         <!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>供應商沙盒</title><style>body{font:16px system-ui;max-width:1000px;margin:2rem auto;padding:0 1rem;color:#172033}button,input{padding:.5rem}section{border:1px solid #ccd4e0;border-radius:8px;padding:1rem;margin:1rem 0}pre{white-space:pre-wrap;background:#f2f5f9;padding:1rem;max-height:18rem;overflow:auto}</style></head><body><h1>SupplierSandbox.WebApi 供應商沙盒</h1><p>本機供應商服務使用 PostgreSQL 保存訂單識別碼。成功回應會標示來源 <code>sandbox</code>。近期請求紀錄只保存時間、方法、路徑與 clientRequestId，不保存任意標頭或本文。</p><section><h2>暫時性故障控制</h2><label>訂單提交後延遲（毫秒） <input id="delay" type="number" min="0" max="10000" value="0"></label> <button onclick="saveDelay()">套用</button><span id="state">重新啟動後恢復為零。</span></section><section><h2>提交範例訂單</h2><label>用戶端請求識別碼 <input id="clientId" value="9d4c99da-6517-46b2-baa7-7e81106d3d34"></label> <button onclick="refreshId()">產生新識別碼</button><br><label>SKU <input id="sku" value="REAL-001"></label> <label>數量 <input id="quantity" type="number" min="1" value="2"></label><button onclick="submitOrder()">提交至沙盒</button><pre id="submission"></pre></section><section><h2>近期訂單</h2><button onclick="refresh()">重新整理</button><pre id="orders"></pre></section><section><h2>近期請求</h2><pre id="requests"></pre></section><section><h2>範例請求</h2><pre>GET /supplier/catalog/REAL-001
         POST /supplier/orders
         {"clientRequestId":"9d4c99da-6517-46b2-baa7-7e81106d3d34","sku":"REAL-001","quantity":2,"unitPrice":100,"currency":"TWD"}
-        GET /supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34</pre></section><script>function refreshId(){clientId.value=crypto.randomUUID()}async function submitOrder(){let payload={clientRequestId:clientId.value,sku:sku.value,quantity:Number(quantity.value),unitPrice:100,currency:"TWD"};let r=await fetch("/supplier/orders",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});submission.textContent=r.status+" "+await r.text();refresh()}async function refresh(){for(const [p,i] of [['/sandbox/orders','orders'],['/sandbox/requests','requests']])document.getElementById(i).textContent=JSON.stringify(await(await fetch(p)).json(),null,2);let c=await(await fetch('/sandbox/control')).json();if(document.activeElement!==delay)delay.value=c.delayAfterCommitMs;if(state.dataset.feedback!=='error')state.textContent=' '+c.persistence+'.'}async function saveDelay(){let r=await fetch('/sandbox/control',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({delayAfterCommitMs:Number(delay.value)})});if(!r.ok){state.dataset.feedback='error';state.textContent='拒絕設定，請填入 0 到 10000 毫秒。';return}state.dataset.feedback='';state.textContent='已套用；服務重新啟動後恢復。';refresh()}refresh();setInterval(refresh,4000)}</script></body></html>
+        GET /supplier/orders/by-client-request/9d4c99da-6517-46b2-baa7-7e81106d3d34</pre></section><script>
+        function refreshId() {
+            document.getElementById("clientId").value = crypto.randomUUID();
+        }
+
+        async function submitOrder() {
+            const clientId = document.getElementById("clientId").value;
+            const sku = document.getElementById("sku").value;
+            const quantity = Number(document.getElementById("quantity").value);
+            const response = await fetch("/supplier/orders", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ clientRequestId: clientId, sku, quantity, unitPrice: 100, currency: "TWD" })
+            });
+            document.getElementById("submission").textContent = `${response.status} ${await response.text()}`;
+            await refresh();
+        }
+
+        async function refresh() {
+            const [ordersResponse, requestsResponse, controlResponse] = await Promise.all([
+                fetch("/sandbox/orders"),
+                fetch("/sandbox/requests"),
+                fetch("/sandbox/control")
+            ]);
+            const orders = await ordersResponse.json();
+            const requests = await requestsResponse.json();
+            const control = await controlResponse.json();
+            document.getElementById("orders").textContent = JSON.stringify(orders, null, 2);
+            document.getElementById("requests").textContent = JSON.stringify(requests, null, 2);
+
+            const delayInput = document.getElementById("delay");
+            if (document.activeElement !== delayInput) {
+                delayInput.value = control.delayAfterCommitMs;
+            }
+
+            const feedback = document.getElementById("state");
+            if (feedback.dataset.feedback !== "error") {
+                feedback.textContent = ` ${control.persistence}.`;
+            }
+        }
+
+        async function saveDelay() {
+            const delayInput = document.getElementById("delay");
+            const feedback = document.getElementById("state");
+            const response = await fetch("/sandbox/control", {
+                method: "PUT",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ delayAfterCommitMs: Number(delayInput.value) })
+            });
+            if (!response.ok) {
+                feedback.dataset.feedback = "error";
+                feedback.textContent = "拒絕設定，請填入 0 到 10000 毫秒。";
+                return;
+            }
+
+            feedback.dataset.feedback = "";
+            feedback.textContent = "已套用；服務重新啟動後恢復。";
+            await refresh();
+        }
+
+        void refresh();
+        setInterval(() => { void refresh(); }, 4000);
+        </script></body></html>
         """;
 }
 
