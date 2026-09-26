@@ -1,5 +1,6 @@
 param(
     [switch]$NoBuild,
+    [Guid]$InventoryProductId,
     [ValidateRange(10, 300)][int]$TimeoutSeconds = 90
 )
 
@@ -71,6 +72,10 @@ Invoke-Compose -ComposeParameters $applicationArgs
 Wait-Http 'http://127.0.0.1:8181/health'
 Wait-Http 'http://127.0.0.1:8182/health'
 Wait-Http 'http://127.0.0.1:8180/health'
+Wait-Http 'http://127.0.0.1:8184/api/services?page=0&size=1'
+if ($InventoryProductId -ne [Guid]::Empty) {
+    Wait-Http "http://127.0.0.1:8185/api/inventory/product/$InventoryProductId"
+}
 
 Write-Output 'Lab endpoints: Procurement http://127.0.0.1:8180/ ; Sandbox http://127.0.0.1:8181/ ; WireMock control http://127.0.0.1:8182/ ; Microcks http://127.0.0.1:8184/ ; Inventory http://127.0.0.1:8185/'
-Write-Output 'Microcks import is a separate UI step; import the selected supplier YAML before using the microcks provider.'
+Write-Output 'Import a selected supplier YAML with Set-MicrocksMode.ps1 or the Microcks Quick Import UI before using the microcks provider.'

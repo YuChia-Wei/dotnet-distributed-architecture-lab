@@ -103,6 +103,8 @@ services:
     environment:
       PROCUREMENT_TEST_POSTGRES_CONNECTION_STRING: Host=postgres-procurement;Port=5432;Database=procurement_db;Username=user;Password=password
       SUPPLIER_TEST_POSTGRES_CONNECTION_STRING: Host=postgres-supplier;Port=5432;Database=supplier_db;Username=user;Password=password
+    volumes: !override
+      - ../artifacts/procurement-lab/test-results:/results
 
 volumes:
   postgres_procurement_data:

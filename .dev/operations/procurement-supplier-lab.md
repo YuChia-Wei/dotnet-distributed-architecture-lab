@@ -21,7 +21,7 @@ docker compose @compose config --quiet
 docker compose @compose ps
 ```
 
-`Start-Lab.ps1` 只以 `--no-deps` 啟動 Kafka、既有 Inventory PostgreSQL、新的採購與供應商 PostgreSQL，以及本實驗的 API、Consumer、mock 和 Microcks；不啟動其他觀測系統。它等待三個資料庫就緒後，重複套用 `docker-compose/sql-script/migrations/inventory/20260926_0003_add_inventory_goods_receipts.sql` 與 `docker-compose/sql-script/procurement/001-procurement.sql`。新的供應商服務在啟動時套用自己的 `docker-compose/sql-script/supplier/init.sql`。PostgreSQL 的 `docker-entrypoint-initdb.d` 只在新 volume 初始化時執行，因此既有資料庫仍需這一步。腳本不刪除容器、volume 或資料；容器映像已建好時可加 `-NoBuild`。
+`Start-Lab.ps1` 只以 `--no-deps` 啟動 Kafka、既有 Inventory PostgreSQL、新的採購與供應商 PostgreSQL，以及本實驗的 API、Consumer、mock 和 Microcks；不啟動其他觀測系統。它等待三個資料庫就緒後，重複套用 `docker-compose/sql-script/migrations/inventory/20260926_0003_add_inventory_goods_receipts.sql` 與 `docker-compose/sql-script/procurement/001-procurement.sql`。新的供應商服務在啟動時套用自己的 `docker-compose/sql-script/supplier/init.sql`。PostgreSQL 的 `docker-entrypoint-initdb.d` 只在新 volume 初始化時執行，因此既有資料庫仍需這一步。腳本也等待服務的 HTTP 健康端點及 Microcks `/api/services`；若商品已在 Inventory 初始化，可傳 `-InventoryProductId $productId` 額外確認其查詢端點回 HTTP 200。腳本不刪除容器、volume 或資料；容器映像已建好時可加 `-NoBuild`。
 
 若要單獨重套 Inventory migration，可把檔案經 stdin 送進本專案的既有資料庫：
 
@@ -76,11 +76,18 @@ Invoke-RestMethod -Method Post http://127.0.0.1:8182/control/reset
 
 `DELETE /control/requests` 會清除 WireMock 原生 request journal；先保存需要的證據。sandbox `GET /sandbox/requests` 提供最近最多 100 筆安全 request 觀察，`GET /sandbox/orders` 可查供應商單；`GET /sandbox/control` 可讀延遲，`PUT /sandbox/control` 的 `{ "delayAfterCommitMs": 0..10000 }` 可重現提交後逾時。模式與延遲控制是執行時狀態；重啟後由設定檔與環境變數重套起始模式。記錄測試前後的 request ID、origin 與 sandbox request 數，而非只看 HTTP 200。
 
-Microcks 使用自己的 UI。從 `samples/SupplierMock/microcks/` 擇一匯入 `supplier-mock.yaml`、`supplier-proxy.yaml` 或 `supplier-hybrid.yaml`，在 Quick Import 確認 `Supplier API` 版本 `1.0.0`，並讀回 UI 顯示的 mock URL。此版本預期前綴是 `/rest/Supplier+API/1.0.0/`；若 UI 顯示不同路徑，修改 `docker-compose.procurement.yml` 的 `SupplierProfiles__microcks` 再重建 `procurement-api`。每次切換匯入檔後檢查 dispatcher/proxy 設定實際生效；`PROXY_FALLBACK` 只適用已知 operation 的 response matching，不能當作所有未知路徑的轉發。mock/proxy/hybrid 各以唯一 request ID 比對 Microcks response origin 和 sandbox request log，留下原生 UI/請求證據。
+Microcks 使用自己的 UI。從 `samples/SupplierMock/microcks/` 擇一匯入 `supplier-mock.yaml`、`supplier-proxy.yaml` 或 `supplier-hybrid.yaml`，在 Quick Import 確認 `Supplier API` 版本 `1.0.0`，並讀回 UI 顯示的 mock URL。也可用 PowerShell 7 的匯入腳本；它將所選檔案送到 Microcks 的 artifact upload API，再由 `/api/services` 讀回服務名稱與版本。若 Microcks 啟用驗證，提供具 manager 權限的 bearer token：
+
+```powershell
+./scripts/procurement-lab/Set-MicrocksMode.ps1 -Mode hybrid
+# 啟用驗證的環境：-BearerToken $managerToken
+```
+
+匯入成功與服務身分讀回只證明規格已登錄，切換後仍須以不同 request ID 確認 dispatch 與來源。此版本預期前綴是 `/rest/Supplier+API/1.0.0/`；若 UI 顯示不同路徑，修改 `docker-compose.procurement.yml` 的 `SupplierProfiles__microcks` 再重建 `procurement-api`。每次切換匯入檔後檢查 dispatcher/proxy 設定實際生效；`PROXY_FALLBACK` 只適用已知 operation 的 response matching，不能當作所有未知路徑的轉發。mock/proxy/hybrid 各以唯一 request ID 比對 Microcks response origin 和 sandbox request log，留下原生 UI/請求證據。
 
 ## 可重現驗證與故障恢復
 
-隔離的 PostgreSQL 測試使用 `RUN_EXTERNAL_INTEGRATION_TESTS=true` 加上 `INVENTORY_TEST_POSTGRES_CONNECTION_STRING`、`PROCUREMENT_TEST_POSTGRES_CONNECTION_STRING`、`SUPPLIER_TEST_POSTGRES_CONNECTION_STRING`。Compose 的 verification 與 procurement overlay 已為 `regression-tests` 設定容器內連線，避免公開資料庫 port。需要時可在服務就緒後執行：
+隔離的 PostgreSQL 測試使用 `RUN_EXTERNAL_INTEGRATION_TESTS=true` 加上 `INVENTORY_TEST_POSTGRES_CONNECTION_STRING`、`PROCUREMENT_TEST_POSTGRES_CONNECTION_STRING`、`SUPPLIER_TEST_POSTGRES_CONNECTION_STRING`。Compose 的 verification 與 procurement overlay 已為 `regression-tests` 設定容器內連線，避免公開資料庫 port；測試結果輸出到 `artifacts/procurement-lab/test-results/`。需要時可在服務就緒後執行：
 
 ```powershell
 docker compose @compose run --rm --no-deps regression-tests
