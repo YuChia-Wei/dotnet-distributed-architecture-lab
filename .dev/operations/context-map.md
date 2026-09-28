@@ -18,6 +18,9 @@ It is limited to relationships that can be traced back to:
 | `Products` | Manage sellable product catalog data | `Product`, `CreateProduct`, `UpdateProduct`, `DeleteProduct` | owns product catalog facts; `products.integration.events` currently carries enabled diagnostics, with business integration events deferred |
 | `Orders` | Manage order placement and lifecycle transitions | `Order`, `PlaceOrder`, `ShipOrder`, `DeliverOrder`, `CancelOrder` | owns `OrderPlaced`, `OrderShipped`, `OrderDelivered`, `OrderCancelled` |
 | `Inventory` | Manage available stock and stock adjustments | `InventoryItem`, `DecreaseStock`, `IncreaseStock`, `Restock` | owns `ReserveInventoryRequestContract` handling and stock integration events |
+| `Procurement` | Manage supplier purchases, uncertain submission reconciliation, and actual goods receipts | `PurchaseOrder`, `CreatePurchase`, `ReconcilePurchase`, `ReceiveGoods` | owns `GoodsReceived` and `procurement.integration.events` |
+
+`SupplierSandbox` and `SupplierMock` are external-system lab samples, not business bounded contexts. The two Vue frontends and YARP are presentation/routing adapters.
 
 ## Relationship Map
 
@@ -30,10 +33,12 @@ It is limited to relationships that can be traced back to:
 | `Products` diagnostic endpoints | `Orders Consumer` diagnostics | demonstrate parallel work and exception policy | enabled diagnostic messages on `products.integration.events` | shared diagnostic contracts and consumer example handlers; not a business reaction | diagnostic execution is documented in `consumer-parallel-examples.md` |
 | `Product Consumer` runtime | `Orders` events | receive order lifecycle stream | consumer listens to `orders.integration.events` | actual handler intent needs clarification | medium; listener exists but business ownership is still unclear |
 | `Inventory Consumer` runtime | `Orders` events | receive order lifecycle stream | consumer listens to `orders.integration.events` | actual handler intent needs clarification | medium; part of current runtime topology but not fully documented |
+| `Procurement` | configured supplier origin | obtain quote, submit purchase, and reconcile an uncertain response | HTTP through a fixed `direct`, `wiremock`, or `microcks` profile | supplier owns its external contract and order record; Procurement owns purchase state and retry identity | high; after timeout, lookup the original request identity before retry |
+| `Procurement` | `Inventory` | increase stock after actual goods receipt | producer-owned `GoodsReceived` on Kafka `procurement.integration.events`; Inventory Consumer handles it | Procurement owns receipt/event meaning and unique receipt ID; Inventory owns idempotent stock application | high; acceptance alone does not increase stock, and at-least-once redelivery is possible |
 
 ## Integration Rules
 
-- Cross-bounded-context communication must be MQ-only.
+- Orders-to-Inventory stock reservation and Procurement-to-Inventory receipt propagation use MQ contracts. Procurement's external supplier boundary uses configured HTTP profiles.
 - `Orders` must not reserve inventory through direct HTTP calls.
 - Shared contracts belong under `src/BC-Contracts/`, not inside a single bounded context.
 - Eventual consistency is expected for inter-context propagation.
@@ -48,6 +53,7 @@ It is limited to relationships that can be traced back to:
 - `Orders` is the upstream owner of order lifecycle facts.
 - `Inventory` is the upstream owner of stock availability facts.
 - `Products` is the upstream owner of product catalog facts.
+- `Procurement` owns purchase and receipt facts; `Inventory` owns the resulting stock fact.
 - The request/reply reservation contract is an explicit customer-supplier relationship from `Orders` to `Inventory`.
 - Consumer runtimes that listen to a topic without clear documented business handling should be treated as review candidates, not silently assumed to be correct.
 - Event ownership does not make a producer responsible for a consumer's projection, retry, idempotency, or dead-letter policy. Conversely, those consumer concerns do not authorize changing producer-owned event meaning.
@@ -56,4 +62,4 @@ It is limited to relationships that can be traced back to:
 
 - The exact business purpose of the current `Product` and `Inventory` consumer listeners on `orders.integration.events` needs clarification.
 - Whether `Products` currently emits meaningful business integration events beyond infrastructure support still needs to be documented from code or contracts.
-- Detailed upstream/downstream consumer ownership beyond the three active contexts should be expanded in later Stage 5 slices.
+- Detailed upstream/downstream consumer ownership beyond the implemented flows remains to be documented from handler evidence.

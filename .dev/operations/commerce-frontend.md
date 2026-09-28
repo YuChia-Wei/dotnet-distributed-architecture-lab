@@ -2,6 +2,8 @@
 
 本手冊對應 Issue #18 與 workflow `2026-09-26-commerce-frontend`。`/web/` 是內部業務／倉管作業台，`/admin/` 是商品主檔與整合工具。此 localhost 實驗入口沒有新增登入、角色授權或公開部署保護。
 
+四個業務 bounded context 是 Products、Orders、Inventory、Procurement；兩套 Vue 應用與 YARP 是呈現及路由層。WireMock.Net/Microcks 的選型與示範見[外部 API 測試指南](../guides/external-api-testing/README.md)。
+
 ## 啟動與檢視
 
 在 repository 根目錄使用 PowerShell 7、Docker Compose，並使用現有整合專案 `mqarchlab-pr5-integration`。啟動腳本先調用採購實驗的既有 bootstrap，再啟動 Orders、Products、兩套前端及 YARP；所有 `up` 均限於指定服務並加 `--no-deps`，不啟動受保護的 observability。腳本不執行 `down`、`down -v` 或 `prune`，保留既有 PostgreSQL/Kafka volumes 與資料。若映像已建好，可傳 `-NoBuild`。

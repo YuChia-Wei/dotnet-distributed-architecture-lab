@@ -8,6 +8,7 @@ This index owns the file and directory catalog for `.dev/guides/`.
 | --- | --- |
 | `ai-collaboration-guides/INDEX.MD` | AI collaboration, skill, prompt, workflow, contract, and runtime wrapper guides. |
 | `design-guides/INDEX.MD` | Architecture, model, integration, and testing design guides. |
+| `external-api-testing/README.md` | Team guide to WireMock.Net and Microcks tradeoffs, diagrams, demo, and source references. |
 | `implementation-guides/INDEX.MD` | Setup, configuration, implementation, troubleshooting, and operation-flow guides. |
 | `learning-guides/INDEX.MD` | Onboarding, learning path, and new-project guides. |
 

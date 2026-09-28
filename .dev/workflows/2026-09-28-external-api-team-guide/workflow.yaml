@@ -1,0 +1,17 @@
+schema_version: '1.0'
+workflow_id: 2026-09-28-external-api-team-guide
+workflow_kind: documentation-delivery
+title: External API testing team materials and documentation reconciliation
+owner_skill: project-documentation-delivery
+status: completed
+current_phase: completed
+artifact_root: .dev/workflows/2026-09-28-external-api-team-guide
+entrypoint: workflow-plan.md
+created_at: '2026-09-28T23:11:20.7417376+08:00'
+updated_at: '2026-09-28T23:32:07+08:00'
+branch: codex/2026-09-28-external-api-team-guide
+base_branch: main
+issue_url: https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/20
+template_source: .dev/standards/WORKFLOW-ARTIFACT-POLICY.md
+template_version: '1.0'
+execution_contract: owner-authorized-documentation-only-exception

@@ -4,7 +4,7 @@ This document describes the current architecture of `dotnet-mq-arch-lab` as supp
 
 ## System Overview
 
-The repository is a distributed commerce lab composed of Products, Orders, and Inventory bounded contexts. It uses:
+The repository is a distributed commerce lab composed of Products, Orders, Inventory, and Procurement bounded contexts. SupplierSandbox and SupplierMock are external-system lab samples, not additional business bounded contexts. It uses:
 
 - Domain-Driven Design
 - Clean Architecture
@@ -21,6 +21,7 @@ The repository is a distributed commerce lab composed of Products, Orders, and I
 | Products | `src/Product/` | `SaleProducts.Domains` | `Product` | `SaleProducts.WebApi`, `SaleProducts.Consumer` |
 | Orders | `src/Order/` | `SaleOrders.Domains` | `Order` | `SaleOrders.WebApi`, `SaleOrders.Consumer` |
 | Inventory | `src/Inventory/` | `InventoryControl.Domains` | `InventoryItem` | `InventoryControl.WebApi`, `InventoryControl.Consumer` |
+| Procurement | `src/Procurement/` | `Procurement.Domains` | `PurchaseOrder` | `Procurement.WebApi` |
 
 Shared boundaries:
 
@@ -30,7 +31,7 @@ Shared boundaries:
 
 ## Context Project Shape
 
-Each bounded context currently follows the same primary physical shape:
+Products, Orders, and Inventory follow this physical shape:
 
 ```text
 <Context>/
@@ -47,6 +48,7 @@ Each bounded context currently follows the same primary physical shape:
 - Application project owns use-case ports, orchestration, query services, gateways, and repository ports.
 - Infrastructure project adapts persistence, messaging, and external collaboration.
 - Web API and Consumer projects are inbound adapters and composition roots.
+- Procurement has Domain, Application, Infrastructure, and Web API projects, but no Procurement Consumer. Its Web API hosts the receipt outbox relay. `SupplierSandbox.WebApi` and `SupplierMock.WebApi` under `samples/` simulate the external supplier; neither owns Procurement business state.
 
 ## Application Boundaries
 
@@ -56,14 +58,16 @@ Each bounded context currently follows the same primary physical shape:
 - Application code should depend on project-owned ports; Wolverine-specific behavior belongs in adapters/composition unless an existing compatibility boundary requires otherwise.
 
 Current use cases include product create/update/delete/query, order place/ship/deliver/cancel/query, and inventory initialize/increase/decrease/restock/query behavior.
+Procurement adds supplier quote, purchase creation and lookup, uncertain-submission reconciliation, and goods receipt. A purchase accepted by the supplier does not itself increase Inventory stock.
 
 ## Persistence
 
-- Products uses Dapper + Npgsql; Inventory uses EF Core + the Npgsql provider. Both use PostgreSQL. Inventory is the EF Core practice bounded context; Products and Orders retain the contrasting Dapper paths.
+- Products, Orders, and Procurement use Dapper + Npgsql. Inventory uses EF Core + the Npgsql provider. Each business context has its own PostgreSQL database.
 - Order includes both a Dapper domain repository and `OrderEventSourcingRepository`; event sourcing is an explicit Orders capability rather than a universal default.
 - Orders atomically commits domain events, read model state, and its source outbox. Inventory exposes capability-specific outbox ports rather than a generic Unit of Work: `IInventoryReservationOutbox` atomically commits reservation outcome/state/event, while `IInventoryStockOutbox` atomically commits decrease/increase/restock state and event with an expected-stock concurrency check. Database transaction/UoW mechanics remain private Infrastructure details.
 - Source-outbox relays are Infrastructure adapters: they do not decide event meaning. They publish the producer-created contract with stable delivery metadata and bounded retry/park behavior.
 - Inventory Infrastructure owns the EF model and maps the existing lowercase PostgreSQL tables. SQL initialization and incremental migrations remain schema authority; the runtime does not recreate existing databases. The retired target validation tooling remains absent.
+- Procurement persists purchases and goods receipts with Dapper. First-time receipt commit stages a producer-owned `GoodsReceived` event in the same PostgreSQL transaction; receipt ID protects replay. Its relay sends that event to Kafka with normalized ProductId as partition key. Inventory Consumer handles it and applies an idempotent stock increase. A relay crash after publish may redeliver, so this is at-least-once delivery.
 
 `samples/EfCoreWolverine/` is an isolated EF Core + Wolverine example that reuses
 `InventoryItem` and the aggregate repository port. Its Application, Infrastructure,
@@ -82,21 +86,23 @@ replace Inventory's existing source-outbox completion owner. Inventory runtime n
 - The producing bounded context owns integration-event meaning, schema, and compatibility. Consumers own only their reactions, projections, idempotency, retry, and dead-letter handling.
 - Known logical channels include `orders.integration.events`, `products.integration.events`, `inventory.integration.events`, `inventory.requests`, and `orders.outbound.replies`.
 - Orders reserves inventory through `ReserveInventoryRequestContract` / `ReserveInventoryResponseContract` request/reply over Wolverine, not through direct domain references.
+- Procurement calls one of three configured supplier HTTP profiles (`direct`, `wiremock`, `microcks`). The fixed external supplier boundary is separate from Orders-to-Inventory MQ collaboration. An uncertain supplier submission is reconciled through its original identity; a new request ID is not a safe retry.
+- `GoodsReceived` is a Procurement-owned event on `procurement.integration.events`; Inventory Consumer is its implemented subscriber. Receiving goods, not supplier acceptance, drives stock increase.
 
 See `operations/context-map.md`, `operations/event-catalog.md`, and `operations/mq-topology.md` for operational detail and documented uncertainties.
 
 ## Runtime And Deployment
 
-The repository defines six product hosts:
+The repository defines seven product hosts:
 
-- three ASP.NET Core Web APIs;
+- four ASP.NET Core Web APIs;
 - three .NET Generic Host consumers.
 
-`docker-compose/docker-compose.yml` also defines PostgreSQL databases per context, Kafka/Kafdrop, OpenTelemetry Collector, Prometheus, Tempo, Loki, and Grafana. Dockerfiles live in each Presentation host project.
+`docker-compose/docker-compose.yml` defines the original three-context services, Kafka/Kafdrop, and observability. The procurement overlay adds Procurement and supplier sample hosts, two PostgreSQL databases (Procurement and sandbox), and Microcks; the frontend overlay adds two Vue 3/TypeScript apps served by Nginx. YARP provides `/web/`, `/admin/`, the four `/api/<context>` routes, and bounded supplier admin facades. Microcks's native UI stays at `http://127.0.0.1:8184/`. These overlays are a localhost lab without login or role authorization. See `operations/procurement-supplier-lab.md` and `operations/commerce-frontend.md` for exact Compose composition and operating steps.
 
 ## Tests And Validation Boundary
 
-- `MQArchLab.slnx` includes five product xUnit test projects and one EF Core/Wolverine sample test project.
+- `MQArchLab.slnx` includes six product xUnit test projects, two supplier sample test projects, and one EF Core/Wolverine sample test project. It contains 27 `src/` projects, five `samples/` projects, and nine `tests/` projects.
 - `InventoryControl.Tests` owns Inventory command/reservation tests. Its real PostgreSQL checks are explicitly opt-in and skipped during ordinary test runs.
 - The target-owned analyzer and runtime-validation projects were retired by the owner-approved v0.9 AI-context upgrade and are absent from the repository and solution.
 - v0.13 removed the former bundled mechanical-validation provider. The remaining `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/` assets are reference-only recipes; they are not selected, activated, or wired into the target solution or build.

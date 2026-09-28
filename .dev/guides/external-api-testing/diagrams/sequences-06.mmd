@@ -1,0 +1,24 @@
+sequenceDiagram
+  actor User as 倉管
+  participant P as Procurement API
+  participant PDB as Procurement PostgreSQL
+  participant Relay as Procurement outbox relay
+  participant W as Wolverine durable outbox
+  participant K as Kafka
+  participant C as Inventory Consumer
+  participant IDB as Inventory PostgreSQL
+  User->>P: POST /purchase-orders/{id}/receipts，ReceiptId 與數量
+  P->>PDB: 同交易保存收貨和 GoodsReceived source outbox
+  P-->>User: 201 created=true 或重播 200 created=false
+  Relay->>PDB: 取得待交付 source outbox
+  Relay->>W: PublishAsync GoodsReceived，持久化交接
+  W-->>Relay: 交接完成
+  Relay->>PDB: 標記 source outbox published_at
+  Note over PDB,K: 標記與後續送達可交錯；標記不代表已消費
+  W->>K: 非同步送出 GoodsReceived
+  K->>C: 至少一次交付事件
+  C->>IDB: 同交易認領 ReceiptId、加 stock、寫 Inventory outbox
+  IDB-->>C: 新結果或同內容已處理
+  User->>P: 以同 ReceiptId、同數量重送
+  P->>PDB: 讀回既有 receipt，不再建立 source outbox
+  P-->>User: 200 created=false

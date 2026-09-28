@@ -15,12 +15,14 @@ Repository 同時維護一套可重用的 AI collaboration context；產品真�
 | Products | 商品建立、查詢、更新與刪除 | `SaleProducts.WebApi`, `SaleProducts.Consumer` |
 | Orders | 訂單建立與 shipped/delivered/cancelled lifecycle | `SaleOrders.WebApi`, `SaleOrders.Consumer` |
 | Inventory | 商品庫存初始化、增加、扣減與補貨；EF Core 練習 context | `InventoryControl.WebApi`, `InventoryControl.Consumer` |
+| Procurement | 供應商報價、採購、結果對帳與實際收貨；Dapper | `Procurement.WebApi` |
 
 跨 context contracts 位於 `src/BC-Contracts/`。Orders 與 Inventory 的庫存預留流程透過 Wolverine request/reply 與 MQ channels 協作；integration events 透過各 context 擁有的 topic/queue 發布。
+Procurement 透過固定 HTTP profile 呼叫外部供應商；收貨提交後才以 Kafka `GoodsReceived` 通知 Inventory 入庫。SupplierSandbox、SupplierMock 與 Microcks 是外部系統實驗工具，不是商務 bounded context。
 
 [Consumer 並行範例](.dev/operations/consumer-parallel-examples.md) 說明 Task.WhenAll、同一外部事件觸發兩個獨立 handler，以及既有 Compose 的回歸與 E2E 指令。
 
-Inventory 正式路徑使用 **EF Core**；Products 與 Orders 保留 **Dapper**，可對照兩種資料存取實作。Inventory 的既有資料表、庫存預留防重與 source outbox 交易保持相容。學習入口見 [Inventory EF Core 指南](.dev/operations/inventory-efcore.md)。
+Inventory 正式路徑使用 **EF Core**；Products、Orders 與 Procurement 使用 **Dapper**，可對照兩種資料存取實作。Inventory 的既有資料表、庫存預留防重與 source outbox 交易保持相容。學習入口見 [Inventory EF Core 指南](.dev/operations/inventory-efcore.md)。
 
 [EF Core + Wolverine 交易範例](samples/EfCoreWolverine/README.md) 示範 Aggregate Repository、Use Case、原生 inbox／outbox 與共同交易，附獨立 PostgreSQL／Kafka 環境及操作指令。
 
@@ -31,7 +33,8 @@ Inventory 正式路徑使用 **EF Core**；Products 與 Orders 保留 **Dapper**
 - WolverineFx `6.36.0`
 - Kafka（canonical broker；目前 Docker Compose 啟用，並以 producer-selected partition key 驗證同一業務實體的順序消費）
 - RabbitMQ（deferred compatibility profile；Compose service 預設註解，目前共享 queue 不是廣播拓撲，是否轉換或同步部署需另行評估）
-- PostgreSQL `16.15-alpine`、EF Core `10.0.12`（Inventory）、Dapper `2.1.79`（Products／Orders）、Npgsql／Npgsql EF provider `10.0.3`
+- PostgreSQL `16.15-alpine`、EF Core `10.0.12`（Inventory）、Dapper `2.1.79`（Products／Orders／Procurement）、Npgsql／Npgsql EF provider `10.0.3`
+- Vue 3、TypeScript、Nginx（選用的前台／管理後台 Compose overlay）；WireMock.Net 與 Microcks（供應商 API 實驗）
 - xUnit v3 `4.0.0` (`xunit.v3.mtp-off` / VSTest)、Moq/NSubstitute、Shouldly
 - OpenTelemetry Collector Contrib `0.159.0`、Prometheus `3.14.0`、Tempo `2.10.7`、Loki `3.7.7`、Grafana `13.2.1`
 
@@ -47,6 +50,8 @@ src/
   Product/            Products bounded context
   Order/              Orders bounded context
   Inventory/          Inventory bounded context
+  Procurement/        Procurement bounded context
+  Frontend/           Web 與 Admin Vue 應用
 tests/                 產品與 domain tests
 samples/               可獨立執行的技術整合範例
 docker-compose/        本機服務與 observability topology
@@ -56,7 +61,7 @@ sql-script/            PostgreSQL 初始化腳本
 .agents/, .claude/     Runtime-specific skill wrappers
 ```
 
-Solution 入口為 `MQArchLab.slnx`。產品 project 採 `DomainCore` 與 `Presentation` 分層；每個 bounded context 各自擁有 Application、Domain、Infrastructure、Web API 與 Consumer projects。
+Solution 入口為 `MQArchLab.slnx`。四個商務 context 各有 Domain、Application、Infrastructure 與 Web API；Products、Orders、Inventory 另有 Consumer，Procurement 的收貨 outbox relay 位於其 Web API。兩個 Vue 應用不屬於 .NET solution projects。
 
 ## 啟動本機環境
 
@@ -74,7 +79,7 @@ docker compose `
   up -d --build
 ```
 
-目前 Compose 會啟動三組 API/Consumer、無身分認證的 YARP Gateway、三個 PostgreSQL databases、Kafka/Kafdrop，以及 OpenTelemetry/Grafana observability stack。
+上述基礎 Compose 會啟動原有三組 API/Consumer、無身分認證的 YARP Gateway、三個 PostgreSQL databases、Kafka/Kafdrop，以及 OpenTelemetry/Grafana observability stack。採購、供應商與兩套前端需套用各自的 Compose overlay；見下方實驗入口。
 
 預設 host 入口：
 
@@ -168,12 +173,14 @@ dotnet test MQArchLab.slnx
 - [管理後台](http://127.0.0.1:8888/admin/)：商品主檔、服務狀態、WireMock.Net／Microcks mock 與 proxy 控制、供應商沙盒。
 
 腳本復用 `mqarchlab-pr5-integration`，保留既有資料 volumes，僅啟動指定服務。這是無登入與角色授權的 localhost 實驗環境。完整路由、操作與故障排查請見[前端實驗操作手冊](.dev/operations/commerce-frontend.md)。
+四個業務 API 走 `/api/products`、`/api/orders`、`/api/inventory`、`/api/procurement`；管理外觀僅提供固定的 `/api/admin/supplier-mock/*` 與 `/api/admin/supplier-sandbox/*`。Microcks 原生 UI 另在 `http://127.0.0.1:8184/`。[外部 API 測試方案指南](.dev/guides/external-api-testing/README.md)比較 WireMock.Net 與 Microcks 的適用情境。
 
 ## 專案知識入口
 
 - [.dev/ARCHITECTURE.md](.dev/ARCHITECTURE.md)：目前產品架構與依賴邊界
 - [.dev/requirement/distributed-commerce-bounded-context-overview.md](.dev/requirement/distributed-commerce-bounded-context-overview.md)：bounded-context requirement baseline
 - [.dev/specs/INDEX.MD](.dev/specs/INDEX.MD)：domain 與 test specs
+- [.dev/specs/current-system-extension.md](.dev/specs/current-system-extension.md)：現況相對於三 context 重建基線的擴充邊界
 - [.dev/operations/context-map.md](.dev/operations/context-map.md)：context relationships
 - [.dev/operations/event-catalog.md](.dev/operations/event-catalog.md)：events 與 request/reply contracts
 - [.dev/operations/mq-topology.md](.dev/operations/mq-topology.md)：Kafka/RabbitMQ topology

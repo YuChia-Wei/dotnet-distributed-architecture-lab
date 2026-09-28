@@ -11,6 +11,8 @@ languages:
   - SQL
   - Python
   - Bash
+  - TypeScript
+  - Vue
 technologyProfiles:
   - dotnet-backend
   - distributed-messaging
@@ -22,15 +24,17 @@ dotnet:
     - netstandard2.0
   solutions:
     - path: MQArchLab.slnx
-      productProjectCount: 22
-      sampleProjectCount: 3
-      testProjectCount: 6
+      productProjectCount: 27
+      sampleProjectCount: 5
+      testProjectCount: 9
   projects:
     - path: src/BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj
       kind: contract-library
     - path: src/BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj
       kind: contract-library
     - path: src/BC-Contracts/Lab.BoundedContextContracts.Products/Lab.BoundedContextContracts.Products.csproj
+      kind: contract-library
+    - path: src/BC-Contracts/Lab.BoundedContextContracts.Procurement/Lab.BoundedContextContracts.Procurement.csproj
       kind: contract-library
     - path: src/BuildingBlocks/Lab.BuildingBlocks.Application/Lab.BuildingBlocks.Application.csproj
       kind: building-block-library
@@ -70,6 +74,14 @@ dotnet:
       kind: web-api
     - path: src/Inventory/Presentation/InventoryControl.Consumer/InventoryControl.Consumer.csproj
       kind: consumer
+    - path: src/Procurement/DomainCore/Procurement.Domains/Procurement.Domains.csproj
+      kind: domain-library
+    - path: src/Procurement/DomainCore/Procurement.Applications/Procurement.Applications.csproj
+      kind: application-library
+    - path: src/Procurement/DomainCore/Procurement.Infrastructure/Procurement.Infrastructure.csproj
+      kind: infrastructure-library
+    - path: src/Procurement/Presentation/Procurement.WebApi/Procurement.WebApi.csproj
+      kind: web-api
     - path: tests/SaleProducts.Tests/SaleProducts.Tests.csproj
       kind: test
     - path: tests/SaleProducts.Domains.Tests/SaleProducts.Domains.Tests.csproj
@@ -80,13 +92,23 @@ dotnet:
       kind: test
     - path: tests/InventoryControl.Tests/InventoryControl.Tests.csproj
       kind: test
+    - path: tests/Procurement.Tests/Procurement.Tests.csproj
+      kind: test
     - path: samples/EfCoreWolverine/EfCoreWolverine.Application/EfCoreWolverine.Application.csproj
       kind: application-library
     - path: samples/EfCoreWolverine/EfCoreWolverine.Infrastructure/EfCoreWolverine.Infrastructure.csproj
       kind: infrastructure-library
     - path: samples/EfCoreWolverine/EfCoreWolverine.Host/EfCoreWolverine.Host.csproj
       kind: consumer
+    - path: samples/SupplierSandbox/SupplierSandbox.WebApi/SupplierSandbox.WebApi.csproj
+      kind: external-system-sample-web-api
+    - path: samples/SupplierMock/SupplierMock.WebApi/SupplierMock.WebApi.csproj
+      kind: external-system-sample-web-api
     - path: tests/EfCoreWolverine.Tests/EfCoreWolverine.Tests.csproj
+      kind: test
+    - path: tests/SupplierSandbox.Tests/SupplierSandbox.Tests.csproj
+      kind: test
+    - path: tests/SupplierMock.Tests/SupplierMock.Tests.csproj
       kind: test
 sourceLayout:
   sourceRoots:
@@ -101,6 +123,9 @@ sourceLayout:
     - src/Order/Presentation/SaleOrders.Consumer
     - src/Inventory/Presentation/InventoryControl.WebApi
     - src/Inventory/Presentation/InventoryControl.Consumer
+    - src/Procurement/Presentation/Procurement.WebApi
+    - samples/SupplierSandbox/SupplierSandbox.WebApi
+    - samples/SupplierMock/SupplierMock.WebApi
     - samples/EfCoreWolverine/EfCoreWolverine.Host
   libraryProjects:
     - src/BC-Contracts
@@ -109,6 +134,7 @@ sourceLayout:
     - src/Product/DomainCore
     - src/Order/DomainCore
     - src/Inventory/DomainCore
+    - src/Procurement/DomainCore
     - samples/EfCoreWolverine/EfCoreWolverine.Application
     - samples/EfCoreWolverine/EfCoreWolverine.Infrastructure
 runtimeHosts:
@@ -130,6 +156,19 @@ runtimeHosts:
   - name: InventoryControl.Consumer
     type: dotnet-generic-host-consumer
     boundedContext: Inventory
+  - name: Procurement.WebApi
+    type: aspnet-core-web-api
+    boundedContext: Procurement
+  - name: SupplierSandbox.WebApi
+    type: external-system-sample-web-api
+  - name: SupplierMock.WebApi
+    type: external-system-sample-web-api
+  - name: web-frontend
+    type: vue3-typescript-nginx
+  - name: admin-frontend
+    type: vue3-typescript-nginx
+  - name: yarp-gateway
+    type: reverse-proxy
 workManagement:
   provider: github
   workItemBinding:
@@ -168,11 +207,15 @@ architecture:
     - name: Inventory
       path: src/Inventory
       primaryAggregate: InventoryItem
+    - name: Procurement
+      path: src/Procurement
+      primaryAggregate: PurchaseOrder
   dependencyRules:
     - Domain projects do not depend on Infrastructure or Presentation.
     - Application projects expose explicit use-case and outbound ports.
     - Cross-context contracts are owned under src/BC-Contracts.
     - Orders-to-Inventory reservation uses Wolverine request/reply messaging.
+    - Procurement uses configured HTTP supplier profiles; GoodsReceived reaches Inventory through Kafka.
 persistence:
   providers:
     - PostgreSQL 16
@@ -186,6 +229,8 @@ persistence:
     - src/Product/Presentation/SaleProducts.WebApi/appsettings.json
     - src/Order/Presentation/SaleOrders.WebApi/appsettings.json
     - src/Inventory/Presentation/InventoryControl.WebApi/appsettings.json
+    - src/Procurement/Presentation/Procurement.WebApi/appsettings.json
+    - docker-compose/docker-compose.procurement.yml
 messaging:
   brokers:
     - name: Apache Kafka
@@ -235,15 +280,16 @@ technologySelections:
       Tests that require PostgreSQL, Kafka, RabbitMQ, or another out-of-process service
       must not add failure noise to ordinary deterministic test runs.
   - slot: persistence.orm
-    value: EF Core for Inventory and the isolated Wolverine sample; Dapper for Products and Orders
+    value: EF Core for Inventory and the isolated Wolverine sample; Dapper for Products, Orders, and Procurement
     status: selected
     source: explicit-target-decision
     evidence:
       - src/Order/DomainCore/SaleOrders.Infrastructure/SaleOrders.Infrastructure.csproj
       - src/Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj
+      - src/Procurement/DomainCore/Procurement.Infrastructure/Procurement.Infrastructure.csproj
       - .dev/workflows/2026-09-21-inventory-efcore-integration/design.md
       - samples/EfCoreWolverine/EfCoreWolverine.Infrastructure/EfCoreWolverine.Infrastructure.csproj
-    reason: On 2026-09-21 the owner selected Inventory as the EF Core practice context and retained Dapper in the other contexts; the native Wolverine sample remains a separate transaction reference.
+    reason: On 2026-09-21 the owner selected Inventory as the EF Core practice context and retained Dapper in Products and Orders; current Procurement source also uses Dapper. The native Wolverine sample remains a separate transaction reference.
   - slot: persistence.database
     value: PostgreSQL
     status: selected
@@ -276,9 +322,19 @@ technologySelections:
       - src/Order/Presentation/SaleOrders.WebApi/SaleOrders.WebApi.csproj
     reason: Presentation projects configure OpenTelemetry instrumentation and export.
 frontend:
-  detected: false
-  frameworks: []
-  sourceRoots: []
+  detected: true
+  frameworks:
+    - Vue 3
+    - TypeScript
+    - Vite
+  buildRuntime: Node.js 22.14 Alpine
+  servingRuntime: Nginx 1.28 Alpine
+  sourceRoots:
+    - src/Frontend/Web
+    - src/Frontend/Admin
+  gatewayRoutes:
+    - docker-compose/config/frontend-lab/RoutesSetting.json
+    - docker-compose/config/frontend-lab/ClustersSetting.json
 deployment:
   containerFiles:
     - src/Product/Presentation/SaleProducts.WebApi/Dockerfile
@@ -287,10 +343,19 @@ deployment:
     - src/Order/Presentation/SaleOrders.Consumer/Dockerfile
     - src/Inventory/Presentation/InventoryControl.WebApi/Dockerfile
     - src/Inventory/Presentation/InventoryControl.Consumer/Dockerfile
+    - src/Procurement/Presentation/Procurement.WebApi/Dockerfile
+    - samples/SupplierSandbox/SupplierSandbox.WebApi/Dockerfile
+    - samples/SupplierMock/SupplierMock.WebApi/Dockerfile
+    - src/Frontend/Web/Dockerfile
+    - src/Frontend/Admin/Dockerfile
   orchestrationFiles:
     - docker-compose/docker-compose.yml
+    - docker-compose/docker-compose.procurement.yml
+    - docker-compose/docker-compose.frontend.yml
   environments:
     - local-compose
+    - local-procurement-lab
+    - local-frontend-lab
 evidence:
   files:
     - global.json
@@ -301,7 +366,14 @@ evidence:
     - src/Product
     - src/Order
     - src/Inventory
+    - src/Procurement
+    - src/Frontend/Web/package.json
+    - src/Frontend/Admin/package.json
+    - samples/SupplierSandbox
+    - samples/SupplierMock
     - docker-compose/docker-compose.yml
+    - docker-compose/docker-compose.procurement.yml
+    - docker-compose/docker-compose.frontend.yml
   confirmedByUser:
     - AI context was refreshed and may have replaced repository-specific truth.
     - The active target analyzer and runtime-validation projects were fully retired during the owner-approved v0.9 AI-context upgrade.

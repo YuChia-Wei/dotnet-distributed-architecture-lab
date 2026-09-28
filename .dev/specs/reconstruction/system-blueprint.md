@@ -4,9 +4,11 @@
 
 This blueprint describes the target architecture at a precision suitable for implementing it without reading the original product source. It preserves compatible behavior while explicitly adopting the quality uplifts in `reconstructable-system-baseline.md`.
 
+**Scope as of 2026-09-28:** This blueprint and its linked machine-readable contracts specify the earlier Products/Orders/Inventory reconstruction target. The current repository additionally implements Procurement, external supplier samples, and two frontends; [the current extension record](../current-system-extension.md) identifies their source and operating references. Do not infer complete contracts or rebuild readiness for those additions from this blueprint.
+
 ## System Shape
 
-The repository is a micro-system mono-repository containing three bounded contexts. Each context uses Domain, Application, Infrastructure, and Presentation responsibilities interpreted as ports and adapters.
+This earlier reconstruction target is a micro-system mono-repository containing three bounded contexts. Each context uses Domain, Application, Infrastructure, and Presentation responsibilities interpreted as ports and adapters.
 
 ```mermaid
 flowchart LR

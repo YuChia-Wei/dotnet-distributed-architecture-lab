@@ -1,0 +1,22 @@
+sequenceDiagram
+  actor User as 操作員
+  participant Admin as /admin/ 整合工具
+  participant C as SupplierMock 控制服務
+  participant Native as WireMock 或 Microcks 原生 API
+  participant S as Supplier Sandbox
+  User->>Admin: 選 mock / proxy / hybrid
+  Admin->>C: POST 固定模式
+  alt WireMock
+    C->>Native: 清 mapping 和 journal，安裝預設 mapping
+  else Microcks
+    C->>Native: 固定檔名上傳 YAML，必要時校正三個 operation
+  end
+  Native-->>C: 原生設定
+  C-->>Admin: 套用結果
+  Admin->>C: GET 狀態與規則
+  C->>Native: WireMock 讀映射；Microcks 讀 operation/rules
+  Native-->>C: 原生設定或讀取失敗
+  C-->>Admin: WireMock applying/ready/failed；Microcks 另有 unconfigured/custom/unavailable
+  User->>Native: 用新識別發測試 HTTP 請求
+  Native-->>User: 回應 origin
+  User->>S: 查看請求紀錄前後值
