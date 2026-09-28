@@ -19,6 +19,7 @@ It distinguishes between:
 | Kafka | `orders.outbound.replies` | Wolverine reply channel used by `Orders` | `SaleOrders.WebApi` | reply inbox for reservation flow |
 | Kafka | `inventory.integration.events` | `InventoryControl.WebApi` | downstream listeners | stock change integration stream |
 | Kafka | `products.integration.events` | `SaleProducts.WebApi` diagnostic use cases when enabled; business events deferred | `SaleOrders.Consumer` and possible downstream listeners | diagnostic route; no confirmed product business integration stream |
+| Kafka | `procurement.integration.events` | `Procurement.WebApi` source-outbox relay | `InventoryControl.Consumer` | actual goods receipts; at-least-once delivery with receipt-ID deduplication |
 | RabbitMQ (deferred) | `orders.integration.events` | `SaleOrders.WebApi` | shared queue consumers | Current name implies competing consumers; fanout requires exchange plus one queue per independent subscriber |
 | RabbitMQ | `inventory.requests` | `SaleOrders.WebApi` | `InventoryControl.WebApi` | request/reply inventory reservation |
 | RabbitMQ | `orders.outbound.replies` | Wolverine reply channel used by `Orders` | `SaleOrders.WebApi` | reply inbox for reservation flow |
@@ -36,6 +37,7 @@ It distinguishes between:
 | `ProductStockIncreasedIntegrationEvent`, `ProductStockReturnedIntegrationEvent` | `Inventory` | `inventory.integration.events` | downstream listeners | state and producer-created event are atomically staged through `IInventoryStockOutbox`, then relayed |
 | `WhenAllWorkRequested`, `IndependentWorkRequested`, `ConsumerExceptionPolicyProbe` diagnostic messages | `Products` diagnostic endpoints | `products.integration.events` | `SaleOrders.Consumer` diagnostic handlers | enabled examples; parallel-work verification is recorded in `consumer-parallel-examples.md` |
 | future product integration events implementing `IIntegrationEvent` | `Products` | `products.integration.events` | downstream listeners | route is configured with durable outbox, but no current Product use case confirms publication |
+| `GoodsReceived` | `Procurement` | `procurement.integration.events` | `InventoryControl.Consumer` | first receipt commit stages one source-outbox intent; Inventory applies stock idempotently |
 
 ## Retry / Dead-Letter Strategy
 
@@ -57,6 +59,7 @@ Known from current code:
 - `Messaging:Profile=InMemory` is the automated-test profile: external transports and Wolverine PostgreSQL persistence are not configured, local queues are used, and `Messaging:OutboxRelay:Enabled=false` disables database polling.
 - `Messaging:Profile` accepts only `InMemory`, `Kafka`, or `RabbitMq`. Kafka requires `Messaging:Kafka:ConnectionString`; RabbitMQ requires an absolute `amqp` or `amqps` URI at `Messaging:RabbitMq:ConnectionString`. Missing or unknown values fail during startup configuration.
 - Inventory reservation transient persistence failures retry after 100 ms, 500 ms, and 2 seconds, then move to Wolverine's error queue.
+- Procurement's Dapper transaction commits a unique receipt and source-outbox row together. Its relay uses ReceiptId as stable identity and normalized ProductId as Kafka partition key. A publish-before-mark crash can redeliver. Inventory Consumer handles the event with its receipt deduplication boundary; no global exactly-once claim follows.
 - Reservation outcomes are keyed by the caller-provided stable operation ID. Only first-time success invokes the event factory and stages an outbox row. Matching replay returns the durable outcome without staging, even after published retention or when a completed legacy operation has no row. Published-row cleanup does not clear the operation outcome.
 - A missing or legacy reservation outbox row requires a separate explicitly scoped recovery action after inspecting the durable outcome and delivery evidence. Ordinary reservation replay never recreates the row; no automatic repair command is implied.
 - Broker-specific physical error queue/topic naming remains implicit in Wolverine transport conventions and requires runtime verification.

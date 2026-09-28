@@ -2,6 +2,10 @@
 
 This directory is the durable entry point for rebuilding the product after product source and test code are unavailable. It is written for a fresh AI session with no hidden context.
 
+## Dated scope boundary (2026-09-28)
+
+The machine-readable manifests, coverage matrix, and acceptance procedure here describe the earlier Products/Orders/Inventory baseline: three business contexts, six product hosts, and three product databases. The live repository also has Procurement, supplier lab samples, and two frontends. See [the current extension record](../current-system-extension.md) and current source/Compose authority for those additions. The older contracts are not a complete rebuild or acceptance claim for the expanded system.
+
 ## Authority Order
 
 When two artifacts disagree, use this order and record the conflict instead of guessing:
@@ -31,7 +35,7 @@ Read in this order:
 
 ## Required Outputs
 
-A reconstruction is complete only when it produces:
+A reconstruction of this earlier three-context baseline is complete only when it produces:
 
 - `MQArchLab.slnx` with the project identities and logical groups in `project-manifest.json`;
 - three bounded contexts (`Products`, `Orders`, `Inventory`) plus business-neutral BuildingBlocks and Published Language contract projects;

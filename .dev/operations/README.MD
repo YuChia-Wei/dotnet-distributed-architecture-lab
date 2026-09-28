@@ -1,8 +1,8 @@
 # Operations Docs
 
-本目錄存放 operations 文件的作者指南與模板約定。
+本目錄存放 operations 文件的作者指南、模板約定與本 repository 的實際操作文件。
 
-這裡的內容不宣稱任何現成的 runtime truth 檔案已存在。當專案真的需要 context map、event catalog、MQ topology 或 runbook 時，先依這些指南建立對應文件，再把內容對回 `requirement`、`specs`、`src` 或 contract source。
+作者指南不能取代 runtime truth；目前可讀的實際文件包括 `context-map.md`、`event-catalog.md`、`mq-topology.md`、`procurement-supplier-lab.md` 與 `commerce-frontend.md`。使用前仍須將內容對回 `requirement`、`specs`、`src`、contract source 與 Compose 設定。
 
 ## Purpose
 

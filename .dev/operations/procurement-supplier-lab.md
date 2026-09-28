@@ -2,6 +2,8 @@
 
 這份操作說明對應 workflow `2026-09-26-procurement-supplier-lab` 與 Issue #17。實驗使用單品採購單、獨立供應商 sandbox、WireMock.Net 與 Microcks，以及既有的 Inventory/Kafka。採購接單與出貨不會增加庫存；登錄實際收貨才會透過 `GoodsReceived` 與 Inventory 入庫。下列命令是重現步驟，成功與否以當次執行及保存的證據為準。
 
+方案選擇與團隊展示請見[外部 API 測試指南](../guides/external-api-testing/README.md)。Procurement 是第四個業務 bounded context；SupplierSandbox、SupplierMock 與 Microcks 是外部系統實驗服務。
+
 ## 啟動與資料庫
 
 在 repository 根目錄使用 PowerShell 7 與 Docker Compose。明確指定原有整合專案、三個既有檔案及新增 overlay：

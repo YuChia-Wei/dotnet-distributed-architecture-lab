@@ -34,6 +34,7 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | `guides/INDEX.MD` | File and directory catalog for guides. |
 | `guides/ai-collaboration-guides/` | AI collaboration, skill, prompt, workflow, and runtime wrapper guides. |
 | `guides/design-guides/` | .NET backend design and context-placement guides. |
+| `guides/external-api-testing/` | WireMock.Net/Microcks comparison, architecture, sequences, demo, and sources. |
 | `guides/implementation-guides/` | .NET backend implementation and setup guides. |
 | `guides/learning-guides/` | Learning path and new-project guidance. |
 
@@ -44,7 +45,7 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | `requirement/` | Requirements and requirement authoring materials. |
 | `requirement/REQUIREMENT-GUIDE.MD` | Requirement authoring guide. |
 | `requirement/TECH-STACK-REQUIREMENTS.MD` | Current repository technology requirements and version ownership. |
-| `requirement/distributed-commerce-bounded-context-overview.md` | Products, Orders, and Inventory requirement baseline. |
+| `requirement/distributed-commerce-bounded-context-overview.md` | Four current business contexts and their integration boundaries. |
 | `requirement/reconstructable-system-baseline.md` | Source-independent reconstruction requirements, quality uplifts, and acceptance criteria. |
 | `specs/` | Target-repository domain/test specs plus reusable authoring guidance. |
 | `specs/README.MD` | Purpose and usage of `.dev/specs/`. |
@@ -52,6 +53,7 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | `specs/SPEC-GUIDE.MD` | Spec authoring guide. |
 | `specs/SPEC-ORGANIZATION-GUIDE.MD` | Spec organization guide. |
 | `specs/reconstruction/` | Durable source-independent reconstruction entrypoint, blueprint, machine-readable manifests, and readiness matrix. |
+| `specs/current-system-extension.md` | Current Procurement, supplier, and frontend additions beyond the earlier three-context reconstruction scope. |
 | `specs/tests/` | Test-spec storage guidance and examples. |
 
 ## Domain Language And Problem Frames
@@ -78,6 +80,14 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | `operations/context-map.md` | Current bounded-context relationship map. |
 | `operations/event-catalog.md` | Current integration event and request/reply contract catalog. |
 | `operations/mq-topology.md` | Current Kafka/RabbitMQ logical channel topology. |
+| `operations/procurement-supplier-lab.md` | Procurement, supplier API, Microcks, and goods receipt lab operations. |
+| `operations/commerce-frontend.md` | Web/Admin frontend and YARP routing lab operations. |
+
+## Presentations
+
+| Path | Description |
+| --- | --- |
+| `presentations/external-api-testing/` | WireMock.Net/Microcks team presentation, PDF, and speaker notes. |
 
 ## Workflow Records
 

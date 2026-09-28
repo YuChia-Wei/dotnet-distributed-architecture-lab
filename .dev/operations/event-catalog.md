@@ -17,6 +17,7 @@ This catalog tracks business integration events and request/reply contracts visi
 | `ProductStockDecreasedIntegrationEvent` | integration event | `Inventory` | downstream listeners on `inventory.integration.events` | `DecreaseStock` | `src/BC-Contracts/Lab.BoundedContextContracts.Inventory/IntegrationEvents/ProductStockDecreasedIntegrationEvent.cs` | active |
 | `ProductStockIncreasedIntegrationEvent` | integration event | `Inventory` | downstream listeners on `inventory.integration.events` | `IncreaseStock` | `src/BC-Contracts/Lab.BoundedContextContracts.Inventory/IntegrationEvents/ProductStockIncreasedIntegrationEvent.cs` | active |
 | `ProductStockReturnedIntegrationEvent` | integration event | `Inventory` | downstream listeners on `inventory.integration.events` | `Restock` | `src/BC-Contracts/Lab.BoundedContextContracts.Inventory/IntegrationEvents/ProductStockReturnedIntegrationEvent.cs` | active |
+| `GoodsReceived` | integration event | `Procurement` | `InventoryControl.Consumer` | first committed actual receipt | `src/BC-Contracts/Lab.BoundedContextContracts.Procurement/IntegrationEvents/GoodsReceived.cs` | active |
 | `ProductStockDeducted` | integration event | unclear / legacy products contract | not clearly mapped in active code | unclear | `src/BC-Contracts/Lab.BoundedContextContracts.Products/IntegrationEvents.cs` | deferred-review |
 | `ProductStockDeductionFailed` | integration event | unclear / legacy products contract | not clearly mapped in active code | unclear | `src/BC-Contracts/Lab.BoundedContextContracts.Products/IntegrationEvents.cs` | deferred-review |
 
@@ -129,11 +130,20 @@ This catalog tracks business integration events and request/reply contracts visi
 - Failure handling notes:
   - the prior erroneous `DecreasedQuantity` fields were removed by owner-approved breaking correction on 2026-08-27; no compatibility alias is retained
 
+### GoodsReceived
+
+- Business meaning: Procurement committed an actual goods receipt for an existing product. Supplier order acceptance alone does not emit this fact.
+- Payload: `ReceiptId`, `PurchaseOrderId`, `ProductId`, positive `Quantity`, and `ReceivedAt`.
+- Producer responsibility: commit the receipt and one source-outbox intent atomically; keep ReceiptId stable on replay and use normalized ProductId as Kafka partition key.
+- Consumer responsibility: Inventory applies the receipt once by ReceiptId, increases stock, and stages its own `ProductStockIncreasedIntegrationEvent`; conflicting replay must not silently mutate stock.
+- Delivery: `procurement.integration.events` can redeliver after a publish-before-mark failure. Receipt deduplication is a business boundary, not a global exactly-once guarantee.
+
 ## Delivery Semantics
 
 - Request/reply reservation flow is synchronous from the caller perspective, but still mediated by the message bus.
 - Orders lifecycle events are atomically staged in `OrderIntegrationOutbox` and relayed with a stable message identity through the PostgreSQL-persisted Orders Wolverine runtime.
 - All Inventory commands that emit integration events atomically stage them in `InventoryIntegrationOutbox`. Reservation reuses `OperationId`; decrease/increase/restock generate UUID v7 message IDs. All use normalized `ProductId` as Kafka partition key.
+- Procurement stages `GoodsReceived` with the receipt transaction in `procurement_outbox`, using ReceiptId as message identity and normalized ProductId as Kafka partition key. `ProcurementOutboxRelay` publishes it to `procurement.integration.events`; `InventoryControl.Consumer` handles it. Supplier acceptance without a goods receipt does not publish this event or increase stock. Relay redelivery remains possible.
 - Inventory relay failure never rolls back already committed stock state. It retries with bounded backoff, parks after five attempts, and sets `PublishedAt` after success. Published rows default to unlimited retention at `Messaging:OutboxRelay:Retention:Mode=RetainAll`.
 - Other hosts currently configure durable endpoint flags, but persisted durability is not proven until each host configures and tests a message store.
 - Consumer handling should assume at-least-once delivery and deduplicate by stable message identity unless stronger guarantees are explicitly documented later.
@@ -148,6 +158,7 @@ These examples separate executable repository behavior from business reactions t
 | configured but handler gap | `OrderPlaced` to `SaleProducts.Consumer` | Orders owns the fact that an order was placed and its schema | Products could own a sales/popularity projection keyed by ProductId and message identity | Changing projection fields or retry policy does not change `OrderPlaced`; changing the event schema requires an Orders compatibility decision. No such handler exists yet, so this is not current behavior. |
 | configured but contract gap | `OrderCancelled` to `InventoryControl.Consumer` | Orders owns cancellation fact and reason | Inventory could own compensation/restock, deduplication, and terminal failure handling | The current event lacks ProductId, quantity, or reservation correlation, so safe automatic restock cannot be reconstructed from it alone. The consumer must not guess; either a query/correlation design or producer-approved additive contract is required. |
 | external candidate | `ProductStockDecreasedIntegrationEvent` | Inventory owns the stock-change fact, quantity field, current stock, occurrence time, and ProductId ordering key | Search, availability, analytics, or notification consumers each own their own projection/reaction and idempotency | Independent consumers justify separate Kafka consumer groups or RabbitMQ queues. They do not justify changing the Inventory event to match one consumer's internal model. |
+| implemented | `GoodsReceived` | Procurement owns committed receipt identity, purchase ID, ProductId, quantity, and received time | Inventory owns the durable receipt deduplication and stock increase | A supplier acceptance is not a receipt; a redelivered receipt must not increase stock twice. |
 
 Current `SaleProducts.Consumer` and `InventoryControl.Consumer` subscribe to `orders.integration.events`, and `SaleOrders.Consumer` subscribes to `products.integration.events`. Orders Consumer has executable diagnostic handlers: `WhenAllWorkHandler`, `IndependentAuditHandler`, `IndependentStatisticsHandler`, and `ConsumerExceptionPolicyProbeHandler`. Product diagnostic use cases publish the corresponding messages when enabled; see [consumer parallel examples](consumer-parallel-examples.md). These diagnostics demonstrate orchestration and delivery policies. Business reactions for the three consumer subscriptions remain a gap.
 

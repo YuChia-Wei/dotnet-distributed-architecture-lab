@@ -15,12 +15,14 @@ The repository also maintains a reusable AI collaboration context. Product truth
 | Products | Create, query, update, and delete products | `SaleProducts.WebApi`, `SaleProducts.Consumer` |
 | Orders | Create orders and manage the shipped/delivered/cancelled lifecycle | `SaleOrders.WebApi`, `SaleOrders.Consumer` |
 | Inventory | Initialize, increase, decrease, and replenish product inventory | `InventoryControl.WebApi`, `InventoryControl.Consumer` |
+| Procurement | Supplier quotes, purchases, reconciliation, and actual goods receipts | `Procurement.WebApi` |
 
 Cross-context contracts are located under `src/BC-Contracts/`. The inventory reservation flow between Orders and Inventory collaborates through Wolverine request/reply and MQ channels; integration events are published through the topic/queue owned by each context.
+Procurement calls an external supplier through fixed HTTP profiles. Only a committed goods receipt publishes Kafka `GoodsReceived` for Inventory to increase stock. SupplierSandbox, SupplierMock, and Microcks are external-system lab tools, not business bounded contexts.
 
 See [Task.WhenAll / two external-event handlers](.dev/operations/consumer-parallel-examples.md) (Consumer parallel examples); includes the existing Compose regression and E2E commands.
 
-Inventory uses **EF Core**, while Products and Orders retain **Dapper** as contrasting persistence examples. Existing Inventory tables, reservation idempotency and source-outbox transactions remain compatible. See the [Inventory EF Core guide](.dev/operations/inventory-efcore.md).
+Inventory uses **EF Core**, while Products, Orders, and Procurement use **Dapper** as contrasting persistence examples. Existing Inventory tables, reservation idempotency and source-outbox transactions remain compatible. See the [Inventory EF Core guide](.dev/operations/inventory-efcore.md).
 
 The [EF Core + Wolverine transaction sample](samples/EfCoreWolverine/README.md) demonstrates an aggregate repository, use case, native inbox/outbox, and shared transaction, with dedicated PostgreSQL/Kafka setup and run commands.
 
@@ -31,8 +33,9 @@ The [EF Core + Wolverine transaction sample](samples/EfCoreWolverine/README.md) 
 - WolverineFx `6.36.0`
 - Kafka (the canonical broker; enabled in Docker Compose, with producer-selected partition keys used to verify per-business-entity ordering)
 - RabbitMQ (a deferred compatibility profile; its Compose service is commented out, current shared queues are not broadcast topology, and migration or dual deployment requires a separate evaluation)
-- PostgreSQL `16.15-alpine`, EF Core `10.0.12` (Inventory), Dapper `2.1.79` (Products/Orders), and Npgsql / Npgsql EF provider `10.0.3`
-- xUnit v3 `4.0.0` (`xunit.v3.mtp-off` / VSTest), Moq, and Shouldly
+- PostgreSQL `16.15-alpine`, EF Core `10.0.12` (Inventory), Dapper `2.1.79` (Products/Orders/Procurement), and Npgsql / Npgsql EF provider `10.0.3`
+- Vue 3, TypeScript, and Nginx in the optional frontend overlay; WireMock.Net and Microcks in the supplier API lab
+- xUnit v3 `4.0.0` (`xunit.v3.mtp-off` / VSTest), Moq/NSubstitute by test project, and Shouldly
 - OpenTelemetry Collector Contrib `0.159.0`, Prometheus `3.14.0`, Tempo `2.10.7`, Loki `3.7.7`, and Grafana `13.2.1`
 
 For exact versions and evidence paths, see [.dev/project-config.yaml](.dev/project-config.yaml) and [.dev/requirement/TECH-STACK-REQUIREMENTS.MD](.dev/requirement/TECH-STACK-REQUIREMENTS.MD).
@@ -47,6 +50,8 @@ src/
   Product/            Products bounded context
   Order/              Orders bounded context
   Inventory/          Inventory bounded context
+  Procurement/        Procurement bounded context
+  Frontend/           Web and Admin Vue applications
 tests/                 Product and domain tests
 docker-compose/        Local services and observability topology
 sql-script/            PostgreSQL initialization scripts
@@ -55,7 +60,7 @@ sql-script/            PostgreSQL initialization scripts
 .agents/, .claude/     Runtime-specific skill wrappers
 ```
 
-The solution entry point is `MQArchLab.slnx`. Product projects are organized into `DomainCore` and `Presentation` layers; each bounded context owns Application, Domain, Infrastructure, Web API, and Consumer projects.
+The solution entry point is `MQArchLab.slnx`. All four business contexts have Domain, Application, Infrastructure, and Web API projects. Products, Orders, and Inventory also have Consumers; Procurement hosts its receipt outbox relay in its Web API. The two Vue applications are outside the .NET solution.
 
 ## Start the Local Environment
 
@@ -73,7 +78,7 @@ docker compose `
   up -d --build
 ```
 
-The current Compose topology starts three API/Consumer pairs, an authentication-free YARP Gateway, three PostgreSQL databases, Kafka/Kafdrop, and the OpenTelemetry/Grafana observability stack.
+The base Compose topology starts the original three API/Consumer pairs, an authentication-free YARP Gateway, three PostgreSQL databases, Kafka/Kafdrop, and the OpenTelemetry/Grafana observability stack. Procurement, supplier tools, and the frontends use separate Compose overlays.
 
 Default host entry points:
 
@@ -167,12 +172,14 @@ The Vue 3 / TypeScript applications in `src/Frontend/Web` and `src/Frontend/Admi
 - [Administration](http://127.0.0.1:8888/admin/): product master data, service status, WireMock.Net/Microcks mock and proxy controls, and the supplier sandbox.
 
 The helper reuses `mqarchlab-pr5-integration`, preserves existing data volumes and starts only selected services. This localhost lab has no login or role authorization. See the [frontend operations guide](.dev/operations/commerce-frontend.md) for routing, controls and troubleshooting (Traditional Chinese).
+The four business APIs use `/api/products`, `/api/orders`, `/api/inventory`, and `/api/procurement`. Bounded admin facades use `/api/admin/supplier-mock/*` and `/api/admin/supplier-sandbox/*`; the native Microcks UI remains at `http://127.0.0.1:8184/`. The [external API testing guide](.dev/guides/external-api-testing/README.md) compares WireMock.Net and Microcks.
 
 ## Project Knowledge Entry Points
 
 - [.dev/ARCHITECTURE.md](.dev/ARCHITECTURE.md): current product architecture and dependency boundaries
 - [.dev/requirement/distributed-commerce-bounded-context-overview.md](.dev/requirement/distributed-commerce-bounded-context-overview.md): bounded-context requirement baseline
 - [.dev/specs/INDEX.MD](.dev/specs/INDEX.MD): domain and test specs
+- [.dev/specs/current-system-extension.md](.dev/specs/current-system-extension.md): current additions beyond the earlier three-context reconstruction baseline
 - [.dev/operations/context-map.md](.dev/operations/context-map.md): context relationships
 - [.dev/operations/event-catalog.md](.dev/operations/event-catalog.md): events and request/reply contracts
 - [.dev/operations/mq-topology.md](.dev/operations/mq-topology.md): Kafka/RabbitMQ topology
