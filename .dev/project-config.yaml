@@ -13,7 +13,6 @@ languages:
   - Bash
   - TypeScript
   - Vue
-  - JavaScript
 technologyProfiles:
   - dotnet-backend
   - distributed-messaging
@@ -328,7 +327,8 @@ frontend:
     - Vue 3
     - TypeScript
     - Vite
-    - Nginx
+  buildRuntime: Node.js 22.14 Alpine
+  servingRuntime: Nginx 1.28 Alpine
   sourceRoots:
     - src/Frontend/Web
     - src/Frontend/Admin
