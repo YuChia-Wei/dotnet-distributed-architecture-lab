@@ -63,7 +63,7 @@ sequenceDiagram
 
 ## 4. 模式切換與讀回：控制成功不等於流量正確
 
-管理後台的 WireMock 操作送到自製 `/control/mode`，控制器重建原生 mapping 並清除 journal；Microcks 操作送到 `/control/microcks/mode`，控制器匯入固定 YAML 並確認三個原生 operation。兩者須再次讀回狀態；之後再發唯一測試請求核對資料路徑。
+管理後台的 WireMock 操作送到自製 `/control/mode`，控制器重建原生 mapping 並清除 journal；Microcks 操作送到 `/control/microcks/mode`，控制器匯入固定 YAML 並確認三個原生 operation。WireMock 的模式欄位是控制器最後一次完整套用的狀態，映射另外從原生 API 讀回；Microcks 的模式由原生 operation/rules 即時辨識。之後仍須發唯一測試請求核對資料路徑。
 
 ```mermaid
 sequenceDiagram
@@ -82,8 +82,9 @@ sequenceDiagram
   Native-->>C: 原生設定
   C-->>Admin: 套用結果
   Admin->>C: GET 狀態與規則
-  C->>Native: 即時讀回
-  Native-->>Admin: 確認的模式或 custom / unavailable
+  C->>Native: WireMock 讀映射；Microcks 讀 operation/rules
+  Native-->>C: 原生設定或讀取失敗
+  C-->>Admin: WireMock applying/ready/failed；Microcks 另有 unconfigured/custom/unavailable
   User->>Native: 用新識別發測試 HTTP 請求
   Native-->>User: 回應 origin
   User->>S: 查看請求紀錄前後值
@@ -121,7 +122,7 @@ sequenceDiagram
 
 ## 6. 實際收貨才入庫：兩端各自保證冪等
 
-收貨與 Procurement source outbox 同交易；relay 的 `published_at` 只代表持久化傳輸交接，不代表 Kafka 已消費。Inventory Consumer 以 `ReceiptId` 執行庫存端收貨；Inventory PostgreSQL 同交易保存 receipt、增加 stock 並寫 Inventory outbox。重送相同 ID 與相同內容讀回既有結果；不同內容必須衝突。
+收貨與 Procurement source outbox 同交易。relay 先把事件交給 Wolverine durable outbox，待交接完成才標記來源列的 `published_at`；Wolverine 後續非同步送往 Kafka。標記來源列和實際送達 Kafka 的先後可能交錯，`published_at` 不代表 Kafka 已消費。Inventory Consumer 以 `ReceiptId` 執行庫存端收貨；Inventory PostgreSQL 同交易保存 receipt、增加 stock 並寫 Inventory outbox。重送相同 ID 與相同內容讀回既有結果；不同內容必須衝突。
 
 ```mermaid
 sequenceDiagram
@@ -129,14 +130,19 @@ sequenceDiagram
   participant P as Procurement API
   participant PDB as Procurement PostgreSQL
   participant Relay as Procurement outbox relay
-  participant K as Kafka / Wolverine
+  participant W as Wolverine durable outbox
+  participant K as Kafka
   participant C as Inventory Consumer
   participant IDB as Inventory PostgreSQL
   User->>P: POST /purchase-orders/{id}/receipts，ReceiptId 與數量
   P->>PDB: 同交易保存收貨和 GoodsReceived source outbox
   P-->>User: 201 created=true 或重播 200 created=false
   Relay->>PDB: 取得待交付 source outbox
-  Relay->>K: 持久化交接並發布 GoodsReceived
+  Relay->>W: PublishAsync GoodsReceived，持久化交接
+  W-->>Relay: 交接完成
+  Relay->>PDB: 標記 source outbox published_at
+  Note over PDB,K: 標記與後續送達可交錯；標記不代表已消費
+  W->>K: 非同步送出 GoodsReceived
   K->>C: 至少一次交付事件
   C->>IDB: 同交易認領 ReceiptId、加 stock、寫 Inventory outbox
   IDB-->>C: 新結果或同內容已處理
@@ -147,22 +153,29 @@ sequenceDiagram
 
 ## 7. 銷售訂單另走庫存保留
 
-銷售不是供應商採購。Orders 在建立銷售訂單前向 Inventory 要求保留，保留失敗便不提交訂單；成功後 Orders 保存訂單與自己的 `OrderPlaced` 來源事件。此圖只描述目前同步保留的責任順序，沒有聲稱銷售與採購共享交易。
+銷售不是供應商採購。前端建立新的 `OperationId`，透過 HTTP 送給 Orders；Orders 的 `InventoryGateway` 再透過 Wolverine/Kafka 向 Inventory 發送保留請求並等待專用回覆。保留失敗便不提交訂單；成功後 Orders 保存訂單與自己的 `OrderPlaced` 來源事件。此圖描述目前 Compose 選用 Kafka profile 的請求／回覆與業務等待，沒有聲稱銷售與採購共享交易。
 
 ```mermaid
 sequenceDiagram
   actor User as 業務
+  participant F as 商務前台
   participant O as Orders API / PlaceOrderUseCase
+  participant K as Kafka / Wolverine request-reply
   participant I as Inventory API / reservation
   participant ODB as Orders PostgreSQL
-  User->>O: 建立銷售訂單，OperationId
-  O->>I: ReserveAsync(OperationId, ProductId, Quantity)
+  User->>F: 確認建立銷售訂單
+  F->>F: 產生本次 OperationId
+  F->>O: POST /api/orders，包含 OperationId
+  O->>K: InvokeAsync 保留請求至 inventory.requests
+  K->>I: ReserveInventoryRequestContract
+  I-->>K: ReserveInventoryResponseContract
+  K-->>O: orders.outbound.replies 回覆
   alt 庫存不足或保留失敗
-    I-->>O: Result=false
-    O-->>User: 不建立訂單
+    O-->>F: 失敗，不建立訂單
+    F-->>User: 顯示失敗
   else 保留成功
-    I-->>O: Result=true
     O->>ODB: Commit 訂單與 OrderPlaced
-    O-->>User: OrderId
+    O-->>F: OrderId
+    F-->>User: 顯示訂單
   end
 ```

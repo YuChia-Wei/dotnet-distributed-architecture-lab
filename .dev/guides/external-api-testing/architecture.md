@@ -4,11 +4,9 @@
 
 ```mermaid
 flowchart LR
-  Browser[瀏覽器 localhost:8888] --> YARP[YARP 單入口]
+  Browser[瀏覽器執行 Vue] -->|localhost:8888 靜態資源與同源 API| YARP[YARP 單入口]
   YARP -->|/web| Web[Nginx 業務前台]
   YARP -->|/admin| Admin[Nginx 管理後台]
-  Web -->|同源 API 呼叫| YARP
-  Admin -.->|同源控制呼叫| YARP
   YARP -->|/api/products| Products[Products API]
   YARP -->|/api/orders| Orders[Orders API]
   YARP -->|/api/inventory| Inventory[Inventory API]
@@ -30,10 +28,13 @@ flowchart LR
   Procurement -->|GoodsReceived 經 outbox| Kafka[(Kafka)]
   Kafka --> Consumer[Inventory Consumer]
   Consumer --> IDB
-  Orders -->|庫存保留請求| Inventory
+  Orders -->|Wolverine 保留請求| Kafka
+  Kafka -->|inventory.requests| Inventory
+  Inventory -->|專用回覆| Kafka
+  Kafka -->|orders.outbound.replies| Orders
 ```
 
-YARP 的 frontend overlay 讓 `/web`、`/admin` 保留前綴進入各自 Nginx；兩個 Nginx 處理 SPA 與靜態檔。YARP 的四組 `/api/...` 業務路由不進 SPA fallback。管理路由只移除 `/api/admin/supplier-mock` 或 `/api/admin/supplier-sandbox` 前綴，讓後端仍看到 `/control/*` 或 `/sandbox/*`。前端容器只在 Docker 網路暴露 80；主機公開的 YARP port 是 `127.0.0.1:8888`。既有採購操作手冊也提供 8180–8185 的本機直連端點，適合拆開檢查，不等於公開部署入口。
+YARP 的 frontend overlay 讓 `/web`、`/admin` 保留前綴進入各自 Nginx；兩個 Nginx 提供 SPA 與靜態檔。Vue 程式在瀏覽器執行，再由瀏覽器經同源 YARP 呼叫 API；Nginx 不代理業務請求。YARP 的四組 `/api/...` 業務路由不進 SPA fallback。管理路由只移除 `/api/admin/supplier-mock` 或 `/api/admin/supplier-sandbox` 前綴，讓後端仍看到 `/control/*` 或 `/sandbox/*`。前端容器只在 Docker 網路暴露 80；主機公開的 YARP port 是 `127.0.0.1:8888`。既有採購操作手冊也提供 8180–8185 的本機直連端點，適合拆開檢查，不等於公開部署入口。
 
 ## 資料面與控制面
 
@@ -41,7 +42,7 @@ YARP 的 frontend overlay 讓 `/web`、`/admin` 保留前綴進入各自 Nginx�
 
 控制面由管理後台、`SupplierMock.WebApi` 的 `/control/*` 及 sandbox 的 `/sandbox/*` 組成。WireMock 控制器以原生 `__admin/mappings` 和 `__admin/requests` 重建及讀取映射；Microcks 控制器上傳固定 YAML，查原生 `/api/services` 的三個 operation／dispatcher/rules，必要時只校正這三個已知 operation。`ready` 是原生設定讀回結果；仍需送唯一 HTTP 請求來確認資料面。sandbox 的最近請求與訂單由 sandbox 自己持久／即時觀察；其延遲設定只在程序生命週期內有效。
 
-四個業務邊界有自己的持久資料：Products、Orders、Procurement、Inventory；Supplier Sandbox 再有獨立的供應商資料庫。採購 `Accepted` 只表示供應商接單；實際 `ReceiptId` 登錄時，Procurement 在同一 PostgreSQL 交易保存收貨與 source outbox，relay 交接 Wolverine/Kafka，Inventory Consumer 再以相同 `ReceiptId` 做一次性入庫。Inventory 的 receipt、stock 與自身 outbox 在單一交易完成。銷售的 Orders 另向 Inventory 要求保留庫存，沒有呼叫供應商 mock。採購與銷售不能合併畫成一條同步交易。
+四個業務邊界有自己的持久資料：Products、Orders、Procurement、Inventory；Supplier Sandbox 再有獨立的供應商資料庫。採購 `Accepted` 只表示供應商接單；實際 `ReceiptId` 登錄時，Procurement 在同一 PostgreSQL 交易保存收貨與 source outbox，relay 交接 Wolverine durable outbox 後由 Kafka 送達，Inventory Consumer 再以相同 `ReceiptId` 做一次性入庫。Inventory 的 receipt、stock 與自身 outbox 在單一交易完成。銷售的 Orders 另以 Wolverine/Kafka 請求／回覆向 Inventory 要求保留庫存，沒有呼叫供應商 mock。採購與銷售不能合併畫成一條同步交易。
 
 ## 目前部署假設
 
