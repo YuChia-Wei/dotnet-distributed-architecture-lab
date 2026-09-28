@@ -6,6 +6,8 @@ This index is the discovery view for workflow artifacts retained by `dotnet-mq-a
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |
 | --- | --- | --- | --- | --- | --- |
+| [`2026-09-28-external-api-team-guide`](2026-09-28-external-api-team-guide/workflow.yaml) | External API testing team materials and documentation reconciliation | `project-documentation-delivery` | `completed` | `2026-09-28T23:32:07+08:00` | [plan](2026-09-28-external-api-team-guide/workflow-plan.md) |
+| [`2026-09-26-commerce-frontend`](2026-09-26-commerce-frontend/workflow.yaml) | Commerce internal operations and administration frontends | `software-development-orchestrator` | `completed` | `2026-09-28T23:18:14.5240744+08:00` | [plan](../workflows-v2/wf-0fa43e8dc60f4683ae1036abde90494b.workflow.json) |
 | [`2026-09-26-procurement-supplier-lab`](2026-09-26-procurement-supplier-lab/workflow.yaml) | Procurement and supplier mock/proxy laboratory | `software-development-orchestrator` | `completed` | `2026-09-26T12:15:17+08:00` | [plan](../workflows-v2/wf-28ef2d2ffe044802a4ddba263d5e5471.workflow.json) |
 | [`2026-09-23-framework-rc1-pilot`](2026-09-23-framework-rc1-pilot/workflow.yaml) | Complete Codex rc.1 pilot with retained target customizations | `ai-context-governance` | `in_progress` | `2026-09-23T16:28:51.971743+00:00` | [plan](2026-09-23-framework-rc1-pilot/workflow-plan.md) |
 | [`2026-09-21-spec-implementation-reconciliation`](2026-09-21-spec-implementation-reconciliation/workflow.yaml) | Reconcile specifications with current product behavior | `software-development-orchestrator` | `completed` | `2026-09-21T12:07:48+08:00` | [plan](2026-09-21-spec-implementation-reconciliation/workflow-plan.md) |

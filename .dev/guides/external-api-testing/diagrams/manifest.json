@@ -1,0 +1,86 @@
+{
+  "renderer": "Mermaid 11.12.0, Microsoft Edge headless",
+  "rendered_at": "2026-09-28T15:19:46.164Z",
+  "diagrams": [
+    {
+      "id": "architecture-01",
+      "source": ".dev/guides/external-api-testing/architecture.md",
+      "heading": "實驗室部署與責任邊界",
+      "type": "flowchart LR",
+      "width": 2355.765625,
+      "height": 1309.375,
+      "source_sha256": "1e94ec55c436b03c86961b922ecfd24bffacb359f90ef75542a8527606d3ed32",
+      "svg_sha256": "90a2d9c62e2cf05af4d3ab903603b32622340405a2742210ed836f83305b7589"
+    },
+    {
+      "id": "sequences-01",
+      "source": ".dev/guides/external-api-testing/sequences.md",
+      "heading": "1. 僅模擬：固定範例沒有進上游",
+      "type": "sequenceDiagram",
+      "width": 1746.5,
+      "height": 534,
+      "source_sha256": "f9e5112a58b1aea31f0b8c13e2f28a844423d22bb9331d0b3b0f90e88d0411d6",
+      "svg_sha256": "5f054926a56998c2d4e4118efbc5529d417d000097ed3ae3b6309f71aa6de018"
+    },
+    {
+      "id": "sequences-02",
+      "source": ".dev/guides/external-api-testing/sequences.md",
+      "heading": "2. WireMock hybrid：高優先序範例與廣域代理",
+      "type": "sequenceDiagram",
+      "width": 878.5,
+      "height": 534,
+      "source_sha256": "480e0ff4efbf87b8881f1c183cc35d725e5eab73b659a255164168d5b6188ee4",
+      "svg_sha256": "d447e12bc1c5d3af4e55981d907cc45befa9a95ec92d3a68736fc959cee5dad4"
+    },
+    {
+      "id": "sequences-03",
+      "source": ".dev/guides/external-api-testing/sequences.md",
+      "heading": "3. Microcks hybrid：已知 operation 的範例與 fallback",
+      "type": "sequenceDiagram",
+      "width": 1209.5,
+      "height": 689,
+      "source_sha256": "b066eddd101cf9d948ebdc7e02696d42926534b1b0aa176a235b6f248520e7fd",
+      "svg_sha256": "292236dfb4e54519838cd0f4706531d2b95e829c4ce3109f5b51ce38ab45b4f6"
+    },
+    {
+      "id": "sequences-04",
+      "source": ".dev/guides/external-api-testing/sequences.md",
+      "heading": "4. 模式切換與讀回：控制成功不等於流量正確",
+      "type": "sequenceDiagram",
+      "width": 1872,
+      "height": 949,
+      "source_sha256": "ab1bf9abf29c1a2b82255a1ee93b4a836161876fb0922be9ea8ab1b3825d0eea",
+      "svg_sha256": "a6939aeac04e39c61208a6a242673a0d5ec79b83c440d712ec9a06b5a44cf076"
+    },
+    {
+      "id": "sequences-05",
+      "source": ".dev/guides/external-api-testing/sequences.md",
+      "heading": "5. 供應商已提交、呼叫端逾時：保留原 key 協調",
+      "type": "sequenceDiagram",
+      "width": 1629.5,
+      "height": 1084,
+      "source_sha256": "91551ecf7043bc7859d051765d7c9c9c4eedffc9015a0d8462d463f0a233d42d",
+      "svg_sha256": "57c0edf964582f29608c9c865bfa6afb7acf44a60610dd1f454ae186b958d903"
+    },
+    {
+      "id": "sequences-06",
+      "source": ".dev/guides/external-api-testing/sequences.md",
+      "heading": "6. 實際收貨才入庫：兩端各自保證冪等",
+      "type": "sequenceDiagram",
+      "width": 2827,
+      "height": 950,
+      "source_sha256": "87f2cf70ed756f0e0eb0e2b55c9d6132a661504e117d15e96706b14ff741e5f3",
+      "svg_sha256": "ae6b4ec5648faf7248150daf722de7f151af7c4d40be6481439662a50233119e"
+    },
+    {
+      "id": "sequences-07",
+      "source": ".dev/guides/external-api-testing/sequences.md",
+      "heading": "7. 銷售訂單另走庫存保留",
+      "type": "sequenceDiagram",
+      "width": 1769,
+      "height": 927,
+      "source_sha256": "ad257639f0e38467c31d3df47920ab4b4240c464cb3858159e559e9a0c00477d",
+      "svg_sha256": "47b9b232ac027ff3bcacdf162c1bfdfb79a6cd02d0618b656547fc2b8e2228ba"
+    }
+  ]
+}

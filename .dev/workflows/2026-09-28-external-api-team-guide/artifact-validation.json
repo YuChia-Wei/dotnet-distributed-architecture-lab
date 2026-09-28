@@ -1,0 +1,40 @@
+{
+  "observed_at": "2026-09-28T23:32:07+08:00",
+  "scope": "Documentation artifact checks, not runtime or framework admission",
+  "source_baseline": "f2bb5750fb01b4508cdae8328becc6581212a4ab",
+  "scoped_checks": {
+    "outcome": "passed",
+    "markdown_files": 28,
+    "local_links_checked": 177,
+    "solution_projects": 41,
+    "project_counts": {
+      "productProjectCount": 27,
+      "sampleProjectCount": 5,
+      "testProjectCount": 9
+    },
+    "diagram_count": 8,
+    "slide_count": 17,
+    "notes_count": 17,
+    "pdf_page_count": 17,
+    "protected_runtime_and_framework_paths_unchanged": true,
+    "errors": []
+  },
+  "presentation": {
+    "pptx_sha256": "5e683671e8f875982103e907271f3bffee482cacd75b636486d0e6396013387f",
+    "pdf_sha256": "cce75d11c16ef879f7421f3c29f539ae0819e1c59cbdbd4a36bebd7620f1d63c",
+    "package_findings": 0,
+    "layout_findings": 0,
+    "renderer": "Artifact-tool first-party renderer; 180 dpi reading PDF",
+    "native_powerpoint_execution_verified": false,
+    "pdf_text_searchable": false
+  },
+  "diagrams": {
+    "manifest": ".dev/guides/external-api-testing/diagrams/manifest.json",
+    "manifest_sha256": "a3bac6c77fd35edc09870894c8011edfebee25f5d24de41512fed923905bcb39",
+    "rendered": 8
+  },
+  "runtime_tests": "not-run: documentation-only change; historical evidence remains historical",
+  "docker_mutations": "none",
+  "framework_admission": "unchanged and not established",
+  "provider_delivery": "pending at artifact freeze; use linked Issue and PR live state"
+}

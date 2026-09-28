@@ -1,0 +1,22 @@
+sequenceDiagram
+  actor User as 業務
+  participant F as 商務前台
+  participant O as Orders API / PlaceOrderUseCase
+  participant K as Kafka / Wolverine request-reply
+  participant I as Inventory API / reservation
+  participant ODB as Orders PostgreSQL
+  User->>F: 確認建立銷售訂單
+  F->>F: 產生本次 OperationId
+  F->>O: POST /api/orders，包含 OperationId
+  O->>K: InvokeAsync 保留請求至 inventory.requests
+  K->>I: ReserveInventoryRequestContract
+  I-->>K: ReserveInventoryResponseContract
+  K-->>O: orders.outbound.replies 回覆
+  alt 庫存不足或保留失敗
+    O-->>F: 失敗，不建立訂單
+    F-->>User: 顯示失敗
+  else 保留成功
+    O->>ODB: Commit 訂單與 OrderPlaced
+    O-->>F: OrderId
+    F-->>User: 顯示訂單
+  end

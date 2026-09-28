@@ -1,0 +1,11 @@
+sequenceDiagram
+  participant Client as Procurement / HTTP client
+  participant W as WireMock.Net :9091
+  participant S as Supplier Sandbox
+  Client->>W: GET /supplier/catalog/MOCK-001
+  W-->>Client: 優先序 1 範例，origin=wiremock
+  Note over S: 不新增 request
+  Client->>W: GET /supplier/catalog/REAL-001
+  W->>S: 優先序 10 代理同一請求
+  S-->>W: 真實報價，origin=sandbox
+  W-->>Client: sandbox 回應

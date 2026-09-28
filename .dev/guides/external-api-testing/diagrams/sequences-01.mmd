@@ -1,0 +1,13 @@
+sequenceDiagram
+  actor User as 操作員
+  participant P as Procurement API
+  participant G as ISupplierGateway / HTTP adapter
+  participant M as 所選 mock 引擎
+  participant S as Supplier Sandbox
+  User->>P: GET /api/procurement/suppliers/{provider}/catalog/MOCK-001
+  P->>G: QuoteAsync(provider, MOCK-001)
+  G->>M: GET /supplier/catalog/MOCK-001
+  M-->>G: 範例報價，origin=wiremock 或 microcks
+  G-->>P: 已驗證的報價
+  P-->>User: 200 與 origin
+  Note over S: 本情境不應新增 sandbox request

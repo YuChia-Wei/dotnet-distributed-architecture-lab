@@ -1,0 +1,23 @@
+sequenceDiagram
+  actor User as 操作員
+  participant P as Procurement API
+  participant DB as Procurement PostgreSQL
+  participant G as HTTP Supplier Gateway
+  participant S as Supplier Sandbox
+  User->>P: POST purchase-orders，固定 clientRequestId
+  P->>DB: 原子建立或取回同 key 採購身分
+  P->>G: SubmitAsync(原身分)
+  G->>S: POST /supplier/orders
+  S->>S: 保存供應商訂單
+  Note over S,G: 提交後延遲，呼叫端逾時
+  G-->>P: supplier_timeout
+  P->>DB: 標示 SubmissionUnknown
+  P-->>User: 202 與原採購單 id
+  User->>P: POST /purchase-orders/{id}/reconcile
+  P->>DB: 讀取原 provider 與 key
+  P->>G: LookupAsync(原身分)
+  G->>S: GET /supplier/orders/by-client-request/{原 key}
+  S-->>G: 已存在的同一訂單
+  G-->>P: Found 與身分驗證後結果
+  P->>DB: 條件式套用 Accepted
+  P-->>User: 同一採購單的確認狀態

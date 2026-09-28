@@ -1,0 +1,14 @@
+sequenceDiagram
+  participant Client as Procurement / HTTP client
+  participant M as Microcks :8080
+  participant S as Supplier Sandbox
+  Client->>M: GET /rest/Supplier+API/1.0.0/supplier/catalog/MOCK-001
+  M-->>Client: URI_PARTS 命中，origin=microcks
+  Note over S: 不新增 request
+  Client->>M: GET /rest/Supplier+API/1.0.0/supplier/catalog/REAL-001
+  M->>S: 已知 GET operation 的 PROXY_FALLBACK
+  S-->>M: 真實報價，origin=sandbox
+  M-->>Client: sandbox 回應
+  Client->>M: GET /rest/Supplier+API/1.0.0/supplier/unknown
+  M-->>Client: 未描述 operation；觀察實際狀態
+  Note over S: 不應把未知路徑解釋為全域代理
