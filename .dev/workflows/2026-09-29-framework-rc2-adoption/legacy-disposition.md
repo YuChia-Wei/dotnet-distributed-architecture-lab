@@ -1,6 +1,6 @@
 # RC1 and retained target disposition
 
-Subject: target worktree `F:/framework-next/rc2-mq-adoption` at baseline `06d9b37f55505b321a2d6b32cfd0fe4946c22721`. This inventory records planning and subsequent file disposition; it is not target validation or an acceptance receipt. The final fixed RC2 catalog/subset was installed through official API2 plan/apply from product commit `aad927328c20b08c8445e8ad1792eadd8ecc3466`; the installer-owned lock was read back at raw SHA-256 `c9a47c945f19fe869696c514003f7eb64ad0219b8f4a315fde4b1d7eaa7ea15f`.
+Subject: target worktree `F:/framework-next/rc2-mq-adoption` at baseline `06d9b37f55505b321a2d6b32cfd0fe4946c22721`. This inventory records planning and subsequent file disposition; it is not target validation or an acceptance receipt. The final fixed RC2 catalog/subset was installed through official API2 plan/apply from product commit `aad927328c20b08c8445e8ad1792eadd8ecc3466`; the installer-owned lock was read back at raw SHA-256 `be0cba5c82425c1fc67755b65b7956c6333d8205f637f4cb3e48e6c45f907223`.
 
 ## Removed tracked RC1 installation and control plane
 
@@ -57,3 +57,7 @@ Automatic approval review rejected a broad deletion of the listed old trees befo
   preserved. The obsolete RC1 candidate/history/tooling copies were removed,
   while current project configuration and the eight configured agent/runtime
   entries retain their actual dispatch semantics through `.ai/custom/roles/`.
+
+## Owner-approved authority URL rebind
+
+After the initial installation, the user directly approved nine URL-only repairs in `.dev/ai-context/TARGET-ENGINEERING-RULES.md`. Its normative rule statements, target predicates and four customizations were retained; its raw SHA-256 became `e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08`. The fixed catalog rederived a subset whose forty bindings all use that hash. Official paired API2 apply changed the project selection, left 384 managed members unchanged and wrote lock SHA-256 `be0cba5c82425c1fc67755b65b7956c6333d8205f637f4cb3e48e6c45f907223`. This is current installation state, not S6 or target-gate acceptance. The earlier rejected broad rewrite and initial blocked installation remain historical evidence.

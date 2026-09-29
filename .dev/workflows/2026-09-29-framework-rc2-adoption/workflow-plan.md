@@ -7,7 +7,7 @@
 - Created: `2026-09-29T10:26:05+08:00`
 - Final fixed product source commit: `aad927328c20b08c8445e8ad1792eadd8ecc3466`; source PR #412 merged and annotated tag `v0.19.0-rc.2` peels to this product commit.
 - Catalog identity: `catalog:1:0.19.0-rc.2:aad927328c20b08c8445e8ad1792eadd8ecc3466:eb997697e9cd8b348092773176162dbdb564ded7d52bef663fde80b98c427d9b`.
-- MQ subset identity: `subset:3:0.19.0-rc.2:aad927328c20b08c8445e8ad1792eadd8ecc3466:291ca4a018051a591e40018f91e6f0ef26c28854eabd746f9de0582a266f1ad2`; installed lock raw SHA-256 `c9a47c945f19fe869696c514003f7eb64ad0219b8f4a315fde4b1d7eaa7ea15f`.
+- MQ subset identity: `subset:3:0.19.0-rc.2:aad927328c20b08c8445e8ad1792eadd8ecc3466:8e0eb8909b9a110b86398ed3f1a87d262b0691ddccdf63e7d49689a864556b71`; installed lock raw SHA-256 `be0cba5c82425c1fc67755b65b7956c6333d8205f637f4cb3e48e6c45f907223`.
 
 ## Authorized outcome
 
@@ -29,20 +29,20 @@ This workflow's target writer owns only `F:/framework-next/rc2-mq-adoption`. The
 
 ## Resume checkpoint
 
-- Current stage: official RC2 installation complete; current target document cleanup and local commit pending.
-- Fixed subset installed by official API2 plan/apply; project selection and installer lock read back at exact raw hashes.
-- Last known Git head: `06d9b37f55505b321a2d6b32cfd0fe4946c22721`.
-- Provider state: Issue #22 was identified by coordinator; no provider mutation by target writer.
-- Next action: complete the local static checkpoint and commit; the nine frozen-authority relative URLs remain awaiting direct owner approval and, if approved, official selection rebind. Coordinator owns integration and provider closeout.
+- Current stage: local RC2 adoption complete after owner-approved authority URL repair, official selection rebind and final local checkpoint.
+- Final subset installed by official API2 plan/apply; project selection and installer lock read back at exact raw hashes. The fourteen target rules, twenty routes and four customizations remain the selected authority.
+- Prior local checkpoint: `aecf4b2ebc3ed1fc661138c06a93c6d2c03101ca`; the final local commit SHA is returned to the coordinator after creation.
+- Provider state: no MQ push, PR, merge or Issue closure is claimed by the target writer.
+- Next action: coordinator owns MQ push, PR/merge, Issue #22 closure and live provider read-back as separate states. Issue #23 owns the future target gate.
 
 ## Fixed-candidate installation attempt
 
 The 2026-09-29 assembled MQ subset selected 18 skills, both runtime adapters, original names, `engineering-common` and `dotnet-backend`, and forty target-authority bindings. Its fixed source commit was `3908974fe3c1e2989253459cd3488d8c29da47f9`, subset identity `subset:3:0.19.0-rc.2:3908974fe3c1e2989253459cd3488d8c29da47f9:2712068f89b6464d3a12cecabc477610493cbaf8729396d096fa78e1f397b4bf`, and frozen target rule authority raw SHA-256 `0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437`. The official API2 plan succeeded with 384 managed additions, one paired installation selection edit, zero unknown siblings, and plan SHA-256 `de928430e1ce074f48888f18dbd597ba0ff5d8f10d2351d64c93bc814245417b`.
 
-The first read-only plan was rejected for Windows path budget (251 > 240 UTF-16 units); shorter dedicated roots yielded the successful plan. The first official apply then stopped during pre-marker preparation with `scan-limit` at the engine's cumulative 20,000 directory-entry bound. It reported `changed: true`, `outcome: blocked`, zero completed managed member writes, no lock, no project selection and no managed/project marker. A zero-byte guard and 193 recovery objects remain as retained preparation residue under `F:/framework-next/rc2-operations/r/e0509fab/i-425d87da0d12e2e3671a29600121c60b`. The coordinator is arranging a fixed product-engine repair and new source/candidate identity. Do not retry the same fixed engine or clean the residue without an owner-supported recovery disposition. This is failed installation evidence, not S6 or gate validation.
+The first read-only plan was rejected for Windows path budget (251 > 240 UTF-16 units); shorter dedicated roots yielded the successful plan. The first official apply then stopped during pre-marker preparation with `scan-limit` at the engine's cumulative 20,000 directory-entry bound. It reported `changed: true`, `outcome: blocked`, zero completed managed member writes, no lock, no project selection and no managed/project marker. A zero-byte guard and 193 recovery objects remain as retained preparation residue under `F:/framework-next/rc2-operations/r/e0509fab/i-425d87da0d12e2e3671a29600121c60b`. The coordinator later fixed the product engine and rebuilt the candidate. The blocked engine was not retried; the residue was retained under the owner-supported disposition. This is failed installation evidence, not S6 or gate validation.
 
 
-## Final fixed-candidate installation and remaining work
+## Initial successful fixed-candidate installation
 
 The repaired engine at source `aad927328c20b08c8445e8ad1792eadd8ecc3466`
 produced an official plan with SHA-256
@@ -77,14 +77,16 @@ target policy validators, their Python prerequisite/registry closure and seven
 project operation settings remain. Broad deletion of 30 human guides was
 rejected by automatic approval review. Subsequent per-file evidence supported
 removing five retired guides and retaining 25 with RC2 path/contract corrections.
-The nine relative links in frozen rule authority remain unresolved pending
-direct owner approval and official binding rebase. Future normal target
-handoff/admission remains
-blocked while the `current_framework.local` command is unconfigured; Issue
+The user later approved and the writer repaired nine relative URLs in
+rule authority without changing its normative statements. An official subset
+rederive and paired API2 apply rebound all forty bindings. Future normal target
+handoff/admission remains blocked while the `current_framework.local` command is unconfigured; Issue
 [#23](https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/23)
 owns its selection and implementation. Issue #22 is this adoption's one-time
 owner-deferred gate exception.
 
-## Pending authority URL rebind
+## Owner-approved authority URL rebind
 
-The nine URL-only corrections are a [pending proposal](pending-authority-url-rebind.diff), not applied authority or installation state. Current `.dev/ai-context/TARGET-ENGINEERING-RULES.md` raw SHA-256 is `0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437`; the exact proposed bytes would be `e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08`. The current official lock is `c9a47c945f19fe869696c514003f7eb64ad0219b8f4a315fde4b1d7eaa7ea15f`. Direct owner approval remains pending. If approved, the forty selected authority bindings must be updated to the new raw hash, the MQ subset rederived from the fixed catalog, and the paired installation selection updated through official API2 plan/apply. Do not hand-edit the lock or treat the proposed links as already repaired. The unresolved nine links make that focused static link check failed, while the completed official installation byte check remains a distinct result.
+The user directly approved the nine URL-only repairs. The rule text and strength did not change; authority raw SHA-256 became `e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08`. A first derive attempt omitted mandatory `python -I -B` and exited 2 with that exact usage error; the corrected official derive exited zero. It produced subset `subset:3:0.19.0-rc.2:aad927328c20b08c8445e8ad1792eadd8ecc3466:8e0eb8909b9a110b86398ed3f1a87d262b0691ddccdf63e7d49689a864556b71` from the unchanged fixed source/catalog with all forty bindings pointing to the new authority hash.
+
+Official API2 rebind plan `F:/framework-next/rc2-operations/mq-rebind-plan.stdout.json` had SHA-256 `572e8c2add8a7da06a7613d31671e827405b12a26f2e781d9b999d701a4a099b` and expected prior lock `c9a47c945f19fe869696c514003f7eb64ad0219b8f4a315fde4b1d7eaa7ea15f`. Apply result `F:/framework-next/rc2-operations/mq-rebind-apply.stdout.json` exited zero with `outcome: applied`, no diagnostics, one changed project selection, 384 unchanged managed files, `protected_input_state: matches`, `managed-bytes-consistent`, and `project_readiness: not-assessed`. Current lock raw SHA-256 is `be0cba5c82425c1fc67755b65b7956c6333d8205f637f4cb3e48e6c45f907223`; selection raw SHA-256 is `4d74012367bd1ec4a5aedb2ed7b923880c315dd7492d32559be88f101af3a5a3`. Both operation markers are absent, and the zero-byte writer guard remains. All eleven non-code Markdown links in rule authority resolve, including the nine repaired links. These observations do not establish S6, runtime behavior, independent review or target admission; those remain deferred or unassessed as stated above. MQ provider integration and Issue closure require the coordinator's later live read-back.
