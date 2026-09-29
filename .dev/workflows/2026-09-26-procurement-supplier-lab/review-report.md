@@ -4,7 +4,7 @@ This migration creates a navigation page for existing review and acceptance evid
 
 - [review-and-model-observations.md](review-and-model-observations.md)
 - [acceptance-report.md](acceptance-report.md)
-- [Original v2 history and evidence](evidence/v2-source.workflow.json)
+- [Path-rebound v2 history and evidence](evidence/v2-history.workflow.json)
 - [ID map and reference details](migration-map.md)
 
 Historical workflow state: `completed`. Owner review and any push, PR, merge, Issue closure or release remain separate from this completed local workflow record.

@@ -22,7 +22,7 @@ Evaluation keeps first delivery separate from corrections. Task difficulty and s
 ## Preflight observations
 
 - Baseline local/remote main: cc0e345367a1d24f49bf8fa68e0eb668df9e5e55. Framework receipt freshly admitted against identical full tree 1f1bac4fcc564657ae8eddb4ee1c704cc85c7284 in existing rc1 pilot worktree. No authority bytes changed.
-- Target effective packets resolved for selected authoring, architecture, implementation, review and compliance selectors; raw results are in ignored `artifacts/procurement-lab/effective-rules`.
+- Target effective packets resolved for selected authoring, architecture, implementation, review and compliance selectors. The temporary packet outputs were not retained; the selected contract and outcome are recorded in the tracked workflow documents.
 - Docker engine responded at 29.8.0. Existing unrelated observability Compose project remains running; commerce project was not listed as running. No data/volume deletion authorized.
 - Hosted Issue creation initially rejected by automatic approval; owner explicitly authorized it, then Issue #17 was created. Initial sandbox network/Docker/other-worktree read failures remain actual preflight failures, resolved through approved scoped access.
 - Code graph has stale Inventory implementation edges/snippets. Graph remains discovery only; implementation uses current tracked source on the baseline.

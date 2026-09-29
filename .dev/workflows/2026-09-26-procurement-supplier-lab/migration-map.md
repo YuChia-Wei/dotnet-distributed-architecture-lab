@@ -1,10 +1,10 @@
 # v2 migration map — 2026-09-26-procurement-supplier-lab
 
-Migrated at: `2026-09-29T22:11:55+08:00`. Source record: `wf-28ef2d2ffe044802a4ddba263d5e5471`; revision `14`; SHA-256 `fe4a21c4469d3c5f6756a69fa2e6424d2d44a2deb661ab5150f83d805f530622`.
+Migrated at: `2026-09-29T22:11:55+08:00`. Source record: `wf-28ef2d2ffe044802a4ddba263d5e5471`; revision `14`; original Git blob SHA-256 `fe4a21c4469d3c5f6756a69fa2e6424d2d44a2deb661ab5150f83d805f530622`.
 
-Original bytes: [evidence/v2-source.workflow.json](evidence/v2-source.workflow.json). Original store path: `.dev/workflows-v2/wf-28ef2d2ffe044802a4ddba263d5e5471.workflow.json` (retired).
+Current [history projection](evidence/v2-history.workflow.json), SHA-256 `09e5dbd788710360fbb7863783fb79dc4af8f73cd31750831eea3cb51401c50d`. Original bytes remain in Git commit `f17128ca5e5cf76c27c23b2ed1c1110d19af4108` at the original evidence snapshot path.
 
-This is a projection of an existing record. The source snapshot is the lossless authority for fields without an original-format column, including all prior states, previous hashes, retrospective, extensions, exact reported-by strings and all source references.
+This is a projection of an existing record. The retained history includes all prior states, previous hash strings, retrospective, extensions, reported-by strings and reference IDs. Only former ignored-output targets were rebound to hash-verified tracked evidence. Because those target strings changed, the projection is not an immutable v2 tool record; prior v2 content hashes describe the original Git bytes, not the rebound projection.
 
 ## Identity mapping
 
@@ -60,13 +60,13 @@ This is a projection of an existing record. The source snapshot is the lossless 
 | ID | Kind | Target | Historical v2 resolution | Blocking | SHA-256 |
 | --- | --- | --- | --- | --- | --- |
 | `SPEC-BASELINE` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/ | `resolved` | `False` | unknown |
-| `FIRST-PG-TRX` | opaque | artifacts/procurement-lab/first-procurement-tests/_39081a7221c7_2026-09-26_03_13_22_net10.0.trx | `resolved` | `False` | a79c095cb989e6338f65d9044808a7b8e6b42d44d5712184ddd9ef411b9e3dd7 |
-| `FIRST-HTTP` | opaque | artifacts/procurement-lab/http-contracts-first.json | `resolved` | `False` | unknown |
-| `DIRECT-FLOW` | opaque | artifacts/procurement-lab/direct-flow.json | `resolved` | `False` | unknown |
-| `FINAL-PROC-TRX` | opaque | artifacts/procurement-lab/focused-final-results/_b8d927bdf806_2026-09-26_03_38_06_net10.0.trx | `resolved` | `False` | unknown |
-| `INVENTORY-TRX` | opaque | artifacts/procurement-lab/test-results/_0c140fbf1ac6_2026-09-26_03_31_41_net10.0.trx | `resolved` | `False` | unknown |
-| `BROKER-RECOVERY` | opaque | artifacts/procurement-lab/broker-recovery.json | `resolved` | `False` | unknown |
-| `REPAIRED-HTTP` | opaque | artifacts/procurement-lab/http-contracts-repaired.json | `resolved` | `False` | unknown |
+| `FIRST-PG-TRX` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/first-procurement-tests/_39081a7221c7_2026-09-26_03_13_22_net10.0.trx | `resolved` | `False` | a79c095cb989e6338f65d9044808a7b8e6b42d44d5712184ddd9ef411b9e3dd7 |
+| `FIRST-HTTP` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-first.json | `resolved` | `False` | unknown |
+| `DIRECT-FLOW` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/direct-flow.json | `resolved` | `False` | unknown |
+| `FINAL-PROC-TRX` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/focused-final-results/_b8d927bdf806_2026-09-26_03_38_06_net10.0.trx | `resolved` | `False` | unknown |
+| `INVENTORY-TRX` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/test-results/_0c140fbf1ac6_2026-09-26_03_31_41_net10.0.trx | `resolved` | `False` | unknown |
+| `BROKER-RECOVERY` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/broker-recovery.json | `resolved` | `False` | unknown |
+| `REPAIRED-HTTP` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-repaired.json | `resolved` | `False` | unknown |
 | `FINAL-HTTP` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/http-contracts-final.json | `resolved` | `False` | bcf41254fc6c3317cae432b549cfac01916e20c23c0921054a5710560575936d |
 | `FINAL-SUPPLEMENTAL` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/supplemental-http.json | `resolved` | `False` | 3bba5dbe4e8db2a1917d03b1dd5f2891c3550b529a43f82b0c2b978a2f1023fe |
 | `FINAL-BROWSER` | opaque | .dev/workflows/2026-09-26-procurement-supplier-lab/evidence/browser-verification.json | `resolved` | `False` | 248f71c9335a59ae834cabe2db3496da166496468c5f5b0103d86ccc9952736c |
@@ -80,10 +80,11 @@ This is a projection of an existing record. The source snapshot is the lossless 
 
 ## History and limitations
 
-- All 13 previous-state entries and revision 14 remain in the exact JSON snapshot; the migration did not call an unsupported v2 terminal update.
+- All 13 previous-state entries and revision 14 remain in the path-rebound history projection; the migration did not call an unsupported v2 terminal update. The exact pre-rebinding bytes are retained by Git history.
 - `recorded_at` in each source history entry is the actual v2 operation time; projected task timestamps use first appearance and last content change observable there. They are not newly invented execution times.
 - Task model fields use the existing execution plan. Root model attribution is a configured default, and child attribution comes from the recorded invocation. Missing runtime metrics stay unknown.
 - Projected task `template_source` names the target artifact-format contract used for this conversion. It does not claim that a historical skill template generated these projected files.
 - All prior failed, blocked, deferred and not-executed entries remain in the source history, even when the final disposition changed.
-- At migration, 11 of 18 local-path references were present in the isolated checkout. Seven historical `resolved` references target ignored `artifacts/procurement-lab/` outputs absent from this checkout: `FIRST-PG-TRX`, `FIRST-HTTP`, `DIRECT-FLOW`, `FINAL-PROC-TRX`, `INVENTORY-TRX`, `BROKER-RECOVERY`, `REPAIRED-HTTP`. Their historical attribution is preserved, not upgraded to current availability.
+- All 18 reference targets now resolve to tracked files in this checkout. The seven repaired targets were matched by file name and, where the source supplied one, by its recorded SHA-256; the full 39-file evidence manifest passed a fresh SHA-256 read-back. This validates retention and paths, not the underlying product outcomes anew.
+- The manifest's current SHA-256 is `cd0ce3a3791e2e1da087b040bfb9f54ee599b0930cd9123b713df194830e55e1`. `FINAL-EVIDENCE-MANIFEST` retains the original historical digest in the v2 history; it does not describe these corrected manifest bytes.
 - Provider operations, owner review, push, PR, merge, deployment, cleanup and framework installation must be established by their own evidence.

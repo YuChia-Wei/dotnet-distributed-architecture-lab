@@ -6,8 +6,8 @@
 - branch: `codex/2026-09-26-procurement-supplier-lab`; base_branch: `main`
 - status: `completed` (v2 revision 14; completion applies to workflow-owned tasks only)
 - created_at: `2026-09-26T10:47:32+08:00` (locator); original v2 record created_at: `2026-09-26T02:44:16.013339+00:00`
-- updated_at: `2026-09-29T22:11:55+08:00` (migration); original v2 record updated_at: `2026-09-26T04:15:16.970345+00:00`
-- source: [exact v2 JSON](evidence/v2-source.workflow.json), SHA-256 `fe4a21c4469d3c5f6756a69fa2e6424d2d44a2deb661ab5150f83d805f530622`
+- updated_at: `2026-09-29T22:28:07+08:00` (retained-reference repair); original v2 record updated_at: `2026-09-26T04:15:16.970345+00:00`
+- source history: [path-rebound projection](evidence/v2-history.workflow.json), SHA-256 `09e5dbd788710360fbb7863783fb79dc4af8f73cd31750831eea3cb51401c50d`; original bytes remain in Git commit `f17128ca5e5cf76c27c23b2ed1c1110d19af4108`
 - stable ID map and complete history: [migration-map.md](migration-map.md)
 
 ## Scope and intent
