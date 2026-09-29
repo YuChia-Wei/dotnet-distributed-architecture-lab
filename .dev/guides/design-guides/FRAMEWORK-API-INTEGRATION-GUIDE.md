@@ -213,10 +213,10 @@ aggregate contract explicitly requires that cleanup after replay.
 
 ## Related Resources
 
-- `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md`
-- `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/mapper-standards.md`
-- `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/repository-standards.md`
-- `.ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`
-- `.ai/assets/tech-stacks/dotnet-backend/examples/outbox/README.md`
-- `.ai/assets/tech-stacks/dotnet-backend/examples/aspnet-core/Program.cs`
-- `.ai/assets/skills/slice-implementer/roles/outbox-sub-agent/sub-agent.yaml`
+- `.ai/core/knowledge/dotnet-backend/standards/coding-standards.md`
+- `.ai/core/knowledge/dotnet-backend/standards/coding-standards/mapper-standards.md`
+- `.ai/core/knowledge/dotnet-backend/standards/coding-standards/repository-standards.md`
+- `.ai/core/knowledge/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`
+- `.ai/core/knowledge/dotnet-backend/examples/outbox/README.md`
+- `.ai/core/knowledge/dotnet-backend/examples/aspnet-core/Program.cs`
+- `.ai/core/skills/slice-implementer/SKILL.md`

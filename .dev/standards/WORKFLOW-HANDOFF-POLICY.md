@@ -12,8 +12,8 @@ Design the checkpoint for the weakest credible executor that is authorized to
 perform the next action.
 
 The machine-readable contract is
-`WORKFLOW-HANDOFF-POLICY.yaml`. Use the skill-owned template at
-`.ai/assets/skills/ai-context-governance/templates/workflow-handoff-checkpoint-template.yaml`.
+`WORKFLOW-HANDOFF-POLICY.yaml`. Use the project-owned template at
+`.dev/standards/templates/workflow-handoff-checkpoint-template.yaml`.
 Register every durable instance in
 `.dev/workflows/handoff-checkpoints.yaml`; aggregate and hosted governance
 checks validate every registered checkpoint.
@@ -64,19 +64,17 @@ does not match the pinned commit.
 
 ## Critical Gate
 
-Before creating the checkpoint, run the repository critical gate. Record the
-exact command, exit code, observation time, SHA-256 of normalized complete
+Before creating the checkpoint, run the target critical gate selected at
+`.dev/project-config.yaml#validation.current_framework.local`. Record its exact
+configured command, exit code, observation time, SHA-256 of normalized complete
 output, total line count, and no more than the bounded tail allowed by the
-machine policy.
+machine policy. The recorded command must equal the configured command.
 
-The portable command is:
-
-```text
-bash .ai/scripts/check-all.sh --critical
-```
-
-An environment-specific Bash executable is permitted when the recorded command
-still invokes the same repository path and `--critical` mode.
+An `unconfigured` target gate blocks normal future handoff and admission. It
+cannot be recorded as a pass or treated as an observed failure eligible for the
+repair-only exception. Issue #23 owns selection, implementation, execution, and
+adoption of the future RC2 target gate. The one-time owner deferral for Issue #22
+is recorded in that adoption workflow and does not configure this gate.
 
 A successful gate permits normal continuation. A failed gate blocks
 continuation unless all of the following are true:
@@ -168,12 +166,12 @@ provider identities. Every checkpoint must record each category as `captured`
 or `blocked`. The selected attribution evidence must reference a captured
 fixture whose commit equals the selected and validated commit.
 
-The existing `GIT-COMMIT-POLICY` and `validate-git-commits.py` continue to
-govern repository-created local workflow commits. Do not broaden that validator
-to provider-native shapes until the required real fixtures exist. A
-provider-native commit that cannot satisfy the local validator must remain
-outside that validator's selected local-workflow range rather than be amended
-for normalization.
+The existing `GIT-COMMIT-POLICY` continues to govern repository-created
+local workflow commits. Its dedicated target validator is not configured in
+this RC2 installation; do not report automated commit-policy validation as
+passed. Provider-native shapes require the real fixtures described above
+before any target validator may accept them, and must not be amended for
+normalization.
 
 Repository-owned Copilot, Claude, or other provider settings must not disable,
 replace, or pin native attribution behavior without explicit owner approval and

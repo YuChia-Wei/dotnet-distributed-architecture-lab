@@ -59,20 +59,20 @@
 
 ### Phase 1: Understand the architecture
 1. Root `AGENTS.md` and `README.md` - repository rules and identity
-2. `.ai/assets/tech-stacks/dotnet-backend/shared/architecture-config.md` - architecture rules
-3. `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md` - non-negotiable rules
-4. `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md` - test rules
-5. `.ai/assets/skills/spec-compliance-validator/references/spec-compliance-rules.md` - spec compliance rules
+2. `.ai/core/knowledge/dotnet-backend/shared/architecture-config.md` - architecture rules
+3. `.ai/core/knowledge/dotnet-backend/shared/common-rules.md` - non-negotiable rules
+4. `.ai/core/knowledge/dotnet-backend/shared/testing-strategy.md` - test rules
+5. `.ai/core/skills/spec-compliance-validator/references/compliance.md` - spec compliance rules
 
 ### Phase 2: Learn by examples
-1. `.ai/assets/tech-stacks/dotnet-backend/examples/outbox/README.md` - outbox flow
-2. `.ai/assets/tech-stacks/dotnet-backend/examples/reference/bdd-gwt-test-template.md` - BDD/GWT test style
-3. `.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md` - mocking pattern
-4. `.ai/assets/tech-stacks/dotnet-backend/examples/dto/README.md` - DTO layout
+1. `.ai/core/knowledge/dotnet-backend/examples/outbox/README.md` - outbox flow
+2. `.ai/core/knowledge/dotnet-backend/examples/reference/bdd-gwt-test-template.md` - BDD/GWT test style
+3. `.ai/core/knowledge/dotnet-backend/standards/coding-standards/test-standards.md` - mocking pattern
+4. `.ai/core/knowledge/dotnet-backend/examples/dto/README.md` - DTO layout
 
 ### Phase 3: Avoid common mistakes
-1. `.ai/assets/tech-stacks/dotnet-backend/references/COMMON-PITFALLS.MD` - cross-cutting pitfalls
-2. `.ai/assets/tech-stacks/dotnet-backend/references/FAILURE-CASES.MD` - failure patterns
+1. `.ai/core/knowledge/dotnet-backend/references/COMMON-PITFALLS.MD` - cross-cutting pitfalls
+2. `.ai/core/knowledge/dotnet-backend/references/FAILURE-CASES.MD` - failure patterns
 
 ## Key Principles Quick Reference
 
@@ -118,7 +118,7 @@ public readonly record struct ProductId(string Value);
 ### Use Case and Optional Dispatch Handler
 
 Read
-[`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../../../.ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
+[`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../../../.ai/core/knowledge/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD)
 before applying a runtime-specific Handler convention. The Use Case owns
 application orchestration; a Handler exists only for a real dispatch/message
 entry and maps one delivery input to one Use Case invocation.
@@ -174,7 +174,7 @@ public sealed class CreateProductUseCaseTests
 ## Quick Start Template for LLM Tasks
 
 When you need to implement a new feature:
-1. Find the closest example in `.ai/assets/tech-stacks/dotnet-backend/examples/`
+1. Find the closest example in `.ai/core/knowledge/dotnet-backend/examples/`
 2. Follow naming rules:
    - Use case: `<Operation><Aggregate>UseCase`
    - Use Case: `I<Operation><Aggregate>UseCase` and
@@ -205,8 +205,8 @@ Please follow these references to learn the coding style:
 
 1. Repository context: root AGENTS.md and README.md
 2. Learning path: .dev/guides/learning-guides/LEARNING-PATH.md
-3. Code templates: .ai/assets/tech-stacks/dotnet-backend/references/CODE-TEMPLATES.MD
-4. Prompts: .ai/assets/
+3. Code templates: .ai/core/knowledge/dotnet-backend/references/CODE-TEMPLATES.MD
+4. Selected skills and knowledge: .ai/core/skills/ and .ai/core/knowledge/
 
 Important rules:
 - Preserve neutral DDD, Specification by Example, BDD/GWT, and Design by Contract semantics while honoring target-selected .NET providers

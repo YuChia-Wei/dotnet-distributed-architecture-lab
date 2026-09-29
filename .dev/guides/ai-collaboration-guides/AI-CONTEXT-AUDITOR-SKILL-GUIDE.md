@@ -11,10 +11,9 @@
 - 檢查 `.ai`、`.dev`、`.agents`、`.claude` 是否漂移；
 - 比較「一般知識獨立分析」與「套用 repo skill／policy 分析」的差異；
 - 追蹤前一次 audit finding 是否仍然存在。
-- 對 schema-2 customization ledger 執行唯讀 active-context baseline 與獨立 post-upgrade verification。
+- 對目前選定的 target authority 與安裝選擇執行唯讀 context 檢查；需要獨立 verification 時以實際授權與既有 assessment policy 為準。
 
-Auditor 不修改 ledger，也不能用升級前 baseline 取代升級後驗證；共同契約見
-`.ai/assets/skills/ai-context-governance/references/semantic-customization-lifecycle.md`。
+Auditor 不修改 target authority，也不能用先前 baseline 取代後續獨立驗證；目前選定能力見 `.ai/core/skills/ai-context-auditor/SKILL.md` 與 `.dev/ai-context/skills.md`。
 
 ## 預設掃描邊界
 
@@ -77,7 +76,7 @@ Assessment id 使用 `ASM-YYYYMMDD-HH-xxx`；日期與小時對應建立時間�
 
 Standalone audit 先建立 `codex/assessment/<lowercase-assessment-id>` 或 runtime 對應 branch，再建立 locator/report。Commit 僅包含 assessment-owned artifacts 與 assessment index，不得混入 audited context 修正。Draft locator 的 resume 欄位負責中斷續作。若 audit 已屬於授權中的 governance workflow，使用該 workflow branch，不另外建立 assessment branch。
 
-Assessment locator 以 `.dev/assessments/templates/` 為準；report template 以 `.ai/assets/skills/ai-context-auditor/templates/` 為準。舊 audit workflow templates 僅保留給 historical workflow 的 `template_source`。
+Assessment locator 以 `.dev/assessments/templates/` 與 `.dev/standards/ASSESSMENT-ARTIFACT-POLICY.md` 為準；report 結構以該 policy 與選定的 `.ai/core/skills/ai-context-auditor/SKILL.md` 為準。歷史 `template_source` 只描述既有紀錄。
 
 ## 後續整改
 
@@ -86,6 +85,6 @@ Auditor 永遠對被稽核的 context 保持唯讀，不會直接修正 findings
 - AI context ownership、language、wrapper 或 routing → `ai-context-governance`；
 - findings 分流、多階段 AI context 整改、複檢協調與結案 → `ai-context-governance`；
 - 產品 source code → `code-reviewer`；
-- framework 複製後的 target repo truth 重建 → `ai-context-init`。
+- target repo truth 重建 → target owner 與 `ai-context-governance`，依目前安裝選擇和 project policy 判斷。
 
 Auditor 對被稽核的 context 始終保持唯讀；它只能更新自己負責的 assessment locator、report、evidence 與 assessment index，這不構成修正授權。

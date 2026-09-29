@@ -5,6 +5,7 @@ This policy defines the repository-wide discovery and metadata contract for dura
 ## Ownership Boundary
 
 - Every skill that can create a workflow owns the templates and domain-specific layout it creates.
+- This target owns the shared AI-context locator shape at `.dev/standards/templates/workflow-locator-template.yaml`; skill-specific plan and task layouts remain with their owning skill.
 - A skill may define its workflow topic, task IDs, report set, and artifact root.
 - The repository owns only the minimum discovery, identity, time, relationship, and lifecycle contract in this document.
 - `software-development-orchestrator` owns software-development workflow templates. It does not own templates for AI context maintenance, repository initialization, or every other workflow kind.
@@ -31,7 +32,7 @@ artifact_root: ".dev/workflows/YYYY-MM-DD-topic"
 entrypoint: "workflow-plan.md"
 created_at: "2026-07-10T18:17:55+08:00"
 updated_at: "2026-07-10T18:17:55+08:00"
-template_source: ".ai/assets/skills/<owner-skill>/templates/workflow-locator-template.yaml"
+template_source: ".dev/standards/templates/workflow-locator-template.yaml"
 template_version: "1.0.0"
 branch: "<runtime-prefix>/YYYY-MM-DD-topic"
 base_branch: "main"
@@ -69,7 +70,7 @@ For workflows created on or after 2026-07-11, `branch` and `base_branch` are als
 - Keep the discovery locator at `.dev/workflows/<workflow-id>/workflow.yaml` when a non-default root is used.
 - The locator `entrypoint` must resolve inside the declared artifact root and must lead to current progress, next work, blockers, and deferred items without repeating repository analysis.
 - Do not use ignored, generated, dependency, temporary, or repository-external locations.
-- Do not store runtime workflow records inside `.ai/assets/skills/`, `.agents/skills/`, or `.claude/skills/`.
+- Do not store runtime workflow records inside `.ai/core/skills/`, `.agents/skills/`, or `.claude/skills/`.
 - Do not let two active workflows share one artifact root.
 - Treat `artifact_root` as immutable. If relocation is necessary, update the locator and every active reference and record the origin in the destination artifacts.
 

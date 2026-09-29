@@ -1,6 +1,6 @@
-metadata_version: 3
+metadata_version: 4
 id: bdd-gwt-test-designer
-version: 0.1.0
+version: 0.2.0
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -42,3 +42,22 @@ operations:
   - Review classification, acceptance coverage and implementation handoff limits
   instructions: references/review.md
   implementation_status: implemented
+knowledge_consumption:
+- id: common-test-design
+  package: engineering-common
+  version: 0.1.0
+  operations: [design, review]
+  resources:
+  - engineering-rule-catalog
+  - member:references/GWT-TEST-HANDOFF-CONTRACT.md
+  requirement: optional
+  on_missing: unavailable
+- id: dotnet-test-design
+  package: dotnet-backend
+  version: 0.1.0
+  operations: [design, review]
+  resources:
+  - engineering-rule-catalog
+  - member:standards/coding-standards/test-standards.md
+  requirement: optional
+  on_missing: unavailable

@@ -27,26 +27,13 @@ dotnet sln MyApp.slnx add tests/Order.Tests/Order.Tests.csproj --solution-folder
 
 ### 2. 安裝已發布的 AI Context Package
 
-不要直接從 framework repository 複製 `.ai/` 或 `.dev/`。請從對應版本的
-GitHub Release 下載 package archive 與外部 `.sha256` sidecar，先驗證
-checksum，再解壓縮至 target repository 以外的位置。
-
-從解壓縮後的 envelope root 依 `INSTALL.md` 執行：
-
-```bash
-python -m pip install -r requirements.txt
-python payload/.ai/scripts/plan-ai-context-package-apply.py \
-  --package-root . \
-  --target-root /path/to/target-repository
-```
-
-先審查 dry-run 的新增、取代、移除、重新命名與 reconciliation 結果；只有在
-所有 reconciliation item 都已按 operation ID 處置後，才加入 `--apply`。
-需要互動式進度時可額外加入 `--progress`；進度只會寫入 stderr，不會混入
-既有的 stdout plan/receipt 輸出。
-乾淨安裝完成後執行 `repo-structure-sync`，版本升級則使用
-`ai-context-upgrader`。完整流程與 provenance 邊界以 package 內的
-`INSTALL.md` 為準。
+使用已發布版本的官方安裝說明，先由 catalog 與 selection 產生候選 subset，
+再以固定 engine 的 API2 `plan` 和 `apply` 安裝。審查 plan 的新增、
+替換與保留路徑；不要直接複製 framework repository 的舊 `.ai/assets/`
+或執行 RC1 的 `plan-ai-context-package-apply.py`、`ai-context-init`、
+`ai-context-upgrader` 命令。正式安裝會產生 `.ai/framework.lock`，
+target 的選擇存於 `.ai/custom/installation.json`，專案規則仍由 target
+擁有。具體命令與輸入格式以該版本的官方安裝說明為準。
 
 ### 3. 設定基礎相依
 - WolverineFx

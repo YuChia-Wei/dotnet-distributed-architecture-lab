@@ -1,0 +1,228 @@
+content_package_version: 1
+id: engineering-common
+version: 0.1.0
+entrypoint: README.md
+members:
+- path: README.md
+  kind: index
+- path: content-package.yaml
+  kind: metadata
+- path: engineering-rule-catalog.yaml
+  kind: rule-catalog
+- path: references/ENGINEERING-IDENTITY-CONTRACT.md
+  kind: knowledge
+- path: references/GWT-TEST-HANDOFF-CONTRACT.md
+  kind: knowledge
+- path: references/PROMPT-PORTABILITY-RULES.md
+  kind: knowledge
+resources:
+- id: engineering-rule-catalog
+  path: engineering-rule-catalog.yaml
+  kind: rule-catalog
+  rule_ids:
+  - AICTX-EVIDENCE-001
+  - ASSESSMENT-ARTIFACT-001
+  - TECH-SELECT-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - context-audit
+  - context-maintenance
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:README.md
+  path: README.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - context-audit
+  - context-maintenance
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:references/ENGINEERING-IDENTITY-CONTRACT.md
+  path: references/ENGINEERING-IDENTITY-CONTRACT.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - context-audit
+  - context-maintenance
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:references/GWT-TEST-HANDOFF-CONTRACT.md
+  path: references/GWT-TEST-HANDOFF-CONTRACT.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - context-audit
+  - context-maintenance
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:references/PROMPT-PORTABILITY-RULES.md
+  path: references/PROMPT-PORTABILITY-RULES.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - context-audit
+  - context-maintenance
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+dependencies:
+  required: []
+  optional: []
+references:
+- from: README.md
+  resource_id: engineering-rule-catalog
+  target:
+    package: engineering-common
+    path: engineering-rule-catalog.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/ENGINEERING-IDENTITY-CONTRACT.md
+  target:
+    package: engineering-common
+    path: references/ENGINEERING-IDENTITY-CONTRACT.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/GWT-TEST-HANDOFF-CONTRACT.md
+  target:
+    package: engineering-common
+    path: references/GWT-TEST-HANDOFF-CONTRACT.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/PROMPT-PORTABILITY-RULES.md
+  target:
+    package: engineering-common
+    path: references/PROMPT-PORTABILITY-RULES.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: engineering-rule-catalog
+  target:
+    package: engineering-common
+    path: engineering-rule-catalog.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/ENGINEERING-IDENTITY-CONTRACT.md
+  resource_id: engineering-rule-catalog
+  target:
+    package: engineering-common
+    path: engineering-rule-catalog.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable

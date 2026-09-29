@@ -1,6 +1,6 @@
-metadata_version: 3
+metadata_version: 4
 id: local-change-implementer
-version: 0.1.0
+version: 0.2.0
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -36,3 +36,24 @@ operations:
   - Remaining uncertainty or a concrete out-of-scope decision handoff
   instructions: references/implement.md
   implementation_status: implemented
+knowledge_consumption:
+- id: common-local-change
+  package: engineering-common
+  version: 0.1.0
+  operations: [implement]
+  resources:
+  - engineering-rule-catalog
+  requirement: optional
+  on_missing: unavailable
+- id: dotnet-local-change
+  package: dotnet-backend
+  version: 0.1.0
+  operations: [implement]
+  resources:
+  - engineering-rule-catalog
+  - member:standards/coding-standards/aggregate-standards.md
+  - member:standards/coding-standards/repository-standards.md
+  - member:standards/coding-standards/test-standards.md
+  - member:standards/coding-standards/usecase-standards.md
+  requirement: optional
+  on_missing: unavailable

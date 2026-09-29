@@ -142,9 +142,9 @@ def _diagnostic(contract: Mapping[str, object], registry: Mapping[str, object], 
         if source_requirements.is_file() or not envelope_requirements.is_file()
         else envelope_requirements
     )
-    requirements_path = str(governed_requirements.resolve())
+    requirements_path = str(governed_requirements.resolve()) if governed_requirements.is_file() else None
     recovery = None
-    if selected and missing:
+    if selected and missing and requirements_path:
         recovery = f'"{selected.executable}" -m pip install -r "{requirements_path}"'
     return {
         "schema_version": "1.0", "outcome": "blocked-by-environment", "reason_code": reason,

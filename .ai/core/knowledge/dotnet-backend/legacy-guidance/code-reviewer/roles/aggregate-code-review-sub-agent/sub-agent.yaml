@@ -1,0 +1,27 @@
+content_kind: reference-only-technical-guidance
+title: Aggregate Code Review Guidance
+activation: none; consuming this member does not dispatch a worker or authorize execution
+applicability: Use only with the target-selected architecture, technology and applicable registered rules; this historical
+  guidance is not a separate normative owner.
+inputs:
+- aggregate implementation scope
+- aggregate tests when available
+- invariant and event-sourcing expectations
+outputs:
+- aggregate-focused review findings
+- invariant and event-structure issues
+- aggregate test strategy notes
+technical_guidance:
+- Remain read-only, preserve the reviewed subject and report missing specialist coverage
+- Check replay and event-driven state transitions only when event sourcing is adopted; require concrete APIs only when selected
+- Always verify aggregate contract and invariant handling
+- Do not drift into architecture redesign unless escalation is needed
+- Do not require a target-unselected contract, guard, date, mapper, or DI helper API
+references:
+- references/review-playbook.md
+- references/review-prompt.md
+- target-authority:ai-assets-skills-code-reviewer-references-review-routing.yaml
+- target-authority:ai-assets-skills-code-reviewer-skill.yaml
+examples:
+- references/review-playbook.md
+- references/review-prompt.md

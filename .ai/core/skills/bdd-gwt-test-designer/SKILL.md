@@ -23,3 +23,7 @@ Scenario design does not grant code-edit or execution authority. Authorized
 test implementation can receive the scenario mapping and existing permission
 without another design ceremony or duplicate approval. This optional
 collaboration needs no other installed skill to finish the scenario output.
+
+Optional selected knowledge follows the metadata-4 allowlist and each operation's
+installed-resource protocol. Selection does not adopt target rules or prove
+specialist coverage; common work remains available when knowledge is absent.

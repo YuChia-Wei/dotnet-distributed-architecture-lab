@@ -2,268 +2,37 @@
 
 [Traditional Chinese](AGENTS.zh-TW.md)
 
-This document is the canonical English agent-facing root collaboration guide. `AGENTS.zh-TW.md` is its Traditional Chinese (Taiwan) translation.
+This is the canonical English collaboration guide for the distributed-commerce lab. `AGENTS.zh-TW.md` is its Traditional Chinese (Taiwan) translation. A deeper `AGENTS.*` file governs its own subtree. Precedence is: direct user authorization, deeper guide, this guide, then general documents.
 
-## Scope & Precedence
+## Project and framework authority
 
-- This document is the root collaboration guide for AI agents and humans working in this repository.
-- This repository is a .NET distributed-commerce architecture lab that also carries a reusable AI collaboration context framework.
-- If a subdirectory has another `AGENTS.*` file, the deeper file takes precedence.
-- Command priority: User/Approval > Subfolder AGENTS > This file > Other general documents.
-- If an IDE MCP server is configured and provides refactoring capabilities, prefer the IDE MCP refactoring tools.
+This repository is a .NET distributed-commerce architecture lab. Products, Orders, Inventory and Procurement are its four current business bounded contexts. SupplierSandbox and SupplierMock are external-system examples; the two Vue frontends and YARP are current application surfaces. Use `MQArchLab.slnx`, project files, source, tests, Compose and current `.dev/` project records to verify a fact. `.dev/project-config.yaml` is a generated inventory and yields to those sources. Do not copy source-framework product facts into this target.
 
-## Current Framework and Target Authority
+[Current framework contract](.dev/ai-context/CURRENT-FRAMEWORK.md) identifies the selected RC2 installation and its actual state. [Target engineering rules](.dev/ai-context/TARGET-ENGINEERING-RULES.md) own the retained fourteen full rule statements, twenty request routes, four customizations and target Git boundaries. Installed skills and common/.NET knowledge are separate from target adoption. A package or wrapper does not establish a rule's applicability or a validation pass. The official lock is installer-owned; never hand-edit it. Select only the saved, pinned candidate and the original-name Codex and Claude entries declared by the actual installation.
 
-Read [.dev/ai-context/CURRENT-FRAMEWORK.md](.dev/ai-context/CURRENT-FRAMEWORK.md)
-and its exact binding for this Codex-only 0.19.0-rc.1 pilot. Managed packages live
-under .ai/core/skills with generated framework-* Codex entries. Ordinary use
-requires a clean unchanged subject admitted by the independent target review
-receipt. Installation and selected checks alone are insufficient. Until admission,
-only this authorized pilot's reconciliation and verification run.
+For Issue #22, the owner authorized a one-time destructive RC2 replacement and explicitly deferred S6, runtime and upgrade/recovery experiments. Record those checks as `deferred-by-owner`; static checks do not become behavioral acceptance. This does not restore or activate CI. Historical RC1 metadata, wrappers and backups are not current authority.
 
-For this installation, the current binding and target registry select layout,
-entry points and validation commands ahead of conflicting legacy layout
-instructions. Retained .NET rules, four customizations, product truth, Git
-attribution and independent review remain mandatory. Legacy provenance identifies
-the retained rule/support baseline, not this installation. The candidate is
-unpublished; a stable release and its upgrade route remain unestablished.
-Claude has no adapter for this candidate. Withdrawn entries remain in
-.dev/ai-context/history/v0.18.0/runtime; do not discover or execute that history.
+## Product decisions
 
-## Default Execution Principles
+- Inventory uses EF Core and its selected stock/reservation outbox boundaries. Products and Orders retain Dapper. Orders selects event sourcing. Procurement and the supplier lab have their own current requirements and operation guides.
+- Preserve plain xUnit v3 with recognizable Given-When-Then tests and the explicit BDDfy opt-out. Select Moq or NSubstitute from the test project's actual configuration.
+- Retired analyzer and runtime-validation projects remain inactive. Reusable examples, source includes and templates are guidance until this target adopts them.
+- Keep target Issue-first authorization, LF policy, scoped `.codex/agents` tracking, actual AI attribution and the exact historical Git exception described in the target authority.
 
-- Do not invent project truth, authorization, execution, or validation. State material assumptions, uncertainty, and tradeoffs. Ask only when an unresolved direction materially affects the outcome.
-- Implement the smallest coherent change that satisfies the accepted scope and verifiable completion criteria. Avoid speculative features, abstractions, and context.
-- Touch only files required by the task. Avoid unrelated cleanup, and remove artifacts introduced by your own changes.
-- Establish verifiable completion criteria before execution. Iterate until they pass, or report concrete blockers and any skipped validation.
-- Continue ordinary reversible implementation and repair within existing authorization. Ask only for missing authority, material scope changes, or unresolved owner decisions.
-- For delegation, use the evidence tier selected by `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md`. Routine bounded work retains actual invocation and results with one tracked writer per worktree; terminal, high-risk, external validation, and adoption operations retain their full evidence requirements.
+## Progressive loading and routes
 
-## Repository Identity
+Start with the request, Git/worktree state, this guide and named Issue or artifacts. Read `.dev/ARCHITECTURE.md`, `.dev/project-config.yaml`, the relevant requirements/specifications and operations guide when product facts matter. Follow [the active skill registry](.dev/ai-context/skills.md) for one selected skill or operation. Read its installed entry and only the references needed for the request. For AI context changes, read `.dev/standards/AI-CONTEXT-BOUNDARY.md` and `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`. Code discovery prefers an available fresh code graph; verify material claims against tracked files, then use direct search if the graph is unavailable or incomplete.
 
-This repository exists to:
+AI context governance and migration route to `ai-context-governance`; audit routes to `ai-context-auditor`. Development orchestration, architecture, GWT design, code review, requirements, specifications, problem frames, implementation and compliance use their matching selected skills. Generic skill instructions do not silently replace target .NET knowledge or effective rule predicates. Before .NET work, resolve the applicable target authority and selected knowledge binding; disclose unavailable specialist coverage. Old `ai-context-init` and `ai-context-upgrader` wrappers are not active target routes.
 
-- demonstrate a distributed commerce system built with .NET 10, DDD, Clean Architecture, CQRS, PostgreSQL, WolverineFx, and message-oriented integration;
-- maintain the active `Products`, `Orders`, and `Inventory` bounded contexts under `src/`;
-- keep the retired target-owned analyzer and runtime-validation projects absent unless a later owner-approved workflow explicitly reintroduces them;
-- carry reusable AI Agent context, skills, sub-agent prompts, and workflow rules without allowing their source-repository facts to replace this repository's product truth;
-- separate reusable context under `.ai/` from target-repository truth under source, deployment configuration, and `.dev/`.
+## Workflow, Git and validation
 
-Treat `MQArchLab.slnx`, `global.json`, `*.csproj`, `src/`, `tests/`, and `docker-compose/` as primary evidence for current product truth. Treat `.dev/project-config.yaml` as a generated inventory that must yield to those sources when they differ. Reusable examples under `.ai/` and `.dev/standards/examples/` are guidance unless current repository evidence adopts them.
+Use `.dev/standards/WORKFLOW-GATE-POLICY.md` when work changes source-of-truth, AI context, routes or multiple stages. In workflow mode, use `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`, `.dev/TEAM-GIT-FLOW-RULES.MD` and a dedicated branch before material edits. For commits, use `.dev/standards/GIT-COMMIT-POLICY.md` and its YAML authority. Validate the complete planned message from a file before committing when a suitable validator is available. Record actual model/runtime attribution; the RC1 pinned target validator has retired and no new target-local automated commit validator is configured.
 
-## Quick Start for AI Agents
+Define observable acceptance criteria and use the narrowest meaningful checks. Report `passed`, `failed`, `blocked`, `deferred` and `not-applicable` truthfully. Keep independent review, CI, runtime execution, package installation, target rule adoption, push, PR, merge, Issue/Project state, tag and publication distinct. Reconcile target-owned authority before applying a framework change. Preserve unrelated changes, user data and historical evidence. Do not use fixture or static results as actual product/runtime evidence.
 
-1. Start with the request, current Git/worktree state, this file, and explicitly named artifacts.
-2. Read `README.md`, `.dev/ARCHITECTURE.md`, and `.dev/project-config.yaml` when the task needs product or repository facts; use `MQArchLab.slnx`, project files, and `docker-compose/docker-compose.yml` to verify runtime or package facts.
-3. Use `.dev/ai-context/skills.md` as the canonical skill registry and expand only for the active task or phase. Execute an explicitly classified generated runtime entry directly; load its full canonical source only for metadata, maintenance, or discrepancy resolution.
-4. Read `.dev/standards/AI-CONTEXT-BOUNDARY.md` and `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md` before moving or rewriting AI context.
-5. Use `.dev/guides/ai-collaboration-guides/README.MD` for human-facing skill and workflow guides, and `.ai/INDEX.MD` for agent-facing AI asset navigation.
+## Navigation and language
 
-## CLI Execution Routing
+`.ai/` contains the selected managed skill and knowledge packages, explicit project configuration and installer-owned lock. `.agents/skills/` and `.claude/skills/` are runtime discovery entries. `.dev/` contains product truth, standards, target authority, operations, workflows and human guides. `README.md` is the Traditional Chinese product entry; `README.en.md` is its English counterpart; `CLAUDE.md` is a thin runtime pointer.
 
-After higher-priority policy selects cross-boundary CLI execution, follow
-`.ai/assets/shared/CLI-EXECUTION-ROUTING-CONTRACT.md`. Do not create or update
-the ignored `.dev/ai-context/local/cli-execution-routing.yaml` implicitly.
-
-## Mandatory Workflows
-
-### Workflow Gate
-
-1. Read `.dev/standards/WORKFLOW-GATE-POLICY.md` when work may affect source-of-truth, AI context, skill routing, wrapper sync, or more than one stage.
-2. Create workflow artifacts proactively when the gate requires workflow mode.
-3. Keep small, local, single-pass changes in direct mode.
-
-Workflow artifact rules:
-
-- Follow `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`.
-- Follow `.dev/TEAM-GIT-FLOW-RULES.MD` for branch naming, checkpoint continuation, push, and merge strategy.
-- Create or switch to a dedicated workflow branch before creating workflow artifacts or making material workflow changes. Default Codex naming is `codex/<workflow-id>`.
-- Create `.dev/workflows/<workflow-id>/workflow.yaml` as the discovery locator.
-- Use a full-date `YYYY-MM-DD-<topic>` workflow ID for new work.
-- Let the workflow-owning skill define its plan, task, report templates, task IDs, and declared artifact root.
-- Default artifacts to `.dev/workflows/<workflow-id>/`; when a skill uses another repository-relative root, keep the locator under `.dev/workflows/`.
-- Record ISO 8601 `created_at` and `updated_at` metadata on new workflow and task artifacts.
-- Record `branch` and `base_branch` on workflows created on or after 2026-07-11.
-- Do not store runtime workflow records under canonical skill or runtime wrapper directories.
-- Treat an explicitly requested merge/push before completion as a checkpoint handoff and keep the workflow active. Resume a push-only handoff from the pushed branch; after a checkpoint merge, start a new dedicated continuation branch from the updated target.
-- Merge workflow branches with `--no-ff` by default unless the user explicitly requests another strategy.
-
-### Git Commit Policy
-
-1. Follow `.dev/standards/GIT-COMMIT-POLICY.md`.
-2. Use issue-bound `<type>(#<issue-number>): <summary>` (or comma-separated issue references) when an issue number exists.
-3. Use scope-bound `<type>(<scope>): <summary>` when no issue number exists. A literal `|` is not part of the prospective grammar.
-4. For workflow-stage commits, include `Why`, `What`, `Validation`, and `Workflow` body sections.
-5. For the current installation, run the selected command and independent
-   admission in .dev/ai-context/CURRENT-FRAMEWORK.md. Its Git check invokes
-   .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py
-   with the workflow range and ID, preserving prospective AI-signature and
-   subject-grammar boundaries plus the exact historical attestation.
-   The old validate-target-ai-context.py remains legacy-package support.
-   The package Git validator alone does not replace the target overlay.
-
-### AI Context Governance
-
-Use `ai-context-governance` for:
-
-- universal versus tech-stack-specific context classification;
-- AI documentation cleanup;
-- language policy changes;
-- skill routing changes;
-- runtime wrapper sync;
-- context migration planning or execution.
-
-Do not route pure AI documentation governance work to `bdd-gwt-test-designer`.
-
-### AI Context Audit
-
-Use `ai-context-auditor` for read-only AI context health and drift analysis. A conversational analysis may remain transient direct mode; create a dedicated workflow and branch only when the user asks to persist the audit as a repository report.
-
-- Default to AI context and governance surfaces.
-- Exclude `src/`, `tests/`, and other product implementation trees.
-- If the user asks to scan product source or test code, stop and route that work to `code-reviewer` instead of expanding the audit.
-- Keep audit findings separate from remediation; use `ai-context-governance` to coordinate the AI-context remediation lifecycle after remediation is authorized.
-- Multi-pass or sub-agent analysis alone does not require workflow artifacts when the result stays in the conversation and no repository mutation or remediation occurs.
-- For a durable report-only audit, keep audited surfaces read-only and commit only auditor-owned workflow and report artifacts.
-
-### Development Workflow Orchestration
-
-Use `software-development-orchestrator` when software-development work needs multi-stage planning, development skill routing, sub-agent coordination, validation checkpoints, or commit checkpoints.
-
-The skill may coordinate downstream skills, but it must not replace their domain responsibilities.
-
-Do not route general AI-context audit, documentation governance, or repository initialization through `software-development-orchestrator`; use their owning skills and skill-specific workflow templates. Historical records may retain the retired `dev-workflow` identifier.
-
-### Repo Init / Template Adaptation
-
-Use the retained ai-context-init only for its original published legacy format and explicit recovery scope. The retained ai-context-upgrader has the same boundary. Neither handles this candidate, changes its lock, or initializes its installed state.
-
-The skill must:
-
-1. inventory the target repository from file-backed facts;
-2. identify copied template or historical source-project truth;
-3. refresh target-specific `AGENTS.md`, `.dev/`, and necessary `.ai/` entry docs;
-4. preserve framework-level collaboration rules unless the target repo clearly invalidates them;
-5. remove or rewrite source-repo-specific requirements, specs, operations docs, workflow artifacts, and ADRs.
-
-Treat `.ai/assets/skills/ai-context-init/references/migration-boundaries.md` as the authoritative migration boundary. Historical records may retain the retired `repo-structure-sync` identifier.
-
-### Code Review
-
-Use the current generic code-reviewer for code review. For .NET backend code or dotnet-backend implementation guidance, additionally apply the retained target extension below.
-
-When code review applies:
-
-1. Complete the applicable effective-rule preflight before loading review guidance.
-2. Follow the current package instructions; load .ai/assets/skills/code-reviewer/references/review-routing.yaml first when selecting the retained .NET extension.
-3. Select every matching route in this order: explicit scope, type hierarchy or interface, path, then the general C# fallback.
-4. Load only the canonical references and applicable finding rule IDs selected by those routes. Do not treat `CODE-REVIEW-INDEX.MD`, `CODE-REVIEW-CHECKLIST.md`, shared checklists, or `checklist-reference.md` as a second semantic authority.
-5. After route selection, evaluate role bindings and load `role-execution.md` only when needed. Direct execution is the default; delegation requires bounded eligibility and evidence.
-6. Build a scoped checklist comparison table and categorize issues as `CRITICAL`, `MUST FIX`, or `SHOULD FIX`.
-7. If tests apply in the target repo, run the narrowest meaningful test command.
-
-### Spec Compliance
-
-For .NET implementation compliance in problem-frame workflows:
-
-1. Run `spec-compliance-validator`.
-2. Gate: coverage must be 100%.
-3. If coverage is not 100%, return to implementation or test generation before claiming completion.
-4. New CBF structural validation alone is not .NET implementation compliance; retain target compliance rules and evidence.
-
-## Skill Routing
-
-- Current target skill registry: `.dev/ai-context/skills.md`
-- Current runtime wrappers: `.agents/skills/README.md`
-- Claude legacy duties and unsupported candidate notice: `.claude/skills/README.md`
-- Human-facing skill guides: `.dev/guides/ai-collaboration-guides/README.MD`
-
-Current package source is .ai/core/skills/<id>/SKILL.md; its exact managed bytes are authoritative over the generated adapter. Apply CURRENT-FRAMEWORK.md and explicit target rule bindings alongside it. .ai/assets/skills retains selected target guidance and legacy support; old top-level specifications do not replace current instructions.
-
-Use these boundaries:
-
-| Need | Skill |
-| --- | --- |
-| Multi-stage software-development workflow orchestration, development skill routing, validation and commit checkpoints | `software-development-orchestrator` |
-| Read-only AI context health, drift, and structure analysis with conversational or persisted output | `ai-context-auditor` |
-| AI context cleanup, prompt boundary, language policy, wrapper sync | `ai-context-governance` |
-| Explicit initialization or recovery of original published legacy formats only | `ai-context-init` |
-| .NET backend architecture design | `ddd-ca-hex-architect` |
-| GWT scenario and assertion design | `bdd-gwt-test-designer` |
-| .NET backend code review | `code-reviewer` |
-| Requirement authoring | `requirement-author` |
-| Spec authoring | `spec-author` |
-| Problem frame authoring | `problem-frame-author` |
-| Bounded implementation slice | `slice-implementer` |
-| Local technical code change | `local-change-implementer` |
-
-## File & Directory Index
-
-### Root Entry Docs
-
-| Path | Description |
-| :--- | :--- |
-| `README.md` | Human-facing Traditional Chinese repository identity and local run guide |
-| `README.en.md` | English translation of the repository identity and local run guide |
-| `AGENTS.md` | Canonical English agent-facing root collaboration guide |
-| `CLAUDE.md` | Thin Claude Code project-memory entry that imports `AGENTS.md` |
-| `AGENTS.zh-TW.md` | Traditional Chinese (Taiwan) translation of the root collaboration guide |
-
-### AI Assets (`.ai/`)
-
-| Path | Description |
-| :--- | :--- |
-| `.ai/INDEX.MD` | Agent-facing AI asset index |
-| `.ai/README.MD` | `.ai/` purpose and boundary guide |
-| `.ai/core/skills/` | Exact managed current skill packages |
-| `.ai/custom/framework.json` | Explicit target package configuration |
-| `.ai/assets/` | Retained target rules, references and legacy support |
-| `.ai/assets/shared/` | Universal shared AI context |
-| `.ai/assets/tech-stacks/dotnet-backend/` | .NET backend-specific context |
-| `.ai/assets/skills/code-reviewer/references/review-routing.yaml` | Canonical .NET backend code review routing contract |
-| `.ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD` | .NET backend building block reference |
-| `.ai/assets/skills/` | Selected retained target guidance and legacy skill support |
-| `.ai/assets/sub-agent-role-prompts/` | Shared canonical roles; skill-private roles live under their owning skill |
-| `.ai/scripts/` | Transitional AI workflow scripts, context governance checks, and local tool orchestration helpers |
-
-### Project Knowledge and Governance (`.dev/`)
-
-| Path | Description |
-| :--- | :--- |
-| `.dev/README.MD` | Human-facing project knowledge purpose and boundary guide |
-| `.dev/INDEX.md` | Project knowledge file and directory catalog |
-| `.dev/ARCHITECTURE.md` | Evidence-backed current product architecture |
-| `.dev/project-config.yaml` | Generated target-repository inventory |
-| `.dev/standards/` | Governance, context, workflow, coding, review, and structure standards |
-| `.dev/guides/` | Human-facing guides |
-| `.dev/adr/` | ADR governance and retained decisions |
-| `.dev/requirement/` | Requirements and requirement authoring materials |
-| `.dev/domain-language/` | Domain ubiquitous language templates and target-repo vocabulary area |
-| `.dev/specs/` | Specification organization and retained specs |
-| `.dev/operations/` | Operations docs and operations document guides |
-| `.dev/workflows/` | Workflow artifacts |
-
-### Runtime Skill Wrappers
-
-| Path | Description |
-| :--- | :--- |
-| `.agents/skills/README.md` | Current runtime wrapper index |
-| `.agents/skills/framework-<skill>/` | Current generated Codex entry |
-| `.claude/skills/README.md` | Claude unsupported-candidate and legacy-duty index |
-| `.claude/skills/<skill>/` | Original legacy-format duties only |
-
-### Product And Tooling Roots
-
-| Path | Description |
-| :--- | :--- |
-| `MQArchLab.slnx` | Product solution containing bounded-context and product test projects |
-| `src/` | Products, Orders, Inventory, shared contracts, building blocks, and an empty Shared Kernel placeholder project |
-| `tests/` | Products and Orders product/domain tests |
-| `docker-compose/` | Local product, database, broker, and observability topology |
-
-## Language Rules
-
-- Agent-facing context should prefer English unless the source material is inherently human-facing Traditional Chinese.
-- Human-facing guides and README content should prefer Traditional Chinese Taiwan usage.
-- Keep runtime adapters thin. Generated runtime entries must remain synchronized projections of canonical skill content; they are never a second authority.
-- Prefer folder placement over per-file metadata for context classification.
+Agent-facing execution contracts prefer English; human-facing guides may use Traditional Chinese (Taiwan). Keep `AGENTS.zh-TW.md` structurally and normatively aligned with this file. Runtime entries remain projections of their installed package, never a second semantic owner.

@@ -6,7 +6,7 @@
 
 `dotnet-mq-arch-lab` 是以 .NET 10 建立的分散式商務範例專案，用來實作與驗證 DDD、Clean Architecture、CQRS、事件驅動整合、Outbox、Event Sourcing，以及以訊息佇列進行 bounded-context 協作的做法。
 
-Repository 同時維護一套可重用的 AI collaboration context；產品真相以 `src/`、`tests/`、`docker-compose/` 與 `.dev/` 中經驗證的專案文件為準，可攜式 AI 規則則以 `.ai/assets/` 為準。
+Repository 同時維護一套可重用的 AI collaboration context；產品真相以 `src/`、`tests/`、`docker-compose/` 與 `.dev/` 中經驗證的專案文件為準，可攜式 AI 規則則以 `.ai/core/knowledge/` 與本專案的 `.dev/ai-context/` 權威文件 為準。
 
 ## Bounded Contexts
 
@@ -159,7 +159,7 @@ docker exec kafka /opt/kafka/bin/kafka-console-consumer.sh `
 dotnet test MQArchLab.slnx
 ```
 
-本 repository 目前沒有 active target-owned analyzer 或 runtime-validator projects。它們已在受治理的 v0.9 AI context 升級中退役，v0.13 framework 也已移除先前的 bundled mechanical-validation provider。現在僅保留 `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/` 下的 reference-only recipes；它們未被選用、未加入 `MQArchLab.slnx`、未接入 build，也未啟用。
+本 repository 目前沒有 active target-owned analyzer 或 runtime-validator projects。它們已在受治理的 v0.9 AI context 升級中退役，v0.13 framework 也已移除先前的 bundled mechanical-validation provider。現在僅保留 `.ai/core/knowledge/dotnet-backend/tooling/on-demand-mechanical-validation/` 下的 reference-only recipes；它們未被選用、未加入 `MQArchLab.slnx`、未接入 build，也未啟用。
 
 ## 前台與管理後台
 
@@ -189,9 +189,10 @@ dotnet test MQArchLab.slnx
 ## AI 協作入口
 
 - `AGENTS.md`：canonical agent collaboration guide
-- `.ai/INDEX.MD`：canonical AI asset index
-- `.ai/assets/skills/README.MD`：canonical skill registry
-- `.agents/skills/README.md`、`.claude/skills/README.md`：runtime wrappers
-- `.dev/guides/ai-collaboration-guides/README.MD`：human-facing 使用指南
+- `.ai/INDEX.MD`：AI package 與 knowledge 索引
+- `.dev/ai-context/skills.md`：目前選定的 skill 路由
+- `.dev/ai-context/CURRENT-FRAMEWORK.md`：RC2 安裝狀態與本目標的採用邊界
+- `.dev/ai-context/TARGET-ENGINEERING-RULES.md`：保留的目標規則與客製化
+- `.agents/skills/README.md`、`.claude/skills/README.md`：runtime 入口
 
-AI context 更新後若專案真相被來源 framework 覆蓋，使用 `ai-context-init` 依 repository evidence 重建，不得直接沿用來源 repo 的產品名稱、credentials、ports、domains 或 workflow records。歷史紀錄中的 `repo-structure-sync` 名稱維持原樣。
+AI context 更新後若專案真相與來源 framework 衝突，依目前 repository evidence 修正目標權威，不得沿用來源 repo 的產品名稱、credentials、ports、domains 或 workflow records。歷史紀錄中的 `repo-structure-sync` 名稱只代表當時紀錄。

@@ -53,10 +53,11 @@ tool, database, timestamp, and executed environment explicitly.
 
 ## Runner And Portability Contract
 
-`.ai/scripts/check-all.sh` retains its existing literal multiline declaration
-format. `shell-assets.yaml` owns the set of required child scripts and commands,
-and `validate-shell-assets.py` fails closed when the runner and manifest differ.
-Formatting-contract fixtures must change with any future runner syntax change.
+The legacy `.ai/scripts/check-all.sh` runner, `shell-assets.yaml`, and
+`validate-shell-assets.py` describe source-only validation and are not target
+commands. Target framework validation is selected by
+`.dev/project-config.yaml#validation.current_framework.local`; while unconfigured,
+normal target handoff remains blocked and no validation pass is implied.
 
 The current framework portability baseline requires the same required profile
 to pass without `dotnet` on Windows Git Bash and hosted Ubuntu. macOS remains

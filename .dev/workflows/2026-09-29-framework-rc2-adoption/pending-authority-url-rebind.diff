@@ -1,0 +1,83 @@
+--- a/.dev/ai-context/TARGET-ENGINEERING-RULES.md
++++ b/.dev/ai-context/TARGET-ENGINEERING-RULES.md
+@@ -79,7 +79,7 @@
+ ```
+ 
+ The repository-owned source include is under
+-[`source-includes/domain/`](../source-includes/domain/). It is reference-only
++[`source-includes/domain/`](../../.ai/core/knowledge/dotnet-backend/source-includes/domain/). It is reference-only
+ framework material, not a published package or complete reference product. An
+ adopting target owns SDK compatibility, compilation, behavior tests, invocation
+ evidence, and upgrade reconciliation before claiming executable validation.
+@@ -196,7 +196,7 @@
+ verified runtime pipeline physically completes it. This does not make
+ `IUnitOfWork` a default Use Case dependency and does not weaken the
+ multi-Aggregate, same-bounded-context exception above. See
+-[Transactional Messaging Standards](transactional-messaging-standards.md) for
++[Transactional Messaging Standards](../../.ai/core/knowledge/dotnet-backend/standards/coding-standards/transactional-messaging-standards.md) for
+ the single completion-owner, inbox/outbox, and adapter contract.
+ 
+ ### ASSESSMENT-ARTIFACT-001
+@@ -417,7 +417,7 @@
+ 
+ **Mandatory**: All tests must use Given-When-Then semantics and recognizable step names. Arrange-Act-Assert (3A) must not replace GWT. Use Case and integration tests default to BDDfy; plain xUnit may implement the same GWT structure only when the target team explicitly opts out of that package.
+ 
+-`.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../../../../../../.dev/specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
++`.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
+ 
+ #### Step Methods And Scenario Readability
+ 
+@@ -451,7 +451,7 @@
+ eventual assertion may wait for an observable asynchronous outcome, but must not
+ repeat the command/query that caused it.
+ 
+-Use the [GWT handoff contract](../../../../shared/GWT-TEST-HANDOFF-CONTRACT.md)
++Use the [GWT handoff contract](../../.ai/core/knowledge/engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md)
+ to preserve scenario/data-row IDs, source/AC bindings and every Then-to-assertion
+ mapping. Parameterized cases are valid when each row remains identifiable and
+ uses the same behavior and assertion responsibilities. A generated report,
+@@ -461,7 +461,7 @@
+ #### Default BDDfy Form
+ 
+ This excerpt's fixture and step implementations are in the
+-[runnable step-method example](../../examples/bdd-step-methods/README.md).
++[runnable step-method example](../../.ai/core/knowledge/dotnet-backend/examples/bdd-step-methods/README.md).
+ It exposes the behavior-bearing data while keeping mechanics inside steps.
+ 
+ ```csharp
+@@ -508,7 +508,7 @@
+ 
+ **Mandatory**: All tests must use Given-When-Then semantics and recognizable step names. Arrange-Act-Assert (3A) must not replace GWT. Use Case and integration tests default to BDDfy; plain xUnit may implement the same GWT structure only when the target team explicitly opts out of that package.
+ 
+-`.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../../../../../../.dev/specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
++`.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../specs/tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
+ 
+ #### Step Methods And Scenario Readability
+ 
+@@ -542,7 +542,7 @@
+ eventual assertion may wait for an observable asynchronous outcome, but must not
+ repeat the command/query that caused it.
+ 
+-Use the [GWT handoff contract](../../../../shared/GWT-TEST-HANDOFF-CONTRACT.md)
++Use the [GWT handoff contract](../../.ai/core/knowledge/engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md)
+ to preserve scenario/data-row IDs, source/AC bindings and every Then-to-assertion
+ mapping. Parameterized cases are valid when each row remains identifiable and
+ uses the same behavior and assertion responsibilities. A generated report,
+@@ -552,7 +552,7 @@
+ #### Default BDDfy Form
+ 
+ This excerpt's fixture and step implementations are in the
+-[runnable step-method example](../../examples/bdd-step-methods/README.md).
++[runnable step-method example](../../.ai/core/knowledge/dotnet-backend/examples/bdd-step-methods/README.md).
+ It exposes the behavior-bearing data while keeping mechanics inside steps.
+ 
+ ```csharp
+@@ -600,7 +600,7 @@
+ NSubstitute is the `TEST-MOCK-001` profile default. Before generating or
+ reviewing mocks, resolve `testing.mocking` through
+ `.dev/project-config.yaml#technologySelections` and
+-[Target Technology Selection Policy](../../../../../../.dev/standards/TECHNOLOGY-SELECTION-POLICY.md).
++[Target Technology Selection Policy](../standards/TECHNOLOGY-SELECTION-POLICY.md).
+ 
+ - When no target selection exists, use NSubstitute.
+ - When an evidenced target selection exists, use that library consistently.

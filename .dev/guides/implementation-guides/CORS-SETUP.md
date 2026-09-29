@@ -36,7 +36,7 @@ app.UseCors("BrowserClient");
 
 Adapt the policy name, headers, methods, and origin source to the target repository. Do not combine credentialed requests with wildcard origins.
 
-See `.ai/assets/tech-stacks/dotnet-backend/shared/common-rules.md` for shared rules.
+See `.ai/core/knowledge/dotnet-backend/shared/common-rules.md` for shared rules.
 
 ## Verification
 

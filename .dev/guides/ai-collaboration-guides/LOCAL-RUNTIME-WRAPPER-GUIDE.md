@@ -4,7 +4,7 @@
 
 ## 原則
 
-- repo 內的 canonical source 以 `.ai/assets/` 為主
+- repo 內的 selected canonical skill 與 knowledge 以 `.ai/core/` 為主，project-owned role contracts 在 `.ai/custom/roles/`
 - repo 內目前的 wrapper roots 是 `.agents/skills/` 與 `.claude/skills/`
 - 本機 runtime 設定只是讓 agent 指到 repo wrapper，不是 canonical source 本身
 - prompt wrappers 與 runtime skill wrappers 是不同層次，不應混為一談
@@ -59,9 +59,9 @@ setx CODEX_HOME ""
 
 ## 建議使用順序
 
-1. 先讀 `.ai/assets/` canonical source
-2. top-level skill 優先讀 `.ai/assets/skills/README.MD` 與對應 `skill.yaml`
-3. shared bounded worker role contracts 優先讀 `.ai/assets/sub-agent-role-prompts/`；private role 則讀 owning skill 的 `roles/`
+1. 先讀 `.ai/core/` 中已選定的 skill 與 knowledge，以及適用的 target authority
+2. top-level skill 優先讀 `.dev/ai-context/skills.md` 與對應 `.ai/core/skills/<skill>/SKILL.md`
+3. project-owned bounded worker role contracts 讀 `.ai/custom/roles/`；selected skill 的細節讀 owning skill references
 4. 再分辨要讀的是 canonical source 還是 runtime skill wrapper
 5. 再讀對應 agent 的 wrapper
 6. Codex / agent runtime 若需 skill wrapper，優先讀 `.agents/skills/`

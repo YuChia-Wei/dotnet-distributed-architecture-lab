@@ -1,5 +1,0 @@
-# Runtime metadata only. Canonical source: `.ai/assets/skills/ddd-ca-hex-architect/skill.yaml`
-interface:
-  display_name: "DDD CA HEX Architect"
-  short_description: "Design and review DDD, CA and HEX architecture artifacts"
-  default_prompt: "Use $ddd-ca-hex-architect to design or review the requested architecture artifact using DDD, CA and HEX methods and target-selected technology rules. Preserve the submitted artifact in review mode."

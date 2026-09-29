@@ -32,7 +32,7 @@
 - 使用 `tasks/<task-id>.json`。
 - 新 workflow ID 使用 `YYYY-MM-DD-<topic>[-NN]`。
 - artifact 預設存放於 `.dev/workflows/<workflow-id>/`，也可由 `software-development-orchestrator` template 宣告其他 repository-relative root；locator 始終保留於 `.dev/workflows/`。
-- locator 與 task 的共通欄位遵循 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`；development artifact body 使用 `software-development-orchestrator` 自有 templates。
+- locator 與 task 的共通欄位遵循 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`；development artifact body 依選定的 `software-development-orchestrator` workflow template 與 project policy。
 - Workflow branch 依 `.dev/TEAM-GIT-FLOW-RULES.MD` 正向選擇線性或 merge-commit topology；未完成時的 integration/push 保留 active/pending，並分別記錄 pushed branch 或 integration 後的 continuation branch。
 
 ## Artifact 與 Skill 對應
@@ -206,6 +206,6 @@ implementer 至少要知道：
 - `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md`
 - `OPTIONAL-MINIMAL-WORKFLOW-MODE.md`
 - `../workflows/README.MD`
-- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
-- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-review-report-template.md`
-- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json`
+- `../../../.ai/core/skills/software-development-orchestrator/templates/workflow.md`
+- `../../../.ai/core/skills/software-development-orchestrator/schemas/workflow-record.schema.json`
+- `../../standards/templates/workflow-locator-template.yaml`

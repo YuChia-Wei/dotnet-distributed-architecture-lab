@@ -1,0 +1,17 @@
+schema_version: "1.0"
+component_id: dotnet-backend
+purpose: Selected .NET architecture and scenario-design guidance.
+routes:
+  architecture:
+    references:
+      - architecture-playbook.md
+      - source-map.md
+  test-design:
+    references:
+      - ../standards/coding-standards/test-standards.md
+      - ../shared/testing-strategy.md
+  transactional-messaging:
+    references:
+      - ../standards/coding-standards/transactional-messaging-standards.md
+      - ../shared/testing-strategy.md
+loading: "Choose the applicable route, then only the relevant standards. Consume effective rules first; preserve explicit target decisions and compatibility aliases."

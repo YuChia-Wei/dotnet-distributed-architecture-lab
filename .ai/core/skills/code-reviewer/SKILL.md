@@ -23,3 +23,7 @@ in the conversation; export prose only when a destination and write are authoriz
 
 The declared `implemented` status means these instructions exist in the package.
 It is not evidence of invocation, independent review, correctness or acceptance.
+
+Optional selected knowledge follows the metadata-4 allowlist and each operation's
+installed-resource protocol. Selection does not adopt target rules or prove
+specialist coverage; common work remains available when knowledge is absent.

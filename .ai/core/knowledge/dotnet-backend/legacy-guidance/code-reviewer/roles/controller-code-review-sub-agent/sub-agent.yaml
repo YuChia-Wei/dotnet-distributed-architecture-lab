@@ -1,0 +1,26 @@
+content_kind: reference-only-technical-guidance
+title: Controller Code Review Guidance
+activation: none; consuming this member does not dispatch a worker or authorize execution
+applicability: Use only with the target-selected architecture, technology and applicable registered rules; this historical
+  guidance is not a separate normative owner.
+inputs:
+- controller or endpoint scope
+- DTO and HTTP contract expectations
+- related controller tests when available
+outputs:
+- controller-focused review findings
+- HTTP semantics and DTO-boundary issues
+- controller test coverage notes
+technical_guidance:
+- Remain read-only, preserve the reviewed subject and report missing specialist coverage
+- Assess controller responsibilities and business-logic placement against the target-selected architecture
+- HTTP status and input validation semantics must be explicit
+- Do not load test standards unless controller tests or test-quality findings are in scope
+references:
+- references/review-playbook.md
+- references/review-prompt.md
+- target-authority:ai-assets-skills-code-reviewer-references-review-routing.yaml
+- target-authority:ai-assets-skills-code-reviewer-skill.yaml
+examples:
+- references/review-playbook.md
+- references/review-prompt.md

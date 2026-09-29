@@ -1,0 +1,1777 @@
+{
+  "selection_version": 2,
+  "catalog": {
+    "identity": "catalog:1:0.19.0-rc.2:aad927328c20b08c8445e8ad1792eadd8ecc3466:eb997697e9cd8b348092773176162dbdb564ded7d52bef663fde80b98c427d9b",
+    "catalog_sha256": "dcb27930e7b2c4bd6040b9d34fdc4876e8d10b8b6192b3a6be2fbf2f36b5155e",
+    "files_sha256": "2c094cabeb5d27d639e651a9241d1616c48ed76c310443b701ae0cfc424054ce"
+  },
+  "skills": [
+    "adr",
+    "ai-context-auditor",
+    "ai-context-governance",
+    "bdd-gwt-test-designer",
+    "code-reviewer",
+    "ddd-ca-hex-architect",
+    "diagnostic-analyst",
+    "lesson",
+    "local-backlog",
+    "local-change-implementer",
+    "pr",
+    "problem-frame-author",
+    "requirement-author",
+    "slice-implementer",
+    "software-development-orchestrator",
+    "spec-author",
+    "spec-compliance-validator",
+    "standards-promotion"
+  ],
+  "knowledge": [
+    "dotnet-backend",
+    "engineering-common"
+  ],
+  "adapters": [
+    "claude",
+    "codex"
+  ],
+  "skill_naming": "original",
+  "bindings": [
+    {
+      "id": "mq-route-01-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "command"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-01; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-01-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "command"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-01; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-02-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "specification"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "draft",
+          "normalize"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "specification-markdown"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-02; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-02-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "specification"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "draft",
+          "normalize"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "specification-markdown"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-02; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-03-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-03; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-03-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-03; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-04-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "generic"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-04; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-04-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "generic"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-04; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-05-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "review"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "dotnet-mixed-review"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-05; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-05-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "review"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "dotnet-mixed-review"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-05; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-06-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-test"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-06; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-06-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-test"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-06; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-07-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "problem-framing"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "draft",
+          "review-draft"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "problem-frame-yaml"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-07; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-07-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "problem-framing"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "draft",
+          "review-draft"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "problem-frame-yaml"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-07; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-08-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "test-design"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "design",
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "gherkin-feature"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-08; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-08-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "test-design"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "design",
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "gherkin-feature"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-08; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-09-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "review"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-review"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-09; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-09-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "review"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-review"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-09; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-10-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "architecture"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "design",
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "architecture-decision"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-10; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-10-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "architecture"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "design",
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "architecture-decision"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-10; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-11-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "project-file"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-11; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-11-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "project-file"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-11; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-12-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "requirements"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "draft",
+          "normalize"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "requirement-markdown"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-12; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-12-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "requirements"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "draft",
+          "normalize"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "requirement-markdown"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-12; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-13-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "test-design"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "design",
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-test"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-13; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-13-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "test-design"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "design",
+          "review"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-test"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-13; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-14-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "compliance-validation"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "assess-runtime",
+          "plan-validation",
+          "review-semantics"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "problem-frame-and-dotnet"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-14; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-14-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "compliance-validation"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "assess-runtime",
+          "plan-validation",
+          "review-semantics"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "problem-frame-and-dotnet"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-14; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-15-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "sql"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-15; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-15-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "sql"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-15; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-16-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "yaml-config"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-16; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-16-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "local-change"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "yaml-config"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-16; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-17-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "generic"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-test"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-17; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-17-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "generic"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-test"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-17; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-18-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "reactor"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-18; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-18-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "reactor"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-18; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-19-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "query"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-19; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-19-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "implementation"
+        ],
+        "execution_modes": [
+          "query"
+        ],
+        "operations": [
+          "implement"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "csharp-production"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-19; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-20-dotnet-backend",
+      "package": "dotnet-backend",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "specification"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "draft",
+          "normalize"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "specification-json"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-20; complete normative statements for dotnet-backend required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AGGREGATE-ES-001",
+        "ARCH-UOW-001",
+        "CONTRACT-SEMANTICS-001",
+        "DELETE-PURGE-001",
+        "DELETE-SOFT-001",
+        "MAP-EVENTS-001",
+        "MESSAGING-TX-001",
+        "PROJECT-GRAMMAR-001",
+        "TEST-BDDFY-001",
+        "TEST-GWT-001",
+        "TEST-MOCK-001"
+      ],
+      "required_for_coverage": true
+    },
+    {
+      "id": "mq-route-20-engineering-common",
+      "package": "engineering-common",
+      "resources": [
+        "engineering-rule-catalog"
+      ],
+      "use_as": "normative-rule",
+      "selector": {
+        "capabilities": [
+          "specification"
+        ],
+        "execution_modes": [
+          "direct"
+        ],
+        "operations": [
+          "draft",
+          "normalize"
+        ],
+        "path_prefixes": [
+          "."
+        ],
+        "technology_profile": "dotnet-backend",
+        "file_types": [
+          "specification-json"
+        ]
+      },
+      "authorities": [
+        {
+          "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+          "sha256": "0be639196c72d7bdf869fedde37f1176738db9983e54f057bbf13ec6b62d9437",
+          "selector": "target knowledge request route mq-route-20; complete normative statements for engineering-common required_rule_ids"
+        }
+      ],
+      "required_rule_ids": [
+        "AICTX-EVIDENCE-001",
+        "ASSESSMENT-ARTIFACT-001",
+        "TECH-SELECT-001"
+      ],
+      "required_for_coverage": true
+    }
+  ]
+}

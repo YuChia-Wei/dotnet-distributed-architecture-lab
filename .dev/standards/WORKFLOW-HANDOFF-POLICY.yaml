@@ -2,7 +2,7 @@ schema_version: "1.1"
 checkpoint_schema_version: "1.0"
 checkpoint_registry_path: ".dev/workflows/handoff-checkpoints.yaml"
 release_phase_contract_path_template: ".dev/releases/{version}/release-phase-checks.yaml"
-critical_command_pattern: '^(?:bash|(?:"[^"]*bash(?:\.exe)?"|[^\s]*bash(?:\.exe)?))\s+(?:\./)?\.ai/scripts/check-all\.sh\s+--critical$'
+critical_command_binding: ".dev/project-config.yaml#validation.current_framework.local"
 model_sources:
   - runtime-reported
   - provider-reported

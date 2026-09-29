@@ -1,8 +1,3 @@
-# Codex entries
+# Codex skill entries
 
-The [target registry](../../.dev/ai-context/skills.md) lists the eighteen exact
-generated framework-* entries and target rule bindings. The candidate is
-Codex-only; ordinary use requires independent target admission.
-ai-context-init and ai-context-upgrader remain solely for original legacy-format
-duties and explicit recovery. Replaced entries are preserved outside active
-discovery in .dev/ai-context/history/v0.18.0/runtime.
+Use the [selected target registry](../../.dev/ai-context/skills.md) and the installer-owned lock to discover the eighteen RC2 entries by their original skill IDs. The target's [effective engineering rules](../../.dev/ai-context/TARGET-ENGINEERING-RULES.md) and exact knowledge bindings govern .NET applicability. No entry is ready merely because it is named in the registry.

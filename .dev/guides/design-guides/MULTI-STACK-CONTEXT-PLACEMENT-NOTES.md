@@ -13,19 +13,18 @@ React / Vite 不應放進目前 dotnet-backend profile，也不應出現在 fram
 ## 未來可能的收納方式
 
 ```text
-.ai/assets/
-  shared/
-  tech-stacks/
-    dotnet-backend/
-    frontend-react-vite/
-    <language-or-stack-profile>/
+.ai/core/knowledge/
+  engineering-common/
+  dotnet-backend/
+  frontend-react-vite/
+  <language-or-stack-profile>/
 ```
 
-- `shared/`
+- `engineering-common/`
   - 與語言、framework 無關的 AI 協作、軟體工程與架構方法。
-- `tech-stacks/dotnet-backend/`
+- `dotnet-backend/`
   - .NET backend 實作、review 與 validation context。
-- `tech-stacks/frontend-react-vite/`
+- `frontend-react-vite/`
   - 僅在未來有足夠 frontend 規範、skills、validation 與維護需求時建立。
 - `.dev/`
   - 目標 repo 實際採用的 frontend/backend 架構與 project truth。

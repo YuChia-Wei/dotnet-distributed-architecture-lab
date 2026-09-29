@@ -1,0 +1,27 @@
+content_kind: reference-only-technical-guidance
+title: Aggregate Guidance
+activation: none; consuming this member does not dispatch a worker or authorize execution
+applicability: Use only with the target-selected architecture, technology and applicable registered rules; this historical
+  guidance is not a separate normative owner.
+inputs:
+- aggregate name or domain target
+- behavior and invariant requirements
+- event sourcing expectations
+outputs:
+- aggregate implementation guidance
+- domain events, value objects, and entities guidance
+- validation notes
+technical_guidance:
+- Aggregate state changes only via event application
+- Constructors must not directly set state
+- Events are immutable and carry metadata
+- Use contract-style validation for aggregate and entities
+references:
+- references/implementation-playbook.md
+- ../../../../shared/common-rules.md
+- ../../../../shared/architecture-config.md
+- ../../../../shared/testing-strategy.md
+- ../../../../shared/dto-conventions.md
+- ../../../../shared/domain-rules.md
+examples:
+- references/implementation-playbook.md

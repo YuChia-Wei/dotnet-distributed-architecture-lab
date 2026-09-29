@@ -178,16 +178,14 @@ workManagement:
       - work-authorization
     mergeGate: required
 validation:
-  routine:
-    argv:
-      - python
-      - -B
-      - .dev/ai-context/tooling/validate-target-ai-context.py
-      - --allow-unfinalized
-      - --workflow-id
-      - 2026-09-06-ai-context-v0-16-0-upgrade
+  current_framework:
     local:
-      mode: manual
+      mode: unconfigured
+      reason: "RC2 target critical gate awaits explicit target selection and implementation in Issue #23; an unconfigured gate blocks normal future handoff and admission."
+  routine:
+    local:
+      mode: unconfigured
+      reason: RC1-only target validator retired during RC2 adoption; no replacement target-local automated validator has been selected.
     ci:
       mode: unconfigured
 architecture:

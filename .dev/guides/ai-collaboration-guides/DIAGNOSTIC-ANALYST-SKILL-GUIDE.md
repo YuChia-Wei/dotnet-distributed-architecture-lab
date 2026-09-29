@@ -34,6 +34,6 @@
 
 ## 契約與驗證
 
-規則由 [canonical skill](../../../.ai/assets/skills/diagnostic-analyst/skill.yaml)、[診斷契約](../../../.ai/assets/skills/diagnostic-analyst/references/diagnostic-contract.md) 與 [輸出契約](../../../.ai/assets/skills/diagnostic-analyst/references/output-contract.md) 管理；Codex 與 Claude wrapper 只提供入口。
+規則由 [selected skill](../../../.ai/core/skills/diagnostic-analyst/SKILL.md) 與 [診斷參考](../../../.ai/core/skills/diagnostic-analyst/references/diagnose.md) 管理；Codex 與 Claude wrapper 只提供入口。
 
 JSON validator 會檢查必填欄位、推論前提及 evidence digest。通過只表示紀錄符合契約；仍需要審查實驗是否真的執行、觀察範圍是否完整，以及控制介入能否排除其他解釋。修復、PR、合併及發布沿用各自的授權邊界。

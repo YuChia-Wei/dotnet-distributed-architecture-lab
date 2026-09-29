@@ -1,0 +1,27 @@
+content_kind: reference-only-technical-guidance
+title: Use Case Test Guidance
+activation: none; consuming this member does not dispatch a worker or authorize execution
+applicability: Use only with the target-selected architecture, technology and applicable registered rules; this historical
+  guidance is not a separate normative owner.
+inputs:
+- use case behavior or acceptance criteria
+- scenario plan from bdd-gwt-test-designer when available
+- target use case implementation scope
+outputs:
+- use case test implementation guidance or code
+- assertion mapping notes
+- test coverage gaps or TODO items
+technical_guidance:
+- Do not invent behavior beyond the source of truth
+- No BaseTestClass
+- Use mandatory Given-When-Then structure and naming; follow the default xUnit + BDDfy profile unless the target team explicitly
+  opts out, and never fall back to 3A
+references:
+- references/test-playbook.md
+- references/test-generation-guidance.md
+- ../../../../shared/testing-strategy.md
+- ../../../../shared/common-rules.md
+- target-authority:ai-assets-skills-bdd-gwt-test-designer-skill.yaml
+examples:
+- references/test-playbook.md
+- references/test-generation-guidance.md

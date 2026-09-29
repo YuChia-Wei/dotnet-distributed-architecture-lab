@@ -2,18 +2,18 @@
 
 Related portable baseline contract: `ENG-IDENTITY-001`.
 
-This source-governance standard assigns canonical ownership classifications to
-reusable AI-context engineering identities and defines how consumers resolve
-them without creating a second semantic owner.
+This standard assigns canonical ownership classifications to selected
+AI-context engineering identities and defines how consumers resolve them
+without creating a second semantic owner.
 
 ## Ownership Model
 
-- `.ai/assets/shared/` owns portable cross-technology framework baseline
+- `.ai/core/knowledge/engineering-common/` owns portable cross-technology framework baseline
   concepts, rules, constraints, and abstract enforcement capabilities.
-- `.ai/assets/tech-stacks/<profile>/` owns portable profile-specific defaults,
+- `.ai/core/knowledge/<profile>/` owns portable profile-specific defaults,
   rules, constraints, technology bindings, and bundled tooling. The canonical
   .NET binding contract is
-  `.ai/assets/tech-stacks/dotnet-backend/references/ENGINEERING-IDENTITY-BINDINGS.MD`.
+  `.ai/core/knowledge/dotnet-backend/references/ENGINEERING-IDENTITY-BINDINGS.MD`.
 - `.dev/standards/` owns source governance, rule strength and applicability
   policy, ownership classification, and the identity registry. A current
   registry record with a legacy `canonical_path` under `.dev/standards/` is
@@ -30,17 +30,18 @@ them without creating a second semantic owner.
   validators, providers, Diagnostics, commands, and target configuration are
   derived consumers or enforcement mechanisms. They never become normative
   semantic owners through repetition or activation.
-- `.dev/standards/AI-CONTEXT-OWNERSHIP.yaml` is the machine-readable registry.
-  It resolves each record to exactly one canonical owner. Add conflicted or
-  cross-cutting identity families incrementally instead of attempting an
-  unreviewed bulk migration.
+- The selected target rules, full statements, strengths, and applicable
+  customizations are recorded in `.dev/ai-context/TARGET-ENGINEERING-RULES.md`.
+  The official installation selection binds their IDs to the selected
+  knowledge packages and this target authority. An unresolved identity or
+  authority binding fails closed.
 
 ## Governance Term Routing
 
-The machine-readable registry's `governance_term_routing` section is an owner
-route index, not a glossary or second definition authority. A consumer uses the
-qualified term on first use, follows the declared canonical owner, and may use
-the listed shorthand only inside the same clearly qualified section.
+The governance term routes below are an owner route index, not a glossary or
+second definition authority. A consumer uses the qualified term on first use,
+follows the declared canonical owner, and may use the listed shorthand only
+inside the same clearly qualified section.
 
 | Namespace | Qualified terms | Definition owner |
 | --- | --- | --- |
@@ -77,20 +78,20 @@ mutation.
 
 ## Rule Catalogs
 
-- `.ai/assets/shared/governance/engineering-rule-catalog.yaml` is the canonical
+- `.ai/core/knowledge/engineering-common/engineering-rule-catalog.yaml` is the canonical
   portable baseline for the registered universal rules. Its complete normative
   text is an LF-normalized anchored extraction, while the source-governance
   section remains provenance and governance evidence.
-- `.ai/assets/tech-stacks/<profile>/engineering-rule-catalog.yaml` is a
+- `.ai/core/knowledge/<profile>/engineering-rule-catalog.yaml` is a
   resolver-ready exact projection. For profile rules, the moved profile Markdown
   path and anchor remain the single semantic owner; the catalog is not a second
   owner and retains the exact source section, hashes, and stable selector.
 - Catalogs preserve existing identities. They do not allocate a path-derived
   rule or constraint ID. A migrated profile-baseline document without a stable
   ID is explicitly `identity-allocation-required` and must remain unpacketized.
-- A routine resolver selects records by stable ID from the catalog and the
-  freshness-validated effective state. It does not scan a directory of Markdown
-  files to reconstruct semantics.
+- A routine consumer selects records by stable ID from the selected catalog
+  and freshness-validated target authority binding. It does not scan a directory of Markdown files
+  to reconstruct semantics.
 
 ## Identity Model
 
@@ -99,11 +100,11 @@ stable; the model does not require a bulk renaming migration.
 
 | Kind | Field and stable form | Canonical owner | Required relationships |
 | --- | --- | --- | --- |
-| Engineering concept | `concept_id`: `CONCEPT-...` | cross-technology baseline record under `.ai/assets/shared/` | may support one or more rules |
-| Normative rule | `rule_id`: existing registered format or new `RULE-...` | classified baseline record under `.ai/assets/shared/` or `.ai/assets/tech-stacks/<profile>/` | references one or more concepts; may yield constraints |
-| Observable constraint | `constraint_id`: `CONSTRAINT-...` | classified baseline record under `.ai/assets/shared/` or `.ai/assets/tech-stacks/<profile>/` | references a rule; may be enforced by capabilities and bindings |
-| Abstract enforcement capability | `capability_id`: `CAPABILITY-...` | cross-technology baseline capability record under `.ai/assets/shared/` | may enforce one or more constraints |
-| Technology binding | `binding_id`: `BINDING-...` | selected profile record under `.ai/assets/tech-stacks/<profile>/` | references exactly one constraint and capability; may name provider or Diagnostic details |
+| Engineering concept | `concept_id`: `CONCEPT-...` | cross-technology baseline record under `.ai/core/knowledge/engineering-common/` | may support one or more rules |
+| Normative rule | `rule_id`: existing registered format or new `RULE-...` | classified baseline record under `.ai/core/knowledge/engineering-common/` or `.ai/core/knowledge/<profile>/` | references one or more concepts; may yield constraints |
+| Observable constraint | `constraint_id`: `CONSTRAINT-...` | classified baseline record under `.ai/core/knowledge/engineering-common/` or `.ai/core/knowledge/<profile>/` | references a rule; may be enforced by capabilities and bindings |
+| Abstract enforcement capability | `capability_id`: `CAPABILITY-...` | cross-technology baseline capability record under `.ai/core/knowledge/engineering-common/` | may enforce one or more constraints |
+| Technology binding | `binding_id`: `BINDING-...` | selected profile record under `.ai/core/knowledge/<profile>/` | references exactly one constraint and capability; may name provider or Diagnostic details |
 
 Concepts, rules, and constraints are semantic subjects. Abstract capabilities
 and technology bindings are enforcement records: they can be changed for a
@@ -128,11 +129,10 @@ names the affected constraint plus its capability/binding evidence.
   requires an explicit owner-approved `supersedes` relationship; compatibility
   and migration records reference the existing identity rather than creating a
   temporary alternate ID.
-- The registry resolves the canonical baseline path, anchor, and catalog
-  selector for each record. A current record with a legacy
-  `.dev/standards/` `canonical_path` is `transitional-unmigrated` until the
-  migration matrix relocates it. Portable consumers and target-effective
-  packets cite the same ID; no alternate normative statement is implied.
+- The selected knowledge catalog and installation bindings resolve the
+  canonical baseline path, selector, and target authority for each adopted
+  rule. Consumers cite the same stable ID; no alternate normative statement
+  is implied. Missing or stale binding evidence remains unresolved.
 
 ## Rule Strength
 
@@ -169,12 +169,12 @@ mechanism for each package family.
 Every registered derived consumer must:
 
 - identify the canonical rule with `Rule IDs:` or an equivalent explicit source declaration;
-- link to the registry-resolved canonical owner instead of independently redefining ownership;
+- link to the selected knowledge owner and target authority binding instead of independently redefining ownership;
 - preserve the registered strength and applicability when it summarizes the rule;
 - keep examples clearly illustrative.
 
-An effective-rule packet consumer uses the catalog record selected by the
-resolver; it does not treat a derived consumer, copied summary, or a directory
-scan as a competing normative source.
+A selected-rule consumer uses the catalog record and target authority binding;
+it does not treat a derived consumer, copied summary, or a directory scan as a
+competing normative source.
 
-The validator checks registry structure, paths, anchors, strength/override compatibility, and declared consumer references. Semantic parity remains a review responsibility.
+The validator selected by `.dev/project-config.yaml#validation.current_framework.local` must check selected binding and catalog structure, paths, anchors, IDs, strength/override compatibility, applicability, and declared consumer references. While it is `unconfigured`, this check is blocked and cannot be reported as passed. Semantic parity remains a review responsibility.

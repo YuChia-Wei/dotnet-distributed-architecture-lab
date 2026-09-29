@@ -66,6 +66,7 @@
 
 # Exact managed framework candidate bytes (Issue #15)
 .ai/framework.lock -text -eol -filter -ident -working-tree-encoding -merge
+.ai/custom/installation.json -text -eol -filter -ident -working-tree-encoding -merge
 .ai/core/skills/adr/** -text -eol -filter -ident -working-tree-encoding -merge
 .agents/skills/framework-adr/SKILL.md -text -eol -filter -ident -working-tree-encoding -merge
 .ai/core/skills/ai-context-auditor/** -text -eol -filter -ident -working-tree-encoding -merge

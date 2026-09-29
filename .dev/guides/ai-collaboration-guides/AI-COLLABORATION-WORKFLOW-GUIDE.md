@@ -75,7 +75,8 @@
 參考：
 
 - `.dev/requirement/REQUIREMENT-GUIDE.MD`
-- `REQUIREMENT-AND-SPEC-DESIGNER-STRATEGY.md`
+- `REQUIREMENT-DESIGNER-PROMPT-GUIDE.md`
+- `SPEC-DESIGNER-PROMPT-GUIDE.md`
 
 ### Step 2: spec
 
@@ -259,7 +260,7 @@ Locator 固定記錄 owner skill、status、artifact root、entrypoint、`create
 - software/product development lifecycle → `software-development-orchestrator`
 - AI context 自檢 → `ai-context-auditor`
 - AI context 文件治理、整改與複檢結案 → `ai-context-governance`
-- framework 複製後的 repo 初始化 → `ai-context-init`
+- 已安裝 target 的 context reconciliation → target owner 與 `ai-context-governance`
 
 artifact 預設放在 locator 同目錄；owner skill 也可宣告其他 repository-relative `artifact_root`。不要假設所有 workflow 都具有下列同名檔案。Development workflow 通常使用：
 
@@ -338,7 +339,8 @@ subagent 不應：
 
 ## 相關文件
 
-- `REQUIREMENT-AND-SPEC-DESIGNER-STRATEGY.md`
+- `REQUIREMENT-DESIGNER-PROMPT-GUIDE.md`
+- `SPEC-DESIGNER-PROMPT-GUIDE.md`
 - `SOFTWARE-DEVELOPMENT-ORCHESTRATOR-SKILL-GUIDE.md`
 - `BDD-GWT-TEST-DESIGNER-SKILL-GUIDE.md`
 - `BDD-GWT-TEST-DESIGNER-PAIR-GUIDE.md`

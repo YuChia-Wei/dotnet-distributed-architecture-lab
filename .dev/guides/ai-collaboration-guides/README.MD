@@ -15,7 +15,7 @@
 - `.dev/workflows/`: 跨 skill workflow artifacts 的正式存放位置
 - `.dev/guides/`: 一般軟體開發、架構、框架、專案使用指南
 - `.ai/`: 給 agent 重用的 prompt 元件、shared rules、scripts
-- `.ai/assets/skills/`: canonical skill specs 與完整 skill registry
+- `.ai/core/skills/`: selected canonical skill instructions；`.dev/ai-context/skills.md` 列出本 target 選擇
 - `.agents/skills/` / `.claude/skills/`: thin runtime wrappers
 
 ## 導航
@@ -27,7 +27,7 @@
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
 - Workflow templates are owned by the canonical skill that creates that workflow kind.
 - Shared discovery and metadata rules are defined by `../../standards/WORKFLOW-ARTIFACT-POLICY.md`.
-- Development templates are under `.ai/assets/skills/software-development-orchestrator/templates/`.
+- Current workflow template is under `.ai/core/skills/software-development-orchestrator/templates/`; project locator template is under `.dev/standards/templates/`.
 - AI context maintenance and audit templates are under their respective canonical skill directories.
 
 ## Feature And Use Case Requests
@@ -44,12 +44,12 @@ current capability routes instead:
 - requirement or spec drafting: `requirement-author` or `spec-author`.
 
 The corresponding guides in this directory provide copyable invocation
-examples. Canonical execution rules remain under `.ai/assets/skills/`.
+examples. Canonical execution rules remain under `.ai/core/skills/`.
 
 ## 維護規則
 
 - 新增 human-facing 的 AI skill 使用說明時，優先放在本目錄。
 - 每個 skill 至少應有一份對應 guide，說明用途、適用情境、prompt 範本與輸出期待。
 - 本目錄的文件是給人讀的，不應複製大量 `.ai/` prompt 內部細節。
-- canonical skill 規則仍以 `.ai/assets/skills/<skill>/skill.yaml` 與其 references 為準；wrapper 只保留薄入口。
+- canonical skill 規則仍以 `.ai/core/skills/<skill>/SKILL.md` 與其 references 為準；wrapper 只保留薄入口。
 - 若 guide 內容與 canonical skill spec 衝突，應同步修正並避免形成雙重真相。

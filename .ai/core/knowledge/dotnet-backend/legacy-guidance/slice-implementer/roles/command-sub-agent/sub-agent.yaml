@@ -1,0 +1,27 @@
+content_kind: reference-only-technical-guidance
+title: Command Guidance
+activation: none; consuming this member does not dispatch a worker or authorize execution
+applicability: Use only with the target-selected architecture, technology and applicable registered rules; this historical
+  guidance is not a separate normative owner.
+inputs:
+- aggregate or bounded context target
+- command behavior goal
+- validation and test expectations
+outputs:
+- command implementation guidance
+- expected output structure and required rules
+- follow-up validation notes
+technical_guidance:
+- Implement an explicit I<Operation>UseCase and <Operation>UseCase with ExecuteAsync; add a Handler only when an actual dispatch/message
+  entry exists
+- Keep Wolverine conditional and outside the portable Use Case boundary
+- Use IAggregateRepository for Aggregate Root writes; do not introduce generic writable CRUD or mix query methods into it
+- Tests use mandatory Given-When-Then structure and naming with no BaseTestClass; BDDfy is the default unless the target team
+  explicitly opted out, and 3A is not a substitute
+references:
+- references/implementation-playbook.md
+- ../../../../shared/common-rules.md
+- ../../../../shared/architecture-config.md
+- ../../../../shared/testing-strategy.md
+examples:
+- references/implementation-playbook.md
