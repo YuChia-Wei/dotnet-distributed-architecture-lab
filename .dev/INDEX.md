@@ -111,6 +111,6 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | Path | Description |
 | --- | --- |
 | `../.ai/INDEX.MD` | Agent-facing reusable AI asset catalog. |
-| `../.ai/assets/skills/README.MD` | Canonical skill registry entry. |
+| `ai-context/skills.md` | Active selected skill registry and target routes. |
 | `../.agents/skills/README.md` | Current runtime wrapper index. |
 | `../.claude/skills/README.md` | Claude-compatible wrapper index. |

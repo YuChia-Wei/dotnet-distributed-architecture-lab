@@ -152,9 +152,9 @@ Before committing a data class:
 
 ## Validation Script
 
-TODO: replace `.ai/scripts/check-data-class-annotations.sh` with a Roslyn analyzer rule for data class attribute requirements.
+A dedicated target Roslyn analyzer for data class attribute requirements is not configured; select and implement one before claiming automated enforcement.
 
 ## Related Documents
 - `FRAMEWORK-API-INTEGRATION-GUIDE.md`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/dto-conventions.md`
-- `.ai/assets/tech-stacks/dotnet-backend/examples/dto/README.md`
+- `.ai/core/knowledge/dotnet-backend/shared/dto-conventions.md`
+- `.ai/core/knowledge/dotnet-backend/examples/dto/README.md`

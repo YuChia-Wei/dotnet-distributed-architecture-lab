@@ -79,7 +79,7 @@ database.
 
 When the target selects EF projection registration validation, it creates and
 runs its own configuration test. The
-[reference-only recipe](../../../.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md)
+[reference-only recipe](../../../.ai/core/knowledge/dotnet-backend/tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md)
 uses a target-owned `IProjectionReadModel` marker and compares its concrete
 implementations with the assembled EF Core model. The framework supplies no
 runtime-validation project, SDK, package versions, or activation claim.

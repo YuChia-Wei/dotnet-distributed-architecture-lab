@@ -1,7 +1,5 @@
-# Legacy .NET Examples Navigation
+# .NET Examples Navigation
 
-The canonical .NET backend examples are now maintained in the
-[`dotnet-backend profile`](../../../.ai/assets/tech-stacks/dotnet-backend/examples/).
-Its [`evidence-manifest.yaml`](../../../.ai/assets/tech-stacks/dotnet-backend/examples/evidence-manifest.yaml)
-defines classification. This compatibility entrypoint is not a second example
-catalog or semantic owner.
+See the selected [dotnet-backend examples](../../../.ai/core/knowledge/dotnet-backend/examples/)
+and the target-owned [engineering rules](../../ai-context/TARGET-ENGINEERING-RULES.md).
+Example files are illustrative; their presence is not acceptance evidence.

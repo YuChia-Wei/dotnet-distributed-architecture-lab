@@ -51,6 +51,17 @@ def load_policy(root: Path = ROOT) -> dict[str, Any]:
     )
     if not isinstance(value, dict):
         raise RuntimeError("workflow handoff policy must be a mapping")
+    value["_configured_critical_command"] = None
+    if value.get("critical_command_binding") != ".dev/project-config.yaml#validation.current_framework.local":
+        return value
+    try:
+        config = yaml.safe_load((root / ".dev/project-config.yaml").read_text(encoding="utf-8"))
+        gate = config["validation"]["current_framework"]["local"]
+        command = gate.get("command")
+        if gate.get("mode") == "configured" and isinstance(command, str) and command.strip():
+            value["_configured_critical_command"] = command
+    except (OSError, UnicodeDecodeError, yaml.YAMLError, KeyError, TypeError, AttributeError):
+        pass
     return value
 
 
@@ -155,12 +166,12 @@ def observed_gate(
 ) -> tuple[int | None, str]:
     gate = mapping(value, label, errors)
     command = non_empty_string(gate.get("command"), f"{label}.command", errors)
-    if critical and command:
-        pattern = re.compile(str(policy.get("critical_command_pattern", "")))
-        if not pattern.fullmatch(command):
-            errors.append(
-                f"{label}.command: must invoke .ai/scripts/check-all.sh --critical"
-            )
+    if critical:
+        configured = policy.get("_configured_critical_command")
+        if not isinstance(configured, str) or not configured.strip():
+            errors.append(f"{label}.command: target critical gate is unconfigured")
+        elif command != configured:
+            errors.append(f"{label}.command: must equal the configured target critical command")
     timestamp(gate.get("observed_at"), f"{label}.observed_at", errors)
     exit_code = gate.get("exit_code")
     if not isinstance(exit_code, int) or isinstance(exit_code, bool) or exit_code < 0:

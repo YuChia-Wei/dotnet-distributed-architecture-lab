@@ -144,4 +144,4 @@ DON'T
 ## References
 - `.dev/guides/implementation-guides/PROFILE-CONFIGURATION-COMPLEXITY-SOLUTION.md`
 - `.dev/guides/design-guides/FRAMEWORK-API-INTEGRATION-GUIDE.md`
-- `.ai/assets/tech-stacks/dotnet-backend/references/COMMON-PITFALLS.MD`
+- `.ai/core/knowledge/dotnet-backend/references/COMMON-PITFALLS.MD`

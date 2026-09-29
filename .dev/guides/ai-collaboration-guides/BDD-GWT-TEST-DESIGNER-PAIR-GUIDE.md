@@ -32,16 +32,7 @@
 
 這一步不是 `bdd-gwt-test-designer` 的責任。只有在 scenarios、assertion points、coverage gaps 已經明確後，才交給 delegated test generation sub-agent workflow。
 
-依測試類型交給 delegated sub-agent workflow：
-
-- use case test:
-  - `.ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml`
-- aggregate test:
-  - `.ai/assets/skills/slice-implementer/roles/aggregate-test-sub-agent/sub-agent.yaml`
-- reactor test:
-  - `.ai/assets/skills/slice-implementer/roles/reactor-test-sub-agent/sub-agent.yaml`
-- controller test:
-  - `.ai/assets/skills/slice-implementer/roles/controller-test-sub-agent/sub-agent.yaml`
+依測試目標選擇 use case、aggregate、reactor 或 controller 的實作 owner；具體交接依 `.ai/core/skills/slice-implementer/references/test-handoff.md` 與 target test policy。只有實際派遣時才記錄 delegated sub-agent；本次選定套件未提供上述四個舊 role manifest。
 
 ### 3. 最後做 review
 

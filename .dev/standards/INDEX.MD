@@ -19,10 +19,10 @@ policies. It is not the canonical owner of .NET backend semantic standards.
 
 ## .NET Backend Profile Compatibility Navigation
 
-- [Profile standards](../../.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md)
-- [Focused coding standards](../../.ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/)
-- [Profile rationale](../../.ai/assets/tech-stacks/dotnet-backend/references/rationale/)
-- [Profile templates](../../.ai/assets/tech-stacks/dotnet-backend/templates/)
+- [Profile standards](../../.ai/core/knowledge/dotnet-backend/standards/coding-standards.md)
+- [Focused coding standards](../../.ai/core/knowledge/dotnet-backend/standards/coding-standards/)
+- [Profile rationale](../../.ai/core/knowledge/dotnet-backend/references/rationale/)
+- [Profile templates](../../.ai/core/knowledge/dotnet-backend/templates/)
 
 Human-facing tutorials, setup, migration, troubleshooting, and prompt-usage
 guidance remain under `.dev/guides/`.

@@ -159,9 +159,9 @@ ASPNETCORE_ENVIRONMENT=TestOutbox dotnet test
 - [ ] `TestInMemory` and `TestOutbox` are both supported when the target adopts both profiles
 
 ## Automated Check
-Preferred active entry point:
 
-- `.ai/scripts/check-test-di-compliance.sh` is a transitional helper. Prefer analyzer or test architecture rules after dotnet-native validation exists.
+A dedicated target analyzer or test architecture check is not configured by
+this guide. Select one before claiming automated DI-test compliance.
 
 ## Common Mistakes
 

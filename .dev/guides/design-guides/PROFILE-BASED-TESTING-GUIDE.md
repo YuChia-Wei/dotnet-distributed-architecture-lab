@@ -115,6 +115,6 @@ When clearing captured events from Given, first wait for the fixture's documente
 
 ## Related Documents
 
-- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
-- `.ai/assets/skills/slice-implementer/roles/usecase-test-sub-agent/sub-agent.yaml`
-- `.ai/assets/tech-stacks/dotnet-backend/references/rationale/profile-based-testing-rationale.MD`
+- `.ai/core/knowledge/dotnet-backend/shared/testing-strategy.md`
+- `.ai/core/skills/slice-implementer/references/test-handoff.md`
+- `.ai/core/knowledge/dotnet-backend/references/rationale/profile-based-testing-rationale.MD`

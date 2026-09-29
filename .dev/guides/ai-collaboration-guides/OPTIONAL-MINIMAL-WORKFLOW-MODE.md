@@ -151,6 +151,6 @@
 
 - `AI-REFACTORING-SKILL-CONTRACTS.md`
 - `../workflows/README.MD`
-- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-plan-template.md`
-- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-review-report-template.md`
-- `../../../.ai/assets/skills/software-development-orchestrator/templates/development-workflow-task-template.json`
+- `../../../.ai/core/skills/software-development-orchestrator/templates/workflow.md`
+- `../../../.ai/core/skills/software-development-orchestrator/schemas/workflow-record.schema.json`
+- `../../standards/templates/workflow-locator-template.yaml`

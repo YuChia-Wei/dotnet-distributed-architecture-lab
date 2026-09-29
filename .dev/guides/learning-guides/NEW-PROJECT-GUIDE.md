@@ -3,9 +3,9 @@
 > **Status: retired onboarding example — do not execute as the current setup path.**
 >
 > The commands and topology below preserve an earlier ExampleApp profile. For a
-> real target repository, install the framework package and run `ai-context-init`
-> first. That skill inventories file-backed facts and refreshes the target-specific
-> `AGENTS.md`, `.dev/`, and necessary `.ai/` entries. Do not create the legacy
+> real target repository, follow the selected RC2 package installation
+> procedure and reconcile file-backed target facts in `AGENTS.md`, `.dev/`,
+> and necessary `.ai/custom/` entries. Do not create the legacy
 > directory tree or install the listed packages unless the target repository has
 > explicitly selected this profile.
 
@@ -40,8 +40,8 @@ defaults for a new target repository.
 
 ## Step 1: Create the project skeleton
 
-> Legacy example only. Current onboarding must use `ai-context-init` to
-> discover and adapt the target repository instead of recreating this topology.
+> Legacy example only. Current onboarding must inspect the target repository
+> and use the selected RC2 package procedure instead of recreating this topology.
 
 ```bash
 # 1) Create project root
@@ -68,7 +68,7 @@ mkdir -p .dev/specs/{use-cases,aggregates,domain-events}
 
 ## Step 3: Configure project metadata
 
-Run `ai-context-init` to generate `.dev/project-config.yaml` from repository evidence:
+For a current target, maintain `.dev/project-config.yaml` from repository evidence.
 
 The YAML below is illustrative. Package versions and feature flags must come
 from target-repository evidence or explicit maintainer decisions.
@@ -167,9 +167,9 @@ dotnet test
 ### Option 1: Use spec documents (recommended)
 1. Create a use case spec in the target repository spec area confirmed by `ai-context-init`
 2. Implement with TDD using canonical sub-agent assets:
-   - `.ai/assets/skills/slice-implementer/roles/command-sub-agent/sub-agent.yaml`
-   - `.ai/assets/skills/slice-implementer/roles/query-sub-agent/sub-agent.yaml`
-   - `.ai/assets/skills/slice-implementer/roles/aggregate-sub-agent/sub-agent.yaml`
+   - `.ai/core/skills/slice-implementer/references/modes/command.md`
+   - `.ai/core/skills/slice-implementer/references/modes/query.md`
+   - `.ai/core/skills/slice-implementer/references/modes/generic.md`
 
 ### Option 2: Describe requirements directly
 Provide the operation, inputs, outputs, business rules, and required events.
@@ -185,8 +185,8 @@ Common workflows:
 - outbox-sub-agent
 - mutation-testing-sub-agent
 
-Shared delegated sub-agent definitions are under `.ai/assets/sub-agent-role-prompts/`; private definitions are under the owning skill's `roles/` directory.
-Shared explanatory materials, examples, and reusable rule fragments are under `.ai/assets/shared/`.
+Shared delegated sub-agent definitions are under `.ai/custom/roles/`; private definitions are under the owning skill's `roles/` directory.
+Shared explanatory materials, examples, and reusable rule fragments are under `.ai/core/knowledge/engineering-common/`.
 
 ## FAQ
 
@@ -205,5 +205,5 @@ Ensure `ASPNETCORE_ENVIRONMENT` matches `TestInMemory` or `TestOutbox` and that 
 
 ## Next Steps
 1. Read `.dev/guides/learning-guides/LEARNING-PATH.md`.
-2. Use `.ai/assets/tech-stacks/dotnet-backend/references/CODE-TEMPLATES.MD` for scaffolding.
+2. Use `.ai/core/knowledge/dotnet-backend/references/CODE-TEMPLATES.MD` for scaffolding.
 3. Keep `.dev/standards/`, `.dev/guides/`, and `.dev/ARCHITECTURE.md` updated as the primary rule set.

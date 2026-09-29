@@ -1,0 +1,1242 @@
+schema_version: '1.0'
+catalog_id: engineering-rule-catalog-dotnet-backend
+catalog_role: resolver-ready-exact-projection
+catalog_location: engineering-rule-catalog.yaml
+technology_profile: dotnet-backend
+description: Exact resolver-ready projections of active .NET backend rule sections whose single semantic owners are the moved
+  profile Markdown documents.
+terminal_lf_convention: normative_text is extracted verbatim from the anchored canonical profile source section after CRLF/CR
+  normalization to LF, whitespace-only line normalization to empty lines, and is stored with exactly one terminal LF.
+ordering:
+  rules: ascending lexical rule_id
+  unpacketized_documents: ascending lexical canonical_source.path
+  array_contents: retain declared source order
+catalog_digest:
+  algorithm: sha256
+  value: fe5b25c2fdbd56044d9a2476e3ef20f78c630566d4cdd20dbc4dccd7333552d3
+  canonicalization: UTF-8 encoding of compact JSON with Unicode preserved, object keys sorted by Unicode code point, array
+    order preserved, and exactly one terminal LF; the complete catalog_digest field is excluded from the input.
+selector_contract:
+  capability_execution_mode_file_type: unconstrained-by-source with an empty values list means no narrower source-backed predicate
+    is declared; a resolver must not invent one or use it as a default fallback.
+  technology_profile: fixed-profile means the catalog is applicable only to the listed technology profile.
+constraints: []
+constraint_policy: No existing constraint IDs are registered for these rules. This catalog fabricates no constraints; a future
+  constraint requires an explicitly allocated stable constraint_id.
+rules:
+- rule_id: AGGREGATE-ES-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md
+    anchor: '## Optional `EsAggregateRoot<TId>` Behavior Contract'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: AGGREGATE-ES-001
+  migration_provenance:
+    legacy_path: .dev/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md
+  domain: event-sourced-aggregate
+  strength: conditional
+  scope: dotnet-backend
+  applicability:
+    text: target Aggregate selects Event Sourcing
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: not-applicable
+  decision_evidence:
+  - target Aggregate architecture or persistence profile
+  derived_consumers:
+  - standards/coding-standards/aggregate-standards.md
+  - references/BUILDING-BLOCKS-CLASS-INDEX.MD
+  - review/review-routing.yaml
+  status: active
+  source_file_sha256: 2379f5f0ba261f0aebd03dfe302e16436a7b23d4d4e02407cbdfe63a350556ed
+  normative_text_sha256: 42e47fde0f22044a6667751e0f00397c30715a614fe853f35d2ef546d0d64804
+  normative_text: |
+    ## Optional `EsAggregateRoot<TId>` Behavior Contract
+
+    Rule ID: `AGGREGATE-ES-001` (`conditional` when Event Sourcing is selected).
+
+    `EsAggregateRoot<TId>` is the only supplied optional base class. A target may
+    copy the source include, reimplement this contract, or use another implementation
+    that preserves the behavior.
+
+    ### Required behavior
+
+    1. `Replay(history)` dispatches committed events to `When` in order.
+    2. Replay increments the committed `Version` once per event.
+    3. Replay never adds events to the pending-event collection.
+    4. `Apply(event)` dispatches the event to `When` before recording it as pending.
+    5. If `When` rejects an event, that event is not recorded as pending.
+    6. `Apply` does not advance the committed `Version`.
+    7. `MarkChangesAsCommitted(committedVersion)` accepts only
+       `Version + pending-count`.
+    8. A successful commit advances `Version` and clears pending events exactly
+       once.
+    9. A rejected commit confirmation preserves the committed version and pending
+       events for retry or diagnosis.
+    10. Product state changes occur only in `When`; `When` is deterministic and
+        performs no external I/O.
+
+    ### Construction rule
+
+    Do not invoke virtual `When` from the base constructor. In C#, a derived type's
+    field initializers have not completed while its base constructor executes.
+    The derived reconstruction constructor calls `Replay(history)` from its own
+    constructor body:
+
+    ```csharp
+    public sealed class Order : EsAggregateRoot<OrderId>
+    {
+        private readonly List<OrderLine> _lines = [];
+
+        public Order(IEnumerable<IDomainEvent> history)
+        {
+            Replay(history);
+        }
+
+        protected override void When(IDomainEvent @event)
+        {
+            // deterministic type dispatch
+        }
+    }
+    ```
+
+    The repository-owned source include is under
+    [`source-includes/domain/`](../source-includes/domain/README.md). It is reference-only
+    framework material, not a published package or complete reference product. An
+    adopting target owns SDK compatibility, compilation, behavior tests, invocation
+    evidence, and upgrade reconciliation before claiming executable validation.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 61281b39e835085587e94bc28ef8a66035aa439d
+      mode: '100644'
+      sha256: 9844e261741fd6fcdf8c0489516c2b4be8ad8bb8074463c7e35942631c2dabd9
+      size: 7279
+    source_normative_text_sha256: 262144bbec5431033e252c4c128025a5563f13f2d6c5610e86d51f7c19b4e4a3
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: ARCH-UOW-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/coding-standards/usecase-standards.md
+    anchor: '### 7. Strong Consistency MUST Be Explicit'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: ARCH-UOW-001
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/usecase-standards.md
+  domain: aggregate-transaction-boundary
+  strength: profile-default
+  scope: dotnet-backend
+  applicability:
+    text: command use case coordinates aggregate persistence
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: explicit-target-decision
+  decision_evidence:
+  - named all-or-nothing invariant
+  - documented same-bounded-context consistency decision
+  derived_consumers:
+  - shared/common-rules.md
+  - review/review-routing.yaml
+  status: active
+  source_file_sha256: 3f69354497aa9c2e875b43788dc1d8c9d418c98122bf1276c9d069bdea1b4030
+  normative_text_sha256: 0bc2ba0f84e5a4faed68487721b1ac9b501a68e8ad714225da143ef6abaa6ee8
+  normative_text: |
+    ### 7. Strong Consistency MUST Be Explicit
+
+    One command changes one Aggregate by default. Events and eventual consistency are
+    the default for coordination between Aggregates. A Use Case may inject
+    `IUnitOfWork` for multiple Aggregates only as an exceptional same-bounded-context
+    decision when all of these conditions hold:
+
+    1. The business names an all-or-nothing invariant involving the Aggregates.
+    2. Any eventually consistent intermediate state would be unacceptable and cannot
+       be safely compensated.
+    3. The design rechecks that the Aggregate boundaries are correct instead of using
+       a transaction to hide a misplaced invariant.
+    4. The decision documents the invariant, the involved Aggregates, and why eventual
+       consistency or compensation is insufficient.
+
+    The following Reservation + Capacity example represents such an exceptional
+    business rule; it is not a general Use Case template:
+
+    ```csharp
+    public sealed class CompleteReservationUseCase
+    {
+        private readonly IUnitOfWork unitOfWork;
+
+        public async Task ExecuteAsync(CancellationToken cancellationToken)
+        {
+            // Exceptional case: Reservation and Capacity are in the same bounded
+            // context and the named invariant requires both changes to succeed or
+            // neither to succeed. An intermediate overbooked state is unacceptable
+            // and cannot be safely compensated. Do not copy this as a general template.
+            // Load Reservation and Capacity, invoke Domain behavior, and save through ports.
+            await this.unitOfWork.CommitAsync(cancellationToken);
+        }
+    }
+    ```
+
+    - MUST NOT select a multi-Aggregate transaction because of shared storage, ORM or
+      framework capabilities, fewer I/O round trips, implementation convenience, or a
+      general future need.
+    - MUST NOT make `IUnitOfWork` a default Use Case dependency.
+    - MUST NOT span bounded contexts with one transaction; cross-bounded-context
+      coordination uses integration events and eventual consistency.
+    - A Repository participating in a Unit of Work MUST NOT commit independently.
+    - A Handler MUST NOT introduce a transaction or commit after the Use Case. A
+      selected runtime pipeline or middleware may enroll and complete the processing
+      transaction outside the Handler; it does not make the Handler a transaction owner.
+    - Pending Domain Events may be acknowledged or cleared only after a successful commit.
+
+    For a selected transactional message path, the Use Case declares and
+    orchestrates the required local consistency; the selected Unit of Work or
+    verified runtime pipeline physically completes it. This does not make
+    `IUnitOfWork` a default Use Case dependency and does not weaken the
+    multi-Aggregate, same-bounded-context exception above. See
+    [Transactional Messaging Standards](transactional-messaging-standards.md) for
+    the single completion-owner, inbox/outbox, and adapter contract.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/usecase-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 13016df585fd1329160d3ed424611f20b9c6e280
+      mode: '100644'
+      sha256: 3f69354497aa9c2e875b43788dc1d8c9d418c98122bf1276c9d069bdea1b4030
+      size: 10830
+    source_normative_text_sha256: 0bc2ba0f84e5a4faed68487721b1ac9b501a68e8ad714225da143ef6abaa6ee8
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: CONTRACT-SEMANTICS-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/DESIGN-BY-CONTRACT.md
+    anchor: '## Contract Categories'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: CONTRACT-SEMANTICS-001
+  migration_provenance:
+    legacy_path: .dev/standards/DESIGN-BY-CONTRACT.md
+  domain: design-by-contract
+  strength: invariant
+  scope: dotnet-backend
+  applicability:
+    text: Domain or Application behavior declares preconditions, postconditions, or invariants
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: forbidden
+  decision_evidence: null
+  derived_consumers:
+  - standards/coding-standards/aggregate-standards.md
+  - standards/coding-standards/test-standards.md
+  - review/review-routing.yaml
+  status: active
+  source_file_sha256: 3ab132dc92cf0120a488358f23abdbb90731a98556e71cff34a85cae4425eabc
+  normative_text_sha256: 45292a7bbc1fc9e6d4e845aa660681efda68e0e2394cecf1c6c2c76ebf3814f7
+  normative_text: |
+    ## Contract Categories
+
+    - A precondition rejects invalid input or an invalid state before behavior runs.
+    - A postcondition verifies the observable state/result promised by a successful
+      operation.
+    - An invariant must hold for every externally observable valid Aggregate or
+      Entity state.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/DESIGN-BY-CONTRACT.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: efdda8b77d5945c253d1300a6b1b2dafe8395714
+      mode: '100644'
+      sha256: 3ab132dc92cf0120a488358f23abdbb90731a98556e71cff34a85cae4425eabc
+      size: 2006
+    source_normative_text_sha256: 45292a7bbc1fc9e6d4e845aa660681efda68e0e2394cecf1c6c2c76ebf3814f7
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: DELETE-PURGE-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/coding-standards/archive-standards.md
+    anchor: '## 📌 Core Concept'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: DELETE-PURGE-001
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/archive-standards.md
+  domain: deletion
+  strength: conditional
+  scope: dotnet-backend
+  applicability:
+    text: target repository adopts archive or physical-purge capability
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: not-applicable
+  decision_evidence:
+  - authorization, retention, legal, audit, and cleanup policy
+  derived_consumers:
+  - shared/common-rules.md
+  - review/review-routing.yaml
+  status: active
+  source_file_sha256: 5dcc29b86f92510582e41a5707be3e5e92f8f6c83b58e5b31384626bb94a5a6d
+  normative_text_sha256: 7d8e43950811aa96c6cfc12f811deb9c8d13739989d4611176e5d0e4754c165e
+  normative_text: |
+    ## 📌 Core Concept
+
+    An **Archive** is a database write pattern dedicated to Query Models in a CQRS architecture:
+
+    - Its interface resembles a Write Model Repository, but an Archive handles database write requirements for a Query Model.
+    - A Repository is limited to writing a single Aggregate in the Command Model.
+    - It may write to one table or across multiple tables.
+    - A Reactor in the Handler layer invokes the Archive after receiving a Domain Event and writes the data to the database.
+
+    ---
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/archive-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: dae8d6137483c8ab10949696bf0cab58653f552d
+      mode: '100644'
+      sha256: dbcb817922af4ff243d8fab09bcdc3d1085dcd88f599ef39e65801b55772f626
+      size: 9014
+    source_normative_text_sha256: 7d8e43950811aa96c6cfc12f811deb9c8d13739989d4611176e5d0e4754c165e
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: DELETE-SOFT-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/coding-standards/aggregate-standards.md
+    anchor: '### 0. Soft-Delete Default Profile'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: DELETE-SOFT-001
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/aggregate-standards.md
+  domain: deletion
+  strength: profile-default
+  scope: dotnet-backend
+  applicability:
+    text: dotnet-backend Aggregate Repository profile is adopted unless the target explicitly opts out
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: explicit-target-decision
+  decision_evidence:
+  - .dev/project-config.yaml architecture capability selection
+  - target repository requirements or architecture decision
+  derived_consumers:
+  - shared/common-rules.md
+  - review/review-routing.yaml
+  status: active
+  source_file_sha256: e95668a82496e7db2ab3ddbd59932bb949ff1b986d597f964d73f3ea0c6a3f44
+  normative_text_sha256: 5e5370bef9fae1d46a6df8518ab380422368a25d7bb0ca00affc1af3f726cfa7
+  normative_text: |
+    ### 0. Soft-Delete Default Profile
+
+    Rule ID: `DELETE-SOFT-001` (`profile-default`).
+
+    The dotnet-backend Aggregate Repository profile defaults to soft deletion.
+    Affected Aggregates support the following field and event-application behavior,
+    and deletion is persisted through `SaveAsync`.
+
+    A target may explicitly opt out for an Aggregate or repository profile when its
+    requirements or architecture decision select another lifecycle. The opt-out
+    must be recorded in target evidence such as `.dev/project-config.yaml`
+    architecture capability selections, requirements, or an ADR. An opted-out
+    Aggregate is not required to add `IsDeleted`.
+
+    #### Adopted Aggregate Root Must Have an `IsDeleted` Field and Handling Logic
+
+    ```csharp
+    // ✅ Correct when soft deletion is adopted
+    public class WorkItem : EsAggregateRoot<WorkItemId>
+    {
+        public bool IsDeleted { get; private set; }  // Required soft-delete marker
+
+        // Set IsDeleted = true when handling the deletion event
+        protected override void When(IDomainEvent @event)
+        {
+            switch (@event)
+            {
+                case WorkItemDeleted e:
+                    IsDeleted = true;  // Mark as deleted
+                    break;
+                // Other event handling...
+            }
+        }
+    }
+    ```
+
+    ---
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/aggregate-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 78e6ee97514b651aa6a7e20f1436e6af6bfe46e0
+      mode: '100644'
+      sha256: 04763da8d53e4a5921c82d216f4143676d7881350d9e87a39ffb950b45859bc0
+      size: 16677
+    source_normative_text_sha256: 5e5370bef9fae1d46a6df8518ab380422368a25d7bb0ca00affc1af3f726cfa7
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: MAP-EVENTS-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/coding-standards/mapper-standards.md
+    anchor: '### Pending Domain Events After Reconstruction'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: MAP-EVENTS-001
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/mapper-standards.md
+  domain: mapper-event-lifecycle
+  strength: invariant
+  scope: dotnet-backend
+  applicability:
+    text: a mapper reconstructs an aggregate from persisted state
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: forbidden
+  decision_evidence: null
+  derived_consumers:
+  - shared/common-rules.md
+  - review/review-routing.yaml
+  status: active
+  source_file_sha256: efe5d0fa1d7a45daac413652b79511863e0d4139c8039e4bd4edb80465ebb4ef
+  normative_text_sha256: 1a3c010a5f2e863bcf60c7ddc333a23c7d96705e8c758bb4a89fa9cae111c01c
+  normative_text: |
+    ### Pending Domain Events After Reconstruction
+
+    An aggregate returned by `ToDomain()` MUST have no pending `DomainEvents`. Rehydration restores historical or persisted state; it does not represent a new business decision and MUST NOT cause those events to be published or persisted again.
+
+    - A rehydration constructor SHOULD replay historical events through `When(...)` or an equivalent state-transition path that does not enqueue them as new events.
+    - `ClearDomainEvents()` is not unconditionally required when the aggregate API explicitly guarantees that reconstruction leaves the pending-event collection empty.
+    - If the selected constructor or replay path emits or enqueues events, or its cleanliness contract is not explicit, the mapper MUST call `ClearDomainEvents()` before returning the aggregate.
+    - State-based fallback reconstruction follows the same rule; constructor side effects must not escape as pending events.
+
+    ---
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/mapper-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 4d9b529f30f058b2d531efebc437e217e0e36970
+      mode: '100644'
+      sha256: 7cf69343dcaa73f12f2dff85549f1627548301d2c72b3bd6c81d6cf2313225b6
+      size: 12123
+    source_normative_text_sha256: 1a3c010a5f2e863bcf60c7ddc333a23c7d96705e8c758bb4a89fa9cae111c01c
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: MESSAGING-TX-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/coding-standards/transactional-messaging-standards.md
+    anchor: '## Transaction Contract'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: MESSAGING-TX-001
+  migration_provenance:
+    legacy_path: null
+  domain: transactional-message-boundary
+  strength: profile-default
+  scope: dotnet-backend
+  applicability:
+    text: a message consumer requires atomic local business state, durable outgoing intent, and successful incoming-processing
+      completion
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: explicit-target-decision
+  decision_evidence:
+  - target architecture decision
+  - selected store/runtime enrollment evidence
+  - deduplication and error-disposition policy
+  derived_consumers:
+  - shared/common-rules.md
+  - review/review-routing.yaml
+  - shared/testing-strategy.md
+  status: active
+  source_file_sha256: 2596901c1a7bc94f3f28db00eff2c3d75fb6a27cf0a210d8f6852fd430b1baa7
+  normative_text_sha256: 9d6358ad89a2fadaa9ff2ebba69d2cb9728500751c921609d41a42efe5383b7a
+  normative_text: |
+    ## Transaction Contract
+
+    For a selected transactional message path:
+
+    1. The Application Use Case declares the required local consistency and
+       orchestrates Aggregate behavior and outbound ports.
+    2. Exactly one selected component physically completes the local transaction:
+       an explicit Unit of Work **or** a verified runtime transaction pipeline.
+       Repositories, message adapters, and decorators participate; they do not add
+       an independent commit path.
+    3. When the selected store and runtime contract support enrollment, commit
+       Aggregate state, durable outgoing intent, and successful incoming-processing
+       completion in that one local transaction.
+    4. Persisting an incoming envelope or claiming broker delivery is distinct from
+       successful business processing. Initial durable receipt must not be reported
+       as completed processing.
+
+    The contract is local. It does not make an external broker, HTTP API, file
+    system, or another database part of the transaction, and it does not provide
+    end-to-end exactly-once delivery. External effects are represented by durable
+    intent and remain retryable after the local commit.
+
+    Inbox and outbox records are technical persistence with operational semantics;
+    they are not Domain Aggregates merely to fit a Repository shape. A target may
+    use conditional updates, uniqueness constraints, claimed states, and
+    capability-specific adapters. It must define the relevant concurrency behavior.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/transactional-messaging-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 8736e6972cd0f57473ce3e31574fa6aef8b5ea14
+      mode: '100644'
+      sha256: 2596901c1a7bc94f3f28db00eff2c3d75fb6a27cf0a210d8f6852fd430b1baa7
+      size: 5249
+    source_normative_text_sha256: 9d6358ad89a2fadaa9ff2ebba69d2cb9728500751c921609d41a42efe5383b7a
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: PROJECT-GRAMMAR-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/project-structure.md
+    anchor: '### Workload Mapping'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: PROJECT-GRAMMAR-001
+  migration_provenance:
+    legacy_path: .dev/standards/project-structure.md
+  domain: solution-navigation
+  strength: profile-default
+  scope: dotnet-backend
+  applicability:
+    text: target adopts the conditional .slnx project-structure profile
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: explicit-target-decision
+  decision_evidence:
+  - target repository project configuration or architecture decision
+  derived_consumers:
+  - shared/architecture-config.md
+  - shared/common-rules.md
+  status: active
+  source_file_sha256: f3db3f4f2a454c7d2e7b4cea97f7c8319307c73a10fb743de595fdf1696068e1
+  normative_text_sha256: 128cc7e3a4315baa4ac69fbc944e11297eaaedef745de742350ebe522130f69c
+  normative_text: |
+    ### Workload Mapping
+
+    Rule ID: `PROJECT-GRAMMAR-001` (`profile-default`).
+
+    `workload` is a logical solution-navigation boundary, not a universal physical
+    directory name:
+
+    | Repository profile | `workload` means | Typical count | Example logical folders |
+    | --- | --- | --- | --- |
+    | micro-system / mini-system mono repo | one Bounded Context | one or more | `/Orders/DomainCore/`, `/Orders/Presentation/` |
+    | mono-system repository | the system represented by the repository | normally one | `/Commerce/DomainCore/`, `/Commerce/Presentation/` |
+
+    This mapping gives both profiles the same development navigation:
+
+    - `DomainCore` groups Domain, Application, and Infrastructure projects that
+      realize the workload's business capability;
+    - `Presentation` groups runtime inbound adapters such as Web API, gRPC, worker,
+      and MQ Consumer projects;
+    - tests, analyzers/tooling, BuildingBlocks, Shared Kernel, Published Language,
+      and CrossCutting projects may remain explicit top-level capability groups;
+    - a target may retain a flat physical `src/` layout while using the logical
+      `.slnx` grammar.
+
+    Do not create artificial Bounded Context folders in a mono-system repository
+    only to imitate a micro-system repo. Conversely, do not collapse real Bounded
+    Contexts in a micro-system mono repo into one layer-first solution view.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/project-structure.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: d5e02c9a26cc8f65a9c5f38ae6b3fb481d0cd756
+      mode: '100644'
+      sha256: 3d1af94d97205dd05e3d8e832c9f222a16e29c8660cb7d59e98ed5043664c904
+      size: 16832
+    source_normative_text_sha256: 128cc7e3a4315baa4ac69fbc944e11297eaaedef745de742350ebe522130f69c
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: TEST-BDDFY-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/coding-standards/test-standards.md
+    anchor: '### 3. Use GWT; Default to BDDfy'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: TEST-BDDFY-001
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/test-standards.md
+  domain: testing
+  strength: profile-default
+  scope: dotnet-backend
+  applicability:
+    text: dotnet-backend profile is adopted
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: explicit-target-decision
+  decision_evidence:
+  - target repository collaboration guidance
+  - target repository package and test configuration
+  derived_consumers:
+  - shared/testing-strategy.md
+  - shared/common-rules.md
+  - review/review-routing.yaml
+  status: active
+  source_file_sha256: 8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea
+  normative_text_sha256: 315423f98b682f8edd3bb7110ea0db11fcc9f28935e5b9472044d888fd44e9e2
+  normative_text: |
+    ### 3. Use GWT; Default to BDDfy
+
+    **Mandatory**: All tests must use Given-When-Then semantics and recognizable step names. Arrange-Act-Assert (3A) must not replace GWT. Use Case and integration tests default to BDDfy; plain xUnit may implement the same GWT structure only when the target team explicitly opts out of that package.
+
+    `.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../../guides/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
+
+    #### Step Methods And Scenario Readability
+
+    For scenario-style unit, Use Case and integration tests, the test method must
+    read as Given/When/Then step calls, directly or through the selected fluent
+    runner. Give methods behavior-specific names such as `GivenMonthlyBudget`,
+    `WhenQueryingBudget` and `ThenAmountShouldBe`; comments or generic `Setup`,
+    `Execute` and `Check` methods alone do not satisfy this form. Preserve the
+    compact exception-contract form explicitly permitted in section 5; it still
+    needs an observable exception assertion and source traceability.
+
+    | Step | Responsibility | Must not substitute for |
+    | --- | --- | --- |
+    | Given | Establish the scenario's data/state and controlled dependency responses. Put reusable construction mechanics in helpers. | The primary action or the scenario's outcome assertions. Fixture guards may fail fast but are not Then coverage. |
+    | When | Execute the real subject's primary behavior once per scenario/data row and capture its result, state or exception. An intentional multi-operation behavior must be explicit in the design. | A mock of the subject, a fabricated result, or a hidden repeat of the action during verification. |
+    | Then / And | Assert each specified observable value, relation, state, event or exception against the result of that When. | Re-executing the subject, calculating the expected answer using its algorithm, or merely checking that no exception occurred when a value is specified. |
+
+    Keep material inputs and expected values visible in the scenario method or its
+    explicitly bound theory row. A business-named builder may encapsulate irrelevant
+    defaults; it must not hide the values that distinguish scenarios. Use fresh
+    per-test state, instance fixtures with isolated scenario state, or explicit
+    arguments/results. Avoid static mutable scenario fields and test-order coupling.
+    A result field must distinguish "not executed" from a legitimate default result
+    (for example, nullable captured data with a Then assertion that it is present).
+
+    For asynchronous behavior, await the step to completion using the selected
+    runner's supported Task API. Do not use `async void`, fire-and-forget actions,
+    `.Wait()` or `.Result`. Capture expected exceptions during When (for example
+    with xUnit `Record.ExceptionAsync`) and assert the required type and relevant
+    details during Then; do not swallow exceptions to make the test green. A bounded
+    eventual assertion may wait for an observable asynchronous outcome, but must not
+    repeat the command/query that caused it.
+
+    Use the [GWT handoff contract](../../../engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md)
+    to preserve scenario/data-row IDs, source/AC bindings and every Then-to-assertion
+    mapping. Parameterized cases are valid when each row remains identifiable and
+    uses the same behavior and assertion responsibilities. A generated report,
+    method-name match, successful build or passing run alone cannot prove that the
+    scenario was implemented faithfully.
+
+    #### Default BDDfy Form
+
+    This excerpt's fixture and step implementations are in the
+    [runnable step-method example](../../examples/bdd-step-methods/README.md).
+    It exposes the behavior-bearing data while keeping mechanics inside steps.
+
+    ```csharp
+    [Fact]
+    public void Should_return_zero_when_query_month_has_no_budget()
+    {
+        this.Given(x => x.GivenMonthlyBudget("202102", 28m))
+            .When(x => x.WhenQueryingBudget(
+                new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2)))
+            .Then(x => x.ThenAmountShouldBe(0m))
+            .BDDfy();
+    }
+    ```
+
+    #### Explicit Plain-xUnit Opt-Out Form
+
+    The same example includes a separately selected BDDfy opt-out. Opting out of
+    the package preserves method responsibilities and GWT semantics.
+
+    ```csharp
+    [Fact]
+    public async Task Should_return_zero_when_query_month_has_no_budget()
+    {
+        GivenMonthlyBudget("202102", 28m);
+        var actual = await WhenQueryingBudget(
+            new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2));
+        ThenAmountShouldBe(actual, 0m);
+    }
+    ```
+
+    Test the concrete Use Case directly for business-flow behavior and mock its
+    outbound ports. Handler adapter tests remain separate and narrow: verify only
+    Command-to-Input mapping, exactly one Use Case invocation, and delivery-specific
+    failure mapping. A Handler test that mocks a Repository must not duplicate
+    responsibility for business-flow testing.
+
+    ---
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: d0fb09aad544c62db18217ee02b511a3629ed309
+      mode: '100644'
+      sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+      size: 17646
+    source_normative_text_sha256: 81fa3b215c6677225c3fdca9a4aca1a8237bd10558c0d7a1d6bfbc5dddedb199
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: TEST-GWT-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/coding-standards/test-standards.md
+    anchor: '### 3. Use GWT; Default to BDDfy'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: TEST-GWT-001
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/test-standards.md
+  domain: testing
+  strength: invariant
+  scope: dotnet-backend
+  applicability:
+    text: always
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: forbidden
+  decision_evidence: null
+  derived_consumers:
+  - shared/testing-strategy.md
+  - shared/common-rules.md
+  - review/review-routing.yaml
+  status: active
+  source_file_sha256: 8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea
+  normative_text_sha256: 315423f98b682f8edd3bb7110ea0db11fcc9f28935e5b9472044d888fd44e9e2
+  normative_text: |
+    ### 3. Use GWT; Default to BDDfy
+
+    **Mandatory**: All tests must use Given-When-Then semantics and recognizable step names. Arrange-Act-Assert (3A) must not replace GWT. Use Case and integration tests default to BDDfy; plain xUnit may implement the same GWT structure only when the target team explicitly opts out of that package.
+
+    `.feature` files and runners are not minimum dependencies. When requirements directly provide a `.feature` file, its design or production is explicitly requested, or the target profile has adopted a runner, create or maintain it according to the [Gherkin Feature Storage Guide](../../guides/GHERKIN-FEATURE-STORAGE-GUIDE.MD). Otherwise, express the scenario directly as a GWT-style C# test.
+
+    #### Step Methods And Scenario Readability
+
+    For scenario-style unit, Use Case and integration tests, the test method must
+    read as Given/When/Then step calls, directly or through the selected fluent
+    runner. Give methods behavior-specific names such as `GivenMonthlyBudget`,
+    `WhenQueryingBudget` and `ThenAmountShouldBe`; comments or generic `Setup`,
+    `Execute` and `Check` methods alone do not satisfy this form. Preserve the
+    compact exception-contract form explicitly permitted in section 5; it still
+    needs an observable exception assertion and source traceability.
+
+    | Step | Responsibility | Must not substitute for |
+    | --- | --- | --- |
+    | Given | Establish the scenario's data/state and controlled dependency responses. Put reusable construction mechanics in helpers. | The primary action or the scenario's outcome assertions. Fixture guards may fail fast but are not Then coverage. |
+    | When | Execute the real subject's primary behavior once per scenario/data row and capture its result, state or exception. An intentional multi-operation behavior must be explicit in the design. | A mock of the subject, a fabricated result, or a hidden repeat of the action during verification. |
+    | Then / And | Assert each specified observable value, relation, state, event or exception against the result of that When. | Re-executing the subject, calculating the expected answer using its algorithm, or merely checking that no exception occurred when a value is specified. |
+
+    Keep material inputs and expected values visible in the scenario method or its
+    explicitly bound theory row. A business-named builder may encapsulate irrelevant
+    defaults; it must not hide the values that distinguish scenarios. Use fresh
+    per-test state, instance fixtures with isolated scenario state, or explicit
+    arguments/results. Avoid static mutable scenario fields and test-order coupling.
+    A result field must distinguish "not executed" from a legitimate default result
+    (for example, nullable captured data with a Then assertion that it is present).
+
+    For asynchronous behavior, await the step to completion using the selected
+    runner's supported Task API. Do not use `async void`, fire-and-forget actions,
+    `.Wait()` or `.Result`. Capture expected exceptions during When (for example
+    with xUnit `Record.ExceptionAsync`) and assert the required type and relevant
+    details during Then; do not swallow exceptions to make the test green. A bounded
+    eventual assertion may wait for an observable asynchronous outcome, but must not
+    repeat the command/query that caused it.
+
+    Use the [GWT handoff contract](../../../engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md)
+    to preserve scenario/data-row IDs, source/AC bindings and every Then-to-assertion
+    mapping. Parameterized cases are valid when each row remains identifiable and
+    uses the same behavior and assertion responsibilities. A generated report,
+    method-name match, successful build or passing run alone cannot prove that the
+    scenario was implemented faithfully.
+
+    #### Default BDDfy Form
+
+    This excerpt's fixture and step implementations are in the
+    [runnable step-method example](../../examples/bdd-step-methods/README.md).
+    It exposes the behavior-bearing data while keeping mechanics inside steps.
+
+    ```csharp
+    [Fact]
+    public void Should_return_zero_when_query_month_has_no_budget()
+    {
+        this.Given(x => x.GivenMonthlyBudget("202102", 28m))
+            .When(x => x.WhenQueryingBudget(
+                new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2)))
+            .Then(x => x.ThenAmountShouldBe(0m))
+            .BDDfy();
+    }
+    ```
+
+    #### Explicit Plain-xUnit Opt-Out Form
+
+    The same example includes a separately selected BDDfy opt-out. Opting out of
+    the package preserves method responsibilities and GWT semantics.
+
+    ```csharp
+    [Fact]
+    public async Task Should_return_zero_when_query_month_has_no_budget()
+    {
+        GivenMonthlyBudget("202102", 28m);
+        var actual = await WhenQueryingBudget(
+            new DateOnly(2021, 1, 1), new DateOnly(2021, 1, 2));
+        ThenAmountShouldBe(actual, 0m);
+    }
+    ```
+
+    Test the concrete Use Case directly for business-flow behavior and mock its
+    outbound ports. Handler adapter tests remain separate and narrow: verify only
+    Command-to-Input mapping, exactly one Use Case invocation, and delivery-specific
+    failure mapping. A Handler test that mocks a Repository must not duplicate
+    responsibility for business-flow testing.
+
+    ---
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: d0fb09aad544c62db18217ee02b511a3629ed309
+      mode: '100644'
+      sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+      size: 17646
+    source_normative_text_sha256: 81fa3b215c6677225c3fdca9a4aca1a8237bd10558c0d7a1d6bfbc5dddedb199
+    semantic_change: false
+    target_adoption: not-implied
+- rule_id: TEST-MOCK-001
+  kind: normative-rule
+  semantic_owner:
+    path: standards/coding-standards/test-standards.md
+    anchor: '### 6. Mocking Library Selection'
+  catalog_projection:
+    path: engineering-rule-catalog.yaml
+    selector:
+      rule_id: TEST-MOCK-001
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/test-standards.md
+  domain: testing
+  strength: profile-default
+  scope: dotnet-backend
+  applicability:
+    text: dotnet-backend profile is adopted and tests require a mocking library
+    selectors:
+      capability:
+        state: unconstrained-by-source
+        values: []
+      execution_mode:
+        state: unconstrained-by-source
+        values: []
+      technology_profile:
+        state: fixed-profile
+        values:
+        - dotnet-backend
+      file_type:
+        state: unconstrained-by-source
+        values: []
+  override_policy: explicit-target-decision
+  decision_evidence:
+  - .dev/project-config.yaml technologySelections slot testing.mocking
+  - target repository test packages and configuration
+  - target repository collaboration or technology requirements
+  derived_consumers:
+  - shared/testing-strategy.md
+  - shared/common-rules.md
+  - review/review-routing.yaml
+  status: active
+  source_file_sha256: 8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea
+  normative_text_sha256: 1f725fb399d66c9ec81d004ac89505cefa5173e6ce059a19eb8225e52cafa0dc
+  normative_text: |
+    ### 6. Mocking Library Selection
+
+    NSubstitute is the `TEST-MOCK-001` profile default. Before generating or
+    reviewing mocks, resolve `testing.mocking` through
+    `.dev/project-config.yaml#technologySelections` and
+    Target Technology Selection Policy (`target-authority:dev-standards-TECHNOLOGY-SELECTION-POLICY.md`; supplied by the target owner).
+
+    - When no target selection exists, use NSubstitute.
+    - When an evidenced target selection exists, use that library consistently.
+    - Do not mix mocking libraries without an explicit migration decision.
+    - Changing the library does not change GWT, test independence, or boundary
+      interaction rules.
+
+    ```csharp
+    // ✅ Correct: NSubstitute
+    var repository = Substitute.For<IAggregateRepository<Product, ProductId>>();
+    repository.FindByIdAsync(Arg.Any<ProductId>(), Arg.Any<CancellationToken>())
+        .Returns(Task.FromResult<Product?>(existingProduct));
+
+    // Verify the call
+    await repository.Received(1).SaveAsync(Arg.Any<Product>(), Arg.Any<CancellationToken>());
+
+    // Valid only when the target explicitly selects Moq
+    var repository = new Mock<IAggregateRepository<Product, ProductId>>();
+    repository.Setup(x => x.FindByIdAsync(...)).ReturnsAsync(existingProduct);
+    repository.Verify(x => x.SaveAsync(...), Times.Once);
+    ```
+
+    ---
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/test-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: d0fb09aad544c62db18217ee02b511a3629ed309
+      mode: '100644'
+      sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+      size: 17646
+    source_normative_text_sha256: 8ff4679c135e2de0f7a370317da2da76ee4a5bf7ca6ef076dc85d0aaeed23503
+    semantic_change: false
+    target_adoption: not-implied
+unpacketized_documents:
+- canonical_source:
+    path: standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md
+  migration_provenance:
+    legacy_path: .dev/standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md
+  source_file_sha256: 2e4b0d969f72c0296b83114fc6f6536e58245ed1f5e09a60cfc304bc1eeecb60
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 49ea5aa3695836b760fdd73bbae14f0f24263df5
+      mode: '100644'
+      sha256: 2e4b0d969f72c0296b83114fc6f6536e58245ed1f5e09a60cfc304bc1eeecb60
+      size: 2170
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD
+  migration_provenance:
+    legacy_path: .dev/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD
+  source_file_sha256: 12a263b623c280d16dea2b2b6b58d55470e6ce84ea9d206de79f6b67376806e1
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: b9979fa5f32a1e3087cc7af8b7a1373c4016b9ca
+      mode: '100644'
+      sha256: 12a263b623c280d16dea2b2b6b58d55470e6ce84ea9d206de79f6b67376806e1
+      size: 9174
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/anti-patterns.md
+  migration_provenance:
+    legacy_path: .dev/standards/anti-patterns.md
+  source_file_sha256: 0ac00a99cf47cd4afd732a9ca00193684adf3608dc1fa12cca93d9ac57f7aae7
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/anti-patterns.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 455ba78f01c7e8f0c5594d7438ba85aac51dccd8
+      mode: '100644'
+      sha256: 28f547761975c7f3160eac6f7374a870d1ab6cf9d4a2de3a7bc98982f1e2827e
+      size: 8734
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/best-practices.md
+  migration_provenance:
+    legacy_path: .dev/standards/best-practices.md
+  source_file_sha256: fd5a97c1b8077e90b3782bdfdd0f0bcd48670589664dcff1a204f7ee2972dd20
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/best-practices.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 0e6ae3272fb3bf18be75b7f2c2e85c798045eedb
+      mode: '100644'
+      sha256: 958d8d060f85a43d34cd7295cf00a9def5c839d786051180689aa8d631f43ada
+      size: 6519
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/coding-guide.md
+  migration_provenance:
+    legacy_path: .dev/standards/coding-guide.md
+  source_file_sha256: 4032c5f7fac59e613f4149d5259a67c09a6dc96e8fabacbd0ee0db7333d1fd83
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-guide.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 0cd4d43955fc31b20df1cb4e4dd2c12a846469ca
+      mode: '100644'
+      sha256: 7413fa8ca91f3c016470d5c7524d7f993e91a99ad476f31de15d27da5158801f
+      size: 3582
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/coding-standards.md
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards.md
+  source_file_sha256: b068ddabf04f8841a54df2f0311ea8f574621545c9dfbe92362946f34529905e
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 272453c9c07355a90acb0714ebf2ed72310a8cec
+      mode: '100644'
+      sha256: 31c5ab7526ebdfe553311441f9879bb1d2448aba94be13dfa9c5ae9fc374537e
+      size: 8686
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/coding-standards/controller-standards.md
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/controller-standards.md
+  source_file_sha256: c016ed5583f134df6d420223a459a8ed52ebcc53a2be952d51de6332cbb604f3
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/controller-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 003631d3c423141bb952c71237187025b97afa4a
+      mode: '100644'
+      sha256: e9c179ec45c01af9eb7c0e84d1c8797432cb1d5ab30202030dd5bb441608125f
+      size: 8833
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/coding-standards/profile-configuration-standards.md
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/profile-configuration-standards.md
+  source_file_sha256: 8e6a90489f18c305bd99518c098edd694039856b026ae2266592bf6e08938729
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/profile-configuration-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: ceebb2fa3bd8e1a9f3007a7579beadc041d07de2
+      mode: '100644'
+      sha256: 5fe6fd1bc79c3143622683ac71daf8b1f876b0ac71ad43d9e1817daaf4a632a9
+      size: 5645
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/coding-standards/projection-standards.md
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/projection-standards.md
+  source_file_sha256: e7016eba7ae63efa4c279f2e4288f12aa26f2d7a377bcd13a9c4a93f62a3d907
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/projection-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: a8bcc352c2ff7243a1e4b04c99ea86080eb31362
+      mode: '100644'
+      sha256: e7016eba7ae63efa4c279f2e4288f12aa26f2d7a377bcd13a9c4a93f62a3d907
+      size: 6193
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/coding-standards/reactor-standards.md
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/reactor-standards.md
+  source_file_sha256: 7bba57e86370fe76a653906013d297142900244d3ed7f0f65f78c93da3047988
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/reactor-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: 67c5f6966130e933f5f09e2f239844e62bbb36cc
+      mode: '100644'
+      sha256: 0d590f2c6dfe6ebc38d1cdcb1625ac59bf79aae06b60cce3eb2f126f31a8c9b3
+      size: 4087
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+- canonical_source:
+    path: standards/coding-standards/repository-standards.md
+  migration_provenance:
+    legacy_path: .dev/standards/coding-standards/repository-standards.md
+  source_file_sha256: e728b64ed10658622b66463f1d1f85e38542e6bf9c19c455c83965813a94184b
+  packet_state: identity-allocation-required
+  resolver_disposition: unpacketized-fail-closed
+  reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive
+    a path-based ID or packet it.
+  relocation_provenance:
+    source_identity:
+      path: .ai/assets/tech-stacks/dotnet-backend/standards/coding-standards/repository-standards.md
+      commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+      git_blob: d7cc7193cceb22ddb5cb76943a9981d941bf6bcc
+      mode: '100644'
+      sha256: e728b64ed10658622b66463f1d1f85e38542e6bf9c19c455c83965813a94184b
+      size: 12707
+    stale_catalog_source_file_sha256: 5a44f7bd3566c6df023e745f7024fc6353299497136aa716399f8ca1e570d16d
+    recorded_hash_matches_source: false
+source_provenance:
+  identity:
+    path: .ai/assets/tech-stacks/dotnet-backend/engineering-rule-catalog.yaml
+    commit: 6f5a13046f1978ba4b8701e4ae772faecde2c2ff
+    git_blob: a153141cbfc852feeaef6758afbde688c1a024dd
+    mode: '100644'
+    sha256: e26dffe17074ccdf33a925d865cf2b24216db1d3d8afb25f678fa828aadc2ef4
+    size: 49682
+  meaning: Inert source identity only; never an installed dependency.

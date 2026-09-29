@@ -1,6 +1,6 @@
-metadata_version: 3
+metadata_version: 4
 id: ddd-ca-hex-architect
-version: 0.1.0
+version: 0.2.0
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -42,3 +42,26 @@ operations:
   - Review classification, coverage, valid alternatives and bounded handoff
   instructions: references/review.md
   implementation_status: implemented
+knowledge_consumption:
+- id: common-architecture
+  package: engineering-common
+  version: 0.1.0
+  operations: [design, review]
+  resources:
+  - engineering-rule-catalog
+  requirement: optional
+  on_missing: unavailable
+- id: dotnet-architecture
+  package: dotnet-backend
+  version: 0.1.0
+  operations: [design, review]
+  resources:
+  - engineering-rule-catalog
+  - member:standards/BUILDING-BLOCKS-RECONSTRUCTION-CONTRACT.md
+  - member:standards/DESIGN-BY-CONTRACT.md
+  - member:standards/coding-standards/aggregate-standards.md
+  - member:standards/coding-standards/transactional-messaging-standards.md
+  - member:standards/coding-standards/usecase-standards.md
+  - member:standards/project-structure.md
+  requirement: optional
+  on_missing: unavailable

@@ -25,7 +25,7 @@
 | `.dev/guides/ai-collaboration-guides/` | Human | skill 使用說明、prompt 範本、workflow、採用建議 |
 | `.dev/guides/` | Human | 一般開發、架構、框架指南 |
 | `.ai/` | Agent | prompts、shared rules、scripts |
-| `.ai/assets/skills/` | Agent | canonical skill specs、references、registry |
+| `.ai/core/skills/` | Agent | canonical skill specs、references、registry |
 | `.agents/skills/` / `.claude/skills/` | Agent | thin runtime wrappers、runtime metadata |
 
 ## 何時應新增到 `.dev/guides/ai-collaboration-guides/`
@@ -48,7 +48,7 @@
 4. Prompt 撰寫方式
 5. 2 到 6 個可直接複製的 prompt 範本
 6. 預期輸出或回傳格式
-7. 與 `.ai/`、`.ai/assets/skills/`、runtime wrappers、`.dev/` 其他文件的關係
+7. 與 `.ai/`、`.ai/core/skills/`、runtime wrappers、`.dev/` 其他文件的關係
 
 ## 撰寫原則
 
@@ -61,7 +61,7 @@
 ## 單一真相規則
 
 - Human-facing 的正式說明以 `.dev/guides/ai-collaboration-guides/` 為主。
-- Canonical skill 規則以 `.ai/assets/skills/<skill>/skill.yaml` 與其 references 為主。
+- Canonical skill 規則以 `.ai/core/skills/<skill>/SKILL.md` 與其 references 為主。
 - `.agents/skills/<skill>/SKILL.md` 與 `.claude/skills/<skill>/SKILL.md` 只保留薄入口與 runtime metadata。
 
 ## 命名建議

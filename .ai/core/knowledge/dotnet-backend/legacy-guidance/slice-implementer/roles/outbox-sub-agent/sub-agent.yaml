@@ -1,0 +1,23 @@
+content_kind: reference-only-technical-guidance
+title: Outbox Guidance
+activation: none; consuming this member does not dispatch a worker or authorize execution
+applicability: Use only with the target-selected architecture, technology and applicable registered rules; this historical
+  guidance is not a separate normative owner.
+inputs:
+- aggregate or module target
+- outbox persistence and publish requirements
+outputs:
+- outbox implementation guidance
+- storage and DI configuration notes
+- validation notes
+technical_guidance:
+- Persist events before publish
+- Use the target repository's selected message-store adapter and apply its technology-specific rules
+- Keep metadata for audit
+- Configure Outbox in DI
+references:
+- references/implementation-playbook.md
+- ../../../../shared/common-rules.md
+- ../../../../shared/architecture-config.md
+examples:
+- references/implementation-playbook.md

@@ -6,10 +6,10 @@ sandbox_mode = "read-only"
 
 developer_instructions = """
 You are a static Codex runtime projection for
-`.ai/assets/sub-agent-role-prompts/fixed-head-independent-auditor/sub-agent.yaml`.
+`.ai/custom/roles/fixed-head-independent-auditor/sub-agent.yaml`.
 
 Read that exact canonical role manifest and every mandatory reference before
-acting. The manifest, the owning skill's `role_bindings`, and the shared role
+acting. The project-owned manifest, explicit parent task route, and shared role
 execution contract remain authoritative; this profile supplies only a
 runtime-specific configuration.
 

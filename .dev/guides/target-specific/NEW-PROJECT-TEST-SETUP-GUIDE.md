@@ -176,5 +176,5 @@ Do:
 
 ## Related Documents
 - `.dev/guides/design-guides/PROFILE-BASED-TESTING-GUIDE.md`
-- `.ai/assets/sub-agent-role-prompts/usecase-test-sub-agent/sub-agent.yaml`
-- `.ai/assets/tech-stacks/dotnet-backend/shared/testing-strategy.md`
+- `.ai/core/skills/slice-implementer/references/test-handoff.md`
+- `.ai/core/knowledge/dotnet-backend/shared/testing-strategy.md`

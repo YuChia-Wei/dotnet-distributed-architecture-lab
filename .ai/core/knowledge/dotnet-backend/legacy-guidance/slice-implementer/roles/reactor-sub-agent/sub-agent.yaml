@@ -1,0 +1,24 @@
+content_kind: reference-only-technical-guidance
+title: Reactor Guidance
+activation: none; consuming this member does not dispatch a worker or authorize execution
+applicability: Use only with the target-selected architecture, technology and applicable registered rules; this historical
+  guidance is not a separate normative owner.
+inputs:
+- event trigger
+- consistency coordination goal
+- integration or projection expectations
+outputs:
+- reactor implementation guidance
+- event-processing rules and output structure
+- follow-up validation notes
+technical_guidance:
+- Reactors handle event data, not domain entities
+- Use WolverineFx message handlers for event processing
+- No direct cross-aggregate repository query
+references:
+- references/implementation-playbook.md
+- ../../../../shared/common-rules.md
+- ../../../../shared/architecture-config.md
+- ../../../../shared/testing-strategy.md
+examples:
+- references/implementation-playbook.md

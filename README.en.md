@@ -6,7 +6,7 @@ This document is the English translation of the canonical Traditional Chinese re
 
 `dotnet-mq-arch-lab` is a distributed commerce sample project built with .NET 10. It implements and validates DDD, Clean Architecture, CQRS, event-driven integration, Outbox, Event Sourcing, and message-queue-based collaboration between bounded contexts.
 
-The repository also maintains a reusable AI collaboration context. Product truth is owned by `src/`, `tests/`, `docker-compose/`, and validated project documentation under `.dev/`, while portable AI rules are owned by `.ai/assets/`.
+The repository also maintains a reusable AI collaboration context. Product truth is owned by `src/`, `tests/`, `docker-compose/`, and validated project documentation under `.dev/`, while portable AI rules are owned by `.ai/core/knowledge/` and the target-owned `.dev/ai-context/` authority.
 
 ## Bounded Contexts
 
@@ -158,7 +158,7 @@ Run the solution tests:
 dotnet test MQArchLab.slnx
 ```
 
-This repository currently has no active target-owned analyzer or runtime-validator projects. They were retired during the governed v0.9 AI-context upgrade, and v0.13 also removed the former bundled mechanical-validation provider. Only reference-only recipes remain under `.ai/assets/tech-stacks/dotnet-backend/tooling/on-demand-mechanical-validation/`; they are not selected, included in `MQArchLab.slnx`, wired into the build, or activated.
+This repository currently has no active target-owned analyzer or runtime-validator projects. They were retired during the governed v0.9 AI-context upgrade, and v0.13 also removed the former bundled mechanical-validation provider. Only reference-only recipes remain under `.ai/core/knowledge/dotnet-backend/tooling/on-demand-mechanical-validation/`; they are not selected, included in `MQArchLab.slnx`, wired into the build, or activated.
 
 ## Operations and administration frontends
 
@@ -188,9 +188,10 @@ The four business APIs use `/api/products`, `/api/orders`, `/api/inventory`, and
 ## AI Collaboration Entry Points
 
 - `AGENTS.md`: canonical agent collaboration guide
-- `.ai/INDEX.MD`: canonical AI asset index
-- `.ai/assets/skills/README.MD`: canonical skill registry
-- `.agents/skills/README.md` and `.claude/skills/README.md`: runtime wrappers
-- `.dev/guides/ai-collaboration-guides/README.MD`: human-facing usage guide
+- `.ai/INDEX.MD`: AI package and knowledge index
+- `.dev/ai-context/skills.md`: current selected skill routes
+- `.dev/ai-context/CURRENT-FRAMEWORK.md`: RC2 installation state and target adoption boundary
+- `.dev/ai-context/TARGET-ENGINEERING-RULES.md`: retained target rules and customizations
+- `.agents/skills/README.md` and `.claude/skills/README.md`: runtime entries
 
-If an AI context update causes project truth to be overwritten by source-framework content, use `ai-context-init` to rebuild it from repository evidence. Do not directly reuse the source repository's product names, credentials, ports, domains, or workflow records. Historical records retain the `repo-structure-sync` name.
+When an AI context update conflicts with project truth, repair target authority from current repository evidence. Do not reuse the source repository's product names, credentials, ports, domains, or workflow records. The historical `repo-structure-sync` name describes only its original record.

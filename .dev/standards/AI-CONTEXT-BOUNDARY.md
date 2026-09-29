@@ -6,10 +6,10 @@ This standard defines where AI collaboration context belongs and how to separate
 
 | Class | Meaning | Primary Location |
 | --- | --- | --- |
-| Universal AI context | Canonical portable baseline concepts, rules, constraints, and abstract enforcement capabilities reusable across repositories and technology stacks. | `.ai/assets/shared/` |
-| Skill context | Canonical top-level skill specs and skill references. | `.ai/assets/skills/` |
-| Sub-agent context | Owning-skill bounded worker role prompts and references; they may execute direct inline or through genuine delegation. Shared roles live under the shared role tree and private roles beside their owning skill. This category does not prove an invocation. | `.ai/assets/sub-agent-role-prompts/`, `.ai/assets/skills/<skill-id>/roles/` |
-| Tech-stack context | Canonical portable profile defaults, rules, constraints, bindings, bundled tooling, and execution context tied to a specific stack profile. | `.ai/assets/tech-stacks/<profile>/` |
+| Universal AI context | Canonical portable baseline concepts, rules, constraints, and abstract enforcement capabilities reusable across repositories and technology stacks. | `.ai/core/knowledge/engineering-common/` |
+| Skill context | Canonical top-level skill specs and skill references. | `.ai/core/skills/` |
+| Sub-agent context | Owning-skill bounded worker role prompts and references; they may execute direct inline or through genuine delegation. Shared roles live under the shared role tree and private roles beside their owning skill. This category does not prove an invocation. | `.ai/custom/roles/`, `.ai/core/skills/<skill-id>/roles/` |
+| Tech-stack context | Canonical portable profile defaults, rules, constraints, bindings, bundled tooling, and execution context tied to a specific stack profile. | `.ai/core/knowledge/<profile>/` |
 | Runtime wrapper context | Thin runtime entries for a specific agent tool. | `.agents/skills/`, `.claude/skills/` |
 | Source governance and ownership registry | Framework governance, ownership classification, and the registry that identifies each artifact's canonical owner. A current registry record whose legacy `canonical_path` is here is transitional-unmigrated until reclassified. | `.dev/standards/` |
 | Target-effective AI-context truth | A target's adopted rule and constraint state, semantic deltas, tuning, waivers, provenance, and decision evidence. It is shared execution truth for humans and agents. | `.dev/ai-context/` |
@@ -30,12 +30,12 @@ It explicitly excludes Razor, Blazor, MAUI, ASP.NET MVC view rendering, and othe
 
 ## Placement Rules
 
-- Put cross-technology portable baseline concepts, rules, constraints, and abstract enforcement capabilities in `.ai/assets/shared/`.
-- Put .NET backend-only baseline defaults, rules, constraints, bindings, and bundled tooling in `.ai/assets/tech-stacks/dotnet-backend/`.
+- Put cross-technology portable baseline concepts, rules, constraints, and abstract enforcement capabilities in `.ai/core/knowledge/engineering-common/`.
+- Put .NET backend-only baseline defaults, rules, constraints, bindings, and bundled tooling in `.ai/core/knowledge/dotnet-backend/`.
 - Put source governance and the ownership registry in `.dev/standards/`. A current registry record with a legacy `canonical_path` under `.dev/standards/` is resolved as `transitional-unmigrated` until the migration matrix reclassifies it; `.dev/standards/` is not the blanket future owner for framework semantics.
 - Put a downstream target's effective semantic state, deltas, tuning, waivers, provenance, and reconciliation evidence in `.dev/ai-context/`. `.dev/` is shared execution truth, not a human-only tree.
-- Put canonical skill specs in `.ai/assets/skills/<skill-id>/`.
-- Put a shared bounded worker role definition in `.ai/assets/sub-agent-role-prompts/<role-id>/`, and a private role beside its owner in `.ai/assets/skills/<skill-id>/roles/<role-id>/`; either may execute direct inline or through genuine delegation, and placement alone does not prove an invocation.
+- Put canonical skill specs in `.ai/core/skills/<skill-id>/`.
+- Put a shared bounded worker role definition in `.ai/custom/roles/<role-id>/`, and a private role beside its owner in `.ai/core/skills/<skill-id>/roles/<role-id>/`; either may execute direct inline or through genuine delegation, and placement alone does not prove an invocation.
 - Put Codex runtime wrappers in `.agents/skills/<skill-id>/`.
 - Put Claude-compatible wrappers in `.claude/skills/<skill-id>/`.
 - Put project requirements, domain language, specs, operations truth, workflow artifacts, and architecture facts under `.dev/`.
@@ -84,7 +84,7 @@ Use these repository-native checks before accepting a discovery-tool conclusion:
 | Incomplete Markdown inventory | Run `git ls-files -- '*.md'` and compare the relevant paths with the tool result. |
 | Missing Markdown relationship | Search the literal target or link text with `git grep -n -F -- '<target-or-link-text>' -- '*.md'`, open the source file, and resolve the target relative to that file. |
 | Stale index or snapshot | Compare the tool's recorded revision, when available, with `git rev-parse HEAD`; directly reopen every file used by a material finding. |
-| Tool-specific omissions | Run `python .ai/scripts/validate-ai-context.py` for registered context contracts and record any relationship class the validator does not cover. |
+| Tool-specific omissions | Run the target validator selected by `.dev/project-config.yaml#validation.current_framework.local` for registered context contracts. While it is `unconfigured`, record that check as blocked, directly inspect candidate relationships, and do not claim a gate pass. |
 
 The 2026-07-13 Codebase Memory MCP probe is an example, not a permanent
 product contract: its full index omitted `.claude/` and exposed Markdown files
@@ -137,7 +137,7 @@ Before creating or moving an AI context file, answer these questions:
 ## Engineering Identity And Semantic Ownership
 
 Canonical portable universal baseline contract:
-`.ai/assets/shared/governance/ENGINEERING-IDENTITY-CONTRACT.md`
+`.ai/core/knowledge/engineering-common/references/ENGINEERING-IDENTITY-CONTRACT.md`
 
 Framework identity contract: `ENG-IDENTITY-001`
 
@@ -149,11 +149,11 @@ records.
 
 | Kind | Stable identity | Canonical owner | Not the owner |
 | --- | --- | --- | --- |
-| Engineering concept | `concept_id` (`CONCEPT-...`) | a cross-technology baseline record under `.ai/assets/shared/` | a profile, Diagnostic, package, target configuration, or registry alone |
-| Normative rule | `rule_id` (existing registered IDs remain valid; new IDs may use `RULE-...`) | the classified baseline record under `.ai/assets/shared/` or `.ai/assets/tech-stacks/<profile>/` | a projection of another record, checklist, skill, or provider |
-| Observable constraint | `constraint_id` (`CONSTRAINT-...`) | the classified baseline record under `.ai/assets/shared/` or `.ai/assets/tech-stacks/<profile>/` | a Diagnostic ID, command, or test name |
-| Abstract enforcement capability | `capability_id` (`CAPABILITY-...`) | a cross-technology capability record under `.ai/assets/shared/` | a particular analyzer, validator, package, or runtime configuration |
-| Technology binding | `binding_id` (`BINDING-...`) | the selected profile binding under `.ai/assets/tech-stacks/<profile>/` | the bound provider, Diagnostic ID, package version, or target configuration alone |
+| Engineering concept | `concept_id` (`CONCEPT-...`) | a cross-technology baseline record under `.ai/core/knowledge/engineering-common/` | a profile, Diagnostic, package, target configuration, or registry alone |
+| Normative rule | `rule_id` (existing registered IDs remain valid; new IDs may use `RULE-...`) | the classified baseline record under `.ai/core/knowledge/engineering-common/` or `.ai/core/knowledge/<profile>/` | a projection of another record, checklist, skill, or provider |
+| Observable constraint | `constraint_id` (`CONSTRAINT-...`) | the classified baseline record under `.ai/core/knowledge/engineering-common/` or `.ai/core/knowledge/<profile>/` | a Diagnostic ID, command, or test name |
+| Abstract enforcement capability | `capability_id` (`CAPABILITY-...`) | a cross-technology capability record under `.ai/core/knowledge/engineering-common/` | a particular analyzer, validator, package, or runtime configuration |
+| Technology binding | `binding_id` (`BINDING-...`) | the selected profile binding under `.ai/core/knowledge/<profile>/` | the bound provider, Diagnostic ID, package version, or target configuration alone |
 
 One concept may support several rules; one rule may yield several constraints;
 and a constraint may use several abstract capabilities and technology bindings.
@@ -162,9 +162,9 @@ not redefine the concept, rule, or constraint that they reference.
 
 Portable framework baselines are delivered under these distinct locations:
 
-- cross-technology baseline semantics: `.ai/assets/shared/`;
+- cross-technology baseline semantics: `.ai/core/knowledge/engineering-common/`;
 - .NET-specific baseline defaults, bindings, and bundled tooling:
-  `.ai/assets/tech-stacks/dotnet-backend/`;
+  `.ai/core/knowledge/dotnet-backend/`;
 - target-effective semantic state and target-selected enforcement disposition:
   `.dev/ai-context/`.
 
@@ -222,7 +222,7 @@ to fall back silently.
 
 ## Rule Ownership
 
-See [AI Context Rule Ownership](AI-CONTEXT-OWNERSHIP.md) and its machine-readable
-[registry](AI-CONTEXT-OWNERSHIP.yaml). Folder placement classifies the context;
-the registry resolves normative ownership when the same rule is consumed across
-multiple surfaces.
+See [AI Context Rule Ownership](AI-CONTEXT-OWNERSHIP.md) and the target
+[selected engineering rules](../ai-context/TARGET-ENGINEERING-RULES.md). Folder
+placement classifies the context; the selected knowledge catalogs and
+installation bindings resolve normative ownership across multiple surfaces.

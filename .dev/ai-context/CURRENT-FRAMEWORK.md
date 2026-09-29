@@ -1,150 +1,26 @@
-# Target framework binding and current checks
+# Current framework selection and target authority
 
-Owner decision: [the direct Issue 15 gate decision](../workflows/2026-09-23-framework-rc1-pilot/reconciliation-proposal.md#direct-target-gate-adoption-decision).
-This document describes the selected target contract. Consult
-[framework-binding.json](framework-binding.json) for its actual state.
-A preparation or blocked state prohibits activation; file presence is insufficient.
+Issue [#22](https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/22) authorizes replacing the prior RC1 installation in this target. The final fixed product source is `aad927328c20b08c8445e8ad1792eadd8ecc3466`, published as `v0.19.0-rc.2` by the source repository. The selected catalog identity is `catalog:1:0.19.0-rc.2:aad927328c20b08c8445e8ad1792eadd8ecc3466:eb997697e9cd8b348092773176162dbdb564ded7d52bef663fde80b98c427d9b`; the derived MQ subset identity is `subset:3:0.19.0-rc.2:aad927328c20b08c8445e8ad1792eadd8ecc3466:8e0eb8909b9a110b86398ed3f1a87d262b0691ddccdf63e7d49689a864556b71`.
 
-## Authority and installation identity
+Official API2 installed the selected managed bytes. After the owner's approval of nine URL-only repairs in target rule authority (raw SHA-256 `e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08`), an official rederived MQ subset and paired API2 plan/apply updated `.ai/framework.lock` (raw SHA-256 `be0cba5c82425c1fc67755b65b7956c6333d8205f637f4cb3e48e6c45f907223`) and `.ai/custom/installation.json` (raw SHA-256 `4d74012367bd1ec4a5aedb2ed7b923880c315dd7492d32559be88f101af3a5a3`). Rebind apply reported one changed project selection and 384 unchanged managed files, `managed-bytes-consistent`, matching protected inputs and `project_readiness: not-assessed`. Static read-back found both operation markers absent and the persistent writer guard regular and empty. These are installation and static observations, not target behavioral or admission validation.
 
-The managed installation is identified by the exact candidate metadata and
-installer-written .ai/framework.lock. A versioned candidate is not a published
-release, release tag, or a verified stable upgrade route. The binding pins the
-candidate selection/inventory/build bytes and, after successful installation,
-the actual lock and complete engine pin. Never hand-edit the lock.
+## Selected shape
 
-Retained provenance.yaml, customizations.yaml, effective-rules.yaml, both rule
-catalogs and the twenty effective-rule packets identify the v0.18-derived target
-rule and legacy-package baseline. They do not identify the new installation.
-Their original versions, dates, meanings and hashes remain intact. Current
-installation and target rule baseline are distinct explicit authorities.
+- Select all eighteen skill packages, `engineering-common` and `dotnet-backend` knowledge, and both `codex` and `claude` adapters.
+- Use Selection v2 `skill_naming: original`. Runtime entry directory, declared name and heading use each canonical skill ID. Old `framework-*` entries and legacy `ai-context-init/upgrader` wrappers have been retired.
+- Keep `.ai/custom/framework.json` as the explicit project operation settings for its seven configured skills. Do not discover or rewrite it implicitly. `.ai/custom/installation.json` is the project-owned desired selection; `.ai/framework.lock` is installer-owned observed installation identity.
+- Use official RC2 plan/apply for managed package, runtime and lock writes. Do not hand-write a lock, fabricate a receipt or infer target adoption from package availability.
 
-The four retained customizations remain binding:
+## Target decisions that survive replacement
 
-| Customization | Current target responsibility |
-| --- | --- |
-| CUST-DOTNET-MQ-GOVERNANCE | Issue-first scope, repository truth, scoped runtime metadata tracking, LF policy, explicit routes |
-| CUST-DOTNET-MQ-VALIDATION | Applicable checks, exact dependency/authority pins, truthful outcomes and independent target review |
-| CUST-DOTNET-MQ-REPO-TRUTH | Product and bounded-context architecture; retired tools remain inactive |
-| CUST-DOTNET-MQ-EXECUTION-PROVENANCE-ADOPTION | Actual AI attribution, target cutover timestamps and the one exact historical attestation |
+[Target engineering rules](TARGET-ENGINEERING-RULES.md) retain fourteen complete rule statements, their target predicates, twenty .NET request routes, four customizations and target Git cutovers. The installation selection must bind normative `engineering-common` and `dotnet-backend` resources to that exact target-owned authority and actual applicable project facts. Empty `bindings` would make knowledge available without adopted normative coverage. A binding hash detects drift; it is not an approval or pass. The source package's examples and templates do not change target product decisions.
 
-Package installation cannot override these subjects. In particular, Inventory's
-EF Core and Products/Orders' Dapper choices remain separate. Preserve plain xUnit
-v3 with GWT and the target BDDfy opt-out; select Moq or NSubstitute from the test
-project's actual authority. Generic framework examples are not new target decisions.
+Inventory uses EF Core/Npgsql; Products and Orders remain Dapper. Orders selects event sourcing. Procurement is a fourth business context; supplier systems and two frontends are current project facts. Use `.dev/ARCHITECTURE.md`, `.dev/project-config.yaml`, relevant operations, source, tests and Compose to confirm details. The project-owned seven skill operation stores in `.ai/custom/framework.json` remain separate from knowledge adoption. Existing records retain their own formats; installing a skill does not migrate them.
 
-## Codex routes and retained .NET rules
+## Execution and validation status
 
-The candidate selects all eighteen packages and only its generated Codex adapter.
-The thirteen replaced old Codex and thirteen old Claude entry directories are
-withdrawn only with exact archived bytes outside active discovery. The old
-ai-context-init/upgrader duties are retained only for their original published
-legacy formats and recovery; they are not entry points for the new candidate.
-Claude does not support this candidate. The target's active registry and root
-instructions must state these boundaries before readiness can be established.
+The owner authorized a **one-time exception for this RC2 adoption**: skip S6, runtime and upgrade/recovery experiments. Report each as `deferred-by-owner` and do not call static parsing, link, Git or read-back checks a behavioral pass. The previous RC1 target admission and independent review do not admit RC2. No CI restoration is authorized. Current target-local automated commit validation is unconfigured after retirement of the RC1 pinned validator; the planned Issue #22 commit message receives only the coordinator-selected source validator check against its exact message file.
 
-The new generic packages contain no built-in .NET extension. For target .NET work,
-use the package's current instructions together with the target's explicit rule
-binding. The binding's route_bindings select these existing target dimensions:
+The target's Issue-first authorization, workflow and Git policies, LF and scoped runtime metadata rules, actual AI provenance, and unique historical trailer exception remain in force. Independent review, target acceptance, hosted contexts, push, PR, merge, Issue closure, tag and publication are separate observations. Keep every failed, blocked, deferred and not-applicable state truthful.
 
-| Current package | Retained capability / modes and file types |
-| --- | --- |
-| slice-implementer | implementation: command, query, reactor, generic; selected C# production/test rows |
-| local-change-implementer | local-change/direct: C# production/test, project, SQL, YAML configuration |
-| code-reviewer | review/direct: .NET mixed review or C# review |
-| bdd-gwt-test-designer | test-design/direct: Gherkin or C# test |
-| spec-author | specification/direct: specification Markdown or JSON |
-| ddd-ca-hex-architect | architecture/direct: architecture decision |
-| requirement-author | requirements/direct: requirement Markdown |
-| problem-frame-author | problem-framing/direct: problem-frame YAML |
-| spec-compliance-validator | compliance-validation/direct: problem frame and .NET |
-
-All twenty rows retain technology_profile=dotnet-backend, all fourteen loaded
-rule IDs, their normative statements/digests and conditional applicability.
-A loaded rule is not automatically applicable to every artifact; preserve its
-actual predicate and selected evidence. Resolve the exact row before the governed
-action. Unknown or mismatched dimensions fail closed; do not borrow an unrelated
-architecture/review row for a different package.
-
-The other nine packages have explicit project scope and no existing .NET selector:
-adr, ai-context-auditor, ai-context-governance, diagnostic-analyst, lesson,
-local-backlog, pr, software-development-orchestrator and standards-promotion.
-This does not waive relevant target governance, product truth or decision authority.
-
-For .NET code review, resolve the packet first, then load retained
-.ai/assets/skills/code-reviewer/references/review-routing.yaml and only its selected
-target-owned .NET references. For slice modes retain the selected old
-slice-implementer mode/role/playbook dependencies as target implementation guidance,
-without activating their old top-level skill wrapper or automatically spawning roles.
-The retained compliance rules' 100% .NET gate remains separate from the new CBF
-tool's structural record validation. Structural success alone is not .NET compliance.
-
-## Explicit configuration and existing data
-
-The seven configured packages use .ai/custom/framework.json only when explicitly
-passed as project_config. The tools do not discover it automatically. Every
-public request must name project_root, the installed package_root and that config.
-Instruction-only packages have configuration=null and receive no invented settings.
-
-New stores are .dev/lessons/records, .dev/adr/records, .dev/knowledge/promotions,
-.dev/pull-requests, .dev/local-work-items, .dev/workflows-v2 and
-.dev/problem-frames/records. Existing historical records keep their formats/paths.
-README files are not records. Query success must include partial=false; explain
-reports configuration with capability not-probed, not write readiness.
-
-Lesson accept, ADR decide and promotion decisions require separately configured,
-real project evidence. No decision adapters are fabricated by this pilot. Read
-and ordinary draft capabilities do not grant decision authority. GitHub Issues
-remain authoritative for this workflow; optional local backlog records do not
-replace them or authorize external provider changes.
-
-## Selected current verification
-
-Run the target-owned command with the caller-selected immutable binding digest:
-
-    python -I -B .dev/ai-context/tooling/validate-current-framework.py --binding-sha256 <review-subject-binding-sha256> --git-range <accepted-base>..HEAD
-
-The command checks exact candidate/lock/managed bytes, complete active runtime discovery,
-baseline-exact withdrawn/legacy history, required current authority pins,
-retained target authority/dependency bytes, all twenty
-actual resolver calls and the unchanged target Git overlay. Changing the binding
-or its expected digest is a reviewed authority change, not automatic re-pinning.
-A digest proves identity, not user approval.
-
-Supporting validation also includes the seven installed public configuration/read
-surfaces, relevant new record schema/behavior checks, raw candidate-to-index-to-
-fresh-checkout parity, and this workflow's actual state. Python >=3.11,<4,
-PyYAML >=6,<7, jsonschema >=4.18,<5 and referencing where required are checked as
-actual runtime prerequisites for the selected package tools.
-
-Independent review is a separate mandatory admission gate against one immutable
-target subject, including the binding, current root/routes, custom configuration,
-gate implementation and validation evidence. Follow the retained target role and
-review-subject/lease contract selected for this adoption. A parent inventory or
-this command's selected-checks-passed result cannot substitute for that review.
-Any unresolved finding, missing/failed/pending review, subject/authority drift or
-dirty admission checkout keeps activation pending.
-
-Keep the old validate-target-ai-context.py and its pinned manifest/tests unchanged
-as v0.18 historical and legacy-package support. Its old wrapper projections,
-old backlog/workflow layout and package provenance do not validate the candidate.
-Legacy assessment/workflow/shell validators retain their named historical scope;
-a zero-check dependency result is not candidate dependency evidence. Source U001
-does not suspend any target obligation. Report every selected check and residual
-truthfully instead of relabeling old-package checks as current passes.
-
-## Independent review protocol for this pilot
-
-Retained ai-context-auditor skill.yaml selects fixed-head-independent-auditor,
-its playbook, ROLE-EXECUTION-CONTRACT and AGENT-EXECUTION-GUARDRAILS-CONTRACT.
-The current generic audit package also applies. This explicit target protocol
-does not reactivate the withdrawn ordinary audit wrapper. Tracked criteria:
-.dev/workflows/2026-09-23-framework-rc1-pilot/review-criteria.md.
-
-Before dispatch verify the clean immutable commit, criteria and authority hashes;
-validate the packet and acquire its read-only snapshot lease. Preserve genuine
-invocation evidence/report in the declared ignored root. Admit a passing receipt
-with .dev/ai-context/tooling/validate-target-terminal-audit.py --admit <receipt.json>
-against the unchanged full tree, then release the lease. Binding state pilot-review
-identifies a review subject, not a passing receipt. Ordinary use requires this
-separate admission; no tracked success annotation is needed after freeze.
+Historical RC1 workflows and delivery reports, where retained, document earlier observations only. Current route/discovery, selection, lock and acceptance must be read from the final installed files and this target's live evidence.

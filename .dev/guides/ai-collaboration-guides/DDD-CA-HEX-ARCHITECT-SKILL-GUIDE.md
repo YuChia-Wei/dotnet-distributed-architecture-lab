@@ -159,7 +159,7 @@ Return:
 Use $ddd-ca-hex-architect to reorganize the existing AI prompts in this repository into a reusable architecture skill/workflow.
 
 Scope:
-- Source prompt set: [.ai/assets/...]
+- Source prompt set: [.ai/core/...]
 - Desired target: [skill, references, prompt families, templates]
 - Main pain points: [duplication, inconsistency, hard to discover, too task-specific]
 
@@ -211,7 +211,7 @@ Use $ddd-ca-hex-architect to refactor the Product aggregate boundary and identif
 ```
 
 ```text
-Use $ddd-ca-hex-architect to reorganize canonical AI assets under `.ai/assets/` into reusable architect guidance for this repo.
+Use $ddd-ca-hex-architect to reorganize canonical AI assets under `.ai/core/` into reusable architect guidance for this repo.
 ```
 
 ## 建議的閱讀順序
@@ -219,13 +219,13 @@ Use $ddd-ca-hex-architect to reorganize canonical AI assets under `.ai/assets/` 
 如果你是第一次使用這個 skill，建議順序如下：
 
 1. 先看本文件，了解它能做什麼
-2. 再看 `.ai/assets/skills/ddd-ca-hex-architect/skill.yaml`，理解 canonical skill 規則
+2. 再看 `.ai/core/skills/ddd-ca-hex-architect/SKILL.md`，理解 canonical skill 規則
 3. 需要 runtime wrapper 時，再看 `.agents/skills/ddd-ca-hex-architect/SKILL.md` 或 `.claude/skills/ddd-ca-hex-architect/SKILL.md`
-4. 若要深挖設計依據，再看 `.ai/assets/skills/ddd-ca-hex-architect/references/`
+4. 若要深挖設計依據，再看 `.ai/core/skills/ddd-ca-hex-architect/references/`
 
 ## 與其他目錄的關係
 
 - 這份文件是給人看的，所以放在 `.dev/guides/ai-collaboration-guides/`
-- canonical skill 規則在 `.ai/assets/skills/ddd-ca-hex-architect/`
+- canonical skill 規則在 `.ai/core/skills/ddd-ca-hex-architect/`
 - runtime wrappers 在 `.agents/skills/ddd-ca-hex-architect/` 與 `.claude/skills/ddd-ca-hex-architect/`
 - 給 agent 重用的 prompt building blocks 仍然放在 `.ai/`

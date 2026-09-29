@@ -1,0 +1,19 @@
+content_kind: reference-only-technical-guidance
+title: Profile Config Guidance
+activation: none; consuming this member does not dispatch a worker or authorize execution
+applicability: Use only with the target-selected architecture, technology and applicable registered rules; this historical
+  guidance is not a separate normative owner.
+inputs:
+- environment and profile requirements
+- DI registration expectations
+outputs:
+- profile configuration guidance
+- environment-specific DI notes
+technical_guidance:
+- No hardcoded profile in tests
+- Use environment variables and appsettings.{Environment}.json
+- DI registration depends on environment
+references:
+- references/implementation-playbook.md
+examples:
+- references/implementation-playbook.md

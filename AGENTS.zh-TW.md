@@ -2,264 +2,37 @@
 
 [English](AGENTS.md)
 
-本文件是 canonical English agent-facing root collaboration guide `AGENTS.md` 的繁體中文（台灣）翻譯。
+本文件是 distributed-commerce lab 的繁體中文（台灣）協作指南，英文版 `AGENTS.md` 為 canonical 版本。子目錄中的 `AGENTS.*` 管轄其自身範圍。優先順序為：使用者直接授權、較深層指南、本指南、其他一般文件。
 
-## 適用範圍與優先順序
+## 專案與框架權威
 
-- 本文件是 AI agents 與人類在此 repository 中協作時的根目錄指南。
-- 這個 repository 是 .NET 分散式商務架構實驗室，並同時包含可重用的 AI collaboration context framework。
-- 如果子目錄有其他 `AGENTS.*` 檔案，較深層的檔案優先。
-- 指令優先順序：User/Approval > Subfolder AGENTS > This file > Other general documents。
-- 若有設定 IDE 的 MCP Server，且該 MCP Server 提供重構功能，優先使用 IDE MCP Server 的重構能力。
+本 repo 是 .NET 分散式商務架構實驗室。Products、Orders、Inventory 與 Procurement 是目前四個業務 bounded context。SupplierSandbox 與 SupplierMock 是外部系統範例；兩個 Vue 前端及 YARP 是現行應用介面。產品事實應核對 `MQArchLab.slnx`、專案檔、原始碼、測試、Compose 與目前 `.dev/` 專案紀錄。`.dev/project-config.yaml` 是產生的 inventory，與上述來源不符時應以來源為準。不得把框架來源 repo 的產品事實帶入本目標。
 
-## 目前 Framework 與目標權威
+[目前框架契約](.dev/ai-context/CURRENT-FRAMEWORK.md) 標示選定 RC2 安裝與實際狀態。[目標工程規則](.dev/ai-context/TARGET-ENGINEERING-RULES.md) 持有保留的十四條完整規範、二十條請求路由、四項客製化及目標 Git 邊界。已安裝的 skills 與 common/.NET knowledge 有別於目標採用。Package 或 wrapper 本身不證明規則適用，也不證明驗證通過。官方 lock 由 installer 持有，不得手改。只能使用實際安裝宣告的已儲存固定候選與 Codex、Claude 原名入口。
 
-本次僅支援 Codex 的 0.19.0-rc.1 試行，須閱讀
-[.dev/ai-context/CURRENT-FRAMEWORK.md](.dev/ai-context/CURRENT-FRAMEWORK.md)
-及其精確綁定。受管理 package 位於 .ai/core/skills，Codex 入口為產生的 framework-*。
-一般使用須先有獨立目標審查收據，且目前內容與准入的乾淨版本一致。
-安裝與選定檢查本身不足以啟用；准入前只執行本次已授權試行的整合與驗證。
+Issue #22 的負責人授權一次性的 RC2 破壞性替換，並明確延後 S6、runtime 與升級／還原試驗。這些檢查應記為 `deferred-by-owner`；靜態檢查不能當成行為驗收。此例外不恢復或啟用 CI。歷史 RC1 metadata、wrapper 與備份不是目前權威。
 
-本次安裝的佈局、入口與驗證指令，由目前綁定與目標 registry 決定，
-優先於互相衝突的舊版佈局指示。保留的 .NET 規則、四項客製化、產品真相、
-Git 歸屬與獨立審查仍為必要條件。舊 provenance 識別保留的規則與支援基線，
-不代表目前安裝。此候選尚未發布；穩定版及其升級路徑仍未建立。
-Claude 尚無此候選的 adapter。被取代的入口保存在
-.dev/ai-context/history/v0.18.0/runtime；不得探索或執行該歷史作為入口。
+## 產品決策
 
-## 預設執行原則
+- Inventory 使用 EF Core 與其選定的庫存／預留 outbox 邊界。Products 與 Orders 維持 Dapper。Orders 選用 event sourcing。Procurement 與供應商實驗有各自目前的需求及操作指南。
+- 保留具有可辨識 Given-When-Then 語義的純 xUnit v3 測試，以及明確的 BDDfy opt-out。Moq 或 NSubstitute 依各測試專案實際設定選擇。
+- 已退役的 analyzer 與 runtime-validation 專案維持停用。可重用範例、source include 與 template 在本目標另行採用前都是指引。
+- 保留目標 Issue-first 授權、LF policy、限定目錄的 `.codex/agents` 追蹤、實際 AI 歸屬，以及目標權威所述的唯一歷史 Git 例外。
 
-- 不得捏造專案事實、授權、執行或驗證。明確說明會影響結果的假設、不確定性與取捨。只有在尚未決定的方向會實質影響成果時，才詢問使用者。
-- 實作符合已接受範圍與可驗證完成條件的最小且完整一致的變更。避免推測性的功能、抽象設計與 context。
-- 僅修改任務所需的檔案。避免無關的清理，並移除自身變更所引入的 artifacts。
-- 執行前先建立可驗證的完成條件。反覆修正直到條件通過；否則應回報具體阻礙與任何略過的 validation。
-- 在既有授權範圍內持續執行一般可逆的實作與修復。只有缺少授權、範圍實質改變或 owner 決策尚未解決時才詢問。
-- 委派工作依 `.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md` 選定的證據層級執行。一般有界工作保留實際 invocation 與結果，且每個 worktree 只有一名 tracked writer；terminal、高風險、外部驗證與採用操作仍須保留完整證據。
+## 漸進載入與路由
 
-## Repository 定位
+從請求、Git/worktree 狀態、本指南及具名 Issue／artifact 開始。需要產品事實時，再讀 `.dev/ARCHITECTURE.md`、`.dev/project-config.yaml`、相關需求／規格及操作指南。透過[現行技能索引](.dev/ai-context/skills.md)選擇一個 skill 或 operation，讀取其已安裝入口與必要參考。AI context 變更須讀 `.dev/standards/AI-CONTEXT-BOUNDARY.md` 與 `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`。程式碼探索優先使用可用且新鮮的 code graph，實質結論仍須以 Git-tracked 檔案核對；graph 無法使用或不完整時再直接搜尋。
 
-這個 repository 的用途是：
+AI context 治理與遷移使用 `ai-context-governance`；稽核使用 `ai-context-auditor`。開發協調、架構、GWT 設計、code review、需求、規格、problem frame、實作及相容性驗證使用對應的選定 skill。通用 skill 指示不會默默取代目標 .NET knowledge 或有效規則的適用條件。執行 .NET 工作前，解析適用的目標權威與選定的 knowledge binding；專項涵蓋不足須如實說明。舊 `ai-context-init` 與 `ai-context-upgrader` wrapper 不是目標目前路由。
 
-- 展示以 .NET 10、DDD、Clean Architecture、CQRS、PostgreSQL、WolverineFx 與 message-oriented integration 建立的分散式商務系統；
-- 維護 `src/` 下目前有效的 `Products`、`Orders` 與 `Inventory` bounded contexts；
-- 維持 target-owned analyzer 與 runtime-validation projects 的退役狀態，除非後續 owner-approved workflow 明確重新引入；
-- 攜帶可重用的 AI Agent context、skills、sub-agent prompts 與 workflow rules，同時避免來源 repository 真相覆蓋本 repo 的產品真相；
-- 區分 `.ai/` 的 reusable context 與 source、deployment configuration、`.dev/` 所擁有的 target-repository truth。
+## Workflow、Git 與驗證
 
-目前產品真相優先以 `MQArchLab.slnx`、`global.json`、`*.csproj`、`src/`、`tests/` 與 `docker-compose/` 為證據。`.dev/project-config.yaml` 是產生的 inventory；若與上述來源衝突，必須以上述來源為準。除非本 repo 明確採用，`.ai/` 與 `.dev/standards/examples/` 下的 reusable examples 只屬於 guidance。
+變更 source-of-truth、AI context、路由或多階段工作時，使用 `.dev/standards/WORKFLOW-GATE-POLICY.md`。Workflow mode 須依 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`、`.dev/TEAM-GIT-FLOW-RULES.MD`，並在實質編輯前使用專用分支。Commit 依 `.dev/standards/GIT-COMMIT-POLICY.md` 及其 YAML 權威；有適用 validator 時，commit 前以檔案驗證完整預定訊息。AI model/runtime 歸屬須反映實際執行；RC1 固定雜湊 target validator 已退役，目前未設定新的目標本地自動 commit validator。
 
-## AI Agents 快速開始
+先定義可觀察驗收條件，再執行最小有意義的檢查。如實回報 `passed`、`failed`、`blocked`、`deferred` 與 `not-applicable`。獨立審查、CI、runtime 執行、package 安裝、目標規則採用、push、PR、merge、Issue／Project 狀態、tag 與發布是不同狀態。套用框架變更前須調和目標自有權威。保留無關修改、使用者資料與歷史證據。Fixture 或靜態結果不得充當實際產品／runtime 證據。
 
-1. 從請求、目前 Git/worktree 狀態、本檔與明確指出的 artifacts 開始。
-2. 當任務需要產品或 repository facts 時，閱讀 `README.md`、`.dev/ARCHITECTURE.md` 與 `.dev/project-config.yaml`；使用 `MQArchLab.slnx`、project files 與 `docker-compose/docker-compose.yml` 驗證 runtime 或 package facts。
-3. 使用 `.dev/ai-context/skills.md` 作為 canonical skill registry，且只為目前任務或階段擴展內容。明確分類為 generated 的 runtime entry 可直接執行；只有查閱 metadata、維護或釐清不一致時，才載入完整 canonical source。
-4. 在移動或重寫 AI context 前，先閱讀 `.dev/standards/AI-CONTEXT-BOUNDARY.md` 與 `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`。
-5. 使用 `.dev/guides/ai-collaboration-guides/README.MD` 查閱 human-facing guides，並使用 `.ai/INDEX.MD` 瀏覽 agent-facing AI assets。
+## 導覽與語言
 
-## CLI 執行路由
+`.ai/` 包含選定的受管理 skill 與 knowledge package、明確的專案設定及 installer 持有的 lock。`.agents/skills/` 與 `.claude/skills/` 是 runtime 探索入口。`.dev/` 包含產品事實、標準、目標權威、操作、workflow 與人類指南。`README.md` 是繁體中文產品入口；`README.en.md` 是英文版；`CLAUDE.md` 是簡薄的 runtime 指引。
 
-當較高優先順序的政策選擇跨邊界 CLI 執行時，遵循
-`.ai/assets/shared/CLI-EXECUTION-ROUTING-CONTRACT.md`。不得隱含建立或更新
-被忽略的 `.dev/ai-context/local/cli-execution-routing.yaml`。
-
-## 必要工作流程
-
-### Workflow Gate
-
-1. 當工作可能影響 source-of-truth、AI context、skill routing、wrapper sync，或跨越多個階段時，閱讀 `.dev/standards/WORKFLOW-GATE-POLICY.md`。
-2. 當 gate 要求 workflow mode 時，主動建立 workflow artifacts。
-3. 小型、局部、單次可完成的變更可維持 direct mode。
-
-Workflow artifact 規則：
-
-- 遵循 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`。
-- Branch 命名、checkpoint continuation、push 與 merge strategy 遵循 `.dev/TEAM-GIT-FLOW-RULES.MD`。
-- 建立 workflow artifact 或進行實質修改前，先建立或切換到獨立 workflow branch。Codex 預設命名為 `codex/<workflow-id>`。
-- 建立 `.dev/workflows/<workflow-id>/workflow.yaml` 作為 discovery locator。
-- 新 workflow 使用完整日期 `YYYY-MM-DD-<topic>` ID。
-- plan、task、report template、task ID 與 artifact root 由 workflow-owning skill 定義。
-- artifact 預設位於 `.dev/workflows/<workflow-id>/`；若 skill 使用其他 repository-relative root，仍須在 `.dev/workflows/` 保留 locator。
-- 新 workflow 與 task artifact 記錄 ISO 8601 `created_at` 與 `updated_at`。
-- 2026-07-11 起建立的 workflow 必須記錄 `branch` 與 `base_branch`。
-- 不要把 runtime workflow 紀錄放進 canonical skill 或 runtime wrapper 目錄。
-- Workflow 尚未完成時若使用者要求 merge/push，視為 checkpoint handoff 並維持 workflow active。只有 push 時從已推送的 branch 接續；checkpoint merge 後則從更新後的 target 建立新的獨立 continuation branch。
-- Workflow branch 預設使用 `--no-ff` 合併，除非使用者明確指定其他策略。
-
-### Git Commit Policy
-
-1. 遵循 `.dev/standards/GIT-COMMIT-POLICY.md`。
-2. 有 issue number 時使用 issue-bound `<type>(#<issue-number>): <summary>`（多個 issue 以逗號分隔）。
-3. 沒有 issue number 時使用 scope-bound `<type>(<scope>): <summary>`；前瞻 grammar 不接受字面上的 `|`。
-4. workflow-stage commits 需包含 `Why`、`What`、`Validation` 與 `Workflow` body sections。
-5. 目前安裝須執行 .dev/ai-context/CURRENT-FRAMEWORK.md 指定的檢查與獨立准入。
-   Git 檢查以 workflow range 與 ID 呼叫
-   .dev/ai-context/tooling/git-commit-policy/validate-target-git-commits.py，
-   保留前瞻 AI signature、subject grammar 邊界及精確歷史佐證。
-   舊 validate-target-ai-context.py 保留為舊版套件支援。
-   Package Git validator 本身不能取代目標 overlay。
-
-### AI Context Governance
-
-以下情境使用 `ai-context-governance`：
-
-- 通用與技術棧專用 context 分類；
-- AI 文件整理；
-- 語言政策調整；
-- skill routing 調整；
-- runtime wrapper sync；
-- context migration 規劃或執行。
-
-不要將純 AI 文件治理工作交給 `bdd-gwt-test-designer`。
-
-### AI Context Audit
-
-執行唯讀的 AI context 健康度與漂移分析時，使用 `ai-context-auditor`。若結果只回覆於對話，可維持 transient direct mode；只有使用者要求將稽核報告落地保存於 repository 時，才建立專用 workflow 與 branch。
-
-- 預設只檢查 AI context 與治理 surfaces。
-- 排除 `src/`、`tests/` 與其他產品 implementation trees。
-- 若使用者要求掃描產品 source 或 test code，停止擴大 audit，改為轉介 `code-reviewer`。
-- Audit finding 與 remediation 必須分開；只有在使用者授權整改後，才由 `ai-context-governance` 協調 AI context remediation lifecycle。
-- 僅因分析有多階段或使用 sub-agent，不代表必須建立 workflow；前提是沒有 repository mutation、remediation 或 durable report。
-- Durable report-only audit 對被稽核 surfaces 維持唯讀，commit 只包含 auditor 擁有的 workflow 與 report artifacts。
-
-### Development Workflow Orchestration
-
-當軟體開發工作需要多階段規劃、開發 skill routing、sub-agent coordination、validation checkpoint 或 commit checkpoint 時，使用 `software-development-orchestrator`。
-
-該 skill 可以協調 downstream skills，但不應取代它們各自的專業責任。
-
-一般 AI context audit、文件治理或 repository initialization 不交給 `software-development-orchestrator`；改由對應 owner skill 與其自有 workflow template 處理。歷史紀錄可保留已退役的 `dev-workflow` 識別碼。
-
-### Repo Init / Template Adaptation
-
-保留的 ai-context-init 僅用於原有已發布舊版格式及明確復原範圍。保留的 ai-context-upgrader 具有相同限制。兩者都不處理此候選、不修改其 lock，也不初始化目前安裝狀態。
-
-該 skill 必須：
-
-1. 依據檔案證據盤點目標 repository；
-2. 辨識 copied template 或歷史來源專案真相；
-3. 更新目標 repo 專屬的 `AGENTS.md`、`.dev/` 與必要 `.ai/` entry docs；
-4. 除非目標 repo 明確推翻，否則保留 framework-level collaboration rules；
-5. 移除或重寫來源 repo 專屬的 requirements、specs、operations docs、workflow artifacts 與 ADRs。
-
-以 `.ai/assets/skills/ai-context-init/references/migration-boundaries.md` 作為 authoritative migration boundary。歷史紀錄可保留已退役的 `repo-structure-sync` 識別碼。
-
-### Code Review
-
-程式碼審查使用目前通用的 code-reviewer；審查 .NET backend code 或 dotnet-backend implementation guidance 時，再加上以下保留的目標擴充。
-
-適用 code review 時：
-
-1. 載入 review guidance 前，先完成適用的 effective-rule preflight。
-2. 遵循目前 package 指示；選取保留的 .NET 擴充時，第一個載入 .ai/assets/skills/code-reviewer/references/review-routing.yaml。
-3. 依 explicit scope、type hierarchy 或 interface、path、general C# fallback 的順序選出所有 matching routes。
-4. 只載入這些 routes 選出的 canonical references 與適用 finding rule IDs。不要把 `CODE-REVIEW-INDEX.MD`、`CODE-REVIEW-CHECKLIST.md`、shared checklists 或 `checklist-reference.md` 當作第二套語意權威。
-5. Route 選定後才評估 role bindings，且僅在需要時載入 `role-execution.md`。Direct execution 為預設；delegation 必須具備 bounded eligibility 與 evidence。
-6. 建立 scoped checklist comparison table，並將問題分類為 `CRITICAL`、`MUST FIX` 或 `SHOULD FIX`。
-7. 若目標 repo 適用測試，執行最窄且有意義的 test command。
-
-### Spec Compliance
-
-在 problem-frame workflows 驗證 .NET 實作符合性時：
-
-1. 執行 `spec-compliance-validator`。
-2. Gate：coverage 必須是 100%。
-3. 若 coverage 不是 100%，回到 implementation 或 test generation 後再宣稱完成。
-4. 新 CBF 結構驗證本身不是 .NET 實作符合性；保留目標 compliance 規則與證據。
-
-## Skill Routing
-
-- 目前目標 skill registry：`.dev/ai-context/skills.md`
-- Current runtime wrappers：`.agents/skills/README.md`
-- Claude 舊版職責與候選版尚未支援聲明：`.claude/skills/README.md`
-- Human-facing skill guides：`.dev/guides/ai-collaboration-guides/README.MD`
-
-目前 package source 是 .ai/core/skills/<id>/SKILL.md，其精確受管理內容優先於 generated adapter；並須同時遵循 CURRENT-FRAMEWORK.md 與明確目標規則綁定。.ai/assets/skills 保留選定的目標 guidance 與舊版支援；舊 top-level 規格不得取代目前指示。
-
-使用下列邊界：
-
-| 需求 | Skill |
-| --- | --- |
-| 多階段開發流程協調、workflow artifacts、skill routing、validation 與 commit checkpoint | `software-development-orchestrator` |
-| 唯讀 AI context 健康度、漂移與結構分析；可選擇對話輸出或保存報告 | `ai-context-auditor` |
-| AI context cleanup、prompt boundary、language policy、wrapper sync | `ai-context-governance` |
-| 僅明確初始化或復原原有已發布舊版格式 | `ai-context-init` |
-| .NET backend architecture design | `ddd-ca-hex-architect` |
-| GWT scenario 與 assertion design | `bdd-gwt-test-designer` |
-| .NET backend code review | `code-reviewer` |
-| Requirement authoring | `requirement-author` |
-| Spec authoring | `spec-author` |
-| Problem frame authoring | `problem-frame-author` |
-| Bounded implementation slice | `slice-implementer` |
-| 局部技術程式變更 | `local-change-implementer` |
-
-## 檔案與目錄索引
-
-### 根目錄入口文件
-
-| Path | 說明 |
-| :--- | :--- |
-| `README.md` | Human-facing 繁體中文 repository identity 與本機啟動指南 |
-| `README.en.md` | Repository identity 與本機啟動指南的英文翻譯 |
-| `AGENTS.md` | Canonical English agent-facing root collaboration guide |
-| `CLAUDE.md` | 匯入 `AGENTS.md` 的薄 Claude Code project-memory 入口 |
-| `AGENTS.zh-TW.md` | Root collaboration guide 的繁體中文（台灣）翻譯 |
-
-### AI Assets (`.ai/`)
-
-| Path | 說明 |
-| :--- | :--- |
-| `.ai/INDEX.MD` | Agent-facing AI asset index |
-| `.ai/README.MD` | `.ai/` purpose and boundary guide |
-| `.ai/core/skills/` | 精確受管理的目前 skill packages |
-| `.ai/custom/framework.json` | 明確使用的目標 package 設定 |
-| `.ai/assets/` | 保留的目標規則、參考資料與舊版支援 |
-| `.ai/assets/shared/` | Universal shared AI context |
-| `.ai/assets/tech-stacks/dotnet-backend/` | .NET backend-specific context |
-| `.ai/assets/skills/code-reviewer/references/review-routing.yaml` | Canonical .NET backend code review routing contract |
-| `.ai/assets/tech-stacks/dotnet-backend/references/BUILDING-BLOCKS-CLASS-INDEX.MD` | .NET backend building block reference |
-| `.ai/assets/skills/` | 選定的目標 guidance 與舊版 skill 支援 |
-| `.ai/assets/sub-agent-role-prompts/` | 共用 canonical roles；skill 私有 roles 放在其所屬 skill 內 |
-| `.ai/scripts/` | 過渡期 AI workflow scripts、context governance checks 與本機工具 orchestration helpers |
-
-### Project Knowledge and Governance (`.dev/`)
-
-| Path | 說明 |
-| :--- | :--- |
-| `.dev/README.MD` | Human-facing project knowledge purpose 與 boundary guide |
-| `.dev/INDEX.md` | Project knowledge 檔案與目錄索引 |
-| `.dev/ARCHITECTURE.md` | 以證據重建的目前產品架構 |
-| `.dev/project-config.yaml` | 產生自本 repo facts 的 inventory |
-| `.dev/standards/` | Governance、context、workflow、coding、review 與 structure standards |
-| `.dev/guides/` | Human-facing guides |
-| `.dev/adr/` | ADR governance and retained decisions |
-| `.dev/requirement/` | Requirements and requirement authoring materials |
-| `.dev/domain-language/` | 領域統一詞彙範本與目標 repo 詞彙收納區 |
-| `.dev/specs/` | Specification organization and retained specs |
-| `.dev/operations/` | Operations docs and operations document guides |
-| `.dev/workflows/` | Workflow artifacts |
-
-### Runtime Skill Wrappers
-
-| Path | 說明 |
-| :--- | :--- |
-| `.agents/skills/README.md` | Current runtime wrapper index |
-| `.agents/skills/framework-<skill>/` | 目前產生的 Codex 入口 |
-| `.claude/skills/README.md` | Claude 尚未支援候選版與舊版職責索引 |
-| `.claude/skills/<skill>/` | 僅限原有舊版格式職責 |
-
-### 產品與 Tooling 根目錄
-
-| Path | 說明 |
-| :--- | :--- |
-| `MQArchLab.slnx` | 包含 bounded-context 與 product test projects 的 solution |
-| `src/` | Products、Orders、Inventory、shared contracts、building blocks 與空的 Shared Kernel placeholder project |
-| `tests/` | Products 與 Orders 的 product/domain tests |
-| `docker-compose/` | 本機產品、database、broker 與 observability topology |
-
-## 語言規則
-
-- Agent-facing context 應優先使用英文，除非來源材料本質上就是 human-facing 繁體中文。
-- Human-facing guides 與 README content 應優先使用繁體中文台灣用語。
-- Runtime adapters 應保持輕量。Generated runtime entries 必須維持為 canonical skill content 的同步投影，不得成為第二套權威。
-- Context 分類優先使用資料夾位置，而不是每個檔案各自加 metadata。
+Agent-facing 執行契約優先使用英文；human-facing 指南可用繁體中文（台灣）。`AGENTS.zh-TW.md` 必須與英文版在結構和規範上保持一致。Runtime 入口是已安裝 package 的投影，不是第二套語義權威。

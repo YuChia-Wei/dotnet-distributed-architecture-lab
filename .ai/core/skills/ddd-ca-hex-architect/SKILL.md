@@ -23,3 +23,7 @@ availability is separate from invocation or verification.
 Return prose by default. Optional ADR, specification or implementation handoffs
 carry decisions, open questions and existing authorization. Other installed
 skills are not required to complete a design or review.
+
+Optional selected knowledge follows the metadata-4 allowlist and each operation's
+installed-resource protocol. Selection does not adopt target rules or prove
+specialist coverage; common work remains available when knowledge is absent.

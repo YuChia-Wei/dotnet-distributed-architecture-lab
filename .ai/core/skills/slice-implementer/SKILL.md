@@ -23,3 +23,7 @@ selected coverage rather than silently selecting another technology.
 
 The source being implemented means these instructions exist. Actual target
 edits, tests, review, acceptance and external delivery are separate observations.
+
+Optional selected knowledge follows the metadata-4 allowlist and each operation's
+installed-resource protocol. Selection does not adopt target rules or prove
+specialist coverage; common work remains available when knowledge is absent.

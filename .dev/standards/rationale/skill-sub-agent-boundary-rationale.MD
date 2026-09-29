@@ -51,7 +51,7 @@ Drawbacks:
 
 Role mapping and applicability stay with the owning skill. Runtime selection
 uses the provider-neutral
-[Role Execution Contract](../../../.ai/assets/shared/ROLE-EXECUTION-CONTRACT.md):
+[Role Execution Contract](../../../.ai/custom/roles/shared/ROLE-EXECUTION-CONTRACT.md):
 
 - `direct` is the default and applies the same role contract inline without
   inventing a child invocation;

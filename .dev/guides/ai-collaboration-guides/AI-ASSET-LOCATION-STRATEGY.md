@@ -19,7 +19,7 @@ GitHub Copilot 是規劃中的可選整合，目前 repo 並未提供其 wrapper
 
 | 路徑 | 主要讀者 | 角色 |
 |------|---------|------|
-| `.ai/assets/` | Agent | canonical source for portable skills、sub-agent-role-prompts、shared packages |
+| `.ai/core/`、`.ai/custom/roles/` | Agent | selected portable skills and knowledge、project-owned role contracts |
 | `.dev/guides/ai-collaboration-guides/` | Human | human-facing guides、workflow、prompt 使用說明 |
 | `.dev/workflows/` | Human + Agent | plan / review-report / task artifact |
 | `.ai/` | Agent | reusable prompts、shared rules、scripts |
@@ -30,7 +30,7 @@ GitHub Copilot 是規劃中的可選整合，目前 repo 並未提供其 wrapper
 
 ### 結論
 
-- repo 內可版本控管且跨 agent 可共用的 skill 真相，應放在 `.ai/assets/skills/`
+- repo 內可版本控管且跨 agent 可共用的 skill 真相，應放在 `.ai/core/skills/`
 - `.agents/skills/` 與 `.claude/skills/` 都只是 runtime wrapper，不應再承擔 canonical skill 定義
 
 ### 目前建議
@@ -56,11 +56,10 @@ GitHub Copilot 是規劃中的可選整合，目前 repo 並未提供其 wrapper
 
 ### Canonical Source
 
-- `.ai/assets/`
-  - canonical skill specs
-  - canonical sub-agent role prompt specs
-  - legacy command specs during migration
-  - shared prompt packages
+- `.ai/core/`
+  - selected skill instructions and knowledge packages
+- `.ai/custom/roles/`
+  - project-owned role contracts
 - `.ai/`
   - 通用 prompt 元件
   - shared rules
@@ -90,10 +89,10 @@ GitHub Copilot 是規劃中的可選整合，目前 repo 並未提供其 wrapper
 
 ## 目前 repo 的建議決策
 
-1. 將 `.ai/assets/skills/` 作為 canonical skill registry 與 spec 位置
+1. 將 `.ai/core/skills/` 作為 canonical skill registry 與 spec 位置
 2. 保留 `.claude/skills/` 作為 Claude runtime skill wrapper 位置
 3. `.agents/skills/` 作為目前主要 runtime skill wrapper layer
-4. shared bounded worker role contracts 放在 `.ai/assets/sub-agent-role-prompts/`；private roles 放在 owning skill 的 `roles/`
+4. project-owned bounded worker role contracts 放在 `.ai/custom/roles/`；selected skill references 留在 `.ai/core/skills/`
 5. 將「Codex 直接可用」視為 wrapper + 本機設定問題，不是 canonical source 位置問題
 6. 將 `.ai/` 與 `.dev/guides/ai-collaboration-guides/` 視為跨 agent 長期可重用資產
 

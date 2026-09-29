@@ -1,0 +1,17 @@
+schema_version: '1.0'
+lifecycle_contract: '1.0'
+workflow_id: 2026-09-29-framework-rc2-adoption
+workflow_kind: ai-context-maintenance
+title: Replace RC1 context with RC2 in the distributed-commerce lab
+owner_skill: ai-context-governance
+status: completed
+current_phase: local-adoption-complete
+artifact_root: .dev/workflows/2026-09-29-framework-rc2-adoption
+entrypoint: workflow-plan.md
+created_at: '2026-09-29T10:26:05+08:00'
+updated_at: '2026-09-29T13:49:09+08:00'
+template_source: .dev/standards/templates/workflow-locator-template.yaml
+template_version: 1.0.0
+branch: codex/2026-09-29-framework-rc2-adoption
+base_branch: main
+issue_url: https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/22

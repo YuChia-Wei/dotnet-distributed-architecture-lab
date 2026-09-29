@@ -5,35 +5,30 @@
 
 ## 前置需求與執行方式
 
-支援的 Python CLI 需要 Python `>=3.11`。需要 YAML 的 CLI 使用已釘選的
-`PyYAML==6.0.3`；以所在 repository 或 extracted package 根目錄的
-`requirements.txt` 為準。
+支援的 Python CLI 需要 Python `>=3.11`。需要 YAML 的 CLI 由保留的 `.ai/scripts/python_prerequisites.py` 檢查相容的 PyYAML；本 target 不提供 source framework 的 requirements mirror。
 
 已準備好直譯器時可直接執行 CLI：
 
 ```text
-python .ai/scripts/validate-ai-context.py --help
+python .ai/scripts/validate-workflow-artifacts.py --help
 ```
 
-需要由 shell 尋找可用直譯器時，改用對應 launcher：
+需要先檢查 target-retained entrypoint 的環境時，使用保留的 preflight：
 
 ```text
-sh .ai/scripts/run-python-entrypoint.sh .ai/scripts/validate-ai-context.py --help
-pwsh -File .ai/scripts/run-python-entrypoint.ps1 .ai/scripts/validate-ai-context.py --help
+python .ai/scripts/python_prerequisites.py --entrypoint validate-workflow-artifacts.py
 ```
 
-請只傳入 registry 所列的 CLI 路徑。source-only CLI 不會隨目標 package 發送，
-因此不在 extracted target 的 prerequisite 支援範圍；framework release
-publication 亦不屬於本指南的執行範圍。
+只有 preflight 成功後，才依 project policy 執行所選 validator；舊 shell/PowerShell launcher 已退役。
+
+請只傳入 `.ai/scripts/python-entrypoints.json` 所列的 target CLI。source-only CLI 不在此 target 的 prerequisite 支援範圍；framework release publication 亦不屬於本指南。
 
 ## 讀取 blocked 診斷
 
-預設輸出是 human-readable stderr 訊息。需要機器可讀結果時，在 direct CLI
-或 launcher 加上 `--diagnostic-format=json`：
+預設輸出是 human-readable stderr 訊息。需要機器可讀的 preflight 結果時，對保留的 prerequisite helper 加上 `--diagnostic-format json`：
 
 ```text
-python .ai/scripts/validate-ai-context.py --diagnostic-format=json
-sh .ai/scripts/run-python-entrypoint.sh .ai/scripts/validate-ai-context.py --diagnostic-format=json
+python .ai/scripts/python_prerequisites.py --entrypoint validate-workflow-artifacts.py --diagnostic-format json
 ```
 
 blocked 結果的 `outcome` 是 `blocked-by-environment`。human 與 JSON 都會說明

@@ -6,8 +6,6 @@
 | `AI-COLLABORATION-WORKFLOW-GUIDE.md` | End-to-end collaboration and routing overview. |
 | `AI-CONTEXT-AUDITOR-SKILL-GUIDE.md` | Read-only AI context audit usage. |
 | `AI-CONTEXT-GOVERNANCE-SKILL-GUIDE.md` | AI context remediation and lifecycle usage. |
-| `AI-CONTEXT-RELEASE-CLOSEOUT-SKILL-GUIDE.md` | Historical post-tag verification and exceptional source recovery; not a normal v0.12+ release stage. |
-| `AI-CONTEXT-UPGRADER-SKILL-GUIDE.md` | Provenance-aware framework upgrade usage. |
 | `AI-EXECUTION-PROVENANCE-AND-ATTRIBUTION-GUIDE.md` | Runtime model, reasoning effort, and Git attribution guidance. |
 | `AI-REFACTORING-SKILL-BOUNDARY-GUIDE.md` | Architect, reviewer, slice, and local-change boundaries. |
 | `AI-REFACTORING-SKILL-CONTRACTS.md` | Minimum input/output and handoff contracts. |
@@ -22,9 +20,7 @@
 | `LOCAL-RUNTIME-WRAPPER-GUIDE.md` | Runtime wrapper setup and boundaries. |
 | `OPTIONAL-MINIMAL-WORKFLOW-MODE.md` | Minimal workflow mode. |
 | `PROBLEM-FRAME-AUTHORING-GUIDE.md` | Problem-frame drafting usage. |
-| `AI-CONTEXT-INIT-SKILL-GUIDE.md` | Initial target repository synchronization. |
 | `PYTHON-PREREQUISITE-DIAGNOSTICS-GUIDE.zh-TW.md` | Python prerequisite diagnostics and target-local validation selection. |
-| `REQUIREMENT-AND-SPEC-DESIGNER-STRATEGY.md` | Requirement/spec capability strategy. |
 | `REQUIREMENT-DESIGNER-PROMPT-GUIDE.md` | Requirement-authoring invocation examples. |
 | `SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md` | Skill and delegated-role taxonomy. |
 | `SLICE-IMPLEMENTER-SKILL-GUIDE.md` | Bounded slice implementation usage. |

@@ -19,3 +19,7 @@ This instruction package owns no executable, configuration or managed record
 store. It needs a permitted target editor for implementation and target-selected
 tools only for requested checks. Source presence is not execution. Missing
 selected specialist coverage and skipped/blocked checks remain explicit.
+
+Optional selected knowledge follows the metadata-4 allowlist and each operation's
+installed-resource protocol. Selection does not adopt target rules or prove
+specialist coverage; common work remains available when knowledge is absent.

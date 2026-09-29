@@ -71,7 +71,7 @@ AC，說明缺漏、有效替代方案與待釐清資訊，不修改原文、不
 
 設計輸出保留 scenario ID、來源／AC、具體 Given 資料、主要 When 與每個 Then
 的預期值。實作後由接收者補上測試檔、方法、step 與斷言位置，依
-[GWT 交接契約](../../../.ai/assets/shared/GWT-TEST-HANDOFF-CONTRACT.md) 逐項核對。
+[GWT 交接契約](../../../.ai/core/knowledge/engineering-common/references/GWT-TEST-HANDOFF-CONTRACT.md) 逐項核對。
 參數化測試可以共用方法，但每筆資料仍要有可辨識的 ID 與結果。
 
 測試本文應讀得出行為：`GivenMonthlyBudget(...)` 建立資料，
@@ -80,7 +80,7 @@ AC，說明缺漏、有效替代方案與待釐清資訊，不修改原文、不
 Then 不重跑待測操作、不抄演算法重算預期值；只寫 GWT 註解或名稱還不夠。
 
 採用 .NET profile 時可參考
-[可執行範例](../../../.ai/assets/tech-stacks/dotnet-backend/examples/bdd-step-methods/README.md)：
+[可執行範例](../../../.ai/core/knowledge/dotnet-backend/examples/bdd-step-methods/README.md)：
 BDDfy 預設與明確 opt-out 的 plain xUnit 使用相同情境與預期結果。具體實作仍交給
 `slice-implementer` 及適用的 test role；已有實作授權就一起交接，毋須再確認一次。
 review 檢查 scenario 與實際斷言的對應，test command 提供執行結果；兩者都要保留。
