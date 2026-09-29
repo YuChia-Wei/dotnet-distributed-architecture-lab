@@ -35,6 +35,8 @@ checkpoint 統一登錄於 `handoff-checkpoints.yaml`，並依
 
 `workflow.yaml` 是固定 locator。真正 artifact 預設放在相同目錄，也可由 workflow-owning skill 宣告其他 repository-relative `artifact_root`。詳細共通契約見 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`。
 
+2026-09-29 的資料遷移已將兩筆 software-development-orchestrator 主紀錄整合回各自既有的主題目錄：`workflow-plan.md` 為人類閱讀入口，`tasks/<原 task ID>.json` 保留任務與依賴，`migration-map.md` 對照 acceptance、decision、evidence、reference ID，而 `evidence/v2-source.workflow.json` 保存完整原始位元組與歷史。RC1 pilot 的第三筆 v2 紀錄是支援性證據，保留於其原有 AI-context workflow 的 `evidence/`，沒有升格為第二個主 workflow。舊 store 路徑與現行 RC2 設定的界線見 [retirement note](../workflows-v2/README.md)。
+
 `INDEX.MD` 是降低認知負載的 discovery view；locator 仍擁有 status、owner、updated time 與 entrypoint。跨 workflow 的 durable 待辦由 `.dev/backlog/` 管理，不應塞入本目錄的 index。
 
 建立新 workflow 時，必須先從預定 base branch 建立獨立 workflow branch，再建立 locator。Codex 預設使用 `codex/<workflow-id>`。Workflow 尚未完成時的 merge/push 是 checkpoint，但 `in_progress` 本身不是 merge blocker；只要另行授權、checkpoint 有效且 repository gate 通過即可整合。Transport 不得自動把 status 改成 `completed`；push-only 從遠端 workflow branch 接續，checkpoint merge 後才從更新後的 target 建立新的 continuation branch。Merge topology 依 `.dev/TEAM-GIT-FLOW-RULES.MD` 的正向選擇規則決定。

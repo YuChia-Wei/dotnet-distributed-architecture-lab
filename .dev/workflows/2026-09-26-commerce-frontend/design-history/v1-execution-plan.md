@@ -1,8 +1,8 @@
 # Execution ownership and continuation
 
-created_at: 2026-09-26T06:15:44+00:00; updated_at: 2026-09-26T06:15:44+00:00
+created_at: 2026-09-26T06:15:44+00:00; updated_at: 2026-09-29T22:11:55+08:00 (historical record-pointer annotation)
 
-Workflow2026-09-26-commerce-frontend; Issue18; parent root integration owner. One workflow, one PR/rollback unit. Primary record `.dev/workflows-v2/wf-0fa43e8dc60f4683ae1036abde90494b.workflow.json`.
+Workflow2026-09-26-commerce-frontend; Issue18; parent root integration owner. One workflow, one PR/rollback unit. Historical primary record path `.dev/workflows-v2/wf-0fa43e8dc60f4683ae1036abde90494b.workflow.json`; its exact bytes are now [retained here](../evidence/v2-source.workflow.json), with the current entry at [workflow-plan.md](../workflow-plan.md).
 
 - T001 root: requirements, architecture, UI/API/GWT baseline and review criteria.
 - T002 GPT-6 Sol/high: customer application, own `src/Frontend/Customer` only; build/unit/component tests and truthful report.

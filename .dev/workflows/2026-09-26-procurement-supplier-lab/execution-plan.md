@@ -1,6 +1,8 @@
 # Execution plan and attribution
 
-Workflow: 2026-09-26-procurement-supplier-lab. Issue: #17. Primary record: `.dev/workflows-v2/wf-28ef2d2ffe044802a4ddba263d5e5471.workflow.json`. All task worktrees belong to this single workflow; no task creates a successor workflow. Root is the final integration/review owner. Owner final review stays pending after delivery.
+Record pointer updated at 2026-09-29T22:11:55+08:00 for the local migration; task outcomes below remain historical.
+
+Workflow: 2026-09-26-procurement-supplier-lab. Issue: #17. Primary record: [workflow-plan.md](workflow-plan.md); exact retired v2 source and ID mapping are in [migration-map.md](migration-map.md). All task worktrees belong to this single workflow; no task creates a successor workflow. Root is the final integration/review owner. Owner final review stays pending after delivery.
 
 | task_id | owner_skill | model / reasoning_effort | Owned result |
 | --- | --- | --- | --- |

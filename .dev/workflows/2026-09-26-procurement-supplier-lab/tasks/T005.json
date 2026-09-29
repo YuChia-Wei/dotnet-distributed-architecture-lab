@@ -1,0 +1,31 @@
+{
+  "workflow_id": "2026-09-26-procurement-supplier-lab",
+  "task_id": "T005",
+  "owner_skill": "slice-implementer",
+  "status": "completed",
+  "created_at": "2026-09-26T02:48:34.241017+00:00",
+  "updated_at": "2026-09-26T04:15:12.715056+00:00",
+  "timestamp_source": "v2 history first appearance and last observed task-content change",
+  "template_source": ".dev/standards/WORKFLOW-ARTIFACT-POLICY.md",
+  "template_version": "1.0",
+  "model": "gpt-6-sol",
+  "reasoning_effort": "high",
+  "model_attribution": "Child invocation where applicable; parent configured default for root tasks. See execution-plan.md.",
+  "workflow_locator": ".dev/workflows/2026-09-26-procurement-supplier-lab/workflow.yaml",
+  "source_record_id": "wf-28ef2d2ffe044802a4ddba263d5e5471",
+  "source_task_id": "T005",
+  "title": "Integrated lab operation",
+  "action": "Prepare Compose, solution integration, scripts and runbook against the specified module interfaces; perform deployment once worker commits are integrated.",
+  "completion_condition": "Integrated worker commits are deployed and the documented services and operation scripts work.",
+  "depends_on": [
+    "T001"
+  ],
+  "reason": "Authorized Compose deployment, startup/import helpers and end-to-end scripts actually ran.",
+  "result": "Lab remains available with preserved data/protected observability; documented controls and provider routes verified.",
+  "evidence_ids": [
+    "EV-FINAL-HTTP",
+    "EV-FINAL-UI",
+    "EV-FINAL-PROTECTED"
+  ],
+  "deferral": null
+}

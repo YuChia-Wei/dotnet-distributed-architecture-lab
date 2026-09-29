@@ -1,0 +1,27 @@
+{
+  "workflow_id": "2026-09-26-commerce-frontend",
+  "task_id": "T001",
+  "owner_skill": "requirement-author, ddd-ca-hex-architect, spec-author",
+  "status": "completed",
+  "created_at": "2026-09-26T06:11:01.468147+00:00",
+  "updated_at": "2026-09-26T06:15:45.586647+00:00",
+  "timestamp_source": "v2 history first appearance and last observed task-content change",
+  "template_source": ".dev/standards/WORKFLOW-ARTIFACT-POLICY.md",
+  "template_version": "1.0",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "ultra",
+  "model_attribution": "Child invocation where applicable; parent configured default for root tasks. See execution-plan.md.",
+  "workflow_locator": ".dev/workflows/2026-09-26-commerce-frontend/workflow.yaml",
+  "source_record_id": "wf-0fa43e8dc60f4683ae1036abde90494b",
+  "source_task_id": "T001",
+  "title": "Define requirements architecture UI/API contracts and observable scenarios",
+  "action": "Define requirements architecture UI/API contracts and observable scenarios",
+  "completion_condition": "Implementation baseline is committed and responsibilities are explicit",
+  "depends_on": [],
+  "reason": "Implementation contract prepared under owner delegated design authority",
+  "result": "Five baseline documents define scope interfaces visual design scenarios and ownership",
+  "evidence_ids": [
+    "EV-SPEC18"
+  ],
+  "deferral": null
+}
