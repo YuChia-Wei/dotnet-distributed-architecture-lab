@@ -180,6 +180,7 @@ dotnet test MQArchLab.slnx
 - [.dev/ARCHITECTURE.md](.dev/ARCHITECTURE.md)：目前產品架構與依賴邊界
 - [.dev/requirement/distributed-commerce-bounded-context-overview.md](.dev/requirement/distributed-commerce-bounded-context-overview.md)：bounded-context requirement baseline
 - [.dev/specs/INDEX.MD](.dev/specs/INDEX.MD)：domain 與 test specs
+- [Procurement 正式規格](.dev/specs/domains/procurement/README.md)／[測試規格](.dev/specs/tests/procurement/README.md)：採購狀態、API、供應商與收貨整合契約
 - [.dev/specs/current-system-extension.md](.dev/specs/current-system-extension.md)：現況相對於三 context 重建基線的擴充邊界
 - [.dev/operations/context-map.md](.dev/operations/context-map.md)：context relationships
 - [.dev/operations/event-catalog.md](.dev/operations/event-catalog.md)：events 與 request/reply contracts

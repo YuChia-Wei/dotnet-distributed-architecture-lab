@@ -22,6 +22,8 @@ This index owns the file and directory catalog for `.dev/specs/`.
 | `tests/e2e/` | End-to-end journey test spec area. |
 | `tests/product/` | Product aggregate, use-case, and persistence test design; implementation coverage is partial. |
 | `tests/order/` | Order aggregate, use-case, lifecycle, and messaging test design; most listed scenarios are planned. |
+| `tests/procurement/` | Procurement aggregate, six operations and adapter verification design with source-presence and unexecuted-target distinctions. |
+| `tests/cross-domain/procurement-inventory-receipt.test-spec.md` | Receipt publication, Inventory idempotency and broker-recovery verification. |
 | `tests/inventory-item/` | Inventory test design; `tests/InventoryControl.Tests/` now exists, while this spec area is not a claim of full coverage. |
 
 ## Target-Repo Production Specs
@@ -31,6 +33,7 @@ This index owns the file and directory catalog for `.dev/specs/`.
 | `domains/product/` | Product aggregate, command/query use-case, and HTTP adapter specs. |
 | `domains/order/` | Event-sourced Order aggregate, lifecycle/query use-case, and HTTP adapter specs. |
 | `domains/inventory-item/` | InventoryItem aggregate, stock/query/reservation use-case, and HTTP adapter specs. |
+| `domains/procurement/` | Source-bound PurchaseOrder entity, six use cases, HTTP/supplier/persistence adapters and requirement reconciliation. |
 | `current-system-extension.md` | Dated source binding for implemented Procurement, supplier samples, and frontend additions outside the earlier reconstruction contracts. |
 
 ## System Reconstruction Specs

@@ -1,31 +1,31 @@
 # Spec File Organization Guide
 
-This document explains how to organize specs by bounded context, aggregate, and test target. This framework repository does not retain an active production/domain spec subtree; production specs are target-repository outputs, usually created by `repo-structure-sync` or a later workflow when source requirements exist. This repository retains rules, templates, and `.dev/specs/tests/`.
+This document explains how to organize specs by bounded context, aggregate, and test target. This target repository has active product, order, inventory-item and procurement production specifications alongside test designs. Preserve existing folder names and requirement/source bindings when filling a missing specification.
 
 ## Directory Structure
 
 ```text
-Framework repo (.dev/specs/):
+.dev/specs/
   README.MD
+  INDEX.MD
   SPEC-GUIDE.MD
   SPEC-ORGANIZATION-GUIDE.MD
+  domains/
+    <existing-domain-folder>/
+      entity/
+      usecase/
+      adapter/
   tests/
-    <bounded-context>/
+    <existing-domain-folder>/
       aggregate/
       use-cases/
       integration/
     cross-domain/
     e2e/
-
-Target repo (.dev/specs/ when production specs exist):
-  domains/
-    <bounded-context>/
-      <aggregate>/
-        entity/
-          <aggregate>-spec.md
-        usecase/
-          <action>-<aggregate>.json
+  reconstruction/
 ```
+
+The established folders represent one primary aggregate per context. An additional aggregate level can be introduced for a context that actually needs it; a documentation supplement does not require moving existing specs.
 
 ## Placement Rules
 
@@ -34,7 +34,7 @@ Target repo (.dev/specs/ when production specs exist):
 3. Use the same bounded-context/aggregate perspective for production and test specs.
 4. A relationship does not imply ownership. Do not place B's spec in A's aggregate directory merely because A references B.
 5. If bounded-context or aggregate ownership is unclear, use `ddd-ca-hex-architect` first; do not guess the path.
-6. This framework repository retains only guides, templates, and test-spec materials; it does not host an active `domains/` subtree.
+6. Use the existing target layout unless an authorized reorganization changes it. Keep production contracts, test designs and historical reconstruction scope distinct.
 
 ## Naming Rules
 

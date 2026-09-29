@@ -1,0 +1,45 @@
+{
+  "useCase": "GetPurchase",
+  "behavior": "Read an immutable order snapshot including receipts.",
+  "input": [
+    {
+      "name": "purchaseOrderId",
+      "type": "Guid"
+    }
+  ],
+  "aggregate": "PurchaseOrder",
+  "aggregateId": "Guid",
+  "method": "IPurchaseOrderQueries.GetByIdAsync",
+  "domainEvent": null,
+  "repository": "IPurchaseOrderQueries",
+  "output": "PurchaseOrderResponse",
+  "sourceBinding": {
+    "revision": "179b3e12bb1e5f1c67cee3158ccd414bd9a8b6a5",
+    "observedAt": "2026-09-29",
+    "status": "source-reconciled specification; no current runtime or compliance verdict",
+    "requirementsSource": ".dev/workflows/2026-09-26-procurement-supplier-lab/requirements.md"
+  },
+  "requirements": [
+    "US01",
+    "US02",
+    "AC01"
+  ],
+  "evidence": [
+    "src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs",
+    "src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs"
+  ],
+  "domainModelNotes": [
+    "No Procurement domain-event object is emitted. GoodsReceived is a separate producer-owned integration contract on first receipt."
+  ],
+  "inputType": "GetPurchaseInput",
+  "postconditions": [
+    "No supplier call or mutation.",
+    "Order and receipts are read from a coherent repeatable-read snapshot."
+  ],
+  "failures": [
+    "Missing identity: purchase_not_found."
+  ],
+  "acceptanceScenarios": [
+    "PS-V03"
+  ]
+}

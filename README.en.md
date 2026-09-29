@@ -179,6 +179,7 @@ The four business APIs use `/api/products`, `/api/orders`, `/api/inventory`, and
 - [.dev/ARCHITECTURE.md](.dev/ARCHITECTURE.md): current product architecture and dependency boundaries
 - [.dev/requirement/distributed-commerce-bounded-context-overview.md](.dev/requirement/distributed-commerce-bounded-context-overview.md): bounded-context requirement baseline
 - [.dev/specs/INDEX.MD](.dev/specs/INDEX.MD): domain and test specs
+- [Procurement specifications](.dev/specs/domains/procurement/README.md) / [test specifications](.dev/specs/tests/procurement/README.md): purchase state, API, supplier and receipt integration contracts
 - [.dev/specs/current-system-extension.md](.dev/specs/current-system-extension.md): current additions beyond the earlier three-context reconstruction baseline
 - [.dev/operations/context-map.md](.dev/operations/context-map.md): context relationships
 - [.dev/operations/event-catalog.md](.dev/operations/event-catalog.md): events and request/reply contracts

@@ -53,6 +53,8 @@ This index owns the file and directory catalog for `.dev/`. The `.dev/README.MD`
 | `specs/SPEC-GUIDE.MD` | Spec authoring guide. |
 | `specs/SPEC-ORGANIZATION-GUIDE.MD` | Spec organization guide. |
 | `specs/reconstruction/` | Durable source-independent reconstruction entrypoint, blueprint, machine-readable manifests, and readiness matrix. |
+| `specs/domains/procurement/README.md` | Procurement entity, operation and adapter specifications with requirement/source bindings. |
+| `specs/tests/procurement/README.md` | Procurement test design and existing-source coverage, including the Inventory receipt boundary. |
 | `specs/current-system-extension.md` | Current Procurement, supplier, and frontend additions beyond the earlier three-context reconstruction scope. |
 | `specs/tests/` | Test-spec storage guidance and examples. |
 

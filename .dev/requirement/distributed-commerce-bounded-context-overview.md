@@ -59,6 +59,8 @@ The goal of this document is to provide the minimum project-specific requirement
 - The system must allow a supplier quote, single-product purchase creation and lookup, reconciliation of an uncertain supplier submission, and partial goods receipts.
 - Procurement must reject over-receipt and conflicting reuse of a receipt identity.
 
+Detailed behavior is recorded in the [Procurement specification set](../specs/domains/procurement/README.md), with [test designs and source mappings](../specs/tests/procurement/README.md). The original US/AC/BR identifiers remain bound to the [Procurement requirements baseline](../workflows/2026-09-26-procurement-supplier-lab/requirements.md); the spec entry records observed implementation differences without replacing that intent.
+
 ### Cross-context collaboration
 
 - Orders must not directly call another bounded context through web API.

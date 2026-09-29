@@ -1,0 +1,44 @@
+{
+  "useCase": "ListPurchases",
+  "behavior": "Read a bounded list of recent immutable purchase snapshots.",
+  "input": [
+    {
+      "name": "limit",
+      "type": "int",
+      "default": 100,
+      "constraint": "application clamps to 1..100; HTTP has no limit parameter"
+    }
+  ],
+  "aggregate": "PurchaseOrder",
+  "aggregateId": "Guid",
+  "method": "IPurchaseOrderQueries.RecentAsync",
+  "domainEvent": null,
+  "repository": "IPurchaseOrderQueries",
+  "output": "IReadOnlyList<PurchaseOrderResponse>",
+  "sourceBinding": {
+    "revision": "179b3e12bb1e5f1c67cee3158ccd414bd9a8b6a5",
+    "observedAt": "2026-09-29",
+    "status": "source-reconciled specification; no current runtime or compliance verdict",
+    "requirementsSource": ".dev/workflows/2026-09-26-procurement-supplier-lab/requirements.md"
+  },
+  "requirements": [
+    "US01",
+    "AC01"
+  ],
+  "evidence": [
+    "src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs",
+    "src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs"
+  ],
+  "domainModelNotes": [
+    "No Procurement domain-event object is emitted. GoodsReceived is a separate producer-owned integration contract on first receipt."
+  ],
+  "inputType": "ListPurchasesInput",
+  "postconditions": [
+    "Most recent created orders first; maximum 100.",
+    "SQL ordering is created_at DESC, id DESC; no pagination/cursor contract.",
+    "No supplier call or stock mutation."
+  ],
+  "acceptanceScenarios": [
+    "PS-V03"
+  ]
+}
