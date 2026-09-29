@@ -1,0 +1,29 @@
+{
+  "workflow_id": "2026-09-26-procurement-supplier-lab",
+  "task_id": "T003",
+  "owner_skill": "slice-implementer",
+  "status": "completed",
+  "created_at": "2026-09-26T02:48:34.241017+00:00",
+  "updated_at": "2026-09-26T03:40:17.352151+00:00",
+  "timestamp_source": "v2 history first appearance and last observed task-content change",
+  "template_source": ".dev/standards/WORKFLOW-ARTIFACT-POLICY.md",
+  "template_version": "1.0",
+  "model": "gpt-6-sol",
+  "reasoning_effort": "high",
+  "model_attribution": "Child invocation where applicable; parent configured default for root tasks. See execution-plan.md.",
+  "workflow_locator": ".dev/workflows/2026-09-26-procurement-supplier-lab/workflow.yaml",
+  "source_record_id": "wf-28ef2d2ffe044802a4ddba263d5e5471",
+  "source_task_id": "T003",
+  "title": "Procurement lifecycle",
+  "action": "Implement the procurement domain, use cases, persistence, HTTP supplier adapter, API and source outbox.",
+  "completion_condition": "Purchase and receipt contracts have focused tests and build.",
+  "depends_on": [
+    "T001"
+  ],
+  "reason": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+  "result": "Procurement implementation and all focused actual PostgreSQL scenarios completed; parent final acceptance remains T006.",
+  "evidence_ids": [
+    "EV-T003-PG"
+  ],
+  "deferral": null
+}

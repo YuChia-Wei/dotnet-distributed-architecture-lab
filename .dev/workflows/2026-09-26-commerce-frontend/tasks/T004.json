@@ -1,0 +1,29 @@
+{
+  "workflow_id": "2026-09-26-commerce-frontend",
+  "task_id": "T004",
+  "owner_skill": "slice-implementer",
+  "status": "completed",
+  "created_at": "2026-09-26T06:14:40.620018+00:00",
+  "updated_at": "2026-09-26T06:47:09.061978+00:00",
+  "timestamp_source": "v2 history first appearance and last observed task-content change",
+  "template_source": ".dev/standards/WORKFLOW-ARTIFACT-POLICY.md",
+  "template_version": "1.0",
+  "model": "gpt-6-sol",
+  "reasoning_effort": "high",
+  "model_attribution": "Child invocation where applicable; parent configured default for root tasks. See execution-plan.md.",
+  "workflow_locator": ".dev/workflows/2026-09-26-commerce-frontend/workflow.yaml",
+  "source_record_id": "wf-0fa43e8dc60f4683ae1036abde90494b",
+  "source_task_id": "T004",
+  "title": "Gateway and mock management adapter",
+  "action": "Implement bounded Microcks adapter and reproducible YARP/Nginx deployment",
+  "completion_condition": "Owned deliverable reviewed with actual checks and remaining limitations recorded",
+  "depends_on": [
+    "T001"
+  ],
+  "reason": "Owned implementation reviewed and integrated; actual environment acceptance belongs to T005",
+  "result": "Sol/high adapter/platform implementation: 6 in-memory Microcks tests, build/publish/Compose config passed. Parent reviewed malformed native JSON and build contexts. Existing Product orphan SQL repair built and actual UI PUT/GET passed. Docker F bind incompatibility handled by temporary C config, durable-main deployment still pending.",
+  "evidence_ids": [
+    "EV-T004"
+  ],
+  "deferral": null
+}

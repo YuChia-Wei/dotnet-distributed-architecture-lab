@@ -24,6 +24,7 @@ including 292 retained files, all 20 rule resolutions and unchanged Git overlay.
 Fourteen focused gate regressions passed. This is preparation for a fixed clean
 independent review, not adoption, provider integration or product readiness.
 Historical snapshots below are retained as the sequence of evidence.
+The separate supporting record-store pilot remains `planned` with its one task pending and acceptance not executed. Its exact retired v2 bytes and identity map are in [record-store-pilot-migration.md](record-store-pilot-migration.md); this did not change the governing Issue #15 workflow state.
 See evidence/installation.json, evidence/installed-public-readers.json,
 evidence/git-byte-parity.json, and the current-gate evidence/report.
 

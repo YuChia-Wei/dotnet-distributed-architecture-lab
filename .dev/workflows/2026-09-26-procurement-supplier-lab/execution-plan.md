@@ -1,6 +1,8 @@
 # Execution plan and attribution
 
-Workflow: 2026-09-26-procurement-supplier-lab. Issue: #17. Primary record: `.dev/workflows-v2/wf-28ef2d2ffe044802a4ddba263d5e5471.workflow.json`. All task worktrees belong to this single workflow; no task creates a successor workflow. Root is the final integration/review owner. Owner final review stays pending after delivery.
+Record pointer updated at 2026-09-29T22:11:55+08:00 for the local migration; task outcomes below remain historical.
+
+Workflow: 2026-09-26-procurement-supplier-lab. Issue: #17. Primary record: [workflow-plan.md](workflow-plan.md); exact retired v2 source and ID mapping are in [migration-map.md](migration-map.md). All task worktrees belong to this single workflow; no task creates a successor workflow. Root is the final integration/review owner. Owner final review stays pending after delivery.
 
 | task_id | owner_skill | model / reasoning_effort | Owned result |
 | --- | --- | --- | --- |
@@ -20,7 +22,7 @@ Evaluation keeps first delivery separate from corrections. Task difficulty and s
 ## Preflight observations
 
 - Baseline local/remote main: cc0e345367a1d24f49bf8fa68e0eb668df9e5e55. Framework receipt freshly admitted against identical full tree 1f1bac4fcc564657ae8eddb4ee1c704cc85c7284 in existing rc1 pilot worktree. No authority bytes changed.
-- Target effective packets resolved for selected authoring, architecture, implementation, review and compliance selectors; raw results are in ignored `artifacts/procurement-lab/effective-rules`.
+- Target effective packets resolved for selected authoring, architecture, implementation, review and compliance selectors. The temporary packet outputs were not retained; the selected contract and outcome are recorded in the tracked workflow documents.
 - Docker engine responded at 29.8.0. Existing unrelated observability Compose project remains running; commerce project was not listed as running. No data/volume deletion authorized.
 - Hosted Issue creation initially rejected by automatic approval; owner explicitly authorized it, then Issue #17 was created. Initial sandbox network/Docker/other-worktree read failures remain actual preflight failures, resolved through approved scoped access.
 - Code graph has stale Inventory implementation edges/snippets. Graph remains discovery only; implementation uses current tracked source on the baseline.
