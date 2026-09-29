@@ -1,0 +1,169 @@
+{
+  "useCase": "ProcurementController",
+  "behavior": "Map the six inbound HTTP operations to explicit application ports without owning purchase rules.",
+  "sourceBinding": {
+    "revision": "179b3e12bb1e5f1c67cee3158ccd414bd9a8b6a5",
+    "observedAt": "2026-09-29",
+    "status": "source-reconciled specification; no current runtime or compliance verdict",
+    "requirementsSource": ".dev/workflows/2026-09-26-procurement-supplier-lab/requirements.md"
+  },
+  "requirements": [
+    "AC01",
+    "AC02",
+    "BR01",
+    "BR04",
+    "BR06"
+  ],
+  "spec": {
+    "basePath": "/api/procurement",
+    "endpoints": [
+      {
+        "method": "GET",
+        "path": "/suppliers/{provider}/catalog/{sku}",
+        "useCase": "QuoteSupplier",
+        "input": "path provider, sku",
+        "responseDto": "SupplierQuoteResponse",
+        "successStatus": 200
+      },
+      {
+        "method": "POST",
+        "path": "/purchase-orders",
+        "useCase": "CreatePurchase",
+        "requestDto": "CreatePurchaseRequest",
+        "responseDto": "PurchaseOrderResponse",
+        "statuses": {
+          "pendingOrUnknown": 202,
+          "newSettledLocalIdentity": 201,
+          "existingSettledLocalIdentity": 200
+        },
+        "location": "Get purchase URL for 201/202; 201 does not imply supplier acceptance (Rejected is a settled outcome)"
+      },
+      {
+        "method": "GET",
+        "path": "/purchase-orders",
+        "useCase": "ListPurchases",
+        "responseDto": "PurchaseOrderResponse[]",
+        "successStatus": 200,
+        "limit": "fixed default 100; no query limit/pagination binding"
+      },
+      {
+        "method": "GET",
+        "path": "/purchase-orders/{id:guid}",
+        "useCase": "GetPurchase",
+        "responseDto": "PurchaseOrderResponse",
+        "successStatus": 200,
+        "notFoundStatus": 404
+      },
+      {
+        "method": "POST",
+        "path": "/purchase-orders/{id:guid}/reconcile",
+        "useCase": "ReconcilePurchase",
+        "requestDto": null,
+        "responseDto": "PurchaseOrderResponse",
+        "statuses": {
+          "pendingOrUnknown": 202,
+          "settled": 200
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/purchase-orders/{id:guid}/receipts",
+        "useCase": "ReceiveGoods",
+        "requestDto": "ReceiveGoodsRequest",
+        "responseDto": "ReceiveGoodsOutput",
+        "statuses": {
+          "newReceipt": 201,
+          "matchingReplay": 200
+        }
+      }
+    ],
+    "errorMapping": {
+      "invalid_request_or_domain_invalid_prefix": 400,
+      "domain_not_found_suffix": 404,
+      "other_domain_rule_conflict": 409,
+      "supplier_not_found": 404,
+      "supplier_identity_conflict": 409,
+      "supplier_business_rejection": 400,
+      "supplier_timeout_or_TaskCanceledException": 504,
+      "other_gateway_error_or_HttpRequestException": 502,
+      "unexpected": 500
+    },
+    "errorScope": "Only exceptions escaping the use case reach this mapping. Create/reconcile may absorb gateway failures and return a 202 order instead. A malformed Guid path can fail route matching with 404; invalid JSON/body binding is 400."
+  },
+  "contracts": {
+    "requestDtos": {
+      "CreatePurchaseRequest": [
+        {
+          "name": "clientRequestId",
+          "type": "Guid",
+          "constraint": "nonempty; globally unique creation identity"
+        },
+        {
+          "name": "productId",
+          "type": "Guid",
+          "constraint": "nonempty reference; existence is not checked here"
+        },
+        {
+          "name": "supplierSku",
+          "type": "string",
+          "constraint": "ASCII [A-Za-z0-9_-], length 1..64"
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "constraint": ">0"
+        },
+        {
+          "name": "unitPrice",
+          "type": "decimal",
+          "constraint": "0..9999999999999999.99; rounding to two decimal places leaves the numeric value unchanged"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "constraint": "exactly TWD"
+        },
+        {
+          "name": "provider",
+          "type": "string",
+          "constraint": "direct | wiremock | microcks, exact named value"
+        }
+      ],
+      "ReceiveGoodsRequest": [
+        {
+          "name": "receiptId",
+          "type": "Guid"
+        },
+        {
+          "name": "quantity",
+          "type": "int"
+        }
+      ]
+    },
+    "responseDtos": {
+      "SupplierQuoteResponse": "{sku:string,name:string,unitPrice:decimal,currency:string,origin:string}",
+      "PurchaseIdentityResponse": "{clientRequestId:Guid,productId:Guid,supplierSku:string,quantity:int,unitPrice:decimal,currency:string,provider:string}",
+      "PurchaseOrderResponse": "{id:Guid,identity:PurchaseIdentityResponse,state:string,supplierOrderId:string|null,receivedQuantity:int,version:int,createdAt:DateTimeOffset,updatedAt:DateTimeOffset,receipts:GoodsReceiptResponse[]}",
+      "GoodsReceiptResponse": "{receiptId:Guid,purchaseOrderId:Guid,productId:Guid,quantity:int,receivedAt:DateTimeOffset}",
+      "ReceiveGoodsOutput": "{order:PurchaseOrderResponse,receipt:GoodsReceiptResponse,created:bool}"
+    },
+    "problemDetails": "status/title/detail plus extensions code/message; invalid body code=invalid_request with at most five model-state errors in message",
+    "serialization": "ASP.NET web JSON camelCase fields; state serialized with JsonStringEnumConverter and declared enum names"
+  },
+  "policies": {
+    "idempotency": "ClientRequestId for purchase identity; ReceiptId for physical receipt. No HTTP stock side effect on acceptance.",
+    "authentication": "No deployment authentication/authorization middleware in this lab host. Local-only exposure is a deployment setting, not in-process authentication.",
+    "validation": "Delegate to use cases/domain and framework model binding; no claim of product existence validation.",
+    "cancellation": "Pass request CancellationToken. Create persists unknown with CancellationToken.None when supplier submission is cancelled after the local identity commit, then rethrows. Reconcile propagates caller cancellation without marking unknown."
+  },
+  "hostNotes": {
+    "health": "GET /health checks PostgreSQL SELECT 1 only; does not establish broker/supplier/schema readiness",
+    "gateway": "YARP frontend configuration forwards /api/procurement paths; the application base path stays unchanged"
+  },
+  "evidence": [
+    "src/Procurement/Presentation/Procurement.WebApi/ProcurementController.cs",
+    "src/Procurement/Presentation/Procurement.WebApi/Program.cs",
+    "src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs",
+    "docker-compose/docker-compose.frontend.yml"
+  ]
+}

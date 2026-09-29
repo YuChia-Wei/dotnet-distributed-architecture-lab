@@ -1,0 +1,78 @@
+{
+  "useCase": "ReceiveGoods",
+  "behavior": "Record actual received quantity and stage exactly one source event for a new receipt identity.",
+  "input": [
+    {
+      "name": "purchaseOrderId",
+      "type": "Guid",
+      "constraint": "lookup identity; Guid.Empty is not separately validated and ordinarily yields purchase_not_found"
+    },
+    {
+      "name": "receiptId",
+      "type": "Guid",
+      "constraint": "nonempty; globally unique receipt identity"
+    },
+    {
+      "name": "quantity",
+      "type": "int",
+      "constraint": ">0 and <= remaining quantity for a new receipt"
+    }
+  ],
+  "aggregate": "PurchaseOrder",
+  "aggregateId": "Guid",
+  "method": "PurchaseOrder.Receive",
+  "domainEvent": null,
+  "repository": "IGoodsReceiptCommitter",
+  "output": "ReceiveGoodsOutput(Order, Receipt, Created)",
+  "sourceBinding": {
+    "revision": "179b3e12bb1e5f1c67cee3158ccd414bd9a8b6a5",
+    "observedAt": "2026-09-29",
+    "status": "source-reconciled specification; no current runtime or compliance verdict",
+    "requirementsSource": ".dev/workflows/2026-09-26-procurement-supplier-lab/requirements.md"
+  },
+  "requirements": [
+    "US03",
+    "US04",
+    "AC02",
+    "BR03",
+    "BR04",
+    "BR05",
+    "BR07"
+  ],
+  "evidence": [
+    "src/Procurement/DomainCore/Procurement.Domains/PurchaseOrder.cs",
+    "src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs",
+    "src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs",
+    "src/Procurement/DomainCore/Procurement.Infrastructure/ProcurementOutboxRelay.cs"
+  ],
+  "domainModelNotes": [
+    "No Procurement domain-event object is emitted. GoodsReceived is a separate producer-owned integration contract on first receipt."
+  ],
+  "inputType": "ReceiveGoodsInput",
+  "integrationEvent": "Lab.BoundedContextContracts.Procurement.IntegrationEvents.GoodsReceived",
+  "steps": [
+    "Validate nonempty ReceiptId and positive quantity; invoke local receipt committer to find the purchase.",
+    "Under row lock, reject an identity owned by another purchase, then let the aggregate decide replay or new receipt.",
+    "Generate ReceivedAt with UTC millisecond precision for a new receipt.",
+    "Commit order, receipt and GoodsReceived source outbox atomically; matching replay stages nothing."
+  ],
+  "postconditions": [
+    "201/Created=true only for a first receipt; matching replay has Created=false and the original receipt/time.",
+    "Order snapshot may reflect newer receipts; replay does not require the original order snapshot.",
+    "HTTP success is local receipt commit, not evidence of completed Inventory consumption."
+  ],
+  "failureSemantics": [
+    "Missing purchase, invalid receipt, unaccepted order, over-receipt or changed receipt identity rejects without partial durable changes.",
+    "Concurrent receipts serialize on the order; aggregate version is not a client-supplied lock token."
+  ],
+  "acceptanceScenarios": [
+    "R01",
+    "R02",
+    "R03",
+    "R04",
+    "R05",
+    "R06",
+    "R07",
+    "R08"
+  ]
+}

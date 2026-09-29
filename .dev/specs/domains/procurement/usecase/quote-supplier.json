@@ -1,0 +1,57 @@
+{
+  "useCase": "QuoteSupplier",
+  "behavior": "Read a supplier quote through a fixed configured provider without persisting a purchase.",
+  "input": [
+    {
+      "name": "provider",
+      "type": "string",
+      "constraint": "direct | wiremock | microcks"
+    },
+    {
+      "name": "sku",
+      "type": "string",
+      "constraint": "1..64 ASCII letters, digits, hyphen or underscore, validated via PurchaseIdentity before HTTP; escaped as a URI path segment"
+    }
+  ],
+  "aggregate": null,
+  "aggregateId": null,
+  "method": "ISupplierGateway.QuoteAsync",
+  "domainEvent": null,
+  "repository": "none; outbound ISupplierGateway",
+  "output": "SupplierQuoteResponse(sku,name,unitPrice,currency,origin)",
+  "sourceBinding": {
+    "revision": "179b3e12bb1e5f1c67cee3158ccd414bd9a8b6a5",
+    "observedAt": "2026-09-29",
+    "status": "source-reconciled specification; no current runtime or compliance verdict",
+    "requirementsSource": ".dev/workflows/2026-09-26-procurement-supplier-lab/requirements.md"
+  },
+  "requirements": [
+    "US01",
+    "AC01"
+  ],
+  "evidence": [
+    "src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs",
+    "src/Procurement/DomainCore/Procurement.Infrastructure/HttpSupplierGateway.cs"
+  ],
+  "domainModelNotes": [
+    "No Procurement domain-event object is emitted. GoodsReceived is a separate producer-owned integration contract on first receipt."
+  ],
+  "preconditions": [
+    "Provider must be a configured named client; caller cannot supply an upstream URL."
+  ],
+  "postconditions": [
+    "No local order, receipt or stock mutation."
+  ],
+  "failures": [
+    "Invalid provider: invalid_purchase; invalid SKU: invalid_sku.",
+    "Supplier 404: supplier_not_found; timeout/network/invalid quote are adapter errors."
+  ],
+  "acceptanceScenarios": [
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05",
+    "M06"
+  ]
+}

@@ -1,0 +1,20 @@
+# Procurement application operations formal-test specification
+
+Type: formal-test. Bound source `179b3e12bb1e5f1c67cee3158ccd414bd9a8b6a5`; [six operation specs](../../../domains/procurement/README.md), AC01–AC02 and BR01–BR07. Use real application subjects and deterministic outbound-port fixtures; distinguish fixture state from real SQL durability. [Presence/evidence policy](../README.md).
+
+| ID | Operation / level | Given | When | Then |
+| --- | --- | --- | --- | --- |
+| P01 | Create / application | Valid identity, committer returns a new pending order, supplier accepts | Execute create | Commit identity before SubmitAsync; supplier receives original immutable key/payload; known result applied; Created=true; no stock or GoodsReceived effect |
+| P02 | Create / application | Existing same-key settled order | Execute create again | Same local ID, Created=false, no supplier POST |
+| P03 | Create / application | Existing key with different payload | Execute create | Reject before supplier POST; no identity replacement |
+| P04 | Create/reconcile / application | Submission timed out after local commit | Create then reconcile by original key/profile | Unknown first; verified lookup can settle it; no new key/provider and no stock effect. Actual after-commit timeout requires separate HTTP/PG run |
+| P05 | Create / application | 5xx, malformed/mismatched successful response or unsupported supplier status | Submit | Mark unsettled order unknown with CancellationToken.None; preserve durable local identity; do not fabricate rejection |
+| P06 | Create/receive / application | Valid 2xx supplier status=rejected | Create then receive | Rejected outcome recorded; receipt rejected |
+| P07 | Create / application | Invalid identity | Execute create | No local commit or supplier call |
+| PS-V02 | Create / application | Supplier HTTP 400/422 or 409 after local identity commit; alternatively caller cancellation during POST | Execute create | Explicit supplier rejection/conflict escapes and can leave PendingSubmission; cancellation marks unknown with noncancelled token then propagates. Distinguish from valid rejected body |
+| PS-V03 | Quote/Get/List / application+adapter | Named provider/SKU, existing or missing order, limit outside 1..100 | Execute corresponding query | Quote validates SKU/provider and returns verified quote; Get returns immutable snapshot or purchase_not_found; list clamps to 1..100 and orders created_at DESC, id DESC; no mutations |
+| PS-V04 | Reconcile / application | Any settled state, supplier missing/unavailable, identical or contradictory found result, invalid response | Execute reconcile | Lookup still occurs; absence/ordinary unavailable preserves settled state; matching known result preserves it; contradiction and settled invalid response surface errors |
+| R01–R04 | Receive / application | Accepted order and receipt decision fixture | Execute receive | Local commit capability owns decision/atomicity; Created distinguishes first/replay; first timestamp is millisecond UTC; replay preserves original time; response does not assert Inventory consumption |
+| PS-V05 | Create/reconcile/receipt HTTP / host integration | Fixtures for unknown/new/replayed/rejected outcomes and invalid input | Call six HTTP routes | Assert exact body/status/Location and code/message per controller contract; a new known rejected order may be HTTP 201; Guid.Empty existing-order path leads to lookup absence, while malformed Guid can miss route |
+
+Use [PurchaseScenarios](../../../../../tests/Procurement.Tests/PurchaseScenarios.cs), [ReceiptScenarios](../../../../../tests/Procurement.Tests/ReceiptScenarios.cs) and [SupplierGatewayScenarios](../../../../../tests/Procurement.Tests/SupplierGatewayScenarios.cs) as existing executable sources; the PS-V targets do not assert all branches already have dedicated tests. There is no fresh host HTTP run in this supplement. A port mock returning a status cannot prove ASP.NET error mapping or actual supplier idempotency.

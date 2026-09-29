@@ -1,17 +1,8 @@
 # Spec Guide
 
-This document defines the format and authoring conventions for specifications under `.dev/specs/` and incorporates the organization rules from `SPEC-ORGANIZATION-GUIDE.md`.
+This document defines the format and authoring conventions for specifications under `.dev/specs/` and incorporates the organization rules from `SPEC-ORGANIZATION-GUIDE.MD`.
 
-In this framework repository, `.dev/specs/` currently retains only:
-
-- `README.MD`
-  - folder purpose, scope, and usage
-- `SPEC-GUIDE.MD`
-- `SPEC-ORGANIZATION-GUIDE.MD`
-- `tests/`
-  - BDD/TDD-oriented test specs and scenario design artifacts
-
-Production/domain specs are target-repository outputs created by `repo-structure-sync` or a later workflow when source requirements exist; they are not an active subtree in this framework repository.
+This target repository maintains production/domain specifications under `domains/`, verification designs under `tests/`, and dated system reconstruction contracts under `reconstruction/`. See [INDEX.MD](INDEX.MD) for the active catalog. Source-reconciled supplements must retain the source revision, requirement bindings and unresolved differences; they do not by themselves prove implementation compliance.
 
 ## 0) Terminology Boundary
 
@@ -39,7 +30,7 @@ In other words:
 - `command`/`query` and an optional `handler` are implementation mappings and do not need to become the primary spec filename
 
 When the .NET backend component is selected, see the complete terminology rules in
-[`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../../.ai/assets/tech-stacks/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD).
+[`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../../.ai/core/knowledge/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD).
 
 ## 1) Directory & Naming Rules
 First follow:
@@ -50,7 +41,7 @@ In a target repository, production specs conventionally live under:
 
 - `.dev/specs/domains/<domain>/<entity|usecase|adapter>/...`
 
-In this framework repository, however, `.dev/specs/domains/` is not used as a ready-made source-of-truth directory.
+Use the established target folders: `product`, `order`, `inventory-item` and `procurement`. Existing single-aggregate context folders do not require another aggregate nesting level.
 
 Test specs should live under:
 
@@ -188,4 +179,4 @@ Every spec must reference:
 - `.dev/specs/tests/` answers "How do I verify that it actually does so?"
 - Test specs must not replace production specs.
 - Test specs should primarily be classified by test target instead of placing every scenario directly under `<domain>/`.
-- This framework repository retains only rules, templates, and test-spec materials; it does not retain an active production/domain spec subtree.
+- This target repository retains both production/domain specs and test designs; neither test presence nor a source-reconciled supplement constitutes a compliance verdict.

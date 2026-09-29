@@ -1,0 +1,99 @@
+{
+  "useCase": "CreatePurchase",
+  "behavior": "Commit one immutable local purchase identity, then submit with the same supplier key outside the transaction.",
+  "input": [
+    {
+      "name": "clientRequestId",
+      "type": "Guid",
+      "constraint": "nonempty; globally unique creation identity"
+    },
+    {
+      "name": "productId",
+      "type": "Guid",
+      "constraint": "nonempty reference; existence is not checked here"
+    },
+    {
+      "name": "supplierSku",
+      "type": "string",
+      "constraint": "ASCII [A-Za-z0-9_-], length 1..64"
+    },
+    {
+      "name": "quantity",
+      "type": "int",
+      "constraint": ">0"
+    },
+    {
+      "name": "unitPrice",
+      "type": "decimal",
+      "constraint": "0..9999999999999999.99; rounding to two decimal places leaves the numeric value unchanged"
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "constraint": "exactly TWD"
+    },
+    {
+      "name": "provider",
+      "type": "string",
+      "constraint": "direct | wiremock | microcks, exact named value"
+    }
+  ],
+  "aggregate": "PurchaseOrder",
+  "aggregateId": "Guid",
+  "method": "PurchaseOrder.Create; RequireIdentity; ApplySupplierOutcome or MarkUnknown",
+  "domainEvent": null,
+  "repository": "IPurchaseCreationCommitter; IPurchaseSubmissionCommitter",
+  "output": "CreatePurchaseOutput(Order, Created)",
+  "sourceBinding": {
+    "revision": "179b3e12bb1e5f1c67cee3158ccd414bd9a8b6a5",
+    "observedAt": "2026-09-29",
+    "status": "source-reconciled specification; no current runtime or compliance verdict",
+    "requirementsSource": ".dev/workflows/2026-09-26-procurement-supplier-lab/requirements.md"
+  },
+  "requirements": [
+    "US01",
+    "US02",
+    "AC01",
+    "BR01",
+    "BR02",
+    "BR03",
+    "BR06"
+  ],
+  "evidence": [
+    "src/Procurement/DomainCore/Procurement.Domains/PurchaseOrder.cs",
+    "src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs",
+    "src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs",
+    "src/Procurement/DomainCore/Procurement.Infrastructure/HttpSupplierGateway.cs"
+  ],
+  "domainModelNotes": [
+    "No Procurement domain-event object is emitted. GoodsReceived is a separate producer-owned integration contract on first receipt."
+  ],
+  "inputType": "CreatePurchaseInput(PurchaseIdentity)",
+  "steps": [
+    "Validate identity before database or supplier I/O; generate candidate Guid.NewGuid() and UTC timestamp.",
+    "CreateOrGetAsync enforces unique ClientRequestId and returns the committed aggregate; RequireIdentity rejects any changed field before supplier POST.",
+    "If the existing order is already settled, return it without another POST. Created describes local first creation only.",
+    "For PendingSubmission or SubmissionUnknown, POST original supplier identity; apply a validated known outcome under the submission committer lock."
+  ],
+  "failureSemantics": [
+    "Ordinary SupplierGatewayException including timeout/unavailable/invalid response marks unsettled state SubmissionUnknown using CancellationToken.None and returns it.",
+    "supplier_identity_conflict and supplier_business_rejection propagate after the local identity commit; a newly created order can remain PendingSubmission.",
+    "Caller cancellation during submission marks unknown with CancellationToken.None and rethrows; failures before the identity commit do not imply a durable order.",
+    "Concurrent pending same-key calls can each send HTTP; upstream idempotency is required for one logical supplier order."
+  ],
+  "postconditions": [
+    "Never increment stock or stage GoodsReceived merely because a supplier accepted.",
+    "Same key with changed product/provider/SKU/quantity/price/currency conflicts; immutable identity is not silently overwritten."
+  ],
+  "acceptanceScenarios": [
+    "P01",
+    "P02",
+    "P03",
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "PS-V01",
+    "PS-V02"
+  ]
+}

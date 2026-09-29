@@ -1,0 +1,62 @@
+{
+  "useCase": "ReconcilePurchase",
+  "behavior": "Query the original provider by original client key and conditionally reconcile its verified result.",
+  "input": [
+    {
+      "name": "purchaseOrderId",
+      "type": "Guid"
+    }
+  ],
+  "aggregate": "PurchaseOrder",
+  "aggregateId": "Guid",
+  "method": "ISupplierGateway.LookupAsync; PurchaseOrder.ApplySupplierOutcome or MarkUnknown",
+  "domainEvent": null,
+  "repository": "IPurchaseOrderRepository; IPurchaseSubmissionCommitter",
+  "output": "PurchaseOrderResponse",
+  "sourceBinding": {
+    "revision": "179b3e12bb1e5f1c67cee3158ccd414bd9a8b6a5",
+    "observedAt": "2026-09-29",
+    "status": "source-reconciled specification; no current runtime or compliance verdict",
+    "requirementsSource": ".dev/workflows/2026-09-26-procurement-supplier-lab/requirements.md"
+  },
+  "requirements": [
+    "US02",
+    "AC01",
+    "BR01",
+    "BR06"
+  ],
+  "evidence": [
+    "src/Procurement/DomainCore/Procurement.Applications/ProcurementOperations.cs",
+    "src/Procurement/DomainCore/Procurement.Domains/PurchaseOrder.cs",
+    "src/Procurement/DomainCore/Procurement.Infrastructure/HttpSupplierGateway.cs",
+    "src/Procurement/DomainCore/Procurement.Infrastructure/PostgresPurchaseStore.cs"
+  ],
+  "domainModelNotes": [
+    "No Procurement domain-event object is emitted. GoodsReceived is a separate producer-owned integration contract on first receipt."
+  ],
+  "inputType": "ReconcilePurchaseInput",
+  "steps": [
+    "Load purchase; missing order raises purchase_not_found.",
+    "Always call LookupAsync with immutable original identity, including for a settled order.",
+    "Found verified outcome: apply under lock, preserving matching settled state and rejecting contradictions.",
+    "NotFound/Unknown: mark unsettled state unknown; preserve settled state."
+  ],
+  "failureSemantics": [
+    "supplier_identity_conflict propagates for every state.",
+    "supplier_invalid_response propagates for a settled order; for an unsettled order it is retained as unknown.",
+    "Other SupplierGatewayException preserves a settled order or marks an unsettled one unknown.",
+    "Caller cancellation propagates through gateway; lookup is not an automatic POST retry."
+  ],
+  "postconditions": [
+    "Never switch provider/key or create a replacement purchase.",
+    "No receipt, outbox or inventory mutation."
+  ],
+  "discrepancies": [
+    "PS-D01: old workflow text said accepted local order simply returns itself; actual implementation still looks up supplier."
+  ],
+  "acceptanceScenarios": [
+    "P04",
+    "P05",
+    "PS-V04"
+  ]
+}
