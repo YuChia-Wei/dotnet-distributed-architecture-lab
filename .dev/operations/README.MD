@@ -1,6 +1,6 @@
 # Operations Docs
 
-本目錄存放 operations 文件的作者指南、模板約定與本 repository 的實際操作文件。
+本目錄存放本 repository 的實際操作文件。可重用作者指南與模板約定改由選定的 [engineering-common knowledge](../../.ai/core/knowledge/engineering-common/README.md) 提供；本目標 operation 與驗證契約仍具權威。
 
 作者指南不能取代 runtime truth；目前可讀的實際文件包括 `context-map.md`、`event-catalog.md`、`mq-topology.md`、`procurement-supplier-lab.md` 與 `commerce-frontend.md`。使用前仍須將內容對回 `requirement`、`specs`、`src`、contract source 與 Compose 設定。
 

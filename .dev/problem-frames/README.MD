@@ -1,6 +1,6 @@
 # Problem Frames
 
-This directory contains problem-frame authoring guidance and reusable templates for validator-ready specs.
+This directory contains retained target problem frames and their semantic interpretation. Use the selected [problem-frame-author](../../.ai/core/skills/problem-frame-author/SKILL.md) and caller-selected format for new work; deleting generic scaffolds does not migrate existing frame formats.
 
 ## Purpose
 
@@ -15,4 +15,4 @@ Start with `.dev/problem-frames/INDEX.md` when you need the file catalog, minimu
 - Requirements remain under `.dev/requirement/`.
 - Human-readable functional specs remain under `.dev/specs/`.
 - Problem frames hold structured machine-readable validation inputs.
-- This framework repository does not keep product-specific problem frames as active truth.
+- This target retains the Orders and Inventory frames listed in INDEX.md as project-owned truth; source-framework examples do not replace them.

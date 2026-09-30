@@ -22,6 +22,8 @@ Selected installed skill members:
 - [references/entity-template.md](../../../.ai/core/skills/spec-author/references/entity-template.md)
 - [references/formal-test-template.md](../../../.ai/core/skills/spec-author/references/formal-test-template.md)
 - [references/production-template.md](../../../.ai/core/skills/spec-author/references/production-template.md)
+- [references/spec-guide.md](../../../.ai/core/skills/spec-author/references/spec-guide.md)
+- [references/spec-organization-guide.md](../../../.ai/core/skills/spec-author/references/spec-organization-guide.md)
 
 For metadata version 4, `knowledge_consumption` declares exact knowledge package
 versions, operations and resource IDs. Follow the installed skill's selected

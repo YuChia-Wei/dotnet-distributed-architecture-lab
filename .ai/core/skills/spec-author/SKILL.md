@@ -15,6 +15,9 @@ provided one:
 - [Adapter/interface specification](references/adapter-template.md)
 - [Formal-test specification](references/formal-test-template.md)
 
+For an optional target-selected format or layout, see [presentation guidance](references/spec-guide.md)
+and [organization guidance](references/spec-organization-guide.md).
+
 These templates are ordinary prose references, not machine schemas. The caller
 may select a different template, format and output path. With no destination,
 return the draft in the conversation. No configuration, store, tool, required

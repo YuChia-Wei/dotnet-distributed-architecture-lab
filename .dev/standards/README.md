@@ -1,11 +1,5 @@
-# Source Governance Standards
+# Adopted Target Governance Standards
 
-This folder owns source-framework governance and registries. It does not own
-.NET backend rules, constraints, or their rationales and templates.
+This target retains the adopted project policies under this directory. Use [INDEX.MD](INDEX.MD) for navigation and [TARGET-ENGINEERING-RULES.md](../ai-context/TARGET-ENGINEERING-RULES.md) for the exact retained fourteen-rule authority and target customizations.
 
-Use [INDEX.MD](INDEX.MD) for the source-governance policy catalog. For the
-canonical .NET backend baseline, use the [profile standards](../../.ai/core/knowledge/dotnet-backend/standards/coding-standards.md), [rationale](../../.ai/core/knowledge/dotnet-backend/references/rationale/), and [templates](../../.ai/core/knowledge/dotnet-backend/templates/).
-
-Project-specific and target-effective decisions belong under `.dev/ai-context/`
-in downstream repositories; they do not silently replace the portable profile
-baseline.
+Selected [.NET standards](../../.ai/core/knowledge/dotnet-backend/standards/coding-standards.md), [rationale](../../.ai/core/knowledge/dotnet-backend/references/rationale/) and [templates](../../.ai/core/knowledge/dotnet-backend/templates/) are installed framework guidance. Adoption, applicability, target overrides and authentic execution evidence remain separate; installing them does not replace the retained target policies or import source U001.

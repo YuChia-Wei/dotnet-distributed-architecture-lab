@@ -69,3 +69,26 @@ select additional resources by their declared IDs for the current task.
 - [standards/coding-standards.md](standards/coding-standards.md)
 - [standards/project-structure.md](standards/project-structure.md)
 - [tooling/on-demand-mechanical-validation/README.md](tooling/on-demand-mechanical-validation/README.md)
+
+## Additional task-selected references
+
+These references are optional guidance and templates. Read only the selected
+subject; their presence does not require an extra artifact, skill or technology.
+
+- [design/architecture-overview.md](design/architecture-overview.md)
+- [guides/COMMON-MISTAKES-GUIDE.md](guides/COMMON-MISTAKES-GUIDE.md)
+- [guides/COMPLETE-ASPNET-CORE-SETUP-GUIDE.md](guides/COMPLETE-ASPNET-CORE-SETUP-GUIDE.md)
+- [guides/CORS-SETUP.md](guides/CORS-SETUP.md)
+- [guides/DATA-CLASS-STANDARDS.md](guides/DATA-CLASS-STANDARDS.md)
+- [guides/DATABASE-MIGRATION-GUIDE.md](guides/DATABASE-MIGRATION-GUIDE.md)
+- [guides/DEVELOPMENT-TOOLS-GUIDE.md](guides/DEVELOPMENT-TOOLS-GUIDE.md)
+- [guides/DUAL-PROFILE-CONFIGURATION-GUIDE.md](guides/DUAL-PROFILE-CONFIGURATION-GUIDE.md)
+- [guides/FAQ.md](guides/FAQ.md)
+- [guides/LEARNING-PATH.md](guides/LEARNING-PATH.md)
+- [guides/NEW-PROJECT-TEST-SETUP-GUIDE.md](guides/NEW-PROJECT-TEST-SETUP-GUIDE.md)
+- [guides/PERSISTENCE-CONFIGURATION-GUIDE.md](guides/PERSISTENCE-CONFIGURATION-GUIDE.md)
+- [guides/PREVENT-SERVICE-REGISTRATION-MISSING.md](guides/PREVENT-SERVICE-REGISTRATION-MISSING.md)
+- [guides/PROFILE-BASED-TESTING-GUIDE.md](guides/PROFILE-BASED-TESTING-GUIDE.md)
+- [guides/TEST-DATA-PREPARATION-GUIDE.md](guides/TEST-DATA-PREPARATION-GUIDE.md)
+- [guides/TEST-SPEC-GUIDE.MD](guides/TEST-SPEC-GUIDE.MD)
+- [requirements/TECH-STACK-REQUIREMENTS.MD](requirements/TECH-STACK-REQUIREMENTS.MD)

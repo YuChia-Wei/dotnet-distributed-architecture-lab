@@ -14,7 +14,8 @@ The public operations are `draft` and `normalize`. Read
 [the authoring method](references/authoring.md) for either operation. Use
 [the default requirement template](references/requirement-template.md) when the
 caller has not selected a target template. The template is ordinary prose
-guidance, not a machine schema or a required record format.
+guidance, not a machine schema or a required record format. Optional
+[presentation guidance](references/requirement-guide.md) covers naming and diagrams.
 
 The caller supplies the scope, sources, applicable target rules and any chosen
 template or output destination. With no destination, return the draft in the

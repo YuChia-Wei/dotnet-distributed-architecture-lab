@@ -47,7 +47,7 @@ inside the same clearly qualified section.
 | --- | --- | --- |
 | `source-release` | framework version candidate; release-source status validated; historical/exception release closeout | source-only release policy or closeout capability |
 | `distribution` | package candidate | source-only distribution contract |
-| `target-upgrade` | target upgrade `automatic-candidate` | `ai-context-upgrader` planning contract |
+| `target-upgrade` | target upgrade `automatic-candidate` | explicitly selected official installation/reconciliation contract; current route is `ai-context-governance`, not the retired upgrader |
 | `git` | repository integration | `.dev/TEAM-GIT-FLOW-RULES.MD` |
 | `workflow` | workflow completion | `WORKFLOW-ARTIFACT-POLICY.md` |
 | `assessment` | assessment final | `ASSESSMENT-ARTIFACT-POLICY.md` |

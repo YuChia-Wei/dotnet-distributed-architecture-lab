@@ -12,4 +12,4 @@
 - duplicate stock decrease handling
 - dead-letter backlog growth
 
-撰寫格式請遵守 [`RUNBOOK-GUIDE.MD`](../RUNBOOK-GUIDE.MD)。
+撰寫格式參考選定的 [RUNBOOK-GUIDE.MD](../../../.ai/core/knowledge/engineering-common/operations/RUNBOOK-GUIDE.MD)，並遵守本目標實際 operation 與驗證契約。

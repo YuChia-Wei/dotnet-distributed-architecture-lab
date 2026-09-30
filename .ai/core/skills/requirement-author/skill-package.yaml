@@ -19,6 +19,7 @@ resources:
   references:
   - references/authoring.md
   - references/requirement-template.md
+  - references/requirement-guide.md
   schemas: []
   templates: []
   tools: []

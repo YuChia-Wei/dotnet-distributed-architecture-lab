@@ -1,26 +1,27 @@
 # Selected target skill routes
 
-The Issue #22 RC2 installation contains all eighteen skill IDs below, `engineering-common` plus `dotnet-backend` knowledge, and both Codex and Claude adapters with original names. The official installed lock and static entry read-back establish file availability. Runtime discovery and target admission were deferred by the owner for this adoption; this registry does not claim either passed.
+The isolated RC3 trial selects these seventeen original IDs, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters. Read the [current contract](CURRENT-FRAMEWORK.md), saved selection and official lock for actual installation state. This registry declares intended navigation; it does not claim installation, discovery, admission or primary adoption passed.
 
 | Skill | Target use |
 | --- | --- |
-| `adr` | Project decision records under explicit settings |
-| `ai-context-auditor` | Read-only AI context assessment |
-| `ai-context-governance` | AI context ownership and migration |
-| `bdd-gwt-test-designer` | GWT scenario design |
-| `code-reviewer` | Code review with selected target .NET rules |
-| `ddd-ca-hex-architect` | Architecture design and review |
-| `diagnostic-analyst` | Observed failure diagnosis |
-| `lesson` | Project lesson records under explicit settings |
-| `local-backlog` | Optional local work items; GitHub Issue authority remains separate |
-| `local-change-implementer` | Bounded technical changes |
-| `pr` | PR preparation under explicit settings |
-| `problem-frame-author` | Problem-frame drafting |
-| `requirement-author` | Requirements drafting |
-| `slice-implementer` | Bounded implementation slices |
-| `software-development-orchestrator` | Multi-stage development |
-| `spec-author` | Specifications |
-| `spec-compliance-validator` | Selected .NET/problem-frame compliance |
-| `standards-promotion` | Proposals and project standards under explicit settings |
+| [`adr-author`](../../.ai/core/skills/adr-author/SKILL.md) | Project decision records under explicit settings |
+| [`ai-context-auditor`](../../.ai/core/skills/ai-context-auditor/SKILL.md) | Read-only AI context assessment |
+| [`ai-context-governance`](../../.ai/core/skills/ai-context-governance/SKILL.md) | AI context ownership and reconciliation |
+| [`bdd-gwt-test-designer`](../../.ai/core/skills/bdd-gwt-test-designer/SKILL.md) | GWT scenario design |
+| [`code-reviewer`](../../.ai/core/skills/code-reviewer/SKILL.md) | Review with selected target .NET rules |
+| [`ddd-ca-hex-architect`](../../.ai/core/skills/ddd-ca-hex-architect/SKILL.md) | Architecture design and review |
+| [`diagnostic-analyst`](../../.ai/core/skills/diagnostic-analyst/SKILL.md) | Observed failure diagnosis |
+| [`lesson-author`](../../.ai/core/skills/lesson-author/SKILL.md) | Project lessons under explicit settings |
+| [`local-backlog`](../../.ai/core/skills/local-backlog/SKILL.md) | Local work items; GitHub Issue authority remains separate |
+| [`local-change-implementer`](../../.ai/core/skills/local-change-implementer/SKILL.md) | Bounded technical changes |
+| [`pr-author`](../../.ai/core/skills/pr-author/SKILL.md) | PR authoring under explicit settings |
+| [`problem-frame-author`](../../.ai/core/skills/problem-frame-author/SKILL.md) | Problem-frame drafting |
+| [`requirement-author`](../../.ai/core/skills/requirement-author/SKILL.md) | Requirements drafting |
+| [`slice-implementer`](../../.ai/core/skills/slice-implementer/SKILL.md) | Bounded implementation slices |
+| [`spec-author`](../../.ai/core/skills/spec-author/SKILL.md) | Specifications |
+| [`spec-compliance-validator`](../../.ai/core/skills/spec-compliance-validator/SKILL.md) | Selected .NET/problem-frame compliance |
+| [`standards-promotion`](../../.ai/core/skills/standards-promotion/SKILL.md) | Proposals and project standards under explicit settings |
 
-The current project-owned normative authority is [TARGET-ENGINEERING-RULES.md](TARGET-ENGINEERING-RULES.md). Resolve an operation's selected knowledge resource, exact binding and actual rule predicate before relying on specialist coverage. A generic skill without a matching binding must report the gap. The prior RC1 `framework-*` and legacy init/upgrader entries are retired; do not route to them or archived copies.
+[TARGET-ENGINEERING-RULES.md](TARGET-ENGINEERING-RULES.md) remains exact adopted semantic authority. Resolve knowledge resources, bindings and actual rule predicates before claiming specialist coverage. Generic instructions do not replace target plain-xUnit GWT, per-domain persistence or project governance.
+
+Decision, lesson and PR discovery now use adr-author, lesson-author and pr-author. Historical owner names are provenance and not active entries. The portable software-development-orchestrator is absent; multi-stage work follows target [workflow gate](../standards/WORKFLOW-GATE-POLICY.md), [artifact contract](../standards/WORKFLOW-ARTIFACT-POLICY.md) and [workflow navigation](../workflows/README.MD) manually. Legacy framework-* and init/upgrader wrappers are retired. Existing records retain their formats and stores until separately authorized migration.

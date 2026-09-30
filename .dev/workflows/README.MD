@@ -35,7 +35,7 @@ checkpoint 統一登錄於 `handoff-checkpoints.yaml`，並依
 
 `workflow.yaml` 是固定 locator。真正 artifact 預設放在相同目錄，也可由 workflow-owning skill 宣告其他 repository-relative `artifact_root`。詳細共通契約見 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`。
 
-2026-09-29 的資料遷移已將兩筆 software-development-orchestrator 主紀錄整合回各自既有的主題目錄：`workflow-plan.md` 為人類閱讀入口，`tasks/<原 task ID>.json` 保留任務與依賴，`migration-map.md` 對照 acceptance、decision、evidence、reference ID。前端 `evidence/v2-source.workflow.json` 保存原始位元組；採購 `evidence/v2-history.workflow.json` 保存路徑改指向 tracked 證據後的完整歷史，其原始位元組留在 Git 歷史。RC1 pilot 的第三筆 v2 紀錄是支援性證據，保留於其原有 AI-context workflow 的 `evidence/`，沒有升格為第二個主 workflow。舊 store 路徑與現行 RC2 設定的界線見 [retirement note](../workflows-v2/README.md)。
+2026-09-29 的資料遷移已將兩筆 software-development-orchestrator 主紀錄整合回各自既有的主題目錄：`workflow-plan.md` 為人類閱讀入口，`tasks/<原 task ID>.json` 保留任務與依賴，`migration-map.md` 對照 acceptance、decision、evidence、reference ID。前端 `evidence/v2-source.workflow.json` 保存原始位元組；採購 `evidence/v2-history.workflow.json` 保存路徑改指向 tracked 證據後的完整歷史，其原始位元組留在 Git 歷史。RC1 pilot 的第三筆 v2 紀錄是支援性證據，保留於其原有 AI-context workflow 的 `evidence/`，沒有升格為第二個主 workflow。舊 store 的導覽已由負責人移除；保留的 migration-map 與 evidence 記錄當時遷移，不是目前 portable skill 或 store 的啟用指示。
 
 `INDEX.MD` 是降低認知負載的 discovery view；locator 仍擁有 status、owner、updated time 與 entrypoint。跨 workflow 的 durable 待辦由 `.dev/backlog/` 管理，不應塞入本目錄的 index。
 
@@ -51,10 +51,10 @@ checkpoint 統一登錄於 `handoff-checkpoints.yaml`，並依
 ## Template Ownership
 
 - 本目錄不擁有萬用 workflow template。
-- `dev-workflow` 管理 software-development workflow templates。
-- `ai-context-governance` 管理 AI context maintenance workflow 與 remediation templates。
-- `ai-context-auditor` 管理 audit report templates。
-- 其他能建立 workflow 的 skill 應在自己的 canonical skill 目錄宣告 templates、ID 規則與 artifact layout。
+- 一般 software-development workflow 的既有 plan/task layout 由本目標採用的 workflow 政策手動治理；不依賴已移除的 portable orchestrator 或 `dev-workflow`。
+- AI context maintenance 使用選定的 `ai-context-governance`；需要持續執行紀錄時，本目標 workflow 政策持有 locator 與保留的 artifact layout。
+- AI context audit 使用選定的 `ai-context-auditor`；持久化報告依本目標 assessment 政策。
+- 其他選定 skill 依其實際 output contract 工作；不得由入口存在推定它提供 workflow template。
 
 ## 使用原則
 

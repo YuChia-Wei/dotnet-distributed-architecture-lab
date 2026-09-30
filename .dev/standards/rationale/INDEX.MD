@@ -8,5 +8,4 @@ The canonical .NET backend rationale records are under the profile:
 - [REST API resource-path rationale](../../../.ai/core/knowledge/dotnet-backend/references/rationale/rest-api-resource-path-rationale.MD)
 
 [Skill and sub-agent boundary rationale](skill-sub-agent-boundary-rationale.MD)
-remains at this path under independent #94 ownership. This index is source
-governance compatibility navigation, not a second semantic owner.
+remains at this path under independent #94 ownership. This index is retained target compatibility navigation, not a second semantic owner.

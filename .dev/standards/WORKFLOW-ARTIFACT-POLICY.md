@@ -8,7 +8,7 @@ This policy defines the repository-wide discovery and metadata contract for dura
 - This target owns the shared AI-context locator shape at `.dev/standards/templates/workflow-locator-template.yaml`; skill-specific plan and task layouts remain with their owning skill.
 - A skill may define its workflow topic, task IDs, report set, and artifact root.
 - The repository owns only the minimum discovery, identity, time, relationship, and lifecycle contract in this document.
-- `software-development-orchestrator` owns software-development workflow templates. It does not own templates for AI context maintenance, repository initialization, or every other workflow kind.
+- This target manually owns ordinary software-development workflow layouts under `.dev/workflows/` and its adopted policies. No portable `software-development-orchestrator` is installed. Existing workflow records retain their formats and historical owners; this does not redefine templates for other work kinds.
 
 ## Workflow Discovery Locator
 

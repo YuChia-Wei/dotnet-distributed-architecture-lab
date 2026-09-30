@@ -1,10 +1,8 @@
-# Source Governance Standards Index
+# Adopted Target Governance Standards Index
 
-`.dev/standards/` is the source-governance location for framework ownership,
-workflow, assessment, language, version, dependency, and technology-selection
-policies. It is not the canonical owner of .NET backend semantic standards.
+`.dev/standards/` retains this target's adopted governance policies. Their adopted meanings remain authoritative for project work; the exact target engineering rules and customizations remain in [TARGET-ENGINEERING-RULES.md](../ai-context/TARGET-ENGINEERING-RULES.md). Selected knowledge owns portable baseline resources; installation alone does not adopt them.
 
-## Source Governance
+## Adopted Target Policies
 
 - [AI context boundary](AI-CONTEXT-BOUNDARY.md), [language](AI-CONTEXT-LANGUAGE-POLICY.md), and [ownership](AI-CONTEXT-OWNERSHIP.md) policies
 - [Portable AI context version, provenance, and upgrade policy](AI-CONTEXT-VERSION-POLICY.md)
@@ -24,5 +22,4 @@ policies. It is not the canonical owner of .NET backend semantic standards.
 - [Profile rationale](../../.ai/core/knowledge/dotnet-backend/references/rationale/)
 - [Profile templates](../../.ai/core/knowledge/dotnet-backend/templates/)
 
-Human-facing tutorials, setup, migration, troubleshooting, and prompt-usage
-guidance remain under `.dev/guides/`.
+Reusable setup, troubleshooting and authoring references are in the selected knowledge packages. Target-owned training remains under `.dev/guides/external-api-testing/`; project records and adopted policy are retained here.

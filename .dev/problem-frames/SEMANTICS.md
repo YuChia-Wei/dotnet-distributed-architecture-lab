@@ -5,7 +5,7 @@ This document defines the minimum conventions for common semantic tags in `aggre
 ## Purpose
 
 - Make field semantics in `aggregate.yaml` consistently reusable.
-- Provide a reference for the semantics mentioned in `.ai/assets/tech-stacks/dotnet-backend/standards/CODE-REVIEW-CHECKLIST.md`.
+- Provide this target-owned interpretation of semantic tags in retained frames during code review; select the installed `code-reviewer` and adopted target rules rather than the retired asset checklist.
 - Avoid using different terms in each project for the same invariant.
 
 ## Core Semantics
