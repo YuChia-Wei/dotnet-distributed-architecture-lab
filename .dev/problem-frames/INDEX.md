@@ -10,15 +10,9 @@ This index owns the file and directory catalog for `.dev/problem-frames/`.
 | `INDEX.md` | File and directory catalog for problem-frame assets. |
 | `SEMANTICS.md` | Problem-frame semantic guidance. |
 
-## Templates
+## Authoring route
 
-| Path | Description |
-| --- | --- |
-| `templates/cbf-external-system/` | Reusable CommandedBehaviorFrame template for external-system integration cases. |
-| `templates/cbf-external-system/frame.yaml` | CBF frame template. |
-| `templates/cbf-external-system/acceptance.yaml` | Acceptance template. |
-| `templates/cbf-external-system/machine/` | Machine and use-case templates. |
-| `templates/cbf-external-system/controlled-domain/` | Controlled-domain aggregate template. |
+Use [problem-frame-author](../../.ai/core/skills/problem-frame-author/SKILL.md) with the requested target format and authentic sources. The removed generic CBF scaffold has no declared identical replacement. The existing layout below documents retained legacy target records; it does not force a new record format or migration.
 
 ## Minimum CBF Layout
 

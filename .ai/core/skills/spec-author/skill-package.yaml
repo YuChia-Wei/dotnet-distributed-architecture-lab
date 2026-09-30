@@ -22,6 +22,8 @@ resources:
   - references/entity-template.md
   - references/adapter-template.md
   - references/formal-test-template.md
+  - references/spec-guide.md
+  - references/spec-organization-guide.md
   schemas: []
   templates: []
   tools: []

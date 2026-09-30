@@ -12,7 +12,7 @@ Start with `.dev/INDEX.md` when you need to find a specific file or directory. U
 
 For this repository, begin with `.dev/ARCHITECTURE.md` and `.dev/project-config.yaml` for current product structure, then use `.dev/INDEX.md` to locate requirements, specs, operations records, standards, and workflows.
 
-When reusable AI context is refreshed from its source, run `ai-context-init` before accepting changed requirements, specs, domain language, operations files, backlog items, or workflow records as current target-repository truth. Keep `repo-structure-sync` only as a historical identifier in records created before its v0.16.0 retirement.
+When selected AI context changes, use the target-authorized `ai-context-governance` route and official installation evidence. Reconcile requirements, specs, domain language, operations, backlog and workflow facts against target-owned source; installation does not make them current automatically. Generic authoring guidance lives in the selected knowledge/skill packages. Existing ordinary workflows remain manually governed by target policy; retired init/upgrader and portable orchestrator routes are unavailable.
 
 ## Boundary
 

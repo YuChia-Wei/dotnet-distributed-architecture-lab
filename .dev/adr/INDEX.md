@@ -7,8 +7,8 @@ This directory contains ADR governance and active target-repository decisions.
 | File | Role |
 | --- | --- |
 | `README.md` | ADR governance guidance |
-| `ADR-TEMPLATE.md` | Template for a new ADR |
-| `WHEN-TO-CREATE-ADR.MD` | Criteria for creating an ADR |
+| [Installed ADR operation contract](../../.ai/core/skills/adr-author/references/operations.md) | Selected new-record contract; retained Markdown ADRs do not migrate automatically |
+| [When to create an ADR](../../.ai/core/skills/adr-author/references/WHEN-TO-CREATE-ADR.MD) | Optional authoring guidance under target authority |
 
 ## Active Decisions
 

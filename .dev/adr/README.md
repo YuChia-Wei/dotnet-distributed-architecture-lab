@@ -4,7 +4,7 @@ This directory is the architecture decision governance area. It is not the daily
 
 ## Purpose
 
-Use `.dev/adr/` to keep ADR templates, ADR creation guidance, and retained historical decision context when a decision still has governance value.
+Use `.dev/adr/` to keep project decision records and retained historical decision context when a decision still has governance value. New portable authoring uses [adr-author](../../.ai/core/skills/adr-author/SKILL.md); it does not migrate retained Markdown decisions or replace their target authority.
 
 ## Usage
 

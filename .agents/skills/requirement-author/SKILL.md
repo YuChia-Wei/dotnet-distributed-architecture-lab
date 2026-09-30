@@ -18,6 +18,7 @@ This package declares `configuration: null`. It needs no framework configuration
 Selected installed skill members:
 
 - [references/authoring.md](../../../.ai/core/skills/requirement-author/references/authoring.md)
+- [references/requirement-guide.md](../../../.ai/core/skills/requirement-author/references/requirement-guide.md)
 - [references/requirement-template.md](../../../.ai/core/skills/requirement-author/references/requirement-template.md)
 
 For metadata version 4, `knowledge_consumption` declares exact knowledge package

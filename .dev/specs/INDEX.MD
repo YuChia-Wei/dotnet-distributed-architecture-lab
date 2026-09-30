@@ -16,8 +16,8 @@ This index owns the file and directory catalog for `.dev/specs/`.
 | Path | Description |
 | --- | --- |
 | `tests/README.MD` | Test-spec area purpose and usage. |
-| `tests/TEST-SPEC-GUIDE.MD` | Test-spec authoring guide. |
-| `tests/GHERKIN-FEATURE-STORAGE-GUIDE.MD` | Gherkin feature storage guidance. |
+| [Selected test-spec guide](../../.ai/core/knowledge/dotnet-backend/guides/TEST-SPEC-GUIDE.MD) | Optional authoring reference; target test choices remain authoritative. |
+| [Selected Gherkin guide](../../.ai/core/knowledge/dotnet-backend/guides/GHERKIN-FEATURE-STORAGE-GUIDE.MD) | Conditional feature storage guidance; no runner adoption implied. |
 | `tests/cross-domain/` | Cross-bounded-context test spec area. |
 | `tests/e2e/` | End-to-end journey test spec area. |
 | `tests/product/` | Product aggregate, use-case, and persistence test design; implementation coverage is partial. |

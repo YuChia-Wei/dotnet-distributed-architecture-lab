@@ -33,3 +33,20 @@ select additional resources by their declared IDs for the current task.
 - [references/ENGINEERING-IDENTITY-CONTRACT.md](references/ENGINEERING-IDENTITY-CONTRACT.md)
 - [references/GWT-TEST-HANDOFF-CONTRACT.md](references/GWT-TEST-HANDOFF-CONTRACT.md)
 - [references/PROMPT-PORTABILITY-RULES.md](references/PROMPT-PORTABILITY-RULES.md)
+
+## Additional task-selected references
+
+These references are optional guidance and templates. Read only the selected
+subject; their presence does not require an extra artifact, skill or technology.
+
+- [domain-language/README.MD](domain-language/README.MD)
+- [domain-language/templates/aggregate-vocabulary-template.md](domain-language/templates/aggregate-vocabulary-template.md)
+- [domain-language/templates/bounded-context-language-template.md](domain-language/templates/bounded-context-language-template.md)
+- [domain-language/templates/domain-event-language-template.md](domain-language/templates/domain-event-language-template.md)
+- [operations/CONTEXT-MAP-GUIDE.MD](operations/CONTEXT-MAP-GUIDE.MD)
+- [operations/EVENT-CATALOG-GUIDE.MD](operations/EVENT-CATALOG-GUIDE.MD)
+- [operations/MQ-TOPOLOGY-GUIDE.MD](operations/MQ-TOPOLOGY-GUIDE.MD)
+- [operations/RUNBOOK-GUIDE.MD](operations/RUNBOOK-GUIDE.MD)
+- [references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md](references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md)
+- [references/AUTHORING-BOUNDARY-CONTRACT.md](references/AUTHORING-BOUNDARY-CONTRACT.md)
+- [references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md](references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md)

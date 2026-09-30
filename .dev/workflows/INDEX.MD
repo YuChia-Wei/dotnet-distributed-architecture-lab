@@ -2,6 +2,8 @@
 
 This index is the discovery view for workflow artifacts retained by `dotnet-mq-arch-lab`. Locator-backed rows mirror their `workflow.yaml`; legacy rows identify target-repository workflows that predate the locator policy.
 
+Owner names below mirror historical locators and are provenance, not current skill discovery. RC3 selects no portable software-development-orchestrator; current multi-stage execution uses adopted target policies manually. No locator, status, timestamp, entrypoint or workflow output is changed by this navigation note.
+
 ## Locator-Backed Workflows
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |
