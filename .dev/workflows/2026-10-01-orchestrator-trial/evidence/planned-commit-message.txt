@@ -1,0 +1,24 @@
+fix(#27): restore development orchestration in the framework trial
+
+Why:
+- The owner requires the important development orchestrator to remain available through the reusable source framework package.
+
+What:
+- Add software-development-orchestrator 0.2.0 with the supported additive installer from source commit 16f3f0c072bd22c3945fce8aca8295bf2b88f330.
+- Align target skill and workflow navigation while preserving target record ownership and prior RC3 adoption history.
+- Retain exact local installation and preservation evidence in a project-owned completed workflow.
+
+Validation:
+- Official API2 apply and fresh inspect returned applied and managed-bytes-consistent without drift; eighteen original-name entries per adapter.
+- All prior 404 managed members, both knowledge packages, forty bindings, settings, rules, roles and workflow history stayed intact.
+- Index finalization kept all 409 managed members unchanged and was inspected without drift.
+- Changed UTF-8, JSON/YAML, added local links, source member hashes, tracked-file preservation and git diff --check passed.
+- Product/runtime, recovery experiments, CI and independent admission were not run; source U001 is not target policy.
+- The source validator checks this planned message only; no target-history, main integration or publication is claimed.
+
+Workflow:
+- 2026-10-01-orchestrator-trial
+- Stage: S1
+- Task: T1
+
+Co-Authored-By: OpenAI Codex (gpt-6.1-sol, ultra) <noreply@openai.com>

@@ -1,5 +1,5 @@
 {
-  "candidate_identity": "subset:3:0.19.0-rc.3:bdb5bbec012e86f5d9486dadd9872ecbbb5a4e0a:65b2fcd6207aabc970773cb61a7aebeb43af78652171c69917bdcb7133a8e9fa",
+  "candidate_identity": "subset:3:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:51b37ec032a689a40e4a61d43c76c17928bf802c0da0c0da2d4e7b0a95660118",
   "catalog_document": {
     "adapters": [
       {
@@ -142,11 +142,11 @@
         "size": 5704
       },
       {
-        "git_blob": "61c8f3c00b919a82e1c12160f3e04d1ed62de015",
+        "git_blob": "16488f724c2cf78ce654cf232717f0b7b856d96a",
         "mode": "100644",
         "path": "src/distribution/manifest.yaml",
-        "sha256": "f0cf6290adabd26621e000d085eab5f26611813664087c94bc7664c2af1db05a",
-        "size": 56901
+        "sha256": "33a46fb73e1849fc9a776aa0628434db7f8219ff83ca3a74f6964e8863d66479",
+        "size": 57414
       },
       {
         "git_blob": "45fffbd3a273e8ba0502b9428b9d426c89cdda0e",
@@ -2011,18 +2011,18 @@
         "size": 1721
       },
       {
-        "git_blob": "e6331a4198a087d894fdd6ca17ecabf9d0977e8c",
+        "git_blob": "6b2d26adee47a35f685661c80c10d4cda209dccf",
         "mode": "100644",
         "path": "src/profiles/collaboration.yaml",
-        "sha256": "4fb97c4d1cc5a5f138d18f29fb6124941adc4717504f22771f2b03bebea936aa",
-        "size": 387
+        "sha256": "34ffb91c7b06e1ab36ea2a03fea26e3f62549364166ea204517d26713fa78e62",
+        "size": 423
       },
       {
-        "git_blob": "ce36d2b271a331c3a2078575e09a1cf8a68c1d00",
+        "git_blob": "82dd2e27608d77d379f2181a1ccbbd12912478f6",
         "mode": "100644",
         "path": "src/profiles/complete.yaml",
-        "sha256": "7e55d8fbb8dd56ec74f655ba67b3332220f00e48f6a47303fda37c53f3be6f37",
-        "size": 427
+        "sha256": "389f290770378c6ea97cfb957ded5e48a2307b162bc97047f784867d719692df",
+        "size": 463
       },
       {
         "git_blob": "adce813b4cb865b93b004af0e665f226842dc4ee",
@@ -2053,18 +2053,18 @@
         "size": 108
       },
       {
-        "git_blob": "ffff9fce5308582d9afe5969f3c877d3f63c70e4",
+        "git_blob": "60491784e90e01cfdb3e29d12c310c0f0f652089",
         "mode": "100644",
         "path": "src/profiles/source-repository.yaml",
-        "sha256": "c33e70a17816f9eb2e6e01796fcbc0e9d50cf461e16febbd634209c1d057f539",
-        "size": 375
+        "sha256": "4cfc61e59e8fe56f3392766df373ec2ac1fab86bf59df9c3a9679584bc04f5a1",
+        "size": 411
       },
       {
-        "git_blob": "63307e246d19982863fdbd0b9d0157c7c045d6ef",
+        "git_blob": "da6f69e37f506688e577c03a5f688d7149a5fd45",
         "mode": "100644",
         "path": "src/profiles/work-management.yaml",
-        "sha256": "c89cde2229702f9f38ba3a0f7959c1145596ab8a03bfcf3503ab569458e2a7b6",
-        "size": 121
+        "sha256": "e475d4884c2df2fb6072f0155135b6ca29e8f1d4454ad682edb85a4519729b9a",
+        "size": 157
       },
       {
         "git_blob": "50f5c6afd5e90ec5e2f15875c46ae4e3d1874cc2",
@@ -2646,6 +2646,27 @@
         "path": "src/skills/slice-implementer/skill-package.yaml",
         "sha256": "6842c837b4359fc5f219eb449ed8d8aa239fd6702c091096e7453f01f5d2c9e5",
         "size": 2431
+      },
+      {
+        "git_blob": "5ab579e3b1c6a0b9d1f8ccb120868f9b6330ca8f",
+        "mode": "100644",
+        "path": "src/skills/software-development-orchestrator/SKILL.md",
+        "sha256": "92e98a9fd810843736d4e0d8cec6362a70e9f3bc753b7745845353c3c8d6abd7",
+        "size": 1645
+      },
+      {
+        "git_blob": "ac92d7a9d95fa241e67074cc1273855b33416578",
+        "mode": "100644",
+        "path": "src/skills/software-development-orchestrator/references/orchestrate.md",
+        "sha256": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
+        "size": 7282
+      },
+      {
+        "git_blob": "f81fbedf920315eadd3e746d90e0a811257364b6",
+        "mode": "100644",
+        "path": "src/skills/software-development-orchestrator/skill-package.yaml",
+        "sha256": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a",
+        "size": 1677
       },
       {
         "git_blob": "bb290b95639cb602563feef45175fe0d9a57d2c6",
@@ -3440,6 +3461,20 @@
         "version": "0.2.0"
       },
       {
+        "id": "software-development-orchestrator",
+        "kind": "skill",
+        "members": [
+          "SKILL.md",
+          "references/orchestrate.md",
+          "skill-package.yaml"
+        ],
+        "metadata": "skill-package.yaml",
+        "metadata_version": 4,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.2.0"
+      },
+      {
         "id": "spec-author",
         "kind": "skill",
         "members": [
@@ -3691,6 +3726,7 @@
           "problem-frame-author",
           "requirement-author",
           "slice-implementer",
+          "software-development-orchestrator",
           "spec-author",
           "spec-compliance-validator",
           "standards-promotion"
@@ -3719,6 +3755,7 @@
           "problem-frame-author",
           "requirement-author",
           "slice-implementer",
+          "software-development-orchestrator",
           "spec-author",
           "spec-compliance-validator",
           "standards-promotion"
@@ -3804,6 +3841,7 @@
           "problem-frame-author",
           "requirement-author",
           "slice-implementer",
+          "software-development-orchestrator",
           "spec-author",
           "spec-compliance-validator",
           "standards-promotion"
@@ -3819,15 +3857,16 @@
         "preset_version": 1,
         "skills": [
           "local-backlog",
-          "pr-author"
+          "pr-author",
+          "software-development-orchestrator"
         ],
         "version": "0.1.0"
       }
     ],
     "release_version": "0.19.0-rc.3",
     "source": {
-      "commit": "bdb5bbec012e86f5d9486dadd9872ecbbb5a4e0a",
-      "tree": "4b4148a0950d454891d9d619db12056fec9b6dbc"
+      "commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
+      "tree": "754e1de8cb01fb8989cc50c0bf48e8efb8cccd1c"
     }
   },
   "catalog_inventory": {
@@ -8360,6 +8399,45 @@
       {
         "kind": "skill",
         "member": "SKILL.md",
+        "owner": "software-development-orchestrator",
+        "path": "packages/skill/software-development-orchestrator/SKILL.md",
+        "source": {
+          "git_blob": "5ab579e3b1c6a0b9d1f8ccb120868f9b6330ca8f",
+          "mode": "100644",
+          "path": "src/skills/software-development-orchestrator/SKILL.md",
+          "sha256": "92e98a9fd810843736d4e0d8cec6362a70e9f3bc753b7745845353c3c8d6abd7",
+          "size": 1645
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "references/orchestrate.md",
+        "owner": "software-development-orchestrator",
+        "path": "packages/skill/software-development-orchestrator/references/orchestrate.md",
+        "source": {
+          "git_blob": "ac92d7a9d95fa241e67074cc1273855b33416578",
+          "mode": "100644",
+          "path": "src/skills/software-development-orchestrator/references/orchestrate.md",
+          "sha256": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
+          "size": 7282
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "skill-package.yaml",
+        "owner": "software-development-orchestrator",
+        "path": "packages/skill/software-development-orchestrator/skill-package.yaml",
+        "source": {
+          "git_blob": "f81fbedf920315eadd3e746d90e0a811257364b6",
+          "mode": "100644",
+          "path": "src/skills/software-development-orchestrator/skill-package.yaml",
+          "sha256": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a",
+          "size": 1677
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "SKILL.md",
         "owner": "spec-author",
         "path": "packages/skill/spec-author/SKILL.md",
         "source": {
@@ -8771,7 +8849,7 @@
       }
     ],
     "id": "framework-managed-installation",
-    "source_commit": "bdb5bbec012e86f5d9486dadd9872ecbbb5a4e0a",
+    "source_commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
     "version": "2.0.0"
   },
   "installation_id": "842258fcd115288102e0a020346643b4",
@@ -14661,6 +14739,57 @@
       },
       {
         "binding": null,
+        "destination": ".ai/core/skills/software-development-orchestrator/SKILL.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/software-development-orchestrator",
+        "path": "payload/.ai/core/skills/software-development-orchestrator/SKILL.md",
+        "sha256": "92e98a9fd810843736d4e0d8cec6362a70e9f3bc753b7745845353c3c8d6abd7",
+        "size": 1645,
+        "source": {
+          "git_blob": "5ab579e3b1c6a0b9d1f8ccb120868f9b6330ca8f",
+          "mode": "100644",
+          "path": "src/skills/software-development-orchestrator/SKILL.md",
+          "sha256": "92e98a9fd810843736d4e0d8cec6362a70e9f3bc753b7745845353c3c8d6abd7",
+          "size": 1645
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/software-development-orchestrator/references/orchestrate.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/software-development-orchestrator",
+        "path": "payload/.ai/core/skills/software-development-orchestrator/references/orchestrate.md",
+        "sha256": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
+        "size": 7282,
+        "source": {
+          "git_blob": "ac92d7a9d95fa241e67074cc1273855b33416578",
+          "mode": "100644",
+          "path": "src/skills/software-development-orchestrator/references/orchestrate.md",
+          "sha256": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
+          "size": 7282
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/software-development-orchestrator/skill-package.yaml",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/software-development-orchestrator",
+        "path": "payload/.ai/core/skills/software-development-orchestrator/skill-package.yaml",
+        "sha256": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a",
+        "size": 1677,
+        "source": {
+          "git_blob": "f81fbedf920315eadd3e746d90e0a811257364b6",
+          "mode": "100644",
+          "path": "src/skills/software-development-orchestrator/skill-package.yaml",
+          "sha256": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a",
+          "size": 1677
+        }
+      },
+      {
+        "binding": null,
         "destination": ".ai/core/skills/spec-author/SKILL.md",
         "kind": "payload",
         "mode": "100644",
@@ -15308,6 +15437,23 @@
       {
         "binding": {
           "adapter": "codex",
+          "core_entrypoint": ".ai/core/skills/software-development-orchestrator/SKILL.md",
+          "entry_name": "software-development-orchestrator",
+          "skill": "software-development-orchestrator",
+          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+        },
+        "destination": ".agents/skills/software-development-orchestrator/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "adapter/codex/skill/software-development-orchestrator",
+        "path": "runtime/.agents/skills/software-development-orchestrator/SKILL.md",
+        "sha256": "2200b6234ea3a1110d4d94ed7081d83375427a501eba1c39b5fa70d92239a2a3",
+        "size": 1900,
+        "source": null
+      },
+      {
+        "binding": {
+          "adapter": "codex",
           "core_entrypoint": ".ai/core/skills/spec-author/SKILL.md",
           "entry_name": "spec-author",
           "skill": "spec-author",
@@ -15597,6 +15743,23 @@
       {
         "binding": {
           "adapter": "claude",
+          "core_entrypoint": ".ai/core/skills/software-development-orchestrator/SKILL.md",
+          "entry_name": "software-development-orchestrator",
+          "skill": "software-development-orchestrator",
+          "template_sha256": "11eeedac1452cc78e9ab7726791c5032b2379815ea15e8fb0f8fb11d921d032e"
+        },
+        "destination": ".claude/skills/software-development-orchestrator/SKILL.md",
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "adapter/claude/skill/software-development-orchestrator",
+        "path": "runtime/.claude/skills/software-development-orchestrator/SKILL.md",
+        "sha256": "9ca0de2305aeceb35c8c424ae5adf1266bbc5343cce6cdcdb819238b46e71442",
+        "size": 1902,
+        "source": null
+      },
+      {
+        "binding": {
+          "adapter": "claude",
           "core_entrypoint": ".ai/core/skills/spec-author/SKILL.md",
           "entry_name": "spec-author",
           "skill": "spec-author",
@@ -15652,148 +15815,16 @@
   "mode_policy": "windows-inventory-only",
   "project_inputs": [
     {
-      "path": ".agents/skills/README.md",
-      "sha256": "c34368cad4105ffe865c8ec81b4fe693aeb1226e90a64ba85c8c45318898e600"
-    },
-    {
-      "path": ".ai/INDEX.MD",
-      "sha256": "d0828e12fb626776c0ea2062b9b6eaaa3c5a1cca7ba1880c198932a478612d71"
-    },
-    {
-      "path": ".ai/README.MD",
-      "sha256": "1b28f273540cf37e91ab17203d134b379619e4a8432f77dc9a5b0ae8c7d835d9"
-    },
-    {
       "path": ".ai/custom/framework.json",
       "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
-    },
-    {
-      "path": ".ai/custom/installation.json",
-      "sha256": "507d08115e4130502077f283f2a2eee669d64c069086d5fe6a6dc938d6377070"
-    },
-    {
-      "path": ".claude/skills/README.md",
-      "sha256": "abbf6cc69c876f86df1678256fed256eddcb6701034ad8daca3ecb3a9b00d767"
-    },
-    {
-      "path": ".dev/INDEX.md",
-      "sha256": "5a66216ad72ded1fb9dc5eb8473c6af2b3719b9345065cbd59c2f49b8dba1a5d"
-    },
-    {
-      "path": ".dev/README.MD",
-      "sha256": "ee878ad5c131637b435cb67d07b766652b533e664f99f50d244db434fdc1acea"
-    },
-    {
-      "path": ".dev/adr/INDEX.md",
-      "sha256": "956605e7756bed2d5eb98bc358c6ed5214b9816388826653da405fb34b767763"
-    },
-    {
-      "path": ".dev/adr/README.md",
-      "sha256": "e032235e81183d96dbec7a16e03807feb1b83ba66bce54f348d83add1768d4bd"
-    },
-    {
-      "path": ".dev/ai-context/CURRENT-FRAMEWORK.md",
-      "sha256": "7053cd6e9febbf8635119f3a8f9d2f5030d92558152bfd422a3cded9c2cf686e"
     },
     {
       "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
       "sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08"
     },
     {
-      "path": ".dev/ai-context/skills.md",
-      "sha256": "db00602f19b4997b6571dad006e7977218b7ac1d9dca641300c14dc0518641fc"
-    },
-    {
-      "path": ".dev/operations/README.MD",
-      "sha256": "dca87131ac405b7fbbe4dc9088f7bb588ee93f378d88db7e237f50fddc928163"
-    },
-    {
-      "path": ".dev/operations/runbooks/README.MD",
-      "sha256": "e7645054316e7cd6f3911f16f6cf5edf36c4c3f7facf468eeb3ab5fc1c58946f"
-    },
-    {
-      "path": ".dev/problem-frames/INDEX.md",
-      "sha256": "5f678516180d6c368b1bd505086100f72d1df619db442e606eebafc6276e2daf"
-    },
-    {
-      "path": ".dev/problem-frames/README.MD",
-      "sha256": "159dbc6aa343447b015c3869ac6f95886d5ecd0bb9226fa58801b94525839258"
-    },
-    {
-      "path": ".dev/problem-frames/SEMANTICS.md",
-      "sha256": "93e349694589c188b1da5c0dfd31d981e64cfe5c339e990aa89df10773771501"
-    },
-    {
-      "path": ".dev/specs/INDEX.MD",
-      "sha256": "8a9b8e2f2198d6db7ffb7c35510788e786d93fed697670ce7a2351b79ecefa9a"
-    },
-    {
-      "path": ".dev/specs/tests/README.MD",
-      "sha256": "dc3624fc5c9b56f44bab04a35cab9714a22b7773c4dfff38c63fd813f2e25523"
-    },
-    {
-      "path": ".dev/standards/AI-CONTEXT-OWNERSHIP.md",
-      "sha256": "a15909ea35a9fe02af3c2a5c3ba7cbbd02ba7d71e4d5a4f7ff402aee85de39ec"
-    },
-    {
-      "path": ".dev/standards/INDEX.MD",
-      "sha256": "73d1d4e8e5b862517b39f3a6f7fc7132bea0d12408e39c86bf179f1753133158"
-    },
-    {
-      "path": ".dev/standards/README.md",
-      "sha256": "030d822f3890ad6a022b253150567af16fdec996448c51a4fd05a937dde150de"
-    },
-    {
-      "path": ".dev/standards/WORKFLOW-ARTIFACT-POLICY.md",
-      "sha256": "67badac4ff597e3fa0821fd1abfcbf6cb7727e36525e801f7d631e5f87782e61"
-    },
-    {
-      "path": ".dev/standards/coding-standards/INDEX.MD",
-      "sha256": "f58edae8d1afa7e6384743cb0859b77c6a62a8bf04b10b8fa3130ffb097dda7b"
-    },
-    {
-      "path": ".dev/standards/coding-standards/README.md",
-      "sha256": "18d19c73bd012df7b98e865271b4b808d608e434592df0fa19077d767303d554"
-    },
-    {
-      "path": ".dev/standards/examples/README.md",
-      "sha256": "d194d16c9be3e4f21f4b7527afe14aba6b519d44c7c392e4193d7d0874503fb3"
-    },
-    {
-      "path": ".dev/standards/rationale/INDEX.MD",
-      "sha256": "b8e54d25cec7870be88038b29dfe4ab2a48809e2ed9f6c0dab729f28a340ddbb"
-    },
-    {
-      "path": ".dev/standards/rationale/README.MD",
-      "sha256": "c8644b23148dca85da1d581248ddd29c54625d54e4d9d7431c1ad30365d57222"
-    },
-    {
       "path": ".dev/workflows/INDEX.MD",
-      "sha256": "00871fec0733b512c31e0f4d1911a58f13be5f7ac902a75296861a144ff6b80b"
-    },
-    {
-      "path": ".dev/workflows/README.MD",
-      "sha256": "0f1aa2074be82c5b0f48333a1be24979057d4e7b1d4d126d680e8062d34545f5"
-    },
-    {
-      "path": "AGENTS.md",
-      "sha256": "f9c6a001c2459671a14a281f6259e4bc789a08caa3844681d3eef182f8bff672"
-    },
-    {
-      "path": "AGENTS.zh-TW.md",
-      "sha256": "077e640538b643156dea6f7e86df364c6b5a83e275b3e245358579e96ca6569e"
-    },
-    {
-      "path": "CLAUDE.md",
-      "sha256": "5bf7c2f992625ee38ba1d3db572d180f8afd029f84f047a8fa08b94707e84b29"
-    },
-    {
-      "path": "README.en.md",
-      "sha256": "8ff4f2a6ea8e8bac6e097e04c77f600465bf9b5f200d8824b4be003eb291ad0c"
-    },
-    {
-      "path": "README.md",
-      "sha256": "9044b4256461a9868c7a637f4381399e8995d69b069817f2d550bae9226b9933"
+      "sha256": "88267f44d64a69934726759f5a4a043209ccb11554e49468d6b4f379d86de570"
     }
   ],
   "selection": {
@@ -15818,9 +15849,9 @@
       }
     ],
     "catalog": {
-      "catalog_sha256": "90da37339f91a31d5f5bbaf5ff1ba83e441b1fc9e8ae37c335da38dca3d77696",
-      "files_sha256": "dd80646a8c23ed8a59b7e63d2b996795ab54d951ffd7ad69e1e961c3517001b9",
-      "identity": "catalog:1:0.19.0-rc.3:bdb5bbec012e86f5d9486dadd9872ecbbb5a4e0a:ccc6cc2b8ed71f3440a82f411f32d429a0c7b1ae1cd8c695ac53bb4c622726e5"
+      "catalog_sha256": "f8336d1bc74a4d733743f98629dcc4033c2ad8f489fb06fcbbc112ade22bd0f2",
+      "files_sha256": "08e55222b4493030bddb868589ab682f9dfd1af292b1afad91df37bc240303c3",
+      "identity": "catalog:1:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:1cfbbd9c5e57f83aa81bdc4242c86762f44a31d3862b16b31b39487c2e939f01"
     },
     "components": [
       {
@@ -16413,6 +16444,20 @@
             "version": "0.1.0"
           }
         ],
+        "required_dependencies": [],
+        "version": "0.2.0"
+      },
+      {
+        "id": "software-development-orchestrator",
+        "kind": "skill",
+        "members": [
+          "SKILL.md",
+          "references/orchestrate.md",
+          "skill-package.yaml"
+        ],
+        "metadata": "skill-package.yaml",
+        "metadata_version": 4,
+        "optional_dependencies": [],
         "required_dependencies": [],
         "version": "0.2.0"
       },
@@ -18220,9 +18265,9 @@
         }
       ],
       "catalog": {
-        "catalog_sha256": "90da37339f91a31d5f5bbaf5ff1ba83e441b1fc9e8ae37c335da38dca3d77696",
-        "files_sha256": "dd80646a8c23ed8a59b7e63d2b996795ab54d951ffd7ad69e1e961c3517001b9",
-        "identity": "catalog:1:0.19.0-rc.3:bdb5bbec012e86f5d9486dadd9872ecbbb5a4e0a:ccc6cc2b8ed71f3440a82f411f32d429a0c7b1ae1cd8c695ac53bb4c622726e5"
+        "catalog_sha256": "f8336d1bc74a4d733743f98629dcc4033c2ad8f489fb06fcbbc112ade22bd0f2",
+        "files_sha256": "08e55222b4493030bddb868589ab682f9dfd1af292b1afad91df37bc240303c3",
+        "identity": "catalog:1:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:1cfbbd9c5e57f83aa81bdc4242c86762f44a31d3862b16b31b39487c2e939f01"
       },
       "knowledge": [
         "dotnet-backend",
@@ -18245,12 +18290,13 @@
         "problem-frame-author",
         "requirement-author",
         "slice-implementer",
+        "software-development-orchestrator",
         "spec-author",
         "spec-compliance-validator",
         "standards-promotion"
       ]
     },
-    "desired_sha256": "507d08115e4130502077f283f2a2eee669d64c069086d5fe6a6dc938d6377070",
+    "desired_sha256": "4e438e6c716e1a7918edb95635f78208d2ba5c891a86c945176016df327ffedb",
     "generator": {
       "id": "aicf-subset-derivation",
       "implementation": [
@@ -18428,8 +18474,8 @@
     "release_version": "0.19.0-rc.3",
     "schema_version": 3,
     "source": {
-      "commit": "bdb5bbec012e86f5d9486dadd9872ecbbb5a4e0a",
-      "tree": "4b4148a0950d454891d9d619db12056fec9b6dbc"
+      "commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
+      "tree": "754e1de8cb01fb8989cc50c0bf48e8efb8cccd1c"
     }
   }
 }

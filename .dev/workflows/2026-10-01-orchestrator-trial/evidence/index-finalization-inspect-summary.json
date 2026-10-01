@@ -1,0 +1,23 @@
+{
+  "api_version": 2,
+  "changed": false,
+  "details": {
+    "drift": [],
+    "managed_state": "managed-bytes-consistent",
+    "mode_policy": "windows-inventory-only",
+    "project_readiness": "not-assessed",
+    "unknown": []
+  },
+  "diagnostics": [],
+  "exclusions": [
+    "owned member entries; authoritative inventory remains in the installer-owned framework.lock"
+  ],
+  "generator": "Issue421 coordinator deterministic JSON projection",
+  "observed_at": "2026-10-01T08:28:59+08:00",
+  "operation": "inspect",
+  "outcome": "inspected",
+  "owned_count": 409,
+  "projection_version": 1,
+  "raw_response_sha256": "a562561460918a3f0ce7d9bee81deec11809ded8b3db3fb65a5e713f8da949c2",
+  "source_commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330"
+}

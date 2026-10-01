@@ -1,0 +1,146 @@
+{
+  "api_version": 2,
+  "candidate_identity": "subset:3:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:51b37ec032a689a40e4a61d43c76c17928bf802c0da0c0da2d4e7b0a95660118",
+  "changed": null,
+  "changed_managed_members": [],
+  "delta_counts": {
+    "unchanged": 409
+  },
+  "diagnostics": [],
+  "exclusions": [
+    "unchanged managed members and repeated engine/input manifests; framework.lock and engine-pin preserve these identities"
+  ],
+  "generator": "Issue421 coordinator deterministic JSON projection",
+  "maintenance_scope": [
+    "adr-author",
+    "ai-context-auditor",
+    "ai-context-governance",
+    "bdd-gwt-test-designer",
+    "code-reviewer",
+    "ddd-ca-hex-architect",
+    "diagnostic-analyst",
+    "dotnet-backend",
+    "engineering-common",
+    "lesson-author",
+    "local-backlog",
+    "local-change-implementer",
+    "pr-author",
+    "problem-frame-author",
+    "requirement-author",
+    "slice-implementer",
+    "software-development-orchestrator",
+    "spec-author",
+    "spec-compliance-validator",
+    "standards-promotion"
+  ],
+  "observed_at": "2026-10-01T08:28:59+08:00",
+  "operation": "plan",
+  "outcome": "planned",
+  "path_budget": {
+    "backend_certification": "not-assessed",
+    "checked_paths": 1034,
+    "full_path_utf16_limit": 240,
+    "maximum_full_path_utf16": 226,
+    "maximum_segment_utf16": 64,
+    "policy": "conservative-windows-v1",
+    "segment_utf16_limit": 255
+  },
+  "plan_sha256": "a01e8387f523dab8f824225f7fff435992737df704faf5f4cc374d5022846b44",
+  "prerequisites": [
+    {
+      "id": "candidate-provenance",
+      "next_action": "Available bytes/bindings match; provenance approval and source authenticity remain with caller.",
+      "owner": "caller",
+      "status": "satisfied"
+    },
+    {
+      "id": "durability-declaration",
+      "next_action": "Native filesystem/domain combination is supported; recovery survival is a caller assertion, not measured durability.",
+      "owner": "caller",
+      "status": "satisfied"
+    },
+    {
+      "id": "exclusive-operation-allocation",
+      "next_action": "Preflight actual unique paths and exclusively allocate the selected operation before managed mutation.",
+      "owner": "maintenance-writer",
+      "status": "pending"
+    },
+    {
+      "id": "fresh-input-observation",
+      "next_action": "Recompute this exact plan under a held native writer lock.",
+      "owner": "maintenance-writer",
+      "status": "pending"
+    },
+    {
+      "id": "lock-publication",
+      "next_action": "Next lock fits the closed reader and selected backend; publication remains a postcondition after full member read-back.",
+      "owner": "maintenance-writer",
+      "status": "satisfied"
+    },
+    {
+      "id": "maintenance-quiescence",
+      "next_action": "Supply a fresh exact-scope declaration; the engine cannot attest stopped activity.",
+      "owner": "caller",
+      "status": "pending"
+    },
+    {
+      "id": "mode-materialization",
+      "next_action": "Windows inventory-only; no ACL/executable enforcement.",
+      "owner": "maintenance-writer",
+      "status": "not-applicable"
+    },
+    {
+      "id": "native-writer-backend",
+      "next_action": "Selected native primitives and filesystem/domain checks are available; this is not platform certification.",
+      "owner": "maintenance-writer",
+      "status": "satisfied"
+    },
+    {
+      "id": "writer-engine-closure",
+      "next_action": "Fixed bootstrap, executing origins, exact source closure and observed checkout HEAD match the caller pin.",
+      "owner": "maintenance-writer",
+      "status": "satisfied"
+    },
+    {
+      "id": "writer-guard",
+      "next_action": "Acquire the inert guard with a native OS lock; no-op cannot create a missing guard.",
+      "owner": "maintenance-writer",
+      "status": "pending"
+    }
+  ],
+  "preserved_unknown": [],
+  "project_data_action": "none",
+  "project_edits": [
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "88267f44d64a69934726759f5a4a043209ccb11554e49468d6b4f379d86de570",
+        "size": 7155
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "ea877be1067f894ca9b7bf98f425d205b7c346842b06c1e64248df1eec01ad91",
+        "size": 6875
+      },
+      "intent": {
+        "after_content_ref": "objects/88267f44d64a69934726759f5a4a043209ccb11554e49468d6b4f379d86de570",
+        "after_sha256": "88267f44d64a69934726759f5a4a043209ccb11554e49468d6b4f379d86de570",
+        "before_sha256": "ea877be1067f894ca9b7bf98f425d205b7c346842b06c1e64248df1eec01ad91",
+        "path": ".dev/workflows/INDEX.MD"
+      }
+    }
+  ],
+  "projection_version": 1,
+  "protected_inputs": [
+    {
+      "path": ".ai/custom/framework.json",
+      "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
+    },
+    {
+      "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+      "sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08"
+    }
+  ],
+  "raw_response_sha256": "7a30db0edf2e8c4cfee9e52333ff6d6e43599232389cf75608e3aaf35de87043",
+  "source_commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330"
+}

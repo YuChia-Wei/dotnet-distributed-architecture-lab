@@ -1,11 +1,11 @@
 # Selected framework contract and target authority
 
-This contract describes an isolated RC3 trial at `F:/framework-next/rc3-mq-trial`, based on source commit `bdb5bbec012e86f5d9486dadd9872ecbbb5a4e0a`. It does not establish primary-checkout adoption, a published RC3 release, target acceptance or runtime discovery. Navigation was prepared against target commit `441009dd550f5ca7f40d94dcbf0c28290cf39ac0`. Actual installation identity, catalog/subset identity, changed files and outcomes must come from the saved selection, installer-owned `.ai/framework.lock` and the coordinator's external plan/apply/read-back evidence. No successful execution is asserted here.
+This contract describes the isolated additive orchestration restoration trial at `F:/framework-next/orchestrator-mq-trial`, based on source commit `16f3f0c072bd22c3945fce8aca8295bf2b88f330`. The saved selection and installer-owned lock identify the actual local candidate. This trial preserves adopted target rules and the prior RC3 history; it does not establish primary-checkout integration, a published release or product/runtime acceptance.
 
 ## Selected shape
 
-- Select seventeen skill packages, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters with original names. Use [the selected skill registry](skills.md).
-- adr-author, lesson-author and pr-author replace the former discovery IDs adr, lesson and pr. No portable software-development-orchestrator is selected. Ordinary `.dev/workflows/` records remain manually governed by adopted target workflow/Git policies; existing records and migrated evidence retain their bytes and historical owners.
+- Select eighteen skill packages, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters with original names. Use [the selected skill registry](skills.md).
+- adr-author, lesson-author and pr-author replace the former discovery IDs adr, lesson and pr. The restored software-development-orchestrator@0.2.0 is selected for stage coordination. Ordinary `.dev/workflows/` records remain governed by adopted target workflow/Git policies; existing records and migrated evidence retain their bytes and historical owners.
 - `.ai/custom/framework.json` remains explicit project-owned operation settings and store constraints. A renamed entry does not migrate a record format, discover a store or grant writes. `.ai/custom/installation.json` is saved desired selection; `.ai/framework.lock` is installer-owned observed installation truth.
 - Use only the official selected installer for managed package, runtime and lock writes. Availability, installation, adoption, execution, acceptance and publication remain separate facts.
 

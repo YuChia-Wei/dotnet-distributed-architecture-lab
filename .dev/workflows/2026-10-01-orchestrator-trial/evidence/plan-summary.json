@@ -1,0 +1,370 @@
+{
+  "api_version": 2,
+  "candidate_identity": "subset:3:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:51b37ec032a689a40e4a61d43c76c17928bf802c0da0c0da2d4e7b0a95660118",
+  "changed": null,
+  "changed_managed_members": [
+    {
+      "action": "add",
+      "after": {
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "adapter/codex/skill/software-development-orchestrator",
+        "sha256": "2200b6234ea3a1110d4d94ed7081d83375427a501eba1c39b5fa70d92239a2a3",
+        "size": 1900
+      },
+      "before": null,
+      "destination": ".agents/skills/software-development-orchestrator/SKILL.md"
+    },
+    {
+      "action": "add",
+      "after": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/software-development-orchestrator",
+        "sha256": "92e98a9fd810843736d4e0d8cec6362a70e9f3bc753b7745845353c3c8d6abd7",
+        "size": 1645
+      },
+      "before": null,
+      "destination": ".ai/core/skills/software-development-orchestrator/SKILL.md"
+    },
+    {
+      "action": "add",
+      "after": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/software-development-orchestrator",
+        "sha256": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
+        "size": 7282
+      },
+      "before": null,
+      "destination": ".ai/core/skills/software-development-orchestrator/references/orchestrate.md"
+    },
+    {
+      "action": "add",
+      "after": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/software-development-orchestrator",
+        "sha256": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a",
+        "size": 1677
+      },
+      "before": null,
+      "destination": ".ai/core/skills/software-development-orchestrator/skill-package.yaml"
+    },
+    {
+      "action": "add",
+      "after": {
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "adapter/claude/skill/software-development-orchestrator",
+        "sha256": "9ca0de2305aeceb35c8c424ae5adf1266bbc5343cce6cdcdb819238b46e71442",
+        "size": 1902
+      },
+      "before": null,
+      "destination": ".claude/skills/software-development-orchestrator/SKILL.md"
+    }
+  ],
+  "delta_counts": {
+    "add": 5,
+    "unchanged": 404
+  },
+  "diagnostics": [],
+  "exclusions": [
+    "unchanged managed members and repeated engine/input manifests; framework.lock and engine-pin preserve these identities"
+  ],
+  "generator": "Issue421 coordinator deterministic JSON projection",
+  "maintenance_scope": [
+    "adr-author",
+    "ai-context-auditor",
+    "ai-context-governance",
+    "bdd-gwt-test-designer",
+    "code-reviewer",
+    "ddd-ca-hex-architect",
+    "diagnostic-analyst",
+    "dotnet-backend",
+    "engineering-common",
+    "lesson-author",
+    "local-backlog",
+    "local-change-implementer",
+    "pr-author",
+    "problem-frame-author",
+    "requirement-author",
+    "slice-implementer",
+    "software-development-orchestrator",
+    "spec-author",
+    "spec-compliance-validator",
+    "standards-promotion"
+  ],
+  "observed_at": "2026-10-01T08:28:59+08:00",
+  "operation": "plan",
+  "outcome": "planned",
+  "path_budget": {
+    "backend_certification": "not-assessed",
+    "checked_paths": 1048,
+    "full_path_utf16_limit": 240,
+    "maximum_full_path_utf16": 226,
+    "maximum_segment_utf16": 64,
+    "policy": "conservative-windows-v1",
+    "segment_utf16_limit": 255
+  },
+  "plan_sha256": "3dc9076f2ecdab109ffed46d945fe64f89cd3ad556802e980bf19d7eed647277",
+  "prerequisites": [
+    {
+      "id": "candidate-provenance",
+      "next_action": "Available bytes/bindings match; provenance approval and source authenticity remain with caller.",
+      "owner": "caller",
+      "status": "satisfied"
+    },
+    {
+      "id": "durability-declaration",
+      "next_action": "Native filesystem/domain combination is supported; recovery survival is a caller assertion, not measured durability.",
+      "owner": "caller",
+      "status": "satisfied"
+    },
+    {
+      "id": "exclusive-operation-allocation",
+      "next_action": "Preflight actual unique paths and exclusively allocate the selected operation before managed mutation.",
+      "owner": "maintenance-writer",
+      "status": "pending"
+    },
+    {
+      "id": "fresh-input-observation",
+      "next_action": "Recompute this exact plan under a held native writer lock.",
+      "owner": "maintenance-writer",
+      "status": "pending"
+    },
+    {
+      "id": "lock-publication",
+      "next_action": "Next lock fits the closed reader and selected backend; publication remains a postcondition after full member read-back.",
+      "owner": "maintenance-writer",
+      "status": "satisfied"
+    },
+    {
+      "id": "maintenance-quiescence",
+      "next_action": "Supply a fresh exact-scope declaration; the engine cannot attest stopped activity.",
+      "owner": "caller",
+      "status": "pending"
+    },
+    {
+      "id": "mode-materialization",
+      "next_action": "Windows inventory-only; no ACL/executable enforcement.",
+      "owner": "maintenance-writer",
+      "status": "not-applicable"
+    },
+    {
+      "id": "native-writer-backend",
+      "next_action": "Selected native primitives and filesystem/domain checks are available; this is not platform certification.",
+      "owner": "maintenance-writer",
+      "status": "satisfied"
+    },
+    {
+      "id": "writer-engine-closure",
+      "next_action": "Fixed bootstrap, executing origins, exact source closure and observed checkout HEAD match the caller pin.",
+      "owner": "maintenance-writer",
+      "status": "satisfied"
+    },
+    {
+      "id": "writer-guard",
+      "next_action": "Acquire the inert guard with a native OS lock; no-op cannot create a missing guard.",
+      "owner": "maintenance-writer",
+      "status": "pending"
+    }
+  ],
+  "preserved_unknown": [],
+  "project_data_action": "none",
+  "project_edits": [
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "9408c2b5e3cbfd68e437cadca0ee3efb3350d98523e3b90d45090641e62c9058",
+        "size": 790
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "c34368cad4105ffe865c8ec81b4fe693aeb1226e90a64ba85c8c45318898e600",
+        "size": 652
+      },
+      "intent": {
+        "after_content_ref": "objects/9408c2b5e3cbfd68e437cadca0ee3efb3350d98523e3b90d45090641e62c9058",
+        "after_sha256": "9408c2b5e3cbfd68e437cadca0ee3efb3350d98523e3b90d45090641e62c9058",
+        "before_sha256": "c34368cad4105ffe865c8ec81b4fe693aeb1226e90a64ba85c8c45318898e600",
+        "path": ".agents/skills/README.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "4e438e6c716e1a7918edb95635f78208d2ba5c891a86c945176016df327ffedb",
+        "size": 48394
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "507d08115e4130502077f283f2a2eee669d64c069086d5fe6a6dc938d6377070",
+        "size": 48353
+      },
+      "intent": {
+        "after_content_ref": "objects/4e438e6c716e1a7918edb95635f78208d2ba5c891a86c945176016df327ffedb",
+        "after_sha256": "4e438e6c716e1a7918edb95635f78208d2ba5c891a86c945176016df327ffedb",
+        "before_sha256": "507d08115e4130502077f283f2a2eee669d64c069086d5fe6a6dc938d6377070",
+        "path": ".ai/custom/installation.json"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "5ba4b851c791fe3b609bd74d5355053467f93b508d23426bd4f82ea6f522d2cf",
+        "size": 791
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "abbf6cc69c876f86df1678256fed256eddcb6701034ad8daca3ecb3a9b00d767",
+        "size": 653
+      },
+      "intent": {
+        "after_content_ref": "objects/5ba4b851c791fe3b609bd74d5355053467f93b508d23426bd4f82ea6f522d2cf",
+        "after_sha256": "5ba4b851c791fe3b609bd74d5355053467f93b508d23426bd4f82ea6f522d2cf",
+        "before_sha256": "abbf6cc69c876f86df1678256fed256eddcb6701034ad8daca3ecb3a9b00d767",
+        "path": ".claude/skills/README.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "f75c97faca7c0bb86653ef5e88bb5282fd84d7f702f3df192aa46b8daa0914cc",
+        "size": 4246
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "7053cd6e9febbf8635119f3a8f9d2f5030d92558152bfd422a3cded9c2cf686e",
+        "size": 4394
+      },
+      "intent": {
+        "after_content_ref": "objects/f75c97faca7c0bb86653ef5e88bb5282fd84d7f702f3df192aa46b8daa0914cc",
+        "after_sha256": "f75c97faca7c0bb86653ef5e88bb5282fd84d7f702f3df192aa46b8daa0914cc",
+        "before_sha256": "7053cd6e9febbf8635119f3a8f9d2f5030d92558152bfd422a3cded9c2cf686e",
+        "path": ".dev/ai-context/CURRENT-FRAMEWORK.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "1fd203a543163879d05d2a18d3b12cf703cbfb6f071070ffd0a2907e4354f39c",
+        "size": 3464
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "db00602f19b4997b6571dad006e7977218b7ac1d9dca641300c14dc0518641fc",
+        "size": 3239
+      },
+      "intent": {
+        "after_content_ref": "objects/1fd203a543163879d05d2a18d3b12cf703cbfb6f071070ffd0a2907e4354f39c",
+        "after_sha256": "1fd203a543163879d05d2a18d3b12cf703cbfb6f071070ffd0a2907e4354f39c",
+        "before_sha256": "db00602f19b4997b6571dad006e7977218b7ac1d9dca641300c14dc0518641fc",
+        "path": ".dev/ai-context/skills.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "a6cc5839bd607c1c8b449390237735346f079a1b152c9b58337699ec613277c5",
+        "size": 12461
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "67badac4ff597e3fa0821fd1abfcbf6cb7727e36525e801f7d631e5f87782e61",
+        "size": 12416
+      },
+      "intent": {
+        "after_content_ref": "objects/a6cc5839bd607c1c8b449390237735346f079a1b152c9b58337699ec613277c5",
+        "after_sha256": "a6cc5839bd607c1c8b449390237735346f079a1b152c9b58337699ec613277c5",
+        "before_sha256": "67badac4ff597e3fa0821fd1abfcbf6cb7727e36525e801f7d631e5f87782e61",
+        "path": ".dev/standards/WORKFLOW-ARTIFACT-POLICY.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "ea877be1067f894ca9b7bf98f425d205b7c346842b06c1e64248df1eec01ad91",
+        "size": 6875
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "00871fec0733b512c31e0f4d1911a58f13be5f7ac902a75296861a144ff6b80b",
+        "size": 6831
+      },
+      "intent": {
+        "after_content_ref": "objects/ea877be1067f894ca9b7bf98f425d205b7c346842b06c1e64248df1eec01ad91",
+        "after_sha256": "ea877be1067f894ca9b7bf98f425d205b7c346842b06c1e64248df1eec01ad91",
+        "before_sha256": "00871fec0733b512c31e0f4d1911a58f13be5f7ac902a75296861a144ff6b80b",
+        "path": ".dev/workflows/INDEX.MD"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "1599813c73a49c383108e3ae2e5949b3628d659a4653aff59affa7bab102c8b2",
+        "size": 5677
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "0f1aa2074be82c5b0f48333a1be24979057d4e7b1d4d126d680e8062d34545f5",
+        "size": 5622
+      },
+      "intent": {
+        "after_content_ref": "objects/1599813c73a49c383108e3ae2e5949b3628d659a4653aff59affa7bab102c8b2",
+        "after_sha256": "1599813c73a49c383108e3ae2e5949b3628d659a4653aff59affa7bab102c8b2",
+        "before_sha256": "0f1aa2074be82c5b0f48333a1be24979057d4e7b1d4d126d680e8062d34545f5",
+        "path": ".dev/workflows/README.MD"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "0a76d2199367e656f074459de3a7a8c1e34e255dd1f49bbc2a73de673985fa78",
+        "size": 6481
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "f9c6a001c2459671a14a281f6259e4bc789a08caa3844681d3eef182f8bff672",
+        "size": 6309
+      },
+      "intent": {
+        "after_content_ref": "objects/0a76d2199367e656f074459de3a7a8c1e34e255dd1f49bbc2a73de673985fa78",
+        "after_sha256": "0a76d2199367e656f074459de3a7a8c1e34e255dd1f49bbc2a73de673985fa78",
+        "before_sha256": "f9c6a001c2459671a14a281f6259e4bc789a08caa3844681d3eef182f8bff672",
+        "path": "AGENTS.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "99a8516d5caf489c88515dc330883a2aa42f1634f1c6e0019226971b79a66aa7",
+        "size": 5768
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "077e640538b643156dea6f7e86df364c6b5a83e275b3e245358579e96ca6569e",
+        "size": 5632
+      },
+      "intent": {
+        "after_content_ref": "objects/99a8516d5caf489c88515dc330883a2aa42f1634f1c6e0019226971b79a66aa7",
+        "after_sha256": "99a8516d5caf489c88515dc330883a2aa42f1634f1c6e0019226971b79a66aa7",
+        "before_sha256": "077e640538b643156dea6f7e86df364c6b5a83e275b3e245358579e96ca6569e",
+        "path": "AGENTS.zh-TW.md"
+      }
+    }
+  ],
+  "projection_version": 1,
+  "protected_inputs": [
+    {
+      "path": ".ai/custom/framework.json",
+      "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
+    },
+    {
+      "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+      "sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08"
+    }
+  ],
+  "raw_response_sha256": "13cbd72c2d6080dea597433f15c58f0fd7d212fa898b53118583d1bfbbe73985",
+  "source_commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330"
+}

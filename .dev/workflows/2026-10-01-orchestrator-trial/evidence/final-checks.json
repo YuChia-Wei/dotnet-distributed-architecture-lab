@@ -1,0 +1,34 @@
+{
+  "generator": "Issue421 bounded changed-file parser/link/relationship check",
+  "observed_at": "2026-10-01T08:32:13+08:00",
+  "outcome": "passed",
+  "source_package_commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
+  "manifest_skill_count": 18,
+  "engine_pin_members_unchanged": 24,
+  "mq_bindings_preserved": 40,
+  "scope": "changed files, added local links, declared package/profile/task relationships and exact installed source members; no behavioral or product/runtime acceptance",
+  "subjects": [
+    {
+      "root": "F:\\framework-next\\orchestrator-restore",
+      "base": "a2ed2e3ebbba2acaae2f9574b52302379e01fc48",
+      "checked_changed_files": 39,
+      "parsed_json_yaml": 20,
+      "checked_added_local_links": 32,
+      "skill_count_per_adapter": 18,
+      "source_members_equal": true,
+      "workflow_local_outcome": "completed",
+      "diff_check": "passed"
+    },
+    {
+      "root": "F:\\framework-next\\orchestrator-mq-trial",
+      "base": "90f0a3ea396be8b3762d58fb6ab04b6c4f83afbc",
+      "checked_changed_files": 31,
+      "parsed_json_yaml": 15,
+      "checked_added_local_links": 23,
+      "skill_count_per_adapter": 18,
+      "source_members_equal": true,
+      "workflow_local_outcome": "completed",
+      "diff_check": "passed"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "api_version": 2,
+  "changed": true,
+  "details": {
+    "counts": {
+      "added": 5,
+      "changed": 10,
+      "removed": 0,
+      "unchanged": 404
+    },
+    "lock_sha256": "09d60f13ed64df60eeef5a5a3f1981c6a4098d6c8b43d27eab8addcee9e83034",
+    "managed_state": "managed-bytes-consistent",
+    "operation_root": "F:\\orchestrator-421-20261001\\mq\\recovery\\i-123168315ecc7dacbdc5062cb7e79d15",
+    "project_readiness": "not-assessed",
+    "protected_input_state": "matches"
+  },
+  "diagnostics": [],
+  "operation": "apply",
+  "outcome": "applied"
+}
