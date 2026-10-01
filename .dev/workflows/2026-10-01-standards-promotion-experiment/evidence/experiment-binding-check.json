@@ -1,0 +1,10 @@
+{
+  "files_unchanged": true,
+  "mutation_state": "none",
+  "operation": "explain",
+  "outcome": "succeeded",
+  "package_version": "0.1.1-alpha.1",
+  "response_sha256": "b8247ecd24249ba76604855416ee3807ce42eb9e10b5c0dc3d557b31850c6b35",
+  "scope": "Read-only metadata/config binding smoke check; no proposal/query scenario or purpose/behavior acceptance",
+  "settings_unchanged": true
+}

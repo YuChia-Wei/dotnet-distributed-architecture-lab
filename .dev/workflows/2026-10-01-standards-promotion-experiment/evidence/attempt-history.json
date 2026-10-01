@@ -1,0 +1,25 @@
+{
+  "attempts": [
+    {
+      "disposition": "Corrected coordinator checks; authentic successful tool plan/apply/inspect retained without rerunning writes.",
+      "layer": "coordinator-postprocessing",
+      "reason": "Response inventory uses destination, not the assumed path field; isolated-mode helper needs explicit private module path; installer leaves empty directories so package availability must be tested by owned files, not directory existence."
+    },
+    {
+      "code": "path-budget",
+      "layer": "candidate-output-environment",
+      "outcome": "unsupported",
+      "raw_failure_sha256": "9c00f0f897a6b7d0d02428a374cc78956cce7f1c51a22a7fc3a7d8956774ffe4",
+      "reason": "MQ subset output exceeded Windows path budget.",
+      "state_change": "A distinct shorter task-owned output/scratch root was selected.",
+      "subsequent_outcome": "assembled; actual installer applied and inspected"
+    },
+    {
+      "disposition": "Removed trailing whitespace; final git diff --check is required before commit.",
+      "layer": "record-formatting",
+      "reason": "Final results paragraph contained trailing whitespace."
+    }
+  ],
+  "behavioral_tests": "not-run",
+  "observed_at": "2026-10-01T09:55:37+08:00"
+}

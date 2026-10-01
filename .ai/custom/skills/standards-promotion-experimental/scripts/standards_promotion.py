@@ -25,7 +25,7 @@ import uuid
 
 
 OWNER = 'standards-promotion'
-VERSION = '0.1.0'
+VERSION = '0.1.1-alpha.1'
 SCHEMA_VERSION = '1.0.0'
 PREFIX = 'promotion'
 INITIAL = 'proposed'

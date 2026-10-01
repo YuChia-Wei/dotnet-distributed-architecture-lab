@@ -1,0 +1,20 @@
+chore(#29): copy promotion as a standalone prerelease experiment
+
+Why:
+- Owner requires separate purpose validation and independent MQ experimentation before distribution.
+
+What:
+- Remove promotion from managed selection through official maintenance while preserving other skills, knowledge, settings and records.
+- Copy all nine prerelease source members and add explicitly project-owned experimental discovery entries and provenance.
+
+Validation:
+- Official plan/apply/inspect, member preservation, metadata/link/frontmatter and diff checks passed.
+- MQ read-only metadata/config explain succeeded without mutation; purpose/behavior acceptance is not run.
+- Product/runtime tests, CI and independent admission are not run.
+
+Workflow:
+- 2026-10-01-standards-promotion-experiment
+- Stage: independent-copy
+- Task: T1
+
+Co-Authored-By: OpenAI Codex (gpt-6.1-sol, ultra) <noreply@openai.com>

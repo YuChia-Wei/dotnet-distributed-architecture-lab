@@ -1,0 +1,327 @@
+{
+  "candidate_identity": "subset:3:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:8ae36d727db48ce5413ce1c2b71d5726439a7e11e80f25231d41223a62766134",
+  "changed_managed_members": [
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "adapter/codex/skill/standards-promotion",
+        "sha256": "afb7da4b356633eff75d6db1d41733039f3857ecf753e50e1a4ffd576102c0ed",
+        "size": 2413
+      },
+      "destination": ".agents/skills/standards-promotion/SKILL.md"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/standards-promotion",
+        "sha256": "9e619bec2a060eafe30a6d4f654963e14633b0462e55365ce2e992debf55055b",
+        "size": 1978
+      },
+      "destination": ".ai/core/skills/standards-promotion/SKILL.md"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/standards-promotion",
+        "sha256": "3df9b1f1ddfdc6aaf1df05d6b027b47144faa362e718e02a8e3218dc2d132792",
+        "size": 5354
+      },
+      "destination": ".ai/core/skills/standards-promotion/references/authority.md"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/standards-promotion",
+        "sha256": "78aca34372afa57475f18b7df6ea062f0234e675c96b97589d6f83d8dc3cb28c",
+        "size": 6073
+      },
+      "destination": ".ai/core/skills/standards-promotion/references/configuration.md"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/standards-promotion",
+        "sha256": "8cc3b24b18431e17ea3c7ae1fc3941c2f04fb06701f7ad5ac8a788c995679a2d",
+        "size": 6032
+      },
+      "destination": ".ai/core/skills/standards-promotion/references/example.md"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/standards-promotion",
+        "sha256": "6e22b7519af5edb7972e5c7c66a009b669977973c8b235a216fc755bd5cd629f",
+        "size": 11605
+      },
+      "destination": ".ai/core/skills/standards-promotion/references/operations.md"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/standards-promotion",
+        "sha256": "0002b9d91dfd4cfea7a74d51567dd0d93bc03e7f3c6ad3ad974707996eb58b46",
+        "size": 11955
+      },
+      "destination": ".ai/core/skills/standards-promotion/schemas/promotion-record.schema.json"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/standards-promotion",
+        "sha256": "acccbc01d5a99d32cfa599243ab9359944ec5a6f1feee3a73b72e52379f80b4d",
+        "size": 90862
+      },
+      "destination": ".ai/core/skills/standards-promotion/scripts/standards_promotion.py"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/standards-promotion",
+        "sha256": "4727f91052636305e0651114f3a66e0bcb2f0d76e9cc8b6c73f63a2d19abd2e3",
+        "size": 6181
+      },
+      "destination": ".ai/core/skills/standards-promotion/skill-package.yaml"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/standards-promotion",
+        "sha256": "953e3da7d7029e4bb9560e1454a6c1dbfb6f1f3cf9c22b6f9f7c7b74af992ea5",
+        "size": 413
+      },
+      "destination": ".ai/core/skills/standards-promotion/templates/promotion.md"
+    },
+    {
+      "action": "remove",
+      "after": null,
+      "before": {
+        "kind": "runtime",
+        "mode": "100644",
+        "owner": "adapter/claude/skill/standards-promotion",
+        "sha256": "a175b611aa989cd47e584c31935309a16c12134ced54be7ded527e32adf2435f",
+        "size": 2415
+      },
+      "destination": ".claude/skills/standards-promotion/SKILL.md"
+    }
+  ],
+  "diagnostics": [],
+  "exclusions": [
+    "Unchanged member inventory remains in official lock; repeated engine/input entries remain pinned."
+  ],
+  "generator": "Issue423 coordinator deterministic projection",
+  "maintenance_scope": [
+    "adr-author",
+    "ai-context-auditor",
+    "ai-context-governance",
+    "bdd-gwt-test-designer",
+    "code-reviewer",
+    "ddd-ca-hex-architect",
+    "diagnostic-analyst",
+    "dotnet-backend",
+    "engineering-common",
+    "lesson-author",
+    "local-backlog",
+    "local-change-implementer",
+    "pr-author",
+    "problem-frame-author",
+    "requirement-author",
+    "slice-implementer",
+    "software-development-orchestrator",
+    "spec-author",
+    "spec-compliance-validator",
+    "standards-promotion"
+  ],
+  "observed_at": "2026-10-01T09:55:37+08:00",
+  "outcome": "planned",
+  "plan_sha256": "4325006198b2a1c0dd0b2855306a044a8ec393fdea037ae96879c8c3fcb9ece9",
+  "project_data_action": "none",
+  "project_edits": [
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "7d00373cab6116076aecc57daeb1bba9481e658493cbc1b8bc42c597b734cf15",
+        "size": 969
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "aeb36b02cb421aefe10d09ed6bc3f17bcaef6288565bb3456027b537238612cf",
+        "size": 761
+      },
+      "intent": {
+        "after_content_ref": "objects/7d00373cab6116076aecc57daeb1bba9481e658493cbc1b8bc42c597b734cf15",
+        "after_sha256": "7d00373cab6116076aecc57daeb1bba9481e658493cbc1b8bc42c597b734cf15",
+        "before_sha256": "aeb36b02cb421aefe10d09ed6bc3f17bcaef6288565bb3456027b537238612cf",
+        "path": ".agents/skills/README.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "00aa04231ff69f2bf11ab4eeb213c9ded7ba625dce4e7471fc800919de8d10a1",
+        "size": 48367
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "4e438e6c716e1a7918edb95635f78208d2ba5c891a86c945176016df327ffedb",
+        "size": 48394
+      },
+      "intent": {
+        "after_content_ref": "objects/00aa04231ff69f2bf11ab4eeb213c9ded7ba625dce4e7471fc800919de8d10a1",
+        "after_sha256": "00aa04231ff69f2bf11ab4eeb213c9ded7ba625dce4e7471fc800919de8d10a1",
+        "before_sha256": "4e438e6c716e1a7918edb95635f78208d2ba5c891a86c945176016df327ffedb",
+        "path": ".ai/custom/installation.json"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "002512c3951271bc55b241f51e7e6c2363870f8c6cf2a9335c140140a86f5be0",
+        "size": 970
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "f7659edebf5269fb743bf17030233e2e227c6204929e49d8854906988cded1ea",
+        "size": 762
+      },
+      "intent": {
+        "after_content_ref": "objects/002512c3951271bc55b241f51e7e6c2363870f8c6cf2a9335c140140a86f5be0",
+        "after_sha256": "002512c3951271bc55b241f51e7e6c2363870f8c6cf2a9335c140140a86f5be0",
+        "before_sha256": "f7659edebf5269fb743bf17030233e2e227c6204929e49d8854906988cded1ea",
+        "path": ".claude/skills/README.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "e5c8014e76e3b24674f51a5105c6909d02c457a1c781ad44c77efe8358d6022b",
+        "size": 5259
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "b124540bc0aaa8ae3a13d5ee2fb2fc75b153ca1e218e711cc6303c8838792849",
+        "size": 4387
+      },
+      "intent": {
+        "after_content_ref": "objects/e5c8014e76e3b24674f51a5105c6909d02c457a1c781ad44c77efe8358d6022b",
+        "after_sha256": "e5c8014e76e3b24674f51a5105c6909d02c457a1c781ad44c77efe8358d6022b",
+        "before_sha256": "b124540bc0aaa8ae3a13d5ee2fb2fc75b153ca1e218e711cc6303c8838792849",
+        "path": ".dev/ai-context/CURRENT-FRAMEWORK.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "322e42e7be9abdb413f7b3eaa0712ad54a027c69ec3e833cc48fdd9bc2142a04",
+        "size": 3993
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "da54d9a5092597ee9ad5d156ce9d31c7412bff67626822482c4128c1ec158395",
+        "size": 3451
+      },
+      "intent": {
+        "after_content_ref": "objects/322e42e7be9abdb413f7b3eaa0712ad54a027c69ec3e833cc48fdd9bc2142a04",
+        "after_sha256": "322e42e7be9abdb413f7b3eaa0712ad54a027c69ec3e833cc48fdd9bc2142a04",
+        "before_sha256": "da54d9a5092597ee9ad5d156ce9d31c7412bff67626822482c4128c1ec158395",
+        "path": ".dev/ai-context/skills.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "f9c6fd5b1473aaf1e0268901ca25497b95a23a420c7784e6d27fcb4f7997a190",
+        "size": 7487
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "a10992b5953d7b5b48efcb09cbfd814ee4c79a0070b2b20cff71f0b83a5805e0",
+        "size": 7160
+      },
+      "intent": {
+        "after_content_ref": "objects/f9c6fd5b1473aaf1e0268901ca25497b95a23a420c7784e6d27fcb4f7997a190",
+        "after_sha256": "f9c6fd5b1473aaf1e0268901ca25497b95a23a420c7784e6d27fcb4f7997a190",
+        "before_sha256": "a10992b5953d7b5b48efcb09cbfd814ee4c79a0070b2b20cff71f0b83a5805e0",
+        "path": ".dev/workflows/INDEX.MD"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "08ccad3de44314d0a682d36226e411df86c03e71060cc9a1e073f68f193fe0be",
+        "size": 6984
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "807282a2a8226c7bba2b72a7c1f90654fd26f56d3fc62588a1f6c87b36e301cf",
+        "size": 6563
+      },
+      "intent": {
+        "after_content_ref": "objects/08ccad3de44314d0a682d36226e411df86c03e71060cc9a1e073f68f193fe0be",
+        "after_sha256": "08ccad3de44314d0a682d36226e411df86c03e71060cc9a1e073f68f193fe0be",
+        "before_sha256": "807282a2a8226c7bba2b72a7c1f90654fd26f56d3fc62588a1f6c87b36e301cf",
+        "path": "AGENTS.md"
+      }
+    },
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "cdcc970a15a975b9671a338e7aaf0060c3982178599973299cd492e86ea78b4a",
+        "size": 6185
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "2e026ae040965de697f2d71674afc886105ca174bb1ba6865721efe23821c115",
+        "size": 5844
+      },
+      "intent": {
+        "after_content_ref": "objects/cdcc970a15a975b9671a338e7aaf0060c3982178599973299cd492e86ea78b4a",
+        "after_sha256": "cdcc970a15a975b9671a338e7aaf0060c3982178599973299cd492e86ea78b4a",
+        "before_sha256": "2e026ae040965de697f2d71674afc886105ca174bb1ba6865721efe23821c115",
+        "path": "AGENTS.zh-TW.md"
+      }
+    }
+  ],
+  "projection_version": 1,
+  "protected_inputs": [
+    {
+      "path": ".ai/custom/framework.json",
+      "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
+    },
+    {
+      "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+      "sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08"
+    }
+  ],
+  "raw_response_sha256": "bf36b372180a475d1f7e97cc73432ad5f309e644f6c04620445c88c620a6fded",
+  "unchanged_managed_count": 398
+}

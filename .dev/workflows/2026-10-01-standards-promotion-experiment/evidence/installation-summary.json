@@ -1,0 +1,43 @@
+{
+  "bindings_count": 40,
+  "candidate_identity": "subset:3:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:8ae36d727db48ce5413ce1c2b71d5726439a7e11e80f25231d41223a62766134",
+  "catalog_identity": "catalog:1:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:c54a507c489225a80d26b3bbbdb3d7756079290453747cf130625bfe131e02f2",
+  "changed_existing_paths": [
+    ".agents/skills/README.md",
+    ".agents/skills/standards-promotion/SKILL.md",
+    ".ai/core/skills/standards-promotion/SKILL.md",
+    ".ai/core/skills/standards-promotion/references/authority.md",
+    ".ai/core/skills/standards-promotion/references/configuration.md",
+    ".ai/core/skills/standards-promotion/references/example.md",
+    ".ai/core/skills/standards-promotion/references/operations.md",
+    ".ai/core/skills/standards-promotion/schemas/promotion-record.schema.json",
+    ".ai/core/skills/standards-promotion/scripts/standards_promotion.py",
+    ".ai/core/skills/standards-promotion/skill-package.yaml",
+    ".ai/core/skills/standards-promotion/templates/promotion.md",
+    ".ai/custom/installation.json",
+    ".ai/framework.lock",
+    ".claude/skills/README.md",
+    ".claude/skills/standards-promotion/SKILL.md",
+    ".dev/ai-context/CURRENT-FRAMEWORK.md",
+    ".dev/ai-context/skills.md",
+    ".dev/workflows/INDEX.MD",
+    "AGENTS.md",
+    "AGENTS.zh-TW.md"
+  ],
+  "drift": [],
+  "knowledge": [
+    "dotnet-backend",
+    "engineering-common"
+  ],
+  "lock_sha256": "750691077a396493ebec8c55a57f4dc799e35440f5db735c036ef48202352d3e",
+  "managed_members": 398,
+  "managed_skills": 17,
+  "managed_state": "managed-bytes-consistent",
+  "outcome": "applied",
+  "plan_sha256": "4325006198b2a1c0dd0b2855306a044a8ec393fdea037ae96879c8c3fcb9ece9",
+  "previous_tracked_count": 1481,
+  "protected_settings_sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1",
+  "source_commit": "5ed50d1b59115a2677711dbb91fcb8cc12dc2148",
+  "target": "mq",
+  "unchanged_tracked_files": 1461
+}

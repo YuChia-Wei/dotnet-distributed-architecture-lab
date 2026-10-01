@@ -1,0 +1,24 @@
+{
+  "copied_at": "2026-10-01T09:53:08+08:00",
+  "copied_package_root": ".ai/custom/skills/standards-promotion-experimental",
+  "discovery_alias": "standards-promotion-experimental",
+  "files": {
+    "SKILL.md": "a3b9c1ad9098cfacaf5b89fcbb13a60ea905b0660fcbd6f3981676706018af08",
+    "references/authority.md": "3df9b1f1ddfdc6aaf1df05d6b027b47144faa362e718e02a8e3218dc2d132792",
+    "references/configuration.md": "78aca34372afa57475f18b7df6ea062f0234e675c96b97589d6f83d8dc3cb28c",
+    "references/example.md": "8cc3b24b18431e17ea3c7ae1fc3941c2f04fb06701f7ad5ac8a788c995679a2d",
+    "references/operations.md": "e926f99bbe0877380a1865d0547cfc57e1e1f9284c2a996ef405edbd7ce368e3",
+    "schemas/promotion-record.schema.json": "0002b9d91dfd4cfea7a74d51567dd0d93bc03e7f3c6ad3ad974707996eb58b46",
+    "scripts/standards_promotion.py": "3aa4054e8a7d1f7a698478efdd9d02ef373ab113751f2635fa61e0429a5ed14e",
+    "skill-package.yaml": "660195c7555003ec67de29e3c5b8e87f4da1869fb7fcf96a5f762d1a0e77a0f6",
+    "templates/promotion.md": "953e3da7d7029e4bb9560e1454a6c1dbfb6f1f3cf9c22b6f9f7c7b74af992ea5"
+  },
+  "managed_by_release_installation": false,
+  "operation_config_identity": "standards-promotion",
+  "owner": "MQ lab project; direct owner-selected experimental-copy exception",
+  "purpose_behavior_acceptance": "not-run; owner-selected future work",
+  "source_commit": "5ed50d1b59115a2677711dbb91fcb8cc12dc2148",
+  "source_path": "src/skills/standards-promotion",
+  "source_repository": "https://github.com/YuChia-Wei/ai-collaboration-framework",
+  "source_version": "0.1.1-alpha.1"
+}

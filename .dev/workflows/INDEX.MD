@@ -8,6 +8,7 @@ Owner names below mirror historical locators and are provenance, not current ski
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |
 | --- | --- | --- | --- | --- | --- |
+| [`2026-10-01-standards-promotion-experiment`](2026-10-01-standards-promotion-experiment/workflow.yaml) | Independently copy prerelease standards promotion outside managed installation | `ai-context-governance` | `completed` | `2026-10-01T09:55:37+08:00` | [plan](2026-10-01-standards-promotion-experiment/workflow-plan.md) |
 | [`2026-10-01-orchestrator-trial`](2026-10-01-orchestrator-trial/workflow.yaml) | Restore development orchestration from the source framework package | `ai-context-governance` | `completed` | `2026-10-01T08:54:23+08:00` | [plan](2026-10-01-orchestrator-trial/workflow-plan.md) |
 | [`2026-09-29-framework-rc2-adoption`](2026-09-29-framework-rc2-adoption/workflow.yaml) | Replace RC1 context with RC2 in the distributed-commerce lab | `ai-context-governance` | `in_progress` | `2026-09-29T10:58:47+08:00` | [plan](2026-09-29-framework-rc2-adoption/workflow-plan.md) |
 | [`2026-09-28-external-api-team-guide`](2026-09-28-external-api-team-guide/workflow.yaml) | External API testing team materials and documentation reconciliation | `project-documentation-delivery` | `completed` | `2026-09-28T23:32:07+08:00` | [plan](2026-09-28-external-api-team-guide/workflow-plan.md) |
