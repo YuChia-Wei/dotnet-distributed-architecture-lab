@@ -51,3 +51,10 @@ The local trial is completed on `codex/2026-10-01-orchestrator-trial`; primary
 adoption remains in `RC3-MAIN-INTEGRATION.md`. This restoration has no push,
 PR/main integration, Issue closure or publication. Continue from the local
 commit after reconciling primary state and separate delivery authorization.
+
+## Authorized main delivery (2026-10-01T08:54:23+08:00)
+
+The owner now authorizes main integration and push of both repositories.
+The earlier local-only integration statements describe the original checkpoint.
+Preserve its source/installation receipts; delivery uses live PR/main/remote
+read-back. Existing product/runtime and independent-admission limits remain.

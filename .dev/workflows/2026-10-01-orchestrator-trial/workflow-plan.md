@@ -48,3 +48,15 @@ schema or generic workflow store. Template metadata: `template_id:
 mq-orchestrator-restoration-task`, `template_version: 1.0.0`,
 `created_at: 2026-10-01T08:24:15+08:00`, `updated_at: 2026-10-01T08:24:15+08:00`. The locator separately identifies
 the real target-owned locator template.
+
+## Authorized integration continuation (2026-10-01T08:54:23+08:00)
+
+The owner explicitly requested merging both repositories to `main` and pushing,
+and requested a complete skill difference table including the reasons for every
+addition, retirement and behavior change. The earlier local-only boundary is
+historical; this authorization extends delivery to branch push, online PR merge
+and primary-checkout synchronization. Use merge commits to preserve the fixed
+source-package and installation checkpoints as a coherent rollback unit.
+Issue closure, Project mutation, tags/releases and policy/CI changes are not
+part of this delivery. Keep existing validation deferrals and report live
+PR/main/remote outcomes separately from local workflow completion.

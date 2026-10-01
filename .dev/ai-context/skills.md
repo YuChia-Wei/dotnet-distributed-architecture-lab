@@ -1,6 +1,6 @@
 # Selected target skill routes
 
-The orchestration restoration trial selects these eighteen original IDs, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters. Read the [current contract](CURRENT-FRAMEWORK.md), saved selection and official lock for actual installation state. This registry declares intended navigation; it does not claim installation, discovery, admission or primary adoption passed.
+The saved installation selects these eighteen original IDs, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters. Read the [current contract](CURRENT-FRAMEWORK.md), saved selection and official lock for actual installation state. This registry declares intended navigation; it does not claim installation, discovery, admission or primary adoption passed.
 
 | Skill | Target use |
 | --- | --- |

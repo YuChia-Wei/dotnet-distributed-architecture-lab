@@ -15815,16 +15815,40 @@
   "mode_policy": "windows-inventory-only",
   "project_inputs": [
     {
+      "path": ".agents/skills/README.md",
+      "sha256": "aeb36b02cb421aefe10d09ed6bc3f17bcaef6288565bb3456027b537238612cf"
+    },
+    {
       "path": ".ai/custom/framework.json",
       "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
+    },
+    {
+      "path": ".claude/skills/README.md",
+      "sha256": "f7659edebf5269fb743bf17030233e2e227c6204929e49d8854906988cded1ea"
+    },
+    {
+      "path": ".dev/ai-context/CURRENT-FRAMEWORK.md",
+      "sha256": "b124540bc0aaa8ae3a13d5ee2fb2fc75b153ca1e218e711cc6303c8838792849"
     },
     {
       "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
       "sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08"
     },
     {
+      "path": ".dev/ai-context/skills.md",
+      "sha256": "da54d9a5092597ee9ad5d156ce9d31c7412bff67626822482c4128c1ec158395"
+    },
+    {
       "path": ".dev/workflows/INDEX.MD",
-      "sha256": "88267f44d64a69934726759f5a4a043209ccb11554e49468d6b4f379d86de570"
+      "sha256": "a10992b5953d7b5b48efcb09cbfd814ee4c79a0070b2b20cff71f0b83a5805e0"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "807282a2a8226c7bba2b72a7c1f90654fd26f56d3fc62588a1f6c87b36e301cf"
+    },
+    {
+      "path": "AGENTS.zh-TW.md",
+      "sha256": "2e026ae040965de697f2d71674afc886105ca174bb1ba6865721efe23821c115"
     }
   ],
   "selection": {

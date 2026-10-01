@@ -1,0 +1,21 @@
+docs(#27): prepare restored skill navigation for main integration
+
+Why:
+- The owner authorizes the restored framework installation for main integration and push.
+
+What:
+- Replace trial-only navigation with the selected installation and explicit delivery authority through paired installer project edits.
+- Preserve original trial receipts and prior RC3 adoption history.
+
+Validation:
+- Official API2 navigation apply returned applied; all 409 managed members unchanged and fresh inspect found no drift.
+- Changed UTF-8, JSON/YAML, local links, task/source relationships and git diff --check passed.
+- Both runtime adapters retain eighteen original-name entries, forty knowledge bindings and exact target rule bytes.
+- Product/runtime, recovery experiments and independent admission were not run; source U001 is not target policy.
+
+Workflow:
+- 2026-10-01-orchestrator-trial
+- Stage: S2
+- Task: T1
+
+Co-Authored-By: OpenAI Codex (gpt-6.1-sol, ultra) <noreply@openai.com>

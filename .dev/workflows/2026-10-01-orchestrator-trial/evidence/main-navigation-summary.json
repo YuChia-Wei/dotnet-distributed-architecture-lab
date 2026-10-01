@@ -1,0 +1,23 @@
+{
+  "candidate_identity": "subset:3:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:51b37ec032a689a40e4a61d43c76c17928bf802c0da0c0da2d4e7b0a95660118",
+  "changed_managed_members": [],
+  "drift": [],
+  "generator": "Issue27 coordinator projection of real main-navigation maintenance responses",
+  "lock_sha256": "068e11082b66e7eb4a0fb9e2a8718c578e81ba54e3c9f5986ef9d2b3c5466487",
+  "managed_state": "managed-bytes-consistent",
+  "observed_at": "2026-10-01T08:54:23+08:00",
+  "outcome": "applied",
+  "plan_sha256": "c7d238fb0920ddff91bb320c1e1a9472beb0098f2ae8c99c846aacbfdc61d8cb",
+  "project_edits": [
+    ".agents/skills/README.md",
+    ".claude/skills/README.md",
+    ".dev/ai-context/CURRENT-FRAMEWORK.md",
+    ".dev/ai-context/skills.md",
+    ".dev/workflows/INDEX.MD",
+    "AGENTS.md",
+    "AGENTS.zh-TW.md"
+  ],
+  "scope": "project-owned navigation only; no package, knowledge, settings or binding change",
+  "source_package_commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
+  "unchanged_managed_members": 409
+}

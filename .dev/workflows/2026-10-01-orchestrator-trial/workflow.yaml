@@ -9,7 +9,7 @@ current_phase: completed
 artifact_root: .dev/workflows/2026-10-01-orchestrator-trial
 entrypoint: workflow-plan.md
 created_at: '2026-10-01T08:24:15+08:00'
-updated_at: '2026-10-01T08:27:29+08:00'
+updated_at: '2026-10-01T08:54:23+08:00'
 template_source: .dev/standards/templates/workflow-locator-template.yaml
 template_version: 1.0.0
 branch: codex/2026-10-01-orchestrator-trial
@@ -19,5 +19,11 @@ issue_url: https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/iss
 source_issue_url: https://github.com/YuChia-Wei/ai-collaboration-framework/issues/421
 authority: Direct owner request on 2026-10-01 to restore the important skill through
   the current source package model.
-integration: isolated local trial; primary-checkout/main integration and provider
-  delivery remain separate
+integration: 'Owner authorized on 2026-10-01: push both branches, merge to main through
+  PRs and synchronize both primary checkouts; provider outcome requires live read-back.'
+integration_authorization:
+  owner_request: 都幫我合併回 main 然後推送
+  observed_at: '2026-10-01T08:54:23+08:00'
+  topology: merge-commit
+  reason: Retain immutable source-package and cross-repository installation checkpoints
+    as one reviewable rollback boundary.

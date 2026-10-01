@@ -2,13 +2,13 @@
 
 This index is the discovery view for workflow artifacts retained by `dotnet-mq-arch-lab`. Locator-backed rows mirror their `workflow.yaml`; legacy rows identify target-repository workflows that predate the locator policy.
 
-Owner names below mirror historical locators and are provenance, not current skill discovery. The restoration trial selects software-development-orchestrator for stage coordination; adopted target policies continue to own workflow records and integration authority. No locator, status, timestamp, entrypoint or workflow output is changed by this navigation note.
+Owner names below mirror historical locators and are provenance, not current skill discovery. The selected installation includes software-development-orchestrator for stage coordination; adopted target policies continue to own workflow records and integration authority. No locator, status, timestamp, entrypoint or workflow output is changed by this navigation note.
 
 ## Locator-Backed Workflows
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |
 | --- | --- | --- | --- | --- | --- |
-| [`2026-10-01-orchestrator-trial`](2026-10-01-orchestrator-trial/workflow.yaml) | Restore development orchestration from the source framework package | `ai-context-governance` | `completed` | `2026-10-01T08:27:29+08:00` | [plan](2026-10-01-orchestrator-trial/workflow-plan.md) |
+| [`2026-10-01-orchestrator-trial`](2026-10-01-orchestrator-trial/workflow.yaml) | Restore development orchestration from the source framework package | `ai-context-governance` | `completed` | `2026-10-01T08:54:23+08:00` | [plan](2026-10-01-orchestrator-trial/workflow-plan.md) |
 | [`2026-09-29-framework-rc2-adoption`](2026-09-29-framework-rc2-adoption/workflow.yaml) | Replace RC1 context with RC2 in the distributed-commerce lab | `ai-context-governance` | `in_progress` | `2026-09-29T10:58:47+08:00` | [plan](2026-09-29-framework-rc2-adoption/workflow-plan.md) |
 | [`2026-09-28-external-api-team-guide`](2026-09-28-external-api-team-guide/workflow.yaml) | External API testing team materials and documentation reconciliation | `project-documentation-delivery` | `completed` | `2026-09-28T23:32:07+08:00` | [plan](2026-09-28-external-api-team-guide/workflow-plan.md) |
 | [`2026-09-26-commerce-frontend`](2026-09-26-commerce-frontend/workflow.yaml) | Commerce internal operations and administration frontends | `software-development-orchestrator` | `completed` | `2026-09-29T22:11:55+08:00` | [plan](2026-09-26-commerce-frontend/workflow-plan.md) |

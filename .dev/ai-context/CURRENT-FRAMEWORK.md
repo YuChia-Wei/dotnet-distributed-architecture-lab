@@ -1,6 +1,6 @@
 # Selected framework contract and target authority
 
-This contract describes the isolated additive orchestration restoration trial at `F:/framework-next/orchestrator-mq-trial`, based on source commit `16f3f0c072bd22c3945fce8aca8295bf2b88f330`. The saved selection and installer-owned lock identify the actual local candidate. This trial preserves adopted target rules and the prior RC3 history; it does not establish primary-checkout integration, a published release or product/runtime acceptance.
+This contract describes the selected restored installation based on source commit `16f3f0c072bd22c3945fce8aca8295bf2b88f330`. Its original isolated trial and actual installer receipts are retained in [the restoration workflow](../workflows/2026-10-01-orchestrator-trial/workflow-plan.md). The saved selection and installer-owned lock identify the installed candidate. On 2026-10-01 the owner authorized main integration and push; observe that delivery through current Git/provider state. Existing engineering authority, prior RC3 history and product/runtime acceptance remain separate.
 
 ## Selected shape
 

@@ -1,0 +1,20 @@
+merge(#27): restore development orchestration in MQ lab
+
+Why:
+- The owner authorizes main integration and push of the restored framework installation.
+
+What:
+- Integrate the generated eighteen-skill installation and target navigation with the retained trial checkpoint.
+
+Validation:
+- Actual API2 apply and fresh inspect found consistent managed bytes with no drift.
+- All existing managed packages, target rules, settings, roles, workflow history and forty knowledge bindings preserved.
+- Product/runtime and independent admission were not run; installation does not establish product acceptance.
+- Issue closure and publication remain separate from this integration.
+
+Workflow:
+- 2026-10-01-orchestrator-trial
+- Stage: Integration
+- Task: T1
+
+Co-Authored-By: OpenAI Codex (gpt-6.1-sol, ultra) <noreply@openai.com>

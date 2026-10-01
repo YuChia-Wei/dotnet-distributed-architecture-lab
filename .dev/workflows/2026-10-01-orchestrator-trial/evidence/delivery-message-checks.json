@@ -1,0 +1,25 @@
+{
+  "generator": "Coordinator exact planned-message validator outcome record",
+  "observed_at": "2026-10-01T08:59:54+08:00",
+  "workflow_id": "2026-10-01-orchestrator-trial",
+  "policy_sha256": "a933d39f4f2f082c1bffc43bb8ec8f8b6d7686ef9bd9597f7c90937d8f1c60ea",
+  "records": [
+    {
+      "operation": "delivery",
+      "message_file": "planned-delivery-message.txt",
+      "message_sha256": "b0fadcb8ad8afc576803eee00d07b13934e301a9f064eb3f34f36c8999bdac2c",
+      "validator": "tools/maintenance/validate-git-commits.py executed from source worktree",
+      "exit_code": 0,
+      "output": "Git commit validation passed for planned message."
+    },
+    {
+      "operation": "merge",
+      "message_file": "planned-merge-message.txt",
+      "message_sha256": "a31da536531e8b0b4e8cdc5bfa2221c4250d8cb95a2b96f0331f8b7296d7aa13",
+      "validator": "tools/maintenance/validate-git-commits.py executed from source worktree",
+      "exit_code": 0,
+      "output": "Git commit validation passed for planned message."
+    }
+  ],
+  "scope": "Exact delivery and merge messages only; no target-history validation or independent audit."
+}
