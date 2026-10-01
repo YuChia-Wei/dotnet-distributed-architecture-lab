@@ -1,6 +1,6 @@
 # Selected target skill routes
 
-The saved installation selects these eighteen original IDs, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters. Read the [current contract](CURRENT-FRAMEWORK.md), saved selection and official lock for actual installation state. This registry declares intended navigation; it does not claim installation, discovery, admission or primary adoption passed.
+The saved installation selects these seventeen managed original IDs, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters. Read the [current contract](CURRENT-FRAMEWORK.md), saved selection and official lock for actual installation state. This registry declares intended navigation; it does not claim installation, discovery, admission or primary adoption passed.
 
 | Skill | Target use |
 | --- | --- |
@@ -21,7 +21,14 @@ The saved installation selects these eighteen original IDs, engineering-common a
 | [`software-development-orchestrator`](../../.ai/core/skills/software-development-orchestrator/SKILL.md) | Development stages and specialist handoffs |
 | [`spec-author`](../../.ai/core/skills/spec-author/SKILL.md) | Specifications |
 | [`spec-compliance-validator`](../../.ai/core/skills/spec-compliance-validator/SKILL.md) | Selected .NET/problem-frame compliance |
-| [`standards-promotion`](../../.ai/core/skills/standards-promotion/SKILL.md) | Proposals and project standards under explicit settings |
+
+## Independently copied experiment
+
+| Local discovery route | Package and status |
+| --- | --- |
+| [`standards-promotion-experimental`](../../.agents/skills/standards-promotion-experimental/SKILL.md) | Project-owned `standards-promotion@0.1.1-alpha.1` copy under `.ai/custom/skills/standards-promotion-experimental/`; excluded from release installation, pending owner-selected purpose/behavior validation. |
+
+See [copy ownership and provenance](STANDARDS-PROMOTION-EXPERIMENT.md). The copied operation/config namespace stays `standards-promotion`; the experimental discovery alias is not an eighteenth managed skill. Existing settings and store ownership are preserved.
 
 [TARGET-ENGINEERING-RULES.md](TARGET-ENGINEERING-RULES.md) remains exact adopted semantic authority. Resolve knowledge resources, bindings and actual rule predicates before claiming specialist coverage. Generic instructions do not replace target plain-xUnit GWT, per-domain persistence or project governance.
 

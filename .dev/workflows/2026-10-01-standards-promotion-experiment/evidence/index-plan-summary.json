@@ -1,0 +1,67 @@
+{
+  "candidate_identity": "subset:3:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:8ae36d727db48ce5413ce1c2b71d5726439a7e11e80f25231d41223a62766134",
+  "changed_managed_members": [],
+  "diagnostics": [],
+  "exclusions": [
+    "Unchanged member inventory remains in official lock; repeated engine/input entries remain pinned."
+  ],
+  "generator": "Issue423 coordinator deterministic projection",
+  "maintenance_scope": [
+    "adr-author",
+    "ai-context-auditor",
+    "ai-context-governance",
+    "bdd-gwt-test-designer",
+    "code-reviewer",
+    "ddd-ca-hex-architect",
+    "diagnostic-analyst",
+    "dotnet-backend",
+    "engineering-common",
+    "lesson-author",
+    "local-backlog",
+    "local-change-implementer",
+    "pr-author",
+    "problem-frame-author",
+    "requirement-author",
+    "slice-implementer",
+    "software-development-orchestrator",
+    "spec-author",
+    "spec-compliance-validator"
+  ],
+  "observed_at": "2026-10-01T09:55:37+08:00",
+  "outcome": "planned",
+  "plan_sha256": "bd323bd01b0178e77d6d3a8ab8b1a886f11a9c0092f2bd11b2101b51d6bee5b2",
+  "project_data_action": "none",
+  "project_edits": [
+    {
+      "after": {
+        "mode": "100644",
+        "sha256": "e1abffe2d5fd7d511791803b3ea9f714fbc5e30e6cb1eb73a660085c1b49285b",
+        "size": 7487
+      },
+      "before": {
+        "mode": "100644",
+        "sha256": "f9c6fd5b1473aaf1e0268901ca25497b95a23a420c7784e6d27fcb4f7997a190",
+        "size": 7487
+      },
+      "intent": {
+        "after_content_ref": "objects/e1abffe2d5fd7d511791803b3ea9f714fbc5e30e6cb1eb73a660085c1b49285b",
+        "after_sha256": "e1abffe2d5fd7d511791803b3ea9f714fbc5e30e6cb1eb73a660085c1b49285b",
+        "before_sha256": "f9c6fd5b1473aaf1e0268901ca25497b95a23a420c7784e6d27fcb4f7997a190",
+        "path": ".dev/workflows/INDEX.MD"
+      }
+    }
+  ],
+  "projection_version": 1,
+  "protected_inputs": [
+    {
+      "path": ".ai/custom/framework.json",
+      "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
+    },
+    {
+      "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
+      "sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08"
+    }
+  ],
+  "raw_response_sha256": "e4272e92cae0861e1bea10847cff93db6977490defc75a2f5ff0624d18d71979",
+  "unchanged_managed_count": 398
+}

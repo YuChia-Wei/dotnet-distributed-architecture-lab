@@ -1,0 +1,18 @@
+{
+  "catalog_identity": "catalog:1:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:c54a507c489225a80d26b3bbbdb3d7756079290453747cf130625bfe131e02f2",
+  "catalog_manifest_sha256": "ca70779db8e6f0a4943311e37490f5500f5d28c85b746fed4b2de87c6bda475f",
+  "emitted_knowledge_count": 2,
+  "emitted_skill_count": 17,
+  "engine_files": 24,
+  "excluded_source_version": "0.1.1-alpha.1",
+  "historical_tags_unchanged": true,
+  "outcome": "passed",
+  "promotion_catalog_component": false,
+  "promotion_catalog_payload": false,
+  "promotion_engine_payload": false,
+  "promotion_preset_selection": false,
+  "release_helper_change": false,
+  "retained_git_source": true,
+  "scope": "Actual emitted Catalog1 and Engine2 closure; archive/hosted snapshot observation remains a separate provider result",
+  "source_commit": "5ed50d1b59115a2677711dbb91fcb8cc12dc2148"
+}

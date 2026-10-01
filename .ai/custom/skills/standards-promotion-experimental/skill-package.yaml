@@ -1,6 +1,6 @@
 metadata_version: 2
 id: standards-promotion
-version: 0.1.0
+version: 0.1.1-alpha.1
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:

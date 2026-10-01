@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "evidence_layer": "exact planned message only; target validator installation is not claimed",
+      "exit_code": 0,
+      "kind": "copy",
+      "message_sha256": "fa8a33de5fd5276a21a962c99e0e2f76b25058d30d75ae42f6371bc698f2cd69",
+      "policy_sha256": "a933d39f4f2f082c1bffc43bb8ec8f8b6d7686ef9bd9597f7c90937d8f1c60ea",
+      "result": "Git commit validation passed for planned message."
+    },
+    {
+      "evidence_layer": "exact planned message only; target validator installation is not claimed",
+      "exit_code": 0,
+      "kind": "merge",
+      "message_sha256": "739b966cc02586b939a381ce88073ef7abd7e52c5336bcb2dd38cd18a7c2a0e5",
+      "policy_sha256": "a933d39f4f2f082c1bffc43bb8ec8f8b6d7686ef9bd9597f7c90937d8f1c60ea",
+      "result": "Git commit validation passed for planned message."
+    }
+  ],
+  "diff_check": "passed after whitespace repair"
+}

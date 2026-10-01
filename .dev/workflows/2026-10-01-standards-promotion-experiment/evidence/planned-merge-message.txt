@@ -1,0 +1,18 @@
+merge(#29): separate the promotion experiment from managed installation
+
+Why:
+- Owner selects a prerelease hold and separately copied MQ experiment pending purpose validation.
+
+What:
+- Integrate official managed removal and complete project-owned prerelease copy as one rollback unit.
+
+Validation:
+- Content/closure and actual installer read-back passed; seventeen managed selections are retained.
+- Purpose/behavior acceptance remains future owner-selected work; product/runtime, CI and independent admission are not run.
+
+Workflow:
+- 2026-10-01-standards-promotion-experiment
+- Stage: integration
+- Task: T1
+
+Co-Authored-By: OpenAI Codex (gpt-6.1-sol, ultra) <noreply@openai.com>

@@ -1,0 +1,19 @@
+{
+  "created_at": "2026-10-01T09:53:08+08:00",
+  "evidence": [
+    "evidence/installation-summary.json",
+    "evidence/catalog-exclusion.json",
+    "results.md"
+  ],
+  "finding_status": "addressed",
+  "model": "gpt-6.1-sol",
+  "owner_skill": "ai-context-governance",
+  "reasoning_effort": "ultra",
+  "result_summary": "Actual emitted catalog/engine excludes promotion; official installer removed eleven members and preserved all other managed bytes. Local experiment/copy and binding checks are separate from purpose/behavior acceptance.",
+  "status": "completed",
+  "task_id": "T1",
+  "template_source": ".dev/workflows/2026-10-01-standards-promotion-experiment/workflow-plan.md",
+  "template_version": "1.0.0",
+  "updated_at": "2026-10-01T09:55:37+08:00",
+  "workflow_id": "2026-10-01-standards-promotion-experiment"
+}

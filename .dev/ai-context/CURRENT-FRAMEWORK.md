@@ -1,13 +1,17 @@
 # Selected framework contract and target authority
 
-This contract describes the selected restored installation based on source commit `16f3f0c072bd22c3945fce8aca8295bf2b88f330`. Its original isolated trial and actual installer receipts are retained in [the restoration workflow](../workflows/2026-10-01-orchestrator-trial/workflow-plan.md). The saved selection and installer-owned lock identify the installed candidate. On 2026-10-01 the owner authorized main integration and push; observe that delivery through current Git/provider state. Existing engineering authority, prior RC3 history and product/runtime acceptance remain separate.
+This contract describes seventeen managed skill selections based on source commit `5ed50d1b59115a2677711dbb91fcb8cc12dc2148`, which excludes standards-promotion from the distribution catalog. The owner separately selected an independently copied standards-promotion@0.1.1-alpha.1 experimental package; its project-owned discovery alias is standards-promotion-experimental. See [the current workflow](../workflows/2026-10-01-standards-promotion-experiment/workflow-plan.md) and [copy provenance](STANDARDS-PROMOTION-EXPERIMENT.md). The saved selection and official installer lock remain managed-installation truth. Earlier RC3 and restoration evidence is retained; experiment presence is not behavior acceptance or release readiness.
 
 ## Selected shape
 
-- Select eighteen skill packages, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters with original names. Use [the selected skill registry](skills.md).
+- Select seventeen managed skill packages, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters with original names. Use [the selected skill registry](skills.md).
 - adr-author, lesson-author and pr-author replace the former discovery IDs adr, lesson and pr. The restored software-development-orchestrator@0.2.0 is selected for stage coordination. Ordinary `.dev/workflows/` records remain governed by adopted target workflow/Git policies; existing records and migrated evidence retain their bytes and historical owners.
 - `.ai/custom/framework.json` remains explicit project-owned operation settings and store constraints. A renamed entry does not migrate a record format, discover a store or grant writes. `.ai/custom/installation.json` is saved desired selection; `.ai/framework.lock` is installer-owned observed installation truth.
 - Use only the official selected installer for managed package, runtime and lock writes. Availability, installation, adoption, execution, acceptance and publication remain separate facts.
+
+## Project-owned experimental-copy exception
+
+The explicit owner request selects `.ai/custom/skills/standards-promotion-experimental/` as the canonical copied package, with separate Codex/Claude experimental discovery entries. This bounded placement exception is outside managed core and the official lock. The source copy and its manifest of file hashes are retained in the current workflow; future replacement requires explicit project reconciliation. The tool identity/config namespace remains standards-promotion. Existing store settings are preserved; targets, source-read roots and adoption/effect adapters are not configured, so proposal/reconciliation readiness and behavior acceptance are not established.
 
 ## Retained target decisions
 

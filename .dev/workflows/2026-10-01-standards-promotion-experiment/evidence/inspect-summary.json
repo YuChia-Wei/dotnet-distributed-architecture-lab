@@ -1,0 +1,19 @@
+{
+  "details": {
+    "drift": [],
+    "managed_state": "managed-bytes-consistent",
+    "mode_policy": "windows-inventory-only",
+    "project_readiness": "not-assessed",
+    "unknown": []
+  },
+  "diagnostics": [],
+  "exclusions": [
+    "Owned member inventory remains in official lock."
+  ],
+  "generator": "Issue423 coordinator deterministic projection",
+  "observed_at": "2026-10-01T09:55:37+08:00",
+  "outcome": "inspected",
+  "owned_count": 398,
+  "projection_version": 1,
+  "raw_response_sha256": "430d01c9cfd0b38796abf87b28e0f3abc40a13618449fd9e8b5af4da8518d71d"
+}

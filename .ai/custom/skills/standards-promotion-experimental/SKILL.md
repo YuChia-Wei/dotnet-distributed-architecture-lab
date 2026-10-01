@@ -1,13 +1,15 @@
 ---
 name: standards-promotion
-description: Persist evidence-bound proposals for one project rule file and separately observe owner adoption, actual rule bytes and declared effect.
+description: Experimental prerelease for evidence-bound proposals for one project rule file and separate observations of owner adoption, actual rule bytes and declared effect. Use only in an explicitly selected standalone experiment.
 ---
 
 # Standards Promotion
 
-Persist evidence-bound proposals for one project rule file and separately observe owner adoption, actual rule bytes and declared effect. Source version 0.1.0; metadata:
-[skill-package.yaml](skill-package.yaml). Source delivery does not claim execution,
-installation or publication. This package is independently selectable.
+Persist evidence-bound proposals for one project rule file and separately observe owner adoption, actual rule bytes and declared effect. Source version 0.1.1-alpha.1; metadata:
+[skill-package.yaml](skill-package.yaml). This prerelease is retained in source for
+owner-selected standalone experiments and excluded from distributed framework
+catalogs, presets and release products pending separate purpose and behavior
+validation. A copied package does not establish acceptance or release readiness.
 
 1. Bind the caller's explicit project/package/config paths and read
    [configuration](references/configuration.md); keep actual task authority separate.

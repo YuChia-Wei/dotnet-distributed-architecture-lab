@@ -1744,9 +1744,9 @@
     }
   ],
   "catalog": {
-    "catalog_sha256": "f8336d1bc74a4d733743f98629dcc4033c2ad8f489fb06fcbbc112ade22bd0f2",
-    "files_sha256": "08e55222b4493030bddb868589ab682f9dfd1af292b1afad91df37bc240303c3",
-    "identity": "catalog:1:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:1cfbbd9c5e57f83aa81bdc4242c86762f44a31d3862b16b31b39487c2e939f01"
+    "catalog_sha256": "8314bec5b4e1c75a4ef2228c40446974de0e70e071784502224acf88c8b42adb",
+    "files_sha256": "ca70779db8e6f0a4943311e37490f5500f5d28c85b746fed4b2de87c6bda475f",
+    "identity": "catalog:1:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:c54a507c489225a80d26b3bbbdb3d7756079290453747cf130625bfe131e02f2"
   },
   "knowledge": [
     "dotnet-backend",
@@ -1771,7 +1771,6 @@
     "slice-implementer",
     "software-development-orchestrator",
     "spec-author",
-    "spec-compliance-validator",
-    "standards-promotion"
+    "spec-compliance-validator"
   ]
 }

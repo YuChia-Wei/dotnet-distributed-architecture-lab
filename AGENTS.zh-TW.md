@@ -8,7 +8,7 @@
 
 本 repo 是 .NET 分散式商務架構實驗室。Products、Orders、Inventory 與 Procurement 是目前四個業務 bounded context。SupplierSandbox 與 SupplierMock 是外部系統範例；兩個 Vue 前端及 YARP 是現行應用介面。產品事實應核對 `MQArchLab.slnx`、專案檔、原始碼、測試、Compose 與目前 `.dev/` 專案紀錄。`.dev/project-config.yaml` 是產生的 inventory，與上述來源不符時應以來源為準。不得把框架來源 repo 的產品事實帶入本目標。
 
-[目前框架契約](.dev/ai-context/CURRENT-FRAMEWORK.md) 標示選定的安裝與保留的開發編排恢復證據；既有 RC3 的 main 採用保留於[整合證據](.dev/ai-context/RC3-MAIN-INTEGRATION.md)。[目標工程規則](.dev/ai-context/TARGET-ENGINEERING-RULES.md) 持有保留的十四條完整規範、二十條請求路由、四項客製化及目標 Git 邊界。已安裝的 skills 與 common/.NET knowledge 有別於目標採用。Package 或 wrapper 本身不證明規則適用，也不證明驗證通過。官方 lock 由 installer 持有，不得手改。只能使用實際安裝宣告的已儲存固定候選與 Codex、Claude 原名入口。負責人已於 2026-10-01 授權本次恢復整合至 main 並推送；實際 Git／provider 交付須與安裝證據分別核對。
+[目前框架契約](.dev/ai-context/CURRENT-FRAMEWORK.md) 標示選定的安裝與保留的開發編排恢復證據；既有 RC3 的 main 採用保留於[整合證據](.dev/ai-context/RC3-MAIN-INTEGRATION.md)。[目標工程規則](.dev/ai-context/TARGET-ENGINEERING-RULES.md) 持有保留的十四條完整規範、二十條請求路由、四項客製化及目標 Git 邊界。已安裝的 skills 與 common/.NET knowledge 有別於目標採用。Package 或 wrapper 本身不證明規則適用，也不證明驗證通過。官方 lock 由 installer 持有，不得手改。Managed packages 只能使用實際安裝宣告的已儲存固定候選與 Codex、Claude 原名入口。負責人另選擇 `.ai/custom/skills/` 下的 project-owned `standards-promotion-experimental@0.1.1-alpha.1` 副本；明確選定試驗時使用其獨立實驗入口。副本工具保留 `standards-promotion` operation/config namespace。此副本不屬於官方 lock 或發布成品，用途與行為驗收仍待完成。負責人已於 2026-10-01 授權本次恢復整合至 main 並推送；實際 Git／provider 交付須與安裝證據分別核對。
 
 歷史上，Issue #22 的負責人授權一次性的 RC2 破壞性替換，並明確延後 S6、runtime 與升級／還原試驗。這些檢查應記為 `deferred-by-owner`；靜態檢查不能當成行為驗收。此例外不恢復或啟用 CI。歷史 RC1 metadata、wrapper 與備份不是目前權威。
 

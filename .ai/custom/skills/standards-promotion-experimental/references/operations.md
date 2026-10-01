@@ -1,4 +1,7 @@
-# Standards Promotion filesystem operations 0.1.0
+# Standards Promotion filesystem operations 0.1.1-alpha.1
+
+Experimental prerelease; excluded from distributed framework products pending
+owner-selected purpose and behavior validation. Record schema 1.0.0 is unchanged.
 
 This is a public source interface. `implemented` means source exists; it does
 not establish installation, tested platform support or observed execution.

@@ -1,5 +1,5 @@
 {
-  "candidate_identity": "subset:3:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:51b37ec032a689a40e4a61d43c76c17928bf802c0da0c0da2d4e7b0a95660118",
+  "candidate_identity": "subset:3:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:8ae36d727db48ce5413ce1c2b71d5726439a7e11e80f25231d41223a62766134",
   "catalog_document": {
     "adapters": [
       {
@@ -142,11 +142,11 @@
         "size": 5704
       },
       {
-        "git_blob": "16488f724c2cf78ce654cf232717f0b7b856d96a",
+        "git_blob": "2b462fd5ce76def88363428eed72566b6f93ba18",
         "mode": "100644",
         "path": "src/distribution/manifest.yaml",
-        "sha256": "33a46fb73e1849fc9a776aa0628434db7f8219ff83ca3a74f6964e8863d66479",
-        "size": 57414
+        "sha256": "db28b394081a7f4140ddfbdd3a2ce52819d6c7a2e50d85b058356a490c3684de",
+        "size": 56253
       },
       {
         "git_blob": "45fffbd3a273e8ba0502b9428b9d426c89cdda0e",
@@ -2011,18 +2011,18 @@
         "size": 1721
       },
       {
-        "git_blob": "6b2d26adee47a35f685661c80c10d4cda209dccf",
+        "git_blob": "2678764212101ecd678a813516706232db76a799",
         "mode": "100644",
         "path": "src/profiles/collaboration.yaml",
-        "sha256": "34ffb91c7b06e1ab36ea2a03fea26e3f62549364166ea204517d26713fa78e62",
-        "size": 423
+        "sha256": "0ac2fb0e7b666066f17aef9cb1a2f524db3229e94db3d9fabc04aded7550a1b7",
+        "size": 401
       },
       {
-        "git_blob": "82dd2e27608d77d379f2181a1ccbbd12912478f6",
+        "git_blob": "7b260352e01b4fce2287879d4e35368cd46aa543",
         "mode": "100644",
         "path": "src/profiles/complete.yaml",
-        "sha256": "389f290770378c6ea97cfb957ded5e48a2307b162bc97047f784867d719692df",
-        "size": 463
+        "sha256": "476cba9a347b4f2c64979ed782afc9459110c3f4846272d794214d9b8fdf2a9d",
+        "size": 441
       },
       {
         "git_blob": "adce813b4cb865b93b004af0e665f226842dc4ee",
@@ -2039,11 +2039,11 @@
         "size": 306
       },
       {
-        "git_blob": "b087505bd4a5b01f2631ba141fbce64b02861c1d",
+        "git_blob": "a854651f2dd1ead94640e498ff59d8eacbafe470",
         "mode": "100644",
         "path": "src/profiles/knowledge.yaml",
-        "sha256": "451ad7222b65646a40f9b22cefe2bdb0a273f0a67e0b79b5bca3f24c89c4cad7",
-        "size": 138
+        "sha256": "6cb3b4e508141716ece9f29c21e2142e4c400d6576c94f8cd818cf4939c00f47",
+        "size": 116
       },
       {
         "git_blob": "0ac37e6475ee57a89899cd90b456d70f44d5f956",
@@ -2053,11 +2053,11 @@
         "size": 108
       },
       {
-        "git_blob": "60491784e90e01cfdb3e29d12c310c0f0f652089",
+        "git_blob": "25bdb2d5590af6c04c73249c63d015e8765568e8",
         "mode": "100644",
         "path": "src/profiles/source-repository.yaml",
-        "sha256": "4cfc61e59e8fe56f3392766df373ec2ac1fab86bf59df9c3a9679584bc04f5a1",
-        "size": 411
+        "sha256": "11732593b5ba6ab7c3227e4863d89aade49c2942c0859ca8de183834eceb3e3c",
+        "size": 389
       },
       {
         "git_blob": "da6f69e37f506688e577c03a5f688d7149a5fd45",
@@ -2774,69 +2774,6 @@
         "size": 1749
       },
       {
-        "git_blob": "b381f540642129075428699b8df5709989bd8b09",
-        "mode": "100644",
-        "path": "src/skills/standards-promotion/SKILL.md",
-        "sha256": "9e619bec2a060eafe30a6d4f654963e14633b0462e55365ce2e992debf55055b",
-        "size": 1978
-      },
-      {
-        "git_blob": "b46bdeeb44092f66ec01149f5e3bcb45422931c8",
-        "mode": "100644",
-        "path": "src/skills/standards-promotion/references/authority.md",
-        "sha256": "3df9b1f1ddfdc6aaf1df05d6b027b47144faa362e718e02a8e3218dc2d132792",
-        "size": 5354
-      },
-      {
-        "git_blob": "3e38aee6d9284861b01a3458b24e4cf1b48846ba",
-        "mode": "100644",
-        "path": "src/skills/standards-promotion/references/configuration.md",
-        "sha256": "78aca34372afa57475f18b7df6ea062f0234e675c96b97589d6f83d8dc3cb28c",
-        "size": 6073
-      },
-      {
-        "git_blob": "de7366b1f1e2618e8f793de4a2a41f472454105b",
-        "mode": "100644",
-        "path": "src/skills/standards-promotion/references/example.md",
-        "sha256": "8cc3b24b18431e17ea3c7ae1fc3941c2f04fb06701f7ad5ac8a788c995679a2d",
-        "size": 6032
-      },
-      {
-        "git_blob": "daff1533f65e26b17e420e9e68524c89000b2f4e",
-        "mode": "100644",
-        "path": "src/skills/standards-promotion/references/operations.md",
-        "sha256": "6e22b7519af5edb7972e5c7c66a009b669977973c8b235a216fc755bd5cd629f",
-        "size": 11605
-      },
-      {
-        "git_blob": "c6810bdbd7e726d7db192dad42c5d49ba26970c4",
-        "mode": "100644",
-        "path": "src/skills/standards-promotion/schemas/promotion-record.schema.json",
-        "sha256": "0002b9d91dfd4cfea7a74d51567dd0d93bc03e7f3c6ad3ad974707996eb58b46",
-        "size": 11955
-      },
-      {
-        "git_blob": "4f74a00457110a75d6aa506ee36d529402da514f",
-        "mode": "100644",
-        "path": "src/skills/standards-promotion/scripts/standards_promotion.py",
-        "sha256": "acccbc01d5a99d32cfa599243ab9359944ec5a6f1feee3a73b72e52379f80b4d",
-        "size": 90862
-      },
-      {
-        "git_blob": "a84f1ae525b5c86ce7cf4a20acbfbb54d0d2d7b5",
-        "mode": "100644",
-        "path": "src/skills/standards-promotion/skill-package.yaml",
-        "sha256": "4727f91052636305e0651114f3a66e0bcb2f0d76e9cc8b6c73f63a2d19abd2e3",
-        "size": 6181
-      },
-      {
-        "git_blob": "230c9dbe8fd8be791a4e17a9fbc20a462a51167f",
-        "mode": "100644",
-        "path": "src/skills/standards-promotion/templates/promotion.md",
-        "sha256": "953e3da7d7029e4bb9560e1454a6c1dbfb6f1f3cf9c22b6f9f7c7b74af992ea5",
-        "size": 413
-      },
-      {
         "git_blob": "4340d53ea763841a67589f77db1df01df7f600f9",
         "mode": "100644",
         "path": "src/tools/maintain_framework.py",
@@ -3510,26 +3447,6 @@
         "optional_dependencies": [],
         "required_dependencies": [],
         "version": "0.1.0"
-      },
-      {
-        "id": "standards-promotion",
-        "kind": "skill",
-        "members": [
-          "SKILL.md",
-          "references/authority.md",
-          "references/configuration.md",
-          "references/example.md",
-          "references/operations.md",
-          "schemas/promotion-record.schema.json",
-          "scripts/standards_promotion.py",
-          "skill-package.yaml",
-          "templates/promotion.md"
-        ],
-        "metadata": "skill-package.yaml",
-        "metadata_version": 2,
-        "optional_dependencies": [],
-        "required_dependencies": [],
-        "version": "0.1.0"
       }
     ],
     "generator": {
@@ -3728,8 +3645,7 @@
           "slice-implementer",
           "software-development-orchestrator",
           "spec-author",
-          "spec-compliance-validator",
-          "standards-promotion"
+          "spec-compliance-validator"
         ],
         "version": "0.1.0"
       },
@@ -3757,8 +3673,7 @@
           "slice-implementer",
           "software-development-orchestrator",
           "spec-author",
-          "spec-compliance-validator",
-          "standards-promotion"
+          "spec-compliance-validator"
         ],
         "version": "0.1.0"
       },
@@ -3805,8 +3720,7 @@
         "preset_version": 1,
         "skills": [
           "adr-author",
-          "lesson-author",
-          "standards-promotion"
+          "lesson-author"
         ],
         "version": "0.1.0"
       },
@@ -3843,8 +3757,7 @@
           "slice-implementer",
           "software-development-orchestrator",
           "spec-author",
-          "spec-compliance-validator",
-          "standards-promotion"
+          "spec-compliance-validator"
         ],
         "version": "0.1.0"
       },
@@ -3865,8 +3778,8 @@
     ],
     "release_version": "0.19.0-rc.3",
     "source": {
-      "commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
-      "tree": "754e1de8cb01fb8989cc50c0bf48e8efb8cccd1c"
+      "commit": "5ed50d1b59115a2677711dbb91fcb8cc12dc2148",
+      "tree": "6a44be2ce709437c1b72e0fd81039e49d9715538"
     }
   },
   "catalog_inventory": {
@@ -8629,123 +8542,6 @@
           "sha256": "aedc751c6543dd905b84c40ef1f4f0aeaa58e40e75f723756e3929f6ba477410",
           "size": 1749
         }
-      },
-      {
-        "kind": "skill",
-        "member": "SKILL.md",
-        "owner": "standards-promotion",
-        "path": "packages/skill/standards-promotion/SKILL.md",
-        "source": {
-          "git_blob": "b381f540642129075428699b8df5709989bd8b09",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/SKILL.md",
-          "sha256": "9e619bec2a060eafe30a6d4f654963e14633b0462e55365ce2e992debf55055b",
-          "size": 1978
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "references/authority.md",
-        "owner": "standards-promotion",
-        "path": "packages/skill/standards-promotion/references/authority.md",
-        "source": {
-          "git_blob": "b46bdeeb44092f66ec01149f5e3bcb45422931c8",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/references/authority.md",
-          "sha256": "3df9b1f1ddfdc6aaf1df05d6b027b47144faa362e718e02a8e3218dc2d132792",
-          "size": 5354
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "references/configuration.md",
-        "owner": "standards-promotion",
-        "path": "packages/skill/standards-promotion/references/configuration.md",
-        "source": {
-          "git_blob": "3e38aee6d9284861b01a3458b24e4cf1b48846ba",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/references/configuration.md",
-          "sha256": "78aca34372afa57475f18b7df6ea062f0234e675c96b97589d6f83d8dc3cb28c",
-          "size": 6073
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "references/example.md",
-        "owner": "standards-promotion",
-        "path": "packages/skill/standards-promotion/references/example.md",
-        "source": {
-          "git_blob": "de7366b1f1e2618e8f793de4a2a41f472454105b",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/references/example.md",
-          "sha256": "8cc3b24b18431e17ea3c7ae1fc3941c2f04fb06701f7ad5ac8a788c995679a2d",
-          "size": 6032
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "references/operations.md",
-        "owner": "standards-promotion",
-        "path": "packages/skill/standards-promotion/references/operations.md",
-        "source": {
-          "git_blob": "daff1533f65e26b17e420e9e68524c89000b2f4e",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/references/operations.md",
-          "sha256": "6e22b7519af5edb7972e5c7c66a009b669977973c8b235a216fc755bd5cd629f",
-          "size": 11605
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "schemas/promotion-record.schema.json",
-        "owner": "standards-promotion",
-        "path": "packages/skill/standards-promotion/schemas/promotion-record.schema.json",
-        "source": {
-          "git_blob": "c6810bdbd7e726d7db192dad42c5d49ba26970c4",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/schemas/promotion-record.schema.json",
-          "sha256": "0002b9d91dfd4cfea7a74d51567dd0d93bc03e7f3c6ad3ad974707996eb58b46",
-          "size": 11955
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "scripts/standards_promotion.py",
-        "owner": "standards-promotion",
-        "path": "packages/skill/standards-promotion/scripts/standards_promotion.py",
-        "source": {
-          "git_blob": "4f74a00457110a75d6aa506ee36d529402da514f",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/scripts/standards_promotion.py",
-          "sha256": "acccbc01d5a99d32cfa599243ab9359944ec5a6f1feee3a73b72e52379f80b4d",
-          "size": 90862
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "skill-package.yaml",
-        "owner": "standards-promotion",
-        "path": "packages/skill/standards-promotion/skill-package.yaml",
-        "source": {
-          "git_blob": "a84f1ae525b5c86ce7cf4a20acbfbb54d0d2d7b5",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/skill-package.yaml",
-          "sha256": "4727f91052636305e0651114f3a66e0bcb2f0d76e9cc8b6c73f63a2d19abd2e3",
-          "size": 6181
-        }
-      },
-      {
-        "kind": "skill",
-        "member": "templates/promotion.md",
-        "owner": "standards-promotion",
-        "path": "packages/skill/standards-promotion/templates/promotion.md",
-        "source": {
-          "git_blob": "230c9dbe8fd8be791a4e17a9fbc20a462a51167f",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/templates/promotion.md",
-          "sha256": "953e3da7d7029e4bb9560e1454a6c1dbfb6f1f3cf9c22b6f9f7c7b74af992ea5",
-          "size": 413
-        }
       }
     ]
   },
@@ -8849,7 +8645,7 @@
       }
     ],
     "id": "framework-managed-installation",
-    "source_commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
+    "source_commit": "5ed50d1b59115a2677711dbb91fcb8cc12dc2148",
     "version": "2.0.0"
   },
   "installation_id": "842258fcd115288102e0a020346643b4",
@@ -15044,159 +14840,6 @@
         }
       },
       {
-        "binding": null,
-        "destination": ".ai/core/skills/standards-promotion/SKILL.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/standards-promotion",
-        "path": "payload/.ai/core/skills/standards-promotion/SKILL.md",
-        "sha256": "9e619bec2a060eafe30a6d4f654963e14633b0462e55365ce2e992debf55055b",
-        "size": 1978,
-        "source": {
-          "git_blob": "b381f540642129075428699b8df5709989bd8b09",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/SKILL.md",
-          "sha256": "9e619bec2a060eafe30a6d4f654963e14633b0462e55365ce2e992debf55055b",
-          "size": 1978
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/standards-promotion/references/authority.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/standards-promotion",
-        "path": "payload/.ai/core/skills/standards-promotion/references/authority.md",
-        "sha256": "3df9b1f1ddfdc6aaf1df05d6b027b47144faa362e718e02a8e3218dc2d132792",
-        "size": 5354,
-        "source": {
-          "git_blob": "b46bdeeb44092f66ec01149f5e3bcb45422931c8",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/references/authority.md",
-          "sha256": "3df9b1f1ddfdc6aaf1df05d6b027b47144faa362e718e02a8e3218dc2d132792",
-          "size": 5354
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/standards-promotion/references/configuration.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/standards-promotion",
-        "path": "payload/.ai/core/skills/standards-promotion/references/configuration.md",
-        "sha256": "78aca34372afa57475f18b7df6ea062f0234e675c96b97589d6f83d8dc3cb28c",
-        "size": 6073,
-        "source": {
-          "git_blob": "3e38aee6d9284861b01a3458b24e4cf1b48846ba",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/references/configuration.md",
-          "sha256": "78aca34372afa57475f18b7df6ea062f0234e675c96b97589d6f83d8dc3cb28c",
-          "size": 6073
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/standards-promotion/references/example.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/standards-promotion",
-        "path": "payload/.ai/core/skills/standards-promotion/references/example.md",
-        "sha256": "8cc3b24b18431e17ea3c7ae1fc3941c2f04fb06701f7ad5ac8a788c995679a2d",
-        "size": 6032,
-        "source": {
-          "git_blob": "de7366b1f1e2618e8f793de4a2a41f472454105b",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/references/example.md",
-          "sha256": "8cc3b24b18431e17ea3c7ae1fc3941c2f04fb06701f7ad5ac8a788c995679a2d",
-          "size": 6032
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/standards-promotion/references/operations.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/standards-promotion",
-        "path": "payload/.ai/core/skills/standards-promotion/references/operations.md",
-        "sha256": "6e22b7519af5edb7972e5c7c66a009b669977973c8b235a216fc755bd5cd629f",
-        "size": 11605,
-        "source": {
-          "git_blob": "daff1533f65e26b17e420e9e68524c89000b2f4e",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/references/operations.md",
-          "sha256": "6e22b7519af5edb7972e5c7c66a009b669977973c8b235a216fc755bd5cd629f",
-          "size": 11605
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/standards-promotion/schemas/promotion-record.schema.json",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/standards-promotion",
-        "path": "payload/.ai/core/skills/standards-promotion/schemas/promotion-record.schema.json",
-        "sha256": "0002b9d91dfd4cfea7a74d51567dd0d93bc03e7f3c6ad3ad974707996eb58b46",
-        "size": 11955,
-        "source": {
-          "git_blob": "c6810bdbd7e726d7db192dad42c5d49ba26970c4",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/schemas/promotion-record.schema.json",
-          "sha256": "0002b9d91dfd4cfea7a74d51567dd0d93bc03e7f3c6ad3ad974707996eb58b46",
-          "size": 11955
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/standards-promotion/scripts/standards_promotion.py",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/standards-promotion",
-        "path": "payload/.ai/core/skills/standards-promotion/scripts/standards_promotion.py",
-        "sha256": "acccbc01d5a99d32cfa599243ab9359944ec5a6f1feee3a73b72e52379f80b4d",
-        "size": 90862,
-        "source": {
-          "git_blob": "4f74a00457110a75d6aa506ee36d529402da514f",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/scripts/standards_promotion.py",
-          "sha256": "acccbc01d5a99d32cfa599243ab9359944ec5a6f1feee3a73b72e52379f80b4d",
-          "size": 90862
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/standards-promotion/skill-package.yaml",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/standards-promotion",
-        "path": "payload/.ai/core/skills/standards-promotion/skill-package.yaml",
-        "sha256": "4727f91052636305e0651114f3a66e0bcb2f0d76e9cc8b6c73f63a2d19abd2e3",
-        "size": 6181,
-        "source": {
-          "git_blob": "a84f1ae525b5c86ce7cf4a20acbfbb54d0d2d7b5",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/skill-package.yaml",
-          "sha256": "4727f91052636305e0651114f3a66e0bcb2f0d76e9cc8b6c73f63a2d19abd2e3",
-          "size": 6181
-        }
-      },
-      {
-        "binding": null,
-        "destination": ".ai/core/skills/standards-promotion/templates/promotion.md",
-        "kind": "payload",
-        "mode": "100644",
-        "owner": "skill/standards-promotion",
-        "path": "payload/.ai/core/skills/standards-promotion/templates/promotion.md",
-        "sha256": "953e3da7d7029e4bb9560e1454a6c1dbfb6f1f3cf9c22b6f9f7c7b74af992ea5",
-        "size": 413,
-        "source": {
-          "git_blob": "230c9dbe8fd8be791a4e17a9fbc20a462a51167f",
-          "mode": "100644",
-          "path": "src/skills/standards-promotion/templates/promotion.md",
-          "sha256": "953e3da7d7029e4bb9560e1454a6c1dbfb6f1f3cf9c22b6f9f7c7b74af992ea5",
-          "size": 413
-        }
-      },
-      {
         "binding": {
           "adapter": "codex",
           "core_entrypoint": ".ai/core/skills/adr-author/SKILL.md",
@@ -15487,23 +15130,6 @@
       },
       {
         "binding": {
-          "adapter": "codex",
-          "core_entrypoint": ".ai/core/skills/standards-promotion/SKILL.md",
-          "entry_name": "standards-promotion",
-          "skill": "standards-promotion",
-          "template_sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
-        },
-        "destination": ".agents/skills/standards-promotion/SKILL.md",
-        "kind": "runtime",
-        "mode": "100644",
-        "owner": "adapter/codex/skill/standards-promotion",
-        "path": "runtime/.agents/skills/standards-promotion/SKILL.md",
-        "sha256": "afb7da4b356633eff75d6db1d41733039f3857ecf753e50e1a4ffd576102c0ed",
-        "size": 2413,
-        "source": null
-      },
-      {
-        "binding": {
           "adapter": "claude",
           "core_entrypoint": ".ai/core/skills/adr-author/SKILL.md",
           "entry_name": "adr-author",
@@ -15790,23 +15416,6 @@
         "sha256": "e14d1f7f85d659aa3992ada5f646488f830b6a97227c31182fbaac3c9c1f41b4",
         "size": 2093,
         "source": null
-      },
-      {
-        "binding": {
-          "adapter": "claude",
-          "core_entrypoint": ".ai/core/skills/standards-promotion/SKILL.md",
-          "entry_name": "standards-promotion",
-          "skill": "standards-promotion",
-          "template_sha256": "11eeedac1452cc78e9ab7726791c5032b2379815ea15e8fb0f8fb11d921d032e"
-        },
-        "destination": ".claude/skills/standards-promotion/SKILL.md",
-        "kind": "runtime",
-        "mode": "100644",
-        "owner": "adapter/claude/skill/standards-promotion",
-        "path": "runtime/.claude/skills/standards-promotion/SKILL.md",
-        "sha256": "a175b611aa989cd47e584c31935309a16c12134ced54be7ded527e32adf2435f",
-        "size": 2415,
-        "source": null
       }
     ],
     "schema_version": 2
@@ -15815,40 +15424,16 @@
   "mode_policy": "windows-inventory-only",
   "project_inputs": [
     {
-      "path": ".agents/skills/README.md",
-      "sha256": "aeb36b02cb421aefe10d09ed6bc3f17bcaef6288565bb3456027b537238612cf"
-    },
-    {
       "path": ".ai/custom/framework.json",
       "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
-    },
-    {
-      "path": ".claude/skills/README.md",
-      "sha256": "f7659edebf5269fb743bf17030233e2e227c6204929e49d8854906988cded1ea"
-    },
-    {
-      "path": ".dev/ai-context/CURRENT-FRAMEWORK.md",
-      "sha256": "b124540bc0aaa8ae3a13d5ee2fb2fc75b153ca1e218e711cc6303c8838792849"
     },
     {
       "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
       "sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08"
     },
     {
-      "path": ".dev/ai-context/skills.md",
-      "sha256": "da54d9a5092597ee9ad5d156ce9d31c7412bff67626822482c4128c1ec158395"
-    },
-    {
       "path": ".dev/workflows/INDEX.MD",
-      "sha256": "a10992b5953d7b5b48efcb09cbfd814ee4c79a0070b2b20cff71f0b83a5805e0"
-    },
-    {
-      "path": "AGENTS.md",
-      "sha256": "807282a2a8226c7bba2b72a7c1f90654fd26f56d3fc62588a1f6c87b36e301cf"
-    },
-    {
-      "path": "AGENTS.zh-TW.md",
-      "sha256": "2e026ae040965de697f2d71674afc886105ca174bb1ba6865721efe23821c115"
+      "sha256": "e1abffe2d5fd7d511791803b3ea9f714fbc5e30e6cb1eb73a660085c1b49285b"
     }
   ],
   "selection": {
@@ -15873,9 +15458,9 @@
       }
     ],
     "catalog": {
-      "catalog_sha256": "f8336d1bc74a4d733743f98629dcc4033c2ad8f489fb06fcbbc112ade22bd0f2",
-      "files_sha256": "08e55222b4493030bddb868589ab682f9dfd1af292b1afad91df37bc240303c3",
-      "identity": "catalog:1:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:1cfbbd9c5e57f83aa81bdc4242c86762f44a31d3862b16b31b39487c2e939f01"
+      "catalog_sha256": "8314bec5b4e1c75a4ef2228c40446974de0e70e071784502224acf88c8b42adb",
+      "files_sha256": "ca70779db8e6f0a4943311e37490f5500f5d28c85b746fed4b2de87c6bda475f",
+      "identity": "catalog:1:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:c54a507c489225a80d26b3bbbdb3d7756079290453747cf130625bfe131e02f2"
     },
     "components": [
       {
@@ -16518,26 +16103,6 @@
         ],
         "metadata": "skill-package.yaml",
         "metadata_version": 3,
-        "optional_dependencies": [],
-        "required_dependencies": [],
-        "version": "0.1.0"
-      },
-      {
-        "id": "standards-promotion",
-        "kind": "skill",
-        "members": [
-          "SKILL.md",
-          "references/authority.md",
-          "references/configuration.md",
-          "references/example.md",
-          "references/operations.md",
-          "schemas/promotion-record.schema.json",
-          "scripts/standards_promotion.py",
-          "skill-package.yaml",
-          "templates/promotion.md"
-        ],
-        "metadata": "skill-package.yaml",
-        "metadata_version": 2,
         "optional_dependencies": [],
         "required_dependencies": [],
         "version": "0.1.0"
@@ -18289,9 +17854,9 @@
         }
       ],
       "catalog": {
-        "catalog_sha256": "f8336d1bc74a4d733743f98629dcc4033c2ad8f489fb06fcbbc112ade22bd0f2",
-        "files_sha256": "08e55222b4493030bddb868589ab682f9dfd1af292b1afad91df37bc240303c3",
-        "identity": "catalog:1:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:1cfbbd9c5e57f83aa81bdc4242c86762f44a31d3862b16b31b39487c2e939f01"
+        "catalog_sha256": "8314bec5b4e1c75a4ef2228c40446974de0e70e071784502224acf88c8b42adb",
+        "files_sha256": "ca70779db8e6f0a4943311e37490f5500f5d28c85b746fed4b2de87c6bda475f",
+        "identity": "catalog:1:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:c54a507c489225a80d26b3bbbdb3d7756079290453747cf130625bfe131e02f2"
       },
       "knowledge": [
         "dotnet-backend",
@@ -18316,11 +17881,10 @@
         "slice-implementer",
         "software-development-orchestrator",
         "spec-author",
-        "spec-compliance-validator",
-        "standards-promotion"
+        "spec-compliance-validator"
       ]
     },
-    "desired_sha256": "4e438e6c716e1a7918edb95635f78208d2ba5c891a86c945176016df327ffedb",
+    "desired_sha256": "00aa04231ff69f2bf11ab4eeb213c9ded7ba625dce4e7471fc800919de8d10a1",
     "generator": {
       "id": "aicf-subset-derivation",
       "implementation": [
@@ -18498,8 +18062,8 @@
     "release_version": "0.19.0-rc.3",
     "schema_version": 3,
     "source": {
-      "commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
-      "tree": "754e1de8cb01fb8989cc50c0bf48e8efb8cccd1c"
+      "commit": "5ed50d1b59115a2677711dbb91fcb8cc12dc2148",
+      "tree": "6a44be2ce709437c1b72e0fd81039e49d9715538"
     }
   }
 }
