@@ -1744,9 +1744,9 @@
     }
   ],
   "catalog": {
-    "catalog_sha256": "90da37339f91a31d5f5bbaf5ff1ba83e441b1fc9e8ae37c335da38dca3d77696",
-    "files_sha256": "dd80646a8c23ed8a59b7e63d2b996795ab54d951ffd7ad69e1e961c3517001b9",
-    "identity": "catalog:1:0.19.0-rc.3:bdb5bbec012e86f5d9486dadd9872ecbbb5a4e0a:ccc6cc2b8ed71f3440a82f411f32d429a0c7b1ae1cd8c695ac53bb4c622726e5"
+    "catalog_sha256": "f8336d1bc74a4d733743f98629dcc4033c2ad8f489fb06fcbbc112ade22bd0f2",
+    "files_sha256": "08e55222b4493030bddb868589ab682f9dfd1af292b1afad91df37bc240303c3",
+    "identity": "catalog:1:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:1cfbbd9c5e57f83aa81bdc4242c86762f44a31d3862b16b31b39487c2e939f01"
   },
   "knowledge": [
     "dotnet-backend",
@@ -1769,6 +1769,7 @@
     "problem-frame-author",
     "requirement-author",
     "slice-implementer",
+    "software-development-orchestrator",
     "spec-author",
     "spec-compliance-validator",
     "standards-promotion"

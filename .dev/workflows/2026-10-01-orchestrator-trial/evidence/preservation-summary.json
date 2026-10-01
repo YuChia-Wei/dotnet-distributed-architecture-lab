@@ -1,0 +1,23 @@
+{
+  "before_head": "90f0a3ea396be8b3762d58fb6ab04b6c4f83afbc",
+  "before_inventory_sha256": "df22417acd5401a6e3cc6d3545901fb32b1d7a79fd093365c1e053b4f51e968c",
+  "before_tracked_files_count": 1452,
+  "generator": "Issue421 coordinator full pre/post tracked-worktree SHA-256 comparison",
+  "observed_at": "2026-10-01T08:28:59+08:00",
+  "project_data_action": "none",
+  "protected_inputs": [
+    {
+      "path": ".ai/custom/framework.json",
+      "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
+    }
+  ],
+  "scope": "Every previously tracked regular file in the isolated worktree before installer execution; new task records are excluded. Only declared paired project edits and the installer-owned lock changed.",
+  "unchanged_selection_fields": [
+    "adapters",
+    "bindings",
+    "knowledge",
+    "selection_version",
+    "skill_naming"
+  ],
+  "unchanged_tracked_files": 1441
+}

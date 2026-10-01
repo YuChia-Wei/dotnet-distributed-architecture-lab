@@ -8,7 +8,7 @@
 
 本 repo 是 .NET 分散式商務架構實驗室。Products、Orders、Inventory 與 Procurement 是目前四個業務 bounded context。SupplierSandbox 與 SupplierMock 是外部系統範例；兩個 Vue 前端及 YARP 是現行應用介面。產品事實應核對 `MQArchLab.slnx`、專案檔、原始碼、測試、Compose 與目前 `.dev/` 專案紀錄。`.dev/project-config.yaml` 是產生的 inventory，與上述來源不符時應以來源為準。不得把框架來源 repo 的產品事實帶入本目標。
 
-[目前框架契約](.dev/ai-context/CURRENT-FRAMEWORK.md) 標示選定的隔離 RC3 試裝及其證據邊界。[目標工程規則](.dev/ai-context/TARGET-ENGINEERING-RULES.md) 持有保留的十四條完整規範、二十條請求路由、四項客製化及目標 Git 邊界。已安裝的 skills 與 common/.NET knowledge 有別於目標採用。Package 或 wrapper 本身不證明規則適用，也不證明驗證通過。官方 lock 由 installer 持有，不得手改。只能使用實際安裝宣告的已儲存固定候選與 Codex、Claude 原名入口。本隔離試裝不代表主要 checkout 已採用。
+[目前框架契約](.dev/ai-context/CURRENT-FRAMEWORK.md) 標示選定的安裝與保留的開發編排恢復證據；既有 RC3 的 main 採用保留於[整合證據](.dev/ai-context/RC3-MAIN-INTEGRATION.md)。[目標工程規則](.dev/ai-context/TARGET-ENGINEERING-RULES.md) 持有保留的十四條完整規範、二十條請求路由、四項客製化及目標 Git 邊界。已安裝的 skills 與 common/.NET knowledge 有別於目標採用。Package 或 wrapper 本身不證明規則適用，也不證明驗證通過。官方 lock 由 installer 持有，不得手改。只能使用實際安裝宣告的已儲存固定候選與 Codex、Claude 原名入口。負責人已於 2026-10-01 授權本次恢復整合至 main 並推送；實際 Git／provider 交付須與安裝證據分別核對。
 
 歷史上，Issue #22 的負責人授權一次性的 RC2 破壞性替換，並明確延後 S6、runtime 與升級／還原試驗。這些檢查應記為 `deferred-by-owner`；靜態檢查不能當成行為驗收。此例外不恢復或啟用 CI。歷史 RC1 metadata、wrapper 與備份不是目前權威。
 
@@ -23,7 +23,7 @@
 
 從請求、Git/worktree 狀態、本指南及具名 Issue／artifact 開始。需要產品事實時，再讀 `.dev/ARCHITECTURE.md`、`.dev/project-config.yaml`、相關需求／規格及操作指南。透過[現行技能索引](.dev/ai-context/skills.md)選擇一個 skill 或 operation，讀取其已安裝入口與必要參考。AI context 變更須讀 `.dev/standards/AI-CONTEXT-BOUNDARY.md` 與 `.dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md`。程式碼探索優先使用可用且新鮮的 code graph，實質結論仍須以 Git-tracked 檔案核對；graph 無法使用或不完整時再直接搜尋。
 
-AI context 治理與遷移使用 `ai-context-governance`；稽核使用 `ai-context-auditor`。架構、GWT 設計、code review、需求、規格、problem frame、實作及相容性驗證使用對應的選定 skill。決策、lesson 與 PR 作者流程分別使用 `adr-author`、`lesson-author` 與 `pr-author`。一般多階段開發仍由目標 workflow 政策及 `.dev/workflows/` 手動治理；未安裝 portable `software-development-orchestrator`。通用 skill 指示不會默默取代目標 .NET knowledge 或有效規則的適用條件。執行 .NET 工作前，解析適用的目標權威與選定的 knowledge binding；專項涵蓋不足須如實說明。舊 `adr`、`lesson`、`pr`、`ai-context-init` 與 `ai-context-upgrader` discovery 入口不是目標目前路由。
+AI context 治理與遷移使用 `ai-context-governance`；稽核使用 `ai-context-auditor`。架構、GWT 設計、code review、需求、規格、problem frame、實作及相容性驗證使用對應的選定 skill。決策、lesson 與 PR 作者流程分別使用 `adr-author`、`lesson-author` 與 `pr-author`。需要多階段開發與專業 skill 交接時使用 `software-development-orchestrator`；目標 workflow 政策及 `.dev/workflows/` 仍擁有紀錄格式與整合權限。通用 skill 指示不會默默取代目標 .NET knowledge 或有效規則的適用條件。執行 .NET 工作前，解析適用的目標權威與選定的 knowledge binding；專項涵蓋不足須如實說明。舊 `adr`、`lesson`、`pr`、`ai-context-init` 與 `ai-context-upgrader` discovery 入口不是目標目前路由。
 
 ## Workflow、Git 與驗證
 

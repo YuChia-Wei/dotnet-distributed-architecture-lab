@@ -51,7 +51,7 @@ checkpoint 統一登錄於 `handoff-checkpoints.yaml`，並依
 ## Template Ownership
 
 - 本目錄不擁有萬用 workflow template。
-- 一般 software-development workflow 的既有 plan/task layout 由本目標採用的 workflow 政策手動治理；不依賴已移除的 portable orchestrator 或 `dev-workflow`。
+- 一般 software-development workflow 的既有 plan/task layout 仍由本目標 workflow 政策治理；恢復的 `software-development-orchestrator` 負責階段與專業 skill 協調，不提供紀錄 store 或復活 `dev-workflow`。
 - AI context maintenance 使用選定的 `ai-context-governance`；需要持續執行紀錄時，本目標 workflow 政策持有 locator 與保留的 artifact layout。
 - AI context audit 使用選定的 `ai-context-auditor`；持久化報告依本目標 assessment 政策。
 - 其他選定 skill 依其實際 output contract 工作；不得由入口存在推定它提供 workflow template。

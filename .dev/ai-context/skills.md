@@ -1,6 +1,6 @@
 # Selected target skill routes
 
-The isolated RC3 trial selects these seventeen original IDs, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters. Read the [current contract](CURRENT-FRAMEWORK.md), saved selection and official lock for actual installation state. This registry declares intended navigation; it does not claim installation, discovery, admission or primary adoption passed.
+The saved installation selects these eighteen original IDs, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters. Read the [current contract](CURRENT-FRAMEWORK.md), saved selection and official lock for actual installation state. This registry declares intended navigation; it does not claim installation, discovery, admission or primary adoption passed.
 
 | Skill | Target use |
 | --- | --- |
@@ -18,10 +18,11 @@ The isolated RC3 trial selects these seventeen original IDs, engineering-common 
 | [`problem-frame-author`](../../.ai/core/skills/problem-frame-author/SKILL.md) | Problem-frame drafting |
 | [`requirement-author`](../../.ai/core/skills/requirement-author/SKILL.md) | Requirements drafting |
 | [`slice-implementer`](../../.ai/core/skills/slice-implementer/SKILL.md) | Bounded implementation slices |
+| [`software-development-orchestrator`](../../.ai/core/skills/software-development-orchestrator/SKILL.md) | Development stages and specialist handoffs |
 | [`spec-author`](../../.ai/core/skills/spec-author/SKILL.md) | Specifications |
 | [`spec-compliance-validator`](../../.ai/core/skills/spec-compliance-validator/SKILL.md) | Selected .NET/problem-frame compliance |
 | [`standards-promotion`](../../.ai/core/skills/standards-promotion/SKILL.md) | Proposals and project standards under explicit settings |
 
 [TARGET-ENGINEERING-RULES.md](TARGET-ENGINEERING-RULES.md) remains exact adopted semantic authority. Resolve knowledge resources, bindings and actual rule predicates before claiming specialist coverage. Generic instructions do not replace target plain-xUnit GWT, per-domain persistence or project governance.
 
-Decision, lesson and PR discovery now use adr-author, lesson-author and pr-author. Historical owner names are provenance and not active entries. The portable software-development-orchestrator is absent; multi-stage work follows target [workflow gate](../standards/WORKFLOW-GATE-POLICY.md), [artifact contract](../standards/WORKFLOW-ARTIFACT-POLICY.md) and [workflow navigation](../workflows/README.MD) manually. Legacy framework-* and init/upgrader wrappers are retired. Existing records retain their formats and stores until separately authorized migration.
+Decision, lesson and PR discovery now use adr-author, lesson-author and pr-author. Historical owner names are provenance and not active entries. The restored software-development-orchestrator coordinates stages and specialist handoffs; record ownership follows target [workflow gate](../standards/WORKFLOW-GATE-POLICY.md), [artifact contract](../standards/WORKFLOW-ARTIFACT-POLICY.md) and [workflow navigation](../workflows/README.MD) without adopting a new record store. Legacy framework-* and init/upgrader wrappers are retired. Existing records retain their formats and stores until separately authorized migration.

@@ -1,0 +1,23 @@
+{
+  "acceptance": [
+    "Source-bound installed package and eighteen original-name entries in each adapter",
+    "No managed drift and existing target authority/configuration/bindings preserved"
+  ],
+  "created_at": "2026-10-01T08:24:15+08:00",
+  "evidence": [
+    "evidence/installation-summary.json",
+    "evidence/apply.json",
+    "evidence/inspect-summary.json"
+  ],
+  "finding_status": "addressed",
+  "model": "gpt-6.1-sol",
+  "owner_skill": "ai-context-governance",
+  "reasoning_effort": "ultra",
+  "result_summary": "Official additive installation applied; 409 managed members read back consistently, eighteen entries per adapter, prior packages and target authority preserved.",
+  "status": "completed",
+  "task_id": "T1",
+  "template_source": ".dev/workflows/2026-10-01-orchestrator-trial/workflow-plan.md",
+  "template_version": "1.0.0",
+  "updated_at": "2026-10-01T08:27:29+08:00",
+  "workflow_id": "2026-10-01-orchestrator-trial"
+}

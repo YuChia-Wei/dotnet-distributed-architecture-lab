@@ -1,0 +1,174 @@
+{
+  "adapters": [
+    "claude",
+    "codex"
+  ],
+  "before_head": "90f0a3ea396be8b3762d58fb6ab04b6c4f83afbc",
+  "candidate_identity": "subset:3:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:51b37ec032a689a40e4a61d43c76c17928bf802c0da0c0da2d4e7b0a95660118",
+  "catalog_identity": "catalog:1:0.19.0-rc.3:16f3f0c072bd22c3945fce8aca8295bf2b88f330:1cfbbd9c5e57f83aa81bdc4242c86762f44a31d3862b16b31b39487c2e939f01",
+  "changed_existing_paths": [
+    ".agents/skills/README.md",
+    ".ai/custom/installation.json",
+    ".ai/framework.lock",
+    ".claude/skills/README.md",
+    ".dev/ai-context/CURRENT-FRAMEWORK.md",
+    ".dev/ai-context/skills.md",
+    ".dev/standards/WORKFLOW-ARTIFACT-POLICY.md",
+    ".dev/workflows/INDEX.MD",
+    ".dev/workflows/README.MD",
+    "AGENTS.md",
+    "AGENTS.zh-TW.md"
+  ],
+  "drift": [],
+  "engine_identity": {
+    "files": [
+      {
+        "path": "src/adapters/claude/skill-entry-v2.md.template",
+        "sha256": "11eeedac1452cc78e9ab7726791c5032b2379815ea15e8fb0f8fb11d921d032e"
+      },
+      {
+        "path": "src/adapters/codex/skill-entry-v2.md.template",
+        "sha256": "68b0d2718e3b8db008ac5d8f29696b6a37e0c07da761ffdc56fc910cd0065af4"
+      },
+      {
+        "path": "src/adapters/codex/skill-entry.md.template",
+        "sha256": "f181a38f61472e65594f8b5b0889e8d096b68bec06036c1f53a2ad2c2536137a"
+      },
+      {
+        "path": "src/distribution/__init__.py",
+        "sha256": "6c02b38ce5adc247280b81e127867fea8d3fb98710861858ece7091d38051c25"
+      },
+      {
+        "path": "src/distribution/assembly.py",
+        "sha256": "b8a538993f2594fccdbbc5912c36a5e8f8feeb92d6a2782cb4c02700b6bf7815"
+      },
+      {
+        "path": "src/distribution/catalog.py",
+        "sha256": "c89aeeec72cda95abab4bee20311d3bfb47d0aa05f3c31b80962c1954224814e"
+      },
+      {
+        "path": "src/distribution/claude.py",
+        "sha256": "47732f37a32c5aa855d09f47aa135c772aded4c41ba9698f6911e1516fea41a8"
+      },
+      {
+        "path": "src/distribution/codex.py",
+        "sha256": "8bf874d70818004db05e4721321714390a6d6acf60343cc4533a39517cf79d2e"
+      },
+      {
+        "path": "src/distribution/content.py",
+        "sha256": "d79ba189e31073d28617d9afab44cb6adaaece9103811abf110257558ef7e202"
+      },
+      {
+        "path": "src/distribution/contracts.py",
+        "sha256": "394e43f38e08cf10ed51cb6ec9c9a41887c4309ff7db63ee97c7cbb87e3c4fa2"
+      },
+      {
+        "path": "src/distribution/data.py",
+        "sha256": "4045d5e5d0c7dd0d95cc2aa5b8a797a9ae25864496793a50cf9a9dd67de6740f"
+      },
+      {
+        "path": "src/distribution/git_source.py",
+        "sha256": "86566f80da65c46ea5241d215799fce7894eed3d0ea7133ab921556da42dc030"
+      },
+      {
+        "path": "src/distribution/installation.py",
+        "sha256": "36f578929ae2610435b831fb7c7bf4f9de6f7db53cb768f6ae9875f1fff3b902"
+      },
+      {
+        "path": "src/distribution/installation_io.py",
+        "sha256": "199f5eb1189ea8be17e6b8984475f53102f95344926a921086d9236cc31fc4d8"
+      },
+      {
+        "path": "src/distribution/installation_plan.py",
+        "sha256": "86bad6f329a6ba03763b337bb8455b34ba0302380773888aed454aa67e2478c6"
+      },
+      {
+        "path": "src/distribution/installation_state.py",
+        "sha256": "46d9e726b64690061b2defcbf174c9624b595b2f9843ae5a5ca01f44211309c6"
+      },
+      {
+        "path": "src/distribution/maintenance_coordination.py",
+        "sha256": "dd071d335e84d31831f479f197e756f429e1101c8d5f3744a8b90f55e448b36a"
+      },
+      {
+        "path": "src/distribution/package.py",
+        "sha256": "f0677644df30f0d9f211dc669da6ecdb5ffcb27a90e996b4b9e036d2e610281c"
+      },
+      {
+        "path": "src/distribution/reinstallation.py",
+        "sha256": "bd6a3c79fa40d65b788e4a39963c16824dc71fac08e871a245b490146f390556"
+      },
+      {
+        "path": "src/distribution/selection.py",
+        "sha256": "d36be253554e30bffb98f3740e35ce9909fb638c171d68435c7bfc46beaf68fc"
+      },
+      {
+        "path": "src/tools/maintain_framework.py",
+        "sha256": "9ae08387cf8875118005ef8cefd4e90e50a9f95f939efef739047404880ec82b"
+      },
+      {
+        "path": "tools/build-catalog.py",
+        "sha256": "0c15bfc93f914c3d7d24fd143c9d2e595f48346920b0b55bd6883e0dfcd86c46"
+      },
+      {
+        "path": "tools/derive-subset.py",
+        "sha256": "21de13c42d411598d435adbae54e4e57a6a1c62dd50a7a02a026c12bd33b6566"
+      },
+      {
+        "path": "tools/reinstall-framework.py",
+        "sha256": "6c59ddd2fc2ff97d2f3712ff85bf47f710a641782ff67bcb8043a0b41bfe208e"
+      }
+    ],
+    "id": "framework-managed-installation",
+    "source_commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
+    "version": "2.0.0"
+  },
+  "final_plan_sha256": "a01e8387f523dab8f824225f7fff435992737df704faf5f4cc374d5022846b44",
+  "final_project_edits": [
+    ".dev/workflows/INDEX.MD"
+  ],
+  "finalization_outcome": "applied",
+  "initial_lock_sha256": "09d60f13ed64df60eeef5a5a3f1981c6a4098d6c8b43d27eab8addcee9e83034",
+  "knowledge": [
+    "dotnet-backend",
+    "engineering-common"
+  ],
+  "knowledge_bindings_count": 40,
+  "knowledge_bindings_sha256": "95ce1f6064ac729387d0e28f438900bf7d902e8d9ba85e34ba823e9649c7930e",
+  "lock_sha256": "56d267d6eb230e1442e636566fc380bdd3cd95cad665469d2c379a14839d734c",
+  "managed_state": "managed-bytes-consistent",
+  "observed_at": "2026-10-01T08:27:29+08:00",
+  "orchestrator_members": {
+    "SKILL.md": "92e98a9fd810843736d4e0d8cec6362a70e9f3bc753b7745845353c3c8d6abd7",
+    "references/orchestrate.md": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
+    "skill-package.yaml": "5cdae28a35f051fa4d8fee2ca1d5eb1139207df86ab6291cf1c2221bc9a0989a"
+  },
+  "outcome": "applied",
+  "plan_sha256": "3dc9076f2ecdab109ffed46d945fe64f89cd3ad556802e980bf19d7eed647277",
+  "protected_framework_sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1",
+  "selection_sha256": "4e438e6c716e1a7918edb95635f78208d2ba5c891a86c945176016df327ffedb",
+  "skills": [
+    "adr-author",
+    "ai-context-auditor",
+    "ai-context-governance",
+    "bdd-gwt-test-designer",
+    "code-reviewer",
+    "ddd-ca-hex-architect",
+    "diagnostic-analyst",
+    "lesson-author",
+    "local-backlog",
+    "local-change-implementer",
+    "pr-author",
+    "problem-frame-author",
+    "requirement-author",
+    "slice-implementer",
+    "software-development-orchestrator",
+    "spec-author",
+    "spec-compliance-validator",
+    "standards-promotion"
+  ],
+  "source_commit": "16f3f0c072bd22c3945fce8aca8295bf2b88f330",
+  "target": "mq",
+  "target_authority_sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08",
+  "unchanged_tracked_files": 1441
+}

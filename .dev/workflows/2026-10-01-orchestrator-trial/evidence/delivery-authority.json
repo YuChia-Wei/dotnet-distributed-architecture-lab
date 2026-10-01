@@ -1,0 +1,30 @@
+{
+  "generator": "Coordinator record of direct owner delivery authority and fresh provider observations",
+  "observed_at": "2026-10-01T08:58:20+08:00",
+  "owner_request": "都幫我合併回 main 然後推送",
+  "source_main_before": "a2ed2e3ebbba2acaae2f9574b52302379e01fc48",
+  "mq_main_before": "90f0a3ea396be8b3762d58fb6ab04b6c4f83afbc",
+  "topology": "merge-commit",
+  "reason": "Keep source package and cross-repository installation checkpoints as a visible rollback boundary.",
+  "source_issue_disposition": "deferred; U001/P7 admission remains separate",
+  "mq_issue_disposition": "deferred; no Issue closure requested",
+  "source_live_provider": {
+    "main_protected": false,
+    "rulesets": [],
+    "repository_actions_enabled": true,
+    "active_workflows": [
+      "Build framework snapshot",
+      "Prepare framework draft"
+    ],
+    "manually_disabled_workflows": [
+      "AI Context Governance",
+      "Nightly Full Validation Readiness",
+      "Portable AI Context Gates",
+      "Check Release Provider Access",
+      "Source checks",
+      "Source native checks",
+      "Portable Test Fixture Acceleration"
+    ]
+  },
+  "limits": "Main snapshot packaging is enabled by the existing release workflow; it is not a deferred test gate pass. No CI, policy, credential or release setting changed."
+}
