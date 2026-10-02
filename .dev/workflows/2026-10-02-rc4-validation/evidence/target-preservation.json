@@ -1,0 +1,23 @@
+{
+  "outcome": "passed",
+  "baseline_commit": "f88be639274f292210df2843780651b1cefe4859",
+  "baseline_files": 1502,
+  "unchanged_files": 1488,
+  "changed_existing_paths": [
+    ".agents/skills/README.md",
+    ".ai/INDEX.MD",
+    ".ai/README.MD",
+    ".ai/core/skills/lesson-author/scripts/lesson.py",
+    ".ai/custom/installation.json",
+    ".ai/framework.lock",
+    ".claude/skills/README.md",
+    ".dev/ai-context/CURRENT-FRAMEWORK.md",
+    ".dev/ai-context/skills.md",
+    ".dev/workflows/INDEX.MD",
+    "AGENTS.md",
+    "AGENTS.zh-TW.md",
+    "README.en.md",
+    "README.md"
+  ],
+  "scope": "all previously tracked target files compared by raw SHA256; installation and workflow navigation changes explicitly allowed"
+}

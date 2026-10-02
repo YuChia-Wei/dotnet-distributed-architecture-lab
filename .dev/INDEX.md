@@ -4,7 +4,9 @@ This catalog describes the distributed-commerce lab's current project knowledge.
 
 ## Project entries and adopted policies
 
-- [Purpose and boundary](README.MD), [architecture](ARCHITECTURE.md) and `project-config.yaml` (generated inventory; verify source facts).
+- [Purpose and boundary](README.MD), [architecture](ARCHITECTURE.md) and [project inventory](project-config.yaml) (derived view; verify source facts and recorded input digest).
+- [Context refresh evidence](ai-context/CONTEXT-REFRESH-2026-10-02.md): bounded document corrections, source scope, reproduction and validation limits.
+- [RC4 main integration authority](ai-context/RC4-MAIN-INTEGRATION.md): subsequent owner selection, delivery grouping and retained validation boundaries.
 - [Target engineering rules](ai-context/TARGET-ENGINEERING-RULES.md), [trial framework contract](ai-context/CURRENT-FRAMEWORK.md) and [selected skill registry](ai-context/skills.md).
 - [Standards navigation](standards/INDEX.MD), [Git flow](TEAM-GIT-FLOW-RULES.MD), [workflow gate](standards/WORKFLOW-GATE-POLICY.md), [workflow artifacts](standards/WORKFLOW-ARTIFACT-POLICY.md), [workflow handoff](standards/WORKFLOW-HANDOFF-POLICY.md) and [Git commits](standards/GIT-COMMIT-POLICY.md).
 
@@ -24,7 +26,7 @@ This catalog describes the distributed-commerce lab's current project knowledge.
 
 ## Retained work and reusable authoring
 
-- [Ordinary workflows](workflows/README.MD) and [workflow catalog](workflows/INDEX.MD) remain project-owned and manually governed; historical owners do not restore a portable orchestrator. Remaining backlog items and skill-owned record stores retain their own authority; owner-deleted generic backlog/v2 navigation is not recreated.
+- [Ordinary workflows](workflows/README.MD) and [workflow catalog](workflows/INDEX.MD) remain project-owned and manually governed; historical owners are provenance; the selected `software-development-orchestrator` coordinates stages and specialist handoffs under current target policy. Remaining backlog items and skill-owned record stores retain their own authority; owner-deleted generic backlog/v2 navigation is not recreated.
 - [AI packages](../.ai/INDEX.MD), [engineering-common guidance](../.ai/core/knowledge/engineering-common/README.md) and [.NET guidance](../.ai/core/knowledge/dotnet-backend/README.md).
 - [Requirements authoring](../.ai/core/skills/requirement-author/references/requirement-guide.md), [spec authoring](../.ai/core/skills/spec-author/references/spec-guide.md) and [ADR guidance](../.ai/core/skills/adr-author/references/WHEN-TO-CREATE-ADR.MD). Target-customized spec/test guidance remains under specs/.
 - [Domain-language templates](../.ai/core/knowledge/engineering-common/domain-language/README.MD) and [operations authoring](../.ai/core/knowledge/engineering-common/README.md) replace generic .dev scaffolds. Package templates do not establish project vocabulary or operational facts.

@@ -8,14 +8,16 @@
 | --- | --- | --- |
 | SDK / Runtime | .NET / C# | SDK `10.0.302` with `latestMajor` roll-forward; product target `net10.0` |
 | Web API | ASP.NET Core + OpenAPI + Scalar | ASP.NET Core packages `10.0.12`; Scalar `2.17.3`; Microsoft.OpenApi `2.12.2` (ASP.NET Core 10 requires `<3.0.0`) |
-| Messaging | WolverineFx | `6.36.0`; six hosts reference RuntimeCompilation for dynamic handler generation |
+| Messaging | WolverineFx | `6.36.0`; seven product hosts and the isolated EF Core/Wolverine sample host reference RuntimeCompilation for dynamic handler generation |
 | Canonical broker | Apache Kafka | Compose image `apache/kafka:4.0.0`; selected for event-driven verification and keyed partition ordering |
 | Deferred compatibility broker | RabbitMQ | Wolverine RabbitMQ `6.36.0`; logical listeners exist, Compose service is disabled, and exchange/per-consumer queue/binding/DLQ verification remains pending |
-| Persistence | EF Core (Inventory); Dapper (Products/Orders) | EF Core `10.0.12`; Npgsql EF provider / Npgsql `10.0.3`; Dapper `2.1.79` |
+| Persistence | EF Core (Inventory); Dapper (Products/Orders/Procurement) | EF Core `10.0.12`; Npgsql EF provider / Npgsql `10.0.3`; Dapper `2.1.79` |
 | Database | PostgreSQL | Compose image `postgres:16.15-alpine` |
 | Testing | xUnit + Moq/NSubstitute + Shouldly | xUnit v3 `4.0.0` (`xunit.v3.mtp-off`, VSTest); test-double package is selected per project; Shouldly `4.3.0` |
 | Observability | OpenTelemetry + Grafana stack | OTel SDK `1.18.0`; Process instrumentation `1.18.0-rc.1`; Collector Contrib `0.159.0`; Grafana `13.2.1`; Tempo `2.10.7`; Loki `3.7.7`; Prometheus `3.14.0` |
-| Containers | Docker / Docker Compose | host Dockerfiles plus `docker-compose/docker-compose.yml` |
+| Frontends / gateway | Vue 3 + TypeScript + Vite; YARP | `src/Frontend/Web/package.json`, `src/Frontend/Admin/package.json`; Node.js 22.14 and Nginx 1.28 container images; gateway image `v0.0.5` |
+| Supplier lab | SupplierSandbox, WireMock.Net and Microcks profiles | External examples under `samples/`; Microcks image `1.15.0` in the Procurement overlay |
+| Containers | Docker / Docker Compose | host Dockerfiles plus base, Procurement and frontend Compose files under `docker-compose/` |
 
 ## Architecture Requirements
 
@@ -28,11 +30,12 @@
 
 ## Persistence Requirements
 
-- Inventory write/query adapters use EF Core with the Npgsql provider; Products and Orders use parameterized Dapper/Npgsql. Domain and Application remain ORM-independent.
+- Inventory write/query adapters use EF Core with the Npgsql provider; Products, Orders and Procurement use parameterized Dapper/Npgsql. Domain and Application remain ORM-independent.
 - Inventory maps existing PostgreSQL tables; provider-specific locking and conflict SQL stays parameterized through EF Core.
 - `samples/EfCoreWolverine/` is an owner-requested parallel example using EF Core `10.0.12`, Npgsql EF provider `10.0.3`, and Wolverine EF integration `6.36.0`; its native Wolverine transaction pipeline remains separate from Inventory's EF Core source-outbox adapters.
 - The Orders event-sourcing repository is a context-specific capability and must not be assumed for Product or Inventory.
 - Orders and every Inventory event-producing stock command write state plus source-outbox intent in one local transaction. Inventory declares this through capability-specific outbox ports; generic Unit of Work and transaction lifecycle types remain private Infrastructure details, and the relay is a separate adapter.
+- Procurement commits each first-time goods receipt and its producer-owned `GoodsReceived` source-outbox event in one local PostgreSQL transaction. Inventory's receipt handler applies an idempotent stock increase; supplier acceptance alone does not change stock.
 - Credentials, connection strings, database names, and local ports belong in runtime configuration, not in `.dev/project-config.yaml`.
 
 ## Messaging Requirements
@@ -48,12 +51,12 @@
 - Product and domain tests use xUnit v3 with the VSTest adapter. The verification Compose profile runs the solution test projects and explicitly enables Kafka/PostgreSQL integration tests.
 - Test doubles use Moq or NSubstitute according to the owning test project; do not introduce a shared mutable base fixture.
 - Assertions use Shouldly where referenced by the test project.
-- `MQArchLab.slnx` contains five product/domain test projects and one EF Core/Wolverine sample test project. The target-owned analyzer and runtime-validation projects are retired and absent; they are not a current validation surface.
+- `MQArchLab.slnx` contains six product/domain test projects, two supplier sample test projects and one EF Core/Wolverine sample test project (nine in total). The target-owned analyzer and runtime-validation projects are retired and absent; they are not a current validation surface.
 - `InventoryControl.Tests` owns Inventory application, contract, relay, idempotency, and opt-in PostgreSQL scenarios. External PostgreSQL/broker tests are skipped without explicit opt-in and skipped results are non-passing evidence.
 
 ## Version Ownership
 
 - `global.json` owns the selected SDK version.
 - Each `*.csproj` owns its package versions.
-- `docker-compose/docker-compose.yml` owns checked-in infrastructure image versions.
+- The applicable Compose files under `docker-compose/` own checked-in infrastructure image versions; frontend Dockerfiles own their build/serving image versions.
 - README and `.dev/project-config.yaml` are derived views and must be refreshed when those sources change.

@@ -1,6 +1,6 @@
 # Project Knowledge And Governance
 
-This directory contains the repository's human-facing governance, standards, guides, requirements, specs, operations guidance, durable backlog, and workflow records.
+This directory contains shared project truth for humans and agents: governance, standards, guides, requirements, specs, operations guidance, durable backlog, and workflow records.
 
 ## Purpose
 
@@ -12,7 +12,7 @@ Start with `.dev/INDEX.md` when you need to find a specific file or directory. U
 
 For this repository, begin with `.dev/ARCHITECTURE.md` and `.dev/project-config.yaml` for current product structure, then use `.dev/INDEX.md` to locate requirements, specs, operations records, standards, and workflows.
 
-When selected AI context changes, use the target-authorized `ai-context-governance` route and official installation evidence. Reconcile requirements, specs, domain language, operations, backlog and workflow facts against target-owned source; installation does not make them current automatically. Generic authoring guidance lives in the selected knowledge/skill packages. Existing ordinary workflows remain manually governed by target policy; retired init/upgrader and portable orchestrator routes are unavailable.
+When selected AI context changes, use the target-authorized `ai-context-governance` route and official installation evidence. Reconcile requirements, specs, domain language, operations, backlog and workflow facts against target-owned source; installation does not make them current automatically. Generic authoring guidance lives in the selected knowledge/skill packages. Use the selected `ai-context-init` refresh operation for bounded updates to initialized project documents. Use `software-development-orchestrator` when stage coordination and specialist handoffs are needed; target policy continues to own ordinary workflow records. Legacy init/upgrader implementations remain retired.
 
 ## Boundary
 

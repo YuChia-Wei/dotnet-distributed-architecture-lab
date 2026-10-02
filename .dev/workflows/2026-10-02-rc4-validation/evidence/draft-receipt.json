@@ -1,0 +1,89 @@
+{
+  "assets": [
+    {
+      "id": 605443761,
+      "name": "ai-collaboration-framework-v0.19.0-rc.4-158b8438f61a60eb621e3a5b43ed1a0479634f6f.zip",
+      "sha256": "db505854a2f355632e71a356ae8c4b85778880be4caee409e6557eca07ed5c4c",
+      "size": 855859
+    },
+    {
+      "id": 605443779,
+      "name": "ai-collaboration-framework-v0.19.0-rc.4-158b8438f61a60eb621e3a5b43ed1a0479634f6f.zip.sha256",
+      "sha256": "d57ddca48d097c4c9367f98d23594a65830ed743284eecf1673a8c57cd78ac2e",
+      "size": 151
+    },
+    {
+      "id": 605443747,
+      "name": "release-manifest.json",
+      "sha256": "71d89f6bb9ff2be5d13bd58421f904b2fb596454ff7f16f8b3f23170ad21f589",
+      "size": 78330
+    }
+  ],
+  "attempted_operations": [
+    {
+      "acknowledged_at": "2026-10-02T11:16:54.307268+00:00",
+      "attempted_at": "2026-10-02T11:16:53.883598+00:00",
+      "manifest_sha256": "71d89f6bb9ff2be5d13bd58421f904b2fb596454ff7f16f8b3f23170ad21f589",
+      "operation": "create-draft",
+      "outcome": "acknowledged",
+      "provider_id": 401752316,
+      "tag": "v0.19.0-rc.4"
+    },
+    {
+      "acknowledged_at": "2026-10-02T11:16:55.607514+00:00",
+      "asset_name": "release-manifest.json",
+      "attempted_at": "2026-10-02T11:16:54.972727+00:00",
+      "operation": "upload-asset",
+      "outcome": "acknowledged",
+      "provider_id": 605443747,
+      "release_id": 401752316,
+      "sha256": "71d89f6bb9ff2be5d13bd58421f904b2fb596454ff7f16f8b3f23170ad21f589",
+      "size": 78330
+    },
+    {
+      "acknowledged_at": "2026-10-02T11:16:56.585479+00:00",
+      "asset_name": "ai-collaboration-framework-v0.19.0-rc.4-158b8438f61a60eb621e3a5b43ed1a0479634f6f.zip",
+      "attempted_at": "2026-10-02T11:16:56.027228+00:00",
+      "operation": "upload-asset",
+      "outcome": "acknowledged",
+      "provider_id": 605443761,
+      "release_id": 401752316,
+      "sha256": "db505854a2f355632e71a356ae8c4b85778880be4caee409e6557eca07ed5c4c",
+      "size": 855859
+    },
+    {
+      "acknowledged_at": "2026-10-02T11:16:57.803565+00:00",
+      "asset_name": "ai-collaboration-framework-v0.19.0-rc.4-158b8438f61a60eb621e3a5b43ed1a0479634f6f.zip.sha256",
+      "attempted_at": "2026-10-02T11:16:56.955635+00:00",
+      "operation": "upload-asset",
+      "outcome": "acknowledged",
+      "provider_id": 605443779,
+      "release_id": 401752316,
+      "sha256": "d57ddca48d097c4c9367f98d23594a65830ed743284eecf1673a8c57cd78ac2e",
+      "size": 151
+    }
+  ],
+  "body_written": true,
+  "completed_at": "2026-10-02T11:16:59.198768+00:00",
+  "created_release_id": 401752316,
+  "existing_body_preserved": false,
+  "manifest_sha256": "71d89f6bb9ff2be5d13bd58421f904b2fb596454ff7f16f8b3f23170ad21f589",
+  "outcome": "draft-ready",
+  "publication": "not-performed",
+  "release_id": 401752316,
+  "schema": "framework-draft-delivery/1",
+  "source": {
+    "commit": "158b8438f61a60eb621e3a5b43ed1a0479634f6f",
+    "tag": "v0.19.0-rc.4",
+    "tag_object": "988448b6eb65c418e2a243e392dbd1204fa0d3dc"
+  },
+  "started_at": "2026-10-02T11:16:52.679414+00:00",
+  "tests": "not-run",
+  "uploaded_assets": [
+    "release-manifest.json",
+    "ai-collaboration-framework-v0.19.0-rc.4-158b8438f61a60eb621e3a5b43ed1a0479634f6f.zip",
+    "ai-collaboration-framework-v0.19.0-rc.4-158b8438f61a60eb621e3a5b43ed1a0479634f6f.zip.sha256"
+  ],
+  "url": "https://github.com/YuChia-Wei/ai-collaboration-framework/releases/tag/untagged-444e872f16d0506e4f36",
+  "verified_existing_assets": []
+}

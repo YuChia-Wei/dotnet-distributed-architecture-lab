@@ -1390,7 +1390,7 @@ def render(binding, record):
     values = {**content, "id": record["id"], "schema_version": record["schema_version"], "status": record["status"],
               "history": record.get("history", "Legacy schema: no lifecycle history; preserved read-only."),
               "provenance": record.get("provenance", "Legacy schema: no derived provenance; preserved read-only."),
-              "decision": record.get("decision"), "observation": record.get("observation"), "proposal": content}
+              "decision": record.get("decision"), "proposal": content}
     if FAMILY == "standards-promotion":
         required = {"id", "schema_version", "status", "proposal", "observation", "history"}
         allowed = required | {"title"}

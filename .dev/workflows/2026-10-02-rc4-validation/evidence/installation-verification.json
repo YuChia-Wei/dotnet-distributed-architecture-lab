@@ -1,0 +1,36 @@
+{
+  "outcome": "verified",
+  "managed_state": "managed-bytes-consistent",
+  "drift": [],
+  "managed_members": 412,
+  "skills": 18,
+  "knowledge": [
+    "dotnet-backend",
+    "engineering-common"
+  ],
+  "bindings": 40,
+  "candidate_identity": "subset:3:0.19.0-rc.4:158b8438f61a60eb621e3a5b43ed1a0479634f6f:ed9052abee7b32f4c11a628ea04d0c735f8fe588470080033413ce8522909a07",
+  "lock_sha256": "7ff45a2620f4cbf807327c43523bc84726bced6d3b540bcd0eb879dde6df67b8",
+  "protected_inputs_unchanged": 24,
+  "unchanged_baseline_files_before_workflow_index": 1489,
+  "changed_existing_paths": [
+    ".agents/skills/README.md",
+    ".ai/INDEX.MD",
+    ".ai/README.MD",
+    ".ai/core/skills/lesson-author/scripts/lesson.py",
+    ".ai/custom/installation.json",
+    ".ai/framework.lock",
+    ".claude/skills/README.md",
+    ".dev/ai-context/CURRENT-FRAMEWORK.md",
+    ".dev/ai-context/skills.md",
+    "AGENTS.md",
+    "AGENTS.zh-TW.md",
+    "README.en.md",
+    "README.md"
+  ],
+  "new_local_link_targets_checked": 38,
+  "runtime_discovery": "not-executed",
+  "skill_behavior": "not-executed",
+  "application_tests": "not-run",
+  "init_execution": "not-performed"
+}

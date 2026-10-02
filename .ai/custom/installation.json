@@ -1744,9 +1744,9 @@
     }
   ],
   "catalog": {
-    "catalog_sha256": "8314bec5b4e1c75a4ef2228c40446974de0e70e071784502224acf88c8b42adb",
-    "files_sha256": "ca70779db8e6f0a4943311e37490f5500f5d28c85b746fed4b2de87c6bda475f",
-    "identity": "catalog:1:0.19.0-rc.3:5ed50d1b59115a2677711dbb91fcb8cc12dc2148:c54a507c489225a80d26b3bbbdb3d7756079290453747cf130625bfe131e02f2"
+    "catalog_sha256": "37d14bd869260b3a089bb4e75cefd451f74912e3b23ad0bf966684e0882423a2",
+    "files_sha256": "2263735f0aafaa844c075e09f58e153d77d48f10cf76fd3190b900c905b58cda",
+    "identity": "catalog:1:0.19.0-rc.4:158b8438f61a60eb621e3a5b43ed1a0479634f6f:48e492e5d98fb35b7ec7189a3d6124ed90e0817afa1dab1d59b1750b56ee41fc"
   },
   "knowledge": [
     "dotnet-backend",
@@ -1758,6 +1758,7 @@
     "adr-author",
     "ai-context-auditor",
     "ai-context-governance",
+    "ai-context-init",
     "bdd-gwt-test-designer",
     "code-reviewer",
     "ddd-ca-hex-architect",

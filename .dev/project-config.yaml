@@ -1,6 +1,15 @@
 schemaVersion: 1
-generatedBy: repo-structure-sync
-generationStatus: initialized
+generatedBy: ai-context-init@0.1.0 refresh (manual repository reconciliation)
+generationStatus: refreshed
+inventoryProvenance:
+  generatedAt: '2026-10-02T14:03:27Z'
+  sourceRevision: aed40558c5b2dfb98157267bc29dc8edca09a323
+  inputDigestAlgorithm: SHA-256 of sorted path + NUL + file SHA-256 + LF records (UTF-8)
+  inputDigest: 843027e76f49ebee35ec9260f7d0cccc5dd38ceebcf45436be0ede314482abcc
+  scope: global.json, MQArchLab.slnx, src/samples/tests csproj and Dockerfiles, both frontend package.json files, docker-compose YAML files
+  exclusions: managed package examples, generated build output, local secrets, live services and provider state
+  validationReference: .dev/ai-context/CONTEXT-REFRESH-2026-10-02.md
+  authority: Derived discovery view; source files and adopted target decisions remain authoritative.
 repository:
   name: dotnet-mq-arch-lab
   mode: existing-repo-with-copied-context
@@ -21,7 +30,6 @@ dotnet:
   sdkVersion: 10.0.302
   targetFrameworks:
     - net10.0
-    - netstandard2.0
   solutions:
     - path: MQArchLab.slnx
       productProjectCount: 27
@@ -163,6 +171,9 @@ runtimeHosts:
     type: external-system-sample-web-api
   - name: SupplierMock.WebApi
     type: external-system-sample-web-api
+  - name: EfCoreWolverine.Host
+    type: dotnet-generic-host-consumer
+    scope: isolated-sample
   - name: web-frontend
     type: vue3-typescript-nginx
   - name: admin-frontend

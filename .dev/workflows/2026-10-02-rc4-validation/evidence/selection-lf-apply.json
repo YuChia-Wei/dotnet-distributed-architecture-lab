@@ -1,0 +1,20 @@
+{
+  "api_version": 2,
+  "changed": true,
+  "details": {
+    "counts": {
+      "added": 0,
+      "changed": 1,
+      "removed": 0,
+      "unchanged": 412
+    },
+    "lock_sha256": "7ff45a2620f4cbf807327c43523bc84726bced6d3b540bcd0eb879dde6df67b8",
+    "managed_state": "managed-bytes-consistent",
+    "operation_root": "C:\\Github\\YuChia\\.rc4-20261002\\recovery\\i-18ce2e349e5ce230e5bc0d2043c9a7e2",
+    "project_readiness": "not-assessed",
+    "protected_input_state": "matches"
+  },
+  "diagnostics": [],
+  "operation": "apply",
+  "outcome": "applied"
+}

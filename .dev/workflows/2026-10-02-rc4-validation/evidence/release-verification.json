@@ -1,0 +1,25 @@
+{
+  "outcome": "verified",
+  "source": {
+    "commit": "158b8438f61a60eb621e3a5b43ed1a0479634f6f",
+    "tag": "v0.19.0-rc.4",
+    "tag_object": "988448b6eb65c418e2a243e392dbd1204fa0d3dc"
+  },
+  "catalog_identity": "catalog:1:0.19.0-rc.4:158b8438f61a60eb621e3a5b43ed1a0479634f6f:48e492e5d98fb35b7ec7189a3d6124ed90e0817afa1dab1d59b1750b56ee41fc",
+  "archive": {
+    "name": "ai-collaboration-framework-v0.19.0-rc.4-158b8438f61a60eb621e3a5b43ed1a0479634f6f.zip",
+    "sha256": "db505854a2f355632e71a356ae8c4b85778880be4caee409e6557eca07ed5c4c",
+    "size": 855859
+  },
+  "archive_entries": 409,
+  "independently_verified_engine_files": 24,
+  "components": 20,
+  "skills": 18,
+  "public_release": false,
+  "provider": {
+    "id": "RE_kwDOSBe2Hc4X8kD8",
+    "draft": true,
+    "prerelease": true
+  },
+  "run_id": 37000062722
+}

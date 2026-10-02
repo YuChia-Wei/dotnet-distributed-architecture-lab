@@ -1,0 +1,27 @@
+[
+  {
+    "stage": "preparation",
+    "outcome": "command-rejected-before-execution",
+    "reason": "Automatic policy review rejected the combined root-directory/write command; no mutation occurred. Prepared explicit run roots beside the repositories and separate target workflow writes successfully."
+  },
+  {
+    "stage": "installation",
+    "outcome": "applied",
+    "evidence": "apply.json"
+  },
+  {
+    "stage": "diff-whitespace",
+    "outcome": "failed",
+    "reason": "Author-prepared saved selection contained 1777 CRLF lines on Windows; text attributes are unset, so git diff --check reported trailing whitespace. Managed byte checks passed separately."
+  },
+  {
+    "stage": "repair",
+    "outcome": "planned",
+    "reason": "Same authorized installation, unchanged semantic desired selection and candidate; official API2 exact project edit replaces selection with LF and sorted-key serialization. No managed member changes."
+  },
+  {
+    "stage": "LF repair and final verification",
+    "outcome": "passed",
+    "reason": "Official apply changed only one saved-selection file; all 412 managed members unchanged. Final inspect showed no drift; all 24 protected inputs matched and git diff --check passed."
+  }
+]

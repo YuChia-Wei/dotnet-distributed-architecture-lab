@@ -1,0 +1,27 @@
+schema_version: '1.0'
+lifecycle_contract: '1.0'
+workflow_id: 2026-10-02-rc4-validation
+workflow_kind: ai-context-maintenance
+title: Install verified framework RC4 for owner validation
+owner_skill: ai-context-governance
+status: completed
+current_phase: completed
+artifact_root: .dev/workflows/2026-10-02-rc4-validation
+entrypoint: workflow-plan.md
+created_at: '2026-10-02T19:18:51+08:00'
+updated_at: '2026-10-02T19:29:13+08:00'
+template_source: .dev/standards/templates/workflow-locator-template.yaml
+template_version: 1.0.0
+branch: codex/2026-10-02-rc4-validation
+base_branch: main
+base_commit: f88be639274f292210df2843780651b1cefe4859
+work_items:
+- provider: github
+  issue: 31
+  url: https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/31
+authority: 'Direct owner instruction on 2026-10-02: create current version 0.19.0-rc4
+  and install into MQ Lab for validation.'
+integration: Local installation and local commit; target push or main merge not selected.
+execution: Root is sole target writer; source Issue430 tracks release administration.
+result_summary: RC4 installed locally and verified; owner validation remains separate
+  from installation. No target push/main integration or public publication.
