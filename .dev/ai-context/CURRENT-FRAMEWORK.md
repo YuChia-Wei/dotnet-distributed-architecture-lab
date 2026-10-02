@@ -1,13 +1,21 @@
 # Selected framework contract and target authority
 
-This contract describes seventeen managed skill selections based on source commit `5ed50d1b59115a2677711dbb91fcb8cc12dc2148`, which excludes standards-promotion from the distribution catalog. The owner separately selected an independently copied standards-promotion@0.1.1-alpha.1 experimental package; its project-owned discovery alias is standards-promotion-experimental. See [the current workflow](../workflows/2026-10-01-standards-promotion-experiment/workflow-plan.md) and [copy provenance](STANDARDS-PROMOTION-EXPERIMENT.md). The saved selection and official installer lock remain managed-installation truth. Earlier RC3 and restoration evidence is retained; experiment presence is not behavior acceptance or release readiness.
+This contract selects framework `0.19.0-rc.4` from exact source `158b8438f61a60eb621e3a5b43ed1a0479634f6f`: eighteen managed skills, including independently optional `ai-context-init@0.1.0`. The official hosted draft and downloaded package are verified in [the RC4 installation workflow](../workflows/2026-10-02-rc4-validation/workflow-plan.md). The owner selected a local validation installation; runtime discovery and skill behavior remain to be validated. Standards-promotion remains excluded from the distributed catalog. The owner separately selected an independently copied standards-promotion@0.1.1-alpha.1 experimental package; its project-owned discovery alias is standards-promotion-experimental. See [the current workflow](../workflows/2026-10-01-standards-promotion-experiment/workflow-plan.md) and [copy provenance](STANDARDS-PROMOTION-EXPERIMENT.md). The saved selection and official installer lock remain managed-installation truth. Earlier RC3 and restoration evidence is retained; experiment presence is not behavior acceptance or release readiness.
 
 ## Selected shape
 
-- Select seventeen managed skill packages, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters with original names. Use [the selected skill registry](skills.md).
+- Select eighteen managed skill packages, engineering-common and dotnet-backend knowledge, and both Codex and Claude adapters with original names. Use [the selected skill registry](skills.md).
 - adr-author, lesson-author and pr-author replace the former discovery IDs adr, lesson and pr. The restored software-development-orchestrator@0.2.0 is selected for stage coordination. Ordinary `.dev/workflows/` records remain governed by adopted target workflow/Git policies; existing records and migrated evidence retain their bytes and historical owners.
 - `.ai/custom/framework.json` remains explicit project-owned operation settings and store constraints. A renamed entry does not migrate a record format, discover a store or grant writes. `.ai/custom/installation.json` is saved desired selection; `.ai/framework.lock` is installer-owned observed installation truth.
 - Use only the official selected installer for managed package, runtime and lock writes. Availability, installation, adoption, execution, acceptance and publication remain separate facts.
+
+## Optional initialization
+
+`ai-context-init@0.1.0` authors or refreshes project-owned collaboration documents
+from actual repository evidence. Its resources do not require other framework
+skills. Installation does not execute initialization or regenerate root files.
+The RC4 transition only reconciles current navigation; product decisions,
+custom rules and existing document structure remain authoritative.
 
 ## Project-owned experimental-copy exception
 

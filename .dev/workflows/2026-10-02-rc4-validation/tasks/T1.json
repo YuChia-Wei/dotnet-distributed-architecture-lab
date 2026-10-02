@@ -1,0 +1,16 @@
+{
+  "task_id": "T1",
+  "workflow_id": "2026-10-02-rc4-validation",
+  "owner_skill": "ai-context-governance",
+  "title": "Install pinned RC4 and reconcile target navigation",
+  "status": "completed",
+  "created_at": "2026-10-02T19:18:51+08:00",
+  "updated_at": "2026-10-02T19:29:13+08:00",
+  "template_source": ".dev/workflows/2026-10-02-rc4-validation/workflow-plan.md",
+  "template_version": "1.0.0",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "high",
+  "execution_identity_basis": "Configured defaults; active runtime identity not exposed.",
+  "result_summary": "Verified hosted RC4 bytes, official plan/apply and final inspection: 412 managed members, 18 skills, 2 knowledge packages, 40 unchanged bindings; protected settings/rules/experiment preserved. Selection LF correction applied through the official writer. Runtime/skill behavior validation is reserved for the owner.",
+  "finding_status": "addressed"
+}

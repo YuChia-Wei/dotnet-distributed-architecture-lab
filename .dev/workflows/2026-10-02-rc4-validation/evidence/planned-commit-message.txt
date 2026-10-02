@@ -1,0 +1,23 @@
+chore(#31): install RC4 framework for local validation
+
+Why:
+- The owner selected the current RC4 package for MQ Lab validation.
+
+What:
+- Install the verified hosted RC4 candidate through the pinned official engine.
+- Add optional init while preserving existing skills, knowledge bindings, settings and experiment.
+- Reconcile current navigation and retain installation/recovery evidence.
+
+Validation:
+- Verified 409 archive entries and independently matched all 24 engine files to the tagged source.
+- Official plan/apply and final inspect passed: 412 managed members, no drift, 24 protected inputs matched.
+- Forty knowledge bindings remain unchanged; 38 new local link targets resolve.
+- Corrected the author-prepared selection LF issue through the official writer; whitespace check passed.
+- Runtime discovery, init behavior and application tests remain owner validation, not executed.
+
+Workflow:
+- 2026-10-02-rc4-validation
+- Stage: installation
+- Task: T1
+
+Co-Authored-By: OpenAI Codex (gpt-6-astra, high) <noreply@openai.com>

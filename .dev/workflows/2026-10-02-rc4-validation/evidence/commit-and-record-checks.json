@@ -1,0 +1,8 @@
+{
+  "outcome": "passed",
+  "scope": "complete planned message and current workflow relationships",
+  "policy": ".dev/standards/GIT-COMMIT-POLICY.yaml",
+  "policy_sha256": "a933d39f4f2f082c1bffc43bb8ec8f8b6d7686ef9bd9597f7c90937d8f1c60ea",
+  "message_sha256": "a298488bbb08ffe716d1c07d069827536079996d91028fb07822370278538e27",
+  "legacy_target_validator": "unconfigured; no execution or restored availability claim"
+}
