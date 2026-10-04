@@ -16,6 +16,6 @@
 
 ## 團隊分享檔案
 
-- [簡報與講者筆記](../../presentations/external-api-testing/README.md)：可編輯 PowerPoint、PDF 閱讀版與逐頁講稿。
+- [簡報與講者筆記](../../../docs/presentations/external-api-testing/README.md)：可編輯 PowerPoint、PDF 閱讀版與逐頁講稿。
 - [8 張圖的圖檔索引](diagrams/README.md)：SVG、PNG 與 Mermaid 原始碼，可引用到團隊文件。
 - [離線圖庫](diagrams/index.html)：瀏覽器開啟即可逐張查看。

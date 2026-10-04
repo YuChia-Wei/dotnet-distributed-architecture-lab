@@ -11,7 +11,7 @@ This document defines coding standards for Domain, Use Case, Handler adapter, Co
 
 Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`.
 
-All tests must express intent in Given-When-Then (GWT) style; Arrange-Act-Assert (3A) is not an acceptable substitute. xUnit + BDDfy is the default combination, with NSubstitute as the default mocking selection. A target team may explicitly opt out of BDDfy, but its C# tests must retain recognizable Given / When / Then structure and naming. A target may replace NSubstitute through the generic `testing.mocking` selection defined by Target Technology Selection Policy (`target-authority:dev-standards-TECHNOLOGY-SELECTION-POLICY.md`; supplied by the target owner).
+All tests must express intent in Given-When-Then (GWT) style; Arrange-Act-Assert (3A) is not an acceptable substitute. xUnit + BDDfy is the default combination, with NSubstitute as the default mocking selection. A target team may explicitly opt out of BDDfy, but its C# tests must retain recognizable Given / When / Then structure and naming. A target may replace NSubstitute through the generic `testing.mocking` selection defined by [Target Technology Selection Policy](../../../engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md).
 
 - **xUnit**: Primary test framework
 - **BDDfy**: Default GWT orchestration tool; a target team may explicitly opt out of the package but not the GWT rule
@@ -258,11 +258,12 @@ public void Rename_Throws_WhenNameIsNull()
 ### 6. Mocking Library Selection
 
 NSubstitute is the `TEST-MOCK-001` profile default. Before generating or
-reviewing mocks, resolve `testing.mocking` through
-`.dev/project-config.yaml#technologySelections` and
-Target Technology Selection Policy (`target-authority:dev-standards-TECHNOLOGY-SELECTION-POLICY.md`; supplied by the target owner).
+reviewing mocks, resolve `testing.mocking` through the target-selected
+`technologySelections` record and
+[Target Technology Selection Policy](../../../engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md).
 
-- When no target selection exists, use NSubstitute.
+- When the target has adopted this profile and no explicit target selection
+  exists, use NSubstitute.
 - When an evidenced target selection exists, use that library consistently.
 - Do not mix mocking libraries without an explicit migration decision.
 - Changing the library does not change GWT, test independence, or boundary

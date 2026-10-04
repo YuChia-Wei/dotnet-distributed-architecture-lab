@@ -8,16 +8,12 @@ audience: agent-facing
 wrapper_targets:
   - codex
   - claude
-  - copilot
 adapter_metadata:
   codex:
     adapter_path: .codex/agents/context-translator.toml
     adapter_format: toml
   claude:
     adapter_path: .claude/agents/context-translator.md
-    adapter_format: markdown-yaml-frontmatter
-  copilot:
-    adapter_path: .github/agents/context-translator.agent.md
     adapter_format: markdown-yaml-frontmatter
 source_of_truth: canonical
 role_kind: documentation-sub-agent
@@ -51,7 +47,7 @@ workflow:
     description: Compare headings, links, code spans, paths, IDs, and normative keywords; report parity and unresolved wording.
 references:
   - .ai/custom/roles/context-translator/references/translation-playbook.md
-  - .dev/standards/AI-CONTEXT-LANGUAGE-POLICY.md
+  - AGENTS.md
 examples: []
 human_guide: .ai/custom/roles/README.md
 status: active

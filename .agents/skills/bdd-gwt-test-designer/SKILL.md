@@ -1,6 +1,6 @@
 ---
 name: bdd-gwt-test-designer
-description: "Design or review Given-When-Then scenarios with source traceability, observable assertions, controlled setup and justified test levels, without implementing or executing tests."
+description: "Design or review Given-When-Then scenario sets, matrices or .feature artifacts with traceable assertions, controlled setup and justified test levels. Formal-test specification authoring is a separate requested output; this skill does not implement or execute tests."
 ---
 
 # bdd-gwt-test-designer

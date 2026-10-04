@@ -1,0 +1,31 @@
+schema_version: '1.0'
+lifecycle_contract: '1.0'
+workflow_id: 2026-10-04-framework-019-init
+workflow_kind: ai-context-maintenance
+title: Update stable framework 0.19.0 and trial context initialization
+owner_skill: ai-context-governance
+status: completed
+current_phase: completed
+artifact_root: .dev/workflows/2026-10-04-framework-019-init
+entrypoint: workflow-plan.md
+created_at: '2026-10-04T21:34:38+08:00'
+updated_at: '2026-10-04T22:02:35+08:00'
+template_source: .dev/standards/templates/workflow-locator-template.yaml
+template_version: 1.0.0
+branch: codex/2026-10-04-framework-019-init
+base_branch: main
+base_commit: 1444d67fdaeb87ded62eb34bf24435fea81d6378
+work_items:
+- provider: github
+  issue: 31
+  url: https://github.com/YuChia-Wei/dotnet-distributed-architecture-lab/issues/31
+authority: 'Direct owner instruction 2026-10-04 authorizes stable update, generic-resource
+  cleanup and new init trial; preserves project-specific truth. Issue #31 remains
+  the open initialization follow-up binding.'
+integration: 'Owner authorized all current changes and the usage addendum in one
+  amended local commit on 2026-10-04. Push, PR, main merge and Issue mutation
+  remain separate and have not been performed.'
+result_summary: Stable 0.19.0 reinstalled and verified; init 0.2.0 authored missing
+  context, retained project decisions, and passed bounded checks plus independent
+  repeat gap review. Local trial complete; user acceptance/native discovery/integration
+  remain separate.

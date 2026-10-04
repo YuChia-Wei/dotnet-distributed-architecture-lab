@@ -1,6 +1,6 @@
 ---
 name: bdd-gwt-test-designer
-description: Design or review Given-When-Then scenarios with source traceability, observable assertions, controlled setup and justified test levels, without implementing or executing tests.
+description: Design or review Given-When-Then scenario sets, matrices or .feature artifacts with traceable assertions, controlled setup and justified test levels. Formal-test specification authoring is a separate requested output; this skill does not implement or execute tests.
 ---
 
 # BDD GWT Test Designer
@@ -8,6 +8,10 @@ description: Design or review Given-When-Then scenarios with source traceability
 Use `design` to produce or explicitly revise scenarios through
 [the scenario method](references/design.md). Use `review` to assess a fixed
 scenario artifact through [the review method](references/review.md).
+
+Select by the requested artifact: scenario notes, a matrix or a `.feature` belong
+here; a formal-test specification remains a specification artifact even when it
+contains GWT. Use the target's specification authoring route for that output.
 
 Supply requirements/specifications/acceptance or explicitly labeled observed
 behavior, the bounded test target, selected testing conventions and any requested

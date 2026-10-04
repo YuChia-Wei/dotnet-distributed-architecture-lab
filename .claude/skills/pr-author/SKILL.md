@@ -1,6 +1,6 @@
 ---
 name: pr-author
-description: "Prepare content-bound pull request records and explicitly authorized GitHub PR operations."
+description: "Prepare pull request content and records bound to an actual Git comparison, or perform explicitly authorized GitHub PR read/create/update operations. Defect review and merge administration retain their own routes."
 ---
 
 # pr-author

@@ -1,7 +1,7 @@
 # Shared Common Rules (Dotnet)
 
 This file is an agent-loading projection. Normative ownership and precedence are
-defined by AI Context Rule Ownership (`target-authority:dev-standards-AI-CONTEXT-OWNERSHIP.md`; supplied by the target owner).
+defined by [Context resource ownership](../../engineering-common/references/CONTEXT-RESOURCE-OWNERSHIP.md).
 
 Rule IDs: `TEST-GWT-001`, `TEST-BDDFY-001`, `TEST-MOCK-001`,
 `TECH-SELECT-001`, `ARCH-UOW-001`, `MESSAGING-TX-001`,

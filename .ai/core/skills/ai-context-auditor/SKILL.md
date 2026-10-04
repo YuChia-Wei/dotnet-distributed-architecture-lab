@@ -1,9 +1,16 @@
 ---
 name: ai-context-auditor
-description: Audit selected AI collaboration context read-only or compare identified context subjects using project authority and evidence. Return prose by default; export or reuse a project format only when requested.
+description: Assess selected AI collaboration context for evidence-backed findings or compare identified before/after subjects while keeping the subject read-only. Use for context assessment, not initialization or maintenance edits; export a report only when requested.
 ---
 
 # AI context auditor
+
+Choose this skill when the requested result is findings, coverage or a comparison.
+Creating missing context belongs to initialization; changing existing project-owned
+rules, responsibilities or navigation belongs to authorized maintenance. An audit
+can recommend that work without performing it. Neither initialization nor a direct
+maintenance edit needs a prior audit unless the target's actual policy requires it;
+other context skills are optional, not installation prerequisites.
 
 Use `audit` for a scoped context question and `compare` for selected before/after
 evidence. Both are instruction operations in [package metadata](skill-package.yaml).

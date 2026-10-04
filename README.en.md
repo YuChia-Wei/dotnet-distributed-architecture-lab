@@ -190,9 +190,10 @@ The four business APIs use `/api/products`, `/api/orders`, `/api/inventory`, and
 
 - `AGENTS.md`: canonical agent collaboration guide
 - `.ai/INDEX.MD`: AI package and knowledge index
-- `.dev/ai-context/skills.md`: current selected skill routes
-- `.dev/ai-context/CURRENT-FRAMEWORK.md`: RC4 local validation installation contract, observed evidence and main-integration boundary
+- [.ai/custom/installation.json](.ai/custom/installation.json): stable 0.19.0 package selection and knowledge bindings
+- [.ai/framework.lock](.ai/framework.lock): installer-generated inventory of installed resources
 - `.dev/ai-context/TARGET-ENGINEERING-RULES.md`: retained target rules and customizations
-- `.agents/skills/README.md` and `.claude/skills/README.md`: runtime entries
+- [.agents/skills/](.agents/skills/) and [.claude/skills/](.claude/skills/): actual runtime entries to use according to the saved installation selection
+- [0.19.0 local trial results](.dev/workflows/2026-10-04-framework-019-init/results.md): ai-context-init 0.2.0 trial and later delivery records; evidence covers only the recorded scope and does not establish current execution, acceptance or main integration
 
 When an AI context update conflicts with project truth, repair target authority from current repository evidence. Do not reuse the source repository's product names, credentials, ports, domains, or workflow records. The historical `repo-structure-sync` name describes only its original record.

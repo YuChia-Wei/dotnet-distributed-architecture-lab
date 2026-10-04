@@ -1,0 +1,16 @@
+{
+  "task_id": "T1",
+  "workflow_id": "2026-10-04-framework-019-init",
+  "owner_skill": "ai-context-governance",
+  "title": "Install pinned stable framework and clean classified generic resources",
+  "status": "completed",
+  "created_at": "2026-10-04T21:34:38+08:00",
+  "updated_at": "2026-10-04T21:34:38+08:00",
+  "template_source": ".dev/workflows/2026-10-04-framework-019-init/workflow-plan.md",
+  "template_version": "1.0.0",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "ultra",
+  "execution_identity_basis": "Configured Codex defaults observed in this session; exact executing runtime model/effort not independently exposed. Delegated initializer inherits parent settings.",
+  "result_summary": "Official reinstall and inspect passed: 418 managed files, 654 scoped files preserved, settings/rules and 40 bindings retained.",
+  "finding_status": "addressed"
+}

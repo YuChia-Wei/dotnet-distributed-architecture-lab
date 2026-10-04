@@ -1,6 +1,6 @@
 name = "fixed-head-independent-auditor"
 description = "Codex-only read-only projection for the canonical fixed-head-independent-auditor role; perform a fail-closed audit of one explicitly selected terminal or high-risk fixed commit."
-model = "gpt-5.6-sol"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "max"
 sandbox_mode = "read-only"
 

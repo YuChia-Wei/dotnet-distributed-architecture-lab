@@ -1,11 +1,11 @@
 ---
 name: ai-context-init
-description: "Initialize project-owned collaboration context and a suitable project documentation structure, or refresh that initialized context from repository evidence. Preserve existing AGENTS rules and custom content. Does not install, upgrade or repair framework packages."
+description: "Establish a usable project collaboration starting point with existing facts, a minimum collaboration baseline, entry references and first-task guidance, or refresh factual context. Preserve project ownership and custom rules. Does not design product strategy, run development tasks or install framework packages."
 ---
 
 # ai-context-init
 
-Codex runtime entry for `ai-context-init@0.1.0`. This generated projection does not
+Codex runtime entry for `ai-context-init@0.2.0`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 
@@ -19,8 +19,11 @@ Selected installed skill members:
 
 - [references/initialize.md](../../../.ai/core/skills/ai-context-init/references/initialize.md)
 - [references/project-structure.md](../../../.ai/core/skills/ai-context-init/references/project-structure.md)
+- [templates/ai-collaboration.md](../../../.ai/core/skills/ai-context-init/templates/ai-collaboration.md)
 - [templates/architecture.md](../../../.ai/core/skills/ai-context-init/templates/architecture.md)
+- [templates/first-task.md](../../../.ai/core/skills/ai-context-init/templates/first-task.md)
 - [templates/project-config.template.yaml](../../../.ai/core/skills/ai-context-init/templates/project-config.template.yaml)
+- [templates/project-context.md](../../../.ai/core/skills/ai-context-init/templates/project-context.md)
 - [templates/public-catalogs/dev/INDEX.md](../../../.ai/core/skills/ai-context-init/templates/public-catalogs/dev/INDEX.md)
 - [templates/public-catalogs/dev/README.MD](../../../.ai/core/skills/ai-context-init/templates/public-catalogs/dev/README.MD)
 - [templates/public-root/AGENTS.md](../../../.ai/core/skills/ai-context-init/templates/public-root/AGENTS.md)

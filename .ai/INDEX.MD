@@ -1,11 +1,23 @@
-# .ai index
+# AI resource index
 
-Read the [current trial contract](../.dev/ai-context/CURRENT-FRAMEWORK.md), [skill registry](../.dev/ai-context/skills.md) and exact [target engineering rules](../.dev/ai-context/TARGET-ENGINEERING-RULES.md). The official lock determines actual managed inventory; navigation does not prove installation, discovery or acceptance.
+Use [AGENTS.md](../AGENTS.md) for collaboration authority and the
+[project index](../.dev/INDEX.md) for product and delivery records.
 
-- [Skill registry](../.dev/ai-context/skills.md): eighteen original IDs, including restored software-development-orchestrator and optional ai-context-init; authoring entries use adr-author, lesson-author and pr-author.
-- [Engineering-common knowledge](core/knowledge/engineering-common/README.md): cross-technology contracts, domain-language templates and operations guides.
-- [.NET knowledge](core/knowledge/dotnet-backend/README.md): selected standards, design/setup/testing references, examples and templates.
-- [Codex entries](../.agents/skills/README.md) and [Claude entries](../.claude/skills/README.md): projections of selected packages.
-- [Project knowledge](../.dev/INDEX.md): requirements, specs, actual operations and adopted policies; [ordinary workflows](../.dev/workflows/README.MD) remain manually governed there.
+| Need | Entry |
+| --- | --- |
+| Selected release, packages and adapters | [Installation selection](custom/installation.json) |
+| Installed managed inventory | [Official lock](framework.lock) |
+| Select one installed skill | [Codex entries](../.agents/skills/), [Claude entries](../.claude/skills/) |
+| Portable engineering knowledge | [engineering-common](core/knowledge/engineering-common/README.md) |
+| .NET backend knowledge | [dotnet-backend](core/knowledge/dotnet-backend/README.md) |
+| Effective target rules and request routes | [Target engineering rules](../.dev/ai-context/TARGET-ENGINEERING-RULES.md) |
+| Project artifact stores | [Framework configuration](custom/framework.json) |
+| Project role definitions | [Custom roles](custom/roles/README.md) |
+| Project-owned experimental promotion package | [Experimental skill](custom/skills/standards-promotion-experimental/SKILL.md) |
+| Recorded 0.19.0 installation and init 0.2.0 trial | [Local results and limitations](../.dev/workflows/2026-10-04-framework-019-init/results.md) |
 
-Explicit target settings and desired selection belong under custom/; framework.lock is installer-owned. Retired assets, source-checkout files and old wrappers are not runtime fallbacks. The RC4 local validation installation does not imply main integration or behavior acceptance.
+Knowledge examples and templates are reference material. Resolve the applicable
+target rule and selected binding before using them in product work.
+The experimental promotion copy requires an explicitly selected trial; its purpose
+and behavior acceptance remain pending. Historical trial results do not establish
+current runtime acceptance or main integration.

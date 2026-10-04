@@ -191,9 +191,10 @@ dotnet test MQArchLab.slnx
 
 - `AGENTS.md`：canonical agent collaboration guide
 - `.ai/INDEX.MD`：AI package 與 knowledge 索引
-- `.dev/ai-context/skills.md`：目前選定的 skill 路由
-- `.dev/ai-context/CURRENT-FRAMEWORK.md`：RC4 本機驗證安裝契約、實際安裝證據與 main 整合邊界
+- [.ai/custom/installation.json](.ai/custom/installation.json)：正式版 0.19.0 的套件選擇與知識綁定
+- [.ai/framework.lock](.ai/framework.lock)：installer 產生的已安裝資源清冊
 - `.dev/ai-context/TARGET-ENGINEERING-RULES.md`：保留的目標規則與客製化
-- `.agents/skills/README.md`、`.claude/skills/README.md`：runtime 入口
+- [.agents/skills/](.agents/skills/)、[.claude/skills/](.claude/skills/)：依安裝選擇使用實際 runtime 入口
+- [0.19.0 本機試用結果](.dev/workflows/2026-10-04-framework-019-init/results.md)：ai-context-init 0.2.0 試用及後續交付紀錄；只證明所記載範圍，不代表目前執行、驗收或 main 整合已通過
 
 AI context 更新後若專案真相與來源 framework 衝突，依目前 repository evidence 修正目標權威，不得沿用來源 repo 的產品名稱、credentials、ports、domains 或 workflow records。歷史紀錄中的 `repo-structure-sync` 名稱只代表當時紀錄。

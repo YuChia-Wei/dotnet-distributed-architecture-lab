@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: "Review a bounded code or implementation-guidance scope for actionable defects using intended behavior, target-owned rules and evidence; report uncertainty and coverage without applying fixes."
+description: "Review selected code, a diff or concrete implementation guidance for actionable defects against intended behavior and target-owned rules. Use for artifact-based findings; causal investigation of an observed symptom belongs to diagnosis. Keep review read-only."
 ---
 
 # code-reviewer

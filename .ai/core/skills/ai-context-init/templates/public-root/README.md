@@ -15,6 +15,10 @@ Link only existing source/test entry points, AGENTS and the selected project ind
 Describe actual module responsibilities concisely. Preserve the project's current
 README language and any maintained bilingual entry.
 
+Point new collaborators to the actual product background, collaboration rules
+and first-task guide when present. Reuse this README as the product overview if
+it already serves that purpose; do not create a duplicate merely for a template.
+
 ## Validation and operation
 
 Describe selected build/test commands and their observed status. Link actual CI,

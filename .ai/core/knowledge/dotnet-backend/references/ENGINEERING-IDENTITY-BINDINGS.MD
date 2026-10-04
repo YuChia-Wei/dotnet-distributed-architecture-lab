@@ -2,10 +2,9 @@
 
 Applies framework identity contract: `ENG-IDENTITY-001`.
 
-This is the canonical .NET profile binding contract. The source-governance
-AI Context Rule Ownership (`target-authority:dev-standards-AI-CONTEXT-OWNERSHIP.md`; supplied by the target owner)
-registry classifies it as the owner of selected .NET bindings; it does not
-duplicate the contract. This file does not own the concept, rule, or constraint
+This is the canonical .NET profile binding contract. [Context resource ownership](../../engineering-common/references/CONTEXT-RESOURCE-OWNERSHIP.md)
+separates the selected .NET bindings from their engineering identities. The
+target owns adoption; no framework-source registry is required. This file does not own the concept, rule, or constraint
 that a binding enforces.
 
 ## Binding Boundary

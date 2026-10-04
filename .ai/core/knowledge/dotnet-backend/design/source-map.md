@@ -6,9 +6,9 @@ Use this file to map a user request to the smallest useful subset of the repo's 
 
 - `target-authority:dev-ARCHITECTURE.md`: repo-wide style and layer model
 - `target-authority:dev-requirement-TECH-STACK-REQUIREMENTS.MD`: stack and tool constraints
-- `target-authority:dev-standards-INDEX.MD`: standards lookup index
-- `target-authority:dev-standards-README.md`: standards purpose and placement boundary
-- `target-authority:ai-SUB-AGENT-SYSTEM.MD`: prompt-family overview
+- `../standards/coding-standards.md`: profile standards entry
+- [Context ownership](../../engineering-common/references/CONTEXT-RESOURCE-OWNERSHIP.md): placement and authority
+- [Skill and sub-agent taxonomy](../../engineering-common/references/SKILL-AND-SUB-AGENT-TAXONOMY.md): asset classification
 
 ## Prompt Families
 
@@ -75,7 +75,7 @@ Use for:
 
 Read the canonical rules/docs for these recurring areas:
 
-- Sub-agent and prompt structure: `target-authority:ai-SUB-AGENT-SYSTEM.MD`, `SKILL-AND-SUB-AGENT-TAXONOMY-GUIDE.md`
+- Sub-agent and prompt structure: [Skill and sub-agent taxonomy](../../engineering-common/references/SKILL-AND-SUB-AGENT-TAXONOMY.md)
 - DI and configuration: `../standards/coding-standards/usecase-standards.md`, `../standards/coding-standards/profile-configuration-standards.md`, `../standards/ASPNET-CORE-CONFIGURATION-CHECKLIST.md`
 - Outbox and transaction flow: `../standards/coding-standards.md`, `../guides/FRAMEWORK-API-INTEGRATION-GUIDE.md`
 - Query-side layering: `../standards/coding-standards.md`, `../references/rationale/query-side-layering-rationale.MD`

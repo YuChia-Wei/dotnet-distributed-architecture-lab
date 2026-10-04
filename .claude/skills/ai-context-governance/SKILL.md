@@ -1,6 +1,6 @@
 ---
 name: ai-context-governance
-description: "Propose or apply a bounded authorized change to project-owned AI context. Preserve semantic authority, custom content and protected managed files; optionally hand useful candidates to project-selected knowledge tools."
+description: "Maintain existing project-owned AI context by proposing or applying bounded changes to rules, document responsibilities, precedence and navigation. Use for ongoing context maintenance and conflict reconciliation; preserve custom content and protected managed files."
 ---
 
 # ai-context-governance

@@ -2,6 +2,13 @@
 
 ## Intake and ownership
 
+Use this method for ongoing maintenance of existing project-owned context.
+Initialization fills missing foundations; an explicitly selected initialization
+refresh may update repository facts, commands and navigation without redesigning
+rules. Audit returns read-only findings or comparisons and is not required before
+an already authorized maintenance edit. Neither the filename nor its original
+author selects the current operation or supplies authority.
+
 Select `propose` or `apply`, the concrete problem/request, intended behavior,
 files and relevant authority. Read only selected owner statements, current
 contents and dependencies needed for the action. Identify project/path and

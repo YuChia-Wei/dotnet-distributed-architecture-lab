@@ -60,9 +60,7 @@ Persisting/exporting that view is a separate caller-owned write.
 
 Writes return `reference`, persisted-byte `sha256`, `store_root`, `changed` and
 `directories_created`; new identities also return the actual `related_query`.
-Reconcile additionally returns the observed dimensions with
-`freshness: observed-this-invocation`; success means the observation was stored,
-not that adoption or effect succeeded. An uncertain/failed publication retains
+An uncertain/failed publication retains
 reference and intended digest when available. Read results do not rewrite data.
 
 ## Query before a new identity

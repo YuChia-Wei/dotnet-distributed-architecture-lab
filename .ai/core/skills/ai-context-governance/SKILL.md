@@ -1,9 +1,18 @@
 ---
 name: ai-context-governance
-description: Propose or apply a bounded authorized change to project-owned AI context. Preserve semantic authority, custom content and protected managed files; optionally hand useful candidates to project-selected knowledge tools.
+description: Maintain existing project-owned AI context by proposing or applying bounded changes to rules, document responsibilities, precedence and navigation. Use for ongoing context maintenance and conflict reconciliation; preserve custom content and protected managed files.
 ---
 
 # AI context governance
+
+Choose this skill by default for ongoing maintenance of existing project-owned
+context, including reconciling contradictory rules or changing document ownership.
+Establishing missing context foundations belongs to initialization; read-only
+findings or before/after comparison belong to audit. A specifically requested
+factual refresh of initialized context may remain with `ai-context-init`; this
+skill can also maintain those facts within an authorized context edit. Select by
+the requested outcome and target route, not by which skill first created a file.
+These adjacent capabilities are optional and need not be installed.
 
 Use `propose` for reviewable changes and `apply` for an authorized proposal or
 bounded direct edit. Both are instruction operations in

@@ -1,11 +1,14 @@
 ---
 name: pr-author
-description: Prepare content-bound pull request records and explicitly authorized GitHub PR operations.
+description: Prepare pull request content and records bound to an actual Git comparison, or perform explicitly authorized GitHub PR read/create/update operations. Defect review and merge administration retain their own routes.
 ---
 
 # Pull Request
 
 Use this independent skill for a selected real Git comparison, reviewable PR content, or read/create/update of one GitHub PR.
+Defect review belongs to the selected review capability. Merge, closure, branch
+push and Issue/Project mutations are outside this package's operations and retain
+their actual provider/project owners and existing authorization.
 No workflow, ADR, Lesson, source-repository policy or other skill installation is required. Project records/settings/templates remain project-owned. Metadata says implemented because source exists; it is not runtime acceptance, availability or authorization evidence.
 
 1. Read [configuration](references/configuration.md); select explicit project/package roots and optional config files. Explain is read-only and never discovers a fallback store.

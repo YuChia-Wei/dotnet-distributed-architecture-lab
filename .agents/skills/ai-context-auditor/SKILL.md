@@ -1,6 +1,6 @@
 ---
 name: ai-context-auditor
-description: "Audit selected AI collaboration context read-only or compare identified context subjects using project authority and evidence. Return prose by default; export or reuse a project format only when requested."
+description: "Assess selected AI collaboration context for evidence-backed findings or compare identified before/after subjects while keeping the subject read-only. Use for context assessment, not initialization or maintenance edits; export a report only when requested."
 ---
 
 # ai-context-auditor

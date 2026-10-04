@@ -9,7 +9,7 @@ ordering:
   rules: ascending lexical rule_id; arrays retain declared source order
 catalog_digest:
   algorithm: sha256
-  value: db1b4a92f64b264185e7605c4657e6fe99f17b51f0a133cd754aff76fd2c9be1
+  value: d62769022fe55f4c6926ce6d60f5d6e78cac1b7c4a71f2cd15ca5fbc94a2d613
   canonicalization: UTF-8 encoding of compact JSON with Unicode preserved, object keys sorted by Unicode code point, array
     order preserved, and exactly one terminal LF; the complete catalog_digest field is excluded from the input.
 selector_contract:
@@ -46,10 +46,7 @@ rules:
         values: []
   override_policy: forbidden
   decision_evidence: null
-  derived_consumers:
-  - target-authority:ai-assets-skills-ai-context-auditor-references-audit-playbook.md
-  - target-authority:ai-assets-skills-ai-context-governance-references-context-boundary-playbook.md
-  - target-authority:ai-assets-skills-ai-context-init-references-scan-playbook.md
+  derived_consumers: []
   status: active
   source_governance_provenance:
     path: .dev/standards/AI-CONTEXT-BOUNDARY.md
@@ -145,10 +142,7 @@ rules:
         values: []
   override_policy: forbidden
   decision_evidence: null
-  derived_consumers:
-  - target-authority:ai-assets-skills-ai-context-auditor-references-output-contract.md
-  - target-authority:ai-assets-skills-ai-context-governance-references-audit-remediation-lifecycle.md
-  - target-authority:ai-assets-skills-code-reviewer-references-output-contract.md
+  derived_consumers: []
   status: active
   source_governance_provenance:
     path: .dev/standards/ASSESSMENT-ARTIFACT-POLICY.md
@@ -205,9 +199,7 @@ rules:
         values: []
   override_policy: forbidden
   decision_evidence: null
-  derived_consumers:
-  - target-authority:ai-assets-skills-ai-context-init-references-scan-playbook.md
-  - target-authority:ai-assets-skills-ai-context-init-references-document-targets.md
+  derived_consumers: []
   status: active
   source_governance_provenance:
     path: .dev/standards/TECHNOLOGY-SELECTION-POLICY.md
@@ -217,9 +209,11 @@ rules:
   normative_text: |
     ## Selection Record
 
-    Target selections belong in generated `.dev/project-config.yaml` under
-    `technologySelections`. Every record uses the schema in
-    `target-authority:ai-assets-skills-ai-context-init-templates-technology-selection.schema.yaml`.
+    The target owner selects the configuration destination. `technologySelections`
+    in a project-owned YAML record is one supported authoring shape; installing
+    knowledge does not create it. Use the record semantics below and an explicit
+    target-selected schema when one is supplied. No removed initializer schema or
+    source-repository policy is required.
 
     ```yaml
     technologySelections:
@@ -228,7 +222,7 @@ rules:
         status: selected
         source: explicit-target-decision
         evidence:
-          - target-authority:dev-requirement-TECH-STACK-REQUIREMENTS.MD
+          - requirements/testing-stack.md
         reason: Existing product test stack
     ```
 
@@ -241,8 +235,8 @@ rules:
     - `evidence` contains repository-relative paths supporting the selection;
     - `reason` explains an explicit override or unresolved decision.
 
-    An absent slot does not invent target truth. If the framework registers a
-    profile default for that slot, the default applies until target evidence records
+    An absent slot does not invent target truth. If the target adopts a
+    profile default for that slot, it applies until target evidence records
     another selection. A target override changes the selected technology, not the
     architecture invariants surrounding it.
 
@@ -257,7 +251,7 @@ rules:
     - `observability.runtime`
 
     New slots must reuse this record shape.
-  normative_text_sha256: a515bd5f33f11ed561476c2973fa1a9ea464c47a7995a3a998c4169fc23de189
+  normative_text_sha256: a7020ee92289a318ce75252ba9acf409394cdb67af5b4d21d176aa18228c2238
   relocation_provenance:
     source_identity:
       path: .ai/assets/shared/governance/engineering-rule-catalog.yaml

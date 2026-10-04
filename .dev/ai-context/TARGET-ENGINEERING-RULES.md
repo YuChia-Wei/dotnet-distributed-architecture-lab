@@ -119,7 +119,7 @@ Use these repository-native checks before accepting a discovery-tool conclusion:
 | Incomplete Markdown inventory | Run `git ls-files -- '*.md'` and compare the relevant paths with the tool result. |
 | Missing Markdown relationship | Search the literal target or link text with `git grep -n -F -- '<target-or-link-text>' -- '*.md'`, open the source file, and resolve the target relative to that file. |
 | Stale index or snapshot | Compare the tool's recorded revision, when available, with `git rev-parse HEAD`; directly reopen every file used by a material finding. |
-| Tool-specific omissions | Run `python .ai/scripts/validate-ai-context.py` for registered context contracts and record any relationship class the validator does not cover. |
+| Tool-specific omissions | Resolve the configured local gate from `.dev/project-config.yaml#validation.current_framework.local`; an unconfigured gate is not a validation pass. Perform scoped file-backed checks and record uncovered relationship classes. |
 
 The 2026-07-13 Codebase Memory MCP probe is an example, not a permanent
 product contract: its full index omitted `.claude/` and exposed Markdown files
@@ -369,8 +369,7 @@ Strength: `invariant`. Target applicability: Testing, persistence, messaging, an
 ## Selection Record
 
 Target selections belong in generated `.dev/project-config.yaml` under
-`technologySelections`. Every record uses the schema in
-`.ai/assets/skills/ai-context-init/templates/technology-selection.schema.yaml`.
+`technologySelections`. The example and required semantics below define the retained target record shape.
 
 ```yaml
 technologySelections:
@@ -600,7 +599,7 @@ Strength: `profile-default`. Target applicability: Test projects use the explici
 NSubstitute is the `TEST-MOCK-001` profile default. Before generating or
 reviewing mocks, resolve `testing.mocking` through
 `.dev/project-config.yaml#technologySelections` and
-[Target Technology Selection Policy](../standards/TECHNOLOGY-SELECTION-POLICY.md).
+[TECH-SELECT-001](#tech-select-001).
 
 - When no target selection exists, use NSubstitute.
 - When an evidenced target selection exists, use that library consistently.
@@ -691,7 +690,7 @@ Adopt AI execution provenance prospectively from 2026-08-12T22:08:09+08:00 and c
 - Any applicable review or validation reports its actual result. Deferred, blocked and not-applicable are not passed. The RC2 adoption exception skips S6, runtime and upgrade/recovery experiments this time and does not activate CI.
 ## Target Git message and attribution contract
 
-The current target policy remains [GIT-COMMIT-POLICY.yaml](../standards/GIT-COMMIT-POLICY.yaml) with its [human guide](../standards/GIT-COMMIT-POLICY.md). Its SHA-256 at this adoption base is `a933d39f4f2f082c1bffc43bb8ec8f8b6d7686ef9bd9597f7c90937d8f1c60ea`. The active subject grammar is `<type>(#<issue-number>[,#<issue-number>...]): <summary>` when an issue exists, or `<type>(<lowercase-boundary-scope>): <summary>` otherwise. The allowed types are `docs`, `workflow`, `feat`, `fix`, `refactor`, `test`, `chore`, and `merge`; a literal pipe is not part of the current grammar. Workflow commits include `Why`, `What`, `Validation`, and `Workflow` body sections with the actual workflow identity.
+This section retains the target's existing Git message and attribution requirements. The active subject grammar is `<type>(#<issue-number>[,#<issue-number>...]): <summary>` when an issue exists, or `<type>(<lowercase-boundary-scope>): <summary>` otherwise. The allowed types are `docs`, `workflow`, `feat`, `fix`, `refactor`, `test`, `chore`, and `merge`; a literal pipe is not part of the current grammar. Workflow commits include `Why`, `What`, `Validation`, and `Workflow` body sections with the actual workflow identity.
 
 Agent-assisted commits end with a matching `Co-Authored-By: <runtime> (<model>, <reasoning_effort>) <noreply@provider>` trailer. The trailer must describe actual execution, and every present AI trailer must match the policy. Assessment commits use the applicable `Assessment-Id` trailer. The target cutover times and sole historical exception are recorded above; they do not authorize any new waiver or history rewrite.
 

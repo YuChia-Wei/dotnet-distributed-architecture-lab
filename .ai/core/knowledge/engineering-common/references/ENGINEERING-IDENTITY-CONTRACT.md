@@ -3,10 +3,9 @@
 Contract ID: `ENG-IDENTITY-001`.
 
 This is the canonical portable universal baseline contract for engineering
-identity. The source-governance registry in
-AI Context Rule Ownership (`target-authority:dev-standards-AI-CONTEXT-OWNERSHIP.md`; supplied by the target owner)
-classifies each artifact's single canonical owner; it does not duplicate this
-contract's semantic content.
+identity. [Context resource ownership](CONTEXT-RESOURCE-OWNERSHIP.md) classifies each
+artifact's single semantic owner. The target owns adoption and effective state;
+this source repository's private registry is not a consumer prerequisite.
 
 ## Load The Relevant Identity, Not A Whole Directory
 

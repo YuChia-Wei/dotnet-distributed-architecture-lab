@@ -1,0 +1,122 @@
+{
+  "release": {
+    "tag": "v0.19.0",
+    "source_commit": "a66957e00aa447be887258fa9b55fd89e39e96dd",
+    "tag_object": "d91b7dff7a6229c2ed5146a72dfbffe80327d221",
+    "url": "https://github.com/YuChia-Wei/ai-collaboration-framework/releases/tag/v0.19.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-10-04T12:58:33Z",
+    "archive_sha256": "33e86f19cb31d83e6fcf2fbb3635ba1c35fd0789dede5b92b1e97ce4439e0746",
+    "manifest_sha256": "4ae3cddc8fbf2dc3c90855291e00783b136bece627bfcea4bd48492b5e21071a",
+    "verified_archive_entries": 444,
+    "verified_engine_files": 23,
+    "engine_pin_sha256": "0bd44c26f8b113d5010d938fd5497a837a51c6db45c656aceb3ddb86d0995f3f"
+  },
+  "candidate_identity": "subset:3:0.19.0:a66957e00aa447be887258fa9b55fd89e39e96dd:d7cebd2b798da2682b7da3a8e79a3b4cb1747d70c6b2914959d0267891a6c10d",
+  "selection": {
+    "skills": 18,
+    "knowledge": 2,
+    "bindings": 40,
+    "adapters": [
+      "claude",
+      "codex"
+    ],
+    "skill_naming": "original",
+    "init_version": "0.2.0",
+    "managed_sub_agents_selected": false
+  },
+  "reinstall": {
+    "outcome": "reinstalled",
+    "plan_sha256": "f170175b91692dbf48144ab8b53b80ea8248a906592ed1c913c38633e5b43912",
+    "cleanup_count": 432,
+    "preserved_inputs_count": 654,
+    "atomic": false,
+    "installation_result": {
+      "api_version": 2,
+      "operation": "apply",
+      "outcome": "applied",
+      "changed": true,
+      "details": {
+        "managed_state": "managed-bytes-consistent",
+        "project_readiness": "not-assessed",
+        "lock_sha256": "13ed2d50585f746f8c7341f70537fee149b1d1773060a440ed012ec41b081675",
+        "operation_root": "F:\\a019-1004\\recovery\\i-51da4589750da28cb7c1927b3f9f04f8",
+        "counts": {
+          "added": 418,
+          "changed": 1,
+          "removed": 0,
+          "unchanged": 0
+        },
+        "protected_input_state": "matches"
+      },
+      "diagnostics": []
+    }
+  },
+  "post_install_inspect": {
+    "outcome": "inspected",
+    "managed_state": "managed-bytes-consistent",
+    "drift": [],
+    "unknown": [],
+    "managed_files": 418,
+    "independent_managed_hash_readback": "passed",
+    "lock_sha256": "13ed2d50585f746f8c7341f70537fee149b1d1773060a440ed012ec41b081675"
+  },
+  "attempts": [
+    {
+      "operation": "derive-subset",
+      "staging": "long TEMP path",
+      "outcome": "unsupported",
+      "code": "path-budget",
+      "target_changed": false
+    },
+    {
+      "operation": "derive-subset",
+      "staging": "F:/a019-1004",
+      "outcome": "assembled"
+    },
+    {
+      "operation": "reinstall plan",
+      "outcome": "planned",
+      "target_changed": false
+    },
+    {
+      "operation": "reinstall apply",
+      "outcome": "reinstalled"
+    }
+  ],
+  "external_evidence": {
+    "reinstall-plan-request.json": {
+      "path": "F:\\a019-1004\\reinstall-plan-request.json",
+      "sha256": "4ef5d8c9b4a0fcc506d0052e27d8a983c979ba0346754e98fe7478ff92b54bcb"
+    },
+    "reinstall-plan-response.json": {
+      "path": "F:\\a019-1004\\reinstall-plan-response.json",
+      "sha256": "490f60a27fa2893ce265619406794de75e91d998c3f63fb994b2082719c60041"
+    },
+    "reinstall-apply-request.json": {
+      "path": "F:\\a019-1004\\reinstall-apply-request.json",
+      "sha256": "1e3e85212e36dab81cdef117326ae233dc6483948acd07ce968f594f76d6715d"
+    },
+    "reinstall-apply-response.json": {
+      "path": "F:\\a019-1004\\reinstall-apply-response.json",
+      "sha256": "c5f1fd881187511d8781b0d815986c8f157b3820d068ff872e6ab5b7bc8986b4"
+    },
+    "inspect-after-reinstall.json": {
+      "path": "F:\\a019-1004\\inspect-after-reinstall.json",
+      "sha256": "180147da8ed19fbbf5bc3823ed4b02dd82d024e9c0aaaf9813d11b73b31b7d8f"
+    },
+    "baseline.json": {
+      "path": "F:\\a019-1004\\baseline.json",
+      "sha256": "85fe9616bee607f4019fa2555d6fb0f29c27aec57824a30a6528a927eb7cbe04"
+    }
+  },
+  "observed_at": "2026-10-04T21:34:38+08:00",
+  "limits": [
+    "application tests not run",
+    "native new-session discovery not run",
+    "recovery experiment not run",
+    "target critical gate unconfigured",
+    "no CI activation, commit, push or integration"
+  ]
+}

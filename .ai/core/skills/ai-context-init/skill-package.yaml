@@ -1,6 +1,6 @@
 metadata_version: 3
 id: ai-context-init
-version: 0.1.0
+version: 0.2.0
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -19,13 +19,16 @@ resources:
   references:
   - references/initialize.md
   - references/project-structure.md
+  - templates/ai-collaboration.md
+  - templates/architecture.md
+  - templates/first-task.md
+  - templates/project-config.template.yaml
+  - templates/project-context.md
   - templates/public-root/AGENTS.md
   - templates/public-root/CLAUDE.md
   - templates/public-root/README.md
   - templates/public-catalogs/dev/README.MD
   - templates/public-catalogs/dev/INDEX.md
-  - templates/project-config.template.yaml
-  - templates/architecture.md
   - templates/technology-requirements.md
   schemas: []
   templates: []
@@ -37,7 +40,7 @@ operations:
   - Target repository, requested collaboration context and authorized write scope
   - Current project rules, available repository evidence and unresolved owner choices
   outputs:
-  - Project-owned AGENTS and selected documentation structure, or a bounded proposal
+  - Project-owned collaboration entry, selected background/baseline/first-task resources and references, or a bounded proposal
   - File change summary, evidence sources, unresolved facts and actual validation status
   instructions: references/initialize.md
   implementation_status: implemented

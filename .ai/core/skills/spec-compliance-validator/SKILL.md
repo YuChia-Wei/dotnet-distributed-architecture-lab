@@ -1,9 +1,14 @@
 ---
 name: spec-compliance-validator
-description: Plan complete criteria, review specification meaning, or assess authentic target evidence against a fixed explicit scope; distinguish structural, semantic and runtime conclusions without inventing coverage.
+description: Plan complete criterion and evidence coverage, review specification semantics against selected criteria, or assess authentic target evidence against every required criterion in a fixed scope. Keep structural, semantic and runtime conclusions separate.
 ---
 
 # Scoped specification compliance
+
+Choose this skill for a complete validation plan, criterion-based semantic
+assessment or scoped evidence-backed compliance conclusion. Improving an authoring
+draft or designing GWT scenarios remains with its selected authoring/design owner;
+those outputs do not require a compliance stage merely because this skill exists.
 
 Select `plan-validation`, `review-semantics` or `assess-runtime` from
 [compliance](references/compliance.md). They are instruction operations, useful
