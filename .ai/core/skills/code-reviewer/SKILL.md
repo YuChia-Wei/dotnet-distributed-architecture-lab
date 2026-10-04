@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Review a bounded code or implementation-guidance scope for actionable defects using intended behavior, target-owned rules and evidence; report uncertainty and coverage without applying fixes.
+description: Review selected code, a diff or concrete implementation guidance for actionable defects against intended behavior and target-owned rules. Use for artifact-based findings; causal investigation of an observed symptom belongs to diagnosis. Keep review read-only.
 ---
 
 # Code reviewer
@@ -10,6 +10,11 @@ Read [the common review method](references/review.md), establish the subject and
 applicable target authority, then trace behavior and return evidence-backed prose
 findings. Review is read-only; a request to review does not authorize repair or
 external writes.
+
+Select this route for defects in the identified artifact. Investigating why an
+observed failure occurs belongs to diagnosis; architecture and scenario-artifact
+reviews retain their specialist owners. Static causal evidence can support a code
+finding without claiming reproduction or requiring a separate diagnostic stage.
 
 This package supplies common review reasoning. It ships no technology extension,
 including no .NET specialist checks. Name unavailable requested coverage and retain

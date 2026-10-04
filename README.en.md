@@ -191,7 +191,7 @@ The four business APIs use `/api/products`, `/api/orders`, `/api/inventory`, and
 - `AGENTS.md`: canonical agent collaboration guide
 - `.ai/INDEX.MD`: AI package and knowledge index
 - `.dev/ai-context/skills.md`: current selected skill routes
-- `.dev/ai-context/CURRENT-FRAMEWORK.md`: RC4 local validation installation contract, observed evidence and main-integration boundary
+- `.dev/ai-context/CURRENT-FRAMEWORK.md`: stable 0.19.0 local installation, ai-context-init 0.2.0 trial evidence and main-integration boundary
 - `.dev/ai-context/TARGET-ENGINEERING-RULES.md`: retained target rules and customizations
 - `.agents/skills/README.md` and `.claude/skills/README.md`: runtime entries
 

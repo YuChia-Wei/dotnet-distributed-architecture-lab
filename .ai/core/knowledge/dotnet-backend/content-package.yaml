@@ -2781,6 +2781,16 @@ references:
   requirement: required
   on_missing: unavailable
 - from: design/source-map.md
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target: {package: engineering-common, path: references/CONTEXT-RESOURCE-OWNERSHIP.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: design/source-map.md
+  resource_id: member:references/SKILL-AND-SUB-AGENT-TAXONOMY.md
+  target: {package: engineering-common, path: references/SKILL-AND-SUB-AGENT-TAXONOMY.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: design/source-map.md
   resource_id: member:references/rationale/query-side-layering-rationale.MD
   target: {package: dotnet-backend, path: references/rationale/query-side-layering-rationale.MD, anchor: null}
   requirement: required
@@ -3361,6 +3371,11 @@ references:
   requirement: required
   on_missing: unavailable
 - from: guides/PERSISTENCE-CONFIGURATION-GUIDE.md
+  resource_id: member:references/TECHNOLOGY-SELECTION-POLICY.md
+  target: {package: engineering-common, path: references/TECHNOLOGY-SELECTION-POLICY.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: guides/PERSISTENCE-CONFIGURATION-GUIDE.md
   resource_id: member:tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
   target: {package: dotnet-backend, path: tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md,
     anchor: null}
@@ -3823,6 +3838,11 @@ references:
   target: {package: dotnet-backend, path: README.md, anchor: null}
   requirement: required
   on_missing: unavailable
+- from: references/ENGINEERING-IDENTITY-BINDINGS.MD
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target: {package: engineering-common, path: references/CONTEXT-RESOURCE-OWNERSHIP.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
 - from: references/FAILURE-CASES.MD
   resource_id: member:references/CODE-TEMPLATES.MD
   target: {package: dotnet-backend, path: references/CODE-TEMPLATES.MD, anchor: null}
@@ -3901,6 +3921,11 @@ references:
 - from: review/test-scenario-review.md
   resource_id: member:standards/coding-standards/test-standards.md
   target: {package: dotnet-backend, path: standards/coding-standards/test-standards.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: shared/common-rules.md
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target: {package: engineering-common, path: references/CONTEXT-RESOURCE-OWNERSHIP.md, anchor: null}
   requirement: required
   on_missing: unavailable
 - from: shared/common-rules.md
@@ -4301,6 +4326,11 @@ references:
 - from: standards/coding-standards/test-standards.md
   resource_id: member:references/GWT-TEST-HANDOFF-CONTRACT.md
   target: {package: engineering-common, path: references/GWT-TEST-HANDOFF-CONTRACT.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: standards/coding-standards/test-standards.md
+  resource_id: member:references/TECHNOLOGY-SELECTION-POLICY.md
+  target: {package: engineering-common, path: references/TECHNOLOGY-SELECTION-POLICY.md, anchor: null}
   requirement: required
   on_missing: unavailable
 - from: standards/coding-standards/test-standards.md

@@ -1,6 +1,6 @@
 ---
 name: local-change-implementer
-description: Implement one authorized local technical target and operation, with direct call sites and immediate tests inside an explicit semantic radius; preserve accepted contracts and architecture.
+description: Implement one authorized operation on one technical target and its direct call sites or immediate tests while preserving accepted public contracts and architecture. Use a slice when the goal requires coordinated behavior or contract changes.
 ---
 
 # Local Change Implementer
@@ -14,6 +14,10 @@ Several files can remain one local change; semantic impact determines the
 boundary. A private helper can remain local only when responsibility,
 dependencies, lifetime, transaction and accepted behavior remain within that
 boundary. Public contract or coordinated behavior changes need a bounded slice.
+
+A method inside an existing public class can remain local when those boundaries
+stay intact. File count, a public class name or the word query alone does not choose
+the route: a bounded SQL adjustment is local; a complete query behavior is a slice.
 
 This instruction package owns no executable, configuration or managed record
 store. It needs a permitted target editor for implementation and target-selected

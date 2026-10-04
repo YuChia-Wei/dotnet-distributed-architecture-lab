@@ -19,6 +19,9 @@ validation:
   ci: null # Unknown until current configuration/provider evidence establishes state.
 documentation:
   collaboration_entry: null
+  collaboration_rules: null
+  product_context: null # Link existing product facts; do not duplicate their content here.
+  first_task: null
   project_index: null
   requirements: []
   architecture: null

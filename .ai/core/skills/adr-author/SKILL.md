@@ -9,6 +9,11 @@ Record architectural alternatives, capture a mapped owner decision, and preserve
 [skill-package.yaml](skill-package.yaml). Source delivery does not claim execution,
 installation or publication. This package is independently selectable.
 
+Use this skill for a durable record of architectural alternatives, tradeoffs and
+an owner decision. Exploring or reviewing architecture stays with the selected
+architecture capability; retaining evidence-qualified observations is Lesson work.
+Neither adjacent capability is required to complete an ADR record.
+
 Consider [when an ADR is useful](references/WHEN-TO-CREATE-ADR.MD) before creating a
 new record; the target's requested decision and adopted process take precedence.
 

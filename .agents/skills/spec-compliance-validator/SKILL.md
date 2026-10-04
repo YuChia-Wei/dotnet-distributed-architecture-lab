@@ -1,6 +1,6 @@
 ---
 name: spec-compliance-validator
-description: "Plan complete criteria, review specification meaning, or assess authentic target evidence against a fixed explicit scope; distinguish structural, semantic and runtime conclusions without inventing coverage."
+description: "Plan complete criterion and evidence coverage, review specification semantics against selected criteria, or assess authentic target evidence against every required criterion in a fixed scope. Keep structural, semantic and runtime conclusions separate."
 ---
 
 # spec-compliance-validator

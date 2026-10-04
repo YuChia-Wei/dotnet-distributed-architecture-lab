@@ -1744,9 +1744,9 @@
     }
   ],
   "catalog": {
-    "catalog_sha256": "37d14bd869260b3a089bb4e75cefd451f74912e3b23ad0bf966684e0882423a2",
-    "files_sha256": "2263735f0aafaa844c075e09f58e153d77d48f10cf76fd3190b900c905b58cda",
-    "identity": "catalog:1:0.19.0-rc.4:158b8438f61a60eb621e3a5b43ed1a0479634f6f:48e492e5d98fb35b7ec7189a3d6124ed90e0817afa1dab1d59b1750b56ee41fc"
+    "identity": "catalog:1:0.19.0:a66957e00aa447be887258fa9b55fd89e39e96dd:dfcf1a44cd7e1693a0b405ae5b9102f3186d6d9df29c3d2c54c09397a6a3c6b1",
+    "catalog_sha256": "b820e86f687b99c29749830ebf2a2b4f8ed0837a6b81b38c9c32c3fbc28c0f21",
+    "files_sha256": "97ef5bfb98628cc4bf6bc56a95ed0cce1f281d5f7bcf8dd6c4e49cdb58f2ae8d"
   },
   "knowledge": [
     "dotnet-backend",

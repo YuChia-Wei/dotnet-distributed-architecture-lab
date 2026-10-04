@@ -77,8 +77,10 @@ helper type can remain local only if it preserves accepted target, radius,
 behavior, responsibility, dependency direction, lifetime and transaction
 boundary. A new type's existence or line count alone decides nothing.
 
-A public/domain type, interface or responsibility/dependency/lifetime/transaction
-change belongs to a bounded slice under an accepted design. Missing or changed
+Adding a public/domain type or interface, or changing an existing public contract,
+responsibility, dependency, lifetime or transaction boundary, belongs to a bounded
+slice under an accepted design. A method-level fix inside an existing public type
+may remain local when it preserves those contracts and boundaries. Missing or changed
 architecture, compatibility, module/aggregate or business-language decisions
 need their owner's decision before dependent edits. Public DTO/API/event or
 ubiquitous-language renames are not local symbol renames. Broad namespace

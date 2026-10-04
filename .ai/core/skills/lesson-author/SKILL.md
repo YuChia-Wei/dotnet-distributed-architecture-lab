@@ -9,6 +9,11 @@ Capture evidence-qualified observations, record mapped owner acceptance, and pre
 [skill-package.yaml](skill-package.yaml). Source delivery does not claim execution,
 installation or publication. This package is independently selectable.
 
+Use this skill to retain an observed outcome, supporting evidence, confidence and
+applicability for future work. An unresolved failure may need diagnosis; a Lesson
+can still preserve tentative observations. Architectural choice records and actual
+project-rule edits retain their selected owners; acceptance grants neither.
+
 1. Bind the caller's explicit project/package/config paths and read
    [configuration](references/configuration.md); keep actual task authority separate.
 2. Select one [operation](references/operations.md). Query related records before

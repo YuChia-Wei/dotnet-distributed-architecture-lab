@@ -1,25 +1,25 @@
-# Adopted Target Governance Standards Index
+# Target policy index
 
-`.dev/standards/` retains this target's adopted governance policies. Their adopted meanings remain authoritative for project work; the exact target engineering rules and customizations remain in [TARGET-ENGINEERING-RULES.md](../ai-context/TARGET-ENGINEERING-RULES.md). Selected knowledge owns portable baseline resources; installation alone does not adopt them.
+[AGENTS.md](../../AGENTS.md) owns the root reading order.
+[Target engineering rules](../ai-context/TARGET-ENGINEERING-RULES.md) own adopted
+rule statements and applicability; this index adds navigation only.
 
-## Adopted Target Policies
+| Concern | Retained owner |
+| --- | --- |
+| Context placement and repository-backed evidence | [AI context boundary](AI-CONTEXT-BOUNDARY.md) |
+| Canonical language and translation parity | [Language policy](AI-CONTEXT-LANGUAGE-POLICY.md) |
+| Baseline, target and consumer ownership | [Ownership policy](AI-CONTEXT-OWNERSHIP.md) |
+| Framework version and target upgrade provenance | [Version policy](AI-CONTEXT-VERSION-POLICY.md) |
+| Assessment identity and records | [Assessment policy](ASSESSMENT-ARTIFACT-POLICY.md) |
+| Workflow selection and authorization | [Workflow gate](WORKFLOW-GATE-POLICY.md) |
+| Workflow locator, tasks and completion | [Artifact policy](WORKFLOW-ARTIFACT-POLICY.md) |
+| Cross-session or runtime continuation | [Handoff policy](WORKFLOW-HANDOFF-POLICY.md), [machine contract](WORKFLOW-HANDOFF-POLICY.yaml) |
+| Branch and integration boundaries | [Team Git flow](../TEAM-GIT-FLOW-RULES.MD) |
+| Commit structure and actual attribution | [Commit policy](GIT-COMMIT-POLICY.md), [machine contract](GIT-COMMIT-POLICY.yaml) |
+| Target technology choices | [Technology selection](TECHNOLOGY-SELECTION-POLICY.md), [selection schema](schemas/technology-selection.schema.yaml) |
+| Existing workflow record templates | [Workflow locator](templates/workflow-locator-template.yaml), [handoff checkpoint](templates/workflow-handoff-checkpoint-template.yaml) |
 
-- [AI context boundary](AI-CONTEXT-BOUNDARY.md), [language](AI-CONTEXT-LANGUAGE-POLICY.md), and [ownership](AI-CONTEXT-OWNERSHIP.md) policies
-- [Portable AI context version, provenance, and upgrade policy](AI-CONTEXT-VERSION-POLICY.md)
-- Source work-management authority and GitHub provider configuration are
-  source-repository-only. They are intentionally absent from initialized-target
-  packages and do not act as portable work-management policy.
-- [Assessment](ASSESSMENT-ARTIFACT-POLICY.md), [workflow artifact](WORKFLOW-ARTIFACT-POLICY.md), [workflow gate](WORKFLOW-GATE-POLICY.md), and [workflow handoff](WORKFLOW-HANDOFF-POLICY.md) policies
-- [Git commit](GIT-COMMIT-POLICY.md), source-repository-only GitHub terminal
-  Issue closure (`GITHUB-TERMINAL-ISSUE-CLOSURE-POLICY.md`),
-  [dependency-version consistency](DEPENDENCY-VERSION-CONSISTENCY-POLICY.md),
-  and [target technology selection](TECHNOLOGY-SELECTION-POLICY.md) policies
-
-## .NET Backend Profile Compatibility Navigation
-
-- [Profile standards](../../.ai/core/knowledge/dotnet-backend/standards/coding-standards.md)
-- [Focused coding standards](../../.ai/core/knowledge/dotnet-backend/standards/coding-standards/)
-- [Profile rationale](../../.ai/core/knowledge/dotnet-backend/references/rationale/)
-- [Profile templates](../../.ai/core/knowledge/dotnet-backend/templates/)
-
-Reusable setup, troubleshooting and authoring references are in the selected knowledge packages. Target-owned training remains under `.dev/guides/external-api-testing/`; project records and adopted policy are retained here.
+The [project configuration](../project-config.yaml) retains required GitHub
+work-item binding and merge gate, and unconfigured framework/local/CI validation.
+Follow the exact applicable policy and recorded owner authorization; an index
+entry, package installation or structural check is not a gate pass.

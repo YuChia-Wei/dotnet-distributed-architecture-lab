@@ -1,6 +1,6 @@
 # Claude skill entries
 
-Use the [selected registry](../../.dev/ai-context/skills.md), [trial contract](../../.dev/ai-context/CURRENT-FRAMEWORK.md) and official lock for the eighteen managed original-name selections. Decision, lesson and PR entries use adr-author, lesson-author and pr-author. The restored software-development-orchestrator@0.2.0 coordinates needed stages; new ai-context-init@0.1.0 authors project context on request. Legacy init/upgrader implementations remain retired.
+Use the [selected registry](../../.dev/ai-context/skills.md), [current contract](../../.dev/ai-context/CURRENT-FRAMEWORK.md) and official lock for the eighteen managed original-name selections. Decision, lesson and PR entries use adr-author, lesson-author and pr-author. The restored software-development-orchestrator@0.2.0 coordinates needed stages; ai-context-init@0.2.0 initializes missing collaboration context or refreshes selected facts on request. Legacy init/upgrader implementations remain retired.
 
 Exact [target engineering rules](../../.dev/ai-context/TARGET-ENGINEERING-RULES.md), knowledge bindings and actual project choices govern applicability. Entry presence does not prove discovery, execution, acceptance or primary adoption. Adopted target policy owns workflow records; the restored orchestrator coordinates development stages.
 

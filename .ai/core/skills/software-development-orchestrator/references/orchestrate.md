@@ -41,12 +41,12 @@ bundled IDs are candidates when installed, not mandatory dependencies:
 | Specifications | `spec-author` | The selected production, entity, adapter or formal-test artifact. |
 | Problem framing | `problem-frame-author` | Commanded behavior and identified sources. |
 | Architecture | `ddd-ca-hex-architect` | Domain/dependency decisions or architecture artifact review. |
-| Scenario design | `bdd-gwt-test-designer` | GWT design or review; does not implement or execute tests. |
-| Slice implementation | `slice-implementer` | One accepted behavioral slice and its immediate checks. |
-| Local change | `local-change-implementer` | One technical target, operation and bounded dependency radius. |
-| Diagnosis | `diagnostic-analyst` | Causal evidence and repair proposal; diagnosis grants no repair authority. |
-| Code review | `code-reviewer` | Executable code or implementation-guidance findings. |
-| Selected compliance | `spec-compliance-validator` | Fixed criteria and authentic evidence, when requested or required. |
+| Scenario design | `bdd-gwt-test-designer` | Scenario set/matrix/artifact design or review; formal-test specifications remain with their authoring owner. |
+| Slice implementation | `slice-implementer` | One accepted behavior, coordinated refactor or concrete test slice and its immediate checks. |
+| Local change | `local-change-implementer` | One technical target and operation preserving public contracts and the bounded dependency radius. |
+| Diagnosis | `diagnostic-analyst` | Causal investigation of an observed symptom and a repair proposal; grants no repair authority. |
+| Code review | `code-reviewer` | Defect findings in selected executable code, a diff or concrete implementation guidance. |
+| Selected compliance | `spec-compliance-validator` | Complete criterion/evidence coverage or assessment in a fixed scope, when requested or required. |
 
 Test execution uses target-owned commands and prerequisites; no dedicated test
 skill is required. Architecture and scenario artifact reviews stay with their

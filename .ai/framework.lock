@@ -1,5 +1,5 @@
 {
-  "candidate_identity": "subset:3:0.19.0-rc.4:158b8438f61a60eb621e3a5b43ed1a0479634f6f:ed9052abee7b32f4c11a628ea04d0c735f8fe588470080033413ce8522909a07",
+  "candidate_identity": "subset:3:0.19.0:a66957e00aa447be887258fa9b55fd89e39e96dd:d7cebd2b798da2682b7da3a8e79a3b4cb1747d70c6b2914959d0267891a6c10d",
   "catalog_document": {
     "adapters": [
       {
@@ -58,11 +58,11 @@
         "size": 11564
       },
       {
-        "git_blob": "7bf614ecda073a2a320bf64a9e07fc981661d494",
+        "git_blob": "2e765101e7264f773c7c695a5cb007642686c029",
         "mode": "100644",
         "path": "src/distribution/catalog.py",
-        "sha256": "c89aeeec72cda95abab4bee20311d3bfb47d0aa05f3c31b80962c1954224814e",
-        "size": 34929
+        "sha256": "5b2853de712d04e2cc3a34437d4d22e0869e7cf7d75904e5a9524cc9861d65e4",
+        "size": 38404
       },
       {
         "git_blob": "db306ef1659af6f406284df3c1ba2f83aa9823d7",
@@ -79,32 +79,32 @@
         "size": 7955
       },
       {
-        "git_blob": "4aa0f1366e92d1574cff0407bc145ce4a9f5b43a",
+        "git_blob": "907320717317a90afe21e79a1bd82ecc1338d7e3",
         "mode": "100644",
         "path": "src/distribution/content.py",
-        "sha256": "d79ba189e31073d28617d9afab44cb6adaaece9103811abf110257558ef7e202",
-        "size": 13858
+        "sha256": "2923bad9c9867cceb62e2c1ac0d3e551e8d52eb5da68012bbc006d6c893a3dce",
+        "size": 23040
       },
       {
-        "git_blob": "28313e259959973478c83cc22be68737dc96176e",
+        "git_blob": "3c93d33b70caaaac1429f1f060ae5fd77810e8c0",
         "mode": "100644",
         "path": "src/distribution/contracts.py",
-        "sha256": "394e43f38e08cf10ed51cb6ec9c9a41887c4309ff7db63ee97c7cbb87e3c4fa2",
-        "size": 27740
+        "sha256": "4d4c9e3b7da68496dc8c9834882049c913fc9afdf45dc150083989329a58e3a5",
+        "size": 34270
       },
       {
-        "git_blob": "0a76808c0574daca9a41aeb1dd39db2ce0add5f6",
+        "git_blob": "38332e2c55bec156e81f0dab68e298b61b52eda7",
         "mode": "100644",
         "path": "src/distribution/data.py",
-        "sha256": "4045d5e5d0c7dd0d95cc2aa5b8a797a9ae25864496793a50cf9a9dd67de6740f",
-        "size": 9518
+        "sha256": "e1d7cb316d516e8ddaa5a85bf67c497a48e1dc306fefd4f17b9613142d1b9485",
+        "size": 9539
       },
       {
-        "git_blob": "3f7c8b0535e62e2b89565040e7fa538cddebf04f",
+        "git_blob": "71a7c01d065a232e0bcd7ed9d862ae7527433c91",
         "mode": "100644",
         "path": "src/distribution/git_source.py",
-        "sha256": "86566f80da65c46ea5241d215799fce7894eed3d0ea7133ab921556da42dc030",
-        "size": 7489
+        "sha256": "87eda8d137c501012743972441af13d154d8ea6d7adc010790f2da0eb96d4af7",
+        "size": 7386
       },
       {
         "git_blob": "69841ca4f17fdf921260b0e8e849714145024312",
@@ -128,11 +128,11 @@
         "size": 25714
       },
       {
-        "git_blob": "254c9e4c23f22997e09ede2b66f9831fc98d4f40",
+        "git_blob": "02f44633d95f61fbe0bf2bd7045f2272f7eb2b3e",
         "mode": "100644",
         "path": "src/distribution/installation_state.py",
-        "sha256": "46d9e726b64690061b2defcbf174c9624b595b2f9843ae5a5ca01f44211309c6",
-        "size": 58167
+        "sha256": "f1899faaa68da25af5f8e2bf380c2138ca2e3de0d085c616a607bbbb2fc6e13a",
+        "size": 58261
       },
       {
         "git_blob": "d6bdb5147678d62580cdbb392c2c9cae53877298",
@@ -142,11 +142,11 @@
         "size": 5704
       },
       {
-        "git_blob": "cdba1c3453b11747f7d548fa851bc5ddc4b1d3df",
+        "git_blob": "f8c4938394a830493d2a0bfb0dd12a5fdd2e933c",
         "mode": "100644",
         "path": "src/distribution/manifest.yaml",
-        "sha256": "ff59ff90c69cd3264d280340a9da5ccb21a88cb30d24e941650bb0d6e754f494",
-        "size": 57919
+        "sha256": "3ec136d00fbf30562ab51c495dd809d2908303c0b68bfd88dc4b96aceeaa35a5",
+        "size": 63509
       },
       {
         "git_blob": "45fffbd3a273e8ba0502b9428b9d426c89cdda0e",
@@ -177,11 +177,11 @@
         "size": 5133
       },
       {
-        "git_blob": "203e32eb2c424176e1ab638061f1319b7cacd440",
+        "git_blob": "8d93c44e2b11a583799966ea03a772fc4d41d985",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/content-package.yaml",
-        "sha256": "816b4797bfdf9f23610f8234b4e5801f3ecc35ddd71dbde4edbe4820e079a0c8",
-        "size": 250457
+        "sha256": "572ba054265dcd81e9aec19db7a9d542e76e4a1d5ed1856f0cdc92609bdc4a41",
+        "size": 251999
       },
       {
         "git_blob": "97bfa7db102096a98fa2f3f4d8eef7e0103ecca2",
@@ -205,18 +205,18 @@
         "size": 660
       },
       {
-        "git_blob": "06def4db477047ab65b9ae322693ab1a78029ca5",
+        "git_blob": "3b179dee525c40c422f923192dff77a898ef4cfb",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/design/source-map.md",
-        "sha256": "a717edbd540ddd135d34d675b968ebb1cc7e1fca3496e5d2c5cb5d1f3b324b69",
-        "size": 4114
+        "sha256": "bde89c5a3967ea6bde3b9ad1603dcc6c6673014f351f8eb1c5d49b401c344f51",
+        "size": 4208
       },
       {
-        "git_blob": "16afbc344152cd13602e4f99e99ae72788d7f789",
+        "git_blob": "b800829758ed1b2f77d3fe75a4f15e0dd5d9ce65",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/engineering-rule-catalog.yaml",
-        "sha256": "1222842d9153acb61b08c86bc2d45ceaf965e0466cd7bd279a372453a6c8b4be",
-        "size": 57155
+        "sha256": "4a4724411333670e33605236e1d96c4b470d1a18a895ee7fd7db5dceb86d6887",
+        "size": 57189
       },
       {
         "git_blob": "5bade9b970d2275ff8744e334e66120cf90ad804",
@@ -1192,11 +1192,11 @@
         "size": 5533
       },
       {
-        "git_blob": "f5208652355149274d19dc7fac0abe077356e819",
+        "git_blob": "ccf78532520032f90acd4519e2f2bb59053e941b",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/guides/PERSISTENCE-CONFIGURATION-GUIDE.md",
-        "sha256": "bff4ecff611ec6c85b43d63acabcf9c99f77013398e3b6c054d114dc47aff9ec",
-        "size": 3386
+        "sha256": "efe20e275e30b4be52f21423cfd1df51f0a7dcc330db70abaaa6ec877dec0fdf",
+        "size": 3428
       },
       {
         "git_blob": "60392efbeb96df484c67c3f3f767d2f154bb704a",
@@ -1521,10 +1521,10 @@
         "size": 4068
       },
       {
-        "git_blob": "cd94fbf34e6a766536e36e2d18f43ba42834a799",
+        "git_blob": "fbdf3dcb0b99a1dd02797c38142364c9b6fea185",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/references/ENGINEERING-IDENTITY-BINDINGS.MD",
-        "sha256": "e322f024f5421707df6d0d86c438d3d75afca2a4ce7303fec1f6ae7c697196eb",
+        "sha256": "1d20c845c4d75cb0bf381cca75d4be8e0bdaf726e4c07b043a0b09c85d90d12f",
         "size": 1986
       },
       {
@@ -1591,11 +1591,11 @@
         "size": 1669
       },
       {
-        "git_blob": "1721f1a9e379bf39bdc6c2db087f8f51c81672d2",
+        "git_blob": "369155b79478322acad55582eb9c1a11f084d2bf",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/shared/common-rules.md",
-        "sha256": "c07384c0366113e9cb1a2d3462fccf26945ec85a095d80a5bca600a54c42b5f3",
-        "size": 6765
+        "sha256": "83753e0ca7a18b40a2ed687e1ff31bf5ffbb58eb85c50711a729ca916a387ebd",
+        "size": 6746
       },
       {
         "git_blob": "3408e3f024d697e8ec8db76110600adff03b4fba",
@@ -1766,11 +1766,11 @@
         "size": 12707
       },
       {
-        "git_blob": "aef2d3400a929f5d6e514fd109ae99646e5da457",
+        "git_blob": "d5ac9cd86d541dc2d060df6cb5c8f3a4fc44366f",
         "mode": "100644",
         "path": "src/knowledge/dotnet-backend/standards/coding-standards/test-standards.md",
-        "sha256": "8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea",
-        "size": 17630
+        "sha256": "6f9fd76a7c064d52132f074e829f138ef20f1952894b649f4b457af4b7c11f4c",
+        "size": 17637
       },
       {
         "git_blob": "8736e6972cd0f57473ce3e31574fa6aef8b5ea14",
@@ -1892,18 +1892,18 @@
         "size": 1512
       },
       {
-        "git_blob": "b2445bff1779b4451ff68177653b12423ab601eb",
+        "git_blob": "1d4f9b1a5ce585dddc1804cf6800b8c6187bd08e",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/README.md",
-        "sha256": "3b4cbf2135ac501a5d9849dafdb0d073957da40406ea076abe24f3715ea303d9",
-        "size": 3177
+        "sha256": "746fa7e049ccf824013ae1f685875d2271831d4f920f93b126fae1947dddd691",
+        "size": 3423
       },
       {
-        "git_blob": "cd52efe973d5f8ae9f7520da74b21edf20ee6b61",
+        "git_blob": "26fd1ee92b1089bffc4ea45b7f743176f7067e07",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/content-package.yaml",
-        "sha256": "63b74b16794affe7fd3f4a5bf4a96760d38411c6fcbbc17ce9c95e0cef3bc094",
-        "size": 12200
+        "sha256": "ddb1a0620f53b559446b3e48de608d96667f7c0da8493169dd5ce52d4b9bdfb7",
+        "size": 15708
       },
       {
         "git_blob": "ac8b661320adef1b3e9b92816cf1a6f112dd8d2b",
@@ -1934,11 +1934,11 @@
         "size": 1136
       },
       {
-        "git_blob": "3876fd02cc6a2c0b8e793a7b668b988f705279be",
+        "git_blob": "b40d0f07baf96c7c3ca29337d9fb5d5e0c9fe821",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/engineering-rule-catalog.yaml",
-        "sha256": "bb7a9fa703e336f7b4d693264f89d4f8ed91bb69517a2f509f5529e98ad6bb17",
-        "size": 13404
+        "sha256": "8664f2623acda3602040568aca0899771b10503f2f5d26a4633bd3274f08be01",
+        "size": 12795
       },
       {
         "git_blob": "b02abee2fbfafda2a6345f1ee4447055e75a79c8",
@@ -1983,11 +1983,18 @@
         "size": 3931
       },
       {
-        "git_blob": "9d34635b0d485957fdd28c970edd1db23ceda3bf",
+        "git_blob": "43f54370f81413bac4c89d47fb18edc0f2683aa8",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/references/CONTEXT-RESOURCE-OWNERSHIP.md",
+        "sha256": "d8bc093081c4202d7aa71e729898e8cbb41c0c93dc2933b7cffa0fbb192aa0f1",
+        "size": 3415
+      },
+      {
+        "git_blob": "756cd952c9f8d36dca51d2e0216f7091d7ae58a7",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/references/ENGINEERING-IDENTITY-CONTRACT.md",
-        "sha256": "7293eda5f64410ce212dc856f2a86bb7919636c4f42f8f9365b00a528a150562",
-        "size": 2809
+        "sha256": "b0d4fd1d3082952175f4d47e21a5b63f4f0f85d7c546b0f5698ea7c557b922f6",
+        "size": 2783
       },
       {
         "git_blob": "002671ffedcb1e361ff4daf5fd5d059afc1e9c9c",
@@ -2009,6 +2016,20 @@
         "path": "src/knowledge/engineering-common/references/PROMPT-PORTABILITY-RULES.md",
         "sha256": "00686dfb22c1c0e22df09758104e46748b855d5eb01f9328c927388267258f61",
         "size": 1721
+      },
+      {
+        "git_blob": "ec2eb31e5d1a6a6e850654e24fb6a0484328a432",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
+        "sha256": "e8bd218a2525e3cbf3b955e4b2ea9ccaf35d73fe5d6033a8566bdefbd7d67b83",
+        "size": 1940
+      },
+      {
+        "git_blob": "f466f11113983094960127e9e32d865b5468a50e",
+        "mode": "100644",
+        "path": "src/knowledge/engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md",
+        "sha256": "09654b188773c63a1dc806286e975787092a2c7fda1116b3a94a2a0ab0406922",
+        "size": 4092
       },
       {
         "git_blob": "2678764212101ecd678a813516706232db76a799",
@@ -2067,6 +2088,20 @@
         "size": 389
       },
       {
+        "git_blob": "509d49a4d4b417e4621e8e19c9f358510a048e51",
+        "mode": "100644",
+        "path": "src/profiles/sub-agents-claude.yaml",
+        "sha256": "cdcca1195540eb6425bcafad7666ab3d0e1b87c2c429c49a6281f535a9ce4e2e",
+        "size": 278
+      },
+      {
+        "git_blob": "a8629c5e2fb01e712feb5a2c4369545a946ca16e",
+        "mode": "100644",
+        "path": "src/profiles/sub-agents.yaml",
+        "sha256": "c5b5c5535674f77e809525c5248382d092f70cfa1b1c71ad7ad1a01a8e789692",
+        "size": 270
+      },
+      {
         "git_blob": "da6f69e37f506688e577c03a5f688d7149a5fd45",
         "mode": "100644",
         "path": "src/profiles/work-management.yaml",
@@ -2074,11 +2109,11 @@
         "size": 157
       },
       {
-        "git_blob": "50f5c6afd5e90ec5e2f15875c46ae4e3d1874cc2",
+        "git_blob": "a991cda1173954337c679162e9d9f5470a221940",
         "mode": "100644",
         "path": "src/skills/adr-author/SKILL.md",
-        "sha256": "b06093534d68277621bcd527fd9063f2f0104b8fbf82573da2e48d1fe26cb272",
-        "size": 1950
+        "sha256": "962ae12718f86d1d7f5b690745d89b80d7451540d8de0e0408a4d768909bb1ca",
+        "size": 2261
       },
       {
         "git_blob": "9828a0947685d4feeec0b38640d9d0f57392d85e",
@@ -2102,11 +2137,11 @@
         "size": 5245
       },
       {
-        "git_blob": "b6986be6402caed409a4dac1672eed586ce2d9fc",
+        "git_blob": "ea05772bb0b4204e2ca80185ca3e4a1a8f39dfb0",
         "mode": "100644",
         "path": "src/skills/adr-author/references/operations.md",
-        "sha256": "7cf60de7bc560c7be7fefc1dc399fb557882846818eca710a78f8a4375b73ee7",
-        "size": 10590
+        "sha256": "20c35161b927195278ff72407e93ea1cccd2509f51bdc298ce9c75d15f4211a4",
+        "size": 10410
       },
       {
         "git_blob": "a04631d81fac04fa2377e2d26605cf0dae248bb0",
@@ -2137,11 +2172,11 @@
         "size": 512
       },
       {
-        "git_blob": "2aa0ce2e3d000b8ab75d898026eff25d8894b2e1",
+        "git_blob": "660778f328791c862c365235a6f0f3a025953f7c",
         "mode": "100644",
         "path": "src/skills/ai-context-auditor/SKILL.md",
-        "sha256": "7d5eda3148ac3b0d792d1c36630b08a0ca17e7ef3f35559c7ca1631688369580",
-        "size": 1155
+        "sha256": "42782d9ef53f8ae24c07163c40c1b4cb11b125620a79185de42d62a3d6ee181a",
+        "size": 1690
       },
       {
         "git_blob": "9e12ba7273482de9ab45f8d9595fd8782dabe5fd",
@@ -2158,18 +2193,18 @@
         "size": 1459
       },
       {
-        "git_blob": "7c82beb61b00baa9ca197f7ad94bbd96a35b32e4",
+        "git_blob": "763d93a5829e6ffdf4d0461200191bdbac4dc168",
         "mode": "100644",
         "path": "src/skills/ai-context-governance/SKILL.md",
-        "sha256": "c0aad70a26e6395964d9f996971b0bbdda24a54cda487d76378217d35743d68e",
-        "size": 1312
+        "sha256": "1b6b4346a4c30b75ababcf39c5b57ac7f6a5237043c8bbad384df5146d7d8b34",
+        "size": 1988
       },
       {
-        "git_blob": "0498c6b52ed56708c787c08aa8547e06142c4d94",
+        "git_blob": "a5bd92c7053a17f158e3e90faeaac1d4df271d25",
         "mode": "100644",
         "path": "src/skills/ai-context-governance/references/maintenance.md",
-        "sha256": "d7a883c88ffca483e9669e3e748be27d9e0648112d77391d632d32b975d8804a",
-        "size": 11292
+        "sha256": "89d56e0848bb9efcbc3ec1efd7e83ee9e2c392f832f8da13a7a72115fc726e3a",
+        "size": 11749
       },
       {
         "git_blob": "02c7ee665ca1367db062a172b60bd17d601d554e",
@@ -2179,32 +2214,39 @@
         "size": 1450
       },
       {
-        "git_blob": "39f91c9eebd4bb4f7df56924eb7976542f6d06f5",
+        "git_blob": "3db4d2d2031e801a1318e75cb6c3ec0b4380f253",
         "mode": "100644",
         "path": "src/skills/ai-context-init/SKILL.md",
-        "sha256": "4c9ee9f43a2f5dc361071d5799864bb2cdcf188f69ed98137aab1e1c9ca42429",
-        "size": 1842
+        "sha256": "ffaac04deaf44577381324b7f2293e21ea589c8be1d6dbdc3afc455563ad6250",
+        "size": 2967
       },
       {
-        "git_blob": "04cd2aff508391a2d48ffb4db6903d3d8ccbc5bb",
+        "git_blob": "008c1997a65bad39327c873a806bc28fd2cf8dfe",
         "mode": "100644",
         "path": "src/skills/ai-context-init/references/initialize.md",
-        "sha256": "d7220d8004ae2135896cab73f61386884fcd1e6b5f07a9c807d55a4e6e0fae00",
-        "size": 6405
+        "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
+        "size": 11501
       },
       {
-        "git_blob": "1b6599bbe48113825f9f24eb2b11703cc0547c4e",
+        "git_blob": "defbb6c0f7220bc4a068367fe82d88bd7fcc15b0",
         "mode": "100644",
         "path": "src/skills/ai-context-init/references/project-structure.md",
-        "sha256": "7d8f1753073105de1cdab0f345103b8130169144e6f9345c4aefef742e3c6fb6",
-        "size": 3251
+        "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
+        "size": 4135
       },
       {
-        "git_blob": "67eaec8b067b74f79e056b792d18e393febbacba",
+        "git_blob": "24834cafe29dadaa34a6420e3313929d8191fe9a",
         "mode": "100644",
         "path": "src/skills/ai-context-init/skill-package.yaml",
-        "sha256": "652d342c0385bfb57b1bcda87f9481a6db6f2f9146d8eff19a497a1221f9d5f7",
-        "size": 1778
+        "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+        "size": 1915
+      },
+      {
+        "git_blob": "9cd093dc613f7adb53857dbfa0b33fa339572388",
+        "mode": "100644",
+        "path": "src/skills/ai-context-init/templates/ai-collaboration.md",
+        "sha256": "d115949f90921d903cfb46f88debb7ea4f518320d7a115ad6f817c9ee122ee00",
+        "size": 5171
       },
       {
         "git_blob": "54e3bab3445d8467b6449b8e39df91396cb9c54a",
@@ -2214,32 +2256,46 @@
         "size": 834
       },
       {
-        "git_blob": "ea4d323e1b41b3f1f1baf88473b35778272f08fd",
+        "git_blob": "c1500b0c9d62613bb8c1cfcc69bac4fe2d39e0b3",
+        "mode": "100644",
+        "path": "src/skills/ai-context-init/templates/first-task.md",
+        "sha256": "280f6e799f28feafd942ae8bdb72076c66750dad1eb6a563d3a6da83718711d1",
+        "size": 3342
+      },
+      {
+        "git_blob": "61425433f3f600dc47df926ed830effdf27e44a1",
         "mode": "100644",
         "path": "src/skills/ai-context-init/templates/project-config.template.yaml",
-        "sha256": "3ba0b4207d2d43cd33314893a33c170f268f15a4f0c500703417c0a4f6f4a010",
-        "size": 920
+        "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
+        "size": 1059
       },
       {
-        "git_blob": "588876a8ce6f2e23aca4c48c32c58ccb8f430ca8",
+        "git_blob": "884ee7a34698a1a759884fbdcb254cbc0dcce41a",
+        "mode": "100644",
+        "path": "src/skills/ai-context-init/templates/project-context.md",
+        "sha256": "906a823b3202e0423711a52951f924d7e9a25be0d776e0bd5d6691f4d7b5e7ec",
+        "size": 2572
+      },
+      {
+        "git_blob": "749e7eea2236b5ea60297e236537a69cf1a5c9c9",
         "mode": "100644",
         "path": "src/skills/ai-context-init/templates/public-catalogs/dev/INDEX.md",
-        "sha256": "45841095a122fd2623c153f0ea1608346e9892563a0f2157f659ba69a64de4dc",
-        "size": 395
+        "sha256": "099c0a0e35a8ae26a785cb061d7d92466bd32d723fa865bf845cecf99a600064",
+        "size": 636
       },
       {
-        "git_blob": "c66cc2415d59200440099f3c6d4aa1b99a3888d0",
+        "git_blob": "d7a14c67912fb793cabf0468e88eccbb66156b7c",
         "mode": "100644",
         "path": "src/skills/ai-context-init/templates/public-catalogs/dev/README.MD",
-        "sha256": "eb0b87d3dfe43df798795096b5fcdbd24aca590adb6b4efeb203c43be80c4f24",
-        "size": 478
+        "sha256": "365f59a215e0fd75f57567434c721f76ffd456447e270796ddaf0cd17074eb8d",
+        "size": 808
       },
       {
-        "git_blob": "d8e9f183def05ff31e94e5d48c4db0a41e44bfbc",
+        "git_blob": "dec2ed7059a50bf498d08af09503f4313f8d73d1",
         "mode": "100644",
         "path": "src/skills/ai-context-init/templates/public-root/AGENTS.md",
-        "sha256": "7216f92eecba326530a0440fe7e9305e74131fd04d9257b3821b2b03c1a05b94",
-        "size": 3571
+        "sha256": "4a330f20585273b3607842d23bf678b2814cdea8147de682adf900e4eaf7e6f5",
+        "size": 4219
       },
       {
         "git_blob": "c63fcb8c22ff7643f8272fbddc231e3c5db5c035",
@@ -2249,11 +2305,11 @@
         "size": 170
       },
       {
-        "git_blob": "d56fc6e1969b2dd7aaba3097c72b5f7fe307b898",
+        "git_blob": "c98a82ad783c4c7da2b96bce0dee475a5587e32b",
         "mode": "100644",
         "path": "src/skills/ai-context-init/templates/public-root/README.md",
-        "sha256": "54ad0d6b48e089a98d25f6a5d3ae118cca18a100317d29c19fad8372e4424429",
-        "size": 906
+        "sha256": "8c170cd0c358541d5483d29ab1bb0ea93cd9f6af9068604241aaedac352c7d7c",
+        "size": 1146
       },
       {
         "git_blob": "668f346d6258fef06bbdad4bd686376aa806bc64",
@@ -2263,11 +2319,11 @@
         "size": 593
       },
       {
-        "git_blob": "2dd8f905e0ec9b65ca32e29f1062c7b2614e6108",
+        "git_blob": "d0de71981c4e1a7b808240d95325d2fe04ffcec8",
         "mode": "100644",
         "path": "src/skills/bdd-gwt-test-designer/SKILL.md",
-        "sha256": "408f4333b9716f373f1341793ebaa121451e1fb861e0858b44619f687a047dca",
-        "size": 1584
+        "sha256": "dc3beee8d47ab3e2c78dac16d78ddf410af27ebeac8486b0e005ca1270d15cf2",
+        "size": 1914
       },
       {
         "git_blob": "41cbf482ad4d1b612cb1236597cd1fbbec6aa5df",
@@ -2291,11 +2347,11 @@
         "size": 2009
       },
       {
-        "git_blob": "98ee1df26bf488a3a77589436b5bcb02311ae127",
+        "git_blob": "3a15a5884ce5e2f9b2d806bbb01be68895e657d0",
         "mode": "100644",
         "path": "src/skills/code-reviewer/SKILL.md",
-        "sha256": "a48c9efa36cf893c0bc5fed93ce84598b7e75149b4e87858b7b99620f9dbcfd0",
-        "size": 1649
+        "sha256": "de8df9f0167890a6a24ddce5ea371ca0bbffca30b6fc56e0c5ced275cd5ae447",
+        "size": 2040
       },
       {
         "git_blob": "ba48290f7df75faaf22b865394b005c883db378e",
@@ -2340,11 +2396,11 @@
         "size": 2265
       },
       {
-        "git_blob": "db665e63540a79af3c5e5ab91e9d9d309b2e7997",
+        "git_blob": "6ade5c42b11c42d53df3e40b741aecd9943d1fd0",
         "mode": "100644",
         "path": "src/skills/diagnostic-analyst/SKILL.md",
-        "sha256": "41ea28386a84941cb58f8a79e0965a1f6197233548b18e4fee53faf7b2cae2aa",
-        "size": 1017
+        "sha256": "cd158d43e3f12db1b9f7959c7f7fdf4960a6dd1aaf2d1d6631bf92b418a6d63c",
+        "size": 1341
       },
       {
         "git_blob": "d833c3a86aced1dd36a04d120956cdbec00a52a7",
@@ -2361,11 +2417,11 @@
         "size": 1075
       },
       {
-        "git_blob": "40071f0fba62c655cd67536e5b41d2749008094e",
+        "git_blob": "6917244f9c6f17f405fdeef87b4cd9aeeb91ce33",
         "mode": "100644",
         "path": "src/skills/lesson-author/SKILL.md",
-        "sha256": "96ba3b0c22458ff4ebef2fbbfc770a595f2398c6e245572e1945fd0e0527d34b",
-        "size": 1713
+        "sha256": "ec9aab1b880726c0c2ad2179e903463eb292b4947c988deaa102f1804bec6ba1",
+        "size": 2037
       },
       {
         "git_blob": "36e61a8a426671f0ab37a7ff5a6465603d57a44e",
@@ -2382,11 +2438,11 @@
         "size": 5028
       },
       {
-        "git_blob": "2fbe961898a72bb8c753b02b4035a8095a067675",
+        "git_blob": "6cb8a2d56b1b7954fc21849be491ec49fc0a63a2",
         "mode": "100644",
         "path": "src/skills/lesson-author/references/operations.md",
-        "sha256": "702d953102db772a7dca631e3f05eefab3b7c47c5c303e3040fe32de0171997d",
-        "size": 10852
+        "sha256": "f7f136355337b5da11fb702b58718554cec819986c829a68a93047dac6fd74dc",
+        "size": 10672
       },
       {
         "git_blob": "7763615e0a654825e6936a7dfebad3163a657f6a",
@@ -2480,18 +2536,18 @@
         "size": 204
       },
       {
-        "git_blob": "ebdd9cd9aadbd0adffda6f6a81883080f00342e4",
+        "git_blob": "c0b0cc2a7cee94f88760588a9efb5cfa68727df5",
         "mode": "100644",
         "path": "src/skills/local-change-implementer/SKILL.md",
-        "sha256": "d26f17b90239157fa6d231f64d6f753a40e1b239cbab30156cb96599aaad0445",
-        "size": 1404
+        "sha256": "6d18c7209fbc740bacd088600f5dafec8dfd52d80e555fb3396462dedbe0e1b5",
+        "size": 1708
       },
       {
-        "git_blob": "f4b1b3a9c01db83b8abe87744a5133d499fa8310",
+        "git_blob": "346c15fbf6a201a2e9594e9f9cf2261c2f86786b",
         "mode": "100644",
         "path": "src/skills/local-change-implementer/references/implement.md",
-        "sha256": "780ca40d00d251cdbea73a513a5d975295b7a4124d1874082d51b41195cf6630",
-        "size": 8223
+        "sha256": "932de795e2508947e41c714683685bc6f7a807b254329e4ca5232080248d5488",
+        "size": 8396
       },
       {
         "git_blob": "ee0c56f7f9012d1b3964fcf2aea7ec2c30787b7a",
@@ -2501,11 +2557,11 @@
         "size": 1864
       },
       {
-        "git_blob": "78a1ef2f198cc21d9e8c403136c345c3e7bee203",
+        "git_blob": "052c360188916a9d9f9d7b0c26ba25d1d750a3c9",
         "mode": "100644",
         "path": "src/skills/pr-author/SKILL.md",
-        "sha256": "fee58e449d31611c60b891421d36f0d1ac19d14a83a132baeaa5bd1d6d61b14b",
-        "size": 1630
+        "sha256": "ed609a3ecbdfd908977a4544d48fbc0ed1bed6c447a8a43531895152034013ac",
+        "size": 1980
       },
       {
         "git_blob": "444ac3528d6ab80cd5d40163e15a6ee9d570a11c",
@@ -2571,11 +2627,11 @@
         "size": 162
       },
       {
-        "git_blob": "f750615d89f134e91165beecefcca77fe6783c47",
+        "git_blob": "be03ccc1379c89d9b5e98bc2d9b044b514f67174",
         "mode": "100644",
         "path": "src/skills/problem-frame-author/SKILL.md",
-        "sha256": "afb8692260f704506a7067ae8d9c1acde629adc4dcd83da95032cc2227c19fd1",
-        "size": 2021
+        "sha256": "4625ec9bb739e3beb7c95563cf7d5ec25f25398156d18d43a7835c940727772b",
+        "size": 2363
       },
       {
         "git_blob": "807b45ee70044aade36d735f20b1fa030df9cd08",
@@ -2676,11 +2732,11 @@
         "size": 1520
       },
       {
-        "git_blob": "a68baa161d8db9ef340f8ca18a15158a3323225a",
+        "git_blob": "37a1c3bbb2f0635702000e942e058b99830b5fde",
         "mode": "100644",
         "path": "src/skills/slice-implementer/SKILL.md",
-        "sha256": "7fb7542531e36732eea61fb73871c826e4e3a11878dc17afe171c5ec5df26b9c",
-        "size": 1647
+        "sha256": "4db337db49f9dad81d868a61edd088365637b3b757d71fde91ffa8a0b68ccba0",
+        "size": 1994
       },
       {
         "git_blob": "396bf271c8f0ec3d51c859976b1071ae12c829b5",
@@ -2746,11 +2802,11 @@
         "size": 1645
       },
       {
-        "git_blob": "ac92d7a9d95fa241e67074cc1273855b33416578",
+        "git_blob": "dfdfec28727f3ef211e8261707175f448fd5abb5",
         "mode": "100644",
         "path": "src/skills/software-development-orchestrator/references/orchestrate.md",
-        "sha256": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
-        "size": 7282
+        "sha256": "332df2bd353bb4649508f254030fd848376cf8142e3923b4de1657fab6383f83",
+        "size": 7490
       },
       {
         "git_blob": "f81fbedf920315eadd3e746d90e0a811257364b6",
@@ -2823,11 +2879,11 @@
         "size": 1697
       },
       {
-        "git_blob": "78da54328dd7cc4c85ff6314f634b7768e72f22d",
+        "git_blob": "6b49026eb666a9e1cee48c7dcb4ceb920ecea568",
         "mode": "100644",
         "path": "src/skills/spec-compliance-validator/SKILL.md",
-        "sha256": "06a009d4913f3a540ce5005283e003c009ecf30503c5fd5abad9ea4c69c32637",
-        "size": 1789
+        "sha256": "fa46d0e3ce024b3aeb74ea5ed1ae4bd21f3bf60ff8cfa23668d9b02ec90e1a67",
+        "size": 2158
       },
       {
         "git_blob": "703761c43bdad0af917e1adb98c70a3ab37833fb",
@@ -2865,31 +2921,234 @@
         "size": 1749
       },
       {
-        "git_blob": "4340d53ea763841a67589f77db1df01df7f600f9",
+        "git_blob": "947c15a1f220b1950d9f0e974d77a3084de08165",
+        "mode": "100644",
+        "path": "src/sub-agents/context-translator/references/translation-playbook.md",
+        "sha256": "3616b93e6507b704754546311960cc51edfc4f476861759ead6b4bd33cda52e2",
+        "size": 1806
+      },
+      {
+        "git_blob": "81e4c3a5e67b43ecb7959da287a672f6fcc11bcb",
+        "mode": "100644",
+        "path": "src/sub-agents/context-translator/runtime/claude.md",
+        "sha256": "95f9fe69c6942600c03161309afa3f5c3284cc41ded92651a80fb6590496a20d",
+        "size": 1351
+      },
+      {
+        "git_blob": "5082f7e792bbe33f6b8fea4b229ec85b829a177f",
+        "mode": "100644",
+        "path": "src/sub-agents/context-translator/runtime/codex.toml",
+        "sha256": "4798bb2557ebb1ac391b31d13522064481d22df27bf6568b14ebe1719d70f466",
+        "size": 1231
+      },
+      {
+        "git_blob": "87e058e880b20833bdc1dd3d4b9e98c8535c30ea",
+        "mode": "100644",
+        "path": "src/sub-agents/context-translator/sub-agent-package.yaml",
+        "sha256": "6a0182b92ea883b12ec9552f6a5dea0bc74d496db3ebfe3922badec0642ff181",
+        "size": 267
+      },
+      {
+        "git_blob": "1f10d38c5c8fc2daa4b98522d180d83bf2758c0a",
+        "mode": "100644",
+        "path": "src/sub-agents/context-translator/sub-agent.yaml",
+        "sha256": "1aa93f6478154c9dbf061747792bacdd1fd66ddd36b0c53b9eb1bb73fe9c1c98",
+        "size": 2509
+      },
+      {
+        "git_blob": "ed7780e00162736a0a2ddab0410012de86f29f6d",
+        "mode": "100644",
+        "path": "src/sub-agents/evidence-report-synthesizer/references/evidence-report-synthesis-playbook.md",
+        "sha256": "4eec5a101253c6d1843b183cb30bd708df502dae88bcd4ff93a5a5a9dd8bf12d",
+        "size": 983
+      },
+      {
+        "git_blob": "65925c98b4f0970ba1765c0c880c91fe286c6d6e",
+        "mode": "100644",
+        "path": "src/sub-agents/evidence-report-synthesizer/runtime/claude.md",
+        "sha256": "4f3abfa996b5e4610aa3d0ce25861142db391251b6d7cbd171c4182bff0d12cc",
+        "size": 2358
+      },
+      {
+        "git_blob": "dd64f076480fe142aff681c4d8d79bc624005f93",
+        "mode": "100644",
+        "path": "src/sub-agents/evidence-report-synthesizer/runtime/codex.toml",
+        "sha256": "0e5d8a0b84947a7c70bbf963e02d0df4611506ff9cf4ef38d942ef35047ae581",
+        "size": 1930
+      },
+      {
+        "git_blob": "045aba33e66a356dacc8e5617b0c2b90b2083d3e",
+        "mode": "100644",
+        "path": "src/sub-agents/evidence-report-synthesizer/sub-agent-package.yaml",
+        "sha256": "3b0b316b10df3239b11aaf9b61e5a27029ed703a23eaa121d180aa6491753544",
+        "size": 290
+      },
+      {
+        "git_blob": "9079955989fc37ff8e0cb115f113c0c1c1bec74a",
+        "mode": "100644",
+        "path": "src/sub-agents/evidence-report-synthesizer/sub-agent.yaml",
+        "sha256": "ea0b2145b25fc34a3d777ce9048b20cba293b5a735e54236ac373732b4fbf7db",
+        "size": 2421
+      },
+      {
+        "git_blob": "d27f082635e542122e918e9a8d3233d520381a6b",
+        "mode": "100644",
+        "path": "src/sub-agents/fixed-head-independent-auditor/references/fixed-head-independent-audit-playbook.md",
+        "sha256": "104429ed97134c093b4a78957536659628a73e39b4b6c76f820e33e287c8cc13",
+        "size": 2489
+      },
+      {
+        "git_blob": "0e05ba61d79aa8d5c444521aaa2be13cb166065a",
+        "mode": "100644",
+        "path": "src/sub-agents/fixed-head-independent-auditor/runtime/claude.md",
+        "sha256": "4aeba595a1febf30189ad753db03fc870810a9646ce44e50b6133835c52dcd20",
+        "size": 3472
+      },
+      {
+        "git_blob": "be02f61da09597c3e8d300c37ff8c81bab203712",
+        "mode": "100644",
+        "path": "src/sub-agents/fixed-head-independent-auditor/runtime/codex.toml",
+        "sha256": "1c56106bdd1f3f35e64bfa0e7035c20f6ac90079913267c02aa65c9e8c0c8046",
+        "size": 3044
+      },
+      {
+        "git_blob": "7e1cd5a4d34305b305c476e148302eddcfb365c2",
+        "mode": "100644",
+        "path": "src/sub-agents/fixed-head-independent-auditor/sub-agent-package.yaml",
+        "sha256": "d7cdf340fd148b2369ab94edf721c71fc96b53262c7c4d60dc6aa7972e3a6955",
+        "size": 296
+      },
+      {
+        "git_blob": "6eb7a2bb4c655d00bc7bdfcaa1c863a213f1de2c",
+        "mode": "100644",
+        "path": "src/sub-agents/fixed-head-independent-auditor/sub-agent.yaml",
+        "sha256": "dcb54b35999184834aafa89a619a7c49852ccdbe033349c6aff2edffcd9bc084",
+        "size": 3532
+      },
+      {
+        "git_blob": "63a1c1746f8bbababd92fba6cfb73154300f68bf",
+        "mode": "100644",
+        "path": "src/sub-agents/mechanical-evidence-worker/references/mechanical-evidence-playbook.md",
+        "sha256": "fdbeb19178d83ee6bf2c40ec95bc4310ecfcb1508a00482fe40297c7d7d001ab",
+        "size": 949
+      },
+      {
+        "git_blob": "c657ee4e02ceff0916bdb9ef69b9c85039a57c0b",
+        "mode": "100644",
+        "path": "src/sub-agents/mechanical-evidence-worker/runtime/claude.md",
+        "sha256": "8297329e44d129a83a38f24413da6ca841aef2458f172dc03c2e462c9220bfdf",
+        "size": 5072
+      },
+      {
+        "git_blob": "d087e6e521b54149e3f42382278aa6f5fc5e2840",
+        "mode": "100644",
+        "path": "src/sub-agents/mechanical-evidence-worker/runtime/codex.toml",
+        "sha256": "c4f7204ada42eeb9874c58de2482a6e3bce48f217098f886f2fa974d232f8c0a",
+        "size": 4644
+      },
+      {
+        "git_blob": "301661e223eb1b593644ea0fdf7725d1443966b4",
+        "mode": "100644",
+        "path": "src/sub-agents/mechanical-evidence-worker/sub-agent-package.yaml",
+        "sha256": "21a9b17d240f9300bf028b04ced4f916c051d0b596b9eb206353b2c0ddf6daac",
+        "size": 283
+      },
+      {
+        "git_blob": "0e5024ca0213c952bada9d225fe4be3765b79473",
+        "mode": "100644",
+        "path": "src/sub-agents/mechanical-evidence-worker/sub-agent.yaml",
+        "sha256": "357512fbf9416dfa83a61e83f51c5e7afc1866bae8dae3e5f982443f2fdf4ada",
+        "size": 2399
+      },
+      {
+        "git_blob": "3dae1314efa19bc4a55a96c31662c8e4661abc36",
+        "mode": "100644",
+        "path": "src/sub-agents/reconciliation-worker/references/reconciliation-playbook.md",
+        "sha256": "2fe1beaef86d90a42587d7e649e1da264eba1dbacdfeeec16f3e5a7d970fe92a",
+        "size": 809
+      },
+      {
+        "git_blob": "0974776366ff5f4a69879fe946a5755c1dfa3526",
+        "mode": "100644",
+        "path": "src/sub-agents/reconciliation-worker/runtime/claude.md",
+        "sha256": "6494207c8dd9b052c22bd24d9f8a3e7886fc3430bffdc5bbc8f76df1320f590f",
+        "size": 2434
+      },
+      {
+        "git_blob": "c4014b2b03a6c5c0bbe7494c2dd1523c0be242b9",
+        "mode": "100644",
+        "path": "src/sub-agents/reconciliation-worker/runtime/codex.toml",
+        "sha256": "ad8cddf10f704c72561d7340ec979f2b21668b1e74678f447dcf53b676e06ab5",
+        "size": 2006
+      },
+      {
+        "git_blob": "67222ed974086e03069cd2a748770421eb71fc32",
+        "mode": "100644",
+        "path": "src/sub-agents/reconciliation-worker/sub-agent-package.yaml",
+        "sha256": "2a337db39b697497d84661a70e81b8b635262e583220f23a66710984b44f4b7e",
+        "size": 273
+      },
+      {
+        "git_blob": "c06cc4f883c84a406e494eee82ba2c666fdbb04c",
+        "mode": "100644",
+        "path": "src/sub-agents/reconciliation-worker/sub-agent.yaml",
+        "sha256": "cac713df7ae620e36c9063848884bec84faf18f3cf584604546ac6a2621f8099",
+        "size": 2299
+      },
+      {
+        "git_blob": "7fb8211d1b45e40f5318dbabfeba89002f715085",
+        "mode": "100644",
+        "path": "src/sub-agents/semantic-governance-analyst/references/semantic-governance-analysis-playbook.md",
+        "sha256": "3ee75ecf5728ba7a765d3a8397922b26604b4797aaf0ea5a01b92ebfb47b1d40",
+        "size": 912
+      },
+      {
+        "git_blob": "359bb91d6399c0a6306246b6d7c9957b1837a739",
+        "mode": "100644",
+        "path": "src/sub-agents/semantic-governance-analyst/runtime/claude.md",
+        "sha256": "9696346674d9b940ce0dc23cfdbe9c0e10d73bcf33955032a6c522e6b2a6dcbd",
+        "size": 2417
+      },
+      {
+        "git_blob": "0523106295745386c5df93e7ad47c1bdba53fa17",
+        "mode": "100644",
+        "path": "src/sub-agents/semantic-governance-analyst/runtime/codex.toml",
+        "sha256": "ccf5f8ecfe41c00b79f013ff31d66053e3d4e76384ed8568e1f9f36164029254",
+        "size": 1989
+      },
+      {
+        "git_blob": "2e36aa7ca467611e568db7624f0121e66e7881b2",
+        "mode": "100644",
+        "path": "src/sub-agents/semantic-governance-analyst/sub-agent-package.yaml",
+        "sha256": "33f5d9525d109b64e84a114093efdd947166a522ce26ec158ea83972aa03d0a3",
+        "size": 293
+      },
+      {
+        "git_blob": "f767e573adac26b133772c35946f9cc83a22c9e5",
+        "mode": "100644",
+        "path": "src/sub-agents/semantic-governance-analyst/sub-agent.yaml",
+        "sha256": "65d73a83466205a0b2b4a9c7e4237154a41525dc7ad171291fbb7293ffda0eea",
+        "size": 2413
+      },
+      {
+        "git_blob": "9b9d6971b618db50d83e1785373ef6cb95031175",
+        "mode": "100644",
+        "path": "src/tools/derive-subset.py",
+        "sha256": "169d75ec5bfde50d05684ffa107def94f627ff7aa7db2efc9d233361a1f62dd2",
+        "size": 13523
+      },
+      {
+        "git_blob": "3bbeff4c327073d2b26cdaf8403de9b228e5e7b0",
         "mode": "100644",
         "path": "src/tools/maintain_framework.py",
-        "sha256": "9ae08387cf8875118005ef8cefd4e90e50a9f95f939efef739047404880ec82b",
-        "size": 14624
+        "sha256": "1fd876785bd99fd8d8055d664b1909c6067a3f186453257e2c524dbc1ce3d24f",
+        "size": 14606
       },
       {
-        "git_blob": "7c3821e42196a19556fcd4a64927a933f109e9e3",
+        "git_blob": "1bf219e5ce7a3f4414dcb953759123d533c37fd5",
         "mode": "100644",
-        "path": "tools/build-catalog.py",
-        "sha256": "0c15bfc93f914c3d7d24fd143c9d2e595f48346920b0b55bd6883e0dfcd86c46",
-        "size": 4103
-      },
-      {
-        "git_blob": "8d07bec2ea85f403677e86624d1be7bf67fa68fe",
-        "mode": "100644",
-        "path": "tools/derive-subset.py",
-        "sha256": "21de13c42d411598d435adbae54e4e57a6a1c62dd50a7a02a026c12bd33b6566",
-        "size": 5086
-      },
-      {
-        "git_blob": "2c5418e030693c607fd0c84e7eca814e98350940",
-        "mode": "100644",
-        "path": "tools/reinstall-framework.py",
-        "sha256": "6c59ddd2fc2ff97d2f3712ff85bf47f710a641782ff67bcb8043a0b41bfe208e",
+        "path": "src/tools/reinstall-framework.py",
+        "sha256": "984103e3e45a26ee4100bcf2558758b4cd14a39c6d8fda1b5d016e620afca689",
         "size": 2960
       }
     ],
@@ -3175,10 +3434,13 @@
           "operations/RUNBOOK-GUIDE.MD",
           "references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md",
           "references/AUTHORING-BOUNDARY-CONTRACT.md",
+          "references/CONTEXT-RESOURCE-OWNERSHIP.md",
           "references/ENGINEERING-IDENTITY-CONTRACT.md",
           "references/GWT-TEST-HANDOFF-CONTRACT.md",
           "references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md",
-          "references/PROMPT-PORTABILITY-RULES.md"
+          "references/PROMPT-PORTABILITY-RULES.md",
+          "references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
+          "references/TECHNOLOGY-SELECTION-POLICY.md"
         ],
         "metadata": "content-package.yaml",
         "metadata_version": 1,
@@ -3242,8 +3504,11 @@
           "references/initialize.md",
           "references/project-structure.md",
           "skill-package.yaml",
+          "templates/ai-collaboration.md",
           "templates/architecture.md",
+          "templates/first-task.md",
           "templates/project-config.template.yaml",
+          "templates/project-context.md",
           "templates/public-catalogs/dev/INDEX.md",
           "templates/public-catalogs/dev/README.MD",
           "templates/public-root/AGENTS.md",
@@ -3255,7 +3520,7 @@
         "metadata_version": 3,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.1.0"
+        "version": "0.2.0"
       },
       {
         "id": "bdd-gwt-test-designer",
@@ -3561,6 +3826,102 @@
         "optional_dependencies": [],
         "required_dependencies": [],
         "version": "0.1.0"
+      },
+      {
+        "id": "context-translator",
+        "kind": "sub-agent",
+        "members": [
+          "references/translation-playbook.md",
+          "runtime/claude.md",
+          "runtime/codex.toml",
+          "sub-agent-package.yaml",
+          "sub-agent.yaml"
+        ],
+        "metadata": "sub-agent-package.yaml",
+        "metadata_version": 1,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.1.0"
+      },
+      {
+        "id": "evidence-report-synthesizer",
+        "kind": "sub-agent",
+        "members": [
+          "references/evidence-report-synthesis-playbook.md",
+          "runtime/claude.md",
+          "runtime/codex.toml",
+          "sub-agent-package.yaml",
+          "sub-agent.yaml"
+        ],
+        "metadata": "sub-agent-package.yaml",
+        "metadata_version": 1,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.1.0"
+      },
+      {
+        "id": "fixed-head-independent-auditor",
+        "kind": "sub-agent",
+        "members": [
+          "references/fixed-head-independent-audit-playbook.md",
+          "runtime/claude.md",
+          "runtime/codex.toml",
+          "sub-agent-package.yaml",
+          "sub-agent.yaml"
+        ],
+        "metadata": "sub-agent-package.yaml",
+        "metadata_version": 1,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.1.0"
+      },
+      {
+        "id": "mechanical-evidence-worker",
+        "kind": "sub-agent",
+        "members": [
+          "references/mechanical-evidence-playbook.md",
+          "runtime/claude.md",
+          "runtime/codex.toml",
+          "sub-agent-package.yaml",
+          "sub-agent.yaml"
+        ],
+        "metadata": "sub-agent-package.yaml",
+        "metadata_version": 1,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.1.0"
+      },
+      {
+        "id": "reconciliation-worker",
+        "kind": "sub-agent",
+        "members": [
+          "references/reconciliation-playbook.md",
+          "runtime/claude.md",
+          "runtime/codex.toml",
+          "sub-agent-package.yaml",
+          "sub-agent.yaml"
+        ],
+        "metadata": "sub-agent-package.yaml",
+        "metadata_version": 1,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.1.0"
+      },
+      {
+        "id": "semantic-governance-analyst",
+        "kind": "sub-agent",
+        "members": [
+          "references/semantic-governance-analysis-playbook.md",
+          "runtime/claude.md",
+          "runtime/codex.toml",
+          "sub-agent-package.yaml",
+          "sub-agent.yaml"
+        ],
+        "metadata": "sub-agent-package.yaml",
+        "metadata_version": 1,
+        "optional_dependencies": [],
+        "required_dependencies": [],
+        "version": "0.1.0"
       }
     ],
     "generator": {
@@ -3602,11 +3963,11 @@
           "size": 11564
         },
         {
-          "git_blob": "7bf614ecda073a2a320bf64a9e07fc981661d494",
+          "git_blob": "2e765101e7264f773c7c695a5cb007642686c029",
           "mode": "100644",
           "path": "src/distribution/catalog.py",
-          "sha256": "c89aeeec72cda95abab4bee20311d3bfb47d0aa05f3c31b80962c1954224814e",
-          "size": 34929
+          "sha256": "5b2853de712d04e2cc3a34437d4d22e0869e7cf7d75904e5a9524cc9861d65e4",
+          "size": 38404
         },
         {
           "git_blob": "db306ef1659af6f406284df3c1ba2f83aa9823d7",
@@ -3623,32 +3984,32 @@
           "size": 7955
         },
         {
-          "git_blob": "4aa0f1366e92d1574cff0407bc145ce4a9f5b43a",
+          "git_blob": "907320717317a90afe21e79a1bd82ecc1338d7e3",
           "mode": "100644",
           "path": "src/distribution/content.py",
-          "sha256": "d79ba189e31073d28617d9afab44cb6adaaece9103811abf110257558ef7e202",
-          "size": 13858
+          "sha256": "2923bad9c9867cceb62e2c1ac0d3e551e8d52eb5da68012bbc006d6c893a3dce",
+          "size": 23040
         },
         {
-          "git_blob": "28313e259959973478c83cc22be68737dc96176e",
+          "git_blob": "3c93d33b70caaaac1429f1f060ae5fd77810e8c0",
           "mode": "100644",
           "path": "src/distribution/contracts.py",
-          "sha256": "394e43f38e08cf10ed51cb6ec9c9a41887c4309ff7db63ee97c7cbb87e3c4fa2",
-          "size": 27740
+          "sha256": "4d4c9e3b7da68496dc8c9834882049c913fc9afdf45dc150083989329a58e3a5",
+          "size": 34270
         },
         {
-          "git_blob": "0a76808c0574daca9a41aeb1dd39db2ce0add5f6",
+          "git_blob": "38332e2c55bec156e81f0dab68e298b61b52eda7",
           "mode": "100644",
           "path": "src/distribution/data.py",
-          "sha256": "4045d5e5d0c7dd0d95cc2aa5b8a797a9ae25864496793a50cf9a9dd67de6740f",
-          "size": 9518
+          "sha256": "e1d7cb316d516e8ddaa5a85bf67c497a48e1dc306fefd4f17b9613142d1b9485",
+          "size": 9539
         },
         {
-          "git_blob": "3f7c8b0535e62e2b89565040e7fa538cddebf04f",
+          "git_blob": "71a7c01d065a232e0bcd7ed9d862ae7527433c91",
           "mode": "100644",
           "path": "src/distribution/git_source.py",
-          "sha256": "86566f80da65c46ea5241d215799fce7894eed3d0ea7133ab921556da42dc030",
-          "size": 7489
+          "sha256": "87eda8d137c501012743972441af13d154d8ea6d7adc010790f2da0eb96d4af7",
+          "size": 7386
         },
         {
           "git_blob": "69841ca4f17fdf921260b0e8e849714145024312",
@@ -3672,11 +4033,11 @@
           "size": 25714
         },
         {
-          "git_blob": "254c9e4c23f22997e09ede2b66f9831fc98d4f40",
+          "git_blob": "02f44633d95f61fbe0bf2bd7045f2272f7eb2b3e",
           "mode": "100644",
           "path": "src/distribution/installation_state.py",
-          "sha256": "46d9e726b64690061b2defcbf174c9624b595b2f9843ae5a5ca01f44211309c6",
-          "size": 58167
+          "sha256": "f1899faaa68da25af5f8e2bf380c2138ca2e3de0d085c616a607bbbb2fc6e13a",
+          "size": 58261
         },
         {
           "git_blob": "d6bdb5147678d62580cdbb392c2c9cae53877298",
@@ -3707,31 +4068,24 @@
           "size": 8608
         },
         {
-          "git_blob": "4340d53ea763841a67589f77db1df01df7f600f9",
+          "git_blob": "9b9d6971b618db50d83e1785373ef6cb95031175",
+          "mode": "100644",
+          "path": "src/tools/derive-subset.py",
+          "sha256": "169d75ec5bfde50d05684ffa107def94f627ff7aa7db2efc9d233361a1f62dd2",
+          "size": 13523
+        },
+        {
+          "git_blob": "3bbeff4c327073d2b26cdaf8403de9b228e5e7b0",
           "mode": "100644",
           "path": "src/tools/maintain_framework.py",
-          "sha256": "9ae08387cf8875118005ef8cefd4e90e50a9f95f939efef739047404880ec82b",
-          "size": 14624
+          "sha256": "1fd876785bd99fd8d8055d664b1909c6067a3f186453257e2c524dbc1ce3d24f",
+          "size": 14606
         },
         {
-          "git_blob": "7c3821e42196a19556fcd4a64927a933f109e9e3",
+          "git_blob": "1bf219e5ce7a3f4414dcb953759123d533c37fd5",
           "mode": "100644",
-          "path": "tools/build-catalog.py",
-          "sha256": "0c15bfc93f914c3d7d24fd143c9d2e595f48346920b0b55bd6883e0dfcd86c46",
-          "size": 4103
-        },
-        {
-          "git_blob": "8d07bec2ea85f403677e86624d1be7bf67fa68fe",
-          "mode": "100644",
-          "path": "tools/derive-subset.py",
-          "sha256": "21de13c42d411598d435adbae54e4e57a6a1c62dd50a7a02a026c12bd33b6566",
-          "size": 5086
-        },
-        {
-          "git_blob": "2c5418e030693c607fd0c84e7eca814e98350940",
-          "mode": "100644",
-          "path": "tools/reinstall-framework.py",
-          "sha256": "6c59ddd2fc2ff97d2f3712ff85bf47f710a641782ff67bcb8043a0b41bfe208e",
+          "path": "src/tools/reinstall-framework.py",
+          "sha256": "984103e3e45a26ee4100bcf2558758b4cd14a39c6d8fda1b5d016e620afca689",
           "size": 2960
         }
       ]
@@ -3892,6 +4246,42 @@
         "adapters": [
           "codex"
         ],
+        "id": "sub-agents",
+        "knowledge": [],
+        "preset_version": 1,
+        "skills": [],
+        "sub_agents": [
+          "context-translator",
+          "evidence-report-synthesizer",
+          "fixed-head-independent-auditor",
+          "mechanical-evidence-worker",
+          "reconciliation-worker",
+          "semantic-governance-analyst"
+        ],
+        "version": "0.1.0"
+      },
+      {
+        "adapters": [
+          "claude"
+        ],
+        "id": "sub-agents-claude",
+        "knowledge": [],
+        "preset_version": 1,
+        "skills": [],
+        "sub_agents": [
+          "context-translator",
+          "evidence-report-synthesizer",
+          "fixed-head-independent-auditor",
+          "mechanical-evidence-worker",
+          "reconciliation-worker",
+          "semantic-governance-analyst"
+        ],
+        "version": "0.1.0"
+      },
+      {
+        "adapters": [
+          "codex"
+        ],
         "id": "work-management",
         "knowledge": [],
         "preset_version": 1,
@@ -3903,10 +4293,10 @@
         "version": "0.1.0"
       }
     ],
-    "release_version": "0.19.0-rc.4",
+    "release_version": "0.19.0",
     "source": {
-      "commit": "158b8438f61a60eb621e3a5b43ed1a0479634f6f",
-      "tree": "260e4ccb01581ab9cbf75fe0c074a78f9b904838"
+      "commit": "a66957e00aa447be887258fa9b55fd89e39e96dd",
+      "tree": "3b4a374c563efd6a32452222313698e6162c8f99"
     }
   },
   "catalog_inventory": {
@@ -3957,11 +4347,11 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/content-package.yaml",
         "source": {
-          "git_blob": "203e32eb2c424176e1ab638061f1319b7cacd440",
+          "git_blob": "8d93c44e2b11a583799966ea03a772fc4d41d985",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/content-package.yaml",
-          "sha256": "816b4797bfdf9f23610f8234b4e5801f3ecc35ddd71dbde4edbe4820e079a0c8",
-          "size": 250457
+          "sha256": "572ba054265dcd81e9aec19db7a9d542e76e4a1d5ed1856f0cdc92609bdc4a41",
+          "size": 251999
         }
       },
       {
@@ -4009,11 +4399,11 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/design/source-map.md",
         "source": {
-          "git_blob": "06def4db477047ab65b9ae322693ab1a78029ca5",
+          "git_blob": "3b179dee525c40c422f923192dff77a898ef4cfb",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/design/source-map.md",
-          "sha256": "a717edbd540ddd135d34d675b968ebb1cc7e1fca3496e5d2c5cb5d1f3b324b69",
-          "size": 4114
+          "sha256": "bde89c5a3967ea6bde3b9ad1603dcc6c6673014f351f8eb1c5d49b401c344f51",
+          "size": 4208
         }
       },
       {
@@ -4022,11 +4412,11 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/engineering-rule-catalog.yaml",
         "source": {
-          "git_blob": "16afbc344152cd13602e4f99e99ae72788d7f789",
+          "git_blob": "b800829758ed1b2f77d3fe75a4f15e0dd5d9ce65",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/engineering-rule-catalog.yaml",
-          "sha256": "1222842d9153acb61b08c86bc2d45ceaf965e0466cd7bd279a372453a6c8b4be",
-          "size": 57155
+          "sha256": "4a4724411333670e33605236e1d96c4b470d1a18a895ee7fd7db5dceb86d6887",
+          "size": 57189
         }
       },
       {
@@ -5842,11 +6232,11 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/guides/PERSISTENCE-CONFIGURATION-GUIDE.md",
         "source": {
-          "git_blob": "f5208652355149274d19dc7fac0abe077356e819",
+          "git_blob": "ccf78532520032f90acd4519e2f2bb59053e941b",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/guides/PERSISTENCE-CONFIGURATION-GUIDE.md",
-          "sha256": "bff4ecff611ec6c85b43d63acabcf9c99f77013398e3b6c054d114dc47aff9ec",
-          "size": 3386
+          "sha256": "efe20e275e30b4be52f21423cfd1df51f0a7dcc330db70abaaa6ec877dec0fdf",
+          "size": 3428
         }
       },
       {
@@ -6453,10 +6843,10 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/references/ENGINEERING-IDENTITY-BINDINGS.MD",
         "source": {
-          "git_blob": "cd94fbf34e6a766536e36e2d18f43ba42834a799",
+          "git_blob": "fbdf3dcb0b99a1dd02797c38142364c9b6fea185",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/references/ENGINEERING-IDENTITY-BINDINGS.MD",
-          "sha256": "e322f024f5421707df6d0d86c438d3d75afca2a4ce7303fec1f6ae7c697196eb",
+          "sha256": "1d20c845c4d75cb0bf381cca75d4be8e0bdaf726e4c07b043a0b09c85d90d12f",
           "size": 1986
         }
       },
@@ -6583,11 +6973,11 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/shared/common-rules.md",
         "source": {
-          "git_blob": "1721f1a9e379bf39bdc6c2db087f8f51c81672d2",
+          "git_blob": "369155b79478322acad55582eb9c1a11f084d2bf",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/shared/common-rules.md",
-          "sha256": "c07384c0366113e9cb1a2d3462fccf26945ec85a095d80a5bca600a54c42b5f3",
-          "size": 6765
+          "sha256": "83753e0ca7a18b40a2ed687e1ff31bf5ffbb58eb85c50711a729ca916a387ebd",
+          "size": 6746
         }
       },
       {
@@ -6908,11 +7298,11 @@
         "owner": "dotnet-backend",
         "path": "packages/knowledge/dotnet-backend/standards/coding-standards/test-standards.md",
         "source": {
-          "git_blob": "aef2d3400a929f5d6e514fd109ae99646e5da457",
+          "git_blob": "d5ac9cd86d541dc2d060df6cb5c8f3a4fc44366f",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/standards/coding-standards/test-standards.md",
-          "sha256": "8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea",
-          "size": 17630
+          "sha256": "6f9fd76a7c064d52132f074e829f138ef20f1952894b649f4b457af4b7c11f4c",
+          "size": 17637
         }
       },
       {
@@ -7142,11 +7532,11 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/README.md",
         "source": {
-          "git_blob": "b2445bff1779b4451ff68177653b12423ab601eb",
+          "git_blob": "1d4f9b1a5ce585dddc1804cf6800b8c6187bd08e",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/README.md",
-          "sha256": "3b4cbf2135ac501a5d9849dafdb0d073957da40406ea076abe24f3715ea303d9",
-          "size": 3177
+          "sha256": "746fa7e049ccf824013ae1f685875d2271831d4f920f93b126fae1947dddd691",
+          "size": 3423
         }
       },
       {
@@ -7155,11 +7545,11 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/content-package.yaml",
         "source": {
-          "git_blob": "cd52efe973d5f8ae9f7520da74b21edf20ee6b61",
+          "git_blob": "26fd1ee92b1089bffc4ea45b7f743176f7067e07",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/content-package.yaml",
-          "sha256": "63b74b16794affe7fd3f4a5bf4a96760d38411c6fcbbc17ce9c95e0cef3bc094",
-          "size": 12200
+          "sha256": "ddb1a0620f53b559446b3e48de608d96667f7c0da8493169dd5ce52d4b9bdfb7",
+          "size": 15708
         }
       },
       {
@@ -7220,11 +7610,11 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/engineering-rule-catalog.yaml",
         "source": {
-          "git_blob": "3876fd02cc6a2c0b8e793a7b668b988f705279be",
+          "git_blob": "b40d0f07baf96c7c3ca29337d9fb5d5e0c9fe821",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/engineering-rule-catalog.yaml",
-          "sha256": "bb7a9fa703e336f7b4d693264f89d4f8ed91bb69517a2f509f5529e98ad6bb17",
-          "size": 13404
+          "sha256": "8664f2623acda3602040568aca0899771b10503f2f5d26a4633bd3274f08be01",
+          "size": 12795
         }
       },
       {
@@ -7307,15 +7697,28 @@
       },
       {
         "kind": "knowledge",
+        "member": "references/CONTEXT-RESOURCE-OWNERSHIP.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/references/CONTEXT-RESOURCE-OWNERSHIP.md",
+        "source": {
+          "git_blob": "43f54370f81413bac4c89d47fb18edc0f2683aa8",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/references/CONTEXT-RESOURCE-OWNERSHIP.md",
+          "sha256": "d8bc093081c4202d7aa71e729898e8cbb41c0c93dc2933b7cffa0fbb192aa0f1",
+          "size": 3415
+        }
+      },
+      {
+        "kind": "knowledge",
         "member": "references/ENGINEERING-IDENTITY-CONTRACT.md",
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/references/ENGINEERING-IDENTITY-CONTRACT.md",
         "source": {
-          "git_blob": "9d34635b0d485957fdd28c970edd1db23ceda3bf",
+          "git_blob": "756cd952c9f8d36dca51d2e0216f7091d7ae58a7",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/ENGINEERING-IDENTITY-CONTRACT.md",
-          "sha256": "7293eda5f64410ce212dc856f2a86bb7919636c4f42f8f9365b00a528a150562",
-          "size": 2809
+          "sha256": "b0d4fd1d3082952175f4d47e21a5b63f4f0f85d7c546b0f5698ea7c557b922f6",
+          "size": 2783
         }
       },
       {
@@ -7358,16 +7761,42 @@
         }
       },
       {
+        "kind": "knowledge",
+        "member": "references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
+        "source": {
+          "git_blob": "ec2eb31e5d1a6a6e850654e24fb6a0484328a432",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
+          "sha256": "e8bd218a2525e3cbf3b955e4b2ea9ccaf35d73fe5d6033a8566bdefbd7d67b83",
+          "size": 1940
+        }
+      },
+      {
+        "kind": "knowledge",
+        "member": "references/TECHNOLOGY-SELECTION-POLICY.md",
+        "owner": "engineering-common",
+        "path": "packages/knowledge/engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md",
+        "source": {
+          "git_blob": "f466f11113983094960127e9e32d865b5468a50e",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md",
+          "sha256": "09654b188773c63a1dc806286e975787092a2c7fda1116b3a94a2a0ab0406922",
+          "size": 4092
+        }
+      },
+      {
         "kind": "skill",
         "member": "SKILL.md",
         "owner": "adr-author",
         "path": "packages/skill/adr-author/SKILL.md",
         "source": {
-          "git_blob": "50f5c6afd5e90ec5e2f15875c46ae4e3d1874cc2",
+          "git_blob": "a991cda1173954337c679162e9d9f5470a221940",
           "mode": "100644",
           "path": "src/skills/adr-author/SKILL.md",
-          "sha256": "b06093534d68277621bcd527fd9063f2f0104b8fbf82573da2e48d1fe26cb272",
-          "size": 1950
+          "sha256": "962ae12718f86d1d7f5b690745d89b80d7451540d8de0e0408a4d768909bb1ca",
+          "size": 2261
         }
       },
       {
@@ -7415,11 +7844,11 @@
         "owner": "adr-author",
         "path": "packages/skill/adr-author/references/operations.md",
         "source": {
-          "git_blob": "b6986be6402caed409a4dac1672eed586ce2d9fc",
+          "git_blob": "ea05772bb0b4204e2ca80185ca3e4a1a8f39dfb0",
           "mode": "100644",
           "path": "src/skills/adr-author/references/operations.md",
-          "sha256": "7cf60de7bc560c7be7fefc1dc399fb557882846818eca710a78f8a4375b73ee7",
-          "size": 10590
+          "sha256": "20c35161b927195278ff72407e93ea1cccd2509f51bdc298ce9c75d15f4211a4",
+          "size": 10410
         }
       },
       {
@@ -7480,11 +7909,11 @@
         "owner": "ai-context-auditor",
         "path": "packages/skill/ai-context-auditor/SKILL.md",
         "source": {
-          "git_blob": "2aa0ce2e3d000b8ab75d898026eff25d8894b2e1",
+          "git_blob": "660778f328791c862c365235a6f0f3a025953f7c",
           "mode": "100644",
           "path": "src/skills/ai-context-auditor/SKILL.md",
-          "sha256": "7d5eda3148ac3b0d792d1c36630b08a0ca17e7ef3f35559c7ca1631688369580",
-          "size": 1155
+          "sha256": "42782d9ef53f8ae24c07163c40c1b4cb11b125620a79185de42d62a3d6ee181a",
+          "size": 1690
         }
       },
       {
@@ -7519,11 +7948,11 @@
         "owner": "ai-context-governance",
         "path": "packages/skill/ai-context-governance/SKILL.md",
         "source": {
-          "git_blob": "7c82beb61b00baa9ca197f7ad94bbd96a35b32e4",
+          "git_blob": "763d93a5829e6ffdf4d0461200191bdbac4dc168",
           "mode": "100644",
           "path": "src/skills/ai-context-governance/SKILL.md",
-          "sha256": "c0aad70a26e6395964d9f996971b0bbdda24a54cda487d76378217d35743d68e",
-          "size": 1312
+          "sha256": "1b6b4346a4c30b75ababcf39c5b57ac7f6a5237043c8bbad384df5146d7d8b34",
+          "size": 1988
         }
       },
       {
@@ -7532,11 +7961,11 @@
         "owner": "ai-context-governance",
         "path": "packages/skill/ai-context-governance/references/maintenance.md",
         "source": {
-          "git_blob": "0498c6b52ed56708c787c08aa8547e06142c4d94",
+          "git_blob": "a5bd92c7053a17f158e3e90faeaac1d4df271d25",
           "mode": "100644",
           "path": "src/skills/ai-context-governance/references/maintenance.md",
-          "sha256": "d7a883c88ffca483e9669e3e748be27d9e0648112d77391d632d32b975d8804a",
-          "size": 11292
+          "sha256": "89d56e0848bb9efcbc3ec1efd7e83ee9e2c392f832f8da13a7a72115fc726e3a",
+          "size": 11749
         }
       },
       {
@@ -7558,11 +7987,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/SKILL.md",
         "source": {
-          "git_blob": "39f91c9eebd4bb4f7df56924eb7976542f6d06f5",
+          "git_blob": "3db4d2d2031e801a1318e75cb6c3ec0b4380f253",
           "mode": "100644",
           "path": "src/skills/ai-context-init/SKILL.md",
-          "sha256": "4c9ee9f43a2f5dc361071d5799864bb2cdcf188f69ed98137aab1e1c9ca42429",
-          "size": 1842
+          "sha256": "ffaac04deaf44577381324b7f2293e21ea589c8be1d6dbdc3afc455563ad6250",
+          "size": 2967
         }
       },
       {
@@ -7571,11 +8000,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/references/initialize.md",
         "source": {
-          "git_blob": "04cd2aff508391a2d48ffb4db6903d3d8ccbc5bb",
+          "git_blob": "008c1997a65bad39327c873a806bc28fd2cf8dfe",
           "mode": "100644",
           "path": "src/skills/ai-context-init/references/initialize.md",
-          "sha256": "d7220d8004ae2135896cab73f61386884fcd1e6b5f07a9c807d55a4e6e0fae00",
-          "size": 6405
+          "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
+          "size": 11501
         }
       },
       {
@@ -7584,11 +8013,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/references/project-structure.md",
         "source": {
-          "git_blob": "1b6599bbe48113825f9f24eb2b11703cc0547c4e",
+          "git_blob": "defbb6c0f7220bc4a068367fe82d88bd7fcc15b0",
           "mode": "100644",
           "path": "src/skills/ai-context-init/references/project-structure.md",
-          "sha256": "7d8f1753073105de1cdab0f345103b8130169144e6f9345c4aefef742e3c6fb6",
-          "size": 3251
+          "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
+          "size": 4135
         }
       },
       {
@@ -7597,11 +8026,24 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/skill-package.yaml",
         "source": {
-          "git_blob": "67eaec8b067b74f79e056b792d18e393febbacba",
+          "git_blob": "24834cafe29dadaa34a6420e3313929d8191fe9a",
           "mode": "100644",
           "path": "src/skills/ai-context-init/skill-package.yaml",
-          "sha256": "652d342c0385bfb57b1bcda87f9481a6db6f2f9146d8eff19a497a1221f9d5f7",
-          "size": 1778
+          "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+          "size": 1915
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "templates/ai-collaboration.md",
+        "owner": "ai-context-init",
+        "path": "packages/skill/ai-context-init/templates/ai-collaboration.md",
+        "source": {
+          "git_blob": "9cd093dc613f7adb53857dbfa0b33fa339572388",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/ai-collaboration.md",
+          "sha256": "d115949f90921d903cfb46f88debb7ea4f518320d7a115ad6f817c9ee122ee00",
+          "size": 5171
         }
       },
       {
@@ -7619,15 +8061,41 @@
       },
       {
         "kind": "skill",
+        "member": "templates/first-task.md",
+        "owner": "ai-context-init",
+        "path": "packages/skill/ai-context-init/templates/first-task.md",
+        "source": {
+          "git_blob": "c1500b0c9d62613bb8c1cfcc69bac4fe2d39e0b3",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/first-task.md",
+          "sha256": "280f6e799f28feafd942ae8bdb72076c66750dad1eb6a563d3a6da83718711d1",
+          "size": 3342
+        }
+      },
+      {
+        "kind": "skill",
         "member": "templates/project-config.template.yaml",
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/templates/project-config.template.yaml",
         "source": {
-          "git_blob": "ea4d323e1b41b3f1f1baf88473b35778272f08fd",
+          "git_blob": "61425433f3f600dc47df926ed830effdf27e44a1",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/project-config.template.yaml",
-          "sha256": "3ba0b4207d2d43cd33314893a33c170f268f15a4f0c500703417c0a4f6f4a010",
-          "size": 920
+          "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
+          "size": 1059
+        }
+      },
+      {
+        "kind": "skill",
+        "member": "templates/project-context.md",
+        "owner": "ai-context-init",
+        "path": "packages/skill/ai-context-init/templates/project-context.md",
+        "source": {
+          "git_blob": "884ee7a34698a1a759884fbdcb254cbc0dcce41a",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/project-context.md",
+          "sha256": "906a823b3202e0423711a52951f924d7e9a25be0d776e0bd5d6691f4d7b5e7ec",
+          "size": 2572
         }
       },
       {
@@ -7636,11 +8104,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/templates/public-catalogs/dev/INDEX.md",
         "source": {
-          "git_blob": "588876a8ce6f2e23aca4c48c32c58ccb8f430ca8",
+          "git_blob": "749e7eea2236b5ea60297e236537a69cf1a5c9c9",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-catalogs/dev/INDEX.md",
-          "sha256": "45841095a122fd2623c153f0ea1608346e9892563a0f2157f659ba69a64de4dc",
-          "size": 395
+          "sha256": "099c0a0e35a8ae26a785cb061d7d92466bd32d723fa865bf845cecf99a600064",
+          "size": 636
         }
       },
       {
@@ -7649,11 +8117,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/templates/public-catalogs/dev/README.MD",
         "source": {
-          "git_blob": "c66cc2415d59200440099f3c6d4aa1b99a3888d0",
+          "git_blob": "d7a14c67912fb793cabf0468e88eccbb66156b7c",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-catalogs/dev/README.MD",
-          "sha256": "eb0b87d3dfe43df798795096b5fcdbd24aca590adb6b4efeb203c43be80c4f24",
-          "size": 478
+          "sha256": "365f59a215e0fd75f57567434c721f76ffd456447e270796ddaf0cd17074eb8d",
+          "size": 808
         }
       },
       {
@@ -7662,11 +8130,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/templates/public-root/AGENTS.md",
         "source": {
-          "git_blob": "d8e9f183def05ff31e94e5d48c4db0a41e44bfbc",
+          "git_blob": "dec2ed7059a50bf498d08af09503f4313f8d73d1",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-root/AGENTS.md",
-          "sha256": "7216f92eecba326530a0440fe7e9305e74131fd04d9257b3821b2b03c1a05b94",
-          "size": 3571
+          "sha256": "4a330f20585273b3607842d23bf678b2814cdea8147de682adf900e4eaf7e6f5",
+          "size": 4219
         }
       },
       {
@@ -7688,11 +8156,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/templates/public-root/README.md",
         "source": {
-          "git_blob": "d56fc6e1969b2dd7aaba3097c72b5f7fe307b898",
+          "git_blob": "c98a82ad783c4c7da2b96bce0dee475a5587e32b",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-root/README.md",
-          "sha256": "54ad0d6b48e089a98d25f6a5d3ae118cca18a100317d29c19fad8372e4424429",
-          "size": 906
+          "sha256": "8c170cd0c358541d5483d29ab1bb0ea93cd9f6af9068604241aaedac352c7d7c",
+          "size": 1146
         }
       },
       {
@@ -7714,11 +8182,11 @@
         "owner": "bdd-gwt-test-designer",
         "path": "packages/skill/bdd-gwt-test-designer/SKILL.md",
         "source": {
-          "git_blob": "2dd8f905e0ec9b65ca32e29f1062c7b2614e6108",
+          "git_blob": "d0de71981c4e1a7b808240d95325d2fe04ffcec8",
           "mode": "100644",
           "path": "src/skills/bdd-gwt-test-designer/SKILL.md",
-          "sha256": "408f4333b9716f373f1341793ebaa121451e1fb861e0858b44619f687a047dca",
-          "size": 1584
+          "sha256": "dc3beee8d47ab3e2c78dac16d78ddf410af27ebeac8486b0e005ca1270d15cf2",
+          "size": 1914
         }
       },
       {
@@ -7766,11 +8234,11 @@
         "owner": "code-reviewer",
         "path": "packages/skill/code-reviewer/SKILL.md",
         "source": {
-          "git_blob": "98ee1df26bf488a3a77589436b5bcb02311ae127",
+          "git_blob": "3a15a5884ce5e2f9b2d806bbb01be68895e657d0",
           "mode": "100644",
           "path": "src/skills/code-reviewer/SKILL.md",
-          "sha256": "a48c9efa36cf893c0bc5fed93ce84598b7e75149b4e87858b7b99620f9dbcfd0",
-          "size": 1649
+          "sha256": "de8df9f0167890a6a24ddce5ea371ca0bbffca30b6fc56e0c5ced275cd5ae447",
+          "size": 2040
         }
       },
       {
@@ -7857,11 +8325,11 @@
         "owner": "diagnostic-analyst",
         "path": "packages/skill/diagnostic-analyst/SKILL.md",
         "source": {
-          "git_blob": "db665e63540a79af3c5e5ab91e9d9d309b2e7997",
+          "git_blob": "6ade5c42b11c42d53df3e40b741aecd9943d1fd0",
           "mode": "100644",
           "path": "src/skills/diagnostic-analyst/SKILL.md",
-          "sha256": "41ea28386a84941cb58f8a79e0965a1f6197233548b18e4fee53faf7b2cae2aa",
-          "size": 1017
+          "sha256": "cd158d43e3f12db1b9f7959c7f7fdf4960a6dd1aaf2d1d6631bf92b418a6d63c",
+          "size": 1341
         }
       },
       {
@@ -7896,11 +8364,11 @@
         "owner": "lesson-author",
         "path": "packages/skill/lesson-author/SKILL.md",
         "source": {
-          "git_blob": "40071f0fba62c655cd67536e5b41d2749008094e",
+          "git_blob": "6917244f9c6f17f405fdeef87b4cd9aeeb91ce33",
           "mode": "100644",
           "path": "src/skills/lesson-author/SKILL.md",
-          "sha256": "96ba3b0c22458ff4ebef2fbbfc770a595f2398c6e245572e1945fd0e0527d34b",
-          "size": 1713
+          "sha256": "ec9aab1b880726c0c2ad2179e903463eb292b4947c988deaa102f1804bec6ba1",
+          "size": 2037
         }
       },
       {
@@ -7935,11 +8403,11 @@
         "owner": "lesson-author",
         "path": "packages/skill/lesson-author/references/operations.md",
         "source": {
-          "git_blob": "2fbe961898a72bb8c753b02b4035a8095a067675",
+          "git_blob": "6cb8a2d56b1b7954fc21849be491ec49fc0a63a2",
           "mode": "100644",
           "path": "src/skills/lesson-author/references/operations.md",
-          "sha256": "702d953102db772a7dca631e3f05eefab3b7c47c5c303e3040fe32de0171997d",
-          "size": 10852
+          "sha256": "f7f136355337b5da11fb702b58718554cec819986c829a68a93047dac6fd74dc",
+          "size": 10672
         }
       },
       {
@@ -8117,11 +8585,11 @@
         "owner": "local-change-implementer",
         "path": "packages/skill/local-change-implementer/SKILL.md",
         "source": {
-          "git_blob": "ebdd9cd9aadbd0adffda6f6a81883080f00342e4",
+          "git_blob": "c0b0cc2a7cee94f88760588a9efb5cfa68727df5",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/SKILL.md",
-          "sha256": "d26f17b90239157fa6d231f64d6f753a40e1b239cbab30156cb96599aaad0445",
-          "size": 1404
+          "sha256": "6d18c7209fbc740bacd088600f5dafec8dfd52d80e555fb3396462dedbe0e1b5",
+          "size": 1708
         }
       },
       {
@@ -8130,11 +8598,11 @@
         "owner": "local-change-implementer",
         "path": "packages/skill/local-change-implementer/references/implement.md",
         "source": {
-          "git_blob": "f4b1b3a9c01db83b8abe87744a5133d499fa8310",
+          "git_blob": "346c15fbf6a201a2e9594e9f9cf2261c2f86786b",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/references/implement.md",
-          "sha256": "780ca40d00d251cdbea73a513a5d975295b7a4124d1874082d51b41195cf6630",
-          "size": 8223
+          "sha256": "932de795e2508947e41c714683685bc6f7a807b254329e4ca5232080248d5488",
+          "size": 8396
         }
       },
       {
@@ -8156,11 +8624,11 @@
         "owner": "pr-author",
         "path": "packages/skill/pr-author/SKILL.md",
         "source": {
-          "git_blob": "78a1ef2f198cc21d9e8c403136c345c3e7bee203",
+          "git_blob": "052c360188916a9d9f9d7b0c26ba25d1d750a3c9",
           "mode": "100644",
           "path": "src/skills/pr-author/SKILL.md",
-          "sha256": "fee58e449d31611c60b891421d36f0d1ac19d14a83a132baeaa5bd1d6d61b14b",
-          "size": 1630
+          "sha256": "ed609a3ecbdfd908977a4544d48fbc0ed1bed6c447a8a43531895152034013ac",
+          "size": 1980
         }
       },
       {
@@ -8286,11 +8754,11 @@
         "owner": "problem-frame-author",
         "path": "packages/skill/problem-frame-author/SKILL.md",
         "source": {
-          "git_blob": "f750615d89f134e91165beecefcca77fe6783c47",
+          "git_blob": "be03ccc1379c89d9b5e98bc2d9b044b514f67174",
           "mode": "100644",
           "path": "src/skills/problem-frame-author/SKILL.md",
-          "sha256": "afb8692260f704506a7067ae8d9c1acde629adc4dcd83da95032cc2227c19fd1",
-          "size": 2021
+          "sha256": "4625ec9bb739e3beb7c95563cf7d5ec25f25398156d18d43a7835c940727772b",
+          "size": 2363
         }
       },
       {
@@ -8481,11 +8949,11 @@
         "owner": "slice-implementer",
         "path": "packages/skill/slice-implementer/SKILL.md",
         "source": {
-          "git_blob": "a68baa161d8db9ef340f8ca18a15158a3323225a",
+          "git_blob": "37a1c3bbb2f0635702000e942e058b99830b5fde",
           "mode": "100644",
           "path": "src/skills/slice-implementer/SKILL.md",
-          "sha256": "7fb7542531e36732eea61fb73871c826e4e3a11878dc17afe171c5ec5df26b9c",
-          "size": 1647
+          "sha256": "4db337db49f9dad81d868a61edd088365637b3b757d71fde91ffa8a0b68ccba0",
+          "size": 1994
         }
       },
       {
@@ -8611,11 +9079,11 @@
         "owner": "software-development-orchestrator",
         "path": "packages/skill/software-development-orchestrator/references/orchestrate.md",
         "source": {
-          "git_blob": "ac92d7a9d95fa241e67074cc1273855b33416578",
+          "git_blob": "dfdfec28727f3ef211e8261707175f448fd5abb5",
           "mode": "100644",
           "path": "src/skills/software-development-orchestrator/references/orchestrate.md",
-          "sha256": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
-          "size": 7282
+          "sha256": "332df2bd353bb4649508f254030fd848376cf8142e3923b4de1657fab6383f83",
+          "size": 7490
         }
       },
       {
@@ -8754,11 +9222,11 @@
         "owner": "spec-compliance-validator",
         "path": "packages/skill/spec-compliance-validator/SKILL.md",
         "source": {
-          "git_blob": "78da54328dd7cc4c85ff6314f634b7768e72f22d",
+          "git_blob": "6b49026eb666a9e1cee48c7dcb4ceb920ecea568",
           "mode": "100644",
           "path": "src/skills/spec-compliance-validator/SKILL.md",
-          "sha256": "06a009d4913f3a540ce5005283e003c009ecf30503c5fd5abad9ea4c69c32637",
-          "size": 1789
+          "sha256": "fa46d0e3ce024b3aeb74ea5ed1ae4bd21f3bf60ff8cfa23668d9b02ec90e1a67",
+          "size": 2158
         }
       },
       {
@@ -8825,6 +9293,396 @@
           "sha256": "aedc751c6543dd905b84c40ef1f4f0aeaa58e40e75f723756e3929f6ba477410",
           "size": 1749
         }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "references/translation-playbook.md",
+        "owner": "context-translator",
+        "path": "packages/sub-agent/context-translator/references/translation-playbook.md",
+        "source": {
+          "git_blob": "947c15a1f220b1950d9f0e974d77a3084de08165",
+          "mode": "100644",
+          "path": "src/sub-agents/context-translator/references/translation-playbook.md",
+          "sha256": "3616b93e6507b704754546311960cc51edfc4f476861759ead6b4bd33cda52e2",
+          "size": 1806
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/claude.md",
+        "owner": "context-translator",
+        "path": "packages/sub-agent/context-translator/runtime/claude.md",
+        "source": {
+          "git_blob": "81e4c3a5e67b43ecb7959da287a672f6fcc11bcb",
+          "mode": "100644",
+          "path": "src/sub-agents/context-translator/runtime/claude.md",
+          "sha256": "95f9fe69c6942600c03161309afa3f5c3284cc41ded92651a80fb6590496a20d",
+          "size": 1351
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/codex.toml",
+        "owner": "context-translator",
+        "path": "packages/sub-agent/context-translator/runtime/codex.toml",
+        "source": {
+          "git_blob": "5082f7e792bbe33f6b8fea4b229ec85b829a177f",
+          "mode": "100644",
+          "path": "src/sub-agents/context-translator/runtime/codex.toml",
+          "sha256": "4798bb2557ebb1ac391b31d13522064481d22df27bf6568b14ebe1719d70f466",
+          "size": 1231
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent-package.yaml",
+        "owner": "context-translator",
+        "path": "packages/sub-agent/context-translator/sub-agent-package.yaml",
+        "source": {
+          "git_blob": "87e058e880b20833bdc1dd3d4b9e98c8535c30ea",
+          "mode": "100644",
+          "path": "src/sub-agents/context-translator/sub-agent-package.yaml",
+          "sha256": "6a0182b92ea883b12ec9552f6a5dea0bc74d496db3ebfe3922badec0642ff181",
+          "size": 267
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent.yaml",
+        "owner": "context-translator",
+        "path": "packages/sub-agent/context-translator/sub-agent.yaml",
+        "source": {
+          "git_blob": "1f10d38c5c8fc2daa4b98522d180d83bf2758c0a",
+          "mode": "100644",
+          "path": "src/sub-agents/context-translator/sub-agent.yaml",
+          "sha256": "1aa93f6478154c9dbf061747792bacdd1fd66ddd36b0c53b9eb1bb73fe9c1c98",
+          "size": 2509
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "references/evidence-report-synthesis-playbook.md",
+        "owner": "evidence-report-synthesizer",
+        "path": "packages/sub-agent/evidence-report-synthesizer/references/evidence-report-synthesis-playbook.md",
+        "source": {
+          "git_blob": "ed7780e00162736a0a2ddab0410012de86f29f6d",
+          "mode": "100644",
+          "path": "src/sub-agents/evidence-report-synthesizer/references/evidence-report-synthesis-playbook.md",
+          "sha256": "4eec5a101253c6d1843b183cb30bd708df502dae88bcd4ff93a5a5a9dd8bf12d",
+          "size": 983
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/claude.md",
+        "owner": "evidence-report-synthesizer",
+        "path": "packages/sub-agent/evidence-report-synthesizer/runtime/claude.md",
+        "source": {
+          "git_blob": "65925c98b4f0970ba1765c0c880c91fe286c6d6e",
+          "mode": "100644",
+          "path": "src/sub-agents/evidence-report-synthesizer/runtime/claude.md",
+          "sha256": "4f3abfa996b5e4610aa3d0ce25861142db391251b6d7cbd171c4182bff0d12cc",
+          "size": 2358
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/codex.toml",
+        "owner": "evidence-report-synthesizer",
+        "path": "packages/sub-agent/evidence-report-synthesizer/runtime/codex.toml",
+        "source": {
+          "git_blob": "dd64f076480fe142aff681c4d8d79bc624005f93",
+          "mode": "100644",
+          "path": "src/sub-agents/evidence-report-synthesizer/runtime/codex.toml",
+          "sha256": "0e5d8a0b84947a7c70bbf963e02d0df4611506ff9cf4ef38d942ef35047ae581",
+          "size": 1930
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent-package.yaml",
+        "owner": "evidence-report-synthesizer",
+        "path": "packages/sub-agent/evidence-report-synthesizer/sub-agent-package.yaml",
+        "source": {
+          "git_blob": "045aba33e66a356dacc8e5617b0c2b90b2083d3e",
+          "mode": "100644",
+          "path": "src/sub-agents/evidence-report-synthesizer/sub-agent-package.yaml",
+          "sha256": "3b0b316b10df3239b11aaf9b61e5a27029ed703a23eaa121d180aa6491753544",
+          "size": 290
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent.yaml",
+        "owner": "evidence-report-synthesizer",
+        "path": "packages/sub-agent/evidence-report-synthesizer/sub-agent.yaml",
+        "source": {
+          "git_blob": "9079955989fc37ff8e0cb115f113c0c1c1bec74a",
+          "mode": "100644",
+          "path": "src/sub-agents/evidence-report-synthesizer/sub-agent.yaml",
+          "sha256": "ea0b2145b25fc34a3d777ce9048b20cba293b5a735e54236ac373732b4fbf7db",
+          "size": 2421
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "references/fixed-head-independent-audit-playbook.md",
+        "owner": "fixed-head-independent-auditor",
+        "path": "packages/sub-agent/fixed-head-independent-auditor/references/fixed-head-independent-audit-playbook.md",
+        "source": {
+          "git_blob": "d27f082635e542122e918e9a8d3233d520381a6b",
+          "mode": "100644",
+          "path": "src/sub-agents/fixed-head-independent-auditor/references/fixed-head-independent-audit-playbook.md",
+          "sha256": "104429ed97134c093b4a78957536659628a73e39b4b6c76f820e33e287c8cc13",
+          "size": 2489
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/claude.md",
+        "owner": "fixed-head-independent-auditor",
+        "path": "packages/sub-agent/fixed-head-independent-auditor/runtime/claude.md",
+        "source": {
+          "git_blob": "0e05ba61d79aa8d5c444521aaa2be13cb166065a",
+          "mode": "100644",
+          "path": "src/sub-agents/fixed-head-independent-auditor/runtime/claude.md",
+          "sha256": "4aeba595a1febf30189ad753db03fc870810a9646ce44e50b6133835c52dcd20",
+          "size": 3472
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/codex.toml",
+        "owner": "fixed-head-independent-auditor",
+        "path": "packages/sub-agent/fixed-head-independent-auditor/runtime/codex.toml",
+        "source": {
+          "git_blob": "be02f61da09597c3e8d300c37ff8c81bab203712",
+          "mode": "100644",
+          "path": "src/sub-agents/fixed-head-independent-auditor/runtime/codex.toml",
+          "sha256": "1c56106bdd1f3f35e64bfa0e7035c20f6ac90079913267c02aa65c9e8c0c8046",
+          "size": 3044
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent-package.yaml",
+        "owner": "fixed-head-independent-auditor",
+        "path": "packages/sub-agent/fixed-head-independent-auditor/sub-agent-package.yaml",
+        "source": {
+          "git_blob": "7e1cd5a4d34305b305c476e148302eddcfb365c2",
+          "mode": "100644",
+          "path": "src/sub-agents/fixed-head-independent-auditor/sub-agent-package.yaml",
+          "sha256": "d7cdf340fd148b2369ab94edf721c71fc96b53262c7c4d60dc6aa7972e3a6955",
+          "size": 296
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent.yaml",
+        "owner": "fixed-head-independent-auditor",
+        "path": "packages/sub-agent/fixed-head-independent-auditor/sub-agent.yaml",
+        "source": {
+          "git_blob": "6eb7a2bb4c655d00bc7bdfcaa1c863a213f1de2c",
+          "mode": "100644",
+          "path": "src/sub-agents/fixed-head-independent-auditor/sub-agent.yaml",
+          "sha256": "dcb54b35999184834aafa89a619a7c49852ccdbe033349c6aff2edffcd9bc084",
+          "size": 3532
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "references/mechanical-evidence-playbook.md",
+        "owner": "mechanical-evidence-worker",
+        "path": "packages/sub-agent/mechanical-evidence-worker/references/mechanical-evidence-playbook.md",
+        "source": {
+          "git_blob": "63a1c1746f8bbababd92fba6cfb73154300f68bf",
+          "mode": "100644",
+          "path": "src/sub-agents/mechanical-evidence-worker/references/mechanical-evidence-playbook.md",
+          "sha256": "fdbeb19178d83ee6bf2c40ec95bc4310ecfcb1508a00482fe40297c7d7d001ab",
+          "size": 949
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/claude.md",
+        "owner": "mechanical-evidence-worker",
+        "path": "packages/sub-agent/mechanical-evidence-worker/runtime/claude.md",
+        "source": {
+          "git_blob": "c657ee4e02ceff0916bdb9ef69b9c85039a57c0b",
+          "mode": "100644",
+          "path": "src/sub-agents/mechanical-evidence-worker/runtime/claude.md",
+          "sha256": "8297329e44d129a83a38f24413da6ca841aef2458f172dc03c2e462c9220bfdf",
+          "size": 5072
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/codex.toml",
+        "owner": "mechanical-evidence-worker",
+        "path": "packages/sub-agent/mechanical-evidence-worker/runtime/codex.toml",
+        "source": {
+          "git_blob": "d087e6e521b54149e3f42382278aa6f5fc5e2840",
+          "mode": "100644",
+          "path": "src/sub-agents/mechanical-evidence-worker/runtime/codex.toml",
+          "sha256": "c4f7204ada42eeb9874c58de2482a6e3bce48f217098f886f2fa974d232f8c0a",
+          "size": 4644
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent-package.yaml",
+        "owner": "mechanical-evidence-worker",
+        "path": "packages/sub-agent/mechanical-evidence-worker/sub-agent-package.yaml",
+        "source": {
+          "git_blob": "301661e223eb1b593644ea0fdf7725d1443966b4",
+          "mode": "100644",
+          "path": "src/sub-agents/mechanical-evidence-worker/sub-agent-package.yaml",
+          "sha256": "21a9b17d240f9300bf028b04ced4f916c051d0b596b9eb206353b2c0ddf6daac",
+          "size": 283
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent.yaml",
+        "owner": "mechanical-evidence-worker",
+        "path": "packages/sub-agent/mechanical-evidence-worker/sub-agent.yaml",
+        "source": {
+          "git_blob": "0e5024ca0213c952bada9d225fe4be3765b79473",
+          "mode": "100644",
+          "path": "src/sub-agents/mechanical-evidence-worker/sub-agent.yaml",
+          "sha256": "357512fbf9416dfa83a61e83f51c5e7afc1866bae8dae3e5f982443f2fdf4ada",
+          "size": 2399
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "references/reconciliation-playbook.md",
+        "owner": "reconciliation-worker",
+        "path": "packages/sub-agent/reconciliation-worker/references/reconciliation-playbook.md",
+        "source": {
+          "git_blob": "3dae1314efa19bc4a55a96c31662c8e4661abc36",
+          "mode": "100644",
+          "path": "src/sub-agents/reconciliation-worker/references/reconciliation-playbook.md",
+          "sha256": "2fe1beaef86d90a42587d7e649e1da264eba1dbacdfeeec16f3e5a7d970fe92a",
+          "size": 809
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/claude.md",
+        "owner": "reconciliation-worker",
+        "path": "packages/sub-agent/reconciliation-worker/runtime/claude.md",
+        "source": {
+          "git_blob": "0974776366ff5f4a69879fe946a5755c1dfa3526",
+          "mode": "100644",
+          "path": "src/sub-agents/reconciliation-worker/runtime/claude.md",
+          "sha256": "6494207c8dd9b052c22bd24d9f8a3e7886fc3430bffdc5bbc8f76df1320f590f",
+          "size": 2434
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/codex.toml",
+        "owner": "reconciliation-worker",
+        "path": "packages/sub-agent/reconciliation-worker/runtime/codex.toml",
+        "source": {
+          "git_blob": "c4014b2b03a6c5c0bbe7494c2dd1523c0be242b9",
+          "mode": "100644",
+          "path": "src/sub-agents/reconciliation-worker/runtime/codex.toml",
+          "sha256": "ad8cddf10f704c72561d7340ec979f2b21668b1e74678f447dcf53b676e06ab5",
+          "size": 2006
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent-package.yaml",
+        "owner": "reconciliation-worker",
+        "path": "packages/sub-agent/reconciliation-worker/sub-agent-package.yaml",
+        "source": {
+          "git_blob": "67222ed974086e03069cd2a748770421eb71fc32",
+          "mode": "100644",
+          "path": "src/sub-agents/reconciliation-worker/sub-agent-package.yaml",
+          "sha256": "2a337db39b697497d84661a70e81b8b635262e583220f23a66710984b44f4b7e",
+          "size": 273
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent.yaml",
+        "owner": "reconciliation-worker",
+        "path": "packages/sub-agent/reconciliation-worker/sub-agent.yaml",
+        "source": {
+          "git_blob": "c06cc4f883c84a406e494eee82ba2c666fdbb04c",
+          "mode": "100644",
+          "path": "src/sub-agents/reconciliation-worker/sub-agent.yaml",
+          "sha256": "cac713df7ae620e36c9063848884bec84faf18f3cf584604546ac6a2621f8099",
+          "size": 2299
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "references/semantic-governance-analysis-playbook.md",
+        "owner": "semantic-governance-analyst",
+        "path": "packages/sub-agent/semantic-governance-analyst/references/semantic-governance-analysis-playbook.md",
+        "source": {
+          "git_blob": "7fb8211d1b45e40f5318dbabfeba89002f715085",
+          "mode": "100644",
+          "path": "src/sub-agents/semantic-governance-analyst/references/semantic-governance-analysis-playbook.md",
+          "sha256": "3ee75ecf5728ba7a765d3a8397922b26604b4797aaf0ea5a01b92ebfb47b1d40",
+          "size": 912
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/claude.md",
+        "owner": "semantic-governance-analyst",
+        "path": "packages/sub-agent/semantic-governance-analyst/runtime/claude.md",
+        "source": {
+          "git_blob": "359bb91d6399c0a6306246b6d7c9957b1837a739",
+          "mode": "100644",
+          "path": "src/sub-agents/semantic-governance-analyst/runtime/claude.md",
+          "sha256": "9696346674d9b940ce0dc23cfdbe9c0e10d73bcf33955032a6c522e6b2a6dcbd",
+          "size": 2417
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "runtime/codex.toml",
+        "owner": "semantic-governance-analyst",
+        "path": "packages/sub-agent/semantic-governance-analyst/runtime/codex.toml",
+        "source": {
+          "git_blob": "0523106295745386c5df93e7ad47c1bdba53fa17",
+          "mode": "100644",
+          "path": "src/sub-agents/semantic-governance-analyst/runtime/codex.toml",
+          "sha256": "ccf5f8ecfe41c00b79f013ff31d66053e3d4e76384ed8568e1f9f36164029254",
+          "size": 1989
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent-package.yaml",
+        "owner": "semantic-governance-analyst",
+        "path": "packages/sub-agent/semantic-governance-analyst/sub-agent-package.yaml",
+        "source": {
+          "git_blob": "2e36aa7ca467611e568db7624f0121e66e7881b2",
+          "mode": "100644",
+          "path": "src/sub-agents/semantic-governance-analyst/sub-agent-package.yaml",
+          "sha256": "33f5d9525d109b64e84a114093efdd947166a522ce26ec158ea83972aa03d0a3",
+          "size": 293
+        }
+      },
+      {
+        "kind": "sub-agent",
+        "member": "sub-agent.yaml",
+        "owner": "semantic-governance-analyst",
+        "path": "packages/sub-agent/semantic-governance-analyst/sub-agent.yaml",
+        "source": {
+          "git_blob": "f767e573adac26b133772c35946f9cc83a22c9e5",
+          "mode": "100644",
+          "path": "src/sub-agents/semantic-governance-analyst/sub-agent.yaml",
+          "sha256": "65d73a83466205a0b2b4a9c7e4237154a41525dc7ad171291fbb7293ffda0eea",
+          "size": 2413
+        }
       }
     ]
   },
@@ -8852,7 +9710,7 @@
       },
       {
         "path": "src/distribution/catalog.py",
-        "sha256": "c89aeeec72cda95abab4bee20311d3bfb47d0aa05f3c31b80962c1954224814e"
+        "sha256": "5b2853de712d04e2cc3a34437d4d22e0869e7cf7d75904e5a9524cc9861d65e4"
       },
       {
         "path": "src/distribution/claude.py",
@@ -8864,19 +9722,19 @@
       },
       {
         "path": "src/distribution/content.py",
-        "sha256": "d79ba189e31073d28617d9afab44cb6adaaece9103811abf110257558ef7e202"
+        "sha256": "2923bad9c9867cceb62e2c1ac0d3e551e8d52eb5da68012bbc006d6c893a3dce"
       },
       {
         "path": "src/distribution/contracts.py",
-        "sha256": "394e43f38e08cf10ed51cb6ec9c9a41887c4309ff7db63ee97c7cbb87e3c4fa2"
+        "sha256": "4d4c9e3b7da68496dc8c9834882049c913fc9afdf45dc150083989329a58e3a5"
       },
       {
         "path": "src/distribution/data.py",
-        "sha256": "4045d5e5d0c7dd0d95cc2aa5b8a797a9ae25864496793a50cf9a9dd67de6740f"
+        "sha256": "e1d7cb316d516e8ddaa5a85bf67c497a48e1dc306fefd4f17b9613142d1b9485"
       },
       {
         "path": "src/distribution/git_source.py",
-        "sha256": "86566f80da65c46ea5241d215799fce7894eed3d0ea7133ab921556da42dc030"
+        "sha256": "87eda8d137c501012743972441af13d154d8ea6d7adc010790f2da0eb96d4af7"
       },
       {
         "path": "src/distribution/installation.py",
@@ -8892,7 +9750,7 @@
       },
       {
         "path": "src/distribution/installation_state.py",
-        "sha256": "46d9e726b64690061b2defcbf174c9624b595b2f9843ae5a5ca01f44211309c6"
+        "sha256": "f1899faaa68da25af5f8e2bf380c2138ca2e3de0d085c616a607bbbb2fc6e13a"
       },
       {
         "path": "src/distribution/maintenance_coordination.py",
@@ -8911,27 +9769,23 @@
         "sha256": "d36be253554e30bffb98f3740e35ce9909fb638c171d68435c7bfc46beaf68fc"
       },
       {
+        "path": "src/tools/derive-subset.py",
+        "sha256": "169d75ec5bfde50d05684ffa107def94f627ff7aa7db2efc9d233361a1f62dd2"
+      },
+      {
         "path": "src/tools/maintain_framework.py",
-        "sha256": "9ae08387cf8875118005ef8cefd4e90e50a9f95f939efef739047404880ec82b"
+        "sha256": "1fd876785bd99fd8d8055d664b1909c6067a3f186453257e2c524dbc1ce3d24f"
       },
       {
-        "path": "tools/build-catalog.py",
-        "sha256": "0c15bfc93f914c3d7d24fd143c9d2e595f48346920b0b55bd6883e0dfcd86c46"
-      },
-      {
-        "path": "tools/derive-subset.py",
-        "sha256": "21de13c42d411598d435adbae54e4e57a6a1c62dd50a7a02a026c12bd33b6566"
-      },
-      {
-        "path": "tools/reinstall-framework.py",
-        "sha256": "6c59ddd2fc2ff97d2f3712ff85bf47f710a641782ff67bcb8043a0b41bfe208e"
+        "path": "src/tools/reinstall-framework.py",
+        "sha256": "984103e3e45a26ee4100bcf2558758b4cd14a39c6d8fda1b5d016e620afca689"
       }
     ],
     "id": "framework-managed-installation",
-    "source_commit": "158b8438f61a60eb621e3a5b43ed1a0479634f6f",
+    "source_commit": "a66957e00aa447be887258fa9b55fd89e39e96dd",
     "version": "2.0.0"
   },
-  "installation_id": "842258fcd115288102e0a020346643b4",
+  "installation_id": "51da4589750da28cb7c1927b3f9f04f8",
   "inventory": {
     "files": [
       {
@@ -8958,14 +9812,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet-backend",
         "path": "payload/.ai/core/knowledge/dotnet-backend/content-package.yaml",
-        "sha256": "816b4797bfdf9f23610f8234b4e5801f3ecc35ddd71dbde4edbe4820e079a0c8",
-        "size": 250457,
+        "sha256": "572ba054265dcd81e9aec19db7a9d542e76e4a1d5ed1856f0cdc92609bdc4a41",
+        "size": 251999,
         "source": {
-          "git_blob": "203e32eb2c424176e1ab638061f1319b7cacd440",
+          "git_blob": "8d93c44e2b11a583799966ea03a772fc4d41d985",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/content-package.yaml",
-          "sha256": "816b4797bfdf9f23610f8234b4e5801f3ecc35ddd71dbde4edbe4820e079a0c8",
-          "size": 250457
+          "sha256": "572ba054265dcd81e9aec19db7a9d542e76e4a1d5ed1856f0cdc92609bdc4a41",
+          "size": 251999
         }
       },
       {
@@ -9026,14 +9880,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet-backend",
         "path": "payload/.ai/core/knowledge/dotnet-backend/design/source-map.md",
-        "sha256": "a717edbd540ddd135d34d675b968ebb1cc7e1fca3496e5d2c5cb5d1f3b324b69",
-        "size": 4114,
+        "sha256": "bde89c5a3967ea6bde3b9ad1603dcc6c6673014f351f8eb1c5d49b401c344f51",
+        "size": 4208,
         "source": {
-          "git_blob": "06def4db477047ab65b9ae322693ab1a78029ca5",
+          "git_blob": "3b179dee525c40c422f923192dff77a898ef4cfb",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/design/source-map.md",
-          "sha256": "a717edbd540ddd135d34d675b968ebb1cc7e1fca3496e5d2c5cb5d1f3b324b69",
-          "size": 4114
+          "sha256": "bde89c5a3967ea6bde3b9ad1603dcc6c6673014f351f8eb1c5d49b401c344f51",
+          "size": 4208
         }
       },
       {
@@ -9043,14 +9897,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet-backend",
         "path": "payload/.ai/core/knowledge/dotnet-backend/engineering-rule-catalog.yaml",
-        "sha256": "1222842d9153acb61b08c86bc2d45ceaf965e0466cd7bd279a372453a6c8b4be",
-        "size": 57155,
+        "sha256": "4a4724411333670e33605236e1d96c4b470d1a18a895ee7fd7db5dceb86d6887",
+        "size": 57189,
         "source": {
-          "git_blob": "16afbc344152cd13602e4f99e99ae72788d7f789",
+          "git_blob": "b800829758ed1b2f77d3fe75a4f15e0dd5d9ce65",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/engineering-rule-catalog.yaml",
-          "sha256": "1222842d9153acb61b08c86bc2d45ceaf965e0466cd7bd279a372453a6c8b4be",
-          "size": 57155
+          "sha256": "4a4724411333670e33605236e1d96c4b470d1a18a895ee7fd7db5dceb86d6887",
+          "size": 57189
         }
       },
       {
@@ -11423,14 +12277,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet-backend",
         "path": "payload/.ai/core/knowledge/dotnet-backend/guides/PERSISTENCE-CONFIGURATION-GUIDE.md",
-        "sha256": "bff4ecff611ec6c85b43d63acabcf9c99f77013398e3b6c054d114dc47aff9ec",
-        "size": 3386,
+        "sha256": "efe20e275e30b4be52f21423cfd1df51f0a7dcc330db70abaaa6ec877dec0fdf",
+        "size": 3428,
         "source": {
-          "git_blob": "f5208652355149274d19dc7fac0abe077356e819",
+          "git_blob": "ccf78532520032f90acd4519e2f2bb59053e941b",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/guides/PERSISTENCE-CONFIGURATION-GUIDE.md",
-          "sha256": "bff4ecff611ec6c85b43d63acabcf9c99f77013398e3b6c054d114dc47aff9ec",
-          "size": 3386
+          "sha256": "efe20e275e30b4be52f21423cfd1df51f0a7dcc330db70abaaa6ec877dec0fdf",
+          "size": 3428
         }
       },
       {
@@ -12222,13 +13076,13 @@
         "mode": "100644",
         "owner": "knowledge/dotnet-backend",
         "path": "payload/.ai/core/knowledge/dotnet-backend/references/ENGINEERING-IDENTITY-BINDINGS.MD",
-        "sha256": "e322f024f5421707df6d0d86c438d3d75afca2a4ce7303fec1f6ae7c697196eb",
+        "sha256": "1d20c845c4d75cb0bf381cca75d4be8e0bdaf726e4c07b043a0b09c85d90d12f",
         "size": 1986,
         "source": {
-          "git_blob": "cd94fbf34e6a766536e36e2d18f43ba42834a799",
+          "git_blob": "fbdf3dcb0b99a1dd02797c38142364c9b6fea185",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/references/ENGINEERING-IDENTITY-BINDINGS.MD",
-          "sha256": "e322f024f5421707df6d0d86c438d3d75afca2a4ce7303fec1f6ae7c697196eb",
+          "sha256": "1d20c845c4d75cb0bf381cca75d4be8e0bdaf726e4c07b043a0b09c85d90d12f",
           "size": 1986
         }
       },
@@ -12392,14 +13246,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet-backend",
         "path": "payload/.ai/core/knowledge/dotnet-backend/shared/common-rules.md",
-        "sha256": "c07384c0366113e9cb1a2d3462fccf26945ec85a095d80a5bca600a54c42b5f3",
-        "size": 6765,
+        "sha256": "83753e0ca7a18b40a2ed687e1ff31bf5ffbb58eb85c50711a729ca916a387ebd",
+        "size": 6746,
         "source": {
-          "git_blob": "1721f1a9e379bf39bdc6c2db087f8f51c81672d2",
+          "git_blob": "369155b79478322acad55582eb9c1a11f084d2bf",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/shared/common-rules.md",
-          "sha256": "c07384c0366113e9cb1a2d3462fccf26945ec85a095d80a5bca600a54c42b5f3",
-          "size": 6765
+          "sha256": "83753e0ca7a18b40a2ed687e1ff31bf5ffbb58eb85c50711a729ca916a387ebd",
+          "size": 6746
         }
       },
       {
@@ -12817,14 +13671,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet-backend",
         "path": "payload/.ai/core/knowledge/dotnet-backend/standards/coding-standards/test-standards.md",
-        "sha256": "8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea",
-        "size": 17630,
+        "sha256": "6f9fd76a7c064d52132f074e829f138ef20f1952894b649f4b457af4b7c11f4c",
+        "size": 17637,
         "source": {
-          "git_blob": "aef2d3400a929f5d6e514fd109ae99646e5da457",
+          "git_blob": "d5ac9cd86d541dc2d060df6cb5c8f3a4fc44366f",
           "mode": "100644",
           "path": "src/knowledge/dotnet-backend/standards/coding-standards/test-standards.md",
-          "sha256": "8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea",
-          "size": 17630
+          "sha256": "6f9fd76a7c064d52132f074e829f138ef20f1952894b649f4b457af4b7c11f4c",
+          "size": 17637
         }
       },
       {
@@ -13123,14 +13977,14 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/README.md",
-        "sha256": "3b4cbf2135ac501a5d9849dafdb0d073957da40406ea076abe24f3715ea303d9",
-        "size": 3177,
+        "sha256": "746fa7e049ccf824013ae1f685875d2271831d4f920f93b126fae1947dddd691",
+        "size": 3423,
         "source": {
-          "git_blob": "b2445bff1779b4451ff68177653b12423ab601eb",
+          "git_blob": "1d4f9b1a5ce585dddc1804cf6800b8c6187bd08e",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/README.md",
-          "sha256": "3b4cbf2135ac501a5d9849dafdb0d073957da40406ea076abe24f3715ea303d9",
-          "size": 3177
+          "sha256": "746fa7e049ccf824013ae1f685875d2271831d4f920f93b126fae1947dddd691",
+          "size": 3423
         }
       },
       {
@@ -13140,14 +13994,14 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/content-package.yaml",
-        "sha256": "63b74b16794affe7fd3f4a5bf4a96760d38411c6fcbbc17ce9c95e0cef3bc094",
-        "size": 12200,
+        "sha256": "ddb1a0620f53b559446b3e48de608d96667f7c0da8493169dd5ce52d4b9bdfb7",
+        "size": 15708,
         "source": {
-          "git_blob": "cd52efe973d5f8ae9f7520da74b21edf20ee6b61",
+          "git_blob": "26fd1ee92b1089bffc4ea45b7f743176f7067e07",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/content-package.yaml",
-          "sha256": "63b74b16794affe7fd3f4a5bf4a96760d38411c6fcbbc17ce9c95e0cef3bc094",
-          "size": 12200
+          "sha256": "ddb1a0620f53b559446b3e48de608d96667f7c0da8493169dd5ce52d4b9bdfb7",
+          "size": 15708
         }
       },
       {
@@ -13225,14 +14079,14 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/engineering-rule-catalog.yaml",
-        "sha256": "bb7a9fa703e336f7b4d693264f89d4f8ed91bb69517a2f509f5529e98ad6bb17",
-        "size": 13404,
+        "sha256": "8664f2623acda3602040568aca0899771b10503f2f5d26a4633bd3274f08be01",
+        "size": 12795,
         "source": {
-          "git_blob": "3876fd02cc6a2c0b8e793a7b668b988f705279be",
+          "git_blob": "b40d0f07baf96c7c3ca29337d9fb5d5e0c9fe821",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/engineering-rule-catalog.yaml",
-          "sha256": "bb7a9fa703e336f7b4d693264f89d4f8ed91bb69517a2f509f5529e98ad6bb17",
-          "size": 13404
+          "sha256": "8664f2623acda3602040568aca0899771b10503f2f5d26a4633bd3274f08be01",
+          "size": 12795
         }
       },
       {
@@ -13339,19 +14193,36 @@
       },
       {
         "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/references/CONTEXT-RESOURCE-OWNERSHIP.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/references/CONTEXT-RESOURCE-OWNERSHIP.md",
+        "sha256": "d8bc093081c4202d7aa71e729898e8cbb41c0c93dc2933b7cffa0fbb192aa0f1",
+        "size": 3415,
+        "source": {
+          "git_blob": "43f54370f81413bac4c89d47fb18edc0f2683aa8",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/references/CONTEXT-RESOURCE-OWNERSHIP.md",
+          "sha256": "d8bc093081c4202d7aa71e729898e8cbb41c0c93dc2933b7cffa0fbb192aa0f1",
+          "size": 3415
+        }
+      },
+      {
+        "binding": null,
         "destination": ".ai/core/knowledge/engineering-common/references/ENGINEERING-IDENTITY-CONTRACT.md",
         "kind": "payload",
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/references/ENGINEERING-IDENTITY-CONTRACT.md",
-        "sha256": "7293eda5f64410ce212dc856f2a86bb7919636c4f42f8f9365b00a528a150562",
-        "size": 2809,
+        "sha256": "b0d4fd1d3082952175f4d47e21a5b63f4f0f85d7c546b0f5698ea7c557b922f6",
+        "size": 2783,
         "source": {
-          "git_blob": "9d34635b0d485957fdd28c970edd1db23ceda3bf",
+          "git_blob": "756cd952c9f8d36dca51d2e0216f7091d7ae58a7",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/ENGINEERING-IDENTITY-CONTRACT.md",
-          "sha256": "7293eda5f64410ce212dc856f2a86bb7919636c4f42f8f9365b00a528a150562",
-          "size": 2809
+          "sha256": "b0d4fd1d3082952175f4d47e21a5b63f4f0f85d7c546b0f5698ea7c557b922f6",
+          "size": 2783
         }
       },
       {
@@ -13407,19 +14278,53 @@
       },
       {
         "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
+        "sha256": "e8bd218a2525e3cbf3b955e4b2ea9ccaf35d73fe5d6033a8566bdefbd7d67b83",
+        "size": 1940,
+        "source": {
+          "git_blob": "ec2eb31e5d1a6a6e850654e24fb6a0484328a432",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
+          "sha256": "e8bd218a2525e3cbf3b955e4b2ea9ccaf35d73fe5d6033a8566bdefbd7d67b83",
+          "size": 1940
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/knowledge/engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "knowledge/engineering-common",
+        "path": "payload/.ai/core/knowledge/engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md",
+        "sha256": "09654b188773c63a1dc806286e975787092a2c7fda1116b3a94a2a0ab0406922",
+        "size": 4092,
+        "source": {
+          "git_blob": "f466f11113983094960127e9e32d865b5468a50e",
+          "mode": "100644",
+          "path": "src/knowledge/engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md",
+          "sha256": "09654b188773c63a1dc806286e975787092a2c7fda1116b3a94a2a0ab0406922",
+          "size": 4092
+        }
+      },
+      {
+        "binding": null,
         "destination": ".ai/core/skills/adr-author/SKILL.md",
         "kind": "payload",
         "mode": "100644",
         "owner": "skill/adr-author",
         "path": "payload/.ai/core/skills/adr-author/SKILL.md",
-        "sha256": "b06093534d68277621bcd527fd9063f2f0104b8fbf82573da2e48d1fe26cb272",
-        "size": 1950,
+        "sha256": "962ae12718f86d1d7f5b690745d89b80d7451540d8de0e0408a4d768909bb1ca",
+        "size": 2261,
         "source": {
-          "git_blob": "50f5c6afd5e90ec5e2f15875c46ae4e3d1874cc2",
+          "git_blob": "a991cda1173954337c679162e9d9f5470a221940",
           "mode": "100644",
           "path": "src/skills/adr-author/SKILL.md",
-          "sha256": "b06093534d68277621bcd527fd9063f2f0104b8fbf82573da2e48d1fe26cb272",
-          "size": 1950
+          "sha256": "962ae12718f86d1d7f5b690745d89b80d7451540d8de0e0408a4d768909bb1ca",
+          "size": 2261
         }
       },
       {
@@ -13480,14 +14385,14 @@
         "mode": "100644",
         "owner": "skill/adr-author",
         "path": "payload/.ai/core/skills/adr-author/references/operations.md",
-        "sha256": "7cf60de7bc560c7be7fefc1dc399fb557882846818eca710a78f8a4375b73ee7",
-        "size": 10590,
+        "sha256": "20c35161b927195278ff72407e93ea1cccd2509f51bdc298ce9c75d15f4211a4",
+        "size": 10410,
         "source": {
-          "git_blob": "b6986be6402caed409a4dac1672eed586ce2d9fc",
+          "git_blob": "ea05772bb0b4204e2ca80185ca3e4a1a8f39dfb0",
           "mode": "100644",
           "path": "src/skills/adr-author/references/operations.md",
-          "sha256": "7cf60de7bc560c7be7fefc1dc399fb557882846818eca710a78f8a4375b73ee7",
-          "size": 10590
+          "sha256": "20c35161b927195278ff72407e93ea1cccd2509f51bdc298ce9c75d15f4211a4",
+          "size": 10410
         }
       },
       {
@@ -13565,14 +14470,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-auditor",
         "path": "payload/.ai/core/skills/ai-context-auditor/SKILL.md",
-        "sha256": "7d5eda3148ac3b0d792d1c36630b08a0ca17e7ef3f35559c7ca1631688369580",
-        "size": 1155,
+        "sha256": "42782d9ef53f8ae24c07163c40c1b4cb11b125620a79185de42d62a3d6ee181a",
+        "size": 1690,
         "source": {
-          "git_blob": "2aa0ce2e3d000b8ab75d898026eff25d8894b2e1",
+          "git_blob": "660778f328791c862c365235a6f0f3a025953f7c",
           "mode": "100644",
           "path": "src/skills/ai-context-auditor/SKILL.md",
-          "sha256": "7d5eda3148ac3b0d792d1c36630b08a0ca17e7ef3f35559c7ca1631688369580",
-          "size": 1155
+          "sha256": "42782d9ef53f8ae24c07163c40c1b4cb11b125620a79185de42d62a3d6ee181a",
+          "size": 1690
         }
       },
       {
@@ -13616,14 +14521,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-governance",
         "path": "payload/.ai/core/skills/ai-context-governance/SKILL.md",
-        "sha256": "c0aad70a26e6395964d9f996971b0bbdda24a54cda487d76378217d35743d68e",
-        "size": 1312,
+        "sha256": "1b6b4346a4c30b75ababcf39c5b57ac7f6a5237043c8bbad384df5146d7d8b34",
+        "size": 1988,
         "source": {
-          "git_blob": "7c82beb61b00baa9ca197f7ad94bbd96a35b32e4",
+          "git_blob": "763d93a5829e6ffdf4d0461200191bdbac4dc168",
           "mode": "100644",
           "path": "src/skills/ai-context-governance/SKILL.md",
-          "sha256": "c0aad70a26e6395964d9f996971b0bbdda24a54cda487d76378217d35743d68e",
-          "size": 1312
+          "sha256": "1b6b4346a4c30b75ababcf39c5b57ac7f6a5237043c8bbad384df5146d7d8b34",
+          "size": 1988
         }
       },
       {
@@ -13633,14 +14538,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-governance",
         "path": "payload/.ai/core/skills/ai-context-governance/references/maintenance.md",
-        "sha256": "d7a883c88ffca483e9669e3e748be27d9e0648112d77391d632d32b975d8804a",
-        "size": 11292,
+        "sha256": "89d56e0848bb9efcbc3ec1efd7e83ee9e2c392f832f8da13a7a72115fc726e3a",
+        "size": 11749,
         "source": {
-          "git_blob": "0498c6b52ed56708c787c08aa8547e06142c4d94",
+          "git_blob": "a5bd92c7053a17f158e3e90faeaac1d4df271d25",
           "mode": "100644",
           "path": "src/skills/ai-context-governance/references/maintenance.md",
-          "sha256": "d7a883c88ffca483e9669e3e748be27d9e0648112d77391d632d32b975d8804a",
-          "size": 11292
+          "sha256": "89d56e0848bb9efcbc3ec1efd7e83ee9e2c392f832f8da13a7a72115fc726e3a",
+          "size": 11749
         }
       },
       {
@@ -13667,14 +14572,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/SKILL.md",
-        "sha256": "4c9ee9f43a2f5dc361071d5799864bb2cdcf188f69ed98137aab1e1c9ca42429",
-        "size": 1842,
+        "sha256": "ffaac04deaf44577381324b7f2293e21ea589c8be1d6dbdc3afc455563ad6250",
+        "size": 2967,
         "source": {
-          "git_blob": "39f91c9eebd4bb4f7df56924eb7976542f6d06f5",
+          "git_blob": "3db4d2d2031e801a1318e75cb6c3ec0b4380f253",
           "mode": "100644",
           "path": "src/skills/ai-context-init/SKILL.md",
-          "sha256": "4c9ee9f43a2f5dc361071d5799864bb2cdcf188f69ed98137aab1e1c9ca42429",
-          "size": 1842
+          "sha256": "ffaac04deaf44577381324b7f2293e21ea589c8be1d6dbdc3afc455563ad6250",
+          "size": 2967
         }
       },
       {
@@ -13684,14 +14589,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/references/initialize.md",
-        "sha256": "d7220d8004ae2135896cab73f61386884fcd1e6b5f07a9c807d55a4e6e0fae00",
-        "size": 6405,
+        "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
+        "size": 11501,
         "source": {
-          "git_blob": "04cd2aff508391a2d48ffb4db6903d3d8ccbc5bb",
+          "git_blob": "008c1997a65bad39327c873a806bc28fd2cf8dfe",
           "mode": "100644",
           "path": "src/skills/ai-context-init/references/initialize.md",
-          "sha256": "d7220d8004ae2135896cab73f61386884fcd1e6b5f07a9c807d55a4e6e0fae00",
-          "size": 6405
+          "sha256": "b3f463e90de97c80fd4b2b8c1809d05c3c5caf6ff7cb765552604d48dc21dd35",
+          "size": 11501
         }
       },
       {
@@ -13701,14 +14606,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/references/project-structure.md",
-        "sha256": "7d8f1753073105de1cdab0f345103b8130169144e6f9345c4aefef742e3c6fb6",
-        "size": 3251,
+        "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
+        "size": 4135,
         "source": {
-          "git_blob": "1b6599bbe48113825f9f24eb2b11703cc0547c4e",
+          "git_blob": "defbb6c0f7220bc4a068367fe82d88bd7fcc15b0",
           "mode": "100644",
           "path": "src/skills/ai-context-init/references/project-structure.md",
-          "sha256": "7d8f1753073105de1cdab0f345103b8130169144e6f9345c4aefef742e3c6fb6",
-          "size": 3251
+          "sha256": "edb09c507448b55f7d187632d3bfb5caeb77034a0c5810674c29617606805240",
+          "size": 4135
         }
       },
       {
@@ -13718,14 +14623,31 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/skill-package.yaml",
-        "sha256": "652d342c0385bfb57b1bcda87f9481a6db6f2f9146d8eff19a497a1221f9d5f7",
-        "size": 1778,
+        "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+        "size": 1915,
         "source": {
-          "git_blob": "67eaec8b067b74f79e056b792d18e393febbacba",
+          "git_blob": "24834cafe29dadaa34a6420e3313929d8191fe9a",
           "mode": "100644",
           "path": "src/skills/ai-context-init/skill-package.yaml",
-          "sha256": "652d342c0385bfb57b1bcda87f9481a6db6f2f9146d8eff19a497a1221f9d5f7",
-          "size": 1778
+          "sha256": "62e7f99f47d70c795860e1681e3ad2af3923115c00c07d514f958598ca94ccb7",
+          "size": 1915
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/ai-collaboration.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/ai-collaboration.md",
+        "sha256": "d115949f90921d903cfb46f88debb7ea4f518320d7a115ad6f817c9ee122ee00",
+        "size": 5171,
+        "source": {
+          "git_blob": "9cd093dc613f7adb53857dbfa0b33fa339572388",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/ai-collaboration.md",
+          "sha256": "d115949f90921d903cfb46f88debb7ea4f518320d7a115ad6f817c9ee122ee00",
+          "size": 5171
         }
       },
       {
@@ -13747,19 +14669,53 @@
       },
       {
         "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/first-task.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/first-task.md",
+        "sha256": "280f6e799f28feafd942ae8bdb72076c66750dad1eb6a563d3a6da83718711d1",
+        "size": 3342,
+        "source": {
+          "git_blob": "c1500b0c9d62613bb8c1cfcc69bac4fe2d39e0b3",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/first-task.md",
+          "sha256": "280f6e799f28feafd942ae8bdb72076c66750dad1eb6a563d3a6da83718711d1",
+          "size": 3342
+        }
+      },
+      {
+        "binding": null,
         "destination": ".ai/core/skills/ai-context-init/templates/project-config.template.yaml",
         "kind": "payload",
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/templates/project-config.template.yaml",
-        "sha256": "3ba0b4207d2d43cd33314893a33c170f268f15a4f0c500703417c0a4f6f4a010",
-        "size": 920,
+        "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
+        "size": 1059,
         "source": {
-          "git_blob": "ea4d323e1b41b3f1f1baf88473b35778272f08fd",
+          "git_blob": "61425433f3f600dc47df926ed830effdf27e44a1",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/project-config.template.yaml",
-          "sha256": "3ba0b4207d2d43cd33314893a33c170f268f15a4f0c500703417c0a4f6f4a010",
-          "size": 920
+          "sha256": "1b70d0217e70237261890dbeff28d856403e1082fc9d9d82218db90374a743d4",
+          "size": 1059
+        }
+      },
+      {
+        "binding": null,
+        "destination": ".ai/core/skills/ai-context-init/templates/project-context.md",
+        "kind": "payload",
+        "mode": "100644",
+        "owner": "skill/ai-context-init",
+        "path": "payload/.ai/core/skills/ai-context-init/templates/project-context.md",
+        "sha256": "906a823b3202e0423711a52951f924d7e9a25be0d776e0bd5d6691f4d7b5e7ec",
+        "size": 2572,
+        "source": {
+          "git_blob": "884ee7a34698a1a759884fbdcb254cbc0dcce41a",
+          "mode": "100644",
+          "path": "src/skills/ai-context-init/templates/project-context.md",
+          "sha256": "906a823b3202e0423711a52951f924d7e9a25be0d776e0bd5d6691f4d7b5e7ec",
+          "size": 2572
         }
       },
       {
@@ -13769,14 +14725,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/templates/public-catalogs/dev/INDEX.md",
-        "sha256": "45841095a122fd2623c153f0ea1608346e9892563a0f2157f659ba69a64de4dc",
-        "size": 395,
+        "sha256": "099c0a0e35a8ae26a785cb061d7d92466bd32d723fa865bf845cecf99a600064",
+        "size": 636,
         "source": {
-          "git_blob": "588876a8ce6f2e23aca4c48c32c58ccb8f430ca8",
+          "git_blob": "749e7eea2236b5ea60297e236537a69cf1a5c9c9",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-catalogs/dev/INDEX.md",
-          "sha256": "45841095a122fd2623c153f0ea1608346e9892563a0f2157f659ba69a64de4dc",
-          "size": 395
+          "sha256": "099c0a0e35a8ae26a785cb061d7d92466bd32d723fa865bf845cecf99a600064",
+          "size": 636
         }
       },
       {
@@ -13786,14 +14742,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/templates/public-catalogs/dev/README.MD",
-        "sha256": "eb0b87d3dfe43df798795096b5fcdbd24aca590adb6b4efeb203c43be80c4f24",
-        "size": 478,
+        "sha256": "365f59a215e0fd75f57567434c721f76ffd456447e270796ddaf0cd17074eb8d",
+        "size": 808,
         "source": {
-          "git_blob": "c66cc2415d59200440099f3c6d4aa1b99a3888d0",
+          "git_blob": "d7a14c67912fb793cabf0468e88eccbb66156b7c",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-catalogs/dev/README.MD",
-          "sha256": "eb0b87d3dfe43df798795096b5fcdbd24aca590adb6b4efeb203c43be80c4f24",
-          "size": 478
+          "sha256": "365f59a215e0fd75f57567434c721f76ffd456447e270796ddaf0cd17074eb8d",
+          "size": 808
         }
       },
       {
@@ -13803,14 +14759,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/templates/public-root/AGENTS.md",
-        "sha256": "7216f92eecba326530a0440fe7e9305e74131fd04d9257b3821b2b03c1a05b94",
-        "size": 3571,
+        "sha256": "4a330f20585273b3607842d23bf678b2814cdea8147de682adf900e4eaf7e6f5",
+        "size": 4219,
         "source": {
-          "git_blob": "d8e9f183def05ff31e94e5d48c4db0a41e44bfbc",
+          "git_blob": "dec2ed7059a50bf498d08af09503f4313f8d73d1",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-root/AGENTS.md",
-          "sha256": "7216f92eecba326530a0440fe7e9305e74131fd04d9257b3821b2b03c1a05b94",
-          "size": 3571
+          "sha256": "4a330f20585273b3607842d23bf678b2814cdea8147de682adf900e4eaf7e6f5",
+          "size": 4219
         }
       },
       {
@@ -13837,14 +14793,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/templates/public-root/README.md",
-        "sha256": "54ad0d6b48e089a98d25f6a5d3ae118cca18a100317d29c19fad8372e4424429",
-        "size": 906,
+        "sha256": "8c170cd0c358541d5483d29ab1bb0ea93cd9f6af9068604241aaedac352c7d7c",
+        "size": 1146,
         "source": {
-          "git_blob": "d56fc6e1969b2dd7aaba3097c72b5f7fe307b898",
+          "git_blob": "c98a82ad783c4c7da2b96bce0dee475a5587e32b",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-root/README.md",
-          "sha256": "54ad0d6b48e089a98d25f6a5d3ae118cca18a100317d29c19fad8372e4424429",
-          "size": 906
+          "sha256": "8c170cd0c358541d5483d29ab1bb0ea93cd9f6af9068604241aaedac352c7d7c",
+          "size": 1146
         }
       },
       {
@@ -13871,14 +14827,14 @@
         "mode": "100644",
         "owner": "skill/bdd-gwt-test-designer",
         "path": "payload/.ai/core/skills/bdd-gwt-test-designer/SKILL.md",
-        "sha256": "408f4333b9716f373f1341793ebaa121451e1fb861e0858b44619f687a047dca",
-        "size": 1584,
+        "sha256": "dc3beee8d47ab3e2c78dac16d78ddf410af27ebeac8486b0e005ca1270d15cf2",
+        "size": 1914,
         "source": {
-          "git_blob": "2dd8f905e0ec9b65ca32e29f1062c7b2614e6108",
+          "git_blob": "d0de71981c4e1a7b808240d95325d2fe04ffcec8",
           "mode": "100644",
           "path": "src/skills/bdd-gwt-test-designer/SKILL.md",
-          "sha256": "408f4333b9716f373f1341793ebaa121451e1fb861e0858b44619f687a047dca",
-          "size": 1584
+          "sha256": "dc3beee8d47ab3e2c78dac16d78ddf410af27ebeac8486b0e005ca1270d15cf2",
+          "size": 1914
         }
       },
       {
@@ -13939,14 +14895,14 @@
         "mode": "100644",
         "owner": "skill/code-reviewer",
         "path": "payload/.ai/core/skills/code-reviewer/SKILL.md",
-        "sha256": "a48c9efa36cf893c0bc5fed93ce84598b7e75149b4e87858b7b99620f9dbcfd0",
-        "size": 1649,
+        "sha256": "de8df9f0167890a6a24ddce5ea371ca0bbffca30b6fc56e0c5ced275cd5ae447",
+        "size": 2040,
         "source": {
-          "git_blob": "98ee1df26bf488a3a77589436b5bcb02311ae127",
+          "git_blob": "3a15a5884ce5e2f9b2d806bbb01be68895e657d0",
           "mode": "100644",
           "path": "src/skills/code-reviewer/SKILL.md",
-          "sha256": "a48c9efa36cf893c0bc5fed93ce84598b7e75149b4e87858b7b99620f9dbcfd0",
-          "size": 1649
+          "sha256": "de8df9f0167890a6a24ddce5ea371ca0bbffca30b6fc56e0c5ced275cd5ae447",
+          "size": 2040
         }
       },
       {
@@ -14058,14 +15014,14 @@
         "mode": "100644",
         "owner": "skill/diagnostic-analyst",
         "path": "payload/.ai/core/skills/diagnostic-analyst/SKILL.md",
-        "sha256": "41ea28386a84941cb58f8a79e0965a1f6197233548b18e4fee53faf7b2cae2aa",
-        "size": 1017,
+        "sha256": "cd158d43e3f12db1b9f7959c7f7fdf4960a6dd1aaf2d1d6631bf92b418a6d63c",
+        "size": 1341,
         "source": {
-          "git_blob": "db665e63540a79af3c5e5ab91e9d9d309b2e7997",
+          "git_blob": "6ade5c42b11c42d53df3e40b741aecd9943d1fd0",
           "mode": "100644",
           "path": "src/skills/diagnostic-analyst/SKILL.md",
-          "sha256": "41ea28386a84941cb58f8a79e0965a1f6197233548b18e4fee53faf7b2cae2aa",
-          "size": 1017
+          "sha256": "cd158d43e3f12db1b9f7959c7f7fdf4960a6dd1aaf2d1d6631bf92b418a6d63c",
+          "size": 1341
         }
       },
       {
@@ -14109,14 +15065,14 @@
         "mode": "100644",
         "owner": "skill/lesson-author",
         "path": "payload/.ai/core/skills/lesson-author/SKILL.md",
-        "sha256": "96ba3b0c22458ff4ebef2fbbfc770a595f2398c6e245572e1945fd0e0527d34b",
-        "size": 1713,
+        "sha256": "ec9aab1b880726c0c2ad2179e903463eb292b4947c988deaa102f1804bec6ba1",
+        "size": 2037,
         "source": {
-          "git_blob": "40071f0fba62c655cd67536e5b41d2749008094e",
+          "git_blob": "6917244f9c6f17f405fdeef87b4cd9aeeb91ce33",
           "mode": "100644",
           "path": "src/skills/lesson-author/SKILL.md",
-          "sha256": "96ba3b0c22458ff4ebef2fbbfc770a595f2398c6e245572e1945fd0e0527d34b",
-          "size": 1713
+          "sha256": "ec9aab1b880726c0c2ad2179e903463eb292b4947c988deaa102f1804bec6ba1",
+          "size": 2037
         }
       },
       {
@@ -14160,14 +15116,14 @@
         "mode": "100644",
         "owner": "skill/lesson-author",
         "path": "payload/.ai/core/skills/lesson-author/references/operations.md",
-        "sha256": "702d953102db772a7dca631e3f05eefab3b7c47c5c303e3040fe32de0171997d",
-        "size": 10852,
+        "sha256": "f7f136355337b5da11fb702b58718554cec819986c829a68a93047dac6fd74dc",
+        "size": 10672,
         "source": {
-          "git_blob": "2fbe961898a72bb8c753b02b4035a8095a067675",
+          "git_blob": "6cb8a2d56b1b7954fc21849be491ec49fc0a63a2",
           "mode": "100644",
           "path": "src/skills/lesson-author/references/operations.md",
-          "sha256": "702d953102db772a7dca631e3f05eefab3b7c47c5c303e3040fe32de0171997d",
-          "size": 10852
+          "sha256": "f7f136355337b5da11fb702b58718554cec819986c829a68a93047dac6fd74dc",
+          "size": 10672
         }
       },
       {
@@ -14398,14 +15354,14 @@
         "mode": "100644",
         "owner": "skill/local-change-implementer",
         "path": "payload/.ai/core/skills/local-change-implementer/SKILL.md",
-        "sha256": "d26f17b90239157fa6d231f64d6f753a40e1b239cbab30156cb96599aaad0445",
-        "size": 1404,
+        "sha256": "6d18c7209fbc740bacd088600f5dafec8dfd52d80e555fb3396462dedbe0e1b5",
+        "size": 1708,
         "source": {
-          "git_blob": "ebdd9cd9aadbd0adffda6f6a81883080f00342e4",
+          "git_blob": "c0b0cc2a7cee94f88760588a9efb5cfa68727df5",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/SKILL.md",
-          "sha256": "d26f17b90239157fa6d231f64d6f753a40e1b239cbab30156cb96599aaad0445",
-          "size": 1404
+          "sha256": "6d18c7209fbc740bacd088600f5dafec8dfd52d80e555fb3396462dedbe0e1b5",
+          "size": 1708
         }
       },
       {
@@ -14415,14 +15371,14 @@
         "mode": "100644",
         "owner": "skill/local-change-implementer",
         "path": "payload/.ai/core/skills/local-change-implementer/references/implement.md",
-        "sha256": "780ca40d00d251cdbea73a513a5d975295b7a4124d1874082d51b41195cf6630",
-        "size": 8223,
+        "sha256": "932de795e2508947e41c714683685bc6f7a807b254329e4ca5232080248d5488",
+        "size": 8396,
         "source": {
-          "git_blob": "f4b1b3a9c01db83b8abe87744a5133d499fa8310",
+          "git_blob": "346c15fbf6a201a2e9594e9f9cf2261c2f86786b",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/references/implement.md",
-          "sha256": "780ca40d00d251cdbea73a513a5d975295b7a4124d1874082d51b41195cf6630",
-          "size": 8223
+          "sha256": "932de795e2508947e41c714683685bc6f7a807b254329e4ca5232080248d5488",
+          "size": 8396
         }
       },
       {
@@ -14449,14 +15405,14 @@
         "mode": "100644",
         "owner": "skill/pr-author",
         "path": "payload/.ai/core/skills/pr-author/SKILL.md",
-        "sha256": "fee58e449d31611c60b891421d36f0d1ac19d14a83a132baeaa5bd1d6d61b14b",
-        "size": 1630,
+        "sha256": "ed609a3ecbdfd908977a4544d48fbc0ed1bed6c447a8a43531895152034013ac",
+        "size": 1980,
         "source": {
-          "git_blob": "78a1ef2f198cc21d9e8c403136c345c3e7bee203",
+          "git_blob": "052c360188916a9d9f9d7b0c26ba25d1d750a3c9",
           "mode": "100644",
           "path": "src/skills/pr-author/SKILL.md",
-          "sha256": "fee58e449d31611c60b891421d36f0d1ac19d14a83a132baeaa5bd1d6d61b14b",
-          "size": 1630
+          "sha256": "ed609a3ecbdfd908977a4544d48fbc0ed1bed6c447a8a43531895152034013ac",
+          "size": 1980
         }
       },
       {
@@ -14619,14 +15575,14 @@
         "mode": "100644",
         "owner": "skill/problem-frame-author",
         "path": "payload/.ai/core/skills/problem-frame-author/SKILL.md",
-        "sha256": "afb8692260f704506a7067ae8d9c1acde629adc4dcd83da95032cc2227c19fd1",
-        "size": 2021,
+        "sha256": "4625ec9bb739e3beb7c95563cf7d5ec25f25398156d18d43a7835c940727772b",
+        "size": 2363,
         "source": {
-          "git_blob": "f750615d89f134e91165beecefcca77fe6783c47",
+          "git_blob": "be03ccc1379c89d9b5e98bc2d9b044b514f67174",
           "mode": "100644",
           "path": "src/skills/problem-frame-author/SKILL.md",
-          "sha256": "afb8692260f704506a7067ae8d9c1acde629adc4dcd83da95032cc2227c19fd1",
-          "size": 2021
+          "sha256": "4625ec9bb739e3beb7c95563cf7d5ec25f25398156d18d43a7835c940727772b",
+          "size": 2363
         }
       },
       {
@@ -14874,14 +15830,14 @@
         "mode": "100644",
         "owner": "skill/slice-implementer",
         "path": "payload/.ai/core/skills/slice-implementer/SKILL.md",
-        "sha256": "7fb7542531e36732eea61fb73871c826e4e3a11878dc17afe171c5ec5df26b9c",
-        "size": 1647,
+        "sha256": "4db337db49f9dad81d868a61edd088365637b3b757d71fde91ffa8a0b68ccba0",
+        "size": 1994,
         "source": {
-          "git_blob": "a68baa161d8db9ef340f8ca18a15158a3323225a",
+          "git_blob": "37a1c3bbb2f0635702000e942e058b99830b5fde",
           "mode": "100644",
           "path": "src/skills/slice-implementer/SKILL.md",
-          "sha256": "7fb7542531e36732eea61fb73871c826e4e3a11878dc17afe171c5ec5df26b9c",
-          "size": 1647
+          "sha256": "4db337db49f9dad81d868a61edd088365637b3b757d71fde91ffa8a0b68ccba0",
+          "size": 1994
         }
       },
       {
@@ -15044,14 +16000,14 @@
         "mode": "100644",
         "owner": "skill/software-development-orchestrator",
         "path": "payload/.ai/core/skills/software-development-orchestrator/references/orchestrate.md",
-        "sha256": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
-        "size": 7282,
+        "sha256": "332df2bd353bb4649508f254030fd848376cf8142e3923b4de1657fab6383f83",
+        "size": 7490,
         "source": {
-          "git_blob": "ac92d7a9d95fa241e67074cc1273855b33416578",
+          "git_blob": "dfdfec28727f3ef211e8261707175f448fd5abb5",
           "mode": "100644",
           "path": "src/skills/software-development-orchestrator/references/orchestrate.md",
-          "sha256": "6f17bd9fbc1bcba894773a35917c8986f992487ccd6f4255447fb2a60ff2821d",
-          "size": 7282
+          "sha256": "332df2bd353bb4649508f254030fd848376cf8142e3923b4de1657fab6383f83",
+          "size": 7490
         }
       },
       {
@@ -15231,14 +16187,14 @@
         "mode": "100644",
         "owner": "skill/spec-compliance-validator",
         "path": "payload/.ai/core/skills/spec-compliance-validator/SKILL.md",
-        "sha256": "06a009d4913f3a540ce5005283e003c009ecf30503c5fd5abad9ea4c69c32637",
-        "size": 1789,
+        "sha256": "fa46d0e3ce024b3aeb74ea5ed1ae4bd21f3bf60ff8cfa23668d9b02ec90e1a67",
+        "size": 2158,
         "source": {
-          "git_blob": "78da54328dd7cc4c85ff6314f634b7768e72f22d",
+          "git_blob": "6b49026eb666a9e1cee48c7dcb4ceb920ecea568",
           "mode": "100644",
           "path": "src/skills/spec-compliance-validator/SKILL.md",
-          "sha256": "06a009d4913f3a540ce5005283e003c009ecf30503c5fd5abad9ea4c69c32637",
-          "size": 1789
+          "sha256": "fa46d0e3ce024b3aeb74ea5ed1ae4bd21f3bf60ff8cfa23668d9b02ec90e1a67",
+          "size": 2158
         }
       },
       {
@@ -15356,8 +16312,8 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/ai-context-auditor",
         "path": "runtime/.agents/skills/ai-context-auditor/SKILL.md",
-        "sha256": "966fdb29db172d6eed373bf7458a074b152b3f493d7e05db0fd7f393ee3d93cd",
-        "size": 1716,
+        "sha256": "f7a42a4f7b735d7c46a92a067ea0f127b778169e90a595546a81b692b5d66704",
+        "size": 1767,
         "source": null
       },
       {
@@ -15373,8 +16329,8 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/ai-context-governance",
         "path": "runtime/.agents/skills/ai-context-governance/SKILL.md",
-        "sha256": "88dc5a459a5f1e5d8f2ad234e490ad2cfcec5cf51e947a65fe390f5b6f6579d9",
-        "size": 1758,
+        "sha256": "75c2947cc6e6182ec4ddf94493f820efdd42d785e1878f1f1511988e2481f66b",
+        "size": 1806,
         "source": null
       },
       {
@@ -15390,8 +16346,8 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/ai-context-init",
         "path": "runtime/.agents/skills/ai-context-init/SKILL.md",
-        "sha256": "980a290f9019df45fa07155cbeb7133bb9ebffe611fd18ce2b4c6d2cd260363b",
-        "size": 2798,
+        "sha256": "a8f940f7291e2f212b753e9e3a6ef94e2537f2ebf196627884635350cc1222f7",
+        "size": 3151,
         "source": null
       },
       {
@@ -15407,8 +16363,8 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/bdd-gwt-test-designer",
         "path": "runtime/.agents/skills/bdd-gwt-test-designer/SKILL.md",
-        "sha256": "6e0cb25d5db8528e2679536d5cce64c38b65a6a7796e7cd26119592f37206498",
-        "size": 1801,
+        "sha256": "8fe3e4db3ad6357af4ca528b0f6c68731a6104b711144f6a9407be1e21e4c300",
+        "size": 1890,
         "source": null
       },
       {
@@ -15424,8 +16380,8 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/code-reviewer",
         "path": "runtime/.agents/skills/code-reviewer/SKILL.md",
-        "sha256": "9ff50c8b319b4001efa1bf332fcf8d9bca4afb15bbb816cbe9a32b668b6dd540",
-        "size": 1674,
+        "sha256": "d5da8908047223039763ff5e86c776d97d00f518818fc12de5ff6b3b74861902",
+        "size": 1742,
         "source": null
       },
       {
@@ -15509,8 +16465,8 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/local-change-implementer",
         "path": "runtime/.agents/skills/local-change-implementer/SKILL.md",
-        "sha256": "c2af5f304314e18f41846c6a1382d1985bfb2d620ca77255daa55e963421626f",
-        "size": 1742,
+        "sha256": "eae76abcfb31344691d2270371c5d3883cb356780cf9b4016e9ebaf7b98514ac",
+        "size": 1796,
         "source": null
       },
       {
@@ -15526,8 +16482,8 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/pr-author",
         "path": "runtime/.agents/skills/pr-author/SKILL.md",
-        "sha256": "2c5c81ce781c38533bd9ef03d926b15336cd7f61e129b3760179145e5816128f",
-        "size": 2255,
+        "sha256": "217f263e69ef38d19ef8a23c0d3e73bdde0d378d0de975532bdc37246b5f4955",
+        "size": 2378,
         "source": null
       },
       {
@@ -15577,8 +16533,8 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/slice-implementer",
         "path": "runtime/.agents/skills/slice-implementer/SKILL.md",
-        "sha256": "930315e8693b92794ec26d3934c665a3396a27d6ae33e81d9582442c6999b0fc",
-        "size": 2340,
+        "sha256": "a96c1d28fcb1ff0886d5c2ebca9f476d2bf521bee421cd9c77629e6924e0ef6f",
+        "size": 2357,
         "source": null
       },
       {
@@ -15628,8 +16584,8 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/spec-compliance-validator",
         "path": "runtime/.agents/skills/spec-compliance-validator/SKILL.md",
-        "sha256": "27c3512562b8b67315c648e0bacdbb69d12d8376ca89b2a3c4aa152a57e0b010",
-        "size": 2091,
+        "sha256": "4b622e969291d590dba0309c0454bcdde201c72b8e3def4e93c10d44100f3e1d",
+        "size": 2136,
         "source": null
       },
       {
@@ -15662,8 +16618,8 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/ai-context-auditor",
         "path": "runtime/.claude/skills/ai-context-auditor/SKILL.md",
-        "sha256": "e9ae8f5427e0947c6ea27bfdfee28ec48de26f2cd6e5013b06b2d699eab745fe",
-        "size": 1718,
+        "sha256": "d602886a98dd80e7b54bc7d68655781490ac25ae71f5ef5474615490bd3803d2",
+        "size": 1769,
         "source": null
       },
       {
@@ -15679,8 +16635,8 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/ai-context-governance",
         "path": "runtime/.claude/skills/ai-context-governance/SKILL.md",
-        "sha256": "7e23f7fee072fb762654919d41770ea3dc3d614e675961edea35532e05793b41",
-        "size": 1760,
+        "sha256": "1d63e73ee132ea91e01f83abaf81f7d1110d1021dc6283804e18ba0d34b83001",
+        "size": 1808,
         "source": null
       },
       {
@@ -15696,8 +16652,8 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/ai-context-init",
         "path": "runtime/.claude/skills/ai-context-init/SKILL.md",
-        "sha256": "49c7636d669a7af29653cf73a9449f4d0b7ef950cd4ec0acabee1fafc2db1310",
-        "size": 2800,
+        "sha256": "b6936d348fe06055e46e60de5ff75c7da6f6d1db290b6d30e837c3bf24de3f1f",
+        "size": 3153,
         "source": null
       },
       {
@@ -15713,8 +16669,8 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/bdd-gwt-test-designer",
         "path": "runtime/.claude/skills/bdd-gwt-test-designer/SKILL.md",
-        "sha256": "60d5b780b1c062eae2675a4e8494a3e17f9a9835af741554f5b8b043f5cfdfad",
-        "size": 1803,
+        "sha256": "384d2fceb27feee598dd2f5730d2374a249e0c4ec6b78172e8973b2f28b803e6",
+        "size": 1892,
         "source": null
       },
       {
@@ -15730,8 +16686,8 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/code-reviewer",
         "path": "runtime/.claude/skills/code-reviewer/SKILL.md",
-        "sha256": "6b8363febdc60052a18a917936b7fa65919ce545d620b4e83c1743b85f3bfae1",
-        "size": 1676,
+        "sha256": "fe9767f1ddbd1113a87ba563a6bf55fba84b3704c05aa2d040863ee25c5ae8df",
+        "size": 1744,
         "source": null
       },
       {
@@ -15815,8 +16771,8 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/local-change-implementer",
         "path": "runtime/.claude/skills/local-change-implementer/SKILL.md",
-        "sha256": "73d4cf9e3492cac8068b5c5133f876515efb7f405b86fd9b2a0a72ad9019b42d",
-        "size": 1744,
+        "sha256": "8bbb277600f7c1dd3b46b990aff26e1be94d2dc5e0912c0a62c1a50e6f793201",
+        "size": 1798,
         "source": null
       },
       {
@@ -15832,8 +16788,8 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/pr-author",
         "path": "runtime/.claude/skills/pr-author/SKILL.md",
-        "sha256": "c32068f1813305fb9035958c11ca98314efb0364feb46aba42ae69071500b90a",
-        "size": 2257,
+        "sha256": "451c99183a3e2a37622d8aa12bc3fec704d30c126605da2a5f118a75aaeeeb0a",
+        "size": 2380,
         "source": null
       },
       {
@@ -15883,8 +16839,8 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/slice-implementer",
         "path": "runtime/.claude/skills/slice-implementer/SKILL.md",
-        "sha256": "2dbaaa37e45a768ec9c9bab67fcf53743edcc8f8dc51d9e88c9551cf8acebd28",
-        "size": 2342,
+        "sha256": "fb741d32ef612cfedc283f70ae0f692846cdd987e67e54919c0df8c6e8398a4b",
+        "size": 2359,
         "source": null
       },
       {
@@ -15934,8 +16890,8 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/spec-compliance-validator",
         "path": "runtime/.claude/skills/spec-compliance-validator/SKILL.md",
-        "sha256": "e14d1f7f85d659aa3992ada5f646488f830b6a97227c31182fbaac3c9c1f41b4",
-        "size": 2093,
+        "sha256": "593d55f5113463130fff4ac3e3fc6e48f593f88ab11428e398ca42d5657f5186",
+        "size": 2138,
         "source": null
       }
     ],
@@ -15945,104 +16901,16 @@
   "mode_policy": "windows-inventory-only",
   "project_inputs": [
     {
-      "path": ".agents/skills/README.md",
-      "sha256": "bfbe82375954e6af61c360d5e18576dd35ad085bce514d5e36d53d030f17f5c0"
-    },
-    {
-      "path": ".agents/skills/standards-promotion-experimental/SKILL.md",
-      "sha256": "9d365da53426a92c352aa5d28e7e5489eb3cd68339937a2d144ba72c0fe1af76"
-    },
-    {
-      "path": ".ai/INDEX.MD",
-      "sha256": "06de2fc572a5ea3b0d1ec96638cc0949255b006235b0fc653a528c47f9ce9a62"
-    },
-    {
-      "path": ".ai/README.MD",
-      "sha256": "fb17a4ac76017e5f3c1218c41f1602ed2e496bb2e730653e8d46aaf55b21b9b9"
-    },
-    {
       "path": ".ai/custom/framework.json",
       "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
     },
     {
       "path": ".ai/custom/installation.json",
-      "sha256": "2e9b17d020bfb2b7571bbbec216bcf9cfb93a139dedadea7d2fa1102a3f49435"
-    },
-    {
-      "path": ".ai/custom/skills/standards-promotion-experimental/SKILL.md",
-      "sha256": "a3b9c1ad9098cfacaf5b89fcbb13a60ea905b0660fcbd6f3981676706018af08"
-    },
-    {
-      "path": ".ai/custom/skills/standards-promotion-experimental/references/authority.md",
-      "sha256": "3df9b1f1ddfdc6aaf1df05d6b027b47144faa362e718e02a8e3218dc2d132792"
-    },
-    {
-      "path": ".ai/custom/skills/standards-promotion-experimental/references/configuration.md",
-      "sha256": "78aca34372afa57475f18b7df6ea062f0234e675c96b97589d6f83d8dc3cb28c"
-    },
-    {
-      "path": ".ai/custom/skills/standards-promotion-experimental/references/example.md",
-      "sha256": "8cc3b24b18431e17ea3c7ae1fc3941c2f04fb06701f7ad5ac8a788c995679a2d"
-    },
-    {
-      "path": ".ai/custom/skills/standards-promotion-experimental/references/operations.md",
-      "sha256": "e926f99bbe0877380a1865d0547cfc57e1e1f9284c2a996ef405edbd7ce368e3"
-    },
-    {
-      "path": ".ai/custom/skills/standards-promotion-experimental/schemas/promotion-record.schema.json",
-      "sha256": "0002b9d91dfd4cfea7a74d51567dd0d93bc03e7f3c6ad3ad974707996eb58b46"
-    },
-    {
-      "path": ".ai/custom/skills/standards-promotion-experimental/scripts/standards_promotion.py",
-      "sha256": "3aa4054e8a7d1f7a698478efdd9d02ef373ab113751f2635fa61e0429a5ed14e"
-    },
-    {
-      "path": ".ai/custom/skills/standards-promotion-experimental/skill-package.yaml",
-      "sha256": "660195c7555003ec67de29e3c5b8e87f4da1869fb7fcf96a5f762d1a0e77a0f6"
-    },
-    {
-      "path": ".ai/custom/skills/standards-promotion-experimental/templates/promotion.md",
-      "sha256": "953e3da7d7029e4bb9560e1454a6c1dbfb6f1f3cf9c22b6f9f7c7b74af992ea5"
-    },
-    {
-      "path": ".claude/skills/README.md",
-      "sha256": "b0b93a197261b54121e16a554b854ae940cf610cd461970a7e119e9fbccb08d6"
-    },
-    {
-      "path": ".claude/skills/standards-promotion-experimental/SKILL.md",
-      "sha256": "9d365da53426a92c352aa5d28e7e5489eb3cd68339937a2d144ba72c0fe1af76"
-    },
-    {
-      "path": ".dev/ai-context/CURRENT-FRAMEWORK.md",
-      "sha256": "dffd2a17a98ac90da3f3cfd6d0c054d89ca6c82957122a2a2a4dac46e5857e0f"
+      "sha256": "51c9d2f81260382c0dcea5b6b12dbecad1fd43d23776d61a0bccabbde46cd5db"
     },
     {
       "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
       "sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08"
-    },
-    {
-      "path": ".dev/ai-context/skills.md",
-      "sha256": "b1bb0699f544f94f56cc9d50fa35e5d707f49f530c83ceafa8e6de17ca2241c5"
-    },
-    {
-      "path": "AGENTS.md",
-      "sha256": "eb1e513dfeeaacb4fa700b45b4dffecc0eb106e7e3b30ad2689a7b011514ec67"
-    },
-    {
-      "path": "AGENTS.zh-TW.md",
-      "sha256": "66e673d31b68d1d4ac6c4d868739d64289e0d681cf83b73eb2129858761725b6"
-    },
-    {
-      "path": "CLAUDE.md",
-      "sha256": "5bf7c2f992625ee38ba1d3db572d180f8afd029f84f047a8fa08b94707e84b29"
-    },
-    {
-      "path": "README.en.md",
-      "sha256": "3ef906c61663d46a569282960c53d660ff19f2073f175645ac8a92db60bffe9c"
-    },
-    {
-      "path": "README.md",
-      "sha256": "162f65817caf6eb952bd637f6fccf4ca67d43f7800d752b3a53e33d2f3fa4002"
     }
   ],
   "selection": {
@@ -16067,9 +16935,9 @@
       }
     ],
     "catalog": {
-      "catalog_sha256": "37d14bd869260b3a089bb4e75cefd451f74912e3b23ad0bf966684e0882423a2",
-      "files_sha256": "2263735f0aafaa844c075e09f58e153d77d48f10cf76fd3190b900c905b58cda",
-      "identity": "catalog:1:0.19.0-rc.4:158b8438f61a60eb621e3a5b43ed1a0479634f6f:48e492e5d98fb35b7ec7189a3d6124ed90e0817afa1dab1d59b1750b56ee41fc"
+      "catalog_sha256": "b820e86f687b99c29749830ebf2a2b4f8ed0837a6b81b38c9c32c3fbc28c0f21",
+      "files_sha256": "97ef5bfb98628cc4bf6bc56a95ed0cce1f281d5f7bcf8dd6c4e49cdb58f2ae8d",
+      "identity": "catalog:1:0.19.0:a66957e00aa447be887258fa9b55fd89e39e96dd:dfcf1a44cd7e1693a0b405ae5b9102f3186d6d9df29c3d2c54c09397a6a3c6b1"
     },
     "components": [
       {
@@ -16352,10 +17220,13 @@
           "operations/RUNBOOK-GUIDE.MD",
           "references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md",
           "references/AUTHORING-BOUNDARY-CONTRACT.md",
+          "references/CONTEXT-RESOURCE-OWNERSHIP.md",
           "references/ENGINEERING-IDENTITY-CONTRACT.md",
           "references/GWT-TEST-HANDOFF-CONTRACT.md",
           "references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md",
-          "references/PROMPT-PORTABILITY-RULES.md"
+          "references/PROMPT-PORTABILITY-RULES.md",
+          "references/SKILL-AND-SUB-AGENT-TAXONOMY.md",
+          "references/TECHNOLOGY-SELECTION-POLICY.md"
         ],
         "metadata": "content-package.yaml",
         "metadata_version": 1,
@@ -16419,8 +17290,11 @@
           "references/initialize.md",
           "references/project-structure.md",
           "skill-package.yaml",
+          "templates/ai-collaboration.md",
           "templates/architecture.md",
+          "templates/first-task.md",
           "templates/project-config.template.yaml",
+          "templates/project-context.md",
           "templates/public-catalogs/dev/INDEX.md",
           "templates/public-catalogs/dev/README.MD",
           "templates/public-root/AGENTS.md",
@@ -16432,7 +17306,7 @@
         "metadata_version": 3,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.1.0"
+        "version": "0.2.0"
       },
       {
         "id": "bdd-gwt-test-designer",
@@ -18486,9 +19360,9 @@
         }
       ],
       "catalog": {
-        "catalog_sha256": "37d14bd869260b3a089bb4e75cefd451f74912e3b23ad0bf966684e0882423a2",
-        "files_sha256": "2263735f0aafaa844c075e09f58e153d77d48f10cf76fd3190b900c905b58cda",
-        "identity": "catalog:1:0.19.0-rc.4:158b8438f61a60eb621e3a5b43ed1a0479634f6f:48e492e5d98fb35b7ec7189a3d6124ed90e0817afa1dab1d59b1750b56ee41fc"
+        "catalog_sha256": "b820e86f687b99c29749830ebf2a2b4f8ed0837a6b81b38c9c32c3fbc28c0f21",
+        "files_sha256": "97ef5bfb98628cc4bf6bc56a95ed0cce1f281d5f7bcf8dd6c4e49cdb58f2ae8d",
+        "identity": "catalog:1:0.19.0:a66957e00aa447be887258fa9b55fd89e39e96dd:dfcf1a44cd7e1693a0b405ae5b9102f3186d6d9df29c3d2c54c09397a6a3c6b1"
       },
       "knowledge": [
         "dotnet-backend",
@@ -18517,7 +19391,7 @@
         "spec-compliance-validator"
       ]
     },
-    "desired_sha256": "2e9b17d020bfb2b7571bbbec216bcf9cfb93a139dedadea7d2fa1102a3f49435",
+    "desired_sha256": "cdfade5aebed031396facd5e5196ebdc5203417beeb858a4959fc7e4e3c48614",
     "generator": {
       "id": "aicf-subset-derivation",
       "implementation": [
@@ -18557,11 +19431,11 @@
           "size": 11564
         },
         {
-          "git_blob": "7bf614ecda073a2a320bf64a9e07fc981661d494",
+          "git_blob": "2e765101e7264f773c7c695a5cb007642686c029",
           "mode": "100644",
           "path": "src/distribution/catalog.py",
-          "sha256": "c89aeeec72cda95abab4bee20311d3bfb47d0aa05f3c31b80962c1954224814e",
-          "size": 34929
+          "sha256": "5b2853de712d04e2cc3a34437d4d22e0869e7cf7d75904e5a9524cc9861d65e4",
+          "size": 38404
         },
         {
           "git_blob": "db306ef1659af6f406284df3c1ba2f83aa9823d7",
@@ -18578,32 +19452,32 @@
           "size": 7955
         },
         {
-          "git_blob": "4aa0f1366e92d1574cff0407bc145ce4a9f5b43a",
+          "git_blob": "907320717317a90afe21e79a1bd82ecc1338d7e3",
           "mode": "100644",
           "path": "src/distribution/content.py",
-          "sha256": "d79ba189e31073d28617d9afab44cb6adaaece9103811abf110257558ef7e202",
-          "size": 13858
+          "sha256": "2923bad9c9867cceb62e2c1ac0d3e551e8d52eb5da68012bbc006d6c893a3dce",
+          "size": 23040
         },
         {
-          "git_blob": "28313e259959973478c83cc22be68737dc96176e",
+          "git_blob": "3c93d33b70caaaac1429f1f060ae5fd77810e8c0",
           "mode": "100644",
           "path": "src/distribution/contracts.py",
-          "sha256": "394e43f38e08cf10ed51cb6ec9c9a41887c4309ff7db63ee97c7cbb87e3c4fa2",
-          "size": 27740
+          "sha256": "4d4c9e3b7da68496dc8c9834882049c913fc9afdf45dc150083989329a58e3a5",
+          "size": 34270
         },
         {
-          "git_blob": "0a76808c0574daca9a41aeb1dd39db2ce0add5f6",
+          "git_blob": "38332e2c55bec156e81f0dab68e298b61b52eda7",
           "mode": "100644",
           "path": "src/distribution/data.py",
-          "sha256": "4045d5e5d0c7dd0d95cc2aa5b8a797a9ae25864496793a50cf9a9dd67de6740f",
-          "size": 9518
+          "sha256": "e1d7cb316d516e8ddaa5a85bf67c497a48e1dc306fefd4f17b9613142d1b9485",
+          "size": 9539
         },
         {
-          "git_blob": "3f7c8b0535e62e2b89565040e7fa538cddebf04f",
+          "git_blob": "71a7c01d065a232e0bcd7ed9d862ae7527433c91",
           "mode": "100644",
           "path": "src/distribution/git_source.py",
-          "sha256": "86566f80da65c46ea5241d215799fce7894eed3d0ea7133ab921556da42dc030",
-          "size": 7489
+          "sha256": "87eda8d137c501012743972441af13d154d8ea6d7adc010790f2da0eb96d4af7",
+          "size": 7386
         },
         {
           "git_blob": "69841ca4f17fdf921260b0e8e849714145024312",
@@ -18627,11 +19501,11 @@
           "size": 25714
         },
         {
-          "git_blob": "254c9e4c23f22997e09ede2b66f9831fc98d4f40",
+          "git_blob": "02f44633d95f61fbe0bf2bd7045f2272f7eb2b3e",
           "mode": "100644",
           "path": "src/distribution/installation_state.py",
-          "sha256": "46d9e726b64690061b2defcbf174c9624b595b2f9843ae5a5ca01f44211309c6",
-          "size": 58167
+          "sha256": "f1899faaa68da25af5f8e2bf380c2138ca2e3de0d085c616a607bbbb2fc6e13a",
+          "size": 58261
         },
         {
           "git_blob": "d6bdb5147678d62580cdbb392c2c9cae53877298",
@@ -18662,41 +19536,34 @@
           "size": 8608
         },
         {
-          "git_blob": "4340d53ea763841a67589f77db1df01df7f600f9",
+          "git_blob": "9b9d6971b618db50d83e1785373ef6cb95031175",
+          "mode": "100644",
+          "path": "src/tools/derive-subset.py",
+          "sha256": "169d75ec5bfde50d05684ffa107def94f627ff7aa7db2efc9d233361a1f62dd2",
+          "size": 13523
+        },
+        {
+          "git_blob": "3bbeff4c327073d2b26cdaf8403de9b228e5e7b0",
           "mode": "100644",
           "path": "src/tools/maintain_framework.py",
-          "sha256": "9ae08387cf8875118005ef8cefd4e90e50a9f95f939efef739047404880ec82b",
-          "size": 14624
+          "sha256": "1fd876785bd99fd8d8055d664b1909c6067a3f186453257e2c524dbc1ce3d24f",
+          "size": 14606
         },
         {
-          "git_blob": "7c3821e42196a19556fcd4a64927a933f109e9e3",
+          "git_blob": "1bf219e5ce7a3f4414dcb953759123d533c37fd5",
           "mode": "100644",
-          "path": "tools/build-catalog.py",
-          "sha256": "0c15bfc93f914c3d7d24fd143c9d2e595f48346920b0b55bd6883e0dfcd86c46",
-          "size": 4103
-        },
-        {
-          "git_blob": "8d07bec2ea85f403677e86624d1be7bf67fa68fe",
-          "mode": "100644",
-          "path": "tools/derive-subset.py",
-          "sha256": "21de13c42d411598d435adbae54e4e57a6a1c62dd50a7a02a026c12bd33b6566",
-          "size": 5086
-        },
-        {
-          "git_blob": "2c5418e030693c607fd0c84e7eca814e98350940",
-          "mode": "100644",
-          "path": "tools/reinstall-framework.py",
-          "sha256": "6c59ddd2fc2ff97d2f3712ff85bf47f710a641782ff67bcb8043a0b41bfe208e",
+          "path": "src/tools/reinstall-framework.py",
+          "sha256": "984103e3e45a26ee4100bcf2558758b4cd14a39c6d8fda1b5d016e620afca689",
           "size": 2960
         }
       ]
     },
     "mode": "catalog-subset",
-    "release_version": "0.19.0-rc.4",
+    "release_version": "0.19.0",
     "schema_version": 3,
     "source": {
-      "commit": "158b8438f61a60eb621e3a5b43ed1a0479634f6f",
-      "tree": "260e4ccb01581ab9cbf75fe0c074a78f9b904838"
+      "commit": "a66957e00aa447be887258fa9b55fd89e39e96dd",
+      "tree": "3b4a374c563efd6a32452222313698e6162c8f99"
     }
   }
 }

@@ -43,6 +43,9 @@ repository evidence. Respect any explicitly selected target language ownership.
   policy paths, required services or approval records.
 - Delegate only when authorized and available. Bound the task, ownership and
   evidence; retain one tracked writer per worktree and report actual invocations.
+- Keep delegation within the user's selected model, reasoning and cost boundary.
+  A role name is not permission to escalate. Disclose a needed escalation and
+  obtain explicit authorization for a visible separate task before using it.
 
 ## CLI Execution Routing
 
@@ -56,6 +59,12 @@ Initialization author: replace this paragraph with verified project identity,
 essential source/test/document paths, selected runtime navigation, stack constraints
 and commands with working directories, prerequisites and evidence status. Mark
 unresolved facts explicitly. Include only existing links and adopted target rules.
+
+Add a concise reading map using the target's actual document paths. Point product
+or behavior work to the authoritative background and requirements; point changes
+to applicable collaboration rules and check commands; point a selected first task
+to the actual starter guide. Reuse equivalent existing documents. Keep essential
+authorization and reporting rules in this entry; links do not prove runtime loading.
 
 For future refresh, this section is the primary fact update zone. Preserve custom
 sections and collaboration rules elsewhere; make only authorized, minimal

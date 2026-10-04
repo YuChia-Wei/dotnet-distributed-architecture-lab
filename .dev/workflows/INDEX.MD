@@ -8,6 +8,7 @@ Owner names below mirror historical locators and are provenance, not current ski
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |
 | --- | --- | --- | --- | --- | --- |
+| [`2026-10-04-framework-019-init`](2026-10-04-framework-019-init/workflow.yaml) | Update stable framework 0.19.0 and trial context initialization | `ai-context-governance` | `completed` | `2026-10-04T21:40:37+08:00` | [plan](2026-10-04-framework-019-init/workflow-plan.md) |
 | [`2026-10-02-rc4-validation`](2026-10-02-rc4-validation/workflow.yaml) | Install verified framework RC4 for owner validation | `ai-context-governance` | `completed` | `2026-10-02T19:29:13+08:00` | [plan](2026-10-02-rc4-validation/workflow-plan.md) |
 | [`2026-10-01-standards-promotion-experiment`](2026-10-01-standards-promotion-experiment/workflow.yaml) | Independently copy prerelease standards promotion outside managed installation | `ai-context-governance` | `completed` | `2026-10-01T09:55:37+08:00` | [plan](2026-10-01-standards-promotion-experiment/workflow-plan.md) |
 | [`2026-10-01-orchestrator-trial`](2026-10-01-orchestrator-trial/workflow.yaml) | Restore development orchestration from the source framework package | `ai-context-governance` | `completed` | `2026-10-01T08:54:23+08:00` | [plan](2026-10-01-orchestrator-trial/workflow-plan.md) |

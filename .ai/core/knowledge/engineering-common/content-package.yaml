@@ -16,10 +16,13 @@ members:
 - {path: operations/RUNBOOK-GUIDE.MD, kind: knowledge}
 - {path: references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md, kind: knowledge}
 - {path: references/AUTHORING-BOUNDARY-CONTRACT.md, kind: knowledge}
+- {path: references/CONTEXT-RESOURCE-OWNERSHIP.md, kind: knowledge}
 - {path: references/ENGINEERING-IDENTITY-CONTRACT.md, kind: knowledge}
 - {path: references/GWT-TEST-HANDOFF-CONTRACT.md, kind: knowledge}
 - {path: references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md, kind: knowledge}
 - {path: references/PROMPT-PORTABILITY-RULES.md, kind: knowledge}
+- {path: references/SKILL-AND-SUB-AGENT-TAXONOMY.md, kind: knowledge}
+- {path: references/TECHNOLOGY-SELECTION-POLICY.md, kind: knowledge}
 resources:
 - id: engineering-rule-catalog
   path: engineering-rule-catalog.yaml
@@ -109,6 +112,13 @@ resources:
   capabilities: [architecture, implementation, requirements, review, specification, test-design]
   operations: [design, draft, implement, normalize, review]
   technology_profile: null
+- id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  path: references/CONTEXT-RESOURCE-OWNERSHIP.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing, requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review, review-draft, review-semantics]
+  technology_profile: null
 - id: member:references/ENGINEERING-IDENTITY-CONTRACT.md
   path: references/ENGINEERING-IDENTITY-CONTRACT.md
   kind: knowledge
@@ -142,6 +152,20 @@ resources:
     requirements, review, specification, test-design]
   operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review,
     review-draft, review-semantics]
+  technology_profile: null
+- id: member:references/SKILL-AND-SUB-AGENT-TAXONOMY.md
+  path: references/SKILL-AND-SUB-AGENT-TAXONOMY.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing, requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review, review-draft, review-semantics]
+  technology_profile: null
+- id: member:references/TECHNOLOGY-SELECTION-POLICY.md
+  path: references/TECHNOLOGY-SELECTION-POLICY.md
+  kind: knowledge
+  rule_ids: []
+  capabilities: [architecture, compliance-validation, context-audit, context-maintenance, implementation, local-change, problem-framing, requirements, review, specification, test-design]
+  operations: [apply, assess-runtime, audit, compare, design, draft, implement, normalize, plan-validation, propose, review, review-draft, review-semantics]
   technology_profile: null
 dependencies:
   required: []
@@ -203,6 +227,11 @@ references:
   requirement: required
   on_missing: unavailable
 - from: README.md
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target: {package: engineering-common, path: references/CONTEXT-RESOURCE-OWNERSHIP.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
   resource_id: member:references/ENGINEERING-IDENTITY-CONTRACT.md
   target: {package: engineering-common, path: references/ENGINEERING-IDENTITY-CONTRACT.md, anchor: null}
   requirement: required
@@ -220,6 +249,16 @@ references:
 - from: README.md
   resource_id: member:references/PROMPT-PORTABILITY-RULES.md
   target: {package: engineering-common, path: references/PROMPT-PORTABILITY-RULES.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/SKILL-AND-SUB-AGENT-TAXONOMY.md
+  target: {package: engineering-common, path: references/SKILL-AND-SUB-AGENT-TAXONOMY.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/TECHNOLOGY-SELECTION-POLICY.md
+  target: {package: engineering-common, path: references/TECHNOLOGY-SELECTION-POLICY.md, anchor: null}
   requirement: required
   on_missing: unavailable
 - from: domain-language/README.MD
@@ -242,8 +281,28 @@ references:
   target: {package: engineering-common, path: engineering-rule-catalog.yaml, anchor: null}
   requirement: required
   on_missing: unavailable
+- from: references/CONTEXT-RESOURCE-OWNERSHIP.md
+  resource_id: member:references/ENGINEERING-IDENTITY-CONTRACT.md
+  target: {package: engineering-common, path: references/ENGINEERING-IDENTITY-CONTRACT.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: references/CONTEXT-RESOURCE-OWNERSHIP.md
+  resource_id: member:references/TECHNOLOGY-SELECTION-POLICY.md
+  target: {package: engineering-common, path: references/TECHNOLOGY-SELECTION-POLICY.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
 - from: references/ENGINEERING-IDENTITY-CONTRACT.md
   resource_id: engineering-rule-catalog
   target: {package: engineering-common, path: engineering-rule-catalog.yaml, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: references/ENGINEERING-IDENTITY-CONTRACT.md
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target: {package: engineering-common, path: references/CONTEXT-RESOURCE-OWNERSHIP.md, anchor: null}
+  requirement: required
+  on_missing: unavailable
+- from: references/SKILL-AND-SUB-AGENT-TAXONOMY.md
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target: {package: engineering-common, path: references/CONTEXT-RESOURCE-OWNERSHIP.md, anchor: null}
   requirement: required
   on_missing: unavailable

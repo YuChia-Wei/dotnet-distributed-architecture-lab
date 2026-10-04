@@ -1,6 +1,6 @@
 ---
 name: local-change-implementer
-description: "Implement one authorized local technical target and operation, with direct call sites and immediate tests inside an explicit semantic radius; preserve accepted contracts and architecture."
+description: "Implement one authorized operation on one technical target and its direct call sites or immediate tests while preserving accepted public contracts and architecture. Use a slice when the goal requires coordinated behavior or contract changes."
 ---
 
 # local-change-implementer

@@ -13,7 +13,7 @@ ordering:
   array_contents: retain declared source order
 catalog_digest:
   algorithm: sha256
-  value: fe5b25c2fdbd56044d9a2476e3ef20f78c630566d4cdd20dbc4dccd7333552d3
+  value: 25e85d360017e114fd1df9df5494b98f537ac9fba3ad5328ca1f01f38c56aada
   canonicalization: UTF-8 encoding of compact JSON with Unicode preserved, object keys sorted by Unicode code point, array
     order preserved, and exactly one terminal LF; the complete catalog_digest field is excluded from the input.
 selector_contract:
@@ -701,7 +701,7 @@ rules:
   - shared/common-rules.md
   - review/review-routing.yaml
   status: active
-  source_file_sha256: 8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea
+  source_file_sha256: 6f9fd76a7c064d52132f074e829f138ef20f1952894b649f4b457af4b7c11f4c
   normative_text_sha256: 315423f98b682f8edd3bb7110ea0db11fcc9f28935e5b9472044d888fd44e9e2
   normative_text: |
     ### 3. Use GWT; Default to BDDfy
@@ -838,7 +838,7 @@ rules:
   - shared/common-rules.md
   - review/review-routing.yaml
   status: active
-  source_file_sha256: 8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea
+  source_file_sha256: 6f9fd76a7c064d52132f074e829f138ef20f1952894b649f4b457af4b7c11f4c
   normative_text_sha256: 315423f98b682f8edd3bb7110ea0db11fcc9f28935e5b9472044d888fd44e9e2
   normative_text: |
     ### 3. Use GWT; Default to BDDfy
@@ -978,17 +978,18 @@ rules:
   - shared/common-rules.md
   - review/review-routing.yaml
   status: active
-  source_file_sha256: 8d561277128dbf95d98c7400999aa57e9798b98b988e294dbbe2c24e03ce9fea
-  normative_text_sha256: 1f725fb399d66c9ec81d004ac89505cefa5173e6ce059a19eb8225e52cafa0dc
+  source_file_sha256: 6f9fd76a7c064d52132f074e829f138ef20f1952894b649f4b457af4b7c11f4c
+  normative_text_sha256: 731d5cc1b4b16c827c0fbc51aa1b449a526a7362a449211a5eeb053c70838d3f
   normative_text: |
     ### 6. Mocking Library Selection
 
     NSubstitute is the `TEST-MOCK-001` profile default. Before generating or
-    reviewing mocks, resolve `testing.mocking` through
-    `.dev/project-config.yaml#technologySelections` and
-    Target Technology Selection Policy (`target-authority:dev-standards-TECHNOLOGY-SELECTION-POLICY.md`; supplied by the target owner).
+    reviewing mocks, resolve `testing.mocking` through the target-selected
+    `technologySelections` record and
+    [Target Technology Selection Policy](../../../engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md).
 
-    - When no target selection exists, use NSubstitute.
+    - When the target has adopted this profile and no explicit target selection
+      exists, use NSubstitute.
     - When an evidenced target selection exists, use that library consistently.
     - Do not mix mocking libraries without an explicit migration decision.
     - Changing the library does not change GWT, test independence, or boundary

@@ -105,4 +105,4 @@ Checklist:
 - `../../standards/coding-standards.md`
 - `DATABASE-MIGRATION-GUIDE.md`
 - `PREVENT-SERVICE-REGISTRATION-MISSING.md`
-- `../../standards/TECHNOLOGY-SELECTION-POLICY.md`
+- [Technology selection](../../engineering-common/references/TECHNOLOGY-SELECTION-POLICY.md)

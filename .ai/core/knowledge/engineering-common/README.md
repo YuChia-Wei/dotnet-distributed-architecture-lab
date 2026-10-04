@@ -50,3 +50,9 @@ subject; their presence does not require an extra artifact, skill or technology.
 - [references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md](references/ARTIFACT-DESIGN-REVIEW-CONTRACT.md)
 - [references/AUTHORING-BOUNDARY-CONTRACT.md](references/AUTHORING-BOUNDARY-CONTRACT.md)
 - [references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md](references/IMPLEMENTATION-SCOPE-ROUTING-CONTRACT.md)
+
+## Context methods
+
+- [Context Resource Ownership](references/CONTEXT-RESOURCE-OWNERSHIP.md)
+- [Skill And Sub Agent Taxonomy](references/SKILL-AND-SUB-AGENT-TAXONOMY.md)
+- [Technology Selection Policy](references/TECHNOLOGY-SELECTION-POLICY.md)

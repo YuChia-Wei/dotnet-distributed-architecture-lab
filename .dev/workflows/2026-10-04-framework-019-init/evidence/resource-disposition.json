@@ -1,0 +1,35 @@
+{
+  "baseline_commit": "1444d67fdaeb87ded62eb34bf24435fea81d6378",
+  "baseline_tracked_files": 1533,
+  "old_managed_files_replaced": 412,
+  "navigation_reinitialized": [
+    ".ai/INDEX.MD",
+    ".ai/README.MD",
+    ".dev/INDEX.md",
+    ".dev/README.MD",
+    ".dev/ai-context/CURRENT-FRAMEWORK.md",
+    ".dev/ai-context/skills.md",
+    ".dev/standards/INDEX.MD",
+    ".dev/standards/README.md"
+  ],
+  "obsolete_generic_files_removed": [
+    ".dev/knowledge/promotions/README.md",
+    ".dev/standards/DEPENDENCY-VERSION-CONSISTENCY-POLICY.md",
+    ".dev/standards/coding-standards/INDEX.MD",
+    ".dev/standards/coding-standards/README.md",
+    ".dev/standards/examples/INDEX.md",
+    ".dev/standards/examples/README.md",
+    ".dev/standards/rationale/INDEX.MD",
+    ".dev/standards/rationale/README.MD",
+    ".dev/standards/rationale/skill-sub-agent-boundary-rationale.MD",
+    ".dev/standards/templates/INDEX.MD",
+    ".dev/standards/templates/README.md"
+  ],
+  "scoped_files_preserved_at_reinstall": 654,
+  "preservation_policy": "Retain project records, source/tests, effective rules, selected technology/Git policies, settings, custom roles and independent experimental package. Full baseline/raw hashes and exact plan stay in external_evidence of installation.json. Git baseline reproduces committed content.",
+  "retained_authority_sha256": "e46c6527b6cb7bf9cd9ef5c3cb19c0f9e36c38dd8ecdeda546c5c273b87d4c08",
+  "retained_settings_sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1",
+  "binding_decisions": "40 existing bindings preserved; only catalog pins change",
+  "optional_managed_sub_agents": "not selected; retain six existing project-owned runtime profiles",
+  "final_preservation_check": "evidence/validation.json"
+}

@@ -1,6 +1,6 @@
 ---
 name: slice-implementer
-description: "Implement one authorized command, query, reactor or generic slice under accepted target architecture; retain slice ownership, scenario fidelity and truthful validation without requiring a technology role registry."
+description: "Implement one authorized behavior, coordinated refactor or concrete test slice under accepted architecture. Select command, query, reactor or generic mode; own the slice's internal edits and validation without per-method handoffs."
 ---
 
 # slice-implementer

@@ -192,7 +192,7 @@ dotnet test MQArchLab.slnx
 - `AGENTS.md`：canonical agent collaboration guide
 - `.ai/INDEX.MD`：AI package 與 knowledge 索引
 - `.dev/ai-context/skills.md`：目前選定的 skill 路由
-- `.dev/ai-context/CURRENT-FRAMEWORK.md`：RC4 本機驗證安裝契約、實際安裝證據與 main 整合邊界
+- `.dev/ai-context/CURRENT-FRAMEWORK.md`：正式版 0.19.0 本機安裝、ai-context-init 0.2.0 試用證據與 main 整合邊界
 - `.dev/ai-context/TARGET-ENGINEERING-RULES.md`：保留的目標規則與客製化
 - `.agents/skills/README.md`、`.claude/skills/README.md`：runtime 入口
 
