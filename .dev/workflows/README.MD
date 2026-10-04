@@ -2,30 +2,22 @@
 
 [Workflow Index](INDEX.MD)
 
-本目錄是跨 skill / subagent workflow artifact 的正式存放位置。
+本目錄保存既有跨 skill / subagent 的 plan、review、task 與執行證據。
+新工作依 [AGENTS.md](../../AGENTS.md)、本次授權範圍及選定 owning skill
+的實際操作與輸出契約進行；需要保存紀錄時，再選定該次工作的存放位置。
 
-跨 model、runtime、host、machine 與 fresh-session 的 machine-readable
-checkpoint 統一登錄於 `handoff-checkpoints.yaml`，並依
-`.dev/standards/WORKFLOW-HANDOFF-POLICY.md` 驗證。
+跨 model、runtime、host、machine 或 fresh-session 接續工作時，可在選定紀錄
+留下已完成事項、未完成事項、精確下一步與驗證限制。
+舊 framework 的 workflow／handoff 驗證程式已退役，目前沒有對應的自動 gate；
+既有紀錄保留原格式，不能把文件檢查當成程式執行或驗收通過。
 
-## 目的
+## 既有紀錄
 
-- 保存跨 skill handoff 所需的 `plan`、`review-report`、`task`
-- 讓人類與 agent 都能在固定位置找到同一批 workflow 資料
-- 避免 workflow artifact 散落在 feature 目錄、skill 目錄或臨時文件中
+- 本目錄包含程式碼與文件工作的 `plan`、`review-report`、`task` 及證據。
+- 紀錄保留在 `.dev/`，屬於專案知識，並非 build / runtime / deployment artifact。
+- 舊有名稱、格式、身分與原始結論維持其歷史範圍。
 
-補充：
-
-- 本目錄不只用於程式碼重構，也可用於文件重構、文件補全、與 source-of-truth 校準 workflow
-- 當工作先補文件、後做程式碼時，可在同一 workflow 下分成 document stages 與 code stages
-
-## Location Rule
-
-- `workflows/` 目前保留在 `.dev/` 之下，因為它屬於專案知識治理的一部分，不是 build / runtime / deployment artifact
-- 它與 `.dev/specs/`、`.dev/operations/`、`.dev/standards/` 共享同一條 knowledge-system 邊界
-- 只有當 repo 未來出現獨立的 repo-wide operational workflow system，才再評估是否升格到根目錄
-
-## Discovery 結構
+既有 locator 的常見位置：
 
 ```text
 .dev/workflows/
@@ -33,61 +25,17 @@ checkpoint 統一登錄於 `handoff-checkpoints.yaml`，並依
     workflow.yaml
 ```
 
-`workflow.yaml` 是固定 locator。真正 artifact 預設放在相同目錄，也可由 workflow-owning skill 宣告其他 repository-relative `artifact_root`。詳細共通契約見 `.dev/standards/WORKFLOW-ARTIFACT-POLICY.md`。
+含有 `workflow.yaml` 的紀錄，以該檔案讀取當時的 status、owner、updated time、
+artifact root 與 entrypoint。這是既有紀錄的導航方式，不是新工作的必備 schema。
 
 2026-09-29 的資料遷移已將兩筆 software-development-orchestrator 主紀錄整合回各自既有的主題目錄：`workflow-plan.md` 為人類閱讀入口，`tasks/<原 task ID>.json` 保留任務與依賴，`migration-map.md` 對照 acceptance、decision、evidence、reference ID。前端 `evidence/v2-source.workflow.json` 保存原始位元組；採購 `evidence/v2-history.workflow.json` 保存路徑改指向 tracked 證據後的完整歷史，其原始位元組留在 Git 歷史。RC1 pilot 的第三筆 v2 紀錄是支援性證據，保留於其原有 AI-context workflow 的 `evidence/`，沒有升格為第二個主 workflow。舊 store 的導覽已由負責人移除；保留的 migration-map 與 evidence 記錄當時遷移，不是目前 portable skill 或 store 的啟用指示。
 
-`INDEX.MD` 是降低認知負載的 discovery view；locator 仍擁有 status、owner、updated time 與 entrypoint。跨 workflow 的 durable 待辦由 `.dev/backlog/` 管理，不應塞入本目錄的 index。
+`INDEX.MD` 是 discovery view；請回到具體紀錄核對狀態與證據。
+既有紀錄或待辦本身不授權後續修改。
 
-建立新 workflow 時，必須先從預定 base branch 建立獨立 workflow branch，再建立 locator。Codex 預設使用 `codex/<workflow-id>`。Workflow 尚未完成時的 merge/push 是 checkpoint，但 `in_progress` 本身不是 merge blocker；只要另行授權、checkpoint 有效且 repository gate 通過即可整合。Transport 不得自動把 status 改成 `completed`；push-only 從遠端 workflow branch 接續，checkpoint merge 後才從更新後的 target 建立新的 continuation branch。Merge topology 依 `.dev/TEAM-GIT-FLOW-RULES.MD` 的正向選擇規則決定。
+## 後續有限任務
 
-## 命名原則
-
-- `<workflow-id>`：新 workflow 使用 `YYYY-MM-DD-<skill-owned-topic>[-<sequence>]`，例如 `2026-07-10-ordering-boundary-cleanup`
-- `workflow.yaml`：固定 discovery locator，記錄 owner、狀態、時間、artifact root 與 entrypoint
-- plan、task 與 report 結構：由能建立該類 workflow 的 skill 自行管理
-- 舊有 `YYYY-MM-*` workflow 保留歷史名稱，不為形式一致而全面 rename
-
-## Template Ownership
-
-- 本目錄不擁有萬用 workflow template。
-- 一般 software-development workflow 的既有 plan/task layout 仍由本目標 workflow 政策治理；恢復的 `software-development-orchestrator` 負責階段與專業 skill 協調，不提供紀錄 store 或復活 `dev-workflow`。
-- AI context maintenance 使用選定的 `ai-context-governance`；需要持續執行紀錄時，本目標 workflow 政策持有 locator 與保留的 artifact layout。
-- AI context audit 使用選定的 `ai-context-auditor`；持久化報告依本目標 assessment 政策。
-- 其他選定 skill 依其實際 output contract 工作；不得由入口存在推定它提供 workflow template。
-
-## 使用原則
-
-- 小任務或單一 skill 任務，不強制建立本目錄內容
-- 進入 workflow mode 時，建立對應 workflow 資料夾
-- workflow mode 的判斷以 `.dev/standards/WORKFLOW-GATE-POLICY.md` 為準
-- 多輪 review、audit 或 remediation report 是否拆檔，由 owning skill 的 artifact contract 決定；final baseline 不得被後續修正靜默覆寫
-
-## Workflow 觸發條件
-
-符合下列任一條件時，應建立 workflow 目錄：
-
-- 需要兩個以上 stage
-- 需要跨 skill handoff
-- 需要保存 plan / review / task status
-- 需要保存 document refactor 的 decision trail
-- 需要整理 source-of-truth，而不是只做單次修改
-- 需要在多輪作業中追蹤哪些內容已完成、哪些刻意延後
-- 會影響未來 agent 行為、AI context 邊界、skill routing、或 runtime wrapper 結構
-
-詳細 gate 規則見 `.dev/standards/WORKFLOW-GATE-POLICY.md`。
-
-反之，若只是：
-
-- 單輪分析
-- 單次小修
-- 單一 skill 任務
-- 不需要保留長期上下文
-
-可維持 direct mode，不強制建立 workflow artifact
-
-## 文件工作使用原則
-
-- 若問題核心是 requirement、spec、runbook、context map、event catalog、AI routing 文件不足，應優先建立 document workflow
-- document workflow 的 stage 應以知識邊界切分，而不是以程式碼檔案切分
-- 若後續需要 code refactor，應在 document stage 補齊最小必要真相後再展開
+- 依 `AGENTS.md` 選擇需要的 skill；`software-development-orchestrator` 可協調階段與專業 skill，入口存在不代表提供紀錄 store 或通用 template。
+- AI context maintenance 與 audit 分別使用選定的 `ai-context-governance`、`ai-context-auditor`，依該次任務與實際 output contract 決定是否保存紀錄。
+- 只執行已授權且與問題相關的檢查，記錄實際結果、未執行項目與限制。
+- 紀錄完成、runtime 驗收、commit、push、PR 與整合是不同狀態，依實際請求及證據分開回報。

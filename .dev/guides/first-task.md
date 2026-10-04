@@ -2,9 +2,8 @@
 
 先讀 [AGENTS.md](../../AGENTS.md)、[產品 README](../../README.md) 與
 [專案索引](../INDEX.md)，確認本次問題、允許修改的範圍及實際授權。
-現有 Issue-first、workflow、Git 與驗證規則依
-[目標工程規則](../ai-context/TARGET-ENGINEERING-RULES.md) 和
-[政策索引](../standards/INDEX.MD) 適用。本指南不會自動啟動以下範例。
+依 `AGENTS.md` 與本次選定 skill 的實際操作契約執行有限任務，並按條件套用
+[目標工程規則](../ai-context/TARGET-ENGINEERING-RULES.md)。本指南不會自動啟動以下範例。
 
 ## 範例一：唯讀理解 Inventory 庫存預留
 

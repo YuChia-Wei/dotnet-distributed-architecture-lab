@@ -16,4 +16,4 @@ Resolve `package_root` to that copied directory and invoke only its declared too
 The discovery alias is `standards-promotion-experimental`; the tool identity and
 configuration namespace remain `standards-promotion`. Existing target settings
 and record-store ownership apply. No proposal write, rule edit or adoption is
-authorized merely by selecting this entry. See [copy ownership and provenance](../../../.dev/ai-context/STANDARDS-PROMOTION-EXPERIMENT.md).
+authorized merely by selecting this entry.

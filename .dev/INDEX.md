@@ -21,11 +21,12 @@ Start with [AGENTS.md](../AGENTS.md), the [product README](../README.md) and the
 | Problem framing | [Problem-frame index](problem-frames/INDEX.md) |
 | Assessments | [Assessment index](assessments/INDEX.MD) |
 | Workflow records and lifecycle | [Workflow index](workflows/INDEX.MD) |
-| Current framework and installed skills | [Framework contract](ai-context/CURRENT-FRAMEWORK.md), [skill registry](ai-context/skills.md) |
+| Selected framework and installed inventory | [Installation selection](../.ai/custom/installation.json), [official lock](../.ai/framework.lock) |
+| Installed skill operations | [Codex entries](../.agents/skills/), [Claude entries](../.claude/skills/) |
 | Effective engineering semantics | [Target rules](ai-context/TARGET-ENGINEERING-RULES.md) |
-| Collaboration policy navigation | [Standards index](standards/INDEX.MD) |
+| Collaboration authority and request routing | [AGENTS.md](../AGENTS.md) |
 | Lessons and authoring records | [Lessons](lessons/records/README.md), [artifact store configuration](../.ai/custom/framework.json) |
-| Current local installation and init trial | [Plan](workflows/2026-10-04-framework-019-init/workflow-plan.md), [results](workflows/2026-10-04-framework-019-init/results.md) |
+| Recorded 0.19.0 local installation and init 0.2.0 trial | [Plan](workflows/2026-10-04-framework-019-init/workflow-plan.md), [results](workflows/2026-10-04-framework-019-init/results.md) |
 
 Historical records preserve their original scope and authorization. Links to them
-do not grant new execution or integration authority.
+do not grant new execution or integration authority or establish current acceptance.

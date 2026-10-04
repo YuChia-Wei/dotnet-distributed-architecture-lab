@@ -345,6 +345,3 @@ healthchecksdb
 .dotnet
 /.dev/validation.local.conf
 /.dev/ai-context/local/
-
-# Target-local framework coordination (Issue #15)
-/.ai/local/

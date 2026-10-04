@@ -1,5 +1,21 @@
 # Project-owned agent roles
 
-These six role definitions and their required references preserve the target's existing manually configured agent profiles. They are project-owned custom context, separate from installer-managed RC2 skills and knowledge. Read an exact role manifest and its references only when a parent explicitly selects that role with bounded scope, permissions, expected output and stop conditions. Static profile presence does not prove invocation or a validation pass.
+These six role definitions and their required references are project-owned custom
+context, separate from installer-managed skills and knowledge. Read an exact role
+manifest and its references only when a parent selects that role with bounded
+scope, permissions, expected output and stop conditions. Profile presence does
+not prove invocation or a validation pass.
 
-The matching Codex, Claude and Copilot agent files retain their actual model and dispatch settings. The shared execution and guardrail contracts apply to these roles; examples referring to retired skill paths are historical illustrations, not current routes.
+The Codex profiles under `.codex/agents/` retain their existing reasoning efforts
+and role permissions. The bounded routine worker, evidence report synthesizer,
+fixed-head independent auditor, reconciliation worker and semantic governance
+analyst explicitly select `gpt-6.1-sol`. The context translator explicitly selects
+`gpt-6-luna` with `max` reasoning to retain its low-cost runtime requirement.
+Verify the resolved model when invoking a role; configuration changes do not
+prove that an already running child changed models.
+See [Codex custom-agent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents#custom-agents).
+
+The translator manifest lists its retained Codex and Claude adapters. The removed
+Copilot adapter is no longer declared. Claude model and dispatch settings remain
+with their own adapter. Shared execution and guardrail contracts still apply;
+examples referring to retired skill paths are historical illustrations.

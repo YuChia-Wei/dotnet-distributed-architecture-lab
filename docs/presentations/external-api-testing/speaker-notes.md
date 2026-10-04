@@ -32,10 +32,10 @@
 
 ## 來源
 
-- [採購、供應商與實際收貨實驗](../../operations/procurement-supplier-lab.md)
-- [商務作業前台與管理後台實驗](../../operations/commerce-frontend.md)
-- [採購架構](../../workflows/2026-09-26-procurement-supplier-lab/architecture.md)
-- [採購規格](../../workflows/2026-09-26-procurement-supplier-lab/specifications.md)
+- [採購、供應商與實際收貨實驗](../../../.dev/operations/procurement-supplier-lab.md)
+- [商務作業前台與管理後台實驗](../../../.dev/operations/commerce-frontend.md)
+- [採購架構](../../../.dev/workflows/2026-09-26-procurement-supplier-lab/architecture.md)
+- [採購規格](../../../.dev/workflows/2026-09-26-procurement-supplier-lab/specifications.md)
 - [WireMock.Net proxying](https://wiremock.org/dotnet/proxying/)
 - [WireMock.Net Admin API](https://wiremock.org/dotnet/admin-api-reference/)
 - [Microcks dispatching](https://microcks.io/documentation/explanations/dispatching/)
