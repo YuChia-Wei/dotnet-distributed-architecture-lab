@@ -1,0 +1,71 @@
+graph LR
+  linkStyle default fill:#ffffff
+
+  subgraph diagram ["Container View: Distributed commerce lab"]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    1["<div style='font-weight: bold'>External supplier</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Owns quotes and supplier<br />order acceptance. The direct<br />profile uses SupplierSandbox;<br />acceptance is not physical<br />receipt.</div>"]
+    style 1 fill:#666666,stroke:#474747,color:#ffffff
+
+    subgraph 2 ["Distributed commerce lab"]
+      style 2 fill:#ffffff,stroke:#193f54,color:#193f54
+
+      10["<div style='font-weight: bold'>Inventory API</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core / EF Core / Npgsql / Wolverine]</div><div style='font-size: 80%; margin-top:10px'>Owns stock queries/commands,<br />reservation request handling<br />and enabled Inventory<br />source-outbox relay.</div>"]
+      style 10 fill:#245b78,stroke:#193f54,color:#ffffff
+      11["<div style='font-weight: bold'>Inventory Consumer</div><div style='font-size: 70%; margin-top: 0px'>[Container: .NET Generic Host / EF Core / Npgsql / Wolverine Kafka]</div><div style='font-size: 80%; margin-top:10px'>Handles GoodsReceived via<br />receipt use case and atomic<br />idempotent stock application;<br />also has an orders topic<br />listener.</div>"]
+      style 11 fill:#245b78,stroke:#193f54,color:#ffffff
+      12["<div style='font-weight: bold'>Procurement API + receipt relay</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core / Dapper / Npgsql / Wolverine Kafka]</div><div style='font-size: 80%; margin-top:10px'>Owns supplier<br />submission/reconciliation and<br />actual receipt commands;<br />hosts ProcurementOutboxRelay<br />and Wolverine durable<br />delivery in this process.</div>"]
+      style 12 fill:#245b78,stroke:#193f54,color:#ffffff
+      13[("<div style='font-weight: bold'>Products database</div><div style='font-size: 70%; margin-top: 0px'>[Container: PostgreSQL 16]</div><div style='font-size: 80%; margin-top:10px'>Stores product catalog state<br />for Products.</div>")]
+      style 13 fill:#507548,stroke:#385132,color:#ffffff
+      14[("<div style='font-weight: bold'>Orders database</div><div style='font-size: 70%; margin-top: 0px'>[Container: PostgreSQL 16]</div><div style='font-size: 80%; margin-top:10px'>Stores order events, read<br />state, source outbox and<br />Wolverine messaging state.</div>")]
+      style 14 fill:#507548,stroke:#385132,color:#ffffff
+      15[("<div style='font-weight: bold'>Inventory database</div><div style='font-size: 70%; margin-top: 0px'>[Container: PostgreSQL 16]</div><div style='font-size: 80%; margin-top:10px'>Stores stock, reservations,<br />receipt<br />deduplication/results, stock<br />source outbox and messaging<br />state.</div>")]
+      style 15 fill:#507548,stroke:#385132,color:#ffffff
+      16[("<div style='font-weight: bold'>Procurement database</div><div style='font-size: 70%; margin-top: 0px'>[Container: PostgreSQL 16]</div><div style='font-size: 80%; margin-top:10px'>Stores purchases, unique<br />receipts, source outbox and<br />procurement_wolverine durable<br />transport state.</div>")]
+      style 16 fill:#507548,stroke:#385132,color:#ffffff
+      17["<div style='font-weight: bold'>Kafka</div><div style='font-size: 70%; margin-top: 0px'>[Container: Apache Kafka 4 / KRaft]</div><div style='font-size: 80%; margin-top:10px'>Transports context events and<br />inventory reservation<br />requests/replies;<br />asynchronous delivery may<br />repeat.</div>"]
+      style 17 fill:#84562d,stroke:#5c3c1f,color:#ffffff
+      3["<div style='font-weight: bold'>Vue storefront</div><div style='font-size: 70%; margin-top: 0px'>[Container: Vue 3 / TypeScript / Nginx]</div><div style='font-size: 80%; margin-top:10px'>Browser UI for catalog,<br />orders, stock, procurement<br />and explicit receipt entry;<br />assets served by<br />web-frontend.</div>"]
+      style 3 fill:#245b78,stroke:#193f54,color:#ffffff
+      4["<div style='font-weight: bold'>Vue administration</div><div style='font-size: 70%; margin-top: 0px'>[Container: Vue 3 / TypeScript / Nginx]</div><div style='font-size: 80%; margin-top:10px'>Browser UI for lab<br />administration and supplier<br />controls; assets served by<br />admin-frontend.</div>"]
+      style 4 fill:#245b78,stroke:#193f54,color:#ffffff
+      5["<div style='font-weight: bold'>YARP gateway</div><div style='font-size: 70%; margin-top: 0px'>[Container: YARP / ASP.NET Core]</div><div style='font-size: 80%; margin-top:10px'>Routes /web, /admin and four<br />context API prefixes; exposes<br />bounded supplier admin<br />facades.</div>"]
+      style 5 fill:#245b78,stroke:#193f54,color:#ffffff
+      6["<div style='font-weight: bold'>Products API</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core / Dapper / Npgsql / Wolverine]</div><div style='font-size: 80%; margin-top:10px'>Manages catalog commands and<br />queries; enabled diagnostic<br />publication is not a product<br />business event stream.</div>"]
+      style 6 fill:#245b78,stroke:#193f54,color:#ffffff
+      7["<div style='font-weight: bold'>Products Consumer</div><div style='font-size: 70%; margin-top: 0px'>[Container: .NET Generic Host / Wolverine Kafka]</div><div style='font-size: 80%; margin-top:10px'>Hosts configured<br />orders.integration.events<br />subscription; business<br />reaction is unresolved.</div>"]
+      style 7 fill:#245b78,stroke:#193f54,color:#ffffff
+      8["<div style='font-weight: bold'>Orders API</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core / Dapper / Npgsql / Wolverine]</div><div style='font-size: 80%; margin-top:10px'>Owns order lifecycle,<br />event-sourced persistence,<br />source-outbox relay and<br />inventory reservation<br />request/reply.</div>"]
+      style 8 fill:#245b78,stroke:#193f54,color:#ffffff
+      9["<div style='font-weight: bold'>Orders Consumer</div><div style='font-size: 70%; margin-top: 0px'>[Container: .NET Generic Host / Wolverine Kafka]</div><div style='font-size: 80%; margin-top:10px'>Hosts<br />products.integration.events<br />diagnostic handlers and<br />parallel-work examples; no<br />confirmed business<br />projection.</div>"]
+      style 9 fill:#245b78,stroke:#193f54,color:#ffffff
+    end
+
+    3-. "<div>Calls same-origin commerce<br />APIs from browser</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->5
+    4-. "<div>Calls same-origin lab/admin<br />APIs from browser</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->5
+    5-. "<div>Routes /web to Nginx assets<br />and SPA fallback</div><div style='font-size: 70%'>[HTTP]</div>" .->3
+    5-. "<div>Routes /admin to Nginx assets<br />and SPA fallback</div><div style='font-size: 70%'>[HTTP]</div>" .->4
+    5-. "<div>Forwards /api/products</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->6
+    5-. "<div>Forwards /api/orders</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->8
+    5-. "<div>Forwards /api/inventory</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->10
+    5-. "<div>Forwards /api/procurement</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->12
+    5-. "<div>Forwards bounded<br />supplier-sandbox admin facade<br />(direct profile)</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->1
+    6-. "<div>Reads and writes catalog</div><div style='font-size: 70%'>[PostgreSQL wire protocol / Dapper + Npgsql]</div>" .->13
+    8-. "<div>Commits order events, read<br />state and outbox; persists<br />messaging state</div><div style='font-size: 70%'>[PostgreSQL wire protocol / Dapper + Npgsql]</div>" .->14
+    10-. "<div>Queries stock; commits<br />stock/reservation outbox;<br />relays stock events</div><div style='font-size: 70%'>[PostgreSQL wire protocol / EF Core + Npgsql]</div>" .->15
+    11-. "<div>Atomically deduplicates<br />receipt, increases stock and<br />stages stock event; persists<br />inbox</div><div style='font-size: 70%'>[PostgreSQL wire protocol / EF Core + Npgsql]</div>" .->15
+    12-. "<div>Commits<br />purchases/receipts/outbox and<br />manages relay/durable<br />transport state</div><div style='font-size: 70%'>[PostgreSQL wire protocol / Dapper + Npgsql]</div>" .->16
+    12-. "<div>Quotes, submits purchases and<br />reconciles original<br />clientRequestId (direct<br />profile)</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->1
+    1-. "<div>Returns synchronous supplier<br />order outcome; no stock<br />mutation</div><div style='font-size: 70%'>[HTTP response / JSON]</div>" .->12
+    6-. "<div>Publishes enabled diagnostics<br />on<br />products.integration.events;<br />business events deferred</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->17
+    8-. "<div>Publishes<br />orders.integration.events and<br />inventory.requests</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->17
+    17-. "<div>Delivers reservation replies<br />on orders.outbound.replies</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->8
+    17-. "<div>Delivers inventory.requests<br />for reservation</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->10
+    10-. "<div>Publishes<br />inventory.integration.events<br />and reservation replies</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->17
+    17-. "<div>Delivers configured<br />orders.integration.events<br />subscription; business intent<br />unresolved</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->7
+    17-. "<div>Delivers<br />products.integration.events<br />diagnostics</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->9
+    17-. "<div>Delivers GoodsReceived on<br />procurement.integration.events;<br />also configured orders<br />listener</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->11
+    12-. "<div>Publishes GoodsReceived via<br />hosted relay and durable<br />transport outbox</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->17
+
+  end

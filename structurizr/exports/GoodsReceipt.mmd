@@ -1,0 +1,44 @@
+graph LR
+  linkStyle default fill:#ffffff
+
+  subgraph diagram ["Dynamic View: Distributed commerce lab"]
+    style diagram fill:#ffffff,stroke:#ffffff
+
+    subgraph 2 ["Distributed commerce lab"]
+      style 2 fill:#ffffff,stroke:#193f54,color:#193f54
+
+      11["<div style='font-weight: bold'>Inventory Consumer</div><div style='font-size: 70%; margin-top: 0px'>[Container: .NET Generic Host / EF Core / Npgsql / Wolverine Kafka]</div><div style='font-size: 80%; margin-top:10px'>Handles GoodsReceived via<br />receipt use case and atomic<br />idempotent stock application;<br />also has an orders topic<br />listener.</div>"]
+      style 11 fill:#245b78,stroke:#193f54,color:#ffffff
+      12["<div style='font-weight: bold'>Procurement API + receipt relay</div><div style='font-size: 70%; margin-top: 0px'>[Container: ASP.NET Core / Dapper / Npgsql / Wolverine Kafka]</div><div style='font-size: 80%; margin-top:10px'>Owns supplier<br />submission/reconciliation and<br />actual receipt commands;<br />hosts ProcurementOutboxRelay<br />and Wolverine durable<br />delivery in this process.</div>"]
+      style 12 fill:#245b78,stroke:#193f54,color:#ffffff
+      15[("<div style='font-weight: bold'>Inventory database</div><div style='font-size: 70%; margin-top: 0px'>[Container: PostgreSQL 16]</div><div style='font-size: 80%; margin-top:10px'>Stores stock, reservations,<br />receipt<br />deduplication/results, stock<br />source outbox and messaging<br />state.</div>")]
+      style 15 fill:#507548,stroke:#385132,color:#ffffff
+      16[("<div style='font-weight: bold'>Procurement database</div><div style='font-size: 70%; margin-top: 0px'>[Container: PostgreSQL 16]</div><div style='font-size: 80%; margin-top:10px'>Stores purchases, unique<br />receipts, source outbox and<br />procurement_wolverine durable<br />transport state.</div>")]
+      style 16 fill:#507548,stroke:#385132,color:#ffffff
+      17["<div style='font-weight: bold'>Kafka</div><div style='font-size: 70%; margin-top: 0px'>[Container: Apache Kafka 4 / KRaft]</div><div style='font-size: 80%; margin-top:10px'>Transports context events and<br />inventory reservation<br />requests/replies;<br />asynchronous delivery may<br />repeat.</div>"]
+      style 17 fill:#84562d,stroke:#5c3c1f,color:#ffffff
+      3["<div style='font-weight: bold'>Vue storefront</div><div style='font-size: 70%; margin-top: 0px'>[Container: Vue 3 / TypeScript / Nginx]</div><div style='font-size: 80%; margin-top:10px'>Browser UI for catalog,<br />orders, stock, procurement<br />and explicit receipt entry;<br />assets served by<br />web-frontend.</div>"]
+      style 3 fill:#245b78,stroke:#193f54,color:#ffffff
+      5["<div style='font-weight: bold'>YARP gateway</div><div style='font-size: 70%; margin-top: 0px'>[Container: YARP / ASP.NET Core]</div><div style='font-size: 80%; margin-top:10px'>Routes /web, /admin and four<br />context API prefixes; exposes<br />bounded supplier admin<br />facades.</div>"]
+      style 5 fill:#245b78,stroke:#193f54,color:#ffffff
+    end
+
+    1["<div style='font-weight: bold'>External supplier</div><div style='font-size: 70%; margin-top: 0px'>[Software System]</div><div style='font-size: 80%; margin-top:10px'>Owns quotes and supplier<br />order acceptance. The direct<br />profile uses SupplierSandbox;<br />acceptance is not physical<br />receipt.</div>"]
+    style 1 fill:#666666,stroke:#474747,color:#ffffff
+
+    3-. "<div>1. Submit purchase with<br />stable clientRequestId</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->5
+    5-. "<div>2. POST<br />/api/procurement/purchase-orders</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->12
+    12-. "<div>3. CreateOrGet unique<br />purchase identity before<br />external HTTP</div><div style='font-size: 70%'>[PostgreSQL wire protocol / Dapper + Npgsql]</div>" .->16
+    12-. "<div>4. POST /supplier/orders<br />using original<br />clientRequestId (direct)</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->1
+    1-. "<div>5. Return accepted supplier<br />order; this is NOT goods<br />receipt</div><div style='font-size: 70%'>[HTTP response / JSON]</div>" .->12
+    12-. "<div>6. Commit Accepted state<br />only: no receipt, no<br />GoodsReceived, no stock<br />increase</div><div style='font-size: 70%'>[PostgreSQL wire protocol / Dapper + Npgsql]</div>" .->16
+    3-. "<div>7. Later, after physical<br />arrival, explicitly submit<br />ReceiptId and quantity</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->5
+    5-. "<div>8. POST<br />/api/procurement/purchase-orders/{id}/receipts</div><div style='font-size: 70%'>[HTTP / JSON]</div>" .->12
+    12-. "<div>9. T1: lock purchase;<br />validate; commit purchase<br />state + receipt +<br />GoodsReceived source outbox<br />atomically</div><div style='font-size: 70%'>[PostgreSQL wire protocol / Dapper + Npgsql]</div>" .->16
+    12-. "<div>10. Hosted Relay leases<br />committed procurement_outbox<br />rows (SKIP LOCKED)</div><div style='font-size: 70%'>[PostgreSQL wire protocol / Dapper + Npgsql]</div>" .->16
+    12-. "<div>11. Await Wolverine<br />durable-outbox handoff into<br />procurement_wolverine; then<br />mark source published_at (NOT<br />consumer completion)</div><div style='font-size: 70%'>[PostgreSQL wire protocol / Dapper + Npgsql]</div>" .->16
+    12-. "<div>12. Durable transport<br />publishes GoodsReceived to<br />procurement.integration.events;<br />key=ProductId N; stable<br />ReceiptId; may redeliver</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->17
+    17-. "<div>13. Deliver GoodsReceived<br />through durable inbox;<br />handler delegates receipt<br />application</div><div style='font-size: 70%'>[Kafka protocol / Wolverine]</div>" .->11
+    11-. "<div>14. T2: claim ReceiptId; lock<br />existing stock; commit dedup<br />result + increase +<br />StockIncreased outbox<br />atomically; matching replay<br />has no new effect</div><div style='font-size: 70%'>[PostgreSQL wire protocol / EF Core + Npgsql]</div>" .->15
+
+  end

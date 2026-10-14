@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-14",
+  "sourceRevision": "4cca0256b96386eae76ea4e73d66cdf7cc2a5847",
+  "dslSha256": "7dcd33657b5e7568e8e74d9e377a9ea9f80ea02903f24fefe801d02e0bd9ded0",
+  "checks": {
+    "readmeLinks": "passed",
+    "mcpFinalDiskValidate": "OK",
+    "productTests": "not-run",
+    "browserVisualAcceptance": "not-run",
+    "existingTrackedFilesUnchanged": "passed",
+    "lfOnly": "passed",
+    "newFileWhitespace": "passed after removing EOF blank lines",
+    "productRuntime": "not-run",
+    "mcpFinalDiskParse": "passed; same view/model counts",
+    "mcpFinalDiskInspect": "4 ERROR findings; see mcp-results.json"
+  },
+  "viewer": {
+    "loadedViewCounts": {
+      "CoreContainers": [
+        16,
+        25
+      ],
+      "GoodsReceipt": [
+        8,
+        14
+      ]
+    },
+    "version": "Local v2026.09.19",
+    "status": "running",
+    "diagramsHttpStatus": 200,
+    "unsuccessfulProbe": "/workspace/diagrams returned HTTP 400; correct URL discovered from root links",
+    "container": "structurizr-arch-lab",
+    "rootHttpStatus": 200,
+    "imageId": "sha256:c59b18bd7bae0cfd976a29119217eb50ab402cbc120149d399fcc001de32e6a5",
+    "image": "structurizr/structurizr:latest",
+    "startedBy": "user",
+    "diagramsUrl": "http://127.0.0.1:8081/workspace/1/diagrams"
+  }
+}

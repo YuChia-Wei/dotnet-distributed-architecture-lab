@@ -1,0 +1,778 @@
+{
+  "configuration": {
+    "scope": "SoftwareSystem"
+  },
+  "description": "Code-backed localhost Kafka + frontend-lab + procurement-lab views; supplier acceptance does not increase stock.",
+  "documentation": {},
+  "id": 0,
+  "model": {
+    "softwareSystems": [
+      {
+        "description": "Owns quotes and supplier order acceptance. The direct profile uses SupplierSandbox; acceptance is not physical receipt.",
+        "documentation": {},
+        "id": "1",
+        "name": "External supplier",
+        "properties": {
+          "structurizr.dsl.identifier": "supplier"
+        },
+        "relationships": [
+          {
+            "description": "Returns synchronous supplier order outcome; no stock mutation",
+            "destinationId": "12",
+            "id": "33",
+            "sourceId": "1",
+            "tags": "Relationship",
+            "technology": "HTTP response / JSON"
+          }
+        ],
+        "tags": "Element,Software System,External"
+      },
+      {
+        "containers": [
+          {
+            "description": "Browser UI for catalog, orders, stock, procurement and explicit receipt entry; assets served by web-frontend.",
+            "documentation": {},
+            "id": "3",
+            "name": "Vue storefront",
+            "properties": {
+              "structurizr.dsl.identifier": "web"
+            },
+            "relationships": [
+              {
+                "description": "Calls same-origin commerce APIs from browser",
+                "destinationId": "5",
+                "id": "18",
+                "sourceId": "3",
+                "tags": "Relationship",
+                "technology": "HTTP / JSON"
+              }
+            ],
+            "tags": "Element,Container",
+            "technology": "Vue 3 / TypeScript / Nginx"
+          },
+          {
+            "description": "Browser UI for lab administration and supplier controls; assets served by admin-frontend.",
+            "documentation": {},
+            "id": "4",
+            "name": "Vue administration",
+            "properties": {
+              "structurizr.dsl.identifier": "admin"
+            },
+            "relationships": [
+              {
+                "description": "Calls same-origin lab/admin APIs from browser",
+                "destinationId": "5",
+                "id": "19",
+                "sourceId": "4",
+                "tags": "Relationship",
+                "technology": "HTTP / JSON"
+              }
+            ],
+            "tags": "Element,Container",
+            "technology": "Vue 3 / TypeScript / Nginx"
+          },
+          {
+            "description": "Routes /web, /admin and four context API prefixes; exposes bounded supplier admin facades.",
+            "documentation": {},
+            "id": "5",
+            "name": "YARP gateway",
+            "properties": {
+              "structurizr.dsl.identifier": "gateway"
+            },
+            "relationships": [
+              {
+                "description": "Routes /web to Nginx assets and SPA fallback",
+                "destinationId": "3",
+                "id": "20",
+                "sourceId": "5",
+                "tags": "Relationship",
+                "technology": "HTTP"
+              },
+              {
+                "description": "Routes /admin to Nginx assets and SPA fallback",
+                "destinationId": "4",
+                "id": "21",
+                "sourceId": "5",
+                "tags": "Relationship",
+                "technology": "HTTP"
+              },
+              {
+                "description": "Forwards /api/products",
+                "destinationId": "6",
+                "id": "22",
+                "sourceId": "5",
+                "tags": "Relationship",
+                "technology": "HTTP / JSON"
+              },
+              {
+                "description": "Forwards /api/orders",
+                "destinationId": "8",
+                "id": "23",
+                "sourceId": "5",
+                "tags": "Relationship",
+                "technology": "HTTP / JSON"
+              },
+              {
+                "description": "Forwards /api/inventory",
+                "destinationId": "10",
+                "id": "24",
+                "sourceId": "5",
+                "tags": "Relationship",
+                "technology": "HTTP / JSON"
+              },
+              {
+                "description": "Forwards /api/procurement",
+                "destinationId": "12",
+                "id": "25",
+                "sourceId": "5",
+                "tags": "Relationship",
+                "technology": "HTTP / JSON"
+              },
+              {
+                "description": "Forwards bounded supplier-sandbox admin facade (direct profile)",
+                "destinationId": "1",
+                "id": "26",
+                "sourceId": "5",
+                "tags": "Relationship",
+                "technology": "HTTP / JSON"
+              }
+            ],
+            "tags": "Element,Container",
+            "technology": "YARP / ASP.NET Core"
+          },
+          {
+            "description": "Manages catalog commands and queries; enabled diagnostic publication is not a product business event stream.",
+            "documentation": {},
+            "id": "6",
+            "name": "Products API",
+            "properties": {
+              "structurizr.dsl.identifier": "productsApi"
+            },
+            "relationships": [
+              {
+                "description": "Reads and writes catalog",
+                "destinationId": "13",
+                "id": "27",
+                "sourceId": "6",
+                "tags": "Relationship",
+                "technology": "PostgreSQL wire protocol / Dapper + Npgsql"
+              },
+              {
+                "description": "Publishes enabled diagnostics on products.integration.events; business events deferred",
+                "destinationId": "17",
+                "id": "34",
+                "sourceId": "6",
+                "tags": "Relationship",
+                "technology": "Kafka protocol / Wolverine"
+              }
+            ],
+            "tags": "Element,Container",
+            "technology": "ASP.NET Core / Dapper / Npgsql / Wolverine"
+          },
+          {
+            "description": "Hosts configured orders.integration.events subscription; business reaction is unresolved.",
+            "documentation": {},
+            "id": "7",
+            "name": "Products Consumer",
+            "properties": {
+              "structurizr.dsl.identifier": "productsConsumer"
+            },
+            "tags": "Element,Container",
+            "technology": ".NET Generic Host / Wolverine Kafka"
+          },
+          {
+            "description": "Owns order lifecycle, event-sourced persistence, source-outbox relay and inventory reservation request/reply.",
+            "documentation": {},
+            "id": "8",
+            "name": "Orders API",
+            "properties": {
+              "structurizr.dsl.identifier": "ordersApi"
+            },
+            "relationships": [
+              {
+                "description": "Commits order events, read state and outbox; persists messaging state",
+                "destinationId": "14",
+                "id": "28",
+                "sourceId": "8",
+                "tags": "Relationship",
+                "technology": "PostgreSQL wire protocol / Dapper + Npgsql"
+              },
+              {
+                "description": "Publishes orders.integration.events and inventory.requests",
+                "destinationId": "17",
+                "id": "35",
+                "sourceId": "8",
+                "tags": "Relationship",
+                "technology": "Kafka protocol / Wolverine"
+              }
+            ],
+            "tags": "Element,Container",
+            "technology": "ASP.NET Core / Dapper / Npgsql / Wolverine"
+          },
+          {
+            "description": "Hosts products.integration.events diagnostic handlers and parallel-work examples; no confirmed business projection.",
+            "documentation": {},
+            "id": "9",
+            "name": "Orders Consumer",
+            "properties": {
+              "structurizr.dsl.identifier": "ordersConsumer"
+            },
+            "tags": "Element,Container",
+            "technology": ".NET Generic Host / Wolverine Kafka"
+          },
+          {
+            "description": "Owns stock queries/commands, reservation request handling and enabled Inventory source-outbox relay.",
+            "documentation": {},
+            "id": "10",
+            "name": "Inventory API",
+            "properties": {
+              "structurizr.dsl.identifier": "inventoryApi"
+            },
+            "relationships": [
+              {
+                "description": "Queries stock; commits stock/reservation outbox; relays stock events",
+                "destinationId": "15",
+                "id": "29",
+                "sourceId": "10",
+                "tags": "Relationship",
+                "technology": "PostgreSQL wire protocol / EF Core + Npgsql"
+              },
+              {
+                "description": "Publishes inventory.integration.events and reservation replies",
+                "destinationId": "17",
+                "id": "38",
+                "sourceId": "10",
+                "tags": "Relationship",
+                "technology": "Kafka protocol / Wolverine"
+              }
+            ],
+            "tags": "Element,Container",
+            "technology": "ASP.NET Core / EF Core / Npgsql / Wolverine"
+          },
+          {
+            "description": "Handles GoodsReceived via receipt use case and atomic idempotent stock application; also has an orders topic listener.",
+            "documentation": {},
+            "id": "11",
+            "name": "Inventory Consumer",
+            "properties": {
+              "structurizr.dsl.identifier": "inventoryConsumer"
+            },
+            "relationships": [
+              {
+                "description": "Atomically deduplicates receipt, increases stock and stages stock event; persists inbox",
+                "destinationId": "15",
+                "id": "30",
+                "sourceId": "11",
+                "tags": "Relationship",
+                "technology": "PostgreSQL wire protocol / EF Core + Npgsql"
+              }
+            ],
+            "tags": "Element,Container",
+            "technology": ".NET Generic Host / EF Core / Npgsql / Wolverine Kafka"
+          },
+          {
+            "description": "Owns supplier submission/reconciliation and actual receipt commands; hosts ProcurementOutboxRelay and Wolverine durable delivery in this process.",
+            "documentation": {},
+            "id": "12",
+            "name": "Procurement API + receipt relay",
+            "properties": {
+              "structurizr.dsl.identifier": "procurementApi"
+            },
+            "relationships": [
+              {
+                "description": "Commits purchases/receipts/outbox and manages relay/durable transport state",
+                "destinationId": "16",
+                "id": "31",
+                "sourceId": "12",
+                "tags": "Relationship",
+                "technology": "PostgreSQL wire protocol / Dapper + Npgsql"
+              },
+              {
+                "description": "Quotes, submits purchases and reconciles original clientRequestId (direct profile)",
+                "destinationId": "1",
+                "id": "32",
+                "sourceId": "12",
+                "tags": "Relationship",
+                "technology": "HTTP / JSON"
+              },
+              {
+                "description": "Publishes GoodsReceived via hosted relay and durable transport outbox",
+                "destinationId": "17",
+                "id": "42",
+                "sourceId": "12",
+                "tags": "Relationship",
+                "technology": "Kafka protocol / Wolverine"
+              }
+            ],
+            "tags": "Element,Container",
+            "technology": "ASP.NET Core / Dapper / Npgsql / Wolverine Kafka"
+          },
+          {
+            "description": "Stores product catalog state for Products.",
+            "documentation": {},
+            "id": "13",
+            "name": "Products database",
+            "properties": {
+              "structurizr.dsl.identifier": "productsDb"
+            },
+            "tags": "Element,Container,Database",
+            "technology": "PostgreSQL 16"
+          },
+          {
+            "description": "Stores order events, read state, source outbox and Wolverine messaging state.",
+            "documentation": {},
+            "id": "14",
+            "name": "Orders database",
+            "properties": {
+              "structurizr.dsl.identifier": "ordersDb"
+            },
+            "tags": "Element,Container,Database",
+            "technology": "PostgreSQL 16"
+          },
+          {
+            "description": "Stores stock, reservations, receipt deduplication/results, stock source outbox and messaging state.",
+            "documentation": {},
+            "id": "15",
+            "name": "Inventory database",
+            "properties": {
+              "structurizr.dsl.identifier": "inventoryDb"
+            },
+            "tags": "Element,Container,Database",
+            "technology": "PostgreSQL 16"
+          },
+          {
+            "description": "Stores purchases, unique receipts, source outbox and procurement_wolverine durable transport state.",
+            "documentation": {},
+            "id": "16",
+            "name": "Procurement database",
+            "properties": {
+              "structurizr.dsl.identifier": "procurementDb"
+            },
+            "tags": "Element,Container,Database",
+            "technology": "PostgreSQL 16"
+          },
+          {
+            "description": "Transports context events and inventory reservation requests/replies; asynchronous delivery may repeat.",
+            "documentation": {},
+            "id": "17",
+            "name": "Kafka",
+            "properties": {
+              "structurizr.dsl.identifier": "kafka"
+            },
+            "relationships": [
+              {
+                "description": "Delivers reservation replies on orders.outbound.replies",
+                "destinationId": "8",
+                "id": "36",
+                "sourceId": "17",
+                "tags": "Relationship",
+                "technology": "Kafka protocol / Wolverine"
+              },
+              {
+                "description": "Delivers inventory.requests for reservation",
+                "destinationId": "10",
+                "id": "37",
+                "sourceId": "17",
+                "tags": "Relationship",
+                "technology": "Kafka protocol / Wolverine"
+              },
+              {
+                "description": "Delivers configured orders.integration.events subscription; business intent unresolved",
+                "destinationId": "7",
+                "id": "39",
+                "sourceId": "17",
+                "tags": "Relationship",
+                "technology": "Kafka protocol / Wolverine"
+              },
+              {
+                "description": "Delivers products.integration.events diagnostics",
+                "destinationId": "9",
+                "id": "40",
+                "sourceId": "17",
+                "tags": "Relationship",
+                "technology": "Kafka protocol / Wolverine"
+              },
+              {
+                "description": "Delivers GoodsReceived on procurement.integration.events; also configured orders listener",
+                "destinationId": "11",
+                "id": "41",
+                "sourceId": "17",
+                "tags": "Relationship",
+                "technology": "Kafka protocol / Wolverine"
+              }
+            ],
+            "tags": "Element,Container,Broker",
+            "technology": "Apache Kafka 4 / KRaft"
+          }
+        ],
+        "description": "Owns product catalog, orders, inventory, purchases and actual goods receipts.",
+        "documentation": {},
+        "id": "2",
+        "name": "Distributed commerce lab",
+        "properties": {
+          "structurizr.dsl.identifier": "commerce"
+        },
+        "tags": "Element,Software System"
+      }
+    ]
+  },
+  "name": "Distributed commerce - Structurizr pilot",
+  "properties": {
+    "structurizr.dsl": "d29ya3NwYWNlICJEaXN0cmlidXRlZCBjb21tZXJjZSAtIFN0cnVjdHVyaXpyIHBpbG90IiAiQ29kZS1iYWNrZWQgbG9jYWxob3N0IEthZmthICsgZnJvbnRlbmQtbGFiICsgcHJvY3VyZW1lbnQtbGFiIHZpZXdzOyBzdXBwbGllciBhY2NlcHRhbmNlIGRvZXMgbm90IGluY3JlYXNlIHN0b2NrLiIgewogICAgY29uZmlndXJhdGlvbiB7CiAgICAgICAgc2NvcGUgc29mdHdhcmVzeXN0ZW0KICAgIH0KICAgICFpbXBsaWVkUmVsYXRpb25zaGlwcyBmYWxzZQogICAgbW9kZWwgewogICAgICAgIHN1cHBsaWVyID0gc29mdHdhcmVTeXN0ZW0gIkV4dGVybmFsIHN1cHBsaWVyIiAiT3ducyBxdW90ZXMgYW5kIHN1cHBsaWVyIG9yZGVyIGFjY2VwdGFuY2UuIFRoZSBkaXJlY3QgcHJvZmlsZSB1c2VzIFN1cHBsaWVyU2FuZGJveDsgYWNjZXB0YW5jZSBpcyBub3QgcGh5c2ljYWwgcmVjZWlwdC4iIHsKICAgICAgICAgICAgdGFncyAiRXh0ZXJuYWwiCiAgICAgICAgfQogICAgICAgIGNvbW1lcmNlID0gc29mdHdhcmVTeXN0ZW0gIkRpc3RyaWJ1dGVkIGNvbW1lcmNlIGxhYiIgIk93bnMgcHJvZHVjdCBjYXRhbG9nLCBvcmRlcnMsIGludmVudG9yeSwgcHVyY2hhc2VzIGFuZCBhY3R1YWwgZ29vZHMgcmVjZWlwdHMuIiB7CiAgICAgICAgICAgIHdlYiA9IGNvbnRhaW5lciAiVnVlIHN0b3JlZnJvbnQiICJCcm93c2VyIFVJIGZvciBjYXRhbG9nLCBvcmRlcnMsIHN0b2NrLCBwcm9jdXJlbWVudCBhbmQgZXhwbGljaXQgcmVjZWlwdCBlbnRyeTsgYXNzZXRzIHNlcnZlZCBieSB3ZWItZnJvbnRlbmQuIiAiVnVlIDMgLyBUeXBlU2NyaXB0IC8gTmdpbngiCiAgICAgICAgICAgIGFkbWluID0gY29udGFpbmVyICJWdWUgYWRtaW5pc3RyYXRpb24iICJCcm93c2VyIFVJIGZvciBsYWIgYWRtaW5pc3RyYXRpb24gYW5kIHN1cHBsaWVyIGNvbnRyb2xzOyBhc3NldHMgc2VydmVkIGJ5IGFkbWluLWZyb250ZW5kLiIgIlZ1ZSAzIC8gVHlwZVNjcmlwdCAvIE5naW54IgogICAgICAgICAgICBnYXRld2F5ID0gY29udGFpbmVyICJZQVJQIGdhdGV3YXkiICJSb3V0ZXMgL3dlYiwgL2FkbWluIGFuZCBmb3VyIGNvbnRleHQgQVBJIHByZWZpeGVzOyBleHBvc2VzIGJvdW5kZWQgc3VwcGxpZXIgYWRtaW4gZmFjYWRlcy4iICJZQVJQIC8gQVNQLk5FVCBDb3JlIgogICAgICAgICAgICBwcm9kdWN0c0FwaSA9IGNvbnRhaW5lciAiUHJvZHVjdHMgQVBJIiAiTWFuYWdlcyBjYXRhbG9nIGNvbW1hbmRzIGFuZCBxdWVyaWVzOyBlbmFibGVkIGRpYWdub3N0aWMgcHVibGljYXRpb24gaXMgbm90IGEgcHJvZHVjdCBidXNpbmVzcyBldmVudCBzdHJlYW0uIiAiQVNQLk5FVCBDb3JlIC8gRGFwcGVyIC8gTnBnc3FsIC8gV29sdmVyaW5lIgogICAgICAgICAgICBwcm9kdWN0c0NvbnN1bWVyID0gY29udGFpbmVyICJQcm9kdWN0cyBDb25zdW1lciIgIkhvc3RzIGNvbmZpZ3VyZWQgb3JkZXJzLmludGVncmF0aW9uLmV2ZW50cyBzdWJzY3JpcHRpb247IGJ1c2luZXNzIHJlYWN0aW9uIGlzIHVucmVzb2x2ZWQuIiAiLk5FVCBHZW5lcmljIEhvc3QgLyBXb2x2ZXJpbmUgS2Fma2EiCiAgICAgICAgICAgIG9yZGVyc0FwaSA9IGNvbnRhaW5lciAiT3JkZXJzIEFQSSIgIk93bnMgb3JkZXIgbGlmZWN5Y2xlLCBldmVudC1zb3VyY2VkIHBlcnNpc3RlbmNlLCBzb3VyY2Utb3V0Ym94IHJlbGF5IGFuZCBpbnZlbnRvcnkgcmVzZXJ2YXRpb24gcmVxdWVzdC9yZXBseS4iICJBU1AuTkVUIENvcmUgLyBEYXBwZXIgLyBOcGdzcWwgLyBXb2x2ZXJpbmUiCiAgICAgICAgICAgIG9yZGVyc0NvbnN1bWVyID0gY29udGFpbmVyICJPcmRlcnMgQ29uc3VtZXIiICJIb3N0cyBwcm9kdWN0cy5pbnRlZ3JhdGlvbi5ldmVudHMgZGlhZ25vc3RpYyBoYW5kbGVycyBhbmQgcGFyYWxsZWwtd29yayBleGFtcGxlczsgbm8gY29uZmlybWVkIGJ1c2luZXNzIHByb2plY3Rpb24uIiAiLk5FVCBHZW5lcmljIEhvc3QgLyBXb2x2ZXJpbmUgS2Fma2EiCiAgICAgICAgICAgIGludmVudG9yeUFwaSA9IGNvbnRhaW5lciAiSW52ZW50b3J5IEFQSSIgIk93bnMgc3RvY2sgcXVlcmllcy9jb21tYW5kcywgcmVzZXJ2YXRpb24gcmVxdWVzdCBoYW5kbGluZyBhbmQgZW5hYmxlZCBJbnZlbnRvcnkgc291cmNlLW91dGJveCByZWxheS4iICJBU1AuTkVUIENvcmUgLyBFRiBDb3JlIC8gTnBnc3FsIC8gV29sdmVyaW5lIgogICAgICAgICAgICBpbnZlbnRvcnlDb25zdW1lciA9IGNvbnRhaW5lciAiSW52ZW50b3J5IENvbnN1bWVyIiAiSGFuZGxlcyBHb29kc1JlY2VpdmVkIHZpYSByZWNlaXB0IHVzZSBjYXNlIGFuZCBhdG9taWMgaWRlbXBvdGVudCBzdG9jayBhcHBsaWNhdGlvbjsgYWxzbyBoYXMgYW4gb3JkZXJzIHRvcGljIGxpc3RlbmVyLiIgIi5ORVQgR2VuZXJpYyBIb3N0IC8gRUYgQ29yZSAvIE5wZ3NxbCAvIFdvbHZlcmluZSBLYWZrYSIKICAgICAgICAgICAgcHJvY3VyZW1lbnRBcGkgPSBjb250YWluZXIgIlByb2N1cmVtZW50IEFQSSArIHJlY2VpcHQgcmVsYXkiICJPd25zIHN1cHBsaWVyIHN1Ym1pc3Npb24vcmVjb25jaWxpYXRpb24gYW5kIGFjdHVhbCByZWNlaXB0IGNvbW1hbmRzOyBob3N0cyBQcm9jdXJlbWVudE91dGJveFJlbGF5IGFuZCBXb2x2ZXJpbmUgZHVyYWJsZSBkZWxpdmVyeSBpbiB0aGlzIHByb2Nlc3MuIiAiQVNQLk5FVCBDb3JlIC8gRGFwcGVyIC8gTnBnc3FsIC8gV29sdmVyaW5lIEthZmthIgogICAgICAgICAgICBwcm9kdWN0c0RiID0gY29udGFpbmVyICJQcm9kdWN0cyBkYXRhYmFzZSIgIlN0b3JlcyBwcm9kdWN0IGNhdGFsb2cgc3RhdGUgZm9yIFByb2R1Y3RzLiIgIlBvc3RncmVTUUwgMTYiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIgogICAgICAgICAgICB9CiAgICAgICAgICAgIG9yZGVyc0RiID0gY29udGFpbmVyICJPcmRlcnMgZGF0YWJhc2UiICJTdG9yZXMgb3JkZXIgZXZlbnRzLCByZWFkIHN0YXRlLCBzb3VyY2Ugb3V0Ym94IGFuZCBXb2x2ZXJpbmUgbWVzc2FnaW5nIHN0YXRlLiIgIlBvc3RncmVTUUwgMTYiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIgogICAgICAgICAgICB9CiAgICAgICAgICAgIGludmVudG9yeURiID0gY29udGFpbmVyICJJbnZlbnRvcnkgZGF0YWJhc2UiICJTdG9yZXMgc3RvY2ssIHJlc2VydmF0aW9ucywgcmVjZWlwdCBkZWR1cGxpY2F0aW9uL3Jlc3VsdHMsIHN0b2NrIHNvdXJjZSBvdXRib3ggYW5kIG1lc3NhZ2luZyBzdGF0ZS4iICJQb3N0Z3JlU1FMIDE2IiB7CiAgICAgICAgICAgICAgICB0YWdzICJEYXRhYmFzZSIKICAgICAgICAgICAgfQogICAgICAgICAgICBwcm9jdXJlbWVudERiID0gY29udGFpbmVyICJQcm9jdXJlbWVudCBkYXRhYmFzZSIgIlN0b3JlcyBwdXJjaGFzZXMsIHVuaXF1ZSByZWNlaXB0cywgc291cmNlIG91dGJveCBhbmQgcHJvY3VyZW1lbnRfd29sdmVyaW5lIGR1cmFibGUgdHJhbnNwb3J0IHN0YXRlLiIgIlBvc3RncmVTUUwgMTYiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIgogICAgICAgICAgICB9CiAgICAgICAgICAgIGthZmthID0gY29udGFpbmVyICJLYWZrYSIgIlRyYW5zcG9ydHMgY29udGV4dCBldmVudHMgYW5kIGludmVudG9yeSByZXNlcnZhdGlvbiByZXF1ZXN0cy9yZXBsaWVzOyBhc3luY2hyb25vdXMgZGVsaXZlcnkgbWF5IHJlcGVhdC4iICJBcGFjaGUgS2Fma2EgNCAvIEtSYWZ0IiB7CiAgICAgICAgICAgICAgICB0YWdzICJCcm9rZXIiCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICAgICAgd2ViIC0+IGdhdGV3YXkgIkNhbGxzIHNhbWUtb3JpZ2luIGNvbW1lcmNlIEFQSXMgZnJvbSBicm93c2VyIiAiSFRUUCAvIEpTT04iCiAgICAgICAgYWRtaW4gLT4gZ2F0ZXdheSAiQ2FsbHMgc2FtZS1vcmlnaW4gbGFiL2FkbWluIEFQSXMgZnJvbSBicm93c2VyIiAiSFRUUCAvIEpTT04iCiAgICAgICAgZ2F0ZXdheSAtPiB3ZWIgIlJvdXRlcyAvd2ViIHRvIE5naW54IGFzc2V0cyBhbmQgU1BBIGZhbGxiYWNrIiAiSFRUUCIKICAgICAgICBnYXRld2F5IC0+IGFkbWluICJSb3V0ZXMgL2FkbWluIHRvIE5naW54IGFzc2V0cyBhbmQgU1BBIGZhbGxiYWNrIiAiSFRUUCIKICAgICAgICBnYXRld2F5IC0+IHByb2R1Y3RzQXBpICJGb3J3YXJkcyAvYXBpL3Byb2R1Y3RzIiAiSFRUUCAvIEpTT04iCiAgICAgICAgZ2F0ZXdheSAtPiBvcmRlcnNBcGkgIkZvcndhcmRzIC9hcGkvb3JkZXJzIiAiSFRUUCAvIEpTT04iCiAgICAgICAgZ2F0ZXdheSAtPiBpbnZlbnRvcnlBcGkgIkZvcndhcmRzIC9hcGkvaW52ZW50b3J5IiAiSFRUUCAvIEpTT04iCiAgICAgICAgZ2F0ZXdheSAtPiBwcm9jdXJlbWVudEFwaSAiRm9yd2FyZHMgL2FwaS9wcm9jdXJlbWVudCIgIkhUVFAgLyBKU09OIgogICAgICAgIGdhdGV3YXkgLT4gc3VwcGxpZXIgIkZvcndhcmRzIGJvdW5kZWQgc3VwcGxpZXItc2FuZGJveCBhZG1pbiBmYWNhZGUgKGRpcmVjdCBwcm9maWxlKSIgIkhUVFAgLyBKU09OIgogICAgICAgIHByb2R1Y3RzQXBpIC0+IHByb2R1Y3RzRGIgIlJlYWRzIGFuZCB3cml0ZXMgY2F0YWxvZyIgIlBvc3RncmVTUUwgd2lyZSBwcm90b2NvbCAvIERhcHBlciArIE5wZ3NxbCIKICAgICAgICBvcmRlcnNBcGkgLT4gb3JkZXJzRGIgIkNvbW1pdHMgb3JkZXIgZXZlbnRzLCByZWFkIHN0YXRlIGFuZCBvdXRib3g7IHBlcnNpc3RzIG1lc3NhZ2luZyBzdGF0ZSIgIlBvc3RncmVTUUwgd2lyZSBwcm90b2NvbCAvIERhcHBlciArIE5wZ3NxbCIKICAgICAgICBpbnZlbnRvcnlBcGkgLT4gaW52ZW50b3J5RGIgIlF1ZXJpZXMgc3RvY2s7IGNvbW1pdHMgc3RvY2svcmVzZXJ2YXRpb24gb3V0Ym94OyByZWxheXMgc3RvY2sgZXZlbnRzIiAiUG9zdGdyZVNRTCB3aXJlIHByb3RvY29sIC8gRUYgQ29yZSArIE5wZ3NxbCIKICAgICAgICBpbnZlbnRvcnlDb25zdW1lciAtPiBpbnZlbnRvcnlEYiAiQXRvbWljYWxseSBkZWR1cGxpY2F0ZXMgcmVjZWlwdCwgaW5jcmVhc2VzIHN0b2NrIGFuZCBzdGFnZXMgc3RvY2sgZXZlbnQ7IHBlcnNpc3RzIGluYm94IiAiUG9zdGdyZVNRTCB3aXJlIHByb3RvY29sIC8gRUYgQ29yZSArIE5wZ3NxbCIKICAgICAgICBwcm9jdXJlbWVudEFwaSAtPiBwcm9jdXJlbWVudERiICJDb21taXRzIHB1cmNoYXNlcy9yZWNlaXB0cy9vdXRib3ggYW5kIG1hbmFnZXMgcmVsYXkvZHVyYWJsZSB0cmFuc3BvcnQgc3RhdGUiICJQb3N0Z3JlU1FMIHdpcmUgcHJvdG9jb2wgLyBEYXBwZXIgKyBOcGdzcWwiCiAgICAgICAgcHJvY3VyZW1lbnRBcGkgLT4gc3VwcGxpZXIgIlF1b3Rlcywgc3VibWl0cyBwdXJjaGFzZXMgYW5kIHJlY29uY2lsZXMgb3JpZ2luYWwgY2xpZW50UmVxdWVzdElkIChkaXJlY3QgcHJvZmlsZSkiICJIVFRQIC8gSlNPTiIKICAgICAgICBzdXBwbGllciAtPiBwcm9jdXJlbWVudEFwaSAiUmV0dXJucyBzeW5jaHJvbm91cyBzdXBwbGllciBvcmRlciBvdXRjb21lOyBubyBzdG9jayBtdXRhdGlvbiIgIkhUVFAgcmVzcG9uc2UgLyBKU09OIgogICAgICAgIHByb2R1Y3RzQXBpIC0+IGthZmthICJQdWJsaXNoZXMgZW5hYmxlZCBkaWFnbm9zdGljcyBvbiBwcm9kdWN0cy5pbnRlZ3JhdGlvbi5ldmVudHM7IGJ1c2luZXNzIGV2ZW50cyBkZWZlcnJlZCIgIkthZmthIHByb3RvY29sIC8gV29sdmVyaW5lIgogICAgICAgIG9yZGVyc0FwaSAtPiBrYWZrYSAiUHVibGlzaGVzIG9yZGVycy5pbnRlZ3JhdGlvbi5ldmVudHMgYW5kIGludmVudG9yeS5yZXF1ZXN0cyIgIkthZmthIHByb3RvY29sIC8gV29sdmVyaW5lIgogICAgICAgIGthZmthIC0+IG9yZGVyc0FwaSAiRGVsaXZlcnMgcmVzZXJ2YXRpb24gcmVwbGllcyBvbiBvcmRlcnMub3V0Ym91bmQucmVwbGllcyIgIkthZmthIHByb3RvY29sIC8gV29sdmVyaW5lIgogICAgICAgIGthZmthIC0+IGludmVudG9yeUFwaSAiRGVsaXZlcnMgaW52ZW50b3J5LnJlcXVlc3RzIGZvciByZXNlcnZhdGlvbiIgIkthZmthIHByb3RvY29sIC8gV29sdmVyaW5lIgogICAgICAgIGludmVudG9yeUFwaSAtPiBrYWZrYSAiUHVibGlzaGVzIGludmVudG9yeS5pbnRlZ3JhdGlvbi5ldmVudHMgYW5kIHJlc2VydmF0aW9uIHJlcGxpZXMiICJLYWZrYSBwcm90b2NvbCAvIFdvbHZlcmluZSIKICAgICAgICBrYWZrYSAtPiBwcm9kdWN0c0NvbnN1bWVyICJEZWxpdmVycyBjb25maWd1cmVkIG9yZGVycy5pbnRlZ3JhdGlvbi5ldmVudHMgc3Vic2NyaXB0aW9uOyBidXNpbmVzcyBpbnRlbnQgdW5yZXNvbHZlZCIgIkthZmthIHByb3RvY29sIC8gV29sdmVyaW5lIgogICAgICAgIGthZmthIC0+IG9yZGVyc0NvbnN1bWVyICJEZWxpdmVycyBwcm9kdWN0cy5pbnRlZ3JhdGlvbi5ldmVudHMgZGlhZ25vc3RpY3MiICJLYWZrYSBwcm90b2NvbCAvIFdvbHZlcmluZSIKICAgICAgICBrYWZrYSAtPiBpbnZlbnRvcnlDb25zdW1lciAiRGVsaXZlcnMgR29vZHNSZWNlaXZlZCBvbiBwcm9jdXJlbWVudC5pbnRlZ3JhdGlvbi5ldmVudHM7IGFsc28gY29uZmlndXJlZCBvcmRlcnMgbGlzdGVuZXIiICJLYWZrYSBwcm90b2NvbCAvIFdvbHZlcmluZSIKICAgICAgICBwcm9jdXJlbWVudEFwaSAtPiBrYWZrYSAiUHVibGlzaGVzIEdvb2RzUmVjZWl2ZWQgdmlhIGhvc3RlZCByZWxheSBhbmQgZHVyYWJsZSB0cmFuc3BvcnQgb3V0Ym94IiAiS2Fma2EgcHJvdG9jb2wgLyBXb2x2ZXJpbmUiCiAgICB9CiAgICB2aWV3cyB7CiAgICAgICAgY29udGFpbmVyIGNvbW1lcmNlICJDb3JlQ29udGFpbmVycyIgIkN1cnJlbnQgY29uZmlndXJlZCBjb3JlIHRvcG9sb2d5OyBLYWZrYSBwcm9maWxlIHBsdXMgZnJvbnRlbmQvcHJvY3VyZW1lbnQgb3ZlcmxheXM7IG5vIGFzc3VtZWQgYnVzaW5lc3MgcmVhY3Rpb25zLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICAgICAgYXV0b0xheW91dCBscgogICAgICAgIH0KICAgICAgICBkeW5hbWljIGNvbW1lcmNlICJHb29kc1JlY2VpcHQiICJEaXJlY3Qgc3VwcGxpZXIgc3VjY2VzcyBwYXRoIHRoZW4gZXhwbGljaXQgcmVjZWlwdDogc3VwcGxpZXIgYWNjZXB0YW5jZSBhbG9uZSBuZXZlciBpbmNyZWFzZXMgSW52ZW50b3J5IHN0b2NrLiIgewogICAgICAgICAgICB3ZWIgLT4gZ2F0ZXdheSAiU3VibWl0IHB1cmNoYXNlIHdpdGggc3RhYmxlIGNsaWVudFJlcXVlc3RJZCIKICAgICAgICAgICAgZ2F0ZXdheSAtPiBwcm9jdXJlbWVudEFwaSAiUE9TVCAvYXBpL3Byb2N1cmVtZW50L3B1cmNoYXNlLW9yZGVycyIKICAgICAgICAgICAgcHJvY3VyZW1lbnRBcGkgLT4gcHJvY3VyZW1lbnREYiAiQ3JlYXRlT3JHZXQgdW5pcXVlIHB1cmNoYXNlIGlkZW50aXR5IGJlZm9yZSBleHRlcm5hbCBIVFRQIgogICAgICAgICAgICBwcm9jdXJlbWVudEFwaSAtPiBzdXBwbGllciAiUE9TVCAvc3VwcGxpZXIvb3JkZXJzIHVzaW5nIG9yaWdpbmFsIGNsaWVudFJlcXVlc3RJZCAoZGlyZWN0KSIKICAgICAgICAgICAgc3VwcGxpZXIgLT4gcHJvY3VyZW1lbnRBcGkgIlJldHVybiBhY2NlcHRlZCBzdXBwbGllciBvcmRlcjsgdGhpcyBpcyBOT1QgZ29vZHMgcmVjZWlwdCIKICAgICAgICAgICAgcHJvY3VyZW1lbnRBcGkgLT4gcHJvY3VyZW1lbnREYiAiQ29tbWl0IEFjY2VwdGVkIHN0YXRlIG9ubHk6IG5vIHJlY2VpcHQsIG5vIEdvb2RzUmVjZWl2ZWQsIG5vIHN0b2NrIGluY3JlYXNlIgogICAgICAgICAgICB3ZWIgLT4gZ2F0ZXdheSAiTGF0ZXIsIGFmdGVyIHBoeXNpY2FsIGFycml2YWwsIGV4cGxpY2l0bHkgc3VibWl0IFJlY2VpcHRJZCBhbmQgcXVhbnRpdHkiCiAgICAgICAgICAgIGdhdGV3YXkgLT4gcHJvY3VyZW1lbnRBcGkgIlBPU1QgL2FwaS9wcm9jdXJlbWVudC9wdXJjaGFzZS1vcmRlcnMve2lkfS9yZWNlaXB0cyIKICAgICAgICAgICAgcHJvY3VyZW1lbnRBcGkgLT4gcHJvY3VyZW1lbnREYiAiVDE6IGxvY2sgcHVyY2hhc2U7IHZhbGlkYXRlOyBjb21taXQgcHVyY2hhc2Ugc3RhdGUgKyByZWNlaXB0ICsgR29vZHNSZWNlaXZlZCBzb3VyY2Ugb3V0Ym94IGF0b21pY2FsbHkiCiAgICAgICAgICAgIHByb2N1cmVtZW50QXBpIC0+IHByb2N1cmVtZW50RGIgIkhvc3RlZCBSZWxheSBsZWFzZXMgY29tbWl0dGVkIHByb2N1cmVtZW50X291dGJveCByb3dzIChTS0lQIExPQ0tFRCkiCiAgICAgICAgICAgIHByb2N1cmVtZW50QXBpIC0+IHByb2N1cmVtZW50RGIgIkF3YWl0IFdvbHZlcmluZSBkdXJhYmxlLW91dGJveCBoYW5kb2ZmIGludG8gcHJvY3VyZW1lbnRfd29sdmVyaW5lOyB0aGVuIG1hcmsgc291cmNlIHB1Ymxpc2hlZF9hdCAoTk9UIGNvbnN1bWVyIGNvbXBsZXRpb24pIgogICAgICAgICAgICBwcm9jdXJlbWVudEFwaSAtPiBrYWZrYSAiRHVyYWJsZSB0cmFuc3BvcnQgcHVibGlzaGVzIEdvb2RzUmVjZWl2ZWQgdG8gcHJvY3VyZW1lbnQuaW50ZWdyYXRpb24uZXZlbnRzOyBrZXk9UHJvZHVjdElkIE47IHN0YWJsZSBSZWNlaXB0SWQ7IG1heSByZWRlbGl2ZXIiCiAgICAgICAgICAgIGthZmthIC0+IGludmVudG9yeUNvbnN1bWVyICJEZWxpdmVyIEdvb2RzUmVjZWl2ZWQgdGhyb3VnaCBkdXJhYmxlIGluYm94OyBoYW5kbGVyIGRlbGVnYXRlcyByZWNlaXB0IGFwcGxpY2F0aW9uIgogICAgICAgICAgICBpbnZlbnRvcnlDb25zdW1lciAtPiBpbnZlbnRvcnlEYiAiVDI6IGNsYWltIFJlY2VpcHRJZDsgbG9jayBleGlzdGluZyBzdG9jazsgY29tbWl0IGRlZHVwIHJlc3VsdCArIGluY3JlYXNlICsgU3RvY2tJbmNyZWFzZWQgb3V0Ym94IGF0b21pY2FsbHk7IG1hdGNoaW5nIHJlcGxheSBoYXMgbm8gbmV3IGVmZmVjdCIKICAgICAgICAgICAgYXV0b0xheW91dCBscgogICAgICAgIH0KICAgICAgICBzdHlsZXMgewogICAgICAgICAgICBlbGVtZW50ICJFbGVtZW50IiB7CiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICMyNDViNzgKICAgICAgICAgICAgfQogICAgICAgICAgICBlbGVtZW50ICJEYXRhYmFzZSIgewogICAgICAgICAgICAgICAgc2hhcGUgQ3lsaW5kZXIKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzUwNzU0OAogICAgICAgICAgICB9CiAgICAgICAgICAgIGVsZW1lbnQgIkJyb2tlciIgewogICAgICAgICAgICAgICAgc2hhcGUgUGlwZQogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjODQ1NjJkCiAgICAgICAgICAgIH0KICAgICAgICAgICAgZWxlbWVudCAiRXh0ZXJuYWwiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzY2NjY2NgogICAgICAgICAgICB9CiAgICAgICAgICAgIHJlbGF0aW9uc2hpcCAiUmVsYXRpb25zaGlwIiB7CiAgICAgICAgICAgICAgICBjb2xvciAjNTI2MTZiCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9Cn0="
+  },
+  "views": {
+    "configuration": {
+      "styles": {
+        "elements": [
+          {
+            "background": "#84562d",
+            "shape": "Pipe",
+            "tag": "Broker"
+          },
+          {
+            "background": "#507548",
+            "shape": "Cylinder",
+            "tag": "Database"
+          },
+          {
+            "background": "#245b78",
+            "color": "#ffffff",
+            "tag": "Element"
+          },
+          {
+            "background": "#666666",
+            "tag": "External"
+          }
+        ],
+        "relationships": [
+          {
+            "color": "#52616b",
+            "tag": "Relationship"
+          }
+        ]
+      },
+      "terminology": {}
+    },
+    "containerViews": [
+      {
+        "automaticLayout": {
+          "edgeSeparation": 50,
+          "nodeSeparation": 50,
+          "rankDirection": "LeftRight",
+          "rankSeparation": 100,
+          "vertices": true
+        },
+        "description": "Current configured core topology; Kafka profile plus frontend/procurement overlays; no assumed business reactions.",
+        "elements": [
+          {
+            "id": "1",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "3",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "4",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "5",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "6",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "7",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "8",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "9",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "10",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "11",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "12",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "13",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "14",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "15",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "16",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "17",
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "externalSoftwareSystemBoundariesVisible": false,
+        "key": "CoreContainers",
+        "name": "Container View: Distributed commerce lab",
+        "order": 1,
+        "relationships": [
+          {
+            "id": "18"
+          },
+          {
+            "id": "19"
+          },
+          {
+            "id": "20"
+          },
+          {
+            "id": "21"
+          },
+          {
+            "id": "22"
+          },
+          {
+            "id": "23"
+          },
+          {
+            "id": "24"
+          },
+          {
+            "id": "25"
+          },
+          {
+            "id": "26"
+          },
+          {
+            "id": "27"
+          },
+          {
+            "id": "28"
+          },
+          {
+            "id": "29"
+          },
+          {
+            "id": "30"
+          },
+          {
+            "id": "31"
+          },
+          {
+            "id": "32"
+          },
+          {
+            "id": "33"
+          },
+          {
+            "id": "34"
+          },
+          {
+            "id": "35"
+          },
+          {
+            "id": "36"
+          },
+          {
+            "id": "37"
+          },
+          {
+            "id": "38"
+          },
+          {
+            "id": "39"
+          },
+          {
+            "id": "40"
+          },
+          {
+            "id": "41"
+          },
+          {
+            "id": "42"
+          }
+        ],
+        "softwareSystemId": "2"
+      }
+    ],
+    "dynamicViews": [
+      {
+        "automaticLayout": {
+          "edgeSeparation": 50,
+          "nodeSeparation": 50,
+          "rankDirection": "LeftRight",
+          "rankSeparation": 100,
+          "vertices": true
+        },
+        "description": "Direct supplier success path then explicit receipt: supplier acceptance alone never increases Inventory stock.",
+        "elementId": "2",
+        "elements": [
+          {
+            "id": "1",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "3",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "5",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "11",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "12",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "15",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "16",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "17",
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "externalBoundariesVisible": false,
+        "key": "GoodsReceipt",
+        "name": "Dynamic View: Distributed commerce lab",
+        "order": 2,
+        "relationships": [
+          {
+            "description": "Submit purchase with stable clientRequestId",
+            "id": "18",
+            "order": "1",
+            "response": false
+          },
+          {
+            "description": "POST /api/procurement/purchase-orders",
+            "id": "25",
+            "order": "2",
+            "response": false
+          },
+          {
+            "description": "CreateOrGet unique purchase identity before external HTTP",
+            "id": "31",
+            "order": "3",
+            "response": false
+          },
+          {
+            "description": "POST /supplier/orders using original clientRequestId (direct)",
+            "id": "32",
+            "order": "4",
+            "response": false
+          },
+          {
+            "description": "Return accepted supplier order; this is NOT goods receipt",
+            "id": "33",
+            "order": "5",
+            "response": false
+          },
+          {
+            "description": "Commit Accepted state only: no receipt, no GoodsReceived, no stock increase",
+            "id": "31",
+            "order": "6",
+            "response": false
+          },
+          {
+            "description": "Later, after physical arrival, explicitly submit ReceiptId and quantity",
+            "id": "18",
+            "order": "7",
+            "response": false
+          },
+          {
+            "description": "POST /api/procurement/purchase-orders/{id}/receipts",
+            "id": "25",
+            "order": "8",
+            "response": false
+          },
+          {
+            "description": "T1: lock purchase; validate; commit purchase state + receipt + GoodsReceived source outbox atomically",
+            "id": "31",
+            "order": "9",
+            "response": false
+          },
+          {
+            "description": "Hosted Relay leases committed procurement_outbox rows (SKIP LOCKED)",
+            "id": "31",
+            "order": "10",
+            "response": false
+          },
+          {
+            "description": "Await Wolverine durable-outbox handoff into procurement_wolverine; then mark source published_at (NOT consumer completion)",
+            "id": "31",
+            "order": "11",
+            "response": false
+          },
+          {
+            "description": "Durable transport publishes GoodsReceived to procurement.integration.events; key=ProductId N; stable ReceiptId; may redeliver",
+            "id": "42",
+            "order": "12",
+            "response": false
+          },
+          {
+            "description": "Deliver GoodsReceived through durable inbox; handler delegates receipt application",
+            "id": "41",
+            "order": "13",
+            "response": false
+          },
+          {
+            "description": "T2: claim ReceiptId; lock existing stock; commit dedup result + increase + StockIncreased outbox atomically; matching replay has no new effect",
+            "id": "30",
+            "order": "14",
+            "response": false
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+# Local viewer state; evidence/workspace.json remains a retained MCP artifact.
+/.structurizr/
+/workspace.json
+/workspace.json.bak

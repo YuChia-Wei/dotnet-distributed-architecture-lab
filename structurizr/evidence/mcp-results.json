@@ -1,0 +1,57 @@
+{
+  "sourceRevision": "4cca0256b96386eae76ea4e73d66cdf7cc2a5847",
+  "date": "2026-10-14",
+  "generator": "Structurizr MCP validate, inspect, parse; functions JavaScript view-array counts",
+  "scope": "structurizr/workspace.dsl; configured localhost Kafka frontend/procurement overlays",
+  "exclusions": [
+    "live runtime",
+    "database tests",
+    "deployment",
+    "observability and test-tool topology"
+  ],
+  "initialInspect": {
+    "content": [
+      {
+        "type": "text",
+        "text": "[\"ERROR: This workspace has no defined scope. It is recommended that the workspace scope is set to \\\"Landscape\\\" or \\\"SoftwareSystem\\\".\",\"ERROR: The software system \\\"Distributed commerce lab\\\" has containers, but is missing documentation.\",\"ERROR: The software system \\\"Distributed commerce lab\\\" has containers, but is missing decisions.\",\"ERROR: The software system \\\"Distributed commerce lab\\\" is disconnected - add a relationship to/from it, or consider removing it from the model.\",\"ERROR: The software system named \\\"Distributed commerce lab\\\" is not included on any views - add it to a view.\"]"
+      }
+    ],
+    "isError": false
+  },
+  "validate": {
+    "content": [
+      {
+        "type": "text",
+        "text": "OK"
+      }
+    ],
+    "isError": false
+  },
+  "inspect": {
+    "content": [
+      {
+        "type": "text",
+        "text": "[\"ERROR: The software system \\\"Distributed commerce lab\\\" has containers, but is missing documentation.\",\"ERROR: The software system \\\"Distributed commerce lab\\\" has containers, but is missing decisions.\",\"ERROR: The software system \\\"Distributed commerce lab\\\" is disconnected - add a relationship to/from it, or consider removing it from the model.\",\"ERROR: The software system named \\\"Distributed commerce lab\\\" is not included on any views - add it to a view.\"]"
+      }
+    ],
+    "isError": false
+  },
+  "parse": {
+    "isError": false,
+    "output": "workspace.json"
+  },
+  "views": [
+    {
+      "key": "CoreContainers",
+      "elements": 16,
+      "relationships": 25,
+      "uniqueRelationships": 25
+    },
+    {
+      "key": "GoodsReceipt",
+      "elements": 8,
+      "relationships": 14,
+      "uniqueRelationships": 8
+    }
+  ]
+}
