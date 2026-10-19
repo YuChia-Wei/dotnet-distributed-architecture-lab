@@ -1,7 +1,7 @@
 using System.Data;
-using Lab.BuildingBlocks.Application;
-using Lab.BuildingBlocks.Domains;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Application;
+using ArchPrecept.Contracts.Domain;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;

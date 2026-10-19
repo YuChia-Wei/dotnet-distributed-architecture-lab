@@ -1,3 +1,5 @@
+using ArchPrecept.Contracts.Domain;
+
 namespace Lab.BuildingBlocks.Domains;
 
 /// <summary>

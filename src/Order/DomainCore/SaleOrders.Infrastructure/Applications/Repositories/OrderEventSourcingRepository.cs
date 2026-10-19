@@ -1,9 +1,9 @@
 ﻿using System.Data;
 using System.Text.Json;
 using Dapper;
-using Lab.BuildingBlocks.Application;
-using Lab.BuildingBlocks.Domains;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Application;
+using ArchPrecept.Contracts.Domain;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 using SaleOrders.Domains.DomainEvents;

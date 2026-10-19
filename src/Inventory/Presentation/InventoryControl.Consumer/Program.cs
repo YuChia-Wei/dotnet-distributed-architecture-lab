@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Confluent.Kafka.Extensions.OpenTelemetry;
-using Lab.BuildingBlocks.Integrations.Configuration;
+using ArchPrecept.Contracts.Messaging.Abstractions.Configuration;
 using InventoryControl.Consumer.Messaging;
 using InventoryControl.Applications;
 using InventoryControl.Applications.Receipts;

@@ -1,4 +1,4 @@
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using SaleOrders.Domains;
 
 namespace SaleOrders.Applications.Repositories;

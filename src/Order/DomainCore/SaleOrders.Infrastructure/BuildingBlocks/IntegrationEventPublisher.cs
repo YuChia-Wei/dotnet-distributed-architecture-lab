@@ -1,4 +1,4 @@
-﻿using Lab.BuildingBlocks.Integrations;
+﻿using ArchPrecept.Contracts.Messaging.Abstractions;
 using Microsoft.Extensions.Logging;
 using Wolverine;
 

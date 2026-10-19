@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using Shouldly;
 
 namespace SaleOrders.Tests;

@@ -1,5 +1,5 @@
 using InventoryControl.Domains;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 using Microsoft.EntityFrameworkCore;
 
 namespace EfCoreWolverine.Infrastructure;

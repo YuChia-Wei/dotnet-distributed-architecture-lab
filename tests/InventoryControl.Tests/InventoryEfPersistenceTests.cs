@@ -6,7 +6,7 @@ using InventoryControl.Domains;
 using InventoryControl.Infrastructure;
 using InventoryControl.Infrastructure.Applications.Repositories;
 using InventoryControl.Infrastructure.Persistence;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;

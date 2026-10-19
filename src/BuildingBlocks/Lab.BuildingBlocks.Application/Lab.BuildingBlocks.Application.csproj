@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\Lab.BuildingBlocks.Domains\Lab.BuildingBlocks.Domains.csproj" />
@@ -9,5 +9,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ArchPrecept.Contracts.Application" Version="0.0.1-preview" />
+  </ItemGroup>
 
 </Project>

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1-preview",
+  "release_record": "https://github.com/YuChia-Wei/ArchPrecept/blob/main/docs/releases/preview.md",
+  "feed": "src/artifacts/archprecept-feed",
+  "sha256": {
+    "ArchPrecept.Analyzers.Core": "3d7045d6bd5e4ff26ba7ad284d27e85bdf9060791f858b600f7922470400d168",
+    "ArchPrecept.Contracts.Application": "0073524f5a6871b0f81b536ae75262dcb6c4e06cf7e0e7131531bc3890d6d54b",
+    "ArchPrecept.Contracts.Domain": "4e9f223c7ebfc0e2ed9fe31fdcfa3d047717c47d653dbf46b1317bf86a72405b",
+    "ArchPrecept.Contracts.Messaging.Abstractions": "588f0fe3a148a394bb3f4c4fe65fa20196f496fbc86bf1ee5e33300c41240044"
+  }
+}

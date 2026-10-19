@@ -1,7 +1,7 @@
 using InventoryControl.Applications.Outbox;
 using InventoryControl.Domains;
 using InventoryControl.Infrastructure.Persistence;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 

@@ -1,4 +1,4 @@
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using Lab.BuildingBlocks.Integrations.Diagnostics;
 
 namespace SaleProducts.Applications.UseCases;

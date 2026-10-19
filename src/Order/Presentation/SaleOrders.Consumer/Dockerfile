@@ -1,10 +1,12 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:10.0 AS base
+FROM mcr.microsoft.com/dotnet/runtime:10.0 AS base
 USER $APP_UID
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["NuGet.Config", "Directory.Build.targets", "./"]
+COPY ["artifacts/archprecept-feed/", "artifacts/archprecept-feed/"]
 COPY ["Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj", "Order/Presentation/SaleOrders.Consumer/"]
 COPY ["Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj", "Order/DomainCore/SaleOrders.Applications/"]
 COPY ["Order/DomainCore/SaleOrders.Domains/SaleOrders.Domains.csproj", "Order/DomainCore/SaleOrders.Domains/"]

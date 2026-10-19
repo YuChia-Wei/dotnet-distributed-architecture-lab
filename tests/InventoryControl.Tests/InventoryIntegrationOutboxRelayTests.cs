@@ -6,7 +6,7 @@ using InventoryControl.Infrastructure.Applications.Repositories;
 using InventoryControl.Infrastructure.BuildingBlocks;
 using InventoryControl.Infrastructure.Persistence;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;

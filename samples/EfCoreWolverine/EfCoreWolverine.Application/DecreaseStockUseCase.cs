@@ -1,7 +1,7 @@
 using InventoryControl.Domains;
 using InventoryControl.Domains.DomainEvents;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 
 namespace EfCoreWolverine.Application;
 

@@ -1,4 +1,4 @@
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 using Procurement.Domains;
 
 namespace Procurement.Applications;

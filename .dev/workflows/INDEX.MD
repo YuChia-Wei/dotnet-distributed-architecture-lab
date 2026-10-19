@@ -4,6 +4,10 @@ This index is the discovery view for workflow artifacts retained by `dotnet-mq-a
 
 Owner names below mirror historical locators and are provenance, not current skill discovery. The selected installation includes software-development-orchestrator for stage coordination; adopted target policies continue to own workflow records and integration authority. No locator, status, timestamp, entrypoint or workflow output is changed by this navigation note.
 
+## Current Bounded Trial Records
+
+- [2026-10-19 ArchPrecept package trial](2026-10-19-archprecept-trial/workflow-plan.md): local implementation, compatibility review, registry restore and Windows/Linux default validation completed; external-service runtime remains unverified. See [results](2026-10-19-archprecept-trial/results.md). This record has no locator and does not change historical locator state.
+
 ## Locator-Backed Workflows
 
 | Workflow | Title | Owner | Status | Updated | Entrypoint |

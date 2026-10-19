@@ -2,7 +2,7 @@ using System.Data;
 using System.Text.Json;
 using Dapper;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

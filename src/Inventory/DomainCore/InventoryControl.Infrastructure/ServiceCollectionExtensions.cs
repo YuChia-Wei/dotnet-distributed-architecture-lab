@@ -1,8 +1,8 @@
 using InventoryControl.Infrastructure.Applications.Repositories;
 using InventoryControl.Infrastructure.BuildingBlocks;
-using Lab.BuildingBlocks.Application;
-using Lab.BuildingBlocks.Domains;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Application;
+using ArchPrecept.Contracts.Domain;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using InventoryControl.Infrastructure.Persistence;

@@ -1,9 +1,10 @@
-using Lab.BuildingBlocks.Domains;
+using ArchPrecept.Contracts.Domain;
+using EsAggregateRoot = Lab.BuildingBlocks.Domains.EsAggregateRoot<System.Guid>;
 using SaleOrders.Domains.DomainEvents;
 
 namespace SaleOrders.Domains;
 
-public class Order : EsAggregateRoot<Guid>
+public class Order : EsAggregateRoot
 {
     /// <summary>
     /// 事件重播用建構子

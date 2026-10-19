@@ -1,7 +1,7 @@
 using Lab.BoundedContextContracts.Inventory.Interactions;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
-using Lab.BuildingBlocks.Application;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Application;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using SaleOrders.Applications.Gateways;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;

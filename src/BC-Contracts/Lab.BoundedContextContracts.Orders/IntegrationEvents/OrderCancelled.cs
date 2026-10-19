@@ -1,4 +1,4 @@
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 
 using System.Text.Json.Serialization;
 

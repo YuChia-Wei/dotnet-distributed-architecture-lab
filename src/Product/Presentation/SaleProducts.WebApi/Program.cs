@@ -1,6 +1,6 @@
 using Confluent.Kafka.Extensions.OpenTelemetry;
-using Lab.BuildingBlocks.Domains;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Domain;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;

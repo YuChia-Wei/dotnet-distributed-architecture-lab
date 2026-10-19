@@ -136,8 +136,8 @@ public sealed class InMemoryInventoryReservationRepository : IInventoryReservati
     }
 
     public sealed record StagedIntegrationMessage(
-        Lab.BuildingBlocks.Integrations.IIntegrationEvent IntegrationEvent,
-        Lab.BuildingBlocks.Integrations.IntegrationMessageDelivery Delivery);
+        ArchPrecept.Contracts.Messaging.Abstractions.IIntegrationEvent IntegrationEvent,
+        ArchPrecept.Contracts.Messaging.Abstractions.IntegrationMessageDelivery Delivery);
 
     private sealed class StockItem(Guid inventoryItemId, int stock)
     {

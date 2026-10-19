@@ -1,5 +1,5 @@
 using SaleProducts.Applications.Dtos;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 
 namespace SaleProducts.Applications.Queries;
 

@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
@@ -7,6 +7,8 @@ EXPOSE 8443
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["NuGet.Config", "Directory.Build.targets", "./"]
+COPY ["artifacts/archprecept-feed/", "artifacts/archprecept-feed/"]
 COPY ["Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj", "Inventory/Presentation/InventoryControl.WebApi/"]
 COPY ["Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj", "Inventory/DomainCore/InventoryControl.Infrastructure/"]
 COPY ["Inventory/DomainCore/InventoryControl.Applications/InventoryControl.Applications.csproj", "Inventory/DomainCore/InventoryControl.Applications/"]

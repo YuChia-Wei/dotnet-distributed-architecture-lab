@@ -1,5 +1,5 @@
 ﻿using System;
-using Lab.BuildingBlocks.Domains;
+using ArchPrecept.Contracts.Domain;
 
 namespace InventoryControl.Domains.DomainEvents;
 

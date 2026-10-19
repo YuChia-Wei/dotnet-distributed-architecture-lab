@@ -1,6 +1,6 @@
 ﻿using InventoryControl.Domains;
-using Lab.BuildingBlocks.Application;
-using Lab.BuildingBlocks.Domains;
+using ArchPrecept.Contracts.Application;
+using ArchPrecept.Contracts.Domain;
 
 namespace InventoryControl.Applications.Repositories;
 

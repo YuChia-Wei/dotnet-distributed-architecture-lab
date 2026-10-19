@@ -2,7 +2,7 @@ using EfCoreWolverine.Application;
 using InventoryControl.Domains;
 using InventoryControl.Domains.DomainEvents;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 using NSubstitute;
 using Shouldly;
 using Xunit;

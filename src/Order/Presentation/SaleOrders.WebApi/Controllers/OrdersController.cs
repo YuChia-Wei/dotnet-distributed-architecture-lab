@@ -1,5 +1,5 @@
 using Lab.BoundedContextContracts.Orders.DataTransferObjects;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 using Microsoft.AspNetCore.Mvc;
 using SaleOrders.Applications.UseCases;
 using SaleOrders.WebApi.Models.Requests;

@@ -1,6 +1,6 @@
 using InventoryControl.Applications.Outbox;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 
 namespace InventoryControl.Applications.Receipts;
 

@@ -5,6 +5,8 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["NuGet.Config", "Directory.Build.targets", "./"]
+COPY ["artifacts/archprecept-feed/", "artifacts/archprecept-feed/"]
 COPY ["Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj", "Product/Presentation/SaleProducts.Consumer/"]
 COPY ["Product/DomainCore/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj", "Product/DomainCore/SaleProducts.Infrastructure/"]
 COPY ["Product/DomainCore/SaleProducts.Applications/SaleProducts.Applications.csproj", "Product/DomainCore/SaleProducts.Applications/"]

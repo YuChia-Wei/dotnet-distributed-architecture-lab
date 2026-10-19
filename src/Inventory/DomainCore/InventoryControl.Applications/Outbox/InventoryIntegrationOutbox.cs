@@ -1,5 +1,5 @@
 using InventoryControl.Domains;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 
 namespace InventoryControl.Applications.Outbox;
 

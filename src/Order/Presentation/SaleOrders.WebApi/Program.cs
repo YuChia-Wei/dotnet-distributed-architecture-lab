@@ -1,8 +1,8 @@
 using Confluent.Kafka.Extensions.OpenTelemetry;
 using Lab.BoundedContextContracts.Inventory.Interactions;
-using Lab.BuildingBlocks.Domains;
-using Lab.BuildingBlocks.Integrations;
-using Lab.BuildingBlocks.Integrations.Configuration;
+using ArchPrecept.Contracts.Domain;
+using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging.Abstractions.Configuration;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;

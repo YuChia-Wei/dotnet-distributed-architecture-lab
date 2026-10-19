@@ -1,3 +1,5 @@
+using ArchPrecept.Contracts.Messaging.Abstractions;
+
 using System.Text.Json.Serialization;
 
 namespace Lab.BuildingBlocks.Integrations.Diagnostics;

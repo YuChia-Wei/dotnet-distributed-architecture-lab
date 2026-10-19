@@ -2,7 +2,7 @@ using InventoryControl.Applications.Queries;
 using InventoryControl.Applications.Repositories;
 using InventoryControl.Domains;
 using InventoryControl.Infrastructure.Persistence;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryControl.Infrastructure.Applications.Repositories;

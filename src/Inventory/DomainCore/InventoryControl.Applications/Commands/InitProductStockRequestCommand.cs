@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using InventoryControl.Applications.Repositories;
 using InventoryControl.Applications.Queries;
 using InventoryControl.Domains;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 
 namespace InventoryControl.Applications.UseCases;
 

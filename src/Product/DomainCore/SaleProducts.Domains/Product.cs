@@ -1,4 +1,4 @@
-using Lab.BuildingBlocks.Domains;
+using ArchPrecept.Contracts.Domain;
 using SaleProducts.Domains.DomainEvents;
 
 namespace SaleProducts.Domains;

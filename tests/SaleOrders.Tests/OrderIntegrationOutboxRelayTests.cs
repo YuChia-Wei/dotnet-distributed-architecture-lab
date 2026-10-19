@@ -4,7 +4,7 @@ using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
-using Lab.BuildingBlocks.Integrations;
+using ArchPrecept.Contracts.Messaging.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using SaleOrders.Infrastructure.BuildingBlocks;

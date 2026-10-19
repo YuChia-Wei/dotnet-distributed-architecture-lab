@@ -22,3 +22,7 @@
 - 只在專案需要具體 operations 文件時參考這裡
 - 先寫成 repo-specific 文件，再補齊實際 truth
 - 不要把這裡當成部署手冊或 production on-call 平台說明
+
+## 套件試用
+
+- [ArchPrecept 0.0.1-preview 本機試用](archprecept-trial.md)：套件對應、本機 feed、保留的安全事件重播實作、驗證結果與 registry 切換方式。

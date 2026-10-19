@@ -1,4 +1,4 @@
-using Lab.BuildingBlocks.Integrations.Configuration;
+using ArchPrecept.Contracts.Messaging.Abstractions.Configuration;
 using Microsoft.Extensions.Configuration;
 using Shouldly;
 

@@ -1,4 +1,4 @@
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 using SaleProducts.Applications.Dtos;
 using SaleProducts.Applications.Queries;
 using SaleProducts.Applications.UseCases;

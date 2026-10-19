@@ -1,6 +1,6 @@
 using System.Data;
 using Dapper;
-using Lab.BuildingBlocks.Application;
+using ArchPrecept.Contracts.Application;
 using SaleProducts.Domains;
 using SaleProducts.Domains.DomainEvents;
 

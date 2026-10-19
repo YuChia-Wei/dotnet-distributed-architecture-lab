@@ -63,7 +63,7 @@ public class OrderTests
         var orderId = Guid.CreateVersion7();
         var productId = Guid.CreateVersion7();
         var orderDate = DateTime.UtcNow;
-        var events = new Lab.BuildingBlocks.Domains.IDomainEvent[]
+        var events = new ArchPrecept.Contracts.Domain.IDomainEvent[]
         {
             new OrderPlacedDomainEvent(orderId, orderDate, 100m, productId, "Product", 1, DateTime.UtcNow),
             new OrderCancelledDomainEvent(orderId, "customer request", DateTime.UtcNow),
@@ -129,7 +129,7 @@ public class OrderTests
             _ => throw new ArgumentOutOfRangeException(nameof(targetStatus), targetStatus, null)
         };
 
-    private static string GetReason(Lab.BuildingBlocks.Domains.IDomainEvent @event)
+    private static string GetReason(ArchPrecept.Contracts.Domain.IDomainEvent @event)
         => @event switch
         {
             OrderCancelledDomainEvent cancelled => cancelled.Reason,
