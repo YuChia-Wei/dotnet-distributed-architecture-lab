@@ -1,6 +1,7 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 using InventoryControl.Applications.Outbox;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 
 namespace InventoryControl.Applications.Reservations;
 

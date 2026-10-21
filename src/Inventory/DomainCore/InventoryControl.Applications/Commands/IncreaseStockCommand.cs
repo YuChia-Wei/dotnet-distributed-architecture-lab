@@ -1,3 +1,4 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using System;
 using System.Threading.Tasks;
 using InventoryControl.Applications.Repositories;
@@ -5,7 +6,7 @@ using InventoryControl.Applications.Queries;
 using InventoryControl.Applications.Outbox;
 using ArchPrecept.Contracts.Application;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 
 namespace InventoryControl.Applications.UseCases;
 

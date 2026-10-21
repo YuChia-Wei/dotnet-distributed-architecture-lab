@@ -1,4 +1,4 @@
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using SaleOrders.Domains;
 
 namespace SaleOrders.Applications.Repositories;

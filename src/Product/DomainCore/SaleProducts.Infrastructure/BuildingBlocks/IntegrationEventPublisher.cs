@@ -1,4 +1,5 @@
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Application.Messaging;
+using ArchPrecept.Contracts.Messaging;
 using Wolverine;
 
 namespace SaleProducts.Infrastructure.BuildingBlocks;

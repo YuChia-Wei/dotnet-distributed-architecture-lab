@@ -1,3 +1,4 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using InventoryControl.Applications.Outbox;
 using InventoryControl.Applications.Reservations;
 
@@ -136,8 +137,8 @@ public sealed class InMemoryInventoryReservationRepository : IInventoryReservati
     }
 
     public sealed record StagedIntegrationMessage(
-        ArchPrecept.Contracts.Messaging.Abstractions.IIntegrationEvent IntegrationEvent,
-        ArchPrecept.Contracts.Messaging.Abstractions.IntegrationMessageDelivery Delivery);
+        ArchPrecept.Contracts.Messaging.IIntegrationEvent IntegrationEvent,
+        ArchPrecept.Contracts.Application.Messaging.IntegrationMessageDelivery Delivery);
 
     private sealed class StockItem(Guid inventoryItemId, int stock)
     {

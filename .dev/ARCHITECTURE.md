@@ -26,7 +26,7 @@ The repository is a distributed commerce lab composed of Products, Orders, Inven
 Shared boundaries:
 
 - `src/BC-Contracts/` owns cross-context request/reply contracts and integration events.
-- `src/BuildingBlocks/` references the published `ArchPrecept.Contracts.Domain`, `.Application`, and `.Messaging.Abstractions` packages at `0.0.1-preview`. It retains target-owned diagnostic messages and the safe `EsAggregateRoot` replay implementation. The package base replay constructor does not satisfy this target's derived-constructor replay rule. See the [local package trial guide](operations/archprecept-trial.md).
+- `src/BuildingBlocks/` references the published `ArchPrecept.Contracts.Domain`, `.Application`, and `.Messaging` / `.Application.Messaging` packages at `0.0.2-preview`. It retains target-owned diagnostic messages and transport configuration. Orders directly adopts `ArchPrecept.Contracts.Domain.EventSourcing`, loading history only after derived initialization; the former local ES base has been removed. See the [package trial guide](operations/archprecept-trial.md).
 - `src/Shared/Lab.SharedKernel/` is currently an empty placeholder project for deliberately shared domain concepts; it owns no implemented concepts yet.
 
 ## Context Project Shape
@@ -104,7 +104,7 @@ The repository defines seven product hosts:
 
 - `MQArchLab.slnx` includes six product xUnit test projects, two supplier sample test projects, and one EF Core/Wolverine sample test project. It contains 27 `src/` projects, five `samples/` projects, and nine `tests/` projects.
 - `InventoryControl.Tests` owns Inventory command/reservation tests. Its real PostgreSQL checks are explicitly opt-in and skipped during ordinary test runs.
-- The target-owned analyzer and runtime-validation projects were retired by the owner-approved v0.9 AI-context upgrade and are absent from the repository and solution. The 2026-10-19 trial separately installs `ArchPrecept.Analyzers.Core@0.0.1-preview` through `src/Directory.Build.targets` for product projects, with upstream default severities. It uses verified local copies of the published packages pending GitHub Packages authentication; this does not restore the retired projects or establish runtime acceptance.
+- The target-owned analyzer and runtime-validation projects were retired by the owner-approved v0.9 AI-context upgrade and are absent from the repository and solution. The 2026-10-21 trial upgrade installs `ArchPrecept.Analyzers.Core@0.0.2-preview` through `src/Directory.Build.targets` for product projects, with upstream default severities. Packages restore from GitHub Packages with the `github-yuchia` source and source mapping; this does not restore the retired projects or establish runtime acceptance.
 - v0.13 removed the former bundled mechanical-validation provider. The remaining `.ai/core/knowledge/dotnet-backend/tooling/on-demand-mechanical-validation/` assets are reference-only recipes; they are not selected, activated, or wired into the target solution or build.
 
 ## Truth Ownership

@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 
 namespace Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 

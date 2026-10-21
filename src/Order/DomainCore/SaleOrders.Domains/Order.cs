@@ -1,17 +1,17 @@
 using ArchPrecept.Contracts.Domain;
-using EsAggregateRoot = Lab.BuildingBlocks.Domains.EsAggregateRoot<System.Guid>;
+using ArchPrecept.Contracts.Domain.EventSourcing;
 using SaleOrders.Domains.DomainEvents;
 
 namespace SaleOrders.Domains;
 
-public class Order : EsAggregateRoot
+public class Order : EsAggregateRoot<Guid>
 {
     /// <summary>
     /// 事件重播用建構子
     /// </summary>
     public Order(IEnumerable<IDomainEvent> events)
     {
-        Replay(events);
+        LoadFromHistory(events);
     }
 
     /// <summary>
@@ -148,6 +148,9 @@ public class Order : EsAggregateRoot
             case OrderDeliveredDomainEvent:
                 this.Status = OrderStatus.Delivered;
                 break;
+
+            default:
+                throw new InvalidOperationException($"Unsupported order event: {@event.GetType().Name}.");
         }
     }
 }

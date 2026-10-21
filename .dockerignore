@@ -19,7 +19,4 @@ artifacts
 **/*.suo
 **/npm-debug.log
 
-# Local ArchPrecept trial packages are required by root-context sample/Procurement builds.
-!src/artifacts/
-src/artifacts/*
-!src/artifacts/archprecept-feed/
+**/artifacts

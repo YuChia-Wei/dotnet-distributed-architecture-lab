@@ -5,6 +5,6 @@ COPY src/ ./src/
 COPY samples/ ./samples/
 COPY tests/ ./tests/
 COPY docker-compose/sql-script/ ./docker-compose/sql-script/
-RUN dotnet restore MQArchLab.slnx --disable-parallel \
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet restore MQArchLab.slnx --disable-parallel \
     && dotnet build MQArchLab.slnx -c Release --no-restore --disable-build-servers -m:1
 ENTRYPOINT ["dotnet", "test", "MQArchLab.slnx", "-c", "Release", "--no-build", "--no-restore", "-m:1", "--logger", "trx", "--results-directory", "/results"]

@@ -25,4 +25,4 @@
 
 ## 套件試用
 
-- [ArchPrecept 0.0.1-preview 本機試用](archprecept-trial.md)：套件對應、本機 feed、保留的安全事件重播實作、驗證結果與 registry 切換方式。
+- [ArchPrecept 0.0.2-preview 試用](archprecept-trial.md)：套件拆分、registry 還原、ES 生命週期與容器 secret 設定。

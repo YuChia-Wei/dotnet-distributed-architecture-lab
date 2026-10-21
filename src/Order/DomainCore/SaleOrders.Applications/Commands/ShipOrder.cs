@@ -1,5 +1,5 @@
 ﻿using Lab.BoundedContextContracts.Orders.IntegrationEvents;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using SaleOrders.Applications.Repositories;
 
 namespace SaleOrders.Applications.UseCases;

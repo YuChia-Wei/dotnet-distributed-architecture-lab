@@ -1,7 +1,8 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using System.Data;
 using ArchPrecept.Contracts.Application;
 using ArchPrecept.Contracts.Domain;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;

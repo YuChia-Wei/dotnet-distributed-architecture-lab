@@ -1,6 +1,7 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using InventoryControl.Applications.Outbox;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 
 namespace InventoryControl.Applications.Receipts;
 

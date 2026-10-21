@@ -1,3 +1,4 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using InventoryControl.Applications.Outbox;
 using InventoryControl.Applications.Receipts;
 using InventoryControl.Domains;
@@ -5,7 +6,7 @@ using InventoryControl.Infrastructure.Applications.Repositories;
 using InventoryControl.Infrastructure.Persistence;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
 using ArchPrecept.Contracts.Application;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using Shouldly;

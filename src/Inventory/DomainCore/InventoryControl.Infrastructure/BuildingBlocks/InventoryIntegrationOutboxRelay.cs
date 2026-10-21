@@ -1,8 +1,9 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using System.Text.Json;
 using InventoryControl.Infrastructure.Applications.Repositories;
 using InventoryControl.Infrastructure.Persistence;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -2,7 +2,7 @@ using InventoryControl.Applications.Reservations;
 using InventoryControl.Applications.Outbox;
 using InventoryControl.Infrastructure.Applications.Repositories;
 using Lab.BoundedContextContracts.Inventory.IntegrationEvents;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using NSubstitute;
 using Shouldly;
 

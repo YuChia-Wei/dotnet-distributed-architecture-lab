@@ -1,5 +1,5 @@
 using JasperFx.Core.Reflection;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

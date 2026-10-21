@@ -3,7 +3,7 @@ using System.Text.Json;
 using Dapper;
 using ArchPrecept.Contracts.Application;
 using ArchPrecept.Contracts.Domain;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using SaleOrders.Applications.Repositories;
 using SaleOrders.Domains;
 using SaleOrders.Domains.DomainEvents;

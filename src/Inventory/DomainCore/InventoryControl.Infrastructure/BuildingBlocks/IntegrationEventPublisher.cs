@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+﻿using ArchPrecept.Contracts.Application.Messaging;
+using System.Threading.Tasks;
+using ArchPrecept.Contracts.Messaging;
 using Microsoft.Extensions.Logging;
 using Wolverine;
 

@@ -6,7 +6,6 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["NuGet.Config", "Directory.Build.targets", "./"]
-COPY ["artifacts/archprecept-feed/", "artifacts/archprecept-feed/"]
 COPY ["Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj", "Product/Presentation/SaleProducts.Consumer/"]
 COPY ["Product/DomainCore/SaleProducts.Infrastructure/SaleProducts.Infrastructure.csproj", "Product/DomainCore/SaleProducts.Infrastructure/"]
 COPY ["Product/DomainCore/SaleProducts.Applications/SaleProducts.Applications.csproj", "Product/DomainCore/SaleProducts.Applications/"]
@@ -16,14 +15,14 @@ COPY ["BuildingBlocks/Lab.BuildingBlocks.Domains/Lab.BuildingBlocks.Domains.cspr
 COPY ["BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
 COPY ["BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj", "BC-Contracts/Lab.BoundedContextContracts.Orders/"]
 COPY ["BC-Contracts/Lab.BoundedContextContracts.Products/Lab.BoundedContextContracts.Products.csproj", "BC-Contracts/Lab.BoundedContextContracts.Products/"]
-RUN dotnet restore "Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj"
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet restore "Product/Presentation/SaleProducts.Consumer/SaleProducts.Consumer.csproj"
 COPY . .
 WORKDIR "Product/Presentation/SaleProducts.Consumer"
-RUN dotnet build "./SaleProducts.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet build "./SaleProducts.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./SaleProducts.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet publish "./SaleProducts.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

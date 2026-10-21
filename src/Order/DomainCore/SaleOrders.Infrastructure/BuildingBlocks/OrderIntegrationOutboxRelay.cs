@@ -1,8 +1,9 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using System.Data;
 using System.Text.Json;
 using Dapper;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

@@ -8,7 +8,6 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["NuGet.Config", "Directory.Build.targets", "./"]
-COPY ["artifacts/archprecept-feed/", "artifacts/archprecept-feed/"]
 COPY ["Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj", "Inventory/Presentation/InventoryControl.WebApi/"]
 COPY ["Inventory/DomainCore/InventoryControl.Infrastructure/InventoryControl.Infrastructure.csproj", "Inventory/DomainCore/InventoryControl.Infrastructure/"]
 COPY ["Inventory/DomainCore/InventoryControl.Applications/InventoryControl.Applications.csproj", "Inventory/DomainCore/InventoryControl.Applications/"]
@@ -18,14 +17,14 @@ COPY ["BuildingBlocks/Lab.BuildingBlocks.Domains/Lab.BuildingBlocks.Domains.cspr
 COPY ["BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
 COPY ["BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj", "BC-Contracts/Lab.BoundedContextContracts.Inventory/"]
 COPY ["BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj", "BC-Contracts/Lab.BoundedContextContracts.Orders/"]
-RUN dotnet restore "Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj"
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet restore "Inventory/Presentation/InventoryControl.WebApi/InventoryControl.WebApi.csproj"
 COPY . .
 WORKDIR "Inventory/Presentation/InventoryControl.WebApi"
-RUN dotnet build "./InventoryControl.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet build "./InventoryControl.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./InventoryControl.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet publish "./InventoryControl.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

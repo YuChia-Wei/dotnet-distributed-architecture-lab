@@ -8,6 +8,8 @@ services:
     build:
       context: ..
       dockerfile: docker-compose/Dockerfile.tests
+      secrets:
+        - nuget_config
     environment:
       RUN_EXTERNAL_INTEGRATION_TESTS: "true"
       PARALLEL_TEST_KAFKA_BOOTSTRAP_SERVERS: kafka:9092

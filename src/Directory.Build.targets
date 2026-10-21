@@ -1,6 +1,6 @@
 <Project>
   <!-- Product-source trial only. Tests and isolated samples keep their existing analyzers. -->
   <ItemGroup>
-    <PackageReference Include="ArchPrecept.Analyzers.Core" Version="0.0.1-preview" PrivateAssets="all" />
+    <PackageReference Include="ArchPrecept.Analyzers.Core" Version="0.0.2-preview" PrivateAssets="all" />
   </ItemGroup>
 </Project>

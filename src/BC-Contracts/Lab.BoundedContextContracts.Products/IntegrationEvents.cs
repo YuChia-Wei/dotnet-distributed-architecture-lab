@@ -1,4 +1,4 @@
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 
 namespace Lab.BoundedContextContracts.Products.IntegrationEvents;
 

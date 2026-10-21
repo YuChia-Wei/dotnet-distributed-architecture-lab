@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ArchPrecept.Contracts.Application" Version="0.0.1-preview" />
+    <PackageReference Include="ArchPrecept.Contracts.Application" Version="0.0.2-preview" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,11 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using System.Collections;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using SaleOrders.Infrastructure.BuildingBlocks;

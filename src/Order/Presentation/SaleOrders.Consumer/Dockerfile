@@ -6,7 +6,6 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["NuGet.Config", "Directory.Build.targets", "./"]
-COPY ["artifacts/archprecept-feed/", "artifacts/archprecept-feed/"]
 COPY ["Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj", "Order/Presentation/SaleOrders.Consumer/"]
 COPY ["Order/DomainCore/SaleOrders.Applications/SaleOrders.Applications.csproj", "Order/DomainCore/SaleOrders.Applications/"]
 COPY ["Order/DomainCore/SaleOrders.Domains/SaleOrders.Domains.csproj", "Order/DomainCore/SaleOrders.Domains/"]
@@ -15,14 +14,14 @@ COPY ["BuildingBlocks/Lab.BuildingBlocks.Domains/Lab.BuildingBlocks.Domains.cspr
 COPY ["BuildingBlocks/Lab.BuildingBlocks.Integrations/Lab.BuildingBlocks.Integrations.csproj", "BuildingBlocks/Lab.BuildingBlocks.Integrations/"]
 COPY ["BC-Contracts/Lab.BoundedContextContracts.Orders/Lab.BoundedContextContracts.Orders.csproj", "BC-Contracts/Lab.BoundedContextContracts.Orders/"]
 COPY ["BC-Contracts/Lab.BoundedContextContracts.Inventory/Lab.BoundedContextContracts.Inventory.csproj", "BC-Contracts/Lab.BoundedContextContracts.Inventory/"]
-RUN dotnet restore "Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj"
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet restore "Order/Presentation/SaleOrders.Consumer/SaleOrders.Consumer.csproj"
 COPY . .
 WORKDIR "Order/Presentation/SaleOrders.Consumer"
-RUN dotnet build "./SaleOrders.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet build "./SaleOrders.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./SaleOrders.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN --mount=type=secret,id=nuget_config,target=/root/.nuget/NuGet/NuGet.Config dotnet publish "./SaleOrders.Consumer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

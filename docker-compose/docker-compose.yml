@@ -188,6 +188,8 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Order/Presentation/SaleOrders.WebApi/Dockerfile
+      secrets:
+        - nuget_config
     pull_policy: build
     container_name: orders-api
     environment:
@@ -210,6 +212,8 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Order/Presentation/SaleOrders.Consumer/Dockerfile
+      secrets:
+        - nuget_config
     pull_policy: build
     container_name: orders-consumer
     environment:
@@ -228,6 +232,8 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Product/Presentation/SaleProducts.WebApi/Dockerfile
+      secrets:
+        - nuget_config
     pull_policy: build
     container_name: product-api
     environment:
@@ -251,6 +257,8 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Product/Presentation/SaleProducts.Consumer/Dockerfile
+      secrets:
+        - nuget_config
     pull_policy: build
     container_name: product-consumer
     environment:
@@ -271,6 +279,8 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Inventory/Presentation/InventoryControl.WebApi/Dockerfile
+      secrets:
+        - nuget_config
     pull_policy: build
     container_name: inventory-api
     environment:
@@ -295,6 +305,8 @@ services:
     build:
       context: ../src
       dockerfile: ../src/Inventory/Presentation/InventoryControl.Consumer/Dockerfile
+      secrets:
+        - nuget_config
     pull_policy: build
     container_name: inventory-consumer
     environment:
@@ -316,3 +328,7 @@ volumes:
   postgres_product_data:
   postgres_inventory_data:
   kafka_data:
+
+secrets:
+  nuget_config:
+    file: ${NUGET_CONFIG_FILE:-${APPDATA}/NuGet/NuGet.Config}

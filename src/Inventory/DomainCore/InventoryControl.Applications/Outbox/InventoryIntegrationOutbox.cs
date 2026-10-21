@@ -1,5 +1,6 @@
+using ArchPrecept.Contracts.Application.Messaging;
 using InventoryControl.Domains;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 
 namespace InventoryControl.Applications.Outbox;
 

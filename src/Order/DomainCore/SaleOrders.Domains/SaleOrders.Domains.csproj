@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Lab.BuildingBlocks.Domains\Lab.BuildingBlocks.Domains.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ArchPrecept.Contracts.Domain.EventSourcing" Version="0.0.2-preview" />
+  </ItemGroup>
+
 </Project>

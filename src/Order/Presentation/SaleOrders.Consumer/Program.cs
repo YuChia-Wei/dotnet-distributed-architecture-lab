@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Confluent.Kafka.Extensions.OpenTelemetry;
-using ArchPrecept.Contracts.Messaging.Abstractions.Configuration;
+using Lab.BuildingBlocks.Integrations.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

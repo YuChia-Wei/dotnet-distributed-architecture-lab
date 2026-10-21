@@ -1,3 +1,4 @@
+using ArchPrecept.Contracts.Domain;
 using SaleOrders.Domains.DomainEvents;
 using Shouldly;
 
@@ -116,6 +117,73 @@ public class OrderTests
         order.Version.ShouldBe(0);
         order.DomainEvents.Count.ShouldBe(1);
     }
+
+    [Theory]
+    [InlineData("base", "add")]
+    [InlineData("base", "remove")]
+    [InlineData("base", "clear")]
+    [InlineData("interface", "add")]
+    [InlineData("interface", "remove")]
+    [InlineData("interface", "clear")]
+    public void Given_pending_order_events_when_mutated_outside_apply_then_state_is_preserved(
+        string access, string operation)
+    {
+        var order = GivenPendingOrder();
+        var pendingEvent = order.DomainEvents.Single();
+
+        var exception = WhenMutatingPendingEvents(order, pendingEvent, access, operation);
+
+        ThenPendingEventsAreProtected(order, pendingEvent, exception);
+    }
+
+    [Fact]
+    public void Given_unknown_history_when_order_is_rehydrated_then_history_is_rejected()
+    {
+        var history = GivenUnknownHistory(Guid.Empty, DateTime.UnixEpoch);
+
+        var exception = WhenRehydratingOrder(history);
+
+        ThenUnknownHistoryIsRejected(exception);
+    }
+
+    private static IDomainEvent[] GivenUnknownHistory(Guid eventId, DateTime occurredOn)
+        => [new UnsupportedOrderEvent(eventId, occurredOn)];
+
+    private static Exception? WhenRehydratingOrder(IEnumerable<IDomainEvent> history)
+        => Record.Exception(() => new Order(history));
+
+    private static Order GivenPendingOrder()
+        => new(DateTime.UnixEpoch, 100m, Guid.Empty, "Product", 1);
+
+    private static Exception? WhenMutatingPendingEvents(
+        Order order, IDomainEvent pendingEvent, string access, string operation)
+    {
+        Action mutation = (access, operation) switch
+        {
+            ("base", "add") => () => ((DomainEntity<Guid>)order).AddDomainEvent(pendingEvent),
+            ("base", "remove") => () => ((DomainEntity<Guid>)order).RemoveDomainEvent(pendingEvent),
+            ("base", "clear") => () => ((DomainEntity<Guid>)order).ClearDomainEvents(),
+            ("interface", "add") => () => ((IDomainEntity<Guid>)order).AddDomainEvent(pendingEvent),
+            ("interface", "remove") => () => ((IDomainEntity<Guid>)order).RemoveDomainEvent(pendingEvent),
+            ("interface", "clear") => () => ((IDomainEntity<Guid>)order).ClearDomainEvents(),
+            _ => throw new ArgumentOutOfRangeException(nameof(operation))
+        };
+        return Record.Exception(mutation);
+    }
+
+    private static void ThenPendingEventsAreProtected(Order order, IDomainEvent pendingEvent, Exception? exception)
+    {
+        exception.ShouldBeOfType<NotSupportedException>();
+        order.Version.ShouldBe(0);
+        order.DomainEvents.Single().ShouldBeSameAs(pendingEvent);
+    }
+
+    private static void ThenUnknownHistoryIsRejected(Exception? exception)
+    {
+        exception.ShouldBeOfType<InvalidOperationException>().Message.ShouldContain(nameof(UnsupportedOrderEvent));
+    }
+
+    private sealed record UnsupportedOrderEvent(Guid EventId, DateTime OccurredOn) : IDomainEvent;
 
     private static Order CreateOrder()
         => new(DateTime.UtcNow, 100m, Guid.CreateVersion7(), "Product", 1);

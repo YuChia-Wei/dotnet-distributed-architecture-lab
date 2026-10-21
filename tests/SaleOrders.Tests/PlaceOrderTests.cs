@@ -1,6 +1,6 @@
 using Lab.BoundedContextContracts.Inventory.Interactions;
 using Lab.BoundedContextContracts.Orders.IntegrationEvents;
-using ArchPrecept.Contracts.Messaging.Abstractions;
+using ArchPrecept.Contracts.Messaging;
 using NSubstitute;
 using SaleOrders.Applications.Gateways;
 using SaleOrders.Applications.Repositories;
