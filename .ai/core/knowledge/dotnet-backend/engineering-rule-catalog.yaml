@@ -13,7 +13,7 @@ ordering:
   array_contents: retain declared source order
 catalog_digest:
   algorithm: sha256
-  value: 25e85d360017e114fd1df9df5494b98f537ac9fba3ad5328ca1f01f38c56aada
+  value: 39a1072fda6fb83f5e5fdb72047f03e90f05806989fd2b071c7e5e1b82b61afd
   canonicalization: UTF-8 encoding of compact JSON with Unicode preserved, object keys sorted by Unicode code point, array
     order preserved, and exactly one terminal LF; the complete catalog_digest field is excluded from the input.
 selector_contract:
@@ -1141,7 +1141,7 @@ unpacketized_documents:
     path: standards/coding-standards/controller-standards.md
   migration_provenance:
     legacy_path: .dev/standards/coding-standards/controller-standards.md
-  source_file_sha256: c016ed5583f134df6d420223a459a8ed52ebcc53a2be952d51de6332cbb604f3
+  source_file_sha256: c63b7203080e1e85093b2ed90110e18760dc6b348daabed4cdc0fb5c720f4687
   packet_state: identity-allocation-required
   resolver_disposition: unpacketized-fail-closed
   reason: The migration matrix classifies this as profile-baseline-rule, but no registered stable rule_id exists. Do not derive

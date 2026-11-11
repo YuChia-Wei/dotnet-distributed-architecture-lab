@@ -86,4 +86,4 @@ Read the canonical rules/docs for these recurring areas:
 
 - Read the family overview first, then only the exact prompt files needed for the task.
 - Prefer shared prompt fragments for stable rules and specialized prompts for task mechanics.
-- If the user asks to create a reusable architect prompt or skill, treat `selected engineering-common resources` plus these decision/rule hotspots as the canonical design input.
+- If the user asks to create a reusable domain-modeling or software-architecture prompt or skill, distinguish the responsibilities of `domain-model-designer` and `software-architect`. Use `selected engineering-common resources` for the selected responsibility; add these .NET decision/rule hotspots only when the target technology and task require them.

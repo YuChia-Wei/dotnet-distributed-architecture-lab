@@ -5,7 +5,7 @@ description: "Prepare pull request content and records bound to an actual Git co
 
 # pr-author
 
-Codex runtime entry for `pr-author@0.1.0`. This generated projection does not
+Codex runtime entry for `pr-author@0.1.1`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 
@@ -13,7 +13,7 @@ Read [the installed skill](../../../.ai/core/skills/pr-author/SKILL.md) for its 
 Resolve [the installed metadata](../../../.ai/core/skills/pr-author/skill-package.yaml) with the installed skill
 directory as the explicit `package_root`.
 
-Obtain the caller's explicit `project_root`, configuration selection and operation. The project-owned `.ai/custom/framework.json` is not supplied by this entry. Pass the chosen configuration path explicitly under the installed skill's contract; do not infer it from the current working directory.
+Obtain the caller's explicit `project_root`, configuration selection and operation. The project-owned `.ai/project/framework.json` is not supplied by this entry. Pass the chosen configuration path explicitly under the installed skill's contract; do not infer it from the current working directory.
 
 Selected installed skill members:
 
@@ -26,11 +26,15 @@ Selected installed skill members:
 - [scripts/pr.py](../../../.ai/core/skills/pr-author/scripts/pr.py)
 - [templates/pr.md](../../../.ai/core/skills/pr-author/templates/pr.md)
 
-For metadata version 4, `knowledge_consumption` declares exact knowledge package
+For metadata versions 4 and 5, `knowledge_consumption` declares exact knowledge package
 versions, operations and resource IDs. Follow the installed skill's selected
 binding to access knowledge. An optional missing package or resource makes the
 named coverage unavailable; do not assume it was installed or promise that
 coverage. Required dependencies must be present before the operation is used.
+
+Metadata 5 also declares executable module closure in tool `support_files`.
+Keep every declared member with its tool entrypoint; never load missing modules
+from the framework source checkout or ambient paths.
 
 For metadata versions 1–3, follow the declared operation and runtime contracts.
 An instruction operation means read its declared instructions; a tool operation
