@@ -1,6 +1,6 @@
-metadata_version: 3
+metadata_version: 4
 id: spec-author
-version: 0.1.0
+version: 0.3.0
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -17,11 +17,11 @@ configuration: null
 artifact_roles: []
 resources:
   references:
-  - references/authoring.md
-  - references/production-template.md
-  - references/entity-template.md
   - references/adapter-template.md
-  - references/formal-test-template.md
+  - references/authoring.md
+  - references/entity-template.md
+  - references/knowledge.md
+  - references/production-template.md
   - references/spec-guide.md
   - references/spec-organization-guide.md
   schemas: []
@@ -48,3 +48,17 @@ operations:
   - Material change summary, retained uncertainties and actual delivery location
   instructions: references/authoring.md
   implementation_status: implemented
+knowledge_consumption:
+- id: common-specification
+  package: engineering-common
+  version: 0.4.0
+  operations:
+  - draft
+  - normalize
+  resources:
+  - member:bdd/formulation.md
+  - member:ddd/domain-discovery.md
+  - member:ddd/tactical-design.md
+  - member:references/AUTHORING-BOUNDARY-CONTRACT.md
+  requirement: optional
+  on_missing: unavailable

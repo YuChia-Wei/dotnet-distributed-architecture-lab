@@ -139,9 +139,11 @@ prefixes, or exact project counts.
 - [ ] CrossCutting runtime/AOP observability is outside Domain, and Domain has no
       dependency on it.
 
-The last item is the only Observability boundary in this standard. Detailed
-attribute behavior, redaction, async interception, package selection, and
-validation remain in backlog item `OBS-001` for a separate design workflow.
+The last item is the only Observability boundary in this standard. The target
+repository selects runtime/AOP implementations in Infrastructure or CrossCutting
+through its `observability.runtime` technology decision. When instrumentation
+is selected, the target defines and validates attribute behavior, redaction,
+async interception, and package-specific behavior against its actual needs.
 
 ## Application-Layer Directory Structure
 

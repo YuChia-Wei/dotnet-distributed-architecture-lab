@@ -1,6 +1,6 @@
 # Pull Request configuration v2
 
-The selected package is pr-author@0.1.0, metadata_version 2. Its sole writable/readable schema is pr.record@1.0.0. Package/config/record versions are separate; there is no conversion or schema fallback.
+The selected package is pr-author@0.1.1, metadata_version 2. Its sole writable/readable schema is pr.record@1.0.0. Package/config/record versions are separate; there is no conversion or schema fallback.
 
 The caller supplies absolute existing project_root/package_root and optional explicit project_config/local_config. Config filenames may be absolute or project-relative. Omitted config means defaults; an explicitly missing file fails. No upward/cwd search, environment interpolation, source policy or credential store is consulted. The running executable must belong to the selected package; all exact declared resources must exist.
 

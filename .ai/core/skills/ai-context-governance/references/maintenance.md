@@ -60,25 +60,77 @@ finalization are separate operations with their own owners and authority.
    Reconcile stale inputs/collisions; preserve other writers' edits and unrelated
    content. Change only authorized project-owned files and in-scope direct
    references. A needed out-of-scope change is an explicit owner handoff.
-3. Preserve meaning and full adopted rule text at the existing canonical owner.
-   Retain required source/decision references and applicability there. Do not
-   duplicate normative statements into a new ledger or shadow entry, weaken
-   protections, or manufacture another tool's adoption/effect evidence.
-4. Read back actual changes and perform the narrow authorized project checks.
+3. Maintain one complete effective rule at its canonical owner. For an
+   authorized semantic replacement, delete or rewrite obsolete, duplicate and
+   contradictory instructions in that scope; do not leave them active beneath
+   an added priority disclaimer. Preserve still-valid protections, adopted
+   meaning outside the authorized change, unrelated custom content and required
+   source/decision references. Do not create a shadow rule or manufacture
+   another tool's adoption/effect evidence.
+4. Read back actual changes, effective entry links and applicability. Decide
+   which checks the actual diff, semantics, direct dependencies and target-owned
+   gates require before executing them. Ordinary explanatory text or whitespace
+   with no parsing, output or content-contract effect needs no product/schema
+   test merely because of its extension or location. Whitespace affecting those
+   contracts requires the relevant checks; unclear impact needs investigation.
    Report paths, source/decision references, outcomes, uncertainty and next action.
    Failed, unavailable, deferred and not-run checks are not passed. A diff,
    commit or syntax check is not independent review, runtime effect or provider
    acceptance. Execute no check whose side effects exceed the authorized scope.
+
+Remove unnecessary old experience from current operating text. If useful
+history must remain in the same document, isolate it in a clearly named
+`NOT AN EXECUTION TRIGGER / historical context only` section. State that it
+does not meet current trigger conditions, why it is retained and any separately
+selected legacy applicability. Remove active entry links to superseded steps;
+a label alone does not guarantee that an agent will not execute them. Preserve
+separately owned historical records rather than rewriting history.
+
+Select large integration, E2E, usability, full installation/upgrade or high-cost AI
+checks only for a clearly affected behavior/boundary or an explicit user request or
+accepted acceptance criterion. Preserve mandatory target-owned gates,
+security and release duties. A changed SHA, report or handoff alone is no test
+trigger. A short reason in the existing output suffices; add no reuse receipt,
+ledger, complete hash inventory or generic classification tool.
 
 These instructions provide no generic lock, compare-and-swap, rollback or
 multi-file atomicity. On interruption or unexpected changes, report the actual
 partial state and remaining work. Do not overwrite newer external changes to
 restore a presumed baseline. Read back uncertain writes before deciding a retry.
 
+## Framework upgrade reconciliation
+
+Use the existing `propose` or `apply` operation for selected project-owned entry
+clauses after an upgrade. Read the current root/index, installed candidate
+instructions and actual target policy or decision evidence. Installation success
+and a context follow-up hint do not establish a contradiction or adoption.
+Compare meaning: an intentional project variation can remain valid.
+
+Refresh facts and navigation within the authorized edit radius. For rule changes,
+show or apply the bounded replacement under the existing authority, preserving
+unrelated rules and resolving consequential adoption choices before their writes.
+An already authorized direct edit needs no extra proposal cycle. Do not use a
+former starter as an assumed merge base or rewrite the whole root.
+
+Keep the root usable for scope, authorization and truthful reporting. Where the
+target has adopted a model policy, direct delegation to that actual policy and
+keep model/effort mappings there instead of duplicating them in the root. Verify
+paths and reading triggers; missing policy and conflicting overrides remain
+visible. A link proves neither client loading nor runtime enforcement.
+
+Read back the effective clauses and navigation; report maintained facts, adopted
+rule changes, preserved intentional differences and pending decisions. Keep
+managed installation, lock/configuration changes and runtime activation with
+their owners. This method adds no operation, store or mandatory dependency.
+
 ## Necessary semantic state
 
-Use the project's existing rule and decision owners; create no second
-customization catalog, ledger, acceptance packet or universal rule engine.
+Use the project's existing rule and decision owners; create no duplicate
+decision ledger, acceptance packet or universal rule engine. A project-selected
+resource manager may own its executable customization registry: use that reader
+and writer for provenance, resource closure and runtime routing, and reference
+existing decisions there. That registry does not own rules, grant installer
+ownership or turn coverage metadata into adoption or runtime evidence.
 Keep the full effective statement with its canonical rule owner. When required,
 retain semantic identity, material baseline, reason for extension/override,
 applicability, decision evidence and real review/expiry obligations with the

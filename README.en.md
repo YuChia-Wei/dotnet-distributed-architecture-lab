@@ -190,7 +190,7 @@ The four business APIs use `/api/products`, `/api/orders`, `/api/inventory`, and
 
 - `AGENTS.md`: canonical agent collaboration guide
 - `.ai/INDEX.MD`: AI package and knowledge index
-- [.ai/custom/installation.json](.ai/custom/installation.json): stable 0.19.0 package selection and knowledge bindings
+- [.ai/custom/installation.json](.ai/custom/installation.json): stable 0.21.0 package selection and knowledge bindings
 - [.ai/framework.lock](.ai/framework.lock): installer-generated inventory of installed resources
 - `.dev/ai-context/TARGET-ENGINEERING-RULES.md`: retained target rules and customizations
 - [.agents/skills/](.agents/skills/) and [.claude/skills/](.claude/skills/): actual runtime entries to use according to the saved installation selection
