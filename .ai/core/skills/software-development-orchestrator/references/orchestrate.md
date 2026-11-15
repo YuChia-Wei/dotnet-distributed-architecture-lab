@@ -33,6 +33,14 @@ boundary. Sequence dependencies; parallelize only independent work with suitable
 isolation and available delegation. Keep one integration owner and comply with
 the project's writer and review isolation rules.
 
+## Resolve issue operations
+
+For both `orchestrate` and `resume`, read and validate the current optional
+[issue-operation settings](issue-control.md) before selecting issue tools. Missing
+or empty settings choose no framework route. An explicit experimental or project
+route must be available; never silently fall back. Configuration changes do not
+migrate items, change their provider references or grant permission.
+
 ## Resolve capabilities and sequence stages
 
 Plan only the stages needed to reach the accepted outcome. For each, identify

@@ -78,11 +78,10 @@ public sealed class Order : EsAggregateRoot<OrderId>
 }
 ```
 
-The repository-owned source include is under
-[`source-includes/domain/`](../../.ai/core/knowledge/dotnet-backend/source-includes/domain/). It is reference-only
-framework material, not a published package or complete reference product. An
-adopting target owns SDK compatibility, compilation, behavior tests, invocation
-evidence, and upgrade reconciliation before claiming executable validation.
+The framework's [BuildingBlocks reconstruction guide](../../.ai/core/knowledge/dotnet/architecture/ddd-cqrs/building-blocks-reconstruction.md)
+provides reference material. An adopting target owns SDK compatibility,
+compilation, behavior tests, invocation evidence, and upgrade reconciliation
+before claiming executable validation.
 
 ### AICTX-EVIDENCE-001
 
@@ -196,7 +195,7 @@ orchestrates the required local consistency; the selected Unit of Work or
 verified runtime pipeline physically completes it. This does not make
 `IUnitOfWork` a default Use Case dependency and does not weaken the
 multi-Aggregate, same-bounded-context exception above. See
-[Transactional Messaging Standards](../../.ai/core/knowledge/dotnet-backend/standards/coding-standards/transactional-messaging-standards.md) for
+[Transactional Messaging Standards](../../.ai/core/knowledge/dotnet/integration/messaging/transactional-messaging-standards.md) for
 the single completion-owner, inbox/outbox, and adapter contract.
 
 ### ASSESSMENT-ARTIFACT-001
@@ -459,8 +458,7 @@ scenario was implemented faithfully.
 
 #### Default BDDfy Form
 
-This excerpt's fixture and step implementations are in the
-[runnable step-method example](../../.ai/core/knowledge/dotnet-backend/examples/bdd-step-methods/README.md).
+The following excerpt illustrates the BDDfy step-method form.
 It exposes the behavior-bearing data while keeping mechanics inside steps.
 
 ```csharp
@@ -550,8 +548,7 @@ scenario was implemented faithfully.
 
 #### Default BDDfy Form
 
-This excerpt's fixture and step implementations are in the
-[runnable step-method example](../../.ai/core/knowledge/dotnet-backend/examples/bdd-step-methods/README.md).
+The following excerpt illustrates the BDDfy step-method form.
 It exposes the behavior-bearing data while keeping mechanics inside steps.
 
 ```csharp
@@ -651,7 +648,7 @@ The target selects these twenty exact capability, operation and file-type reques
 | `mq-route-19` | `implementation` | `query` | `implement` | `csharp-production` |
 | `mq-route-20` | `specification` | `direct` | `draft`, `normalize` | `specification-json` |
 
-For these routes, `engineering-common` contributes `AICTX-EVIDENCE-001`, `ASSESSMENT-ARTIFACT-001`, and `TECH-SELECT-001`; `dotnet-backend` contributes the other eleven rule IDs. A package selection alone does not adopt any rule. Target configuration and the actual affected file determine applicability.
+For these routes, `engineering-common` contributes `AICTX-EVIDENCE-001`, `ASSESSMENT-ARTIFACT-001`, and `TECH-SELECT-001`; `dotnet` contributes the other eleven rule IDs. A package selection alone does not adopt any rule. Target configuration and the actual affected file determine applicability.
 
 ## Target customizations
 

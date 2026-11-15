@@ -84,16 +84,16 @@ Leave the subject unchanged. Finish review before a separately authorized
 
 | Criterion | Inspect for |
 | --- | --- |
-| Source authority | Agreed, proposed, observed and unknown behavior remain distinct; no invented approval or oracle |
-| Traceability | Criteria, risks and invariants map to design/case/row IDs or explicit gaps; source revisions survive |
-| Oracle | Every important expected value, relation, property or exception has an independent permitted source |
-| Subject and observations | The real subject and each meaningful outcome are explicit; private implementation details need a selected-contract reason |
-| Test level and facilities | The boundary can prove the claim and fits actual target infrastructure; required real facilities are identified as available, missing or unknown |
+| Source authority | Agreed, proposed, observed and unknown behavior stay distinct; no invented approval or requirement |
+| Traceability | Source revisions and IDs connect criteria, risks, invariants and outcomes to cases or gaps |
+| Oracle | Important values, relations, properties and exceptions have independent permitted sources |
+| Subject and observations | Cover all contract-required fields; each assertion needs a source, not an inferred guarantee |
+| Test level and facilities | The boundary proves its claim; required real dependencies are available, missing or unknown |
 | Setup and isolation | Relevant data, identity, time, state, responses, nondeterminism and cleanup are controlled or disclosed |
-| Input and failure coverage | Relevant partitions, boundaries and specified failure/recovery are represented without inventing business rules |
-| Format fidelity | GWT, tables, transitions, properties or formal prose preserve the same behavior and all accepted outcomes |
-| Handoff | IDs, oracle, setup, boundaries and unresolved decisions can survive into implementation; future results are not fabricated |
-| Cost and conventions | Fixtures are proportionate; target rules apply from their authority, not from an illustrative method or runner default |
+| Input and failure coverage | Keep cases required by accepted criteria or target gates; cover distinct failures and boundaries; investigate source gaps, ask before adoption; omit speculation and duplication |
+| Format fidelity | Expressions preserve accepted behavior and outcomes |
+| Handoff | IDs, oracle, setup, boundaries and unresolved decisions survive implementation; no invented results |
+| Cost and conventions | Protection justifies false failures/upkeep; refactors preserve contracts; target authority, not examples or runner defaults, supplies rules |
 
 For GWT or Gherkin, check each Then/And, independent scenario setup and meaningful
 primary event or justified sequence. Separate syntax defects from optional

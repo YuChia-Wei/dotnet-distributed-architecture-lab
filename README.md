@@ -159,7 +159,7 @@ docker exec kafka /opt/kafka/bin/kafka-console-consumer.sh `
 dotnet test MQArchLab.slnx
 ```
 
-本 repository 目前沒有 active target-owned analyzer 或 runtime-validator projects。它們已在受治理的 v0.9 AI context 升級中退役，v0.13 framework 也已移除先前的 bundled mechanical-validation provider。現在僅保留 `.ai/core/knowledge/dotnet-backend/tooling/on-demand-mechanical-validation/` 下的 reference-only recipes；它們未被選用、未加入 `MQArchLab.slnx`、未接入 build，也未啟用。
+本 repository 目前沒有 active target-owned analyzer 或 runtime-validator projects。它們已在受治理的 v0.9 AI context 升級中退役，v0.13 framework 也已移除先前的 bundled mechanical-validation provider。現在僅保留 `.ai/core/knowledge/dotnet/tooling/on-demand-mechanical-validation/` 下的 reference-only recipes；它們未被選用、未加入 `MQArchLab.slnx`、未接入 build，也未啟用。
 
 ## 前台與管理後台
 
@@ -191,7 +191,7 @@ dotnet test MQArchLab.slnx
 
 - `AGENTS.md`：canonical agent collaboration guide
 - `.ai/INDEX.MD`：AI package 與 knowledge 索引
-- [.ai/custom/installation.json](.ai/custom/installation.json)：選定的正式版 0.21.0 的套件選擇與知識綁定
+- [.ai/custom/installation.json](.ai/custom/installation.json)：選定的正式版 0.23.0 的套件選擇與知識綁定
 - [.ai/framework.lock](.ai/framework.lock)：installer 產生的已安裝資源清冊
 - `.dev/ai-context/TARGET-ENGINEERING-RULES.md`：保留的目標規則與客製化
 - [.agents/skills/](.agents/skills/)、[.claude/skills/](.claude/skills/)：依安裝選擇使用實際 runtime 入口

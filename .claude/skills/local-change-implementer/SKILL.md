@@ -5,7 +5,7 @@ description: "Implement one authorized operation on one technical target and its
 
 # local-change-implementer
 
-Claude runtime entry for `local-change-implementer@0.2.7`. This generated projection does not
+Claude runtime entry for `local-change-implementer@0.2.17`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Claude adapter.
 

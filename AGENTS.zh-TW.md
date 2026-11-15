@@ -8,7 +8,7 @@
 
 本 repo 是 .NET 分散式商務架構實驗室。Products、Orders、Inventory 與 Procurement 是目前四個業務 bounded context。SupplierSandbox 與 SupplierMock 是外部系統範例；兩個 Vue 前端及 YARP 是現行應用介面。產品事實應核對 `MQArchLab.slnx`、專案檔、原始碼、測試、Compose 與目前 `.dev/` 專案紀錄。`.dev/project-config.yaml` 是產生的 inventory，與上述來源不符時應以來源為準。不得把框架來源 repo 的產品事實帶入本目標。
 
-[安裝選擇](.ai/custom/installation.json) 記錄選定的正式版 `0.21.0` packages 與 target bindings；[官方 lock](.ai/framework.lock) 記錄已安裝的 inventory。[目標工程規則](.dev/ai-context/TARGET-ENGINEERING-RULES.md) 持有保留的十四條完整規範、二十條請求路由、四項客製化及目標 Git 邊界。已安裝的 skills 與 common/.NET knowledge 有別於目標採用。Package 或 wrapper 本身不證明規則適用，也不證明驗證通過。官方 lock 由 installer 持有，不得手改。只能使用已儲存的選擇及其已安裝的 Codex、Claude 原名入口。
+[安裝選擇](.ai/custom/installation.json) 記錄選定的正式版 `0.23.0` packages 與 target bindings；[官方 lock](.ai/framework.lock) 記錄已安裝的 inventory。[目標工程規則](.dev/ai-context/TARGET-ENGINEERING-RULES.md) 持有保留的十四條完整規範、二十條請求路由、四項客製化及目標 Git 邊界。已安裝的 skills 與 common/.NET knowledge 有別於目標採用。Package 或 wrapper 本身不證明規則適用，也不證明驗證通過。官方 lock 由 installer 持有，不得手改。只能使用已儲存的選擇及其已安裝的 Codex、Claude 原名入口。
 
 Project-owned [實驗性 promotion skill](.ai/custom/skills/standards-promotion-experimental/SKILL.md) 僅供明確選定的試驗使用。它不屬於官方 lock 或發布成品，用途與行為驗收仍待完成。[2026-10-04 本機安裝及初始化結果](.dev/workflows/2026-10-04-framework-019-init/results.md) 是具日期的證據，不構成新的整合或推送授權。
 

@@ -1,0 +1,15 @@
+schema_version: "1.0"
+component_id: dotnet
+purpose: Selected .NET architecture and scenario-design guidance.
+routes:
+  architecture:
+    references:
+      - ../architecture/ddd-cqrs/overview.md
+  test-design:
+    references:
+      - ../testing/test-standards.md
+  transactional-messaging:
+    references:
+      - ../integration/messaging/transactional-messaging-standards.md
+      - ../testing/test-standards.md
+loading: "Choose a route only for a target-selected concern. Intersect its direct references with the consuming operation's allowed resources and apply the target's effective rules."

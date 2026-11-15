@@ -29,8 +29,8 @@ In other words:
 - `use case` is the subject of the spec
 - `command`/`query` and an optional `handler` are implementation mappings and do not need to become the primary spec filename
 
-When the .NET backend component is selected, see the complete terminology rules in
-[`USECASE-COMMAND-HANDLER-RELATIONSHIP.MD`](../../.ai/core/knowledge/dotnet-backend/standards/USECASE-COMMAND-HANDLER-RELATIONSHIP.MD).
+For .NET implementation guidance, see the
+[Use Case coding standards](../../.ai/core/knowledge/dotnet/architecture/ddd-cqrs/usecase-standards.md).
 
 ## 1) Directory & Naming Rules
 First follow:

@@ -5,7 +5,7 @@ description: "Explore bounded requirements, or draft or normalize a requirement 
 
 # requirement-author
 
-Claude runtime entry for `requirement-author@0.2.3`. This generated projection does not
+Claude runtime entry for `requirement-author@0.2.5`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Claude adapter.
 
