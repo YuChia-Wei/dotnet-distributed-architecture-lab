@@ -177,4 +177,4 @@ Do:
 ## Related Documents
 - `.dev/guides/design-guides/PROFILE-BASED-TESTING-GUIDE.md`
 - `.ai/core/skills/slice-implementer/references/test-handoff.md`
-- `.ai/core/knowledge/dotnet-backend/shared/testing-strategy.md`
+- `.ai/core/knowledge/dotnet/testing/test-standards.md`

@@ -4,7 +4,7 @@ This directory contains BDD, TDD, and acceptance-oriented test specification doc
 
 Given-When-Then is the minimum standard for every test design and C# test; Arrange-Act-Assert (3A) must not replace it. This target explicitly selects plain xUnit v3 and opts out of BDDfy while retaining recognizable GWT structure. `.feature` is a planned, optional asset that is enabled only when a requirement directly provides one, the user explicitly requests its design or generation, or the target profile adopts a runner.
 
-The optional [test-spec guide](../../../.ai/core/knowledge/dotnet-backend/guides/TEST-SPEC-GUIDE.MD) and [Gherkin guide](../../../.ai/core/knowledge/dotnet-backend/guides/GHERKIN-FEATURE-STORAGE-GUIDE.MD) are packaged references; the target choice above governs applicability.
+The optional [test-spec guide](../../../.ai/core/knowledge/dotnet/testing/test-spec-guide.md) and [Gherkin guide](../../../.ai/core/knowledge/dotnet/testing/gherkin-feature-storage.md) are packaged references; the target choice above governs applicability.
 
 ## Purpose
 

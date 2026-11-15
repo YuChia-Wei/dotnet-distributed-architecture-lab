@@ -5,7 +5,7 @@ description: "Implement one authorized behavior, coordinated refactor or concret
 
 # slice-implementer
 
-Claude runtime entry for `slice-implementer@0.2.7`. This generated projection does not
+Claude runtime entry for `slice-implementer@0.2.17`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Claude adapter.
 

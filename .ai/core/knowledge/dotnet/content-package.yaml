@@ -1,0 +1,3883 @@
+content_package_version: 1
+id: dotnet
+version: 0.3.3
+entrypoint: README.md
+members:
+- path: README.md
+  kind: index
+- path: application-types/web-api/controller-standards.md
+  kind: knowledge
+- path: application-types/web-api/setup.md
+  kind: knowledge
+- path: architecture/ddd-cqrs/aggregate-standards.md
+  kind: normative-rule
+- path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+  kind: normative-rule
+- path: architecture/ddd-cqrs/overview.md
+  kind: knowledge
+- path: architecture/ddd-cqrs/project-structure.md
+  kind: normative-rule
+- path: architecture/ddd-cqrs/reactor-standards.md
+  kind: knowledge
+- path: architecture/ddd-cqrs/usecase-standards.md
+  kind: normative-rule
+- path: content-package.yaml
+  kind: metadata
+- path: core/csharp-conventions.md
+  kind: knowledge
+- path: core/design-by-contract.md
+  kind: normative-rule
+- path: core/host-configuration.md
+  kind: knowledge
+- path: core/technology-selection.md
+  kind: knowledge
+- path: engineering-rule-catalog.yaml
+  kind: rule-catalog
+- path: integration/messaging/persistence-and-messaging.md
+  kind: knowledge
+- path: integration/messaging/transactional-messaging-standards.md
+  kind: normative-rule
+- path: integration/persistence/archive-standards.md
+  kind: normative-rule
+- path: integration/persistence/configuration.md
+  kind: knowledge
+- path: integration/persistence/database-migrations.md
+  kind: knowledge
+- path: integration/persistence/mapper-standards.md
+  kind: normative-rule
+- path: integration/persistence/projection-standards.md
+  kind: knowledge
+- path: integration/persistence/repository-standards.md
+  kind: knowledge
+- path: references/design-routing.yaml
+  kind: knowledge
+- path: references/engineering-identity-bindings.md
+  kind: knowledge
+- path: references/legacy-dotnet-compliance/spec-compliance-rules.md
+  kind: knowledge
+- path: references/legacy-dotnet-compliance/test-validation-steps.md
+  kind: knowledge
+- path: references/legacy-dotnet-compliance/validation-command-templates.md
+  kind: knowledge
+- path: references/policy-rationale.md
+  kind: knowledge
+- path: references/review-routing.yaml
+  kind: knowledge
+- path: references/troubleshooting.md
+  kind: knowledge
+- path: testing/domain-contract-examples.md
+  kind: knowledge
+- path: testing/gherkin-feature-storage.md
+  kind: knowledge
+- path: testing/profile-based-testing.md
+  kind: knowledge
+- path: testing/reconstruction-and-projector-cases.md
+  kind: knowledge
+- path: testing/test-scenario-review.md
+  kind: knowledge
+- path: testing/test-spec-guide.md
+  kind: knowledge
+- path: testing/test-standards.md
+  kind: normative-rule
+- path: tooling/development-tools.md
+  kind: knowledge
+- path: tooling/docker-restore-cache.md
+  kind: knowledge
+- path: tooling/generation/DELIVERY.md
+  kind: knowledge
+- path: tooling/generation/README.md
+  kind: knowledge
+- path: tooling/generation/snippet-tool/README.md
+  kind: knowledge
+- path: tooling/implementation-guidance.md
+  kind: skill-guidance
+- path: tooling/on-demand-mechanical-validation/README.md
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/provider-contract.yaml
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/recipes/analyzer-severity.editorconfig.snippet
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+  kind: knowledge
+- path: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  kind: knowledge
+resources:
+- id: engineering-rule-catalog
+  path: engineering-rule-catalog.yaml
+  kind: rule-catalog
+  rule_ids:
+  - AGGREGATE-ES-001
+  - ARCH-UOW-001
+  - CONTRACT-SEMANTICS-001
+  - DELETE-PURGE-001
+  - DELETE-SOFT-001
+  - MAP-EVENTS-001
+  - MESSAGING-TX-001
+  - PROJECT-GRAMMAR-001
+  - TEST-BDDFY-001
+  - TEST-GWT-001
+  - TEST-MOCK-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:README.md
+  path: README.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:application-types/web-api/controller-standards.md
+  path: application-types/web-api/controller-standards.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:application-types/web-api/setup.md
+  path: application-types/web-api/setup.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:architecture/ddd-cqrs/aggregate-standards.md
+  path: architecture/ddd-cqrs/aggregate-standards.md
+  kind: normative-rule
+  rule_ids:
+  - DELETE-SOFT-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+  kind: normative-rule
+  rule_ids:
+  - AGGREGATE-ES-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:architecture/ddd-cqrs/overview.md
+  path: architecture/ddd-cqrs/overview.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:architecture/ddd-cqrs/project-structure.md
+  path: architecture/ddd-cqrs/project-structure.md
+  kind: normative-rule
+  rule_ids:
+  - PROJECT-GRAMMAR-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:architecture/ddd-cqrs/reactor-standards.md
+  path: architecture/ddd-cqrs/reactor-standards.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:architecture/ddd-cqrs/usecase-standards.md
+  path: architecture/ddd-cqrs/usecase-standards.md
+  kind: normative-rule
+  rule_ids:
+  - ARCH-UOW-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:core/csharp-conventions.md
+  path: core/csharp-conventions.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:core/design-by-contract.md
+  path: core/design-by-contract.md
+  kind: normative-rule
+  rule_ids:
+  - CONTRACT-SEMANTICS-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:core/host-configuration.md
+  path: core/host-configuration.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:core/technology-selection.md
+  path: core/technology-selection.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:integration/messaging/persistence-and-messaging.md
+  path: integration/messaging/persistence-and-messaging.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:integration/messaging/transactional-messaging-standards.md
+  path: integration/messaging/transactional-messaging-standards.md
+  kind: normative-rule
+  rule_ids:
+  - MESSAGING-TX-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:integration/persistence/archive-standards.md
+  path: integration/persistence/archive-standards.md
+  kind: normative-rule
+  rule_ids:
+  - DELETE-PURGE-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:integration/persistence/configuration.md
+  path: integration/persistence/configuration.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:integration/persistence/database-migrations.md
+  path: integration/persistence/database-migrations.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:integration/persistence/mapper-standards.md
+  path: integration/persistence/mapper-standards.md
+  kind: normative-rule
+  rule_ids:
+  - MAP-EVENTS-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:integration/persistence/projection-standards.md
+  path: integration/persistence/projection-standards.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:integration/persistence/repository-standards.md
+  path: integration/persistence/repository-standards.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:references/design-routing.yaml
+  path: references/design-routing.yaml
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:references/engineering-identity-bindings.md
+  path: references/engineering-identity-bindings.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:references/legacy-dotnet-compliance/spec-compliance-rules.md
+  path: references/legacy-dotnet-compliance/spec-compliance-rules.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:references/legacy-dotnet-compliance/test-validation-steps.md
+  path: references/legacy-dotnet-compliance/test-validation-steps.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:references/legacy-dotnet-compliance/validation-command-templates.md
+  path: references/legacy-dotnet-compliance/validation-command-templates.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:references/policy-rationale.md
+  path: references/policy-rationale.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:references/review-routing.yaml
+  path: references/review-routing.yaml
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:references/troubleshooting.md
+  path: references/troubleshooting.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:testing/domain-contract-examples.md
+  path: testing/domain-contract-examples.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:testing/gherkin-feature-storage.md
+  path: testing/gherkin-feature-storage.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:testing/profile-based-testing.md
+  path: testing/profile-based-testing.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:testing/reconstruction-and-projector-cases.md
+  path: testing/reconstruction-and-projector-cases.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:testing/test-scenario-review.md
+  path: testing/test-scenario-review.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:testing/test-spec-guide.md
+  path: testing/test-spec-guide.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:testing/test-standards.md
+  path: testing/test-standards.md
+  kind: normative-rule
+  rule_ids:
+  - TEST-BDDFY-001
+  - TEST-GWT-001
+  - TEST-MOCK-001
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/development-tools.md
+  path: tooling/development-tools.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:tooling/docker-restore-cache.md
+  path: tooling/docker-restore-cache.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/generation/DELIVERY.md
+  path: tooling/generation/DELIVERY.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:tooling/generation/README.md
+  path: tooling/generation/README.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:tooling/generation/snippet-tool/README.md
+  path: tooling/generation/snippet-tool/README.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: null
+- id: member:tooling/implementation-guidance.md
+  path: tooling/implementation-guidance.md
+  kind: skill-guidance
+  rule_ids: []
+  capabilities:
+  - implementation
+  - local-change
+  operations:
+  - implement
+  technology_profile: null
+- id: member:tooling/on-demand-mechanical-validation/README.md
+  path: tooling/on-demand-mechanical-validation/README.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  path: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  path: tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/provider-contract.yaml
+  path: tooling/on-demand-mechanical-validation/provider-contract.yaml
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  path: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  path: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/recipes/analyzer-severity.editorconfig.snippet
+  path: tooling/on-demand-mechanical-validation/recipes/analyzer-severity.editorconfig.snippet
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
+  path: tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+  path: tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+  path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+  path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+- id: member:tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  path: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  kind: knowledge
+  rule_ids: []
+  capabilities:
+  - architecture
+  - compliance-validation
+  - implementation
+  - local-change
+  - problem-framing
+  - requirements
+  - review
+  - specification
+  - test-design
+  operations:
+  - apply
+  - assess-runtime
+  - audit
+  - compare
+  - design
+  - draft
+  - implement
+  - normalize
+  - plan-validation
+  - propose
+  - review
+  - review-draft
+  - review-semantics
+  technology_profile: dotnet-backend
+dependencies:
+  required:
+  - kind: knowledge
+    id: engineering-common
+    version: 0.4.2
+  optional: []
+references:
+- from: README.md
+  resource_id: engineering-rule-catalog
+  target:
+    package: dotnet
+    path: engineering-rule-catalog.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:application-types/web-api/controller-standards.md
+  target:
+    package: dotnet
+    path: application-types/web-api/controller-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:application-types/web-api/setup.md
+  target:
+    package: dotnet
+    path: application-types/web-api/setup.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:architecture/ddd-cqrs/overview.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/overview.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:core/csharp-conventions.md
+  target:
+    package: dotnet
+    path: core/csharp-conventions.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:core/design-by-contract.md
+  target:
+    package: dotnet
+    path: core/design-by-contract.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:core/host-configuration.md
+  target:
+    package: dotnet
+    path: core/host-configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:core/technology-selection.md
+  target:
+    package: dotnet
+    path: core/technology-selection.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:integration/messaging/persistence-and-messaging.md
+  target:
+    package: dotnet
+    path: integration/messaging/persistence-and-messaging.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:integration/persistence/configuration.md
+  target:
+    package: dotnet
+    path: integration/persistence/configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/engineering-identity-bindings.md
+  target:
+    package: dotnet
+    path: references/engineering-identity-bindings.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/legacy-dotnet-compliance/spec-compliance-rules.md
+  target:
+    package: dotnet
+    path: references/legacy-dotnet-compliance/spec-compliance-rules.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/legacy-dotnet-compliance/test-validation-steps.md
+  target:
+    package: dotnet
+    path: references/legacy-dotnet-compliance/test-validation-steps.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/legacy-dotnet-compliance/validation-command-templates.md
+  target:
+    package: dotnet
+    path: references/legacy-dotnet-compliance/validation-command-templates.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:references/troubleshooting.md
+  target:
+    package: dotnet
+    path: references/troubleshooting.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:testing/domain-contract-examples.md
+  target:
+    package: dotnet
+    path: testing/domain-contract-examples.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:testing/profile-based-testing.md
+  target:
+    package: dotnet
+    path: testing/profile-based-testing.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:testing/reconstruction-and-projector-cases.md
+  target:
+    package: dotnet
+    path: testing/reconstruction-and-projector-cases.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:tooling/development-tools.md
+  target:
+    package: dotnet
+    path: tooling/development-tools.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:tooling/generation/README.md
+  target:
+    package: dotnet
+    path: tooling/generation/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/README.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/controller-standards.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/controller-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: controller-usecase-handler-and-operation-shape
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/controller-standards.md
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/controller-standards.md
+  resource_id: member:tooling/generation/README.md
+  target:
+    package: dotnet
+    path: tooling/generation/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/setup.md
+  resource_id: member:application-types/web-api/controller-standards.md
+  target:
+    package: dotnet
+    path: application-types/web-api/controller-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/setup.md
+  resource_id: member:core/host-configuration.md
+  target:
+    package: dotnet
+    path: core/host-configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/setup.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/setup.md
+  resource_id: member:integration/persistence/configuration.md
+  target:
+    package: dotnet
+    path: integration/persistence/configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/setup.md
+  resource_id: member:testing/profile-based-testing.md
+  target:
+    package: dotnet
+    path: testing/profile-based-testing.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: application-types/web-api/setup.md
+  resource_id: member:tooling/generation/README.md
+  target:
+    package: dotnet
+    path: tooling/generation/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: 7-strong-consistency-must-be-explicit
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:core/design-by-contract.md
+  target:
+    package: dotnet
+    path: core/design-by-contract.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: pending-domain-events-after-reconstruction
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: factory-retained-policy-and-unresolved-justification
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: value-objects-and-bounded-product-checks
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: versioned-archprecept-comparison-not-a-second-rule-catalog
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:testing/reconstruction-and-projector-cases.md
+  target:
+    package: dotnet
+    path: testing/reconstruction-and-projector-cases.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/aggregate-standards.md
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/building-blocks-reconstruction.md
+  resource_id: member:testing/reconstruction-and-projector-cases.md
+  target:
+    package: dotnet
+    path: testing/reconstruction-and-projector-cases.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/building-blocks-reconstruction.md
+  resource_id: member:tooling/generation/README.md
+  target:
+    package: dotnet
+    path: tooling/generation/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:architecture/ddd-cqrs/project-structure.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/project-structure.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: 7-strong-consistency-must-be-explicit
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:core/host-configuration.md
+  target:
+    package: dotnet
+    path: core/host-configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:core/technology-selection.md
+  target:
+    package: dotnet
+    path: core/technology-selection.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:integration/persistence/archive-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/archive-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/overview.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: cross-bc-interaction-retained-restriction-and-scope-gap
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/project-structure.md
+  resource_id: member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/project-structure.md
+  resource_id: member:architecture/ddd-cqrs/overview.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/overview.md
+    anchor: retained-cross-context-restrictions
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/project-structure.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/reactor-standards.md
+  resource_id: member:architecture/ddd-cqrs/overview.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/overview.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/reactor-standards.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/reactor-standards.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/reactor-standards.md
+  resource_id: member:integration/persistence/archive-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/archive-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/usecase-standards.md
+  resource_id: member:application-types/web-api/controller-standards.md
+  target:
+    package: dotnet
+    path: application-types/web-api/controller-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/usecase-standards.md
+  resource_id: member:architecture/ddd-cqrs/aggregate-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/aggregate-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/usecase-standards.md
+  resource_id: member:architecture/ddd-cqrs/overview.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/overview.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/usecase-standards.md
+  resource_id: member:architecture/ddd-cqrs/project-structure.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/project-structure.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/usecase-standards.md
+  resource_id: member:architecture/ddd-cqrs/reactor-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/reactor-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/usecase-standards.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/usecase-standards.md
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/usecase-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: architecture/ddd-cqrs/usecase-standards.md
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: core/host-configuration.md
+  resource_id: member:integration/persistence/configuration.md
+  target:
+    package: dotnet
+    path: integration/persistence/configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: core/host-configuration.md
+  resource_id: member:testing/profile-based-testing.md
+  target:
+    package: dotnet
+    path: testing/profile-based-testing.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: core/technology-selection.md
+  resource_id: member:architecture/ddd-cqrs/overview.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/overview.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: core/technology-selection.md
+  resource_id: member:integration/messaging/persistence-and-messaging.md
+  target:
+    package: dotnet
+    path: integration/messaging/persistence-and-messaging.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: core/technology-selection.md
+  resource_id: member:integration/persistence/configuration.md
+  target:
+    package: dotnet
+    path: integration/persistence/configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: core/technology-selection.md
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: engineering-rule-catalog
+  target:
+    package: dotnet
+    path: engineering-rule-catalog.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:README.md
+  target:
+    package: dotnet
+    path: README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:application-types/web-api/controller-standards.md
+  target:
+    package: dotnet
+    path: application-types/web-api/controller-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:application-types/web-api/setup.md
+  target:
+    package: dotnet
+    path: application-types/web-api/setup.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:architecture/ddd-cqrs/aggregate-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/aggregate-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:architecture/ddd-cqrs/overview.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/overview.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:architecture/ddd-cqrs/project-structure.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/project-structure.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:architecture/ddd-cqrs/reactor-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/reactor-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:core/csharp-conventions.md
+  target:
+    package: dotnet
+    path: core/csharp-conventions.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:core/design-by-contract.md
+  target:
+    package: dotnet
+    path: core/design-by-contract.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:core/host-configuration.md
+  target:
+    package: dotnet
+    path: core/host-configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:integration/messaging/persistence-and-messaging.md
+  target:
+    package: dotnet
+    path: integration/messaging/persistence-and-messaging.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:integration/persistence/archive-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/archive-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:integration/persistence/configuration.md
+  target:
+    package: dotnet
+    path: integration/persistence/configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:references/review-routing.yaml
+  target:
+    package: dotnet
+    path: references/review-routing.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:references/troubleshooting.md
+  target:
+    package: dotnet
+    path: references/troubleshooting.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:testing/profile-based-testing.md
+  target:
+    package: dotnet
+    path: testing/profile-based-testing.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: engineering-rule-catalog.yaml
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/messaging/persistence-and-messaging.md
+  resource_id: member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/messaging/persistence-and-messaging.md
+  resource_id: member:core/host-configuration.md
+  target:
+    package: dotnet
+    path: core/host-configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/messaging/persistence-and-messaging.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/messaging/persistence-and-messaging.md
+  resource_id: member:integration/persistence/configuration.md
+  target:
+    package: dotnet
+    path: integration/persistence/configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/messaging/persistence-and-messaging.md
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/messaging/persistence-and-messaging.md
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/messaging/transactional-messaging-standards.md
+  resource_id: member:bdd/architecture-boundaries.md
+  target:
+    package: engineering-common
+    path: bdd/architecture-boundaries.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/archive-standards.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/archive-standards.md
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/archive-standards.md
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/configuration.md
+  resource_id: member:core/host-configuration.md
+  target:
+    package: dotnet
+    path: core/host-configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/configuration.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/configuration.md
+  resource_id: member:integration/persistence/database-migrations.md
+  target:
+    package: dotnet
+    path: integration/persistence/database-migrations.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/configuration.md
+  resource_id: member:testing/profile-based-testing.md
+  target:
+    package: dotnet
+    path: testing/profile-based-testing.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/configuration.md
+  resource_id: member:tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/database-migrations.md
+  resource_id: member:architecture/ddd-cqrs/project-structure.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/project-structure.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/database-migrations.md
+  resource_id: member:integration/persistence/configuration.md
+  target:
+    package: dotnet
+    path: integration/persistence/configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/mapper-standards.md
+  resource_id: member:architecture/ddd-cqrs/aggregate-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/aggregate-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/mapper-standards.md
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/mapper-standards.md
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/mapper-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: pure-object-mapper-versus-work-with-dependencies
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/mapper-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: reconstruction-and-projection-sources
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/mapper-standards.md
+  resource_id: member:testing/reconstruction-and-projector-cases.md
+  target:
+    package: dotnet
+    path: testing/reconstruction-and-projector-cases.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/projection-standards.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/projection-standards.md
+  resource_id: member:integration/persistence/archive-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/archive-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/projection-standards.md
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/projection-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/projection-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: query-reader-and-read-model-projector
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/projection-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: reconstruction-and-projection-sources
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/repository-standards.md
+  resource_id: member:architecture/ddd-cqrs/aggregate-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/aggregate-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/repository-standards.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/repository-standards.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/repository-standards.md
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/repository-standards.md
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/repository-standards.md
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: event-driven-read-model-projector
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/repository-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: integration/persistence/repository-standards.md
+  resource_id: member:references/policy-rationale.md
+  target:
+    package: dotnet
+    path: references/policy-rationale.md
+    anchor: repository-a-narrow-selected-write-port
+  requirement: required
+  on_missing: unavailable
+- from: references/design-routing.yaml
+  resource_id: member:architecture/ddd-cqrs/overview.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/overview.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/design-routing.yaml
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/design-routing.yaml
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/engineering-identity-bindings.md
+  resource_id: member:references/CONTEXT-RESOURCE-OWNERSHIP.md
+  target:
+    package: engineering-common
+    path: references/CONTEXT-RESOURCE-OWNERSHIP.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/legacy-dotnet-compliance/validation-command-templates.md
+  resource_id: member:tooling/on-demand-mechanical-validation/README.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/policy-rationale.md
+  resource_id: member:application-types/web-api/controller-standards.md
+  target:
+    package: dotnet
+    path: application-types/web-api/controller-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/policy-rationale.md
+  resource_id: member:architecture/ddd-cqrs/aggregate-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/aggregate-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/policy-rationale.md
+  resource_id: member:architecture/ddd-cqrs/overview.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/overview.md
+    anchor: retained-cross-context-restrictions
+  requirement: required
+  on_missing: unavailable
+- from: references/policy-rationale.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/policy-rationale.md
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/policy-rationale.md
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/policy-rationale.md
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/policy-rationale.md
+  resource_id: member:testing/reconstruction-and-projector-cases.md
+  target:
+    package: dotnet
+    path: testing/reconstruction-and-projector-cases.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:application-types/web-api/controller-standards.md
+  target:
+    package: dotnet
+    path: application-types/web-api/controller-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:architecture/ddd-cqrs/aggregate-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/aggregate-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:architecture/ddd-cqrs/reactor-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/reactor-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:core/csharp-conventions.md
+  target:
+    package: dotnet
+    path: core/csharp-conventions.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:core/design-by-contract.md
+  target:
+    package: dotnet
+    path: core/design-by-contract.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:integration/persistence/archive-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/archive-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:testing/test-scenario-review.md
+  target:
+    package: dotnet
+    path: testing/test-scenario-review.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/review-routing.yaml
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:architecture/ddd-cqrs/aggregate-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/aggregate-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:architecture/ddd-cqrs/reactor-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/reactor-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:integration/persistence/configuration.md
+  target:
+    package: dotnet
+    path: integration/persistence/configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:integration/persistence/database-migrations.md
+  target:
+    package: dotnet
+    path: integration/persistence/database-migrations.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:testing/test-scenario-review.md
+  target:
+    package: dotnet
+    path: testing/test-scenario-review.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: references/troubleshooting.md
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/domain-contract-examples.md
+  resource_id: member:testing/reconstruction-and-projector-cases.md
+  target:
+    package: dotnet
+    path: testing/reconstruction-and-projector-cases.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/domain-contract-examples.md
+  resource_id: member:tooling/generation/DELIVERY.md
+  target:
+    package: dotnet
+    path: tooling/generation/DELIVERY.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/gherkin-feature-storage.md
+  resource_id: member:bdd/README.md
+  target:
+    package: engineering-common
+    path: bdd/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/gherkin-feature-storage.md
+  resource_id: member:bdd/architecture-boundaries.md
+  target:
+    package: engineering-common
+    path: bdd/architecture-boundaries.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/gherkin-feature-storage.md
+  resource_id: member:bdd/examples/library-renewal.feature
+  target:
+    package: engineering-common
+    path: bdd/examples/library-renewal.feature
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/gherkin-feature-storage.md
+  resource_id: member:bdd/gherkin.md
+  target:
+    package: engineering-common
+    path: bdd/gherkin.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/gherkin-feature-storage.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/gherkin-feature-storage.md
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/profile-based-testing.md
+  resource_id: member:core/host-configuration.md
+  target:
+    package: dotnet
+    path: core/host-configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/profile-based-testing.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/profile-based-testing.md
+  resource_id: member:integration/persistence/configuration.md
+  target:
+    package: dotnet
+    path: integration/persistence/configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/profile-based-testing.md
+  resource_id: member:references/troubleshooting.md
+  target:
+    package: dotnet
+    path: references/troubleshooting.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/profile-based-testing.md
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/reconstruction-and-projector-cases.md
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/reconstruction-and-projector-cases.md
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: event-driven-read-model-projector
+  requirement: required
+  on_missing: unavailable
+- from: testing/reconstruction-and-projector-cases.md
+  resource_id: member:testing/domain-contract-examples.md
+  target:
+    package: dotnet
+    path: testing/domain-contract-examples.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-scenario-review.md
+  resource_id: member:references/GWT-TEST-HANDOFF-CONTRACT.md
+  target:
+    package: engineering-common
+    path: references/GWT-TEST-HANDOFF-CONTRACT.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-scenario-review.md
+  resource_id: member:testing/test-standards.md
+  target:
+    package: dotnet
+    path: testing/test-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-spec-guide.md
+  resource_id: member:testing/gherkin-feature-storage.md
+  target:
+    package: dotnet
+    path: testing/gherkin-feature-storage.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:application-types/web-api/controller-standards.md
+  target:
+    package: dotnet
+    path: application-types/web-api/controller-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:architecture/ddd-cqrs/aggregate-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/aggregate-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:bdd/README.md
+  target:
+    package: engineering-common
+    path: bdd/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:bdd/architecture-boundaries.md
+  target:
+    package: engineering-common
+    path: bdd/architecture-boundaries.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:core/design-by-contract.md
+  target:
+    package: dotnet
+    path: core/design-by-contract.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:core/host-configuration.md
+  target:
+    package: dotnet
+    path: core/host-configuration.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:integration/messaging/persistence-and-messaging.md
+  target:
+    package: dotnet
+    path: integration/messaging/persistence-and-messaging.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:integration/messaging/transactional-messaging-standards.md
+  target:
+    package: dotnet
+    path: integration/messaging/transactional-messaging-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:references/GWT-TEST-HANDOFF-CONTRACT.md
+  target:
+    package: engineering-common
+    path: references/GWT-TEST-HANDOFF-CONTRACT.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:references/TECHNOLOGY-SELECTION-POLICY.md
+  target:
+    package: engineering-common
+    path: references/TECHNOLOGY-SELECTION-POLICY.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:testing/gherkin-feature-storage.md
+  target:
+    package: dotnet
+    path: testing/gherkin-feature-storage.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: testing/test-standards.md
+  resource_id: member:testing/profile-based-testing.md
+  target:
+    package: dotnet
+    path: testing/profile-based-testing.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/development-tools.md
+  resource_id: member:integration/persistence/database-migrations.md
+  target:
+    package: dotnet
+    path: integration/persistence/database-migrations.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/development-tools.md
+  resource_id: member:tooling/generation/README.md
+  target:
+    package: dotnet
+    path: tooling/generation/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/docker-restore-cache.md
+  resource_id: member:tooling/generation/README.md
+  target:
+    package: dotnet
+    path: tooling/generation/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/generation/README.md
+  resource_id: member:application-types/web-api/setup.md
+  target:
+    package: dotnet
+    path: application-types/web-api/setup.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/generation/README.md
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/generation/README.md
+  resource_id: member:testing/domain-contract-examples.md
+  target:
+    package: dotnet
+    path: testing/domain-contract-examples.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/generation/README.md
+  resource_id: member:tooling/development-tools.md
+  target:
+    package: dotnet
+    path: tooling/development-tools.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/generation/README.md
+  resource_id: member:tooling/generation/DELIVERY.md
+  target:
+    package: dotnet
+    path: tooling/generation/DELIVERY.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/generation/README.md
+  resource_id: member:tooling/generation/snippet-tool/README.md
+  target:
+    package: dotnet
+    path: tooling/generation/snippet-tool/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/implementation-guidance.md
+  resource_id: member:tooling/development-tools.md
+  target:
+    package: dotnet
+    path: tooling/development-tools.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/implementation-guidance.md
+  resource_id: member:tooling/generation/README.md
+  target:
+    package: dotnet
+    path: tooling/generation/README.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/provider-contract.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/provider-contract.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/recipes/analyzer-severity.editorconfig.snippet
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/recipes/analyzer-severity.editorconfig.snippet
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/README.md
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  resource_id: member:application-types/web-api/controller-standards.md
+  target:
+    package: dotnet
+    path: application-types/web-api/controller-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  resource_id: member:architecture/ddd-cqrs/aggregate-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/aggregate-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  resource_id: member:architecture/ddd-cqrs/building-blocks-reconstruction.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/building-blocks-reconstruction.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  resource_id: member:architecture/ddd-cqrs/usecase-standards.md
+  target:
+    package: dotnet
+    path: architecture/ddd-cqrs/usecase-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  resource_id: member:integration/persistence/mapper-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/mapper-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  resource_id: member:integration/persistence/projection-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/projection-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  resource_id: member:integration/persistence/repository-standards.md
+  target:
+    package: dotnet
+    path: integration/persistence/repository-standards.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/provider-contract.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/provider-contract.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/provider-contract.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/provider-contract.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/provider-contract.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/provider-contract.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: engineering-rule-catalog
+  target:
+    package: dotnet
+    path: engineering-rule-catalog.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/provider-contract.schema.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/provider-contract.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/provider-contract.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/recipes/analyzer-severity.editorconfig.snippet
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/recipes/analyzer-severity.editorconfig.snippet
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/recipes/projection-registration-test.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipe-manifest.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  resource_id: member:tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/diagnostic-mapping.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  resource_id: member:tooling/on-demand-mechanical-validation/provider-contract.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/provider-contract.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/recipes/analyzer-project.md
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/code-fix-decision.md
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer-test.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable
+- from: tooling/on-demand-mechanical-validation/templates/provider-selection.template.yaml
+  resource_id: member:tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+  target:
+    package: dotnet
+    path: tooling/on-demand-mechanical-validation/templates/minimal-diagnostic-analyzer.cs.template
+    anchor: null
+  requirement: required
+  on_missing: unavailable

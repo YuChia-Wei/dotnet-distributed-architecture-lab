@@ -9,11 +9,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-01; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-01-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -56,7 +56,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-01; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-01-engineering-common",
@@ -95,11 +95,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-02; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-02-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -143,7 +143,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-02; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-02-engineering-common",
@@ -183,11 +183,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-03; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-03-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -230,7 +230,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-03; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-03-engineering-common",
@@ -269,11 +269,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-04; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-04-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -316,7 +316,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-04; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-04-engineering-common",
@@ -355,11 +355,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-05; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-05-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -402,7 +402,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-05; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-05-engineering-common",
@@ -441,11 +441,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-06; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-06-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -488,7 +488,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-06; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-06-engineering-common",
@@ -527,11 +527,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-07; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-07-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -575,7 +575,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-07; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-07-engineering-common",
@@ -615,11 +615,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-08; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-08-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -663,7 +663,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-08; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-08-engineering-common",
@@ -703,11 +703,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-09; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-09-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -750,7 +750,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-09; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-09-engineering-common",
@@ -789,11 +789,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-10; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-10-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -837,7 +837,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-10; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-10-engineering-common",
@@ -877,11 +877,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-11; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-11-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -924,7 +924,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-11; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-11-engineering-common",
@@ -963,11 +963,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-12; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-12-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -1011,7 +1011,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-12; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-12-engineering-common",
@@ -1051,11 +1051,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-13; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-13-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -1099,7 +1099,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-13; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-13-engineering-common",
@@ -1139,11 +1139,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-14; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-14-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -1188,7 +1188,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-14; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-14-engineering-common",
@@ -1229,11 +1229,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-15; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-15-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -1276,7 +1276,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-15; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-15-engineering-common",
@@ -1315,11 +1315,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-16; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-16-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -1362,7 +1362,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-16; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-16-engineering-common",
@@ -1401,11 +1401,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-17; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-17-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -1448,7 +1448,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-17; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-17-engineering-common",
@@ -1487,11 +1487,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-18; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-18-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -1534,7 +1534,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-18; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-18-engineering-common",
@@ -1573,11 +1573,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-19; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-19-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -1620,7 +1620,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-19; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-19-engineering-common",
@@ -1659,11 +1659,11 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-20; complete normative statements for dotnet-backend required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-20-dotnet-backend",
-      "package": "dotnet-backend",
+      "package": "dotnet",
       "required_for_coverage": true,
       "required_rule_ids": [
         "AGGREGATE-ES-001",
@@ -1707,7 +1707,7 @@
         {
           "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
           "selector": "target knowledge request route mq-route-20; complete normative statements for engineering-common required_rule_ids",
-          "sha256": "56cf2bd6a21004c969b30c160a089fd060be029861e05f3f40aa94ea8c7ef884"
+          "sha256": "8c84d797140df081122af55b60c151a9727d19fab2c80fed5dee5496ad4b0be7"
         }
       ],
       "id": "mq-route-20-engineering-common",
@@ -1744,12 +1744,12 @@
     }
   ],
   "catalog": {
-    "catalog_sha256": "7b970f792ffbc085bca83605fb570e0a87b7f75bbbbd78aa1ea7f70fed2199fb",
-    "files_sha256": "636a2d82a4dbab3cd292ab2d3a6599db84e4342c41fdb23beddd1fd5b9575366",
-    "identity": "catalog:1:0.21.0:5fe8d307ce8c337463088f2abb4f2a945262a56d:7ed99fd380ba12bc0e694c43fba19e2d6c2333aa86336bfcc0f9c89907e29d45"
+    "catalog_sha256": "7efceed63909bb41e885885a31c844434ec5fdcea7d9db2b3d0414cb49f2042a",
+    "files_sha256": "4d0692c8b8cb88d3db01ae8fe878e3e2678ab6f8e093510e3e5b77dd2490985c",
+    "identity": "catalog:1:0.23.0:24138feb596f5fdfca0a9ec0537b7c4f1c428436:b4e4c70351704a2a275b65b7e2f511340585b9838b14a91ebdfeae3f643702c1"
   },
   "knowledge": [
-    "dotnet-backend",
+    "dotnet",
     "engineering-common"
   ],
   "selection_version": 2,
@@ -1763,7 +1763,6 @@
     "diagnostic-analyst",
     "domain-model-designer",
     "lesson-author",
-    "local-backlog",
     "local-change-implementer",
     "pr-author",
     "problem-frame-author",

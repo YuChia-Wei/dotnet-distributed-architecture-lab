@@ -9,7 +9,7 @@ Use [AGENTS.md](../AGENTS.md) for collaboration authority and the
 | Installed managed inventory | [Official lock](framework.lock) |
 | Select one installed skill | [Codex entries](../.agents/skills/), [Claude entries](../.claude/skills/) |
 | Portable engineering knowledge | [engineering-common](core/knowledge/engineering-common/README.md) |
-| .NET backend knowledge | [dotnet-backend](core/knowledge/dotnet-backend/README.md) |
+| .NET knowledge | [dotnet](core/knowledge/dotnet/README.md) |
 | Effective target rules and request routes | [Target engineering rules](../.dev/ai-context/TARGET-ENGINEERING-RULES.md) |
 | Project artifact stores | [Framework configuration](custom/framework.json) |
 | Project role definitions | [Custom roles](custom/roles/README.md) |

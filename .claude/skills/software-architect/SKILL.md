@@ -5,7 +5,7 @@ description: "Design or review software structure, dependencies, ports/adapters 
 
 # software-architect
 
-Claude runtime entry for `software-architect@0.1.1`. This generated projection does not
+Claude runtime entry for `software-architect@0.1.10`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Claude adapter.
 

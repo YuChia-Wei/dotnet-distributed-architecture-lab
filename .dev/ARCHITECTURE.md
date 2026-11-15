@@ -1,6 +1,6 @@
 # Architecture
 
-This document describes the current architecture of `dotnet-mq-arch-lab` as supported by source and deployment evidence. Reusable .NET backend guidance lives under `.ai/core/knowledge/dotnet-backend/`; framework examples are not product facts.
+This document describes the current architecture of `dotnet-mq-arch-lab` as supported by source and deployment evidence. Reusable .NET backend guidance lives under `.ai/core/knowledge/dotnet/`; framework examples are not product facts.
 
 ## System Overview
 
@@ -105,7 +105,7 @@ The repository defines seven product hosts:
 - `MQArchLab.slnx` includes six product xUnit test projects, two supplier sample test projects, and one EF Core/Wolverine sample test project. It contains 27 `src/` projects, five `samples/` projects, and nine `tests/` projects.
 - `InventoryControl.Tests` owns Inventory command/reservation tests. Its real PostgreSQL checks are explicitly opt-in and skipped during ordinary test runs.
 - The target-owned analyzer and runtime-validation projects were retired by the owner-approved v0.9 AI-context upgrade and are absent from the repository and solution.
-- v0.13 removed the former bundled mechanical-validation provider. The remaining `.ai/core/knowledge/dotnet-backend/tooling/on-demand-mechanical-validation/` assets are reference-only recipes; they are not selected, activated, or wired into the target solution or build.
+- v0.13 removed the former bundled mechanical-validation provider. The remaining `.ai/core/knowledge/dotnet/tooling/on-demand-mechanical-validation/` assets are reference-only recipes; they are not selected, activated, or wired into the target solution or build.
 
 ## Truth Ownership
 

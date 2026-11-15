@@ -17,8 +17,10 @@ small local change does not need a requirements-to-release pipeline.
 
 The project owns its engineering rules, workflow policy, records, commands and
 external operations. This skill coordinates their use; it does not prescribe a
-record schema, storage path, provider or installation. It works without framework
-configuration, scripts or a workflow store. Resolve specialist capabilities from
+record schema, storage path, provider or installation. It works without a selected framework configuration, scripts or a workflow store.
+Optional [issue-operation settings](references/issue-control.md) select a route;
+missing or empty settings leave the route fully unspecified. Read and validate
+the project selection at each operation. Resolve specialist capabilities from
 those actually available; missing support stays visible.
 
 Since its restoration in `0.2.0`, this package supplies development stage

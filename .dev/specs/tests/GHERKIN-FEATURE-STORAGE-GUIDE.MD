@@ -2,7 +2,7 @@
 
 The target's retained `TEST-BDDFY-001` and `TEST-GWT-001` rules refer to this
 project-owned navigation entry. Use the selected, installer-owned
-[Gherkin Feature Storage Guide](../../../.ai/core/knowledge/dotnet-backend/guides/GHERKIN-FEATURE-STORAGE-GUIDE.MD)
+[Gherkin Feature Storage Guide](../../../.ai/core/knowledge/dotnet/testing/gherkin-feature-storage.md)
 for the conditional enablement, `tests/Features/` placement, naming and
 test-spec traceability conventions.
 

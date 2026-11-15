@@ -1,6 +1,6 @@
 metadata_version: 4
 id: spec-author
-version: 0.3.0
+version: 0.3.2
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -51,7 +51,7 @@ operations:
 knowledge_consumption:
 - id: common-specification
   package: engineering-common
-  version: 0.4.0
+  version: 0.4.2
   operations:
   - draft
   - normalize
