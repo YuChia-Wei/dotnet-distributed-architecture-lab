@@ -46,8 +46,8 @@ workflow:
   - step: 4
     description: Compare headings, links, code spans, paths, IDs, and normative keywords; report parity and unresolved wording.
 references:
-  - .ai/custom/roles/context-translator/references/translation-playbook.md
+  - .ai/project/roles/context-translator/references/translation-playbook.md
   - AGENTS.md
 examples: []
-human_guide: .ai/custom/roles/README.md
+human_guide: .ai/project/roles/README.md
 status: active

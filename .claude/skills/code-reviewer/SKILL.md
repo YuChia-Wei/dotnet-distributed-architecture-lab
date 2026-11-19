@@ -5,7 +5,7 @@ description: "Review selected code, a diff or concrete implementation guidance f
 
 # code-reviewer
 
-Claude runtime entry for `code-reviewer@0.2.15`. This generated projection does not
+Claude runtime entry for `code-reviewer@0.2.17`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Claude adapter.
 

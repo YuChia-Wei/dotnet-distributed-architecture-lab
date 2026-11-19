@@ -5,7 +5,7 @@ description: "Explore, design or review a bounded domain model using business la
 
 # domain-model-designer
 
-Codex runtime entry for `domain-model-designer@0.1.10`. This generated projection does not
+Codex runtime entry for `domain-model-designer@0.1.12`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Codex adapter.
 

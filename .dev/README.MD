@@ -9,7 +9,7 @@
 | 理解產品與 context 邊界 | [商務需求概覽](requirement/distributed-commerce-bounded-context-overview.md)、[架構](ARCHITECTURE.md) |
 | 修改行為或測試 | [可重建行為基準](requirement/reconstructable-system-baseline.md)、[規格](specs/)、[目標工程規則](ai-context/TARGET-ENGINEERING-RULES.md) |
 | 操作既有環境 | [Operations](operations/README.MD) 與該情境的具體操作指南 |
-| 維護協作 context | [AGENTS.md](../AGENTS.md)、[安裝選擇](../.ai/custom/installation.json)、[安裝清冊](../.ai/framework.lock)、[Codex 技能](../.agents/skills/)、[Claude 技能](../.claude/skills/)、[目標規則](ai-context/TARGET-ENGINEERING-RULES.md) |
+| 維護協作 context | [AGENTS.md](../AGENTS.md)、[安裝選擇](../.ai/project/installation.json)、[安裝清冊](../.ai/framework.lock)、[Codex 技能](../.agents/skills/)、[Claude 技能](../.claude/skills/)、[目標規則](ai-context/TARGET-ENGINEERING-RULES.md) |
 | 開始一項有限範圍工作 | [第一項工作指南](guides/first-task.md) |
 
 `project-config.yaml` 是來源檔案與既有決策的衍生 inventory，不能取代原始碼、

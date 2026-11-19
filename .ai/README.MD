@@ -2,20 +2,20 @@
 
 This project-owned entry describes the selected framework resources. Product
 facts and adopted rules belong to this repository; see the
-[project guide](../AGENTS.md), [saved installation selection](custom/installation.json)
+[project guide](../AGENTS.md), [saved installation selection](project/installation.json)
 and [resource index](INDEX.MD).
 
 - [Managed skills](core/skills/) and [knowledge](core/knowledge/) are installer-owned.
   Select an installed operation through the [Codex](../.agents/skills/) or
   [Claude](../.claude/skills/) entries and the saved installation selection.
-- [Installation selection](custom/installation.json) records the selected packages,
+- [Installation selection](project/installation.json) records the selected packages,
   adapters and target knowledge bindings. [framework.lock](framework.lock) is the
   installer-generated inventory; never hand-edit it.
-- [Project configuration](custom/framework.json) preserves selected artifact stores
+- [Project configuration](project/framework.json) preserves selected artifact stores
   and write-root constraints. It is separate from the optional
   [product inventory](../.dev/project-config.yaml).
-- [Custom roles](custom/roles/README.md) and the
-  [experimental promotion skill](custom/skills/standards-promotion-experimental/SKILL.md)
+- [Custom roles](project/roles/README.md) and the
+  [experimental promotion skill](project/skills/standards-promotion-experimental/SKILL.md)
   remain project-owned. Their presence does not prove invocation or acceptance.
 
 The initialized root entries, indexes and guides are project-owned documents.

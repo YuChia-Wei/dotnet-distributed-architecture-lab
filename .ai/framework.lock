@@ -1,5 +1,5 @@
 {
-  "candidate_identity": "subset:3:0.23.0:24138feb596f5fdfca0a9ec0537b7c4f1c428436:35019d6adba9e3f9eb0d5f6731a159c4196c81c7997ef567383145805c7bfad9",
+  "candidate_identity": "subset:3:0.23.1:5616b9236ab15cf41d16e16eca79f9171e039f3d:77176a2902845728ad805867de93954debf47e3a847f986c0272724069ad1a81",
   "catalog_document": {
     "adapters": [
       {
@@ -107,11 +107,11 @@
         "size": 7386
       },
       {
-        "git_blob": "7fd4105544bec4f6f7d487997b43b1a053e31f95",
+        "git_blob": "3dfd3317178f34f91709ed3cd613ab3a76e44ffd",
         "mode": "100644",
         "path": "src/distribution/installation.py",
-        "sha256": "e40fb99329279f6b63d61e9667fa88758822b38ab2de13280a7f327eda86bbf6",
-        "size": 42244
+        "sha256": "93b632ddbc1fbc204ee0c8b7efb325331beb44cc2e68ae6a32200d4400da28b0",
+        "size": 47799
       },
       {
         "git_blob": "d8b2272c5d53f273d5dc1a94999f2788888f3cb4",
@@ -121,11 +121,11 @@
         "size": 27127
       },
       {
-        "git_blob": "25d370faac4aa3c46c5b53f313f8a97bea8c05a6",
+        "git_blob": "82009d533a159c5a0136dbeaf425048034939b1d",
         "mode": "100644",
         "path": "src/distribution/installation_plan.py",
-        "sha256": "ebc3c8dec1389795c6df087d49ffe22ffd1a78d92c37cd5570496929cff84cd3",
-        "size": 26524
+        "sha256": "bc02c2336e60e92100f877f539aabfe59ccb463397672ceaaf61727e0576fece",
+        "size": 27976
       },
       {
         "git_blob": "86356c2bafd0a0f9cb7f9ece3f1e8a4e17bebb1e",
@@ -142,10 +142,10 @@
         "size": 5704
       },
       {
-        "git_blob": "2e22a95eaab55144434d06cf6c78bcca8679ab8f",
+        "git_blob": "f096f0474aa454865cf514231e3cf14838bb1208",
         "mode": "100644",
         "path": "src/distribution/manifest.yaml",
-        "sha256": "42dc3d8847d5f7a7d77bd5a06d5b8ebb6ed4d0ed777d9f7aa5edd8c96b6aafe9",
+        "sha256": "7a86ce23f6f65e0c46aa0dbdb48d13f20c3e865edf13538f7317a4835fae97df",
         "size": 41686
       },
       {
@@ -156,11 +156,11 @@
         "size": 25013
       },
       {
-        "git_blob": "056779fd69487c9d4fcd1343acdec2149c455b92",
+        "git_blob": "31968b83e2d02f6a2bd1d6cd27f5941f88c082d1",
         "mode": "100644",
         "path": "src/distribution/project_layout.py",
-        "sha256": "cd180d6f8f10272dc00a2d68df56c352b55582670f1d2d2e70842f86d8859424",
-        "size": 17784
+        "sha256": "a47df792d9d768b8e0fc874038c17eed5cca6c8b9ccebc49bd7afa982674704e",
+        "size": 28368
       },
       {
         "git_blob": "19cb339db3e7b1b5cbd4021410ed1302331be61c",
@@ -177,18 +177,18 @@
         "size": 8608
       },
       {
-        "git_blob": "4f3aab909f07b8cf5644e0558fc54e5ea1d31c13",
+        "git_blob": "b7bd7b155fd1a3718a6b838fb67d697385ae2e0a",
         "mode": "100644",
         "path": "src/distribution/skill_registry.py",
-        "sha256": "7db04528de191ad1f2c207f163f5c20c8b2fb696667293f04bbe3871f8e0e486",
-        "size": 34187
+        "sha256": "792ba6e4eb04f09b5954565c44a4353e9b197b60094393fb603a0b2fc1faf7c5",
+        "size": 34188
       },
       {
-        "git_blob": "617f20f5601241a31f0ec2e008a70419c1ca023d",
+        "git_blob": "d449e8d065be60dfba52d47f921c7bc5258bef15",
         "mode": "100644",
         "path": "src/distribution/subagent_policy.py",
-        "sha256": "4975bbbebf1134fbf080f3352a5d7595955557799a1918e2017435c0e16de704",
-        "size": 16744
+        "sha256": "27dd216803d659de2813674a370fb98b9b166a6887b1893a9f55fdd7e1bfb112",
+        "size": 17737
       },
       {
         "git_blob": "71606a1a72a4d2c11a615ca539925c589639539e",
@@ -198,10 +198,10 @@
         "size": 25581
       },
       {
-        "git_blob": "c13a2f5c6d60eb67786e594759e9dcd994b1acbf",
+        "git_blob": "dad6c79e63db7bd995674136aff3c532dd0ad6cf",
         "mode": "100644",
         "path": "src/knowledge/dotnet/README.md",
-        "sha256": "ffb3a6168a8ccc3e5640b639545e4fbee72713a8da8238323e7f42830f25ea47",
+        "sha256": "f6a4474a1760dab087dd18bf8317910467b08f14ae1134d1c81fb8f8d4817f24",
         "size": 5266
       },
       {
@@ -219,11 +219,11 @@
         "size": 3201
       },
       {
-        "git_blob": "3dea743435b96fb9f97d59334385f5efb78341b5",
+        "git_blob": "354b24692d9c4bda301f37ed07aa86855792301e",
         "mode": "100644",
         "path": "src/knowledge/dotnet/architecture/ddd-cqrs/aggregate-standards.md",
-        "sha256": "b50107b539d69511e7c60ee5cb6287ef31a16430fc77ee3664ff913f13dd8a2d",
-        "size": 19358
+        "sha256": "13199853ade6aa058c45b08d680ef79575e1e42328ca22f57f7427db0644e2a0",
+        "size": 19852
       },
       {
         "git_blob": "a74c580f6fc05064b6c1ea089ef080d4e2a85df1",
@@ -261,10 +261,10 @@
         "size": 11770
       },
       {
-        "git_blob": "8f3069848849d6c0ddb20227ef03f99146e8dd71",
+        "git_blob": "602a8f43a91b05eac57ed361b36994b717f0a4af",
         "mode": "100644",
         "path": "src/knowledge/dotnet/content-package.yaml",
-        "sha256": "84dc4a096ba61ee8a072a53cf9306fd1eeea8cb7dc36329993ff6c482be23702",
+        "sha256": "21c26cc39276dc3d10999d2b2d0bd74fb41bafaa1120d6b45f9d61b057c29388",
         "size": 107818
       },
       {
@@ -296,10 +296,10 @@
         "size": 1410
       },
       {
-        "git_blob": "d7fce80e867610067cff0f4bcb6f787c4bc59da9",
+        "git_blob": "83145c84fc3421b062a66efdf9c7a49c99c1b0bd",
         "mode": "100644",
         "path": "src/knowledge/dotnet/engineering-rule-catalog.yaml",
-        "sha256": "e389ec69d6b9514ff8fe825d518f758fbe373f89288a1f37593af5aeb0443b66",
+        "sha256": "4a7758440dab3232a29412d003b61a4341c4d597d721312c0999b81b5b9f90b5",
         "size": 82589
       },
       {
@@ -317,11 +317,11 @@
         "size": 5782
       },
       {
-        "git_blob": "6792bcd50e36e67eeff3479012c2db94ff25d677",
+        "git_blob": "3f6dcf79f1e4b25e5edbf16cfd98229009b8baab",
         "mode": "100644",
         "path": "src/knowledge/dotnet/integration/persistence/archive-standards.md",
-        "sha256": "640f95c29e552086a2043d92f4711624af4cbe77543d8c4ac7db20c25fbfb821",
-        "size": 8932
+        "sha256": "c5570c8558f15c7113e82abfea3fb1a2ca84ab355f4bcfef16e15533da4307b2",
+        "size": 8979
       },
       {
         "git_blob": "4552417bc99bc55d89001c422e05725f0acbe8ce",
@@ -457,11 +457,11 @@
         "size": 5422
       },
       {
-        "git_blob": "8f680afb66f2841646e3ddae467e20d58913bacb",
+        "git_blob": "613e8562fae329f1d0017a26a86428d9c981d826",
         "mode": "100644",
         "path": "src/knowledge/dotnet/testing/test-standards.md",
-        "sha256": "d9f55548b4068b8a550766f8c130ff9a95cfa8a59b0d0fc92b3981b21993fa64",
-        "size": 18941
+        "sha256": "ef48f4dca5af6d63afced986469c5f17e082d66c45c8ae70fbee936acc0dca27",
+        "size": 19223
       },
       {
         "git_blob": "3ed33b840abf20f713721e6efa6764dd795a3a27",
@@ -478,11 +478,11 @@
         "size": 1331
       },
       {
-        "git_blob": "43689b985a0c7036910960c7b91c3b0719610649",
+        "git_blob": "06c3f964e9b461bbddfac126feafd41c77b1c244",
         "mode": "100644",
         "path": "src/knowledge/dotnet/tooling/generation/DELIVERY.md",
-        "sha256": "6dfb1a93efd4c77cc14eb1fdb919a9c226461d8d4d6f665349a47497f5f8c947",
-        "size": 9181
+        "sha256": "363bb4cbc4a0dd0fa36f18cca1b2cd6cacdb2b970cd3b663cc73f6730a128ab9",
+        "size": 9887
       },
       {
         "git_blob": "6c38d314909c7fc2f2263ec485e755554946baba",
@@ -492,11 +492,11 @@
         "size": 4760
       },
       {
-        "git_blob": "09596e0e1895e43ff8a4bd77f121d683bff3ac70",
+        "git_blob": "70236519c4ab4a41d312131a3828961023cfd8bd",
         "mode": "100644",
         "path": "src/knowledge/dotnet/tooling/generation/snippet-tool/README.md",
-        "sha256": "afa84e47f3c950ccfb624983aff9c44459e378ca4326a9672f6ef207fdf2cc68",
-        "size": 7819
+        "sha256": "3712664d46f7fbadf9dc32e294e143949214c3d2f04293706eabb5447fa27f96",
+        "size": 8407
       },
       {
         "git_blob": "53a624c037b0dc4d5aeb9d0f0e433bc898abcb23",
@@ -660,10 +660,10 @@
         "size": 4294
       },
       {
-        "git_blob": "b8a4bbbe8c46721d5f80dd4ae29774b72de867c2",
+        "git_blob": "4ccd40778562385d7dca977aae33a48a94c70c85",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/content-package.yaml",
-        "sha256": "e100ecd79fe76f5da25c3333345bd4bd998125a2f1df006e6ac1902e28915922",
+        "sha256": "3000da9f7528b0318562888cd0b511d1a9e67db37ab6ed751cc34d88aa40c912",
         "size": 30160
       },
       {
@@ -821,11 +821,11 @@
         "size": 4543
       },
       {
-        "git_blob": "bc94780ef5f39ed19863ebcdc1459df8180d2190",
+        "git_blob": "9c73d73a529e33b79889d172ddd6d6fba1b3ce0a",
         "mode": "100644",
         "path": "src/knowledge/engineering-common/references/PROMPT-PORTABILITY-RULES.md",
-        "sha256": "00686dfb22c1c0e22df09758104e46748b855d5eb01f9328c927388267258f61",
-        "size": 1721
+        "sha256": "65373b0f93103380a01f2743d59a93e1be1c8c74422b1bd21e739a31bf2eaba8",
+        "size": 2298
       },
       {
         "git_blob": "ec2eb31e5d1a6a6e850654e24fb6a0484328a432",
@@ -1052,10 +1052,10 @@
         "size": 4213
       },
       {
-        "git_blob": "85761d44387eb22c70c71ba044f9f2a9b1e2d970",
+        "git_blob": "734ecdced4c60042a294571dd0aa8742373a4c98",
         "mode": "100644",
         "path": "src/skills/ai-context-init/skill-package.yaml",
-        "sha256": "f80cd632c21aecf78772a8c1beba2d2bacfe469168364f31a21cc0408f245e84",
+        "sha256": "bec71576eba339ed6fa41f1363cb07c18d27a180613ceb005217f301e3e43c7b",
         "size": 1915
       },
       {
@@ -1108,11 +1108,11 @@
         "size": 808
       },
       {
-        "git_blob": "e71acb4b58a309263ef6c2a97a89ad80e5d627c9",
+        "git_blob": "3f533524ca6428740b1621622cf1864379466cee",
         "mode": "100644",
         "path": "src/skills/ai-context-init/templates/public-root/AGENTS.md",
-        "sha256": "a2beac55c2d4e5204d791c827835c9b4e32c0bac6a59c965b83f59204e6b431f",
-        "size": 8233
+        "sha256": "1dfc5df919c30022575de28c1c9409f4dc4431d24064399175c3ee3bfd3ee463",
+        "size": 8129
       },
       {
         "git_blob": "c63fcb8c22ff7643f8272fbddc231e3c5db5c035",
@@ -1150,10 +1150,10 @@
         "size": 11495
       },
       {
-        "git_blob": "ca7a7f937273ddf8e3970d0e22ed4efb246e0baf",
+        "git_blob": "d2c32adab7a2f2961a0e884fa63b27d140d5c2e8",
         "mode": "100644",
         "path": "src/skills/code-reviewer/skill-package.yaml",
-        "sha256": "3480e758492094c5ce775345477b973869fa0f644433c548d184586c1699df62",
+        "sha256": "384da1ce27c0f5787ca305cef6ca424b1622625bed8044ab40c6b55b3078be0d",
         "size": 2093
       },
       {
@@ -1213,10 +1213,10 @@
         "size": 3182
       },
       {
-        "git_blob": "42d13fb5f4436456edf8237275d314f384277e58",
+        "git_blob": "591f3e44e696b961a5d23039300675a5d000d1b5",
         "mode": "100644",
         "path": "src/skills/domain-model-designer/skill-package.yaml",
-        "sha256": "f8ece5423fa71a790cd3904d84612f6b23c845b1fe49cf1a6c7def5ae9d7818a",
+        "sha256": "70508432bf6792c0f8f9fc372c85a5df367acb83eab8f63393b59daa1e630a7e",
         "size": 3445
       },
       {
@@ -1297,10 +1297,10 @@
         "size": 11423
       },
       {
-        "git_blob": "2b65f5755c3bb32c795884a32b9f76a09f9ead6c",
+        "git_blob": "0f1bd485a6d56510bdb01eafe43bfa24e8816e83",
         "mode": "100644",
         "path": "src/skills/local-change-implementer/skill-package.yaml",
-        "sha256": "72ee4c9806001ae3ee36032bbca45ddeead04d65052156122dc6741572de8eee",
+        "sha256": "0de2bc6be36c1b45bc171dd101682c355e80b51b1f36fef8d1e7777b01405f12",
         "size": 2062
       },
       {
@@ -1311,11 +1311,11 @@
         "size": 3225
       },
       {
-        "git_blob": "cf0d8f68e49c49542898fe00db585953ac11c6f6",
+        "git_blob": "eb95503408c35f7df412997c9838613b2a441436",
         "mode": "100644",
         "path": "src/skills/pr-author/references/configuration.md",
-        "sha256": "f5384356276e53a93e819331bf88f3dc24d4d09baa138c7063041a146c2f2c79",
-        "size": 4237
+        "sha256": "dde7c148296297901ced0cc1bf4c1a62ffff4b46d5a75c96f0507a2d5a426e37",
+        "size": 4279
       },
       {
         "git_blob": "73afed4458724e10c3cefcf370cd75de6295e36c",
@@ -1325,10 +1325,10 @@
         "size": 1649
       },
       {
-        "git_blob": "b15eacf4b5e36da34dc053f5fb30a245dbc8fa66",
+        "git_blob": "6965ac40f015f2184f31ba84568a8f0215da298c",
         "mode": "100644",
         "path": "src/skills/pr-author/references/github.md",
-        "sha256": "54ba078200067cb0a70ee339823b40d30f3caeed291d9a342e523dc4540a8c05",
+        "sha256": "4beb7c6e0bdbfd5553bdc9bde9d03754c8e429db847982bb08a81f1ff034506f",
         "size": 6613
       },
       {
@@ -1346,24 +1346,24 @@
         "size": 9171
       },
       {
-        "git_blob": "1b5707dfdfb88ee71631b9e9d2418cb0dd4d7fd5",
+        "git_blob": "19d72b785bcafec7336ac92065f277457cf40483",
         "mode": "100644",
         "path": "src/skills/pr-author/scripts/github.py",
-        "sha256": "dd9545259f2ae34c27f053a1f70d9262ff39f7a66deb88d9f36dfeffc241455c",
+        "sha256": "6538cf4eafddd868c40b223130d037121bc678cc97d06e6db91946f8a946659f",
         "size": 26619
       },
       {
-        "git_blob": "7f3510e3c3275301b54af676b44ba410e08478a7",
+        "git_blob": "23ff947e4a5da77e27bfea1e3e8a66c5feb6ac4d",
         "mode": "100644",
         "path": "src/skills/pr-author/scripts/pr.py",
-        "sha256": "d249edb2a4c5b419412deb47cc7a5d15b42437c36c9e6852ceca0a341cc992e0",
+        "sha256": "21def5ce3bb34bae51b557bff83c15f11f04f1e8878b341dbdeb336532d648a8",
         "size": 66059
       },
       {
-        "git_blob": "f0d4d1db402304b4e1d1287c31603ca7b7532aad",
+        "git_blob": "a0849e5f62fcdcdefcd678f899dc4e8abe13bedd",
         "mode": "100644",
         "path": "src/skills/pr-author/skill-package.yaml",
-        "sha256": "a5a231a07390ac5714fc694f70aed67db029e3c9eae17fbe0bd7ae85bd6274ee",
+        "sha256": "0497c747154e43f03b860660955764b852bfd6538b9ab37e707cc4fb21104d75",
         "size": 5520
       },
       {
@@ -1486,10 +1486,10 @@
         "size": 3000
       },
       {
-        "git_blob": "76fa657b92505a01edbb7e9c4c85a5dd518d55c7",
+        "git_blob": "c9b5952e9153ea221e1626847ddf76a1b213093d",
         "mode": "100644",
         "path": "src/skills/requirement-author/skill-package.yaml",
-        "sha256": "e7d1add6d8ee75f22d0400b550c7add2becb845aae80d148c3ba2cb21721756c",
+        "sha256": "6f71305bbb82bd779ccc2ac0928538efe6e9884b81547245284b54d051ef89d1",
         "size": 2552
       },
       {
@@ -1549,10 +1549,10 @@
         "size": 2844
       },
       {
-        "git_blob": "60a074c1d51202dc45e918d7a9887fde622d6da9",
+        "git_blob": "0ce7ae56ab97b906a4b9fe3eeb99ce122c73c8b2",
         "mode": "100644",
         "path": "src/skills/slice-implementer/skill-package.yaml",
-        "sha256": "95ccf7d7f3c16b499446fcfd2b27d2e5188330572eab9e0985ab70f69c270440",
+        "sha256": "567745c46df32c5b08f92357fd4ded657cf560b60ff425dfaee6fa06aaee85f1",
         "size": 2673
       },
       {
@@ -1584,10 +1584,10 @@
         "size": 3620
       },
       {
-        "git_blob": "aaeffaa71947910e21539478c2bde83cd820c280",
+        "git_blob": "fadd50984b6603bb841ab10b68478054e152efed",
         "mode": "100644",
         "path": "src/skills/software-architect/skill-package.yaml",
-        "sha256": "5c8f32b30b7fe05d7ea1b744d91748d2b6d04a5dc27618a2c5c88366bac40252",
+        "sha256": "cf9cbb0ed9e8e16d0196cd78582ebdb76cb0f9c285faaa3ad02c0b54ef07687a",
         "size": 2579
       },
       {
@@ -1682,10 +1682,10 @@
         "size": 1981
       },
       {
-        "git_blob": "60d85a8aba91351679b4f2069fb8d614a2715bb7",
+        "git_blob": "da2b2d6a4184fdf18dcc154a81c22cee5ab77ea2",
         "mode": "100644",
         "path": "src/skills/spec-author/skill-package.yaml",
-        "sha256": "4656b6f37152b86027324da402a9265cf55e1d37819e35a0909ecb3e32d00dcd",
+        "sha256": "48643a390074d7936dabec895780a861f8fde816d4a0ddb6e353ed2adc89c089",
         "size": 2036
       },
       {
@@ -1759,10 +1759,10 @@
         "size": 9885
       },
       {
-        "git_blob": "5550dd537e45b93f26354bb7379c2f089e3618c4",
+        "git_blob": "2f51639243c1ae5422c17b7086cc6f84a07f21b2",
         "mode": "100644",
         "path": "src/skills/test-designer/skill-package.yaml",
-        "sha256": "31ee7026733a131541127218fe0374d3739828b7fd9b8efa1d1fc97a8153c4d4",
+        "sha256": "b3ff44ad0f56c120056f11cf58408ea1256cccf8709cd4ddb22f56f013b34aba",
         "size": 2377
       },
       {
@@ -1836,10 +1836,10 @@
         "size": 828
       },
       {
-        "git_blob": "5e2080899da3f7fa2623e5bad1b888dff1056f4a",
+        "git_blob": "b050c34a6ecdccbbd8f93150d55780ed3a2c189c",
         "mode": "100644",
         "path": "src/skills/user-story-author/skill-package.yaml",
-        "sha256": "a8968eeab0965e547020c9a62ebc7b32557f57cc5e7b0a309039aceb36436086",
+        "sha256": "87b98043790d404128d0a1728a1b98929bbe2060a1bfaa54ebb05c8ecfbcb4b5",
         "size": 2787
       },
       {
@@ -2151,24 +2151,24 @@
         "size": 1863
       },
       {
-        "git_blob": "9c78b9c6bed0370f2215cfd9a0e39280fbb3dc25",
+        "git_blob": "ba904fbdeb95de1798e6a5d93a884e1c6f650831",
         "mode": "100644",
         "path": "src/sub-agents/context-translator/runtime/claude.md",
-        "sha256": "4fa4f154a6ed2e190eba4cbb23bbfa9bc898d5eff3c17fb14f2edd3af651d30a",
-        "size": 1752
+        "sha256": "a2776d9093025d2388fe6444b9b70a990ee73182f6c0d4f543f4e6c092ed1888",
+        "size": 1577
       },
       {
-        "git_blob": "f039d6a995d25aefd4b4787a5d30d22e275a81c7",
+        "git_blob": "c204676c6546495d689fb99b05fba69af3b845ad",
         "mode": "100644",
         "path": "src/sub-agents/context-translator/runtime/codex.toml",
-        "sha256": "115037c5bbba8ecad9b3a4294cdf36aad46e4c463180e0e64e23ab655691fdee",
-        "size": 1568
+        "sha256": "b77490cf43499ce807e94737d5ae00a354a8a0fc748a28823654e5948c46e00d",
+        "size": 1420
       },
       {
-        "git_blob": "f118015070684aa2c1e4367ea9a2291e5fae3b88",
+        "git_blob": "ae3db8ab920224f185ac1bd9ad222904605fb9f5",
         "mode": "100644",
         "path": "src/sub-agents/context-translator/sub-agent-package.yaml",
-        "sha256": "cd3914db2df9d38c0394b3a0bb96238a9e254c0eb5dc53ae770987b88b678b17",
+        "sha256": "8dd6b0ffcf045276b69c43b8701a4602186e77f26a6b243cb05d81e63edb9779",
         "size": 267
       },
       {
@@ -2186,24 +2186,24 @@
         "size": 983
       },
       {
-        "git_blob": "bec1290e80796d94bc498ea981dfc035da7127c0",
+        "git_blob": "05ff2184d96b4127792b5bc8c99e4f81caa089d6",
         "mode": "100644",
         "path": "src/sub-agents/evidence-report-synthesizer/runtime/claude.md",
-        "sha256": "dbaf71be5e7f2b6c467cd16d9b74f694c626ad3e5242a46ce0cc7a96a291d11a",
-        "size": 2883
+        "sha256": "f13d0fa7b202369397c6cbb924161d510da997a2275e69d662bd7ffb20fd7c82",
+        "size": 2708
       },
       {
-        "git_blob": "89fd84b0ff7a57a0ff5c31d70e6823ebfea0f6b6",
+        "git_blob": "2a7dd8475aacdff87d077cc20ac57786861c7efe",
         "mode": "100644",
         "path": "src/sub-agents/evidence-report-synthesizer/runtime/codex.toml",
-        "sha256": "cd7c1d768138c9e59302a6d327dbd9d99c00c68c5c137d46146e3fad71db292f",
-        "size": 2373
+        "sha256": "99322f6ac787ff34884948287c8c5ff0c2d45751322537fae14c1c40223acd35",
+        "size": 2225
       },
       {
-        "git_blob": "4235fbb05d4403a98bb87bd1b831572eaa358874",
+        "git_blob": "30b9dc82b5e5d0b7e7f6df34e26fb0523194444e",
         "mode": "100644",
         "path": "src/sub-agents/evidence-report-synthesizer/sub-agent-package.yaml",
-        "sha256": "ea93e529fc6bacb05ca80e17a4a9cb74193155954c9a3f3248c079e52ff1cb9b",
+        "sha256": "949a87459bbcf2eaeb5a5aa5ce6133e18a3c2b720415eaeaa83a791f320223b5",
         "size": 290
       },
       {
@@ -2221,24 +2221,24 @@
         "size": 2573
       },
       {
-        "git_blob": "f153f7119792f68b5ac91dda03a98cf0fa832980",
+        "git_blob": "515dbe02e616a1473364ae717f3531bc0d2f6537",
         "mode": "100644",
         "path": "src/sub-agents/fixed-head-independent-auditor/runtime/claude.md",
-        "sha256": "715a468910fd15d5c4493a62d4bb56060e88ad823ac0f83690158a23d19f689e",
-        "size": 3796
+        "sha256": "1a22141532f9876dee2c51a1744e58e6a2a9bcb6e8429e70cf4e2684dbc6a534",
+        "size": 3621
       },
       {
-        "git_blob": "a80b60f7a645fe7f783e76370ca3edea49b1dfe5",
+        "git_blob": "f5c8ac58f2a3519ee7cebf7759f4f62cc24e12de",
         "mode": "100644",
         "path": "src/sub-agents/fixed-head-independent-auditor/runtime/codex.toml",
-        "sha256": "20e51f1008100a22dda602bf524f1f6604c0f8e5487ca71dd0639629db824ba8",
-        "size": 3286
+        "sha256": "a88b70d59bda860532549e84844d51d3ff5b1301334fc92d8e48c1980eb3696c",
+        "size": 3138
       },
       {
-        "git_blob": "31ac091d9190c074e0b814228caee6b3c4f517fc",
+        "git_blob": "57522d00a7eb442843e1baf37719b794078f5554",
         "mode": "100644",
         "path": "src/sub-agents/fixed-head-independent-auditor/sub-agent-package.yaml",
-        "sha256": "5d553de1ca720d59d0e7c4b4e411cd6240d62163a3fce44c888901ce57b012f3",
+        "sha256": "8ad09ab116e733df9aa5bb703fb4a8f8f427bceab85b8d3b7d471dd1b78637af",
         "size": 296
       },
       {
@@ -2256,32 +2256,32 @@
         "size": 949
       },
       {
-        "git_blob": "2ae11f3e52fb63aaf794de3c8fe18fd01435d2fc",
+        "git_blob": "ee417e4dc0425a8ec93bb6a7069ebda163672783",
         "mode": "100644",
         "path": "src/sub-agents/mechanical-evidence-worker/runtime/claude.md",
-        "sha256": "53a1c6fe2ac2e3df6d989b688d8d8ae9c105b26646c3ec2859ce204aca005a15",
-        "size": 5489
+        "sha256": "bf23c239a0039a7ad9dd2bc5a107aa10647196179aca35bfb9f68f35fe38bf15",
+        "size": 5567
       },
       {
-        "git_blob": "7fcd190af93fadc7e4b9f635c3a40e4434d26228",
+        "git_blob": "c0f694b9e102dd8e609201e8d2d0b9fde71498fd",
         "mode": "100644",
         "path": "src/sub-agents/mechanical-evidence-worker/runtime/codex.toml",
-        "sha256": "b589d2935405275e4a31da2e7a8dbae2dd61e8e5f34f02d990ce0139c41f377c",
-        "size": 4979
+        "sha256": "489f18484385f4e8ffd2b4694f9c4a27bd6c24472ef6d728451c4e3c70a0b54d",
+        "size": 5084
       },
       {
-        "git_blob": "dc582403f589b251561937ad9ee3260e25ef692b",
+        "git_blob": "207304a98083105016a74ab5faa13af2150affe0",
         "mode": "100644",
         "path": "src/sub-agents/mechanical-evidence-worker/sub-agent-package.yaml",
-        "sha256": "de4e72335f2d541de229a8fdd48c6f490c233dbbc3dfebf8feb0a51ae3fa497f",
+        "sha256": "5bbc03efc2fd5072894ef6e3fb218f2d1458d5b0f636090ed1830147c3c99864",
         "size": 283
       },
       {
-        "git_blob": "64a0c2088140371ecd06de2be63bf859e9670d9b",
+        "git_blob": "aa75788f7de2b9e6daaa372a70287272bc86289a",
         "mode": "100644",
         "path": "src/sub-agents/mechanical-evidence-worker/sub-agent.yaml",
-        "sha256": "6747c5809b9c383dc8dc4389cb8599884c22647ce709ce0ad7c4f17897b27b7a",
-        "size": 2491
+        "sha256": "fb6b4b7323699edc7aa42a56a4df3e4af779e4f1c8b51e0c92eb7fbb3ccc26f1",
+        "size": 2601
       },
       {
         "git_blob": "3dae1314efa19bc4a55a96c31662c8e4661abc36",
@@ -2291,24 +2291,24 @@
         "size": 809
       },
       {
-        "git_blob": "4730c83ca1a686b19c0caa610be184bdf4cb7bf5",
+        "git_blob": "b4b14a8d46a7460507d54201c77a105a63f4397a",
         "mode": "100644",
         "path": "src/sub-agents/reconciliation-worker/runtime/claude.md",
-        "sha256": "d7c577e063cd8df4209cc78c43c4eb935ed6890340c4d65115af069d32147c63",
-        "size": 2965
+        "sha256": "ffd0eddc27eedcde3cdb9bc0f3d1875df871aaa84746421e592e74be1e764e77",
+        "size": 2790
       },
       {
-        "git_blob": "97a8bb28c15e92bad6de0dba7bf83663af21d2d9",
+        "git_blob": "1dc88e48db21cd93aced790d02829b826151ba71",
         "mode": "100644",
         "path": "src/sub-agents/reconciliation-worker/runtime/codex.toml",
-        "sha256": "18204e694464f5a5fc382f2aa2921119be26c692db26c92c628d5a14edcc8515",
-        "size": 2455
+        "sha256": "0acd3330d0c5a0a9ceb9b3785ef265378b877e8ffe6dac7d87eb8933c09c1f27",
+        "size": 2307
       },
       {
-        "git_blob": "37fe3ad508e6836dcaed114ecc14e438bab8b79f",
+        "git_blob": "71dc1792016ddd68c8e49c1861bd0216b862c2c0",
         "mode": "100644",
         "path": "src/sub-agents/reconciliation-worker/sub-agent-package.yaml",
-        "sha256": "e5f62fa000001a11a5e59f4ae380ff8e74f069601c850d13fd1003d7700282d8",
+        "sha256": "2c02a9cd2165d5f4699bc3bb51bad766c064497e66edc666be0373bffbe5c4cb",
         "size": 273
       },
       {
@@ -2326,24 +2326,24 @@
         "size": 912
       },
       {
-        "git_blob": "0b5329eced1363119d3872ab6972ed2c7e185bd4",
+        "git_blob": "b421b2710a56f9692d2232f830af1b0d19747a47",
         "mode": "100644",
         "path": "src/sub-agents/semantic-governance-analyst/runtime/claude.md",
-        "sha256": "457baac50c6627356e8adab9052e4db6bcb34ca12124314803f4c92a640eeccd",
-        "size": 2948
+        "sha256": "9aeff1be3a860c7c4b546273305f9179eb9eb8b7fa7aa9ab49ceaf46b345a97a",
+        "size": 2773
       },
       {
-        "git_blob": "1932609cd1fc34f0d0c88c515dc0675ea6ba1f7f",
+        "git_blob": "1e8a0779d56fefa0e1b0bf21ad5bf0965c8a2e49",
         "mode": "100644",
         "path": "src/sub-agents/semantic-governance-analyst/runtime/codex.toml",
-        "sha256": "5d262dfffe9950d1ce65f87311059111b5b4150b7e8ffa4bae31fbb82790410d",
-        "size": 2438
+        "sha256": "dd9cc9d6fb1d10db0120ecb81ac5eee93cf4918766dab7f6d317325ca039c0f9",
+        "size": 2290
       },
       {
-        "git_blob": "e5fd6485162d8756039390b0942e71e9c7821f47",
+        "git_blob": "4e855d8921a36af1eeaaf5292fd9a86b8fef460a",
         "mode": "100644",
         "path": "src/sub-agents/semantic-governance-analyst/sub-agent-package.yaml",
-        "sha256": "3d66c05a31b33fb4ae6a7dad3a5fc80b81c93ed963c21de969609a7acb408512",
+        "sha256": "ecfcb3f31103e83cd765e44ee93a6c03bd095492b3d4915ffb76ab77cc31a082",
         "size": 293
       },
       {
@@ -2459,10 +2459,10 @@
           {
             "id": "engineering-common",
             "kind": "knowledge",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
-        "version": "0.3.3"
+        "version": "0.3.5"
       },
       {
         "id": "engineering-common",
@@ -2510,7 +2510,7 @@
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.4.2"
+        "version": "0.4.3"
       },
       {
         "id": "adr-author",
@@ -2584,7 +2584,7 @@
         "metadata_version": 3,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.5"
+        "version": "0.2.6"
       },
       {
         "id": "code-reviewer",
@@ -2601,17 +2601,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.15"
+        "version": "0.2.17"
       },
       {
         "id": "diagnostic-analyst",
@@ -2645,17 +2645,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.1.10"
+        "version": "0.1.12"
       },
       {
         "id": "lesson-author",
@@ -2692,17 +2692,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.17"
+        "version": "0.2.19"
       },
       {
         "id": "pr-author",
@@ -2723,7 +2723,7 @@
         "metadata_version": 2,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.1.1"
+        "version": "0.1.2"
       },
       {
         "id": "problem-frame-author",
@@ -2765,11 +2765,11 @@
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.5"
+        "version": "0.2.6"
       },
       {
         "id": "slice-implementer",
@@ -2792,17 +2792,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.17"
+        "version": "0.2.19"
       },
       {
         "id": "software-architect",
@@ -2821,17 +2821,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.1.10"
+        "version": "0.1.12"
       },
       {
         "id": "software-development-orchestrator",
@@ -2870,11 +2870,11 @@
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.3.2"
+        "version": "0.3.3"
       },
       {
         "id": "spec-compliance-validator",
@@ -2910,17 +2910,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.4.13"
+        "version": "0.4.15"
       },
       {
         "id": "user-story-author",
@@ -2945,11 +2945,11 @@
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.3"
+        "version": "0.2.4"
       },
       {
         "id": "workflow-board-experimental",
@@ -3036,7 +3036,7 @@
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.1"
+        "version": "0.2.2"
       },
       {
         "id": "evidence-report-synthesizer",
@@ -3052,7 +3052,7 @@
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.1"
+        "version": "0.2.2"
       },
       {
         "id": "fixed-head-independent-auditor",
@@ -3068,7 +3068,7 @@
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.1"
+        "version": "0.2.2"
       },
       {
         "id": "mechanical-evidence-worker",
@@ -3084,7 +3084,7 @@
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.1"
+        "version": "0.2.2"
       },
       {
         "id": "reconciliation-worker",
@@ -3100,7 +3100,7 @@
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.1"
+        "version": "0.2.2"
       },
       {
         "id": "semantic-governance-analyst",
@@ -3116,7 +3116,7 @@
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.1"
+        "version": "0.2.2"
       }
     ],
     "generator": {
@@ -3207,11 +3207,11 @@
           "size": 7386
         },
         {
-          "git_blob": "7fd4105544bec4f6f7d487997b43b1a053e31f95",
+          "git_blob": "3dfd3317178f34f91709ed3cd613ab3a76e44ffd",
           "mode": "100644",
           "path": "src/distribution/installation.py",
-          "sha256": "e40fb99329279f6b63d61e9667fa88758822b38ab2de13280a7f327eda86bbf6",
-          "size": 42244
+          "sha256": "93b632ddbc1fbc204ee0c8b7efb325331beb44cc2e68ae6a32200d4400da28b0",
+          "size": 47799
         },
         {
           "git_blob": "d8b2272c5d53f273d5dc1a94999f2788888f3cb4",
@@ -3221,11 +3221,11 @@
           "size": 27127
         },
         {
-          "git_blob": "25d370faac4aa3c46c5b53f313f8a97bea8c05a6",
+          "git_blob": "82009d533a159c5a0136dbeaf425048034939b1d",
           "mode": "100644",
           "path": "src/distribution/installation_plan.py",
-          "sha256": "ebc3c8dec1389795c6df087d49ffe22ffd1a78d92c37cd5570496929cff84cd3",
-          "size": 26524
+          "sha256": "bc02c2336e60e92100f877f539aabfe59ccb463397672ceaaf61727e0576fece",
+          "size": 27976
         },
         {
           "git_blob": "86356c2bafd0a0f9cb7f9ece3f1e8a4e17bebb1e",
@@ -3249,11 +3249,11 @@
           "size": 25013
         },
         {
-          "git_blob": "056779fd69487c9d4fcd1343acdec2149c455b92",
+          "git_blob": "31968b83e2d02f6a2bd1d6cd27f5941f88c082d1",
           "mode": "100644",
           "path": "src/distribution/project_layout.py",
-          "sha256": "cd180d6f8f10272dc00a2d68df56c352b55582670f1d2d2e70842f86d8859424",
-          "size": 17784
+          "sha256": "a47df792d9d768b8e0fc874038c17eed5cca6c8b9ccebc49bd7afa982674704e",
+          "size": 28368
         },
         {
           "git_blob": "19cb339db3e7b1b5cbd4021410ed1302331be61c",
@@ -3270,18 +3270,18 @@
           "size": 8608
         },
         {
-          "git_blob": "4f3aab909f07b8cf5644e0558fc54e5ea1d31c13",
+          "git_blob": "b7bd7b155fd1a3718a6b838fb67d697385ae2e0a",
           "mode": "100644",
           "path": "src/distribution/skill_registry.py",
-          "sha256": "7db04528de191ad1f2c207f163f5c20c8b2fb696667293f04bbe3871f8e0e486",
-          "size": 34187
+          "sha256": "792ba6e4eb04f09b5954565c44a4353e9b197b60094393fb603a0b2fc1faf7c5",
+          "size": 34188
         },
         {
-          "git_blob": "617f20f5601241a31f0ec2e008a70419c1ca023d",
+          "git_blob": "d449e8d065be60dfba52d47f921c7bc5258bef15",
           "mode": "100644",
           "path": "src/distribution/subagent_policy.py",
-          "sha256": "4975bbbebf1134fbf080f3352a5d7595955557799a1918e2017435c0e16de704",
-          "size": 16744
+          "sha256": "27dd216803d659de2813674a370fb98b9b166a6887b1893a9f55fdd7e1bfb112",
+          "size": 17737
         },
         {
           "git_blob": "71606a1a72a4d2c11a615ca539925c589639539e",
@@ -3531,10 +3531,10 @@
         "version": "0.2.0"
       }
     ],
-    "release_version": "0.23.0",
+    "release_version": "0.23.1",
     "source": {
-      "commit": "24138feb596f5fdfca0a9ec0537b7c4f1c428436",
-      "tree": "1755760b73a7f8c433d63f6c608315e82bff3437"
+      "commit": "5616b9236ab15cf41d16e16eca79f9171e039f3d",
+      "tree": "a4db60670fa57ff7bac82c944d8df4c60f95ebc6"
     }
   },
   "catalog_inventory": {
@@ -3572,10 +3572,10 @@
         "owner": "dotnet",
         "path": "packages/knowledge/dotnet/README.md",
         "source": {
-          "git_blob": "c13a2f5c6d60eb67786e594759e9dcd994b1acbf",
+          "git_blob": "dad6c79e63db7bd995674136aff3c532dd0ad6cf",
           "mode": "100644",
           "path": "src/knowledge/dotnet/README.md",
-          "sha256": "ffb3a6168a8ccc3e5640b639545e4fbee72713a8da8238323e7f42830f25ea47",
+          "sha256": "f6a4474a1760dab087dd18bf8317910467b08f14ae1134d1c81fb8f8d4817f24",
           "size": 5266
         }
       },
@@ -3611,11 +3611,11 @@
         "owner": "dotnet",
         "path": "packages/knowledge/dotnet/architecture/ddd-cqrs/aggregate-standards.md",
         "source": {
-          "git_blob": "3dea743435b96fb9f97d59334385f5efb78341b5",
+          "git_blob": "354b24692d9c4bda301f37ed07aa86855792301e",
           "mode": "100644",
           "path": "src/knowledge/dotnet/architecture/ddd-cqrs/aggregate-standards.md",
-          "sha256": "b50107b539d69511e7c60ee5cb6287ef31a16430fc77ee3664ff913f13dd8a2d",
-          "size": 19358
+          "sha256": "13199853ade6aa058c45b08d680ef79575e1e42328ca22f57f7427db0644e2a0",
+          "size": 19852
         }
       },
       {
@@ -3689,10 +3689,10 @@
         "owner": "dotnet",
         "path": "packages/knowledge/dotnet/content-package.yaml",
         "source": {
-          "git_blob": "8f3069848849d6c0ddb20227ef03f99146e8dd71",
+          "git_blob": "602a8f43a91b05eac57ed361b36994b717f0a4af",
           "mode": "100644",
           "path": "src/knowledge/dotnet/content-package.yaml",
-          "sha256": "84dc4a096ba61ee8a072a53cf9306fd1eeea8cb7dc36329993ff6c482be23702",
+          "sha256": "21c26cc39276dc3d10999d2b2d0bd74fb41bafaa1120d6b45f9d61b057c29388",
           "size": 107818
         }
       },
@@ -3754,10 +3754,10 @@
         "owner": "dotnet",
         "path": "packages/knowledge/dotnet/engineering-rule-catalog.yaml",
         "source": {
-          "git_blob": "d7fce80e867610067cff0f4bcb6f787c4bc59da9",
+          "git_blob": "83145c84fc3421b062a66efdf9c7a49c99c1b0bd",
           "mode": "100644",
           "path": "src/knowledge/dotnet/engineering-rule-catalog.yaml",
-          "sha256": "e389ec69d6b9514ff8fe825d518f758fbe373f89288a1f37593af5aeb0443b66",
+          "sha256": "4a7758440dab3232a29412d003b61a4341c4d597d721312c0999b81b5b9f90b5",
           "size": 82589
         }
       },
@@ -3793,11 +3793,11 @@
         "owner": "dotnet",
         "path": "packages/knowledge/dotnet/integration/persistence/archive-standards.md",
         "source": {
-          "git_blob": "6792bcd50e36e67eeff3479012c2db94ff25d677",
+          "git_blob": "3f6dcf79f1e4b25e5edbf16cfd98229009b8baab",
           "mode": "100644",
           "path": "src/knowledge/dotnet/integration/persistence/archive-standards.md",
-          "sha256": "640f95c29e552086a2043d92f4711624af4cbe77543d8c4ac7db20c25fbfb821",
-          "size": 8932
+          "sha256": "c5570c8558f15c7113e82abfea3fb1a2ca84ab355f4bcfef16e15533da4307b2",
+          "size": 8979
         }
       },
       {
@@ -4053,11 +4053,11 @@
         "owner": "dotnet",
         "path": "packages/knowledge/dotnet/testing/test-standards.md",
         "source": {
-          "git_blob": "8f680afb66f2841646e3ddae467e20d58913bacb",
+          "git_blob": "613e8562fae329f1d0017a26a86428d9c981d826",
           "mode": "100644",
           "path": "src/knowledge/dotnet/testing/test-standards.md",
-          "sha256": "d9f55548b4068b8a550766f8c130ff9a95cfa8a59b0d0fc92b3981b21993fa64",
-          "size": 18941
+          "sha256": "ef48f4dca5af6d63afced986469c5f17e082d66c45c8ae70fbee936acc0dca27",
+          "size": 19223
         }
       },
       {
@@ -4092,11 +4092,11 @@
         "owner": "dotnet",
         "path": "packages/knowledge/dotnet/tooling/generation/DELIVERY.md",
         "source": {
-          "git_blob": "43689b985a0c7036910960c7b91c3b0719610649",
+          "git_blob": "06c3f964e9b461bbddfac126feafd41c77b1c244",
           "mode": "100644",
           "path": "src/knowledge/dotnet/tooling/generation/DELIVERY.md",
-          "sha256": "6dfb1a93efd4c77cc14eb1fdb919a9c226461d8d4d6f665349a47497f5f8c947",
-          "size": 9181
+          "sha256": "363bb4cbc4a0dd0fa36f18cca1b2cd6cacdb2b970cd3b663cc73f6730a128ab9",
+          "size": 9887
         }
       },
       {
@@ -4118,11 +4118,11 @@
         "owner": "dotnet",
         "path": "packages/knowledge/dotnet/tooling/generation/snippet-tool/README.md",
         "source": {
-          "git_blob": "09596e0e1895e43ff8a4bd77f121d683bff3ac70",
+          "git_blob": "70236519c4ab4a41d312131a3828961023cfd8bd",
           "mode": "100644",
           "path": "src/knowledge/dotnet/tooling/generation/snippet-tool/README.md",
-          "sha256": "afa84e47f3c950ccfb624983aff9c44459e378ca4326a9672f6ef207fdf2cc68",
-          "size": 7819
+          "sha256": "3712664d46f7fbadf9dc32e294e143949214c3d2f04293706eabb5447fa27f96",
+          "size": 8407
         }
       },
       {
@@ -4430,10 +4430,10 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/content-package.yaml",
         "source": {
-          "git_blob": "b8a4bbbe8c46721d5f80dd4ae29774b72de867c2",
+          "git_blob": "4ccd40778562385d7dca977aae33a48a94c70c85",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/content-package.yaml",
-          "sha256": "e100ecd79fe76f5da25c3333345bd4bd998125a2f1df006e6ac1902e28915922",
+          "sha256": "3000da9f7528b0318562888cd0b511d1a9e67db37ab6ed751cc34d88aa40c912",
           "size": 30160
         }
       },
@@ -4729,11 +4729,11 @@
         "owner": "engineering-common",
         "path": "packages/knowledge/engineering-common/references/PROMPT-PORTABILITY-RULES.md",
         "source": {
-          "git_blob": "bc94780ef5f39ed19863ebcdc1459df8180d2190",
+          "git_blob": "9c73d73a529e33b79889d172ddd6d6fba1b3ce0a",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/PROMPT-PORTABILITY-RULES.md",
-          "sha256": "00686dfb22c1c0e22df09758104e46748b855d5eb01f9328c927388267258f61",
-          "size": 1721
+          "sha256": "65373b0f93103380a01f2743d59a93e1be1c8c74422b1bd21e739a31bf2eaba8",
+          "size": 2298
         }
       },
       {
@@ -5015,10 +5015,10 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/skill-package.yaml",
         "source": {
-          "git_blob": "85761d44387eb22c70c71ba044f9f2a9b1e2d970",
+          "git_blob": "734ecdced4c60042a294571dd0aa8742373a4c98",
           "mode": "100644",
           "path": "src/skills/ai-context-init/skill-package.yaml",
-          "sha256": "f80cd632c21aecf78772a8c1beba2d2bacfe469168364f31a21cc0408f245e84",
+          "sha256": "bec71576eba339ed6fa41f1363cb07c18d27a180613ceb005217f301e3e43c7b",
           "size": 1915
         }
       },
@@ -5119,11 +5119,11 @@
         "owner": "ai-context-init",
         "path": "packages/skill/ai-context-init/templates/public-root/AGENTS.md",
         "source": {
-          "git_blob": "e71acb4b58a309263ef6c2a97a89ad80e5d627c9",
+          "git_blob": "3f533524ca6428740b1621622cf1864379466cee",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-root/AGENTS.md",
-          "sha256": "a2beac55c2d4e5204d791c827835c9b4e32c0bac6a59c965b83f59204e6b431f",
-          "size": 8233
+          "sha256": "1dfc5df919c30022575de28c1c9409f4dc4431d24064399175c3ee3bfd3ee463",
+          "size": 8129
         }
       },
       {
@@ -5197,10 +5197,10 @@
         "owner": "code-reviewer",
         "path": "packages/skill/code-reviewer/skill-package.yaml",
         "source": {
-          "git_blob": "ca7a7f937273ddf8e3970d0e22ed4efb246e0baf",
+          "git_blob": "d2c32adab7a2f2961a0e884fa63b27d140d5c2e8",
           "mode": "100644",
           "path": "src/skills/code-reviewer/skill-package.yaml",
-          "sha256": "3480e758492094c5ce775345477b973869fa0f644433c548d184586c1699df62",
+          "sha256": "384da1ce27c0f5787ca305cef6ca424b1622625bed8044ab40c6b55b3078be0d",
           "size": 2093
         }
       },
@@ -5314,10 +5314,10 @@
         "owner": "domain-model-designer",
         "path": "packages/skill/domain-model-designer/skill-package.yaml",
         "source": {
-          "git_blob": "42d13fb5f4436456edf8237275d314f384277e58",
+          "git_blob": "591f3e44e696b961a5d23039300675a5d000d1b5",
           "mode": "100644",
           "path": "src/skills/domain-model-designer/skill-package.yaml",
-          "sha256": "f8ece5423fa71a790cd3904d84612f6b23c845b1fe49cf1a6c7def5ae9d7818a",
+          "sha256": "70508432bf6792c0f8f9fc372c85a5df367acb83eab8f63393b59daa1e630a7e",
           "size": 3445
         }
       },
@@ -5470,10 +5470,10 @@
         "owner": "local-change-implementer",
         "path": "packages/skill/local-change-implementer/skill-package.yaml",
         "source": {
-          "git_blob": "2b65f5755c3bb32c795884a32b9f76a09f9ead6c",
+          "git_blob": "0f1bd485a6d56510bdb01eafe43bfa24e8816e83",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/skill-package.yaml",
-          "sha256": "72ee4c9806001ae3ee36032bbca45ddeead04d65052156122dc6741572de8eee",
+          "sha256": "0de2bc6be36c1b45bc171dd101682c355e80b51b1f36fef8d1e7777b01405f12",
           "size": 2062
         }
       },
@@ -5496,11 +5496,11 @@
         "owner": "pr-author",
         "path": "packages/skill/pr-author/references/configuration.md",
         "source": {
-          "git_blob": "cf0d8f68e49c49542898fe00db585953ac11c6f6",
+          "git_blob": "eb95503408c35f7df412997c9838613b2a441436",
           "mode": "100644",
           "path": "src/skills/pr-author/references/configuration.md",
-          "sha256": "f5384356276e53a93e819331bf88f3dc24d4d09baa138c7063041a146c2f2c79",
-          "size": 4237
+          "sha256": "dde7c148296297901ced0cc1bf4c1a62ffff4b46d5a75c96f0507a2d5a426e37",
+          "size": 4279
         }
       },
       {
@@ -5522,10 +5522,10 @@
         "owner": "pr-author",
         "path": "packages/skill/pr-author/references/github.md",
         "source": {
-          "git_blob": "b15eacf4b5e36da34dc053f5fb30a245dbc8fa66",
+          "git_blob": "6965ac40f015f2184f31ba84568a8f0215da298c",
           "mode": "100644",
           "path": "src/skills/pr-author/references/github.md",
-          "sha256": "54ba078200067cb0a70ee339823b40d30f3caeed291d9a342e523dc4540a8c05",
+          "sha256": "4beb7c6e0bdbfd5553bdc9bde9d03754c8e429db847982bb08a81f1ff034506f",
           "size": 6613
         }
       },
@@ -5561,10 +5561,10 @@
         "owner": "pr-author",
         "path": "packages/skill/pr-author/scripts/github.py",
         "source": {
-          "git_blob": "1b5707dfdfb88ee71631b9e9d2418cb0dd4d7fd5",
+          "git_blob": "19d72b785bcafec7336ac92065f277457cf40483",
           "mode": "100644",
           "path": "src/skills/pr-author/scripts/github.py",
-          "sha256": "dd9545259f2ae34c27f053a1f70d9262ff39f7a66deb88d9f36dfeffc241455c",
+          "sha256": "6538cf4eafddd868c40b223130d037121bc678cc97d06e6db91946f8a946659f",
           "size": 26619
         }
       },
@@ -5574,10 +5574,10 @@
         "owner": "pr-author",
         "path": "packages/skill/pr-author/scripts/pr.py",
         "source": {
-          "git_blob": "7f3510e3c3275301b54af676b44ba410e08478a7",
+          "git_blob": "23ff947e4a5da77e27bfea1e3e8a66c5feb6ac4d",
           "mode": "100644",
           "path": "src/skills/pr-author/scripts/pr.py",
-          "sha256": "d249edb2a4c5b419412deb47cc7a5d15b42437c36c9e6852ceca0a341cc992e0",
+          "sha256": "21def5ce3bb34bae51b557bff83c15f11f04f1e8878b341dbdeb336532d648a8",
           "size": 66059
         }
       },
@@ -5587,10 +5587,10 @@
         "owner": "pr-author",
         "path": "packages/skill/pr-author/skill-package.yaml",
         "source": {
-          "git_blob": "f0d4d1db402304b4e1d1287c31603ca7b7532aad",
+          "git_blob": "a0849e5f62fcdcdefcd678f899dc4e8abe13bedd",
           "mode": "100644",
           "path": "src/skills/pr-author/skill-package.yaml",
-          "sha256": "a5a231a07390ac5714fc694f70aed67db029e3c9eae17fbe0bd7ae85bd6274ee",
+          "sha256": "0497c747154e43f03b860660955764b852bfd6538b9ab37e707cc4fb21104d75",
           "size": 5520
         }
       },
@@ -5821,10 +5821,10 @@
         "owner": "requirement-author",
         "path": "packages/skill/requirement-author/skill-package.yaml",
         "source": {
-          "git_blob": "76fa657b92505a01edbb7e9c4c85a5dd518d55c7",
+          "git_blob": "c9b5952e9153ea221e1626847ddf76a1b213093d",
           "mode": "100644",
           "path": "src/skills/requirement-author/skill-package.yaml",
-          "sha256": "e7d1add6d8ee75f22d0400b550c7add2becb845aae80d148c3ba2cb21721756c",
+          "sha256": "6f71305bbb82bd779ccc2ac0928538efe6e9884b81547245284b54d051ef89d1",
           "size": 2552
         }
       },
@@ -5938,10 +5938,10 @@
         "owner": "slice-implementer",
         "path": "packages/skill/slice-implementer/skill-package.yaml",
         "source": {
-          "git_blob": "60a074c1d51202dc45e918d7a9887fde622d6da9",
+          "git_blob": "0ce7ae56ab97b906a4b9fe3eeb99ce122c73c8b2",
           "mode": "100644",
           "path": "src/skills/slice-implementer/skill-package.yaml",
-          "sha256": "95ccf7d7f3c16b499446fcfd2b27d2e5188330572eab9e0985ab70f69c270440",
+          "sha256": "567745c46df32c5b08f92357fd4ded657cf560b60ff425dfaee6fa06aaee85f1",
           "size": 2673
         }
       },
@@ -6003,10 +6003,10 @@
         "owner": "software-architect",
         "path": "packages/skill/software-architect/skill-package.yaml",
         "source": {
-          "git_blob": "aaeffaa71947910e21539478c2bde83cd820c280",
+          "git_blob": "fadd50984b6603bb841ab10b68478054e152efed",
           "mode": "100644",
           "path": "src/skills/software-architect/skill-package.yaml",
-          "sha256": "5c8f32b30b7fe05d7ea1b744d91748d2b6d04a5dc27618a2c5c88366bac40252",
+          "sha256": "cf9cbb0ed9e8e16d0196cd78582ebdb76cb0f9c285faaa3ad02c0b54ef07687a",
           "size": 2579
         }
       },
@@ -6185,10 +6185,10 @@
         "owner": "spec-author",
         "path": "packages/skill/spec-author/skill-package.yaml",
         "source": {
-          "git_blob": "60d85a8aba91351679b4f2069fb8d614a2715bb7",
+          "git_blob": "da2b2d6a4184fdf18dcc154a81c22cee5ab77ea2",
           "mode": "100644",
           "path": "src/skills/spec-author/skill-package.yaml",
-          "sha256": "4656b6f37152b86027324da402a9265cf55e1d37819e35a0909ecb3e32d00dcd",
+          "sha256": "48643a390074d7936dabec895780a861f8fde816d4a0ddb6e353ed2adc89c089",
           "size": 2036
         }
       },
@@ -6328,10 +6328,10 @@
         "owner": "test-designer",
         "path": "packages/skill/test-designer/skill-package.yaml",
         "source": {
-          "git_blob": "5550dd537e45b93f26354bb7379c2f089e3618c4",
+          "git_blob": "2f51639243c1ae5422c17b7086cc6f84a07f21b2",
           "mode": "100644",
           "path": "src/skills/test-designer/skill-package.yaml",
-          "sha256": "31ee7026733a131541127218fe0374d3739828b7fd9b8efa1d1fc97a8153c4d4",
+          "sha256": "b3ff44ad0f56c120056f11cf58408ea1256cccf8709cd4ddb22f56f013b34aba",
           "size": 2377
         }
       },
@@ -6471,10 +6471,10 @@
         "owner": "user-story-author",
         "path": "packages/skill/user-story-author/skill-package.yaml",
         "source": {
-          "git_blob": "5e2080899da3f7fa2623e5bad1b888dff1056f4a",
+          "git_blob": "b050c34a6ecdccbbd8f93150d55780ed3a2c189c",
           "mode": "100644",
           "path": "src/skills/user-story-author/skill-package.yaml",
-          "sha256": "a8968eeab0965e547020c9a62ebc7b32557f57cc5e7b0a309039aceb36436086",
+          "sha256": "87b98043790d404128d0a1728a1b98929bbe2060a1bfaa54ebb05c8ecfbcb4b5",
           "size": 2787
         }
       },
@@ -7056,11 +7056,11 @@
         "owner": "context-translator",
         "path": "packages/sub-agent/context-translator/runtime/claude.md",
         "source": {
-          "git_blob": "9c78b9c6bed0370f2215cfd9a0e39280fbb3dc25",
+          "git_blob": "ba904fbdeb95de1798e6a5d93a884e1c6f650831",
           "mode": "100644",
           "path": "src/sub-agents/context-translator/runtime/claude.md",
-          "sha256": "4fa4f154a6ed2e190eba4cbb23bbfa9bc898d5eff3c17fb14f2edd3af651d30a",
-          "size": 1752
+          "sha256": "a2776d9093025d2388fe6444b9b70a990ee73182f6c0d4f543f4e6c092ed1888",
+          "size": 1577
         }
       },
       {
@@ -7069,11 +7069,11 @@
         "owner": "context-translator",
         "path": "packages/sub-agent/context-translator/runtime/codex.toml",
         "source": {
-          "git_blob": "f039d6a995d25aefd4b4787a5d30d22e275a81c7",
+          "git_blob": "c204676c6546495d689fb99b05fba69af3b845ad",
           "mode": "100644",
           "path": "src/sub-agents/context-translator/runtime/codex.toml",
-          "sha256": "115037c5bbba8ecad9b3a4294cdf36aad46e4c463180e0e64e23ab655691fdee",
-          "size": 1568
+          "sha256": "b77490cf43499ce807e94737d5ae00a354a8a0fc748a28823654e5948c46e00d",
+          "size": 1420
         }
       },
       {
@@ -7082,10 +7082,10 @@
         "owner": "context-translator",
         "path": "packages/sub-agent/context-translator/sub-agent-package.yaml",
         "source": {
-          "git_blob": "f118015070684aa2c1e4367ea9a2291e5fae3b88",
+          "git_blob": "ae3db8ab920224f185ac1bd9ad222904605fb9f5",
           "mode": "100644",
           "path": "src/sub-agents/context-translator/sub-agent-package.yaml",
-          "sha256": "cd3914db2df9d38c0394b3a0bb96238a9e254c0eb5dc53ae770987b88b678b17",
+          "sha256": "8dd6b0ffcf045276b69c43b8701a4602186e77f26a6b243cb05d81e63edb9779",
           "size": 267
         }
       },
@@ -7121,11 +7121,11 @@
         "owner": "evidence-report-synthesizer",
         "path": "packages/sub-agent/evidence-report-synthesizer/runtime/claude.md",
         "source": {
-          "git_blob": "bec1290e80796d94bc498ea981dfc035da7127c0",
+          "git_blob": "05ff2184d96b4127792b5bc8c99e4f81caa089d6",
           "mode": "100644",
           "path": "src/sub-agents/evidence-report-synthesizer/runtime/claude.md",
-          "sha256": "dbaf71be5e7f2b6c467cd16d9b74f694c626ad3e5242a46ce0cc7a96a291d11a",
-          "size": 2883
+          "sha256": "f13d0fa7b202369397c6cbb924161d510da997a2275e69d662bd7ffb20fd7c82",
+          "size": 2708
         }
       },
       {
@@ -7134,11 +7134,11 @@
         "owner": "evidence-report-synthesizer",
         "path": "packages/sub-agent/evidence-report-synthesizer/runtime/codex.toml",
         "source": {
-          "git_blob": "89fd84b0ff7a57a0ff5c31d70e6823ebfea0f6b6",
+          "git_blob": "2a7dd8475aacdff87d077cc20ac57786861c7efe",
           "mode": "100644",
           "path": "src/sub-agents/evidence-report-synthesizer/runtime/codex.toml",
-          "sha256": "cd7c1d768138c9e59302a6d327dbd9d99c00c68c5c137d46146e3fad71db292f",
-          "size": 2373
+          "sha256": "99322f6ac787ff34884948287c8c5ff0c2d45751322537fae14c1c40223acd35",
+          "size": 2225
         }
       },
       {
@@ -7147,10 +7147,10 @@
         "owner": "evidence-report-synthesizer",
         "path": "packages/sub-agent/evidence-report-synthesizer/sub-agent-package.yaml",
         "source": {
-          "git_blob": "4235fbb05d4403a98bb87bd1b831572eaa358874",
+          "git_blob": "30b9dc82b5e5d0b7e7f6df34e26fb0523194444e",
           "mode": "100644",
           "path": "src/sub-agents/evidence-report-synthesizer/sub-agent-package.yaml",
-          "sha256": "ea93e529fc6bacb05ca80e17a4a9cb74193155954c9a3f3248c079e52ff1cb9b",
+          "sha256": "949a87459bbcf2eaeb5a5aa5ce6133e18a3c2b720415eaeaa83a791f320223b5",
           "size": 290
         }
       },
@@ -7186,11 +7186,11 @@
         "owner": "fixed-head-independent-auditor",
         "path": "packages/sub-agent/fixed-head-independent-auditor/runtime/claude.md",
         "source": {
-          "git_blob": "f153f7119792f68b5ac91dda03a98cf0fa832980",
+          "git_blob": "515dbe02e616a1473364ae717f3531bc0d2f6537",
           "mode": "100644",
           "path": "src/sub-agents/fixed-head-independent-auditor/runtime/claude.md",
-          "sha256": "715a468910fd15d5c4493a62d4bb56060e88ad823ac0f83690158a23d19f689e",
-          "size": 3796
+          "sha256": "1a22141532f9876dee2c51a1744e58e6a2a9bcb6e8429e70cf4e2684dbc6a534",
+          "size": 3621
         }
       },
       {
@@ -7199,11 +7199,11 @@
         "owner": "fixed-head-independent-auditor",
         "path": "packages/sub-agent/fixed-head-independent-auditor/runtime/codex.toml",
         "source": {
-          "git_blob": "a80b60f7a645fe7f783e76370ca3edea49b1dfe5",
+          "git_blob": "f5c8ac58f2a3519ee7cebf7759f4f62cc24e12de",
           "mode": "100644",
           "path": "src/sub-agents/fixed-head-independent-auditor/runtime/codex.toml",
-          "sha256": "20e51f1008100a22dda602bf524f1f6604c0f8e5487ca71dd0639629db824ba8",
-          "size": 3286
+          "sha256": "a88b70d59bda860532549e84844d51d3ff5b1301334fc92d8e48c1980eb3696c",
+          "size": 3138
         }
       },
       {
@@ -7212,10 +7212,10 @@
         "owner": "fixed-head-independent-auditor",
         "path": "packages/sub-agent/fixed-head-independent-auditor/sub-agent-package.yaml",
         "source": {
-          "git_blob": "31ac091d9190c074e0b814228caee6b3c4f517fc",
+          "git_blob": "57522d00a7eb442843e1baf37719b794078f5554",
           "mode": "100644",
           "path": "src/sub-agents/fixed-head-independent-auditor/sub-agent-package.yaml",
-          "sha256": "5d553de1ca720d59d0e7c4b4e411cd6240d62163a3fce44c888901ce57b012f3",
+          "sha256": "8ad09ab116e733df9aa5bb703fb4a8f8f427bceab85b8d3b7d471dd1b78637af",
           "size": 296
         }
       },
@@ -7251,11 +7251,11 @@
         "owner": "mechanical-evidence-worker",
         "path": "packages/sub-agent/mechanical-evidence-worker/runtime/claude.md",
         "source": {
-          "git_blob": "2ae11f3e52fb63aaf794de3c8fe18fd01435d2fc",
+          "git_blob": "ee417e4dc0425a8ec93bb6a7069ebda163672783",
           "mode": "100644",
           "path": "src/sub-agents/mechanical-evidence-worker/runtime/claude.md",
-          "sha256": "53a1c6fe2ac2e3df6d989b688d8d8ae9c105b26646c3ec2859ce204aca005a15",
-          "size": 5489
+          "sha256": "bf23c239a0039a7ad9dd2bc5a107aa10647196179aca35bfb9f68f35fe38bf15",
+          "size": 5567
         }
       },
       {
@@ -7264,11 +7264,11 @@
         "owner": "mechanical-evidence-worker",
         "path": "packages/sub-agent/mechanical-evidence-worker/runtime/codex.toml",
         "source": {
-          "git_blob": "7fcd190af93fadc7e4b9f635c3a40e4434d26228",
+          "git_blob": "c0f694b9e102dd8e609201e8d2d0b9fde71498fd",
           "mode": "100644",
           "path": "src/sub-agents/mechanical-evidence-worker/runtime/codex.toml",
-          "sha256": "b589d2935405275e4a31da2e7a8dbae2dd61e8e5f34f02d990ce0139c41f377c",
-          "size": 4979
+          "sha256": "489f18484385f4e8ffd2b4694f9c4a27bd6c24472ef6d728451c4e3c70a0b54d",
+          "size": 5084
         }
       },
       {
@@ -7277,10 +7277,10 @@
         "owner": "mechanical-evidence-worker",
         "path": "packages/sub-agent/mechanical-evidence-worker/sub-agent-package.yaml",
         "source": {
-          "git_blob": "dc582403f589b251561937ad9ee3260e25ef692b",
+          "git_blob": "207304a98083105016a74ab5faa13af2150affe0",
           "mode": "100644",
           "path": "src/sub-agents/mechanical-evidence-worker/sub-agent-package.yaml",
-          "sha256": "de4e72335f2d541de229a8fdd48c6f490c233dbbc3dfebf8feb0a51ae3fa497f",
+          "sha256": "5bbc03efc2fd5072894ef6e3fb218f2d1458d5b0f636090ed1830147c3c99864",
           "size": 283
         }
       },
@@ -7290,11 +7290,11 @@
         "owner": "mechanical-evidence-worker",
         "path": "packages/sub-agent/mechanical-evidence-worker/sub-agent.yaml",
         "source": {
-          "git_blob": "64a0c2088140371ecd06de2be63bf859e9670d9b",
+          "git_blob": "aa75788f7de2b9e6daaa372a70287272bc86289a",
           "mode": "100644",
           "path": "src/sub-agents/mechanical-evidence-worker/sub-agent.yaml",
-          "sha256": "6747c5809b9c383dc8dc4389cb8599884c22647ce709ce0ad7c4f17897b27b7a",
-          "size": 2491
+          "sha256": "fb6b4b7323699edc7aa42a56a4df3e4af779e4f1c8b51e0c92eb7fbb3ccc26f1",
+          "size": 2601
         }
       },
       {
@@ -7316,11 +7316,11 @@
         "owner": "reconciliation-worker",
         "path": "packages/sub-agent/reconciliation-worker/runtime/claude.md",
         "source": {
-          "git_blob": "4730c83ca1a686b19c0caa610be184bdf4cb7bf5",
+          "git_blob": "b4b14a8d46a7460507d54201c77a105a63f4397a",
           "mode": "100644",
           "path": "src/sub-agents/reconciliation-worker/runtime/claude.md",
-          "sha256": "d7c577e063cd8df4209cc78c43c4eb935ed6890340c4d65115af069d32147c63",
-          "size": 2965
+          "sha256": "ffd0eddc27eedcde3cdb9bc0f3d1875df871aaa84746421e592e74be1e764e77",
+          "size": 2790
         }
       },
       {
@@ -7329,11 +7329,11 @@
         "owner": "reconciliation-worker",
         "path": "packages/sub-agent/reconciliation-worker/runtime/codex.toml",
         "source": {
-          "git_blob": "97a8bb28c15e92bad6de0dba7bf83663af21d2d9",
+          "git_blob": "1dc88e48db21cd93aced790d02829b826151ba71",
           "mode": "100644",
           "path": "src/sub-agents/reconciliation-worker/runtime/codex.toml",
-          "sha256": "18204e694464f5a5fc382f2aa2921119be26c692db26c92c628d5a14edcc8515",
-          "size": 2455
+          "sha256": "0acd3330d0c5a0a9ceb9b3785ef265378b877e8ffe6dac7d87eb8933c09c1f27",
+          "size": 2307
         }
       },
       {
@@ -7342,10 +7342,10 @@
         "owner": "reconciliation-worker",
         "path": "packages/sub-agent/reconciliation-worker/sub-agent-package.yaml",
         "source": {
-          "git_blob": "37fe3ad508e6836dcaed114ecc14e438bab8b79f",
+          "git_blob": "71dc1792016ddd68c8e49c1861bd0216b862c2c0",
           "mode": "100644",
           "path": "src/sub-agents/reconciliation-worker/sub-agent-package.yaml",
-          "sha256": "e5f62fa000001a11a5e59f4ae380ff8e74f069601c850d13fd1003d7700282d8",
+          "sha256": "2c02a9cd2165d5f4699bc3bb51bad766c064497e66edc666be0373bffbe5c4cb",
           "size": 273
         }
       },
@@ -7381,11 +7381,11 @@
         "owner": "semantic-governance-analyst",
         "path": "packages/sub-agent/semantic-governance-analyst/runtime/claude.md",
         "source": {
-          "git_blob": "0b5329eced1363119d3872ab6972ed2c7e185bd4",
+          "git_blob": "b421b2710a56f9692d2232f830af1b0d19747a47",
           "mode": "100644",
           "path": "src/sub-agents/semantic-governance-analyst/runtime/claude.md",
-          "sha256": "457baac50c6627356e8adab9052e4db6bcb34ca12124314803f4c92a640eeccd",
-          "size": 2948
+          "sha256": "9aeff1be3a860c7c4b546273305f9179eb9eb8b7fa7aa9ab49ceaf46b345a97a",
+          "size": 2773
         }
       },
       {
@@ -7394,11 +7394,11 @@
         "owner": "semantic-governance-analyst",
         "path": "packages/sub-agent/semantic-governance-analyst/runtime/codex.toml",
         "source": {
-          "git_blob": "1932609cd1fc34f0d0c88c515dc0675ea6ba1f7f",
+          "git_blob": "1e8a0779d56fefa0e1b0bf21ad5bf0965c8a2e49",
           "mode": "100644",
           "path": "src/sub-agents/semantic-governance-analyst/runtime/codex.toml",
-          "sha256": "5d262dfffe9950d1ce65f87311059111b5b4150b7e8ffa4bae31fbb82790410d",
-          "size": 2438
+          "sha256": "dd9cc9d6fb1d10db0120ecb81ac5eee93cf4918766dab7f6d317325ca039c0f9",
+          "size": 2290
         }
       },
       {
@@ -7407,10 +7407,10 @@
         "owner": "semantic-governance-analyst",
         "path": "packages/sub-agent/semantic-governance-analyst/sub-agent-package.yaml",
         "source": {
-          "git_blob": "e5fd6485162d8756039390b0942e71e9c7821f47",
+          "git_blob": "4e855d8921a36af1eeaaf5292fd9a86b8fef460a",
           "mode": "100644",
           "path": "src/sub-agents/semantic-governance-analyst/sub-agent-package.yaml",
-          "sha256": "3d66c05a31b33fb4ae6a7dad3a5fc80b81c93ed963c21de969609a7acb408512",
+          "sha256": "ecfcb3f31103e83cd765e44ee93a6c03bd095492b3d4915ffb76ab77cc31a082",
           "size": 293
         }
       },
@@ -7481,7 +7481,7 @@
       },
       {
         "path": "src/distribution/installation.py",
-        "sha256": "e40fb99329279f6b63d61e9667fa88758822b38ab2de13280a7f327eda86bbf6"
+        "sha256": "93b632ddbc1fbc204ee0c8b7efb325331beb44cc2e68ae6a32200d4400da28b0"
       },
       {
         "path": "src/distribution/installation_io.py",
@@ -7489,7 +7489,7 @@
       },
       {
         "path": "src/distribution/installation_plan.py",
-        "sha256": "ebc3c8dec1389795c6df087d49ffe22ffd1a78d92c37cd5570496929cff84cd3"
+        "sha256": "bc02c2336e60e92100f877f539aabfe59ccb463397672ceaaf61727e0576fece"
       },
       {
         "path": "src/distribution/installation_state.py",
@@ -7505,7 +7505,7 @@
       },
       {
         "path": "src/distribution/project_layout.py",
-        "sha256": "cd180d6f8f10272dc00a2d68df56c352b55582670f1d2d2e70842f86d8859424"
+        "sha256": "a47df792d9d768b8e0fc874038c17eed5cca6c8b9ccebc49bd7afa982674704e"
       },
       {
         "path": "src/distribution/reinstallation.py",
@@ -7517,11 +7517,11 @@
       },
       {
         "path": "src/distribution/skill_registry.py",
-        "sha256": "7db04528de191ad1f2c207f163f5c20c8b2fb696667293f04bbe3871f8e0e486"
+        "sha256": "792ba6e4eb04f09b5954565c44a4353e9b197b60094393fb603a0b2fc1faf7c5"
       },
       {
         "path": "src/distribution/subagent_policy.py",
-        "sha256": "4975bbbebf1134fbf080f3352a5d7595955557799a1918e2017435c0e16de704"
+        "sha256": "27dd216803d659de2813674a370fb98b9b166a6887b1893a9f55fdd7e1bfb112"
       },
       {
         "path": "src/distribution/subagent_registry.py",
@@ -7549,7 +7549,7 @@
       }
     ],
     "id": "framework-managed-installation",
-    "source_commit": "24138feb596f5fdfca0a9ec0537b7c4f1c428436",
+    "source_commit": "5616b9236ab15cf41d16e16eca79f9171e039f3d",
     "version": "2.0.0"
   },
   "installation_id": "51da4589750da28cb7c1927b3f9f04f8",
@@ -7562,13 +7562,13 @@
         "mode": "100644",
         "owner": "knowledge/dotnet",
         "path": "payload/.ai/core/knowledge/dotnet/README.md",
-        "sha256": "ffb3a6168a8ccc3e5640b639545e4fbee72713a8da8238323e7f42830f25ea47",
+        "sha256": "f6a4474a1760dab087dd18bf8317910467b08f14ae1134d1c81fb8f8d4817f24",
         "size": 5266,
         "source": {
-          "git_blob": "c13a2f5c6d60eb67786e594759e9dcd994b1acbf",
+          "git_blob": "dad6c79e63db7bd995674136aff3c532dd0ad6cf",
           "mode": "100644",
           "path": "src/knowledge/dotnet/README.md",
-          "sha256": "ffb3a6168a8ccc3e5640b639545e4fbee72713a8da8238323e7f42830f25ea47",
+          "sha256": "f6a4474a1760dab087dd18bf8317910467b08f14ae1134d1c81fb8f8d4817f24",
           "size": 5266
         }
       },
@@ -7613,14 +7613,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet",
         "path": "payload/.ai/core/knowledge/dotnet/architecture/ddd-cqrs/aggregate-standards.md",
-        "sha256": "b50107b539d69511e7c60ee5cb6287ef31a16430fc77ee3664ff913f13dd8a2d",
-        "size": 19358,
+        "sha256": "13199853ade6aa058c45b08d680ef79575e1e42328ca22f57f7427db0644e2a0",
+        "size": 19852,
         "source": {
-          "git_blob": "3dea743435b96fb9f97d59334385f5efb78341b5",
+          "git_blob": "354b24692d9c4bda301f37ed07aa86855792301e",
           "mode": "100644",
           "path": "src/knowledge/dotnet/architecture/ddd-cqrs/aggregate-standards.md",
-          "sha256": "b50107b539d69511e7c60ee5cb6287ef31a16430fc77ee3664ff913f13dd8a2d",
-          "size": 19358
+          "sha256": "13199853ade6aa058c45b08d680ef79575e1e42328ca22f57f7427db0644e2a0",
+          "size": 19852
         }
       },
       {
@@ -7715,13 +7715,13 @@
         "mode": "100644",
         "owner": "knowledge/dotnet",
         "path": "payload/.ai/core/knowledge/dotnet/content-package.yaml",
-        "sha256": "84dc4a096ba61ee8a072a53cf9306fd1eeea8cb7dc36329993ff6c482be23702",
+        "sha256": "21c26cc39276dc3d10999d2b2d0bd74fb41bafaa1120d6b45f9d61b057c29388",
         "size": 107818,
         "source": {
-          "git_blob": "8f3069848849d6c0ddb20227ef03f99146e8dd71",
+          "git_blob": "602a8f43a91b05eac57ed361b36994b717f0a4af",
           "mode": "100644",
           "path": "src/knowledge/dotnet/content-package.yaml",
-          "sha256": "84dc4a096ba61ee8a072a53cf9306fd1eeea8cb7dc36329993ff6c482be23702",
+          "sha256": "21c26cc39276dc3d10999d2b2d0bd74fb41bafaa1120d6b45f9d61b057c29388",
           "size": 107818
         }
       },
@@ -7800,13 +7800,13 @@
         "mode": "100644",
         "owner": "knowledge/dotnet",
         "path": "payload/.ai/core/knowledge/dotnet/engineering-rule-catalog.yaml",
-        "sha256": "e389ec69d6b9514ff8fe825d518f758fbe373f89288a1f37593af5aeb0443b66",
+        "sha256": "4a7758440dab3232a29412d003b61a4341c4d597d721312c0999b81b5b9f90b5",
         "size": 82589,
         "source": {
-          "git_blob": "d7fce80e867610067cff0f4bcb6f787c4bc59da9",
+          "git_blob": "83145c84fc3421b062a66efdf9c7a49c99c1b0bd",
           "mode": "100644",
           "path": "src/knowledge/dotnet/engineering-rule-catalog.yaml",
-          "sha256": "e389ec69d6b9514ff8fe825d518f758fbe373f89288a1f37593af5aeb0443b66",
+          "sha256": "4a7758440dab3232a29412d003b61a4341c4d597d721312c0999b81b5b9f90b5",
           "size": 82589
         }
       },
@@ -7851,14 +7851,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet",
         "path": "payload/.ai/core/knowledge/dotnet/integration/persistence/archive-standards.md",
-        "sha256": "640f95c29e552086a2043d92f4711624af4cbe77543d8c4ac7db20c25fbfb821",
-        "size": 8932,
+        "sha256": "c5570c8558f15c7113e82abfea3fb1a2ca84ab355f4bcfef16e15533da4307b2",
+        "size": 8979,
         "source": {
-          "git_blob": "6792bcd50e36e67eeff3479012c2db94ff25d677",
+          "git_blob": "3f6dcf79f1e4b25e5edbf16cfd98229009b8baab",
           "mode": "100644",
           "path": "src/knowledge/dotnet/integration/persistence/archive-standards.md",
-          "sha256": "640f95c29e552086a2043d92f4711624af4cbe77543d8c4ac7db20c25fbfb821",
-          "size": 8932
+          "sha256": "c5570c8558f15c7113e82abfea3fb1a2ca84ab355f4bcfef16e15533da4307b2",
+          "size": 8979
         }
       },
       {
@@ -8191,14 +8191,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet",
         "path": "payload/.ai/core/knowledge/dotnet/testing/test-standards.md",
-        "sha256": "d9f55548b4068b8a550766f8c130ff9a95cfa8a59b0d0fc92b3981b21993fa64",
-        "size": 18941,
+        "sha256": "ef48f4dca5af6d63afced986469c5f17e082d66c45c8ae70fbee936acc0dca27",
+        "size": 19223,
         "source": {
-          "git_blob": "8f680afb66f2841646e3ddae467e20d58913bacb",
+          "git_blob": "613e8562fae329f1d0017a26a86428d9c981d826",
           "mode": "100644",
           "path": "src/knowledge/dotnet/testing/test-standards.md",
-          "sha256": "d9f55548b4068b8a550766f8c130ff9a95cfa8a59b0d0fc92b3981b21993fa64",
-          "size": 18941
+          "sha256": "ef48f4dca5af6d63afced986469c5f17e082d66c45c8ae70fbee936acc0dca27",
+          "size": 19223
         }
       },
       {
@@ -8242,14 +8242,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet",
         "path": "payload/.ai/core/knowledge/dotnet/tooling/generation/DELIVERY.md",
-        "sha256": "6dfb1a93efd4c77cc14eb1fdb919a9c226461d8d4d6f665349a47497f5f8c947",
-        "size": 9181,
+        "sha256": "363bb4cbc4a0dd0fa36f18cca1b2cd6cacdb2b970cd3b663cc73f6730a128ab9",
+        "size": 9887,
         "source": {
-          "git_blob": "43689b985a0c7036910960c7b91c3b0719610649",
+          "git_blob": "06c3f964e9b461bbddfac126feafd41c77b1c244",
           "mode": "100644",
           "path": "src/knowledge/dotnet/tooling/generation/DELIVERY.md",
-          "sha256": "6dfb1a93efd4c77cc14eb1fdb919a9c226461d8d4d6f665349a47497f5f8c947",
-          "size": 9181
+          "sha256": "363bb4cbc4a0dd0fa36f18cca1b2cd6cacdb2b970cd3b663cc73f6730a128ab9",
+          "size": 9887
         }
       },
       {
@@ -8276,14 +8276,14 @@
         "mode": "100644",
         "owner": "knowledge/dotnet",
         "path": "payload/.ai/core/knowledge/dotnet/tooling/generation/snippet-tool/README.md",
-        "sha256": "afa84e47f3c950ccfb624983aff9c44459e378ca4326a9672f6ef207fdf2cc68",
-        "size": 7819,
+        "sha256": "3712664d46f7fbadf9dc32e294e143949214c3d2f04293706eabb5447fa27f96",
+        "size": 8407,
         "source": {
-          "git_blob": "09596e0e1895e43ff8a4bd77f121d683bff3ac70",
+          "git_blob": "70236519c4ab4a41d312131a3828961023cfd8bd",
           "mode": "100644",
           "path": "src/knowledge/dotnet/tooling/generation/snippet-tool/README.md",
-          "sha256": "afa84e47f3c950ccfb624983aff9c44459e378ca4326a9672f6ef207fdf2cc68",
-          "size": 7819
+          "sha256": "3712664d46f7fbadf9dc32e294e143949214c3d2f04293706eabb5447fa27f96",
+          "size": 8407
         }
       },
       {
@@ -8684,13 +8684,13 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/content-package.yaml",
-        "sha256": "e100ecd79fe76f5da25c3333345bd4bd998125a2f1df006e6ac1902e28915922",
+        "sha256": "3000da9f7528b0318562888cd0b511d1a9e67db37ab6ed751cc34d88aa40c912",
         "size": 30160,
         "source": {
-          "git_blob": "b8a4bbbe8c46721d5f80dd4ae29774b72de867c2",
+          "git_blob": "4ccd40778562385d7dca977aae33a48a94c70c85",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/content-package.yaml",
-          "sha256": "e100ecd79fe76f5da25c3333345bd4bd998125a2f1df006e6ac1902e28915922",
+          "sha256": "3000da9f7528b0318562888cd0b511d1a9e67db37ab6ed751cc34d88aa40c912",
           "size": 30160
         }
       },
@@ -9075,14 +9075,14 @@
         "mode": "100644",
         "owner": "knowledge/engineering-common",
         "path": "payload/.ai/core/knowledge/engineering-common/references/PROMPT-PORTABILITY-RULES.md",
-        "sha256": "00686dfb22c1c0e22df09758104e46748b855d5eb01f9328c927388267258f61",
-        "size": 1721,
+        "sha256": "65373b0f93103380a01f2743d59a93e1be1c8c74422b1bd21e739a31bf2eaba8",
+        "size": 2298,
         "source": {
-          "git_blob": "bc94780ef5f39ed19863ebcdc1459df8180d2190",
+          "git_blob": "9c73d73a529e33b79889d172ddd6d6fba1b3ce0a",
           "mode": "100644",
           "path": "src/knowledge/engineering-common/references/PROMPT-PORTABILITY-RULES.md",
-          "sha256": "00686dfb22c1c0e22df09758104e46748b855d5eb01f9328c927388267258f61",
-          "size": 1721
+          "sha256": "65373b0f93103380a01f2743d59a93e1be1c8c74422b1bd21e739a31bf2eaba8",
+          "size": 2298
         }
       },
       {
@@ -9449,13 +9449,13 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/skill-package.yaml",
-        "sha256": "f80cd632c21aecf78772a8c1beba2d2bacfe469168364f31a21cc0408f245e84",
+        "sha256": "bec71576eba339ed6fa41f1363cb07c18d27a180613ceb005217f301e3e43c7b",
         "size": 1915,
         "source": {
-          "git_blob": "85761d44387eb22c70c71ba044f9f2a9b1e2d970",
+          "git_blob": "734ecdced4c60042a294571dd0aa8742373a4c98",
           "mode": "100644",
           "path": "src/skills/ai-context-init/skill-package.yaml",
-          "sha256": "f80cd632c21aecf78772a8c1beba2d2bacfe469168364f31a21cc0408f245e84",
+          "sha256": "bec71576eba339ed6fa41f1363cb07c18d27a180613ceb005217f301e3e43c7b",
           "size": 1915
         }
       },
@@ -9585,14 +9585,14 @@
         "mode": "100644",
         "owner": "skill/ai-context-init",
         "path": "payload/.ai/core/skills/ai-context-init/templates/public-root/AGENTS.md",
-        "sha256": "a2beac55c2d4e5204d791c827835c9b4e32c0bac6a59c965b83f59204e6b431f",
-        "size": 8233,
+        "sha256": "1dfc5df919c30022575de28c1c9409f4dc4431d24064399175c3ee3bfd3ee463",
+        "size": 8129,
         "source": {
-          "git_blob": "e71acb4b58a309263ef6c2a97a89ad80e5d627c9",
+          "git_blob": "3f533524ca6428740b1621622cf1864379466cee",
           "mode": "100644",
           "path": "src/skills/ai-context-init/templates/public-root/AGENTS.md",
-          "sha256": "a2beac55c2d4e5204d791c827835c9b4e32c0bac6a59c965b83f59204e6b431f",
-          "size": 8233
+          "sha256": "1dfc5df919c30022575de28c1c9409f4dc4431d24064399175c3ee3bfd3ee463",
+          "size": 8129
         }
       },
       {
@@ -9687,13 +9687,13 @@
         "mode": "100644",
         "owner": "skill/code-reviewer",
         "path": "payload/.ai/core/skills/code-reviewer/skill-package.yaml",
-        "sha256": "3480e758492094c5ce775345477b973869fa0f644433c548d184586c1699df62",
+        "sha256": "384da1ce27c0f5787ca305cef6ca424b1622625bed8044ab40c6b55b3078be0d",
         "size": 2093,
         "source": {
-          "git_blob": "ca7a7f937273ddf8e3970d0e22ed4efb246e0baf",
+          "git_blob": "d2c32adab7a2f2961a0e884fa63b27d140d5c2e8",
           "mode": "100644",
           "path": "src/skills/code-reviewer/skill-package.yaml",
-          "sha256": "3480e758492094c5ce775345477b973869fa0f644433c548d184586c1699df62",
+          "sha256": "384da1ce27c0f5787ca305cef6ca424b1622625bed8044ab40c6b55b3078be0d",
           "size": 2093
         }
       },
@@ -9840,13 +9840,13 @@
         "mode": "100644",
         "owner": "skill/domain-model-designer",
         "path": "payload/.ai/core/skills/domain-model-designer/skill-package.yaml",
-        "sha256": "f8ece5423fa71a790cd3904d84612f6b23c845b1fe49cf1a6c7def5ae9d7818a",
+        "sha256": "70508432bf6792c0f8f9fc372c85a5df367acb83eab8f63393b59daa1e630a7e",
         "size": 3445,
         "source": {
-          "git_blob": "42d13fb5f4436456edf8237275d314f384277e58",
+          "git_blob": "591f3e44e696b961a5d23039300675a5d000d1b5",
           "mode": "100644",
           "path": "src/skills/domain-model-designer/skill-package.yaml",
-          "sha256": "f8ece5423fa71a790cd3904d84612f6b23c845b1fe49cf1a6c7def5ae9d7818a",
+          "sha256": "70508432bf6792c0f8f9fc372c85a5df367acb83eab8f63393b59daa1e630a7e",
           "size": 3445
         }
       },
@@ -10044,13 +10044,13 @@
         "mode": "100644",
         "owner": "skill/local-change-implementer",
         "path": "payload/.ai/core/skills/local-change-implementer/skill-package.yaml",
-        "sha256": "72ee4c9806001ae3ee36032bbca45ddeead04d65052156122dc6741572de8eee",
+        "sha256": "0de2bc6be36c1b45bc171dd101682c355e80b51b1f36fef8d1e7777b01405f12",
         "size": 2062,
         "source": {
-          "git_blob": "2b65f5755c3bb32c795884a32b9f76a09f9ead6c",
+          "git_blob": "0f1bd485a6d56510bdb01eafe43bfa24e8816e83",
           "mode": "100644",
           "path": "src/skills/local-change-implementer/skill-package.yaml",
-          "sha256": "72ee4c9806001ae3ee36032bbca45ddeead04d65052156122dc6741572de8eee",
+          "sha256": "0de2bc6be36c1b45bc171dd101682c355e80b51b1f36fef8d1e7777b01405f12",
           "size": 2062
         }
       },
@@ -10078,14 +10078,14 @@
         "mode": "100644",
         "owner": "skill/pr-author",
         "path": "payload/.ai/core/skills/pr-author/references/configuration.md",
-        "sha256": "f5384356276e53a93e819331bf88f3dc24d4d09baa138c7063041a146c2f2c79",
-        "size": 4237,
+        "sha256": "dde7c148296297901ced0cc1bf4c1a62ffff4b46d5a75c96f0507a2d5a426e37",
+        "size": 4279,
         "source": {
-          "git_blob": "cf0d8f68e49c49542898fe00db585953ac11c6f6",
+          "git_blob": "eb95503408c35f7df412997c9838613b2a441436",
           "mode": "100644",
           "path": "src/skills/pr-author/references/configuration.md",
-          "sha256": "f5384356276e53a93e819331bf88f3dc24d4d09baa138c7063041a146c2f2c79",
-          "size": 4237
+          "sha256": "dde7c148296297901ced0cc1bf4c1a62ffff4b46d5a75c96f0507a2d5a426e37",
+          "size": 4279
         }
       },
       {
@@ -10112,13 +10112,13 @@
         "mode": "100644",
         "owner": "skill/pr-author",
         "path": "payload/.ai/core/skills/pr-author/references/github.md",
-        "sha256": "54ba078200067cb0a70ee339823b40d30f3caeed291d9a342e523dc4540a8c05",
+        "sha256": "4beb7c6e0bdbfd5553bdc9bde9d03754c8e429db847982bb08a81f1ff034506f",
         "size": 6613,
         "source": {
-          "git_blob": "b15eacf4b5e36da34dc053f5fb30a245dbc8fa66",
+          "git_blob": "6965ac40f015f2184f31ba84568a8f0215da298c",
           "mode": "100644",
           "path": "src/skills/pr-author/references/github.md",
-          "sha256": "54ba078200067cb0a70ee339823b40d30f3caeed291d9a342e523dc4540a8c05",
+          "sha256": "4beb7c6e0bdbfd5553bdc9bde9d03754c8e429db847982bb08a81f1ff034506f",
           "size": 6613
         }
       },
@@ -10163,13 +10163,13 @@
         "mode": "100644",
         "owner": "skill/pr-author",
         "path": "payload/.ai/core/skills/pr-author/scripts/github.py",
-        "sha256": "dd9545259f2ae34c27f053a1f70d9262ff39f7a66deb88d9f36dfeffc241455c",
+        "sha256": "6538cf4eafddd868c40b223130d037121bc678cc97d06e6db91946f8a946659f",
         "size": 26619,
         "source": {
-          "git_blob": "1b5707dfdfb88ee71631b9e9d2418cb0dd4d7fd5",
+          "git_blob": "19d72b785bcafec7336ac92065f277457cf40483",
           "mode": "100644",
           "path": "src/skills/pr-author/scripts/github.py",
-          "sha256": "dd9545259f2ae34c27f053a1f70d9262ff39f7a66deb88d9f36dfeffc241455c",
+          "sha256": "6538cf4eafddd868c40b223130d037121bc678cc97d06e6db91946f8a946659f",
           "size": 26619
         }
       },
@@ -10180,13 +10180,13 @@
         "mode": "100644",
         "owner": "skill/pr-author",
         "path": "payload/.ai/core/skills/pr-author/scripts/pr.py",
-        "sha256": "d249edb2a4c5b419412deb47cc7a5d15b42437c36c9e6852ceca0a341cc992e0",
+        "sha256": "21def5ce3bb34bae51b557bff83c15f11f04f1e8878b341dbdeb336532d648a8",
         "size": 66059,
         "source": {
-          "git_blob": "7f3510e3c3275301b54af676b44ba410e08478a7",
+          "git_blob": "23ff947e4a5da77e27bfea1e3e8a66c5feb6ac4d",
           "mode": "100644",
           "path": "src/skills/pr-author/scripts/pr.py",
-          "sha256": "d249edb2a4c5b419412deb47cc7a5d15b42437c36c9e6852ceca0a341cc992e0",
+          "sha256": "21def5ce3bb34bae51b557bff83c15f11f04f1e8878b341dbdeb336532d648a8",
           "size": 66059
         }
       },
@@ -10197,13 +10197,13 @@
         "mode": "100644",
         "owner": "skill/pr-author",
         "path": "payload/.ai/core/skills/pr-author/skill-package.yaml",
-        "sha256": "a5a231a07390ac5714fc694f70aed67db029e3c9eae17fbe0bd7ae85bd6274ee",
+        "sha256": "0497c747154e43f03b860660955764b852bfd6538b9ab37e707cc4fb21104d75",
         "size": 5520,
         "source": {
-          "git_blob": "f0d4d1db402304b4e1d1287c31603ca7b7532aad",
+          "git_blob": "a0849e5f62fcdcdefcd678f899dc4e8abe13bedd",
           "mode": "100644",
           "path": "src/skills/pr-author/skill-package.yaml",
-          "sha256": "a5a231a07390ac5714fc694f70aed67db029e3c9eae17fbe0bd7ae85bd6274ee",
+          "sha256": "0497c747154e43f03b860660955764b852bfd6538b9ab37e707cc4fb21104d75",
           "size": 5520
         }
       },
@@ -10503,13 +10503,13 @@
         "mode": "100644",
         "owner": "skill/requirement-author",
         "path": "payload/.ai/core/skills/requirement-author/skill-package.yaml",
-        "sha256": "e7d1add6d8ee75f22d0400b550c7add2becb845aae80d148c3ba2cb21721756c",
+        "sha256": "6f71305bbb82bd779ccc2ac0928538efe6e9884b81547245284b54d051ef89d1",
         "size": 2552,
         "source": {
-          "git_blob": "76fa657b92505a01edbb7e9c4c85a5dd518d55c7",
+          "git_blob": "c9b5952e9153ea221e1626847ddf76a1b213093d",
           "mode": "100644",
           "path": "src/skills/requirement-author/skill-package.yaml",
-          "sha256": "e7d1add6d8ee75f22d0400b550c7add2becb845aae80d148c3ba2cb21721756c",
+          "sha256": "6f71305bbb82bd779ccc2ac0928538efe6e9884b81547245284b54d051ef89d1",
           "size": 2552
         }
       },
@@ -10656,13 +10656,13 @@
         "mode": "100644",
         "owner": "skill/slice-implementer",
         "path": "payload/.ai/core/skills/slice-implementer/skill-package.yaml",
-        "sha256": "95ccf7d7f3c16b499446fcfd2b27d2e5188330572eab9e0985ab70f69c270440",
+        "sha256": "567745c46df32c5b08f92357fd4ded657cf560b60ff425dfaee6fa06aaee85f1",
         "size": 2673,
         "source": {
-          "git_blob": "60a074c1d51202dc45e918d7a9887fde622d6da9",
+          "git_blob": "0ce7ae56ab97b906a4b9fe3eeb99ce122c73c8b2",
           "mode": "100644",
           "path": "src/skills/slice-implementer/skill-package.yaml",
-          "sha256": "95ccf7d7f3c16b499446fcfd2b27d2e5188330572eab9e0985ab70f69c270440",
+          "sha256": "567745c46df32c5b08f92357fd4ded657cf560b60ff425dfaee6fa06aaee85f1",
           "size": 2673
         }
       },
@@ -10741,13 +10741,13 @@
         "mode": "100644",
         "owner": "skill/software-architect",
         "path": "payload/.ai/core/skills/software-architect/skill-package.yaml",
-        "sha256": "5c8f32b30b7fe05d7ea1b744d91748d2b6d04a5dc27618a2c5c88366bac40252",
+        "sha256": "cf9cbb0ed9e8e16d0196cd78582ebdb76cb0f9c285faaa3ad02c0b54ef07687a",
         "size": 2579,
         "source": {
-          "git_blob": "aaeffaa71947910e21539478c2bde83cd820c280",
+          "git_blob": "fadd50984b6603bb841ab10b68478054e152efed",
           "mode": "100644",
           "path": "src/skills/software-architect/skill-package.yaml",
-          "sha256": "5c8f32b30b7fe05d7ea1b744d91748d2b6d04a5dc27618a2c5c88366bac40252",
+          "sha256": "cf9cbb0ed9e8e16d0196cd78582ebdb76cb0f9c285faaa3ad02c0b54ef07687a",
           "size": 2579
         }
       },
@@ -10979,13 +10979,13 @@
         "mode": "100644",
         "owner": "skill/spec-author",
         "path": "payload/.ai/core/skills/spec-author/skill-package.yaml",
-        "sha256": "4656b6f37152b86027324da402a9265cf55e1d37819e35a0909ecb3e32d00dcd",
+        "sha256": "48643a390074d7936dabec895780a861f8fde816d4a0ddb6e353ed2adc89c089",
         "size": 2036,
         "source": {
-          "git_blob": "60d85a8aba91351679b4f2069fb8d614a2715bb7",
+          "git_blob": "da2b2d6a4184fdf18dcc154a81c22cee5ab77ea2",
           "mode": "100644",
           "path": "src/skills/spec-author/skill-package.yaml",
-          "sha256": "4656b6f37152b86027324da402a9265cf55e1d37819e35a0909ecb3e32d00dcd",
+          "sha256": "48643a390074d7936dabec895780a861f8fde816d4a0ddb6e353ed2adc89c089",
           "size": 2036
         }
       },
@@ -11166,13 +11166,13 @@
         "mode": "100644",
         "owner": "skill/test-designer",
         "path": "payload/.ai/core/skills/test-designer/skill-package.yaml",
-        "sha256": "31ee7026733a131541127218fe0374d3739828b7fd9b8efa1d1fc97a8153c4d4",
+        "sha256": "b3ff44ad0f56c120056f11cf58408ea1256cccf8709cd4ddb22f56f013b34aba",
         "size": 2377,
         "source": {
-          "git_blob": "5550dd537e45b93f26354bb7379c2f089e3618c4",
+          "git_blob": "2f51639243c1ae5422c17b7086cc6f84a07f21b2",
           "mode": "100644",
           "path": "src/skills/test-designer/skill-package.yaml",
-          "sha256": "31ee7026733a131541127218fe0374d3739828b7fd9b8efa1d1fc97a8153c4d4",
+          "sha256": "b3ff44ad0f56c120056f11cf58408ea1256cccf8709cd4ddb22f56f013b34aba",
           "size": 2377
         }
       },
@@ -11240,7 +11240,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/ai-context-init",
         "path": "runtime/.agents/skills/ai-context-init/SKILL.md",
-        "sha256": "c8c58b63850aea5f7c5051277744733f5e4f6d0bb4d4ccd90ff62b8df1dd826e",
+        "sha256": "42c302f73c9d60ba7fee55ddbe8c6e8523c6ab6cfd77378ab431b04f827a3be5",
         "size": 3368,
         "source": null
       },
@@ -11257,7 +11257,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/code-reviewer",
         "path": "runtime/.agents/skills/code-reviewer/SKILL.md",
-        "sha256": "2297692112341b6758e244669b90459537ec0485a717f6660bb40426ade775b2",
+        "sha256": "2dd79364d4943a8e9408f958289577c91f94c2bd4bf851177de4591bbeefeeec",
         "size": 1960,
         "source": null
       },
@@ -11291,7 +11291,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/domain-model-designer",
         "path": "runtime/.agents/skills/domain-model-designer/SKILL.md",
-        "sha256": "27e5ea39bbc26be4a71f3ad098bc83144e6564adc5661bc21fcfb3c48d32b4bf",
+        "sha256": "6a2005bf6b13dd5fc2b155efa74baf11f7b057408e757363fbe3d4c2804c07c0",
         "size": 2287,
         "source": null
       },
@@ -11325,7 +11325,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/local-change-implementer",
         "path": "runtime/.agents/skills/local-change-implementer/SKILL.md",
-        "sha256": "9bf09fdd65a72226bf88f55f20d40213af260a485a78c9be2071c0a638aa387a",
+        "sha256": "4e3e6c0a8fe415dcb8bfb97b555ed913bf514e40354df98ae73dc7849ddaea44",
         "size": 2014,
         "source": null
       },
@@ -11342,7 +11342,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/pr-author",
         "path": "runtime/.agents/skills/pr-author/SKILL.md",
-        "sha256": "82817a58fbee2c8f78e2096ce39e48b846d3495b7b3a3473404ba986407520bd",
+        "sha256": "63688988bf8bd941bcf8c588491a0bd68b61a2cc892583c73f3c984a7ebddef8",
         "size": 2596,
         "source": null
       },
@@ -11376,7 +11376,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/requirement-author",
         "path": "runtime/.agents/skills/requirement-author/SKILL.md",
-        "sha256": "6da860fd61620bce0b73e22e4adef39f1143c302af3775087482382527dcd28a",
+        "sha256": "73f3ecfa6bbb5b2f23930350aade87b6b86370482505afb70c9c292fae236293",
         "size": 2417,
         "source": null
       },
@@ -11393,7 +11393,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/slice-implementer",
         "path": "runtime/.agents/skills/slice-implementer/SKILL.md",
-        "sha256": "6f7820a009927f7cb3cabda63e130d200503596466bd500e17d600de51181d56",
+        "sha256": "7cc0518c0bced1737982e88657874aaf23a57440bd791d6a3a4a4c3eef1d70f2",
         "size": 2575,
         "source": null
       },
@@ -11410,7 +11410,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/software-architect",
         "path": "runtime/.agents/skills/software-architect/SKILL.md",
-        "sha256": "f3712049f5990096a3344c4db326fba2e383992e6ad801c6eff97466a7ad1db3",
+        "sha256": "f1daf8808429dfaf9a9eed4fe4089be38087bd104db814ed2ea7fe79b537926c",
         "size": 2169,
         "source": null
       },
@@ -11444,7 +11444,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/spec-author",
         "path": "runtime/.agents/skills/spec-author/SKILL.md",
-        "sha256": "8154b8e17e6a29ba26b47adb0c1118c4f8d6a2c78af3a863df2a092cd1649ef5",
+        "sha256": "950a0b0bb789dadbdfb83ee2a8a80301abc4985cd64fac8ff29754df1b55d14b",
         "size": 2536,
         "source": null
       },
@@ -11478,7 +11478,7 @@
         "mode": "100644",
         "owner": "adapter/codex/skill/test-designer",
         "path": "runtime/.agents/skills/test-designer/SKILL.md",
-        "sha256": "8a96084c6b6eadc5559ca22612fada2ac612fa4a6e22339d6b47e841e616280f",
+        "sha256": "0fa72174ac36c06778d5beca651949032d64c12c3eb874483552eea835f5fa49",
         "size": 2125,
         "source": null
       },
@@ -11588,7 +11588,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/ai-context-init",
         "path": "runtime/.claude/skills/ai-context-init/SKILL.md",
-        "sha256": "fa0ac5a84b66a7e0008a14b5653214cf146d2836b40953b33c4caba5f87c7f98",
+        "sha256": "952bc6014fe1ca154292842175b2716d0c7486864f0d3f740be59eff2da1fa4a",
         "size": 3370,
         "source": null
       },
@@ -11605,7 +11605,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/code-reviewer",
         "path": "runtime/.claude/skills/code-reviewer/SKILL.md",
-        "sha256": "d47a4d02b1bf55e2ad8775cfb30a99ba85298781e95025e56a84b359165b461f",
+        "sha256": "b1629f6412b493bd715f21e3790e10bbe9cefc549851e0d8840854d95c594abc",
         "size": 1962,
         "source": null
       },
@@ -11639,7 +11639,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/domain-model-designer",
         "path": "runtime/.claude/skills/domain-model-designer/SKILL.md",
-        "sha256": "86f913a1273317bcbe341d73597557e719866289895a9229cdc586451b11ef4c",
+        "sha256": "3bb7d896bf378ba04512bf66f0f726c73fc9a90e6cae77bac0b01c32d5476d7f",
         "size": 2289,
         "source": null
       },
@@ -11673,7 +11673,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/local-change-implementer",
         "path": "runtime/.claude/skills/local-change-implementer/SKILL.md",
-        "sha256": "2bb39c061d0c4e7d87f3bb302af6015859fc7a19b3554bd47fde94a6c88cfc45",
+        "sha256": "17340669bcf5c6910ac238d728bd899c76f2fcf8ce9a42dbe26a3b0f2cdab5e8",
         "size": 2016,
         "source": null
       },
@@ -11690,7 +11690,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/pr-author",
         "path": "runtime/.claude/skills/pr-author/SKILL.md",
-        "sha256": "9590555361be81af3da486d21c82f42138dde885f59a7d3821a7481da7356c10",
+        "sha256": "b3ef0d79e4e168d2dea5f98a6dfa4e85c5892516cd17ab39a562ea37760c29d8",
         "size": 2598,
         "source": null
       },
@@ -11724,7 +11724,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/requirement-author",
         "path": "runtime/.claude/skills/requirement-author/SKILL.md",
-        "sha256": "da29c36f67cb89b5b98e887220309a6284b44b8060feffc605f5bbc4d8278632",
+        "sha256": "bc46025abaf7c2fa1211abeff82967d43d54e732a6646178e3be93a12d1a51f8",
         "size": 2419,
         "source": null
       },
@@ -11741,7 +11741,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/slice-implementer",
         "path": "runtime/.claude/skills/slice-implementer/SKILL.md",
-        "sha256": "55a8690b3129c04685b2f8820c28a97fc4f07918c013ebb058efef92bea8545a",
+        "sha256": "b5886e4dce0d915eed35bc93aa5d3684eb686e9c54014a995840ae46af220791",
         "size": 2577,
         "source": null
       },
@@ -11758,7 +11758,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/software-architect",
         "path": "runtime/.claude/skills/software-architect/SKILL.md",
-        "sha256": "59f894e515187239df22b88ff8d98561e205521c609c14c1e9f41303d6c074be",
+        "sha256": "24e3fbb7fc416e4c6ef0f1e48495d66d0452aeccd92255ef477a2cde710f18ae",
         "size": 2171,
         "source": null
       },
@@ -11792,7 +11792,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/spec-author",
         "path": "runtime/.claude/skills/spec-author/SKILL.md",
-        "sha256": "b73e909683fa2086d10ed4ced90c1bdab3e91f1abbb372e5bf11f0bbeb962475",
+        "sha256": "1ed4774f0f62a3f3eee3a3084b712d6c3b2677017a92e8d4025d1f1697840a74",
         "size": 2538,
         "source": null
       },
@@ -11826,7 +11826,7 @@
         "mode": "100644",
         "owner": "adapter/claude/skill/test-designer",
         "path": "runtime/.claude/skills/test-designer/SKILL.md",
-        "sha256": "8540d355165ddd1061d8eb03c6e07ea79233e965a0cfdebd932e5a851bbdd8b2",
+        "sha256": "b826a476da9c052b1a670e3faea741b9fdfdf9ca225d77a31de1cc2a446aac0d",
         "size": 2127,
         "source": null
       }
@@ -11838,135 +11838,135 @@
   "project_inputs": [
     {
       "path": ".ai/INDEX.MD",
-      "sha256": "334eb9f6c08638abb3d7c4041d23cf01acfdcef86fdb87ebde140800f744e90d"
+      "sha256": "f192d58eca7ad60d28a2e34c1828c9332d4c7c3324fd906c765cab06f7ff488e"
     },
     {
-      "path": ".ai/custom/framework.json",
+      "path": ".ai/project/framework.json",
       "sha256": "fedc5f5c74400bd5aead2b0b75df9b8dce0ca8bb50e3f744001b429091afd1a1"
     },
     {
-      "path": ".ai/custom/installation.json",
-      "sha256": "dda49f94421f7d9d3450c2245beaa521b42eb489c201a6adcef385b50b3d2d51"
+      "path": ".ai/project/installation.json",
+      "sha256": "ffda2cf428d9b0efaaa9b724aa490095db911e1965064f6da74331eb5ff07f77"
     },
     {
-      "path": ".ai/custom/roles/README.md",
+      "path": ".ai/project/roles/README.md",
       "sha256": "ae0bbb74f23454f1e904afd0651a506933dc48ba212d0b5564b5ae13878ec2f2"
     },
     {
-      "path": ".ai/custom/roles/context-translator/references/translation-playbook.md",
+      "path": ".ai/project/roles/context-translator/references/translation-playbook.md",
       "sha256": "2c466c7bc25ff7f34e60791ffa18875c9405886e0931be9a10feb5c5c169c313"
     },
     {
-      "path": ".ai/custom/roles/context-translator/sub-agent.yaml",
-      "sha256": "1b2b1bbc7f341877bc0e7da1f241dd29ff6b11b7a6604bac4ab632a3d3d39115"
+      "path": ".ai/project/roles/context-translator/sub-agent.yaml",
+      "sha256": "f1856c5feb673f641d511185e27a0c5a5b4658bf6d537450b1a17a03a3b39bf2"
     },
     {
-      "path": ".ai/custom/roles/evidence-report-synthesizer/references/evidence-report-synthesis-playbook.md",
+      "path": ".ai/project/roles/evidence-report-synthesizer/references/evidence-report-synthesis-playbook.md",
       "sha256": "4eec5a101253c6d1843b183cb30bd708df502dae88bcd4ff93a5a5a9dd8bf12d"
     },
     {
-      "path": ".ai/custom/roles/evidence-report-synthesizer/sub-agent.yaml",
-      "sha256": "67b288c3cebac14caaffffea914db3408f37d49ffa9af5f71b8c682802fc4efb"
+      "path": ".ai/project/roles/evidence-report-synthesizer/sub-agent.yaml",
+      "sha256": "abbe306f072d0ceba68b49f8cc35f9e41f9175fd007a0f425ed6984512fa0d64"
     },
     {
-      "path": ".ai/custom/roles/fixed-head-independent-auditor/references/fixed-head-independent-audit-playbook.md",
+      "path": ".ai/project/roles/fixed-head-independent-auditor/references/fixed-head-independent-audit-playbook.md",
       "sha256": "ddcb129626a7a04adadb15c4681c740073db4f5caff626daeff76545f5a6d537"
     },
     {
-      "path": ".ai/custom/roles/fixed-head-independent-auditor/sub-agent.yaml",
-      "sha256": "81a3ebe7a7b795c25b3fd1c614da0fc868806a9f1cb613b8bf103bb66daa7d1c"
+      "path": ".ai/project/roles/fixed-head-independent-auditor/sub-agent.yaml",
+      "sha256": "ac4fe59f022fc8289bee8b05bffae10b2cebf0b3787e389dc09ca50e14baaaf8"
     },
     {
-      "path": ".ai/custom/roles/mechanical-evidence-worker/references/mechanical-evidence-playbook.md",
+      "path": ".ai/project/roles/mechanical-evidence-worker/references/mechanical-evidence-playbook.md",
       "sha256": "fdbeb19178d83ee6bf2c40ec95bc4310ecfcb1508a00482fe40297c7d7d001ab"
     },
     {
-      "path": ".ai/custom/roles/mechanical-evidence-worker/sub-agent.yaml",
-      "sha256": "f9bd85806d9093feda558e1412a4725a58b2a164d90af51f8bcb61a3c7be65ea"
+      "path": ".ai/project/roles/mechanical-evidence-worker/sub-agent.yaml",
+      "sha256": "99a687232acedb0bdea18fbfa44c4e5bc9cfab6ca4d9f943d77766f189bb6fb2"
     },
     {
-      "path": ".ai/custom/roles/reconciliation-worker/references/reconciliation-playbook.md",
+      "path": ".ai/project/roles/reconciliation-worker/references/reconciliation-playbook.md",
       "sha256": "2fe1beaef86d90a42587d7e649e1da264eba1dbacdfeeec16f3e5a7d970fe92a"
     },
     {
-      "path": ".ai/custom/roles/reconciliation-worker/sub-agent.yaml",
-      "sha256": "c6b5a46db8f1975876f023afef63ddf66b2aa29ff9c4a5bf60c9443844672991"
+      "path": ".ai/project/roles/reconciliation-worker/sub-agent.yaml",
+      "sha256": "30d6415620f8f5f03d30af64434773a191c3359a9b49f84fd1b903bac325018d"
     },
     {
-      "path": ".ai/custom/roles/semantic-governance-analyst/references/semantic-governance-analysis-playbook.md",
+      "path": ".ai/project/roles/semantic-governance-analyst/references/semantic-governance-analysis-playbook.md",
       "sha256": "3ee75ecf5728ba7a765d3a8397922b26604b4797aaf0ea5a01b92ebfb47b1d40"
     },
     {
-      "path": ".ai/custom/roles/semantic-governance-analyst/sub-agent.yaml",
-      "sha256": "5b1935c66622031e0dea5c3328dc68917b065ced5c58714b6f90d1babf043eda"
+      "path": ".ai/project/roles/semantic-governance-analyst/sub-agent.yaml",
+      "sha256": "1740749dd7004cbcd5f168336e4489ecfc696471d40268c7fd88924c1a1e445a"
     },
     {
-      "path": ".ai/custom/roles/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md",
+      "path": ".ai/project/roles/shared/AGENT-EXECUTION-GUARDRAILS-CONTRACT.md",
       "sha256": "11cf1cb5815cffeabadf88587ac33125f1517ce4cacd521dcd2aa8d7f15b7adf"
     },
     {
-      "path": ".ai/custom/roles/shared/ROLE-EXECUTION-CONTRACT.md",
-      "sha256": "cabdf5c11e2504346c203af8bfcaaacd5b3133f1373b0473e4686d26a3788853"
+      "path": ".ai/project/roles/shared/ROLE-EXECUTION-CONTRACT.md",
+      "sha256": "385858f210a3ee786c22f899bd1591032f3313b50f43abd6facdf26bce8810ef"
     },
     {
-      "path": ".ai/custom/skills/standards-promotion-experimental/SKILL.md",
+      "path": ".ai/project/skills/standards-promotion-experimental/SKILL.md",
       "sha256": "a3b9c1ad9098cfacaf5b89fcbb13a60ea905b0660fcbd6f3981676706018af08"
     },
     {
-      "path": ".ai/custom/skills/standards-promotion-experimental/references/authority.md",
+      "path": ".ai/project/skills/standards-promotion-experimental/references/authority.md",
       "sha256": "3df9b1f1ddfdc6aaf1df05d6b027b47144faa362e718e02a8e3218dc2d132792"
     },
     {
-      "path": ".ai/custom/skills/standards-promotion-experimental/references/configuration.md",
+      "path": ".ai/project/skills/standards-promotion-experimental/references/configuration.md",
       "sha256": "78aca34372afa57475f18b7df6ea062f0234e675c96b97589d6f83d8dc3cb28c"
     },
     {
-      "path": ".ai/custom/skills/standards-promotion-experimental/references/example.md",
+      "path": ".ai/project/skills/standards-promotion-experimental/references/example.md",
       "sha256": "8cc3b24b18431e17ea3c7ae1fc3941c2f04fb06701f7ad5ac8a788c995679a2d"
     },
     {
-      "path": ".ai/custom/skills/standards-promotion-experimental/references/operations.md",
+      "path": ".ai/project/skills/standards-promotion-experimental/references/operations.md",
       "sha256": "e926f99bbe0877380a1865d0547cfc57e1e1f9284c2a996ef405edbd7ce368e3"
     },
     {
-      "path": ".ai/custom/skills/standards-promotion-experimental/schemas/promotion-record.schema.json",
+      "path": ".ai/project/skills/standards-promotion-experimental/schemas/promotion-record.schema.json",
       "sha256": "0002b9d91dfd4cfea7a74d51567dd0d93bc03e7f3c6ad3ad974707996eb58b46"
     },
     {
-      "path": ".ai/custom/skills/standards-promotion-experimental/scripts/standards_promotion.py",
+      "path": ".ai/project/skills/standards-promotion-experimental/scripts/standards_promotion.py",
       "sha256": "3aa4054e8a7d1f7a698478efdd9d02ef373ab113751f2635fa61e0429a5ed14e"
     },
     {
-      "path": ".ai/custom/skills/standards-promotion-experimental/skill-package.yaml",
+      "path": ".ai/project/skills/standards-promotion-experimental/skill-package.yaml",
       "sha256": "660195c7555003ec67de29e3c5b8e87f4da1869fb7fcf96a5f762d1a0e77a0f6"
     },
     {
-      "path": ".ai/custom/skills/standards-promotion-experimental/templates/promotion.md",
+      "path": ".ai/project/skills/standards-promotion-experimental/templates/promotion.md",
       "sha256": "953e3da7d7029e4bb9560e1454a6c1dbfb6f1f3cf9c22b6f9f7c7b74af992ea5"
     },
     {
       "path": ".codex/agents/bounded-routine-worker.toml",
-      "sha256": "bc4648c20ea19593d323d69ea43eac0311983c63d27662ca8b336765784d2c0e"
+      "sha256": "d561ba057cc3304892114e1b7200c6719af52e769979d1f44b029153a5b76e3a"
     },
     {
       "path": ".codex/agents/context-translator.toml",
-      "sha256": "479c6e89475ccdfcd82a2b9254c93b62bd23affb10f07132cfb9a28b3e8e64f9"
+      "sha256": "badb579aa1d2fa055e86ac19c8e8f9d20e18da011fad1c4af75dcc042376be22"
     },
     {
       "path": ".codex/agents/evidence-report-synthesizer.toml",
-      "sha256": "e5294cbbd7a1636854f9de700769c5cae55b2bc82a131bc732a2625951b2045f"
+      "sha256": "781474fccd9babc2bec9b3664728030a7e9fedd5b515a1c6823d2d13206b2814"
     },
     {
       "path": ".codex/agents/fixed-head-independent-auditor.toml",
-      "sha256": "6ec598940a79a0a396b2d288076d05801168bfd760080e2f928168bb15ea513b"
+      "sha256": "dacbbe5be149574e342b44b409f176e4d38d8375c60585940ed3c52c846da478"
     },
     {
       "path": ".codex/agents/reconciliation-worker.toml",
-      "sha256": "82215994bd5797c125529be45370d42da070cdd16525166ace57dbcc2a358d72"
+      "sha256": "18a45b7de303de18b5ea0d0714188c22fe55c8c833703020630d6513c22bc479"
     },
     {
       "path": ".codex/agents/semantic-governance-analyst.toml",
-      "sha256": "b2d85e4954a976ea33cad8c3c3081f93e40bc50892f1201334502b35add8ed88"
+      "sha256": "06119fd7115cb7ec6e2cfdf48713890227fe61a240f7e4d3649d45176dbe8232"
     },
     {
       "path": ".dev/ai-context/TARGET-ENGINEERING-RULES.md",
@@ -11974,7 +11974,7 @@
     },
     {
       "path": ".gitattributes",
-      "sha256": "2a54ac838adf10bb12f0e1974847ed801e98d5d6b8822c88306ac2b5971618cd"
+      "sha256": "2f1c0ef8ac2726f1ff80cc929786185dd40faa1ddcdedd6e630e6c0c9d93be0d"
     },
     {
       "path": ".gitignore",
@@ -11982,23 +11982,23 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "de9c89ef25eecee1254a8fb81e5286ee8cfca4f1549d3587eb2f21d350724361"
+      "sha256": "5cbbe389aa17b4ce8bc18100c3c179a6f5f0bc962088ff366d7505f4319de9ba"
     },
     {
       "path": "AGENTS.zh-TW.md",
-      "sha256": "7b015443d189991c86248a6e321ba0ea51f10e0cdd5006d62bb15d3340ddfb4e"
+      "sha256": "0edff46e5835626fe0e8b37bbff959dcffaa51d0e1c60f40a0e6efba72fc0d86"
     },
     {
       "path": "CLAUDE.md",
-      "sha256": "ef50c33c264267502e4cf0ce29b52e60e8a3acb654ca34a30ff0844bf85d9266"
+      "sha256": "3d05e4acc859dae1f12490558de2cc749e68b05d81e66026f31ae161cd21b6b6"
     },
     {
       "path": "README.en.md",
-      "sha256": "64150a5bfd02a4717d8b657dfcf6c5afa69d9e82ffb3474a749eb66c8eaa580b"
+      "sha256": "e0e12a01fa9b6264a5a7f2631a67050c4a91816d672cb2c87b67001a648c7c83"
     },
     {
       "path": "README.md",
-      "sha256": "9e92088f47f0a7606b60fd121ccedb63be4f97d405e930ce8e2f0c775df0be97"
+      "sha256": "48608e363697e88c5697c8fa4de67ec43fe2390e8214b7dca23baf98ac8e0910"
     }
   ],
   "selection": {
@@ -12023,9 +12023,9 @@
       }
     ],
     "catalog": {
-      "catalog_sha256": "7efceed63909bb41e885885a31c844434ec5fdcea7d9db2b3d0414cb49f2042a",
-      "files_sha256": "4d0692c8b8cb88d3db01ae8fe878e3e2678ab6f8e093510e3e5b77dd2490985c",
-      "identity": "catalog:1:0.23.0:24138feb596f5fdfca0a9ec0537b7c4f1c428436:b4e4c70351704a2a275b65b7e2f511340585b9838b14a91ebdfeae3f643702c1"
+      "catalog_sha256": "bcc2456a4f0655c915b1c09b71730cc8c921bf5181ff3516f715e1e4c7c6cfbd",
+      "files_sha256": "061d8f74998e91800b9a159e1827e94a3943fef058031b99f34eb7bc51b41402",
+      "identity": "catalog:1:0.23.1:5616b9236ab15cf41d16e16eca79f9171e039f3d:fc8e6aa4ef496a06587ba748f3da1b309c30c3f33889aaff31bff66f1ff2380d"
     },
     "components": [
       {
@@ -12096,10 +12096,10 @@
           {
             "id": "engineering-common",
             "kind": "knowledge",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
-        "version": "0.3.3"
+        "version": "0.3.5"
       },
       {
         "id": "engineering-common",
@@ -12147,7 +12147,7 @@
         "metadata_version": 1,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.4.2"
+        "version": "0.4.3"
       },
       {
         "id": "adr-author",
@@ -12221,7 +12221,7 @@
         "metadata_version": 3,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.2.5"
+        "version": "0.2.6"
       },
       {
         "id": "code-reviewer",
@@ -12238,17 +12238,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.15"
+        "version": "0.2.17"
       },
       {
         "id": "diagnostic-analyst",
@@ -12282,17 +12282,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.1.10"
+        "version": "0.1.12"
       },
       {
         "id": "lesson-author",
@@ -12329,17 +12329,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.17"
+        "version": "0.2.19"
       },
       {
         "id": "pr-author",
@@ -12360,7 +12360,7 @@
         "metadata_version": 2,
         "optional_dependencies": [],
         "required_dependencies": [],
-        "version": "0.1.1"
+        "version": "0.1.2"
       },
       {
         "id": "problem-frame-author",
@@ -12402,11 +12402,11 @@
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.5"
+        "version": "0.2.6"
       },
       {
         "id": "slice-implementer",
@@ -12429,17 +12429,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.2.17"
+        "version": "0.2.19"
       },
       {
         "id": "software-architect",
@@ -12458,17 +12458,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.1.10"
+        "version": "0.1.12"
       },
       {
         "id": "software-development-orchestrator",
@@ -12507,11 +12507,11 @@
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.3.2"
+        "version": "0.3.3"
       },
       {
         "id": "spec-compliance-validator",
@@ -12547,17 +12547,17 @@
             "id": "dotnet",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.3.3"
+            "version": "0.3.5"
           },
           {
             "id": "engineering-common",
             "kind": "knowledge",
             "on_missing": "unavailable",
-            "version": "0.4.2"
+            "version": "0.4.3"
           }
         ],
         "required_dependencies": [],
-        "version": "0.4.13"
+        "version": "0.4.15"
       }
     ],
     "desired": {
@@ -14306,9 +14306,9 @@
         }
       ],
       "catalog": {
-        "catalog_sha256": "7efceed63909bb41e885885a31c844434ec5fdcea7d9db2b3d0414cb49f2042a",
-        "files_sha256": "4d0692c8b8cb88d3db01ae8fe878e3e2678ab6f8e093510e3e5b77dd2490985c",
-        "identity": "catalog:1:0.23.0:24138feb596f5fdfca0a9ec0537b7c4f1c428436:b4e4c70351704a2a275b65b7e2f511340585b9838b14a91ebdfeae3f643702c1"
+        "catalog_sha256": "bcc2456a4f0655c915b1c09b71730cc8c921bf5181ff3516f715e1e4c7c6cfbd",
+        "files_sha256": "061d8f74998e91800b9a159e1827e94a3943fef058031b99f34eb7bc51b41402",
+        "identity": "catalog:1:0.23.1:5616b9236ab15cf41d16e16eca79f9171e039f3d:fc8e6aa4ef496a06587ba748f3da1b309c30c3f33889aaff31bff66f1ff2380d"
       },
       "knowledge": [
         "dotnet",
@@ -14337,7 +14337,7 @@
         "test-designer"
       ]
     },
-    "desired_sha256": "dda49f94421f7d9d3450c2245beaa521b42eb489c201a6adcef385b50b3d2d51",
+    "desired_sha256": "ffda2cf428d9b0efaaa9b724aa490095db911e1965064f6da74331eb5ff07f77",
     "generator": {
       "id": "aicf-subset-derivation",
       "implementation": [
@@ -14426,11 +14426,11 @@
           "size": 7386
         },
         {
-          "git_blob": "7fd4105544bec4f6f7d487997b43b1a053e31f95",
+          "git_blob": "3dfd3317178f34f91709ed3cd613ab3a76e44ffd",
           "mode": "100644",
           "path": "src/distribution/installation.py",
-          "sha256": "e40fb99329279f6b63d61e9667fa88758822b38ab2de13280a7f327eda86bbf6",
-          "size": 42244
+          "sha256": "93b632ddbc1fbc204ee0c8b7efb325331beb44cc2e68ae6a32200d4400da28b0",
+          "size": 47799
         },
         {
           "git_blob": "d8b2272c5d53f273d5dc1a94999f2788888f3cb4",
@@ -14440,11 +14440,11 @@
           "size": 27127
         },
         {
-          "git_blob": "25d370faac4aa3c46c5b53f313f8a97bea8c05a6",
+          "git_blob": "82009d533a159c5a0136dbeaf425048034939b1d",
           "mode": "100644",
           "path": "src/distribution/installation_plan.py",
-          "sha256": "ebc3c8dec1389795c6df087d49ffe22ffd1a78d92c37cd5570496929cff84cd3",
-          "size": 26524
+          "sha256": "bc02c2336e60e92100f877f539aabfe59ccb463397672ceaaf61727e0576fece",
+          "size": 27976
         },
         {
           "git_blob": "86356c2bafd0a0f9cb7f9ece3f1e8a4e17bebb1e",
@@ -14468,11 +14468,11 @@
           "size": 25013
         },
         {
-          "git_blob": "056779fd69487c9d4fcd1343acdec2149c455b92",
+          "git_blob": "31968b83e2d02f6a2bd1d6cd27f5941f88c082d1",
           "mode": "100644",
           "path": "src/distribution/project_layout.py",
-          "sha256": "cd180d6f8f10272dc00a2d68df56c352b55582670f1d2d2e70842f86d8859424",
-          "size": 17784
+          "sha256": "a47df792d9d768b8e0fc874038c17eed5cca6c8b9ccebc49bd7afa982674704e",
+          "size": 28368
         },
         {
           "git_blob": "19cb339db3e7b1b5cbd4021410ed1302331be61c",
@@ -14489,18 +14489,18 @@
           "size": 8608
         },
         {
-          "git_blob": "4f3aab909f07b8cf5644e0558fc54e5ea1d31c13",
+          "git_blob": "b7bd7b155fd1a3718a6b838fb67d697385ae2e0a",
           "mode": "100644",
           "path": "src/distribution/skill_registry.py",
-          "sha256": "7db04528de191ad1f2c207f163f5c20c8b2fb696667293f04bbe3871f8e0e486",
-          "size": 34187
+          "sha256": "792ba6e4eb04f09b5954565c44a4353e9b197b60094393fb603a0b2fc1faf7c5",
+          "size": 34188
         },
         {
-          "git_blob": "617f20f5601241a31f0ec2e008a70419c1ca023d",
+          "git_blob": "d449e8d065be60dfba52d47f921c7bc5258bef15",
           "mode": "100644",
           "path": "src/distribution/subagent_policy.py",
-          "sha256": "4975bbbebf1134fbf080f3352a5d7595955557799a1918e2017435c0e16de704",
-          "size": 16744
+          "sha256": "27dd216803d659de2813674a370fb98b9b166a6887b1893a9f55fdd7e1bfb112",
+          "size": 17737
         },
         {
           "git_blob": "71606a1a72a4d2c11a615ca539925c589639539e",
@@ -14547,11 +14547,11 @@
       ]
     },
     "mode": "catalog-subset",
-    "release_version": "0.23.0",
+    "release_version": "0.23.1",
     "schema_version": 3,
     "source": {
-      "commit": "24138feb596f5fdfca0a9ec0537b7c4f1c428436",
-      "tree": "1755760b73a7f8c433d63f6c608315e82bff3437"
+      "commit": "5616b9236ab15cf41d16e16eca79f9171e039f3d",
+      "tree": "a4db60670fa57ff7bac82c944d8df4c60f95ebc6"
     }
   }
 }

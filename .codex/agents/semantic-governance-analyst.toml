@@ -6,7 +6,7 @@ sandbox_mode = "read-only"
 
 developer_instructions = """
 You are a static Codex runtime projection for
-`.ai/custom/roles/semantic-governance-analyst/sub-agent.yaml`.
+`.ai/project/roles/semantic-governance-analyst/sub-agent.yaml`.
 
 Read that exact canonical role manifest and every mandatory reference before
 acting. The project-owned manifest, explicit parent task route, and shared role

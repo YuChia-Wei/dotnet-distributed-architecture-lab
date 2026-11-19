@@ -14,7 +14,7 @@ ordering:
   array_contents: retain declared source order
 catalog_digest:
   algorithm: sha256
-  value: 8a7a57a26b20a4676927e4f968985506da0eeabbe306475815e5ff0f9adef8af
+  value: ed69c3981d09911062560d0f42a6259bd26c29e586d1cbebc8d3914c5fc75ffb
   canonicalization: UTF-8 encoding of compact JSON with Unicode preserved, object keys sorted by Unicode code
     point, array order preserved, and exactly one terminal LF; the complete catalog_digest field is excluded
     from the input.
@@ -348,7 +348,7 @@ rules:
   - integration/persistence/mapper-standards.md
   - references/review-routing.yaml
   status: active
-  source_file_sha256: 640f95c29e552086a2043d92f4711624af4cbe77543d8c4ac7db20c25fbfb821
+  source_file_sha256: c5570c8558f15c7113e82abfea3fb1a2ca84ab355f4bcfef16e15533da4307b2
   normative_text_sha256: 7d8e43950811aa96c6cfc12f811deb9c8d13739989d4611176e5d0e4754c165e
   normative_text: |
     ## 📌 Core Concept
@@ -413,7 +413,7 @@ rules:
   - integration/persistence/mapper-standards.md
   - references/review-routing.yaml
   status: active
-  source_file_sha256: b50107b539d69511e7c60ee5cb6287ef31a16430fc77ee3664ff913f13dd8a2d
+  source_file_sha256: 13199853ade6aa058c45b08d680ef79575e1e42328ca22f57f7427db0644e2a0
   normative_text_sha256: 5e5370bef9fae1d46a6df8518ab380422368a25d7bb0ca00affc1af3f726cfa7
   normative_text: |
     ### 0. Soft-Delete Default Profile
@@ -752,7 +752,7 @@ rules:
   - testing/profile-based-testing.md
   - testing/test-standards.md
   status: active
-  source_file_sha256: d9f55548b4068b8a550766f8c130ff9a95cfa8a59b0d0fc92b3981b21993fa64
+  source_file_sha256: ef48f4dca5af6d63afced986469c5f17e082d66c45c8ae70fbee936acc0dca27
   normative_text_sha256: b969fc0b217b1d55fbd3933e49dd9e313501aeb98c88225015df1a0592ccb91d
   normative_text: |
     ### 3. Use GWT; Default to BDDfy
@@ -894,7 +894,7 @@ rules:
   - testing/profile-based-testing.md
   - testing/test-standards.md
   status: active
-  source_file_sha256: d9f55548b4068b8a550766f8c130ff9a95cfa8a59b0d0fc92b3981b21993fa64
+  source_file_sha256: ef48f4dca5af6d63afced986469c5f17e082d66c45c8ae70fbee936acc0dca27
   normative_text_sha256: b969fc0b217b1d55fbd3933e49dd9e313501aeb98c88225015df1a0592ccb91d
   normative_text: |
     ### 3. Use GWT; Default to BDDfy
@@ -1039,7 +1039,7 @@ rules:
   - testing/profile-based-testing.md
   - testing/test-standards.md
   status: active
-  source_file_sha256: d9f55548b4068b8a550766f8c130ff9a95cfa8a59b0d0fc92b3981b21993fa64
+  source_file_sha256: ef48f4dca5af6d63afced986469c5f17e082d66c45c8ae70fbee936acc0dca27
   normative_text_sha256: 2c19a84c144f1a39b3cd719a6d9cfc2e9ce7a4ac52124d32e6e50a8bf22d6cd8
   normative_text: |
     ### 6. Mocking Library Selection
@@ -1674,7 +1674,7 @@ unpacketized_documents:
     path: testing/test-standards.md
   migration_provenance:
     legacy_path: .dev/standards/best-practices.md
-  source_file_sha256: d9f55548b4068b8a550766f8c130ff9a95cfa8a59b0d0fc92b3981b21993fa64
+  source_file_sha256: ef48f4dca5af6d63afced986469c5f17e082d66c45c8ae70fbee936acc0dca27
   packet_state: identity-allocation-required
   resolver_disposition: unpacketized-fail-closed
   reason: Retained guidance has no separately allocated stable rule_id. Moving or consolidating its source

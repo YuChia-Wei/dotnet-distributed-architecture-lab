@@ -1744,9 +1744,9 @@
     }
   ],
   "catalog": {
-    "catalog_sha256": "7efceed63909bb41e885885a31c844434ec5fdcea7d9db2b3d0414cb49f2042a",
-    "files_sha256": "4d0692c8b8cb88d3db01ae8fe878e3e2678ab6f8e093510e3e5b77dd2490985c",
-    "identity": "catalog:1:0.23.0:24138feb596f5fdfca0a9ec0537b7c4f1c428436:b4e4c70351704a2a275b65b7e2f511340585b9838b14a91ebdfeae3f643702c1"
+    "catalog_sha256": "bcc2456a4f0655c915b1c09b71730cc8c921bf5181ff3516f715e1e4c7c6cfbd",
+    "files_sha256": "061d8f74998e91800b9a159e1827e94a3943fef058031b99f34eb7bc51b41402",
+    "identity": "catalog:1:0.23.1:5616b9236ab15cf41d16e16eca79f9171e039f3d:fc8e6aa4ef496a06587ba748f3da1b309c30c3f33889aaff31bff66f1ff2380d"
   },
   "knowledge": [
     "dotnet",

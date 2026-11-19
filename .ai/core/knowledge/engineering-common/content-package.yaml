@@ -1,6 +1,6 @@
 content_package_version: 1
 id: engineering-common
-version: 0.4.2
+version: 0.4.3
 entrypoint: README.md
 members:
 - path: README.md

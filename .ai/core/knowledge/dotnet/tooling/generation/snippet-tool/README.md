@@ -10,7 +10,19 @@ SnippetTool renders small C# fragments for a human or agent to insert into a sel
 
 ## Run
 
-On Windows use `SnippetTool.exe`. On Unix use `./SnippetTool`. The executable also accepts `--help` and `--version`. For a request, pass `--request request.json`. For example, save this request to inspect the interface snippet:
+Check the selected bundle's `generation.json` or the Release asset list for
+your RID. The three-RID Native AOT delivery targets `win-x64`,
+`linux-x64` and `osx-arm64` (Apple silicon). Earlier two-RID releases such as
+v0.23.0 contain the Windows and Linux executables. For a standalone download,
+verify its SHA-256 and place the same release and RID's `snippets/` directory
+from the Framework ZIP beside the executable.
+
+On Windows use `SnippetTool.exe`. On Linux and macOS use `./SnippetTool`
+from the bundle's RID directory, or invoke the downloaded filename, such as
+`./SnippetTool-<version>-osx-arm64`. Set the executable bit if needed.
+Use `--version` to check startup or `--help` to inspect the CLI. For a request,
+pass `--request request.json`. For example, save this request to inspect the
+interface snippet:
 
 ```json
 {"schemaVersion":1,"operation":"inspect","id":"interface-method"}

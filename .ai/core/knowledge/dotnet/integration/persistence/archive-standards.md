@@ -14,19 +14,20 @@ The Archive Pattern is used for soft deletion and historical data management and
 
 ---
 
-## 🏷️ Pattern Markers (for Automated Checks)
+## 🏷️ Illustrative Pattern Markers
 
-The following markers are used by automated code review scripts:
+Use these names to locate candidate archive-state fields for review. Confirm
+whether any target-selected automation actually checks them in scope.
 
 ```yaml
 # Archive rules (soft-delete support)
 Pattern (required, any): IsDeleted|IsArchived|ArchivedAt
 ```
 
-The marker verifies that the read model represents archive state. It is not a
-method-naming rule. Physical deletion is governed through the restricted purge
-capability described below, so a generic `HardDelete` text check would be both
-too broad and too easy to evade.
+Verify that the read model stores the agreed archive state and that archiving
+persists that state while retaining the record. Review physical deletion against
+the restricted purge capability below, including its authorization and policy
+gates.
 
 ---
 

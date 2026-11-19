@@ -32,8 +32,8 @@ workflow:
   - step: 3
     description: "Project only authorized dispositions and return unresolved semantic conflicts for parent or owner reconciliation."
 references:
-  - ".ai/custom/roles/reconciliation-worker/references/reconciliation-playbook.md"
-  - ".ai/custom/roles/shared/ROLE-EXECUTION-CONTRACT.md"
+  - ".ai/project/roles/reconciliation-worker/references/reconciliation-playbook.md"
+  - ".ai/project/roles/shared/ROLE-EXECUTION-CONTRACT.md"
 examples: []
 handoff_rules:
   - "Escalate any semantic conflict, missing credible base, ambiguous ownership, or requested write to the parent."

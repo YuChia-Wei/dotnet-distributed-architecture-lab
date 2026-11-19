@@ -5,7 +5,7 @@ description: "Establish a usable project collaboration starting point with exist
 
 # ai-context-init
 
-Claude runtime entry for `ai-context-init@0.2.5`. This generated projection does not
+Claude runtime entry for `ai-context-init@0.2.6`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Claude adapter.
 

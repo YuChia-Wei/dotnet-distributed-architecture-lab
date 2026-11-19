@@ -32,8 +32,8 @@ workflow:
   - step: 3
     description: "Return the requested structured facts, unknowns, and conflicts without making a semantic or integration decision."
 references:
-  - ".ai/custom/roles/mechanical-evidence-worker/references/mechanical-evidence-playbook.md"
-  - ".ai/custom/roles/shared/ROLE-EXECUTION-CONTRACT.md"
+  - ".ai/project/roles/mechanical-evidence-worker/references/mechanical-evidence-playbook.md"
+  - ".ai/project/roles/shared/ROLE-EXECUTION-CONTRACT.md"
 examples: []
 handoff_rules:
   - "Return to the parent when the evidence request needs an unbounded scan, an owner decision, a mutation, or a non-deterministic substitute."

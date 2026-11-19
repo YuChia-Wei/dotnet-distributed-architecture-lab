@@ -128,12 +128,18 @@ public class WorkItem : EsAggregateRoot<WorkItemId>
 
 ### 1. Aggregate Command-Method Postcondition Checks
 
-**Mandatory**: Every Aggregate command method MUST use Guard Clauses or Contracts to verify:
-1. correctness of the business-state change;
-2. correctness of Domain Event generation.
+Verify the observable state or result promised by each successful command and
+preserve the Aggregate invariants. Check the Domain Events agreed for that outcome
+when the command contract calls for them. For an idempotent no-op that promises
+no changes, verify that state and pending events remain unchanged. A state-based
+Aggregate can satisfy a command contract without emitting an event.
+
+Use the target's accepted contract mechanism. When the target intentionally
+omits runtime postcondition checks, verify the same promises in focused Domain
+tests.
 
 ```csharp
-// ✅ Correct: complete postcondition checks
+// Example: optional runtime checks for an event-sourced command
 public void CreateTask(TaskId taskId, string name, int? estimatedHours, string creatorId)
 {
     // Preconditions
@@ -168,7 +174,7 @@ public void CreateTask(TaskId taskId, string name, int? estimatedHours, string c
 
 | Component Type | Validation Method | Description |
 |---------|---------|------|
-| Aggregate Root | Guard Clauses + Contracts | `Contract.Require()`, `Contract.Ensure()` |
+| Aggregate Root | Guard clauses and the accepted contract mechanism | Enforce preconditions before mutation. Verify postconditions at runtime or with focused Domain tests as described above. |
 | Entity | `ArgumentNullException.ThrowIfNull` | Standard .NET 7+ method |
 | Value Object | `ArgumentNullException.ThrowIfNull` | Standard .NET 7+ method |
 | Domain Event | `ArgumentNullException.ThrowIfNull` | Validate in the record constructor |
