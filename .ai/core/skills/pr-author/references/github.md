@@ -1,4 +1,4 @@
-# pr-author.github 0.1.1
+# pr-author.github 0.1.2
 
 Entry: `python <absolute-package>/scripts/github.py --request <absolute-request.json|->`. This is a package-owned public tool. It calls `pr-author.fs` inspect/render/explain through JSON subprocess requests using the selected installed package; it imports no private skill module. The selected executable must match package_root.
 

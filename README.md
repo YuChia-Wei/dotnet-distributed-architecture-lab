@@ -191,7 +191,7 @@ dotnet test MQArchLab.slnx
 
 - `AGENTS.md`：canonical agent collaboration guide
 - `.ai/INDEX.MD`：AI package 與 knowledge 索引
-- [.ai/custom/installation.json](.ai/custom/installation.json)：選定的正式版 0.23.0 的套件選擇與知識綁定
+- [.ai/project/installation.json](.ai/project/installation.json)：選定的正式版 0.23.1 的套件選擇與知識綁定
 - [.ai/framework.lock](.ai/framework.lock)：installer 產生的已安裝資源清冊
 - `.dev/ai-context/TARGET-ENGINEERING-RULES.md`：保留的目標規則與客製化
 - [.agents/skills/](.agents/skills/)、[.claude/skills/](.claude/skills/)：依安裝選擇使用實際 runtime 入口

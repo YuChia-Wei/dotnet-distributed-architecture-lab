@@ -26,7 +26,7 @@ and embedded rule text uses its semantic owner's link base.
 | Generate editable source | [Generation guide](tooling/generation/README.md) |
 | Diagnose an observed failure | [Troubleshooting](references/troubleshooting.md) |
 
-The package depends on `engineering-common@0.4.2`. Use the
+The package depends on `engineering-common@0.4.3`. Use the
 [rule catalog](engineering-rule-catalog.yaml) and [identity
 bindings](references/engineering-identity-bindings.md) to identify retained rule
 IDs and their conditions. `dotnet@0.3.0` replaces the previous package identity.

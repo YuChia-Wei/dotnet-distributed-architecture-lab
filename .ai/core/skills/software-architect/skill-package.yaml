@@ -1,6 +1,6 @@
 metadata_version: 4
 id: software-architect
-version: 0.1.10
+version: 0.1.12
 delivery_status: implemented
 entrypoint: SKILL.md
 dependencies:
@@ -47,7 +47,7 @@ operations:
 knowledge_consumption:
 - id: common-software-architecture
   package: engineering-common
-  version: 0.4.2
+  version: 0.4.3
   operations:
   - design
   - review
@@ -60,7 +60,7 @@ knowledge_consumption:
   on_missing: unavailable
 - id: dotnet-software-architecture
   package: dotnet
-  version: 0.3.3
+  version: 0.3.5
   operations:
   - design
   - review

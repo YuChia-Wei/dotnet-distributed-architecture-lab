@@ -33,8 +33,8 @@ workflow:
   - step: 3
     description: "Return content-addressed terminal audit evidence, commit provenance, and the result without repair, retry substitution, or integration acceptance."
 references:
-  - ".ai/custom/roles/fixed-head-independent-auditor/references/fixed-head-independent-audit-playbook.md"
-  - ".ai/custom/roles/shared/ROLE-EXECUTION-CONTRACT.md"
+  - ".ai/project/roles/fixed-head-independent-auditor/references/fixed-head-independent-audit-playbook.md"
+  - ".ai/project/roles/shared/ROLE-EXECUTION-CONTRACT.md"
 examples: []
 handoff_rules:
   - "Stop and return to the parent on subject drift, an unclean or unpinned commit, missing terminal selection, or any request to repair the audited subject."

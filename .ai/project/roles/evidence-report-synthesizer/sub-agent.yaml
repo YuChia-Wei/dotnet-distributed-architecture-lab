@@ -32,8 +32,8 @@ workflow:
   - step: 3
     description: "Return the bounded report projection or authorized artifact content without inventing verification or finalization."
 references:
-  - ".ai/custom/roles/evidence-report-synthesizer/references/evidence-report-synthesis-playbook.md"
-  - ".ai/custom/roles/shared/ROLE-EXECUTION-CONTRACT.md"
+  - ".ai/project/roles/evidence-report-synthesizer/references/evidence-report-synthesis-playbook.md"
+  - ".ai/project/roles/shared/ROLE-EXECUTION-CONTRACT.md"
 examples: []
 handoff_rules:
   - "Return to the parent when the requested report needs new verification, an owner decision, an unbounded scope, or unauthorized writing."

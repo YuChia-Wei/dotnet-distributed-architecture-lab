@@ -32,8 +32,8 @@ workflow:
   - step: 3
     description: "Return source-grounded analysis and owner-sensitive questions without choosing the owner decision."
 references:
-  - ".ai/custom/roles/semantic-governance-analyst/references/semantic-governance-analysis-playbook.md"
-  - ".ai/custom/roles/shared/ROLE-EXECUTION-CONTRACT.md"
+  - ".ai/project/roles/semantic-governance-analyst/references/semantic-governance-analysis-playbook.md"
+  - ".ai/project/roles/shared/ROLE-EXECUTION-CONTRACT.md"
 examples: []
 handoff_rules:
   - "Escalate when semantic authority conflicts, target-owned truth needs reconciliation, or a policy change is requested."

@@ -14,9 +14,11 @@ direct SDK usage from other shells. An unchanged installation of a prior bundle
 can be replaced with the same installer. Update formatter callers to use SDK
 arguments and output in place of the former FormatTool JSON API.
 
-The release bundle publishes SnippetTool with Native AOT on its Windows x64 and
-Linux x64 runners. Each executable contains its runtime support. The
-`native-aot` mode in `generation.json` identifies the snippet delivery.
+Check the selected release assets and the RID entries in `generation.json`.
+Three-RID Native AOT bundles contain SnippetTool for Windows x64
+(`win-x64`), Linux x64 (`linux-x64`), and Apple silicon (`osx-arm64`).
+Earlier two-RID releases such as v0.23.0 contain the Windows and Linux
+executables. Each Native AOT executable includes its runtime support.
 Maintainers can select a framework-dependent CoreCLR comparison build, and
 older CoreCLR manifests remain supported. SnippetTool's standalone
 `Publish-Snippets.ps1` retains its host-SDK default and selects AOT with
@@ -122,14 +124,27 @@ dotnet new aicf-ct005-contract-tests --name Example.Ct005 --output Example.Ct005
 dotnet test Example.Ct005/Example.Ct005.csproj -p:PublishedContractsDir=<verified-extracted-directory>
 ```
 
-Run `snippets/win-x64/SnippetTool.exe` on Windows x64 or
-`snippets/linux-x64/SnippetTool` on Linux x64 with `--request request.json`.
-Each executable includes its .NET runtime. Keep the shipped `snippets/` directory
-beside the executable. Linux needs the platform's native runtime dependencies
+Use the executable for your RID with `--request request.json`:
+
+| Platform | Path relative to the generation directory |
+| --- | --- |
+| Windows x64 | `snippets/win-x64/SnippetTool.exe` |
+| Linux x64 | `snippets/linux-x64/SnippetTool` |
+| Apple silicon | `snippets/osx-arm64/SnippetTool`, when listed in `generation.json` |
+
+A standalone release binary, such as `SnippetTool-<version>-osx-arm64`,
+requires the adjacent `snippets/` data from the same version and RID in the
+Framework ZIP. Verify the published SHA-256 before using a downloaded binary.
+On Linux or macOS, add the executable bit if needed and run `--version` as
+a startup check. Linux needs the platform's native runtime dependencies
 (Ubuntu 24.04 is the tested baseline).
-macOS is not in the SnippetTool runtime matrix; separate trial binaries do not
-establish supported installation or download trust. macOS delivery remains
-future work tracked by Feature #582.
+
+The macOS CI acceptance environment is macOS 26 arm64. Check the results for
+the selected source and artifact. The Actions trial under #582 predates the
+three-RID release delivery work under #637. The trial and release CI have
+separate evidence from browser-download Gatekeeper acceptance. Intel Macs
+and a minimum macOS version have no supported claim here.
+
 Use `{"schemaVersion":1,"operation":"list"}`, then inspect one ID before rendering it.
 See `snippets/README.md` for request fields and customization.
 Rendering returns text; insertion and compilation remain explicit steps.

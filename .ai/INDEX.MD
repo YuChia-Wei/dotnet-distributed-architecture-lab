@@ -5,15 +5,15 @@ Use [AGENTS.md](../AGENTS.md) for collaboration authority and the
 
 | Need | Entry |
 | --- | --- |
-| Selected release, packages and adapters | [Installation selection](custom/installation.json) |
+| Selected release, packages and adapters | [Installation selection](project/installation.json) |
 | Installed managed inventory | [Official lock](framework.lock) |
 | Select one installed skill | [Codex entries](../.agents/skills/), [Claude entries](../.claude/skills/) |
 | Portable engineering knowledge | [engineering-common](core/knowledge/engineering-common/README.md) |
 | .NET knowledge | [dotnet](core/knowledge/dotnet/README.md) |
 | Effective target rules and request routes | [Target engineering rules](../.dev/ai-context/TARGET-ENGINEERING-RULES.md) |
-| Project artifact stores | [Framework configuration](custom/framework.json) |
-| Project role definitions | [Custom roles](custom/roles/README.md) |
-| Project-owned experimental promotion package | [Experimental skill](custom/skills/standards-promotion-experimental/SKILL.md) |
+| Project artifact stores | [Framework configuration](project/framework.json) |
+| Project role definitions | [Custom roles](project/roles/README.md) |
+| Project-owned experimental promotion package | [Experimental skill](project/skills/standards-promotion-experimental/SKILL.md) |
 | Recorded 0.19.0 installation and init 0.2.0 trial | [Local results and limitations](../.dev/workflows/2026-10-04-framework-019-init/results.md) |
 
 Knowledge examples and templates are reference material. Resolve the applicable

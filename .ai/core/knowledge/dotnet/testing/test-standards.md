@@ -25,9 +25,13 @@ All tests must express intent in Given-When-Then (GWT) style; Arrange-Act-Assert
 
 ---
 
-## 🏷️ Pattern Markers (for Automated Checks)
+## 🏷️ Illustrative Pattern Markers
 
-The automated code-review scripts consume these markers:
+Use these text patterns as review hints within the adopted test profile. Check
+whether any target-selected automation actually runs them and review its output
+in scope. Confirm the configured runner and libraries, inspect the scenario steps
+and assertions against the behavior contract, and use the selected runner's
+results for execution evidence.
 
 ```yaml
 # Test framework rules

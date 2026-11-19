@@ -5,7 +5,7 @@ without making a runtime, adapter, model, or provider the source of truth. It
 does not define role applicability, role bindings, `loaded_rule_ids`, provider
 configuration, or effective-state semantics.
 
-Project-owned role definitions under `.ai/custom/roles/` are selected by an explicit parent task. A static installed skill or adapter does not select them. Example paths in this inherited contract illustrate historical role records and are not active route declarations.
+Project-owned role definitions under `.ai/project/roles/` are selected by an explicit parent task. A static installed skill or adapter does not select them. Example paths in this inherited contract illustrate historical role records and are not active route declarations.
 
 ## Ownership and Use
 

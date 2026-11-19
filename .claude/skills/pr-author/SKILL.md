@@ -5,7 +5,7 @@ description: "Prepare pull request content and records bound to an actual Git co
 
 # pr-author
 
-Claude runtime entry for `pr-author@0.1.1`. This generated projection does not
+Claude runtime entry for `pr-author@0.1.2`. This generated projection does not
 prove installation, operation execution, validation or runtime discovery.
 Regenerate it from the selected package and verified Claude adapter.
 
